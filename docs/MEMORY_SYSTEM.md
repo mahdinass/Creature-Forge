@@ -1,5 +1,7 @@
 # Creature Forge — persistent AI memory and context protocol
 
+> **DEFAULT / FREE OPTION (October 2026):** Basic Memory local is **free and open-source**. Use it first for Claude Code + Codex on the same Windows machine. See [FREE_MEMORY_QUICKSTART.md](FREE_MEMORY_QUICKSTART.md). A Basic Memory Cloud subscription is **optional**, useful only for managed remote MCP and multi-device/web access. GitHub project-state files bridge context to ChatGPT at no extra memory-subscription cost.
+
 ## The problem we are solving
 
 Claude Code, Codex and ChatGPT have separate conversations, so they may forget previous environment setup, architecture decisions and solved problems. Example: a coding agent creates a new virtual environment when `.venv/` already exists. Avoiding that requires **checking the filesystem before acting**, not merely remembering a note.
@@ -14,7 +16,7 @@ Claude Code, Codex and ChatGPT have separate conversations, so they may forget p
 | **Basic Memory** MCP (`creature-forge` project) | Semantic/graph retrieval across Claude Code, Codex and optionally ChatGPT | Supplemental, verify against repo |
 | `docs/PROJECT_SPEC.md` | Full planned system vision and acceptance gates | Requirements, not current implementation |
 
-**Design choice:** Start with Basic Memory, a structured Markdown knowledge store with linked notes and semantic search. Don't introduce a separate Graphiti/Neo4j service before a measured retrieval problem requires it. Graph storage alone does not force an agent to retrieve or verify state.
+**Design choice:** Start with **free local** Basic Memory, a structured Markdown knowledge store with linked notes and semantic search. Don't introduce a separate Graphiti/Neo4j service before a measured retrieval problem requires it. Graph storage alone does not force an agent to retrieve or verify state.
 
 ## Cloud / local choice
 
