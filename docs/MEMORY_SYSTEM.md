@@ -60,6 +60,10 @@ Install local Basic Memory using `uv tool install basic-memory` (Python 3.12+; `
 
 Docs: https://docs.basicmemory.com/integrations/claude-code/ and https://docs.basicmemory.com/integrations/codex/ and https://docs.basicmemory.com/integrations/chatgpt/
 
+## Observed local retrieval behavior (2026-10-13)
+
+Claude Code reported successful **create, read-by-permalink, text search and recent-activity** operations against local Basic Memory **0.23.2**, project `creature-forge`. A hybrid/semantic `search_notes` request took around two minutes and returned no matching result for a recently written note. Neither embedding initialization nor a threshold explanation has been verified. Until tested, prefer `search_type: "text"` and use targeted query terms or direct note permalinks. This is a measured limitation, **not a proof that all semantic retrieval is broken**. Fresh-session Codex access is still unverified.
+
 ## Mandatory retrieval protocol for agents
 
 - **Session start:** inspect local environment and git status; read the compact state file. Then search memory for the current epic and recent relevant incidents.
