@@ -42,3 +42,11 @@ Update with date, exact commands/tests, linked log or commit, scope, unresolved 
 - **Blocked:** Codex could not run *any* local PowerShell command, including file reads and Python environment verification: `Failed to create unified exec process: helper_unknown_error: setup refresh had errors`. No local code or environment changes were reported by Codex.
 - **Not established by Codex:** Independent current local Python/venv state, local safety-hook behavior, or repository test execution. Claude's prior observations are not a substitute for these checks.
 - **Immediate action:** Run `python scripts/context_preflight.py` and `python -m unittest discover -s tests -v` directly in standalone Windows PowerShell. If these succeed, isolate Codex's command-execution runtime; look at known Windows sandbox-related Codex issues. Do not delete sandboxes or weaken execution security as a first troubleshooting step.
+
+## Windows PowerShell verification — 2026-10-13 (user-provided execution results)
+
+- Working directory: `C:\\Users\\mbnas\\.vscode\\Creature-Forge`.
+- `git status`: clean `main`, tracking `origin/main`; `git pull --ff-only` succeeded and advanced local HEAD from `24a9008` to `488cc05` at time of audit. Later documentation commits still require a new pull.
+- `python scripts/context_preflight.py`: successful; current interpreter `C:\\Users\\mbnas\\AppData\\Local\\Programs\\Python\\Python311\\python.exe`, Python `3.11.9`, `VIRTUAL_ENV=False`, no known project venv directories reported; no `pyproject.toml`, `requirements.txt`, `package.json` or lockfile yet. These are observed at audit time, not permanent declarations.
+- `python -m unittest discover -s tests -v`: **4 tests passed**, including duplicate-venv guard behavior and hook JSON parsing. This verifies the tested Python logic but does not alone prove Claude Code actually invoked its hooks.
+- Codex separately attempted `Get-Location` but every sandbox shell command still failed before launch with `helper_unknown_error: setup refresh had errors`. Standalone PowerShell is healthy; Codex sandbox diagnostics/log inspection remains to be done. Do not alter Windows ACLs or disable security without identifying the log's specific cause.
