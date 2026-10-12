@@ -1,0 +1,31 @@
+# Secrets, credentials, local overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.claude/settings.local.json
+# Python virtual environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# JS and frontend builds
+node_modules/
+dist/
+build/
+.next/
+# Generated experiment outputs and logs
+artifacts/
+runs/
+checkpoints/
+*.log
+# Editor/OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
