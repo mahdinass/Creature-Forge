@@ -50,3 +50,14 @@ Update with date, exact commands/tests, linked log or commit, scope, unresolved 
 - `python scripts/context_preflight.py`: successful; current interpreter `C:\\Users\\mbnas\\AppData\\Local\\Programs\\Python\\Python311\\python.exe`, Python `3.11.9`, `VIRTUAL_ENV=False`, no known project venv directories reported; no `pyproject.toml`, `requirements.txt`, `package.json` or lockfile yet. These are observed at audit time, not permanent declarations.
 - `python -m unittest discover -s tests -v`: **4 tests passed**, including duplicate-venv guard behavior and hook JSON parsing. This verifies the tested Python logic but does not alone prove Claude Code actually invoked its hooks.
 - Codex separately attempted `Get-Location` but every sandbox shell command still failed before launch with `helper_unknown_error: setup refresh had errors`. Standalone PowerShell is healthy; Codex sandbox diagnostics/log inspection remains to be done. Do not alter Windows ACLs or disable security without identifying the log's specific cause.
+
+
+## Codex Windows sandbox root-cause evidence — 2026-10-13
+
+From the local `$HOME\.codex\.sandbox\sandbox*.log` provided by the project owner:
+
+- FATAL: `runtime read/execute validation failed` when the Codex Windows sandbox setup attempts an ACL operation on `%LOCALAPPDATA%\OpenAI\Codex\runtimes\cua_node\3dd31cfff853001c\bin\node_repl.exe`.
+- Windows returns `os error 32` (sharing violation: the file is in use). The setup process exits status 1; consequently `Get-Location` / `Get-Content` fail *before* PowerShell starts.
+- An earlier file-lock warning for the user profile states `continuing setup` and is not the decisive failure.
+- This matches multiple reported openai/codex Windows regressions during October 7–12, 2026, e.g. https://github.com/openai/codex/issues/52000 and https://github.com/openai/codex/issues/51981 . Some reports persist after restart or reinstall. Exact locking process was not identified from these logs; it may be a Codex-owned helper.
+- **Safe next actions:** check for an official Codex update, quit all Codex app/CLI/VS Code integrations completely and restart Windows, then test one `Get-Location` with the normal sandbox. If still failing, leave sandbox restrictions intact and proceed with Claude Code while monitoring upstream fix. Do not delete `node_repl.exe`, indiscriminately kill processes, rewrite ACLs, or enable full access as a default remedy.
