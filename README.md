@@ -9,7 +9,8 @@
 - [Master project specification](docs/PROJECT_SPEC.md)
 - [Verified project state](docs/PROJECT_STATE.md)
 - [Shared agent instructions](AGENTS.md) / [Claude Code instructions](CLAUDE.md)
-- [Persistent memory system and cross-tool connection](docs/MEMORY_SYSTEM.md)
+- **[Free local memory setup (Windows) — start here](docs/FREE_MEMORY_QUICKSTART.md)**
+- [Full persistent memory architecture and optional cloud integration](docs/MEMORY_SYSTEM.md)
 - [Nebius account, credits and model setup](docs/NEBIUS_SETUP.md)
 
 Before starting Claude Code or Codex in this repository, inspect the existing environment and run:
