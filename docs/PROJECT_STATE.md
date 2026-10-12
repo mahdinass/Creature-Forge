@@ -20,7 +20,7 @@ Updated: 2026-10-13. Local environment audit **reported by Claude Code and relay
 
 ## Still unverified
 
-- Cross-tool **Codex → Basic Memory** retrieval from a new session.
+- Cross-tool **Codex → Basic Memory** retrieval: **confirmed 2026-10-13** (text search + read_note). Codex filesystem verification remained blocked by its Windows command runner.
 - Local Claude Code SessionStart and venv PreToolUse hooks (must run the committed tests on Windows).
 - Semantic index and similarity threshold behavior.
 - Nebius credit redemption, model availability, inference, and actual physics simulation.
@@ -28,7 +28,7 @@ Updated: 2026-10-13. Local environment audit **reported by Claude Code and relay
 ## Next actions
 
 1. Pull current `main` docs into the clean local repository.
-2. In a fresh Codex session, retrieve the exact Claude-written Basic Memory note using **text search** scoped to `creature-forge` and read it. Confirm the same fact against the local repo. Don't install anything.
+2. **Completed:** Codex retrieved Claude's note via Basic Memory text search + read_note. **Pending:** inspect the local repo in standalone PowerShell because Codex's workspace execution failed before commands could run.
 3. Run `python scripts/context_preflight.py` and `python -m unittest discover -s tests -v`; record actual results and resolve Windows-specific hook issues if any.
 4. Once cross-agent retrieval is confirmed, begin Phase 0/T0: toolchain + Nebius runtime verification, MuJoCo physical rollout, telemetry and fall detection.
 
