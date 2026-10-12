@@ -30,3 +30,12 @@ A creator builds a robot, it attempts locomotion under authoritative MuJoCo phys
 Deadline: October 30, 2026, 18:00 Norway time. Public source repository, open-source license, a working project using NVIDIA open-source model(s) on Nebius and an under-three-minute YouTube demo are required for final submission. The repository is private during development and must be made public for judging.
 
 Do not add real keys to git. A working app, license, dependency pins and deployment instructions will be added as implementation progresses.
+
+## Creature Forge Studio (local)
+
+```
+uv pip install --python .venv\Scripts\python.exe -e ".[studio]"
+npm --prefix studio install && npm --prefix studio run build
+.venv\Scripts\python scripts\run_studio.py        # http://127.0.0.1:8000
+.venv\Scripts\python scripts\studio_e2e_check.py --browser
+```

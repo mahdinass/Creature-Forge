@@ -17,11 +17,9 @@ from creature_forge.controller import GaitParams  # noqa: E402
 from creature_forge.experiment import compare_designs  # noqa: E402
 from creature_forge.failures import detect_failures  # noqa: E402
 from creature_forge.morphology import BipedParams  # noqa: E402
-from creature_forge.simulate import Push, run_rollout  # noqa: E402
+from creature_forge.simulate import run_rollout  # noqa: E402
 
-SEEDS = (0, 1, 2, 3, 4)
-DURATION = 5.0
-PUSH = Push(time=1.0, force=25.0, duration=0.15)
+from creature_forge.experiment import PHASE0_DURATION as DURATION, PHASE0_PUSH as PUSH, PHASE0_SEEDS as SEEDS  # noqa: E402
 OUT = Path(__file__).resolve().parents[1] / "artifacts" / "phase0"
 
 

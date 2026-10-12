@@ -62,17 +62,26 @@ From the local `$HOME\.codex\.sandbox\sandbox*.log` provided by the project owne
 - This matches multiple reported openai/codex Windows regressions during October 7–12, 2026, e.g. https://github.com/openai/codex/issues/52000 and https://github.com/openai/codex/issues/51981 . Some reports persist after restart or reinstall. Exact locking process was not identified from these logs; it may be a Codex-owned helper.
 - **Safe next actions:** check for an official Codex update, quit all Codex app/CLI/VS Code integrations completely and restart Windows, then test one `Get-Location` with the normal sandbox. If still failing, leave sandbox restrictions intact and proceed with Claude Code while monitoring upstream fix. Do not delete `node_repl.exe`, indiscriminately kill processes, rewrite ACLs, or enable full access as a default remedy.
 
-## Phase 0 / T0 physics foundation � 2026-10-13 (verified by Claude Code in this session)
+## Phase 0 / T0 physics foundation — 2026-10-13 (verified by Claude Code in this session)
 
 **Implemented (code, not plans):** `creature_forge/{morphology,controller,simulate,failures,experiment,artifacts}.py`, `scripts/{run_phase0,smoke_test,nebius_check}.py`, `pyproject.toml`, `.venv` (Python 3.11.9, MuJoCo 3.15.0, NumPy 2.4.6; venv is gitignored).
 
 **Evidence:**
 - `.venv\Scripts\python -m unittest discover -s tests -v`: 23 tests pass (4 pre-existing guard tests + 19 new, written test-first; red runs observed).
 - `.venv\Scripts\python scripts\smoke_test.py`: 6/6 checks, exit 0 (10 s headless rollout, determinism by SHA-256 of telemetry, fall detection, parameter-change effect, artifacts).
-- `.venv\Scripts\python scriptsun_phase0.py`: 25 N push; foot_length 0.08 m falls on 5/5 seeds (fall at ~1.85 s, min torso height 0.03 m); changing only foot_length to 0.16 m falls on 0/5 (min height 0.76 m). Artifacts in `artifacts/phase0/` (gitignored): `telemetry.npz` + `manifest.json` per run.
+- `.venv\Scripts\python scripts
+un_phase0.py`: 25 N push; foot_length 0.08 m falls on 5/5 seeds (fall at ~1.85 s, min torso height 0.03 m); changing only foot_length to 0.16 m falls on 0/5 (min height 0.76 m). Artifacts in `artifacts/phase0/` (gitignored): `telemetry.npz` + `manifest.json` per run.
 - Telemetry (200 Hz): torso pose/velocity, joint angles/velocities, applied and demanded torque, COM position/velocity, per-foot contact, slip speed, contact force. Detectors: fall, actuator saturation, foot slip (event + evidence; no causal claim).
 
 **Limitations / not done:** only standing balance + push recovery validated; open-loop walking gaits fell or walked backward (see INCIDENTS). Planar model; no hopper; no video/frontend viewer; no failure *causal* attribution yet (saturation/slip detectors were unit-tested on synthetic data and are quiet in the push experiment; torque and friction showed no effect there). Nebius: `NEBIUS_API_KEY` unset, **no API call made, nothing verified**; endpoint URL in `nebius_check.py` is an unverified assumption. Local `git push` not done.
 
 **Next:** Phase 1 - failure autopsy features, hypothesis schema, gait search with a classical baseline, Nemotron once a key exists.
 
+## Phase 0.5 Creature Forge Studio - 2026-10-13 (branch `feature/phase0.5-studio`, based on 5a13a09, not pushed)
+
+**Implemented and verified:** pose export (`creature_forge/render_export.py`), sketch compiler (`creature_forge/sketch.py`), FastAPI backend (`creature_forge/studio/app.py`), React/R3F frontend (`studio/`), launcher `scripts/run_studio.py`, end-to-end check `scripts/studio_e2e_check.py`.
+- Run: `.venv\Scripts\python scriptsun_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio install && npm --prefix studio run build`). Deep links: `/?tab=compare&t=2.0`.
+- Evidence: `.venv\Scripts\python -m unittest discover -s tests` = 41 passed (23 original kept + 18 new); `npm --prefix studio test` = 6 passed; `npm --prefix studio run build` (strict tsc) ok; `scripts/studio_e2e_check.py --browser` = 13/13 checks including headless Edge rendering the fall banner at the MuJoCo-detected 1.85 s. Screenshots inspected manually (Studio fall, Compare, Sketch).
+- Features: orbit/pan/zoom viewer, ground grid and lights, contact rings (green; orange when slipping), push arrow only during the applied force, playback (play/pause/restart/0.1-1x/scrub/follow), failure markers on timeline and chart, morphology sliders (bounds from backend schema) with Forge button, side-by-side 8 cm vs 16 cm replay on one shared clock with matched-seed table, constrained sketch editor (hip/knee/ankle vertical, toe horizontal).
+- Limitations: replay of recorded rollouts only (no live stepping); each Forge call is a full 5 s server run; the Forge/slider click path is covered by API tests but not by an automated browser interaction test; legs are drawn 7 cm apart as a declared display transform (model is planar); sketch supports only the straight-leg biped template (no bent knees, no arbitrary drawings, fixed torso geometry); frame payload about 0.9 MB per run as JSON; only tested in headless Edge.
+- Incident: see INCIDENTS (leg offset changed physics; Phase 0 "5/5 at 25 N" is near the tipping frontier; invalid-UTF-8 docs repaired).

@@ -21,7 +21,8 @@ class Push:
 
 
 def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: float = 10.0,
-                perturb: float = 0.02, push: Push | None = None) -> dict[str, np.ndarray]:
+                perturb: float = 0.02, push: Push | None = None,
+                record_poses: bool = False) -> dict[str, np.ndarray]:
     """Simulate; the seed drives a small initial pitch/joint perturbation (only source of randomness)."""
     body.validate()
     gait.validate()
@@ -35,7 +36,9 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
     foot_ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, f"foot_{s}") for s in "lr"]
     floor_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "floor")
     torso_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "torso")
-    lowest = min(data.geom_xpos[i][2] - model.geom_size[i][2] * 1.5 for i in foot_ids)
+    # exact lowest point of each (rotated) foot box
+    lowest = min(data.geom_xpos[i][2] - np.abs(data.geom_xmat[i].reshape(3, 3)[2]) @ model.geom_size[i]
+                 for i in foot_ids)
     data.qpos[1] -= max(lowest, 0.0) - 0.002
     mujoco.mj_forward(model, data)
 
@@ -44,6 +47,10 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
         "t", "torso_pos", "torso_pitch", "torso_linvel", "torso_angvel", "qpos_joints",
         "qvel_joints", "joint_torque", "ctrl_demand", "com_pos", "com_vel", "foot_contact",
         "foot_slip_speed", "contact_force_total")}
+    render_geoms = [i for i in range(model.ngeom) if i != floor_id]
+    if record_poses:
+        rows.update({"geom_xpos": [], "geom_xquat": [], "foot_contact_pos": []})
+    quat = np.zeros(4)
     vel6 = np.zeros(6)
     demand = np.zeros(6)
     for step in range(steps):
@@ -58,6 +65,8 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
             continue
         mujoco.mj_subtreeVel(model, data)
         contact = np.zeros(2)
+        cpos = np.zeros((2, 3))
+        ccount = np.zeros(2)
         slip = np.zeros(2)
         fsum = 0.0
         f6 = np.zeros(6)
@@ -72,8 +81,18 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
             if other in foot_ids and f6[0] > 1e-6:
                 k = foot_ids.index(other)
                 contact[k] = 1.0
+                cpos[k] += con.pos
+                ccount[k] += 1
                 mujoco.mj_objectVelocity(model, data, mujoco.mjtObj.mjOBJ_GEOM, other, vel6, 0)
                 slip[k] = max(slip[k], abs(vel6[3]))  # world-frame x linear velocity of foot geom
+        if record_poses:
+            xq = np.zeros((len(render_geoms), 4))
+            for r, gi in enumerate(render_geoms):
+                mujoco.mju_mat2Quat(quat, data.geom_xmat[gi])
+                xq[r] = quat
+            rows["geom_xpos"].append(data.geom_xpos[render_geoms].copy())
+            rows["geom_xquat"].append(xq)
+            rows["foot_contact_pos"].append(cpos / np.maximum(ccount, 1)[:, None])
         rows["t"].append(data.time)
         rows["torso_pos"].append([data.xpos[torso_id][0], data.xpos[torso_id][2], data.qpos[2]])
         rows["torso_pitch"].append(data.qpos[2])
