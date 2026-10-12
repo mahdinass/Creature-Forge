@@ -29,3 +29,4 @@ checkpoints/
 .vscode/
 .DS_Store
 Thumbs.db
+*.egg-info/

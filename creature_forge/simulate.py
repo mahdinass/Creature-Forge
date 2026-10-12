@@ -1,0 +1,91 @@
+"""Deterministic headless MuJoCo rollout with full telemetry capture."""
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+import mujoco
+import numpy as np
+
+from .controller import GaitParams, compute_torque
+from .morphology import BipedParams, build_model
+
+LOG_EVERY = 5  # steps => 200 Hz telemetry at dt=0.001
+
+
+@dataclass(frozen=True)
+class Push:
+    """Horizontal external force on the torso (N) applied for `duration` s starting at `time`."""
+    time: float
+    force: float
+    duration: float = 0.1
+
+
+def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: float = 10.0,
+                perturb: float = 0.02, push: Push | None = None) -> dict[str, np.ndarray]:
+    """Simulate; the seed drives a small initial pitch/joint perturbation (only source of randomness)."""
+    body.validate()
+    gait.validate()
+    model = build_model(body)
+    data = mujoco.MjData(model)
+    rng = np.random.default_rng(seed)
+    data.qpos[2] = perturb * rng.standard_normal()
+    data.qpos[3:9] = perturb * rng.standard_normal(6)
+    mujoco.mj_forward(model, data)
+    # Place the body so the lowest foot sits just above the floor.
+    foot_ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, f"foot_{s}") for s in "lr"]
+    floor_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "floor")
+    torso_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "torso")
+    lowest = min(data.geom_xpos[i][2] - model.geom_size[i][2] * 1.5 for i in foot_ids)
+    data.qpos[1] -= max(lowest, 0.0) - 0.002
+    mujoco.mj_forward(model, data)
+
+    steps = int(round(duration / model.opt.timestep))
+    rows: dict[str, list] = {k: [] for k in (
+        "t", "torso_pos", "torso_pitch", "torso_linvel", "torso_angvel", "qpos_joints",
+        "qvel_joints", "joint_torque", "ctrl_demand", "com_pos", "com_vel", "foot_contact",
+        "foot_slip_speed", "contact_force_total")}
+    vel6 = np.zeros(6)
+    demand = np.zeros(6)
+    for step in range(steps):
+        pitch, pitch_rate = data.qpos[2], data.qvel[2]
+        demand = compute_torque(gait, data.time, pitch, pitch_rate, data.qpos[3:9], data.qvel[3:9])
+        data.ctrl[:] = np.clip(demand, -body.torque_limit, body.torque_limit)
+        if push is not None:
+            on = push.time <= data.time < push.time + push.duration
+            data.xfrc_applied[torso_id, 0] = push.force if on else 0.0
+        mujoco.mj_step(model, data)
+        if step % LOG_EVERY:
+            continue
+        mujoco.mj_subtreeVel(model, data)
+        contact = np.zeros(2)
+        slip = np.zeros(2)
+        fsum = 0.0
+        f6 = np.zeros(6)
+        for c in range(data.ncon):
+            con = data.contact[c]
+            g1, g2 = con.geom1, con.geom2
+            if floor_id not in (g1, g2):
+                continue
+            mujoco.mj_contactForce(model, data, c, f6)
+            fsum += f6[0]
+            other = g2 if g1 == floor_id else g1
+            if other in foot_ids and f6[0] > 1e-6:
+                k = foot_ids.index(other)
+                contact[k] = 1.0
+                mujoco.mj_objectVelocity(model, data, mujoco.mjtObj.mjOBJ_GEOM, other, vel6, 0)
+                slip[k] = max(slip[k], abs(vel6[3]))  # world-frame x linear velocity of foot geom
+        rows["t"].append(data.time)
+        rows["torso_pos"].append([data.xpos[torso_id][0], data.xpos[torso_id][2], data.qpos[2]])
+        rows["torso_pitch"].append(data.qpos[2])
+        rows["torso_linvel"].append([data.qvel[0], data.qvel[1]])
+        rows["torso_angvel"].append(data.qvel[2])
+        rows["qpos_joints"].append(data.qpos[3:9].copy())
+        rows["qvel_joints"].append(data.qvel[3:9].copy())
+        rows["joint_torque"].append(data.actuator_force.copy())
+        rows["ctrl_demand"].append(demand.copy())
+        rows["com_pos"].append(data.subtree_com[0].copy())
+        rows["com_vel"].append(data.subtree_linvel[0].copy())
+        rows["foot_contact"].append(contact)
+        rows["foot_slip_speed"].append(slip)
+        rows["contact_force_total"].append(fsum)
+    return {k: np.asarray(v, dtype=float) for k, v in rows.items()}
