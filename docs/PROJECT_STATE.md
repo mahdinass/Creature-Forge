@@ -35,3 +35,10 @@ Updated: 2026-10-13. Local environment audit **reported by Claude Code and relay
 ## Maintenance rule
 
 Update with date, exact commands/tests, linked log or commit, scope, unresolved issues and next step. Incomplete facts must be labeled not checked. Source code and tests supersede notes.
+## Cross-agent verification: Codex report (2026-10-13)
+
+- **Confirmed by Codex:** Connected to local Basic Memory MCP, ran diagnostics, used text `search_notes`, and successfully `read_note` for Claude Code's previously written note at `creature-forge/environment/environment-and-memory-setup-audit-2026-10-13`. Cross-tool note visibility is therefore verified.
+- Basic Memory compatibility `fetch` returned `Unsupported MCP Client`; use `read_note` instead. This did **not** prevent retrieval.
+- **Blocked:** Codex could not run *any* local PowerShell command, including file reads and Python environment verification: `Failed to create unified exec process: helper_unknown_error: setup refresh had errors`. No local code or environment changes were reported by Codex.
+- **Not established by Codex:** Independent current local Python/venv state, local safety-hook behavior, or repository test execution. Claude's prior observations are not a substitute for these checks.
+- **Immediate action:** Run `python scripts/context_preflight.py` and `python -m unittest discover -s tests -v` directly in standalone Windows PowerShell. If these succeed, isolate Codex's command-execution runtime; look at known Windows sandbox-related Codex issues. Do not delete sandboxes or weaken execution security as a first troubleshooting step.
