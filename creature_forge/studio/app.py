@@ -72,7 +72,20 @@ async def _warm(_: FastAPI):
     yield
 
 
-def create_app(investigations_dir: Path = INVESTIGATIONS_DIR) -> FastAPI:
+def resolve_static(root: Path, path: str) -> Path | None:
+    """Return the file under `root` that `path` names, or None. Never leaves `root` (.., absolute, symlinks)."""
+    if not path:
+        return None
+    try:
+        base = root.resolve()
+        f = (base / path).resolve()
+        f.relative_to(base)
+    except (ValueError, OSError):
+        return None
+    return f if f.is_file() else None
+
+
+def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = DIST) -> FastAPI:
     app = FastAPI(title="Creature Forge Studio", lifespan=_warm)
 
     @app.get("/api/schema")
@@ -125,13 +138,12 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR) -> FastAPI:
         except SketchError as exc:
             return {"ok": False, "errors": exc.errors}
 
-    if DIST.is_dir():
-        app.mount("/assets", StaticFiles(directory=DIST / "assets"), name="assets")
+    if dist_dir.is_dir():
+        app.mount("/assets", StaticFiles(directory=dist_dir / "assets"), name="assets")
 
         @app.get("/{path:path}")
         def spa(path: str):
-            f = DIST / path
-            return FileResponse(f if path and f.is_file() else DIST / "index.html")
+            return FileResponse(resolve_static(dist_dir, path) or dist_dir / "index.html")
 
     return app
 

@@ -30,7 +30,9 @@ class BudgetExceeded(NebiusError):
 @dataclass(frozen=True)
 class Limits:
     max_requests: int = 3
-    max_total_tokens: int = 20_000  # prompt + completion, as reported by the API
+    # Prompt + completion. Enforced BEFORE the call against a conservative worst case (see
+    # estimate_prompt_tokens + max_tokens; the prompt part is a heuristic) and again AFTER it against the API-reported usage.
+    max_total_tokens: int = 20_000
     max_tokens_per_request: int = 4096
     timeout_s: float = 60.0
 
@@ -54,6 +56,14 @@ class ChatResult:
                 "content_is_null": self.content is None}
 
 
+
+
+def estimate_prompt_tokens(messages: list[dict]) -> int:
+    """Heuristic prompt-token estimate: ~3 UTF-8 bytes per token of the serialized messages plus chat-template
+    slack (same ratio the pre-registered live runner uses). It is deliberately pessimistic for English/JSON
+    but is NOT a guaranteed upper bound: unusual text can tokenize denser and the server's template
+    overhead is invisible to us. Actual API-reported usage is still added after every call."""
+    return len(json.dumps(messages, ensure_ascii=False).encode("utf-8")) // 3 + 64
 
 
 def _urllib_transport(url: str, headers: dict, body: dict, timeout: float):
@@ -95,10 +105,13 @@ class NebiusClient:
             raise BudgetExceeded(f"max_tokens={max_tokens} outside 1..{self.limits.max_tokens_per_request}")
         if self.requests_made >= self.limits.max_requests:
             raise BudgetExceeded(f"request limit {self.limits.max_requests} reached")
-        # worst case: this request could add max_tokens completion tokens (prompt tokens are unknown
-        # beforehand, so the total is enforced after the fact as well)
-        if self.tokens_used + max_tokens > self.limits.max_total_tokens:
-            raise BudgetExceeded(f"token budget {self.limits.max_total_tokens} would be exceeded")
+        # Reserve for this request: estimated prompt tokens (heuristic) + max_tokens completion tokens (hard cap).
+        # The actual API-reported usage is added afterwards, so a later call is blocked if the estimate
+        # was too low. Hard limit on completion; prompt side is a conservative estimate (documented).
+        reserve = estimate_prompt_tokens(messages) + max_tokens
+        if self.tokens_used + reserve > self.limits.max_total_tokens:
+            raise BudgetExceeded(f"token budget {self.limits.max_total_tokens} would be exceeded "
+                                 f"(used {self.tokens_used} + reserve {reserve})")
         if not self.api_key:
             raise NebiusError("NEBIUS_API_KEY is not set")
 

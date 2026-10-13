@@ -71,6 +71,29 @@ class ClientTests(unittest.TestCase):
             c.chat([{"role": "user", "content": "x"}], max_tokens=200)
         self.assertEqual(len(t.calls), 1)
 
+    def test_large_prompt_is_reserved_before_network(self):
+        t = FakeTransport(ok_response())
+        c = client(t, max_total_tokens=1000)
+        big = [{"role": "user", "content": "x" * 5000}]  # estimate alone exceeds the budget
+        with self.assertRaises(BudgetExceeded):
+            c.chat(big, max_tokens=10)
+        self.assertEqual(t.calls, [])
+        self.assertEqual(c.requests_made, 0)
+
+    def test_estimate_scales_with_bytes_not_characters(self):
+        from creature_forge.nebius import estimate_prompt_tokens
+        ascii_ = estimate_prompt_tokens([{"role": "user", "content": "a" * 300}])
+        cjk = estimate_prompt_tokens([{"role": "user", "content": "中" * 300}])  # 3 bytes per char
+        self.assertGreater(cjk, ascii_)
+
+    def test_post_hoc_usage_blocks_next_call_even_if_estimate_was_low(self):
+        t = FakeTransport(ok_response(total=990))  # server reports far more than we estimated
+        c = client(t, max_total_tokens=1000)
+        c.chat([{"role": "user", "content": "x"}], max_tokens=10)
+        with self.assertRaises(BudgetExceeded):
+            c.chat([{"role": "user", "content": "x"}], max_tokens=10)
+        self.assertEqual(len(t.calls), 1)
+
     def test_per_request_cap_and_bad_reasoning_value(self):
         c = client(FakeTransport(ok_response()), max_tokens_per_request=100)
         with self.assertRaises(BudgetExceeded):
