@@ -7,11 +7,15 @@ import os
 import sys
 import urllib.request
 
-BASE = os.environ.get("NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1")  # verified 2026-10-13 (Nebius docs + live call)
+from creature_forge.config import load_env, nebius_api_key, nebius_base_url
+from creature_forge.nebius import DEFAULT_BASE_URL
+
+load_env()
+BASE = nebius_base_url(DEFAULT_BASE_URL)
 
 
 def main() -> int:
-    key = os.environ.get("NEBIUS_API_KEY")
+    key = nebius_api_key()
     if not key:
         print("BLOCKED: NEBIUS_API_KEY is not set. No API call made. See docs/NEBIUS_SETUP.md.")
         return 2

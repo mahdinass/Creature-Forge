@@ -22,7 +22,7 @@ class FakeTransport:
 
 
 def client(transport, **limits):
-    return NebiusClient(transport=transport, api_key=SECRET, limits=Limits(**limits))
+    return NebiusClient(transport=transport, api_key=SECRET, base_url="https://example.test/v1", limits=Limits(**limits))
 
 
 class ClientTests(unittest.TestCase):
@@ -30,7 +30,7 @@ class ClientTests(unittest.TestCase):
         t = FakeTransport(ok_response())
         r = client(t).chat([{"role": "user", "content": "x"}], max_tokens=50, reasoning_effort="low")
         url, headers, body, timeout = t.calls[0]
-        self.assertEqual(url, "https://api.tokenfactory.nebius.com/v1/chat/completions")
+        self.assertEqual(url, "https://example.test/v1/chat/completions")
         self.assertEqual((body["max_tokens"], body["reasoning_effort"]), (50, "low"))
         self.assertEqual(timeout, 60.0)
         self.assertEqual((r.content, r.request_id, r.usage["total_tokens"]), ("hi", "rid1", 30))

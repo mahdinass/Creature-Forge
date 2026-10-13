@@ -6,12 +6,13 @@ and time limits; NO retries of any kind; the transport is injectable so tests ne
 from __future__ import annotations
 
 import json
-import os
 import time
 import urllib.error
 import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass, field
+
+from .config import load_env, nebius_api_key, nebius_base_url
 
 DEFAULT_BASE_URL = "https://api.tokenfactory.nebius.com/v1"
 DEFAULT_MODEL = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
@@ -70,7 +71,7 @@ def _urllib_transport(url: str, headers: dict, body: dict, timeout: float):
 @dataclass
 class NebiusClient:
     model: str = DEFAULT_MODEL
-    base_url: str = DEFAULT_BASE_URL
+    base_url: str | None = None  # None -> NEBIUS_BASE_URL (env or .env) -> DEFAULT_BASE_URL
     limits: Limits = field(default_factory=Limits)
     # transport(url, headers, body, timeout) -> (status, response_headers, parsed_json)
     transport: Callable = _urllib_transport
@@ -80,8 +81,11 @@ class NebiusClient:
     calls: list = field(default_factory=list)  # redacted records of every attempted request
 
     def __post_init__(self):
+        if self.api_key is None or self.base_url is None:
+            load_env()  # repo-root .env; real environment variables take precedence
         if self.api_key is None:
-            self.api_key = os.environ.get("NEBIUS_API_KEY")
+            self.api_key = nebius_api_key()
+        self.base_url = (self.base_url or nebius_base_url(DEFAULT_BASE_URL)).rstrip("/")
 
     def chat(self, messages: list[dict], *, max_tokens: int = 1024, temperature: float = 0.0,
              reasoning_effort: str | None = None, response_format: dict | None = None) -> ChatResult:

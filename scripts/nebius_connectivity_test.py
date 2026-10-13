@@ -14,13 +14,17 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-BASE = "https://api.tokenfactory.nebius.com/v1"
+from creature_forge.config import load_env, nebius_api_key, nebius_base_url
+from creature_forge.nebius import DEFAULT_BASE_URL
+
+load_env()
+BASE = nebius_base_url(DEFAULT_BASE_URL)
 MODEL = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
 MAX_TOKENS = 256
 
 
 def main() -> int:
-    key = os.environ.get("NEBIUS_API_KEY")
+    key = nebius_api_key()
     if not key:
         print("BLOCKED: NEBIUS_API_KEY not set")
         return 2
