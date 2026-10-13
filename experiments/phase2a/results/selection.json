@@ -1,0 +1,56 @@
+{
+ "rule": "highest mean training fitness (ties: earlier)",
+ "protocol_commit": "2f3df1c61f3dae36889303680d2a796766bdc31b",
+ "protocol_sha256": "409b2d1f09ac541a11f528f7cbc8857a1d23d74efb979e2af6f1199603e3e4ce",
+ "training_seeds": [
+  1000,
+  1001,
+  1002
+ ],
+ "selected": {
+  "random_search": {
+   "index": 67,
+   "params": {
+    "freq": 1.646239548925801,
+    "duty": 0.5729446517844355,
+    "hip_amp": 0.06101980708909241,
+    "knee_amp": 0.6924277704621796,
+    "knee_shift": -0.02662269165497158,
+    "stance_knee": -0.042295661954438124,
+    "hip_bias": 0.1439390110186835,
+    "kp": 178.7755444387619,
+    "kd": 10.681215465076788,
+    "balance_gain": 106.9484311388033,
+    "pitch_kp": 85.12436346148849,
+    "pitch_ref": 0.1546848679414043,
+    "sync_gain": 0.8424240543403356
+   },
+   "training_fitness": 5.464214741575677,
+   "training_label": "walking",
+   "training_feasible": false,
+   "export": "best_random_search.json"
+  },
+  "differential_evolution": {
+   "index": 196,
+   "params": {
+    "freq": 1.6028012436537196,
+    "duty": 0.5725830619223611,
+    "hip_amp": 0.05383693551752,
+    "knee_amp": 1.0,
+    "knee_shift": -0.05876873116085414,
+    "stance_knee": -0.21154724595234414,
+    "hip_bias": 0.023516252190300374,
+    "kp": 120.57234931023044,
+    "kd": 4.979872580808602,
+    "balance_gain": 0.0,
+    "pitch_kp": 47.6163376179085,
+    "pitch_ref": 0.25,
+    "sync_gain": 0.0
+   },
+   "training_fitness": 2.4538083191971074,
+   "training_label": "fall",
+   "training_feasible": false,
+   "export": "best_differential_evolution.json"
+  }
+ }
+}

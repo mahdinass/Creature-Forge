@@ -1,0 +1,43 @@
+{
+ "controller": "phase_gait",
+ "params": {
+  "freq": 1.646239548925801,
+  "duty": 0.5729446517844355,
+  "hip_amp": 0.06101980708909241,
+  "knee_amp": 0.6924277704621796,
+  "knee_shift": -0.02662269165497158,
+  "stance_knee": -0.042295661954438124,
+  "hip_bias": 0.1439390110186835,
+  "kp": 178.7755444387619,
+  "kd": 10.681215465076788,
+  "balance_gain": 106.9484311388033,
+  "pitch_kp": 85.12436346148849,
+  "pitch_ref": 0.1546848679414043,
+  "sync_gain": 0.8424240543403356
+ },
+ "body": {
+  "torso_mass": 5.0,
+  "thigh_length": 0.3,
+  "shank_length": 0.3,
+  "foot_length": 0.16,
+  "foot_friction": 1.0,
+  "torque_limit": 60.0,
+  "leg_density": 1000.0
+ },
+ "source": {
+  "method": "random_search",
+  "index": 67,
+  "rollouts_before": 201,
+  "protocol_commit": "2f3df1c61f3dae36889303680d2a796766bdc31b"
+ },
+ "training": {
+  "seeds": [
+   1000,
+   1001,
+   1002
+  ],
+  "fitness": 5.464214741575677,
+  "label": "walking",
+  "feasible": false
+ }
+}
