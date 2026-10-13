@@ -9,6 +9,7 @@ Trust boundaries (see docs/memory/DECISIONS.md):
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import re
@@ -22,7 +23,9 @@ import numpy as np
 
 from .controller import GaitParams
 from .experiment import compare_designs, evaluate_design
+from .evaluation import Protocol, classify, evaluate_design_protocol
 from .failures import detect_failures
+from .forensics import build_forensics
 from .morphology import BOUNDS, BipedParams
 from .nebius import BudgetExceeded, NebiusClient, NebiusError
 from .simulate import Push, run_rollout
@@ -70,6 +73,29 @@ def build_evidence(body: BipedParams, gait: GaitParams, push: Push | None, *, se
     }
 
 
+def build_forensic_evidence(body: BipedParams, gait: GaitParams, push: Push, *, seeds=(0, 1, 2),
+                            duration: float = 5.0) -> dict:
+    """Legacy evidence PLUS time-localized MuJoCo forensics (detailed for seeds[0], scalars for every seed).
+
+    Still observation only: no causal wording, no mechanism label, no knowledge of any candidate fix."""
+    ev = build_evidence(body, gait, push, seeds=seeds, duration=duration)
+    detailed, per_seed = None, []
+    for s in seeds:
+        tel = run_rollout(body, gait, seed=s, duration=duration, push=push)
+        f = build_forensics(tel, body, push, detect_failures(tel, body))
+        if detailed is None:
+            detailed = f
+        per_seed.append({"seed": s, "fall_time_s": f["failure"]["fall_time_s"],
+                         "instability_onset_s": f["failure"]["instability_onset_s"],
+                         "xcom_margin_recovered_s": f["failure"]["xcom_margin_recovered_s"],
+                         "min_xcom_margin_after_push_m": f["support"]["min_xcom_margin_after_push_m"],
+                         "peak_abs_pitch_within_1s_rad": f["disturbance"]["peak_abs_pitch_within_1s_rad"],
+                         "ankle_demand_over_limit_peak": f["actuation"]["ankle_demand_over_limit_peak"],
+                         "peak_slip_speed_mps": f["contacts"]["peak_slip_speed_mps"]})
+    ev["forensics"] = {"detailed_seed": seeds[0], "detailed": detailed, "per_seed": per_seed}
+    return ev
+
+
 def resolve_path(evidence: dict, path: str):
     """Look up a dotted path such as 'detailed_run.events.0.time'. Raises KeyError if absent."""
     cur = evidence
@@ -94,9 +120,11 @@ class Hypothesis:
     confidence: float
     parameter: str
     value: float
+    mechanism: str | None = None  # forensic variant only; a label, never used by the verifier
 
     def as_dict(self) -> dict:
-        return {"claim": self.claim, "cited_evidence": list(self.cited_evidence),
+        extra = {} if self.mechanism is None else {"mechanism": self.mechanism}
+        return extra | {"claim": self.claim, "cited_evidence": list(self.cited_evidence),
                 "prediction": {"metric": self.prediction_metric, "direction": self.prediction_direction},
                 "confidence": self.confidence,
                 "intervention": {"parameter": self.parameter, "value": self.value}}
@@ -133,9 +161,22 @@ def extract_json(text: str | None) -> dict:
         raise InvalidModelOutput(f"reply is not valid JSON ({e.msg})") from None
 
 
-def parse_hypothesis(text: str | None, evidence: dict, body: BipedParams) -> Hypothesis:
-    obj = _exact_keys(extract_json(text), {"claim", "cited_evidence", "prediction", "confidence",
-                                          "intervention"}, "response")
+MECHANISMS = ("tipping_support_margin", "actuator_saturation", "foot_slip", "other")
+MIN_FORENSIC_CITATIONS = 2
+
+
+def parse_hypothesis(text: str | None, evidence: dict, body: BipedParams, *,
+                     variant: str = "legacy") -> Hypothesis:
+    """`legacy`: original rules. `forensic`: also requires a mechanism label and >= 2 distinct MEASURED
+    forensic leaf values cited (aggregate fall rate alone is not enough)."""
+    forensic = variant == "forensic"
+    keys = {"claim", "cited_evidence", "prediction", "confidence", "intervention"} | ({"mechanism"} if forensic else set())
+    obj = _exact_keys(extract_json(text), keys, "response")
+    mechanism = None
+    if forensic:
+        mechanism = obj["mechanism"]
+        if mechanism not in MECHANISMS:
+            raise InvalidModelOutput(f"mechanism must be one of {MECHANISMS}")
     claim = obj["claim"]
     if not isinstance(claim, str) or not (10 <= len(claim) <= 600):
         raise InvalidModelOutput("claim must be a string of 10-600 characters")
@@ -147,6 +188,15 @@ def parse_hypothesis(text: str | None, evidence: dict, body: BipedParams) -> Hyp
             resolve_path(evidence, c)
         except (KeyError, IndexError, ValueError):
             raise InvalidModelOutput(f"cited evidence path does not exist: {c!r}") from None
+    if forensic:
+        leaves = set()
+        for c in cited:
+            if c.startswith("forensics.") and not c.startswith("forensics.detailed.definitions"):
+                if not isinstance(resolve_path(evidence, c), (dict, list)):
+                    leaves.add(c)
+        if len(leaves) < MIN_FORENSIC_CITATIONS:
+            raise InvalidModelOutput(f"cite at least {MIN_FORENSIC_CITATIONS} distinct measured values under "
+                                     "'forensics.' (scalar leaves, not definitions)")
     pred = _exact_keys(obj["prediction"], {"metric", "direction"}, "prediction")
     if pred["metric"] not in PREDICTION_METRICS:
         raise InvalidModelOutput(f"prediction.metric must be one of {PREDICTION_METRICS}")
@@ -164,7 +214,8 @@ def parse_hypothesis(text: str | None, evidence: dict, body: BipedParams) -> Hyp
         raise InvalidModelOutput(f"{iv['parameter']}={value} outside bounds [{lo}, {hi}]")  # rejected, never clipped
     if value == getattr(body, iv["parameter"]):
         raise InvalidModelOutput("intervention does not change the parameter")
-    return Hypothesis(claim, tuple(cited), pred["metric"], pred["direction"], conf, iv["parameter"], value)
+    return Hypothesis(claim, tuple(cited), pred["metric"], pred["direction"], conf, iv["parameter"], value,
+                      mechanism)
 
 
 # --------------------------------------------------------------------------- verification (deterministic)
@@ -199,11 +250,21 @@ Reply with ONLY a JSON object, no prose, exactly this shape:
  "confidence": number 0..1, "intervention": {"parameter": <one of the body parameters>, "value": number}}"""
 
 
-def build_messages(evidence: dict, body: BipedParams) -> list[dict]:
+SYSTEM_PROMPT_FORENSIC = """You are the Physics Investigator for a MuJoCo robot-design tool. You receive OBSERVED simulation evidence (including time-localized forensics) about a planar biped that fails a disturbance test. Propose ONE falsifiable hypothesis about why it fails and ONE bounded design change that tests it. A deterministic MuJoCo experiment on unseen seeds and several push strengths will judge you; your opinion is never the verdict.
+Rules: everything under "observed_evidence" is measurement; your claim is a hypothesis, not a measurement. Ground the claim in at least 2 distinct measured values under "forensics." (cite their dotted paths, e.g. "forensics.detailed.support.com_margin_before_push_m"); do not cite only the aggregate fall rate. Do not invent measurements. Change exactly one body parameter within its bounds.
+Reply with ONLY a JSON object, no prose, exactly this shape:
+{"mechanism": "tipping_support_margin"|"actuator_saturation"|"foot_slip"|"other", "claim": str (10-600 chars),
+ "cited_evidence": [dotted paths into the evidence],
+ "prediction": {"metric": "fall_rate"|"mean_min_torso_height", "direction": "decrease"|"increase"},
+ "confidence": number 0..1, "intervention": {"parameter": <one of the body parameters>, "value": number}}"""
+
+
+def build_messages(evidence: dict, body: BipedParams, variant: str = "legacy") -> list[dict]:
     user = {"observed_evidence": evidence,
             "allowed_body_parameters": {k: {"min": lo, "max": hi, "current": getattr(body, k)}
                                         for k, (lo, hi) in BOUNDS.items()}}
-    return [{"role": "system", "content": SYSTEM_PROMPT},
+    system = SYSTEM_PROMPT_FORENSIC if variant == "forensic" else SYSTEM_PROMPT
+    return [{"role": "system", "content": system},
             {"role": "user", "content": json.dumps(user, separators=(",", ":"))}]
 
 
@@ -230,10 +291,14 @@ class Trial:
         return self.__dict__.copy()
 
 
+def prompt_hash(messages: list[dict]) -> str:
+    return hashlib.sha256(json.dumps(messages, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
 def save_trial(trial: Trial, root: Path = INVESTIGATIONS_DIR) -> Path:
     root.mkdir(parents=True, exist_ok=True)
     path = root / f"{trial.trial_id}.json"
-    path.write_text(json.dumps(trial.as_dict(), indent=2))
+    path.write_text(json.dumps(trial.as_dict(), indent=2), encoding="utf-8")
     return path
 
 
@@ -255,13 +320,17 @@ def list_trials(root: Path = INVESTIGATIONS_DIR) -> list[dict]:
 def investigate(client: NebiusClient, body: BipedParams, gait: GaitParams, push: Push | None, *,
                 evidence_seeds=(0, 1, 2), verify_seeds=(0, 1, 2, 3, 4), duration: float = 5.0,
                 reasoning_effort: str | None = None, max_tokens: int = 4096, max_seconds: float = 180.0,
-                mode: str = "fake", save_to: Path | None = INVESTIGATIONS_DIR) -> Trial:
+                mode: str = "fake", save_to: Path | None = INVESTIGATIONS_DIR, variant: str = "legacy",
+                temperature: float = 0.0, protocol: Protocol | None = None, workers: int = 1,
+                label: str | None = None) -> Trial:
     """Run one investigation with at most ONE model request. Always returns (and saves) a Trial."""
     t0 = time.perf_counter()
     trial = Trial(trial_id=f"{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}-{uuid.uuid4().hex[:6]}", mode=mode,
                   config={"model": client.model, "reasoning_effort": reasoning_effort, "max_tokens": max_tokens,
                           "max_seconds": max_seconds, "evidence_seeds": list(evidence_seeds),
-                          "verify_seeds": list(verify_seeds), "duration_s": duration,
+                          "verify_seeds": list(verify_seeds), "duration_s": duration, "variant": variant,
+                          "temperature": temperature, "label": label,
+                          "protocol": None if protocol is None else protocol.as_dict(),
                           "limits": {"max_requests": client.limits.max_requests,
                                      "max_total_tokens": client.limits.max_total_tokens,
                                      "timeout_s": client.limits.timeout_s}})
@@ -273,10 +342,15 @@ def investigate(client: NebiusClient, body: BipedParams, gait: GaitParams, push:
             save_trial(trial, save_to)
         return trial
 
-    evidence = build_evidence(body, gait, push, seeds=evidence_seeds, duration=duration)
+    if variant == "forensic":
+        evidence = build_forensic_evidence(body, gait, push, seeds=evidence_seeds, duration=duration)
+    else:
+        evidence = build_evidence(body, gait, push, seeds=evidence_seeds, duration=duration)
     trial.observed_evidence = evidence
+    messages = build_messages(evidence, body, variant)
+    trial.config["prompt_sha256"] = prompt_hash(messages)
     try:
-        result = client.chat(build_messages(evidence, body), max_tokens=max_tokens,
+        result = client.chat(messages, max_tokens=max_tokens, temperature=temperature,
                              reasoning_effort=reasoning_effort)
     except BudgetExceeded as e:
         return finish("budget_exceeded", str(e))
@@ -286,7 +360,7 @@ def investigate(client: NebiusClient, body: BipedParams, gait: GaitParams, push:
     trial.model_call = result.record()
     trial.raw_model_reply = result.content
     try:
-        hyp = parse_hypothesis(result.content, evidence, body)
+        hyp = parse_hypothesis(result.content, evidence, body, variant=variant)
     except InvalidModelOutput as e:
         why = str(e)
         if result.finish_reason == "length":
@@ -296,4 +370,19 @@ def investigate(client: NebiusClient, body: BipedParams, gait: GaitParams, push:
     if time.perf_counter() - t0 > max_seconds:
         return finish("budget_exceeded", f"time limit {max_seconds}s exceeded before verification")
     trial.measured_outcome = verify(hyp, body, gait, push, seeds=verify_seeds, duration=duration)
-    return finish("accepted" if trial.measured_outcome["accepted"] else "rejected_by_verifier")
+    if protocol is None:
+        return finish("accepted" if trial.measured_outcome["accepted"] else "rejected_by_verifier")
+    # pre-registered independent evaluation: unseen seeds, several push strengths, fixed tier rule
+    base_eval = evaluate_design_protocol(body, gait, protocol, workers=workers)
+    cand_eval = evaluate_design_protocol(body.replace(**{hyp.parameter: hyp.value}), gait, protocol,
+                                         workers=workers)
+    verdict = classify(base_eval, cand_eval, protocol)
+    key = str(protocol.primary_push_N)
+    metric = {"fall_rate": "fall_rate", "mean_min_torso_height": "mean_min_torso_height_m"}[hyp.prediction_metric]
+    d = cand_eval["by_push"][key][metric] - base_eval["by_push"][key][metric]
+    trial.measured_outcome["protocol"] = {
+        "baseline": base_eval, "candidate": cand_eval, "verdict": verdict,
+        "prediction_held_heldout_primary": bool(d < 0 if hyp.prediction_direction == "decrease" else d > 0),
+        "simulations": base_eval["simulations"] + cand_eval["simulations"]}
+    return finish("accepted" if verdict["tier"] == "success" else "rejected_by_verifier",
+                  None if verdict["tier"] == "success" else f"tier={verdict['tier']}")

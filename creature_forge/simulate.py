@@ -46,7 +46,7 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
     rows: dict[str, list] = {k: [] for k in (
         "t", "torso_pos", "torso_pitch", "torso_linvel", "torso_angvel", "qpos_joints",
         "qvel_joints", "joint_torque", "ctrl_demand", "com_pos", "com_vel", "foot_contact",
-        "foot_slip_speed", "contact_force_total")}
+        "foot_slip_speed", "contact_force_total", "support_x_min", "support_x_max", "cop_x")}
     render_geoms = [i for i in range(model.ngeom) if i != floor_id]
     if record_poses:
         rows.update({"geom_xpos": [], "geom_xquat": [], "foot_contact_pos": []})
@@ -70,6 +70,8 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
         slip = np.zeros(2)
         fsum = 0.0
         f6 = np.zeros(6)
+        foot_cx: list[float] = []  # world x of every loaded foot-floor contact point
+        foot_cf: list[float] = []  # its normal force (N)
         for c in range(data.ncon):
             con = data.contact[c]
             g1, g2 = con.geom1, con.geom2
@@ -81,6 +83,8 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
             if other in foot_ids and f6[0] > 1e-6:
                 k = foot_ids.index(other)
                 contact[k] = 1.0
+                foot_cx.append(float(con.pos[0]))
+                foot_cf.append(float(f6[0]))
                 cpos[k] += con.pos
                 ccount[k] += 1
                 mujoco.mj_objectVelocity(model, data, mujoco.mjtObj.mjOBJ_GEOM, other, vel6, 0)
@@ -104,6 +108,14 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
         rows["ctrl_demand"].append(demand.copy())
         rows["com_pos"].append(data.subtree_com[0].copy())
         rows["com_vel"].append(data.subtree_linvel[0].copy())
+        # support polygon extent (min/max loaded contact x) and center of pressure; NaN = no foot loaded
+        if foot_cx:
+            rows["support_x_min"].append(min(foot_cx))
+            rows["support_x_max"].append(max(foot_cx))
+            rows["cop_x"].append(float(np.dot(foot_cx, foot_cf) / sum(foot_cf)))
+        else:
+            for k in ("support_x_min", "support_x_max", "cop_x"):
+                rows[k].append(float("nan"))
         rows["foot_contact"].append(contact)
         rows["foot_slip_speed"].append(slip)
         rows["contact_force_total"].append(fsum)
