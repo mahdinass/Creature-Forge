@@ -1,6 +1,6 @@
 import { memo, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Grid, Html, OrbitControls } from '@react-three/drei'
+import { Grid, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { usePlayback } from './store'
@@ -15,7 +15,6 @@ function Robot({ run }: { run: RunPayload }) {
   const meshes = useRef<(THREE.Mesh | null)[]>([])
   const rings = useRef<(THREE.Mesh | null)[]>([])
   const arrow = useRef<THREE.Group>(null)
-  const pushLabel = useRef<HTMLDivElement>(null)
   const geoms = run.scene.geoms
   // presentation-only: the model is planar, so draw left/right legs apart (declared by the backend)
   const lat = useMemo(() => geoms.map((g) => (g.part.endsWith('_l') ? 1 : g.part.endsWith('_r') ? -1 : 0) * run.scene.display_lateral_offset), [geoms, run.scene.display_lateral_offset])
@@ -63,7 +62,6 @@ function Robot({ run }: { run: RunPayload }) {
     if (arrow.current && run.push && torsoIdx >= 0) {
       const on = t >= run.push.time && t < run.push.time + run.push.duration
       arrow.current.visible = on
-      if (pushLabel.current) pushLabel.current.style.display = on ? 'block' : 'none' // DOM label ignores 3D visibility
       if (on) arrow.current.position.set(pos[torsoIdx][0] - 0.55, pos[torsoIdx][1], pos[torsoIdx][2])
     }
   })
@@ -96,9 +94,6 @@ function Robot({ run }: { run: RunPayload }) {
             <coneGeometry args={[0.045, 0.1, 16]} />
             <meshBasicMaterial color="#f5a524" />
           </mesh>
-          <Html position={[-0.15, 0.1, 0]} center>
-            <div ref={pushLabel} className="push-label" style={{ display: 'none' }}>{run.push.force} N push</div>
-          </Html>
         </group>
       )}
     </group>
@@ -156,6 +151,10 @@ export const Viewport = memo(function Viewport({ run, label }: { run: RunPayload
         <Scene run={run} />
       </Canvas>
       <div className="vp-label">{label}</div>
+      {run.push && t >= run.push.time && t < run.push.time + run.push.duration && (
+        // plain DOM overlay (a drei <Html> portal threw removeChild errors when a viewport unmounted)
+        <div className="push-label vp-push">{run.push.force} N push</div>
+      )}
       <div className="vp-hud">
         <div>torso height <b>{h.toFixed(3)} m</b></div>
         <div>pitch <b>{(run.series.torso_pitch[k] * 57.2958).toFixed(1)}°</b></div>

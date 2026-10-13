@@ -1,0 +1,284 @@
+{
+  "trial_id": "20261013T002054Z-aaad96",
+  "status": "rejected_by_verifier",
+  "created_utc": "2026-10-13T00:20:54.339869+00:00",
+  "schema_version": 1,
+  "mode": "live",
+  "config": {
+    "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "reasoning_effort": null,
+    "max_tokens": 4096,
+    "max_seconds": 180.0,
+    "evidence_seeds": [
+      0,
+      1,
+      2
+    ],
+    "verify_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "duration_s": 5.0,
+    "limits": {
+      "max_requests": 1,
+      "max_total_tokens": 8096,
+      "timeout_s": 90
+    }
+  },
+  "observed_evidence": {
+    "scenario": {
+      "push": {
+        "time_s": 1.0,
+        "force_N": 25.0,
+        "duration_s": 0.15
+      },
+      "duration_s": 5.0,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    "body": {
+      "torso_mass": 5.0,
+      "thigh_length": 0.3,
+      "shank_length": 0.3,
+      "foot_length": 0.08,
+      "foot_friction": 1.0,
+      "torque_limit": 60.0,
+      "leg_density": 1000.0
+    },
+    "controller": {
+      "kp": 150.0,
+      "kd": 8.0,
+      "gait_freq": 0.0,
+      "hip_amp": 0.0,
+      "knee_amp": 0.0,
+      "balance_gain": 80.0,
+      "stand_hip": 0.0,
+      "stand_knee": 0.0
+    },
+    "matched_seed_results": {
+      "fall_rate": 1.0,
+      "mean_min_torso_height_m": 0.034148603757219474,
+      "mean_max_abs_pitch_rad": 1.6051756730198097,
+      "per_seed": [
+        {
+          "seed": 0,
+          "fell": true,
+          "min_torso_height_m": 0.03451719220535754,
+          "max_abs_pitch_rad": 1.6016840353940294,
+          "events": [
+            "fall"
+          ]
+        },
+        {
+          "seed": 1,
+          "fell": true,
+          "min_torso_height_m": 0.033696035034769034,
+          "max_abs_pitch_rad": 1.6026283769446255,
+          "events": [
+            "fall"
+          ]
+        },
+        {
+          "seed": 2,
+          "fell": true,
+          "min_torso_height_m": 0.03423258403153184,
+          "max_abs_pitch_rad": 1.6112146067207742,
+          "events": [
+            "fall"
+          ]
+        }
+      ]
+    },
+    "detailed_run": {
+      "seed": 0,
+      "events": [
+        {
+          "kind": "fall",
+          "time": 1.8459999999999075,
+          "evidence": {
+            "torso_height": 0.45225428216960023,
+            "initial_torso_height": 0.7634834134769432,
+            "torso_pitch": 1.0152423524855911,
+            "min_torso_height": 0.03451719220535754
+          }
+        }
+      ],
+      "peak_torque_demand_over_limit": 0.3380089754359986,
+      "peak_foot_slip_speed_mps": 0.7400617732368997,
+      "initial_torso_height_m": 0.7634834134769432
+    }
+  },
+  "model_call": {
+    "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 1088,
+      "completion_tokens": 1126,
+      "total_tokens": 2214
+    },
+    "latency_s": 5.687,
+    "request_id": "611976be3910a5c013c64ab3496015f5",
+    "reasoning_present": true,
+    "http_status": 200,
+    "content_is_null": false
+  },
+  "raw_model_reply": "\n{\n  \"claim\": \"Lowering the torso mass will reduce the fall_rate when subjected to the 25\u202fN push disturbance, indicating that excess torso inertia drives the fall.\",\n  \"cited_evidence\": [\n    \"matched_seed_results.fall_rate\"\n  ],\n  \"prediction\": {\n    \"metric\": \"fall_rate\",\n    \"direction\": \"decrease\"\n  },\n  \"confidence\": 0.78,\n  \"intervention\": {\n    \"parameter\": \"torso_mass\",\n    \"value\": 3.0\n  }\n}",
+  "rejection_reason": null,
+  "hypothesis": {
+    "claim": "Lowering the torso mass will reduce the fall_rate when subjected to the 25\u202fN push disturbance, indicating that excess torso inertia drives the fall.",
+    "cited_evidence": [
+      "matched_seed_results.fall_rate"
+    ],
+    "prediction": {
+      "metric": "fall_rate",
+      "direction": "decrease"
+    },
+    "confidence": 0.78,
+    "intervention": {
+      "parameter": "torso_mass",
+      "value": 3.0
+    }
+  },
+  "measured_outcome": {
+    "candidate_body": {
+      "torso_mass": 3.0,
+      "thigh_length": 0.3,
+      "shank_length": 0.3,
+      "foot_length": 0.08,
+      "foot_friction": 1.0,
+      "torque_limit": 60.0,
+      "leg_density": 1000.0
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "duration_s": 5.0,
+    "observed": {
+      "fall_rate": {
+        "baseline": 1.0,
+        "candidate": 1.0,
+        "delta": 0.0
+      },
+      "mean_min_torso_height": {
+        "baseline": 0.0339833552129362,
+        "candidate": 0.03292832534380004,
+        "delta": -0.0010550298691361648
+      },
+      "mean_max_abs_pitch": {
+        "baseline": 1.6080329320935403,
+        "candidate": 1.6116034251345794,
+        "delta": 0.00357049304103918
+      }
+    },
+    "per_seed": {
+      "baseline": [
+        {
+          "seed": 0,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03451719220535754,
+          "max_abs_pitch": 1.6016840353940294
+        },
+        {
+          "seed": 1,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.033696035034769034,
+          "max_abs_pitch": 1.6026283769446255
+        },
+        {
+          "seed": 2,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03423258403153184,
+          "max_abs_pitch": 1.6112146067207742
+        },
+        {
+          "seed": 3,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03332903126772779,
+          "max_abs_pitch": 1.613336590907621
+        },
+        {
+          "seed": 4,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03414193352529482,
+          "max_abs_pitch": 1.611301050500651
+        }
+      ],
+      "candidate": [
+        {
+          "seed": 0,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03326036631541529,
+          "max_abs_pitch": 1.6130760516302163
+        },
+        {
+          "seed": 1,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03302965837458216,
+          "max_abs_pitch": 1.61325519908155
+        },
+        {
+          "seed": 2,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.032669879240402766,
+          "max_abs_pitch": 1.6140275688708132
+        },
+        {
+          "seed": 3,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.03325790756696834,
+          "max_abs_pitch": 1.6037730720062218
+        },
+        {
+          "seed": 4,
+          "fell": true,
+          "events": [
+            "fall"
+          ],
+          "min_torso_height": 0.032423815221631624,
+          "max_abs_pitch": 1.6138852340840961
+        }
+      ]
+    },
+    "prediction_held": false,
+    "improved": false,
+    "accepted": false
+  },
+  "elapsed_s": 16.767
+}

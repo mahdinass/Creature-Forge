@@ -17,6 +17,7 @@ from ..controller import CTRL_BOUNDS, GaitParams
 from ..experiment import (PHASE0_BASELINE, PHASE0_CANDIDATE, PHASE0_DURATION, PHASE0_PUSH, PHASE0_SEEDS,
                           compare_designs)
 from ..investigator import INVESTIGATIONS_DIR, list_trials, load_trial
+from ..lab import (DEMO_DIR, LabError, build_replay, lab_view, list_lab_trials, load_lab_trial)
 from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
@@ -85,7 +86,8 @@ def resolve_static(root: Path, path: str) -> Path | None:
     return f if f.is_file() else None
 
 
-def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = DIST) -> FastAPI:
+def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = DIST,
+               demo_dir: Path = DEMO_DIR) -> FastAPI:
     app = FastAPI(title="Creature Forge Studio", lifespan=_warm)
 
     @app.get("/api/schema")
@@ -126,6 +128,32 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             return trial_view(load_trial(trial_id, investigations_dir))
         except (KeyError, FileNotFoundError):
             raise HTTPException(404, "no such investigation") from None
+
+    # ---- Investigation Laboratory: read-only records + deterministic re-simulation (no model calls, no writes)
+    @app.get("/api/lab/trials")
+    def lab_trials():
+        return list_lab_trials(investigations_dir, demo_dir)
+
+    def _lab_trial(trial_id: str):
+        try:
+            return load_lab_trial(trial_id, investigations_dir, demo_dir)
+        except KeyError:
+            raise HTTPException(404, "no such investigation record") from None
+        except LabError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @app.get("/api/lab/trials/{trial_id}")
+    def lab_trial(trial_id: str):
+        trial, source = _lab_trial(trial_id)
+        return lab_view(trial, source, demo_dir)
+
+    @app.get("/api/lab/trials/{trial_id}/replay")
+    def lab_replay(trial_id: str, seed: int = 0):
+        trial, _ = _lab_trial(trial_id)
+        try:
+            return build_replay(trial, seed)
+        except LabError as exc:
+            raise HTTPException(422, str(exc)) from None
 
     @app.get("/api/sketch/default")
     def sketch_default():
