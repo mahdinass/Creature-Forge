@@ -103,6 +103,7 @@ export interface LabView {
   outcome: { status: TrialStatus; reason?: string | null; tier?: string | null }
   verdict: Verdict | null
   screening: { prediction_held: boolean; improved: boolean; accepted: boolean; seeds: number[] } | null
+  seeds: { evidence: number[] | null; screening: number[] | null }
   protocol_simulations?: number | null
   protocol_config: { heldout_seeds: number[]; primary_push_N: number; push_levels_N: number[] } | null
   raw_model_reply: { text: string; truncated: boolean; note: string } | null

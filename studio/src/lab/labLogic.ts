@@ -160,3 +160,31 @@ export function fmtForensic(key: string, v: number | null): string {
   if (v === null || v === undefined) return key === 'xcom_margin_recovered_s' ? 'never' : '—'
   return v.toFixed(3)
 }
+
+/** "0–4" for a consecutive run, otherwise "0, 2, 5". */
+export function fmtSeeds(seeds: number[]): string {
+  const s = [...seeds].sort((a, b) => a - b)
+  if (s.length > 2 && s.every((v, i) => i === 0 || v === s[i - 1] + 1)) return `${s[0]}–${s[s.length - 1]}`
+  return s.join(', ')
+}
+
+/** Wording for the screening table, derived only from the seed sets saved with the record. */
+export function screeningText(evidence: number[] | null, screening: number[] | null): { title: string; note: string; count: string } {
+  if (!screening || screening.length === 0)
+    return { title: 'Screening', note: 'This record does not list its screening seeds.', count: 'screening seeds' }
+  const count = `${screening.length} screening seed${screening.length === 1 ? '' : 's'}`
+  const title = `Screening: seeds ${fmtSeeds(screening)}`
+  if (!evidence || evidence.length === 0) return { title, note: 'The evidence seeds were not recorded.', count }
+  const ev = new Set(evidence)
+  const same = screening.length === ev.size && screening.every((s) => ev.has(s))
+  const overlap = screening.filter((s) => ev.has(s))
+  const fresh = screening.filter((s) => !ev.has(s))
+  let note: string
+  if (same) note = `The same seeds (${fmtSeeds(evidence)}) the model saw evidence from.`
+  else if (overlap.length === 0) note = `None of these overlap the evidence seeds (${fmtSeeds(evidence)}).`
+  else
+    note =
+      `The evidence came from seeds ${fmtSeeds(evidence)}; screening re-uses ${overlap.length === evidence.length ? 'all of them' : `seeds ${fmtSeeds(overlap)}`}` +
+      ` and adds ${fresh.length === 0 ? 'none' : `seeds ${fmtSeeds(fresh)}`}.`
+  return { title, note, count }
+}

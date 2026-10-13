@@ -82,6 +82,10 @@ try {
   await page.click('[data-step="verify"]')
   await page.waitForSelector('[data-testid="verdict"]')
   ok((await page.textContent('[data-testid="verdict"]')).includes('Rejected by MuJoCo'), 'MuJoCo verdict: rejected')
+  const scrTitle = await page.textContent('[data-testid="screening-block"] h4')
+  const scrNote = await page.textContent('[data-testid="screening-note"]')
+  ok(scrTitle === 'Screening: seeds 0–4' && scrNote.includes('evidence came from seeds 0–2') && !/same seeds/.test(scrNote),
+    `screening label uses the saved seed sets ("${scrTitle}"; evidence 0–2 is distinguished)`)
   ok((await page.$$('[data-testid="heldout-table"] tbody tr')).length === 5, 'held-out results for all 5 push levels')
   ok((await page.textContent('[data-testid="verdict-block"]')).includes('fell more often than the original at 15'), 'worse-at-15-N finding is surfaced')
   await shot(page, '4-verify')

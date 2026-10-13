@@ -99,6 +99,16 @@ class ListLoadViewTests(unittest.TestCase):
         self.assertEqual(v["design_change"]["parameter"], "torso_mass")
         self.assertEqual(v["missing"], [])
 
+    def test_view_reports_evidence_and_screening_seeds_separately_from_saved_metadata(self):
+        v = lab.lab_view(load(REJECTED), "bundled-demo", DEMO)
+        self.assertEqual(v["seeds"], {"evidence": [0, 1, 2], "screening": [0, 1, 2, 3, 4]})
+        t = load(REJECTED)  # future experiment with other seeds: the view must follow the record, not constants
+        t["config"]["evidence_seeds"], t["config"]["verify_seeds"] = [7, 8], [8, 9, 10]
+        t["measured_outcome"]["seeds"] = [8, 9, 10]
+        self.assertEqual(lab.lab_view(t, "local", DEMO)["seeds"], {"evidence": [7, 8], "screening": [8, 9, 10]})
+        inv = lab.lab_view(load(INVALID), "bundled-demo", DEMO)  # never screened: no screening seeds claimed from outcome
+        self.assertEqual(inv["seeds"]["evidence"], [0, 1, 2])
+
     def test_view_of_invalid_response_has_no_hypothesis_or_verdict_and_labels_raw_reply(self):
         v = lab.lab_view(load(INVALID), "bundled-demo", DEMO)
         self.assertEqual(v["outcome"]["status"], "invalid_model_output")

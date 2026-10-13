@@ -1,7 +1,7 @@
 import { Block, Notice } from './Badges'
 import {
   changeRows, directionWord, FORENSIC_LABEL, fmtDelta, fmtForensic, fmtMetric, fmtNum, metricLabel, metricRows, pct,
-  predictionVerdict, statusInfo,
+  predictionVerdict, screeningText, statusInfo,
 } from './labLogic'
 import type { Consistency, LabView, Replay } from './labTypes'
 import { Metrics } from '../Metrics'
@@ -224,6 +224,7 @@ export function VerifyStep({ view }: { view: LabView }) {
   const heldout = predictionVerdict(pv.held_on_heldout_primary)
   const levels = pv.heldout_by_push ? Object.keys(pv.heldout_by_push).sort((a, b) => Number(a) - Number(b)) : []
   const heldSeeds = view.protocol_config?.heldout_seeds
+  const scr = screeningText(view.seeds?.evidence ?? null, view.seeds?.screening ?? null)
   return (
     <div className="step-body">
       <Block kind="measured" title="Verdict" hint={view.provenance.measured} testid="verdict-block">
@@ -233,7 +234,7 @@ export function VerifyStep({ view }: { view: LabView }) {
         {view.outcome.reason && <p className="dim">Recorded reason: <code>{view.outcome.reason}</code></p>}
         <p>
           Prediction (<i>{metricLabel(pv.metric)} should {directionWord(pv.direction)}</i>):{' '}
-          <span className={`tone-${screening.tone}`}>{screening.text}</span> on the 5 screening seeds,{' '}
+          <span className={`tone-${screening.tone}`}>{screening.text}</span> on the {scr.count},{' '}
           <span className={`tone-${heldout.tone}`}>{heldout.text}</span> at the primary held-out push.
         </p>
         {v && v.levels_where_candidate_worse.length > 0 && (
@@ -241,7 +242,7 @@ export function VerifyStep({ view }: { view: LabView }) {
         )}
       </Block>
 
-      <Block kind="measured" title="Screening: same seeds as the evidence" hint={view.provenance.measured}>
+      <Block kind="measured" title={scr.title} hint={view.provenance.measured} testid="screening-block">
         <table className="cmp">
           <thead><tr><th>Metric</th><th>Original</th><th>Modified</th><th>Change</th></tr></thead>
           <tbody>
@@ -255,6 +256,7 @@ export function VerifyStep({ view }: { view: LabView }) {
             ))}
           </tbody>
         </table>
+        <small data-testid="screening-note">{scr.note}</small>
       </Block>
 
       {pv.heldout_by_push && (

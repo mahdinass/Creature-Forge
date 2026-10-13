@@ -130,6 +130,14 @@ def replay_seeds(trial: dict) -> list[int]:
     return sorted(int(s) for s in seeds)
 
 
+def _seed_roles(trial: dict) -> dict:
+    """Seed sets exactly as saved: the ones the model saw evidence from vs. the ones the verifier screened on."""
+    cfg, ev, out = trial.get("config") or {}, trial.get("observed_evidence") or {}, trial.get("measured_outcome") or {}
+    evidence = cfg.get("evidence_seeds") or (ev.get("scenario") or {}).get("seeds")
+    screening = out.get("seeds") or cfg.get("verify_seeds")
+    return {"evidence": sorted(evidence) if evidence else None, "screening": sorted(screening) if screening else None}
+
+
 def lab_view(trial: dict, source: str, demo_dir: Path = DEMO_DIR) -> dict:
     """trial_view plus availability flags, provenance labels and graceful degradation."""
     missing: list[str] = []
@@ -168,6 +176,7 @@ def lab_view(trial: dict, source: str, demo_dir: Path = DEMO_DIR) -> dict:
         "verdict": ((trial.get("measured_outcome") or {}).get("protocol") or {}).get("verdict"),
         "screening": ({k: trial["measured_outcome"].get(k) for k in ("prediction_held", "improved", "accepted", "seeds")}
                       if trial.get("measured_outcome") else None),
+        "seeds": _seed_roles(trial),
         "protocol_simulations": ((trial.get("measured_outcome") or {}).get("protocol") or {}).get("simulations"),
     }
     return view
