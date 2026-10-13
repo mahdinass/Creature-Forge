@@ -47,7 +47,13 @@ class MemoryGuardTests(unittest.TestCase):
         cfg = json.loads((ROOT / ".claude/settings.json").read_text(encoding="utf-8"))
         self.assertIn("SessionStart", cfg["hooks"])
         self.assertIn("PreToolUse", cfg["hooks"])
-        self.assertIn("context_preflight.py", cfg["hooks"]["SessionStart"][0]["hooks"][0]["command"])
+        for hook, script in (
+            (cfg["hooks"]["SessionStart"][0]["hooks"][0], "context_preflight.py"),
+            (cfg["hooks"]["PreToolUse"][0]["hooks"][0], "guard_venv.py"),
+        ):
+            # Must be cwd-independent: anchored on the project dir, never a relative path.
+            self.assertEqual(hook["command"], "python")
+            self.assertEqual(hook["args"], ["${CLAUDE_PROJECT_DIR}/scripts/" + script])
 
     def test_preflight_repository_root(self):
         self.assertTrue((self.preflight.ROOT / "docs/PROJECT_SPEC.md").is_file())
