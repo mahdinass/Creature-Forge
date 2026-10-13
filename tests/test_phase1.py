@@ -12,7 +12,7 @@ from creature_forge.evaluation import Protocol, classify, evaluate_design_protoc
 from creature_forge.experiment import PHASE0_BASELINE, PHASE0_DURATION, PHASE0_PUSH
 from creature_forge.failures import detect_failures
 from creature_forge.forensics import build_forensics, contact_transitions, support_margins
-from creature_forge.investigator import (InvalidModelOutput, build_forensic_evidence, build_messages,
+from creature_forge.investigator import (InvalidModelOutput, build_evidence, build_forensic_evidence, build_messages,
                                          investigate, parse_hypothesis, prompt_hash)
 from creature_forge.morphology import BOUNDS
 from creature_forge.nebius import Limits, NebiusClient
@@ -271,17 +271,118 @@ if __name__ == "__main__":
     unittest.main()
 
 
+REGISTERED_SHA256 = {  # pinned here too, so rewriting protocol.json alone cannot pass the integrity test
+    "legacy": "77898ff0a6010058319b52e44ef17209a6ed7ba3e6ee58333320efa8caa21bac",
+    "forensic": "fbcf1e8064b54857d1e69369d6bf04ae572bf18003b59a6561b7222a336467b5",
+}
+
+
 class RegistrationTests(unittest.TestCase):
-    def test_registered_prompts_match_rebuilt_prompts_and_budget_is_capped(self):
-        reg = json.loads(Path("experiments/phase1/protocol.json").read_text(encoding="utf-8"))
-        self.assertEqual(reg["live_limits"]["max_live_requests"], 3)
-        self.assertEqual(reg["live_limits"]["max_total_tokens"], 18000)
-        self.assertEqual(reg["live_limits"]["max_completion_tokens_per_request"], 4096)
-        self.assertEqual(reg["live_limits"]["retries"], 0)
-        self.assertEqual(len(reg["call_plan"]), 3)
-        ev = build_forensic_evidence(BODY, GAIT, PHASE0_PUSH, seeds=(0, 1, 2), duration=PHASE0_DURATION)
-        self.assertEqual(prompt_hash(build_messages(ev, BODY, "forensic")), reg["prompts"]["forensic"]["sha256"])
-        self.assertNotIn('"foot_length":0.16', json.dumps(reg["prompts"]))
+    """A. Exact historical integrity. Platform independent: reads only the stored, frozen prompts."""
+
+    def setUp(self):
+        self.reg = json.loads(Path("experiments/phase1/protocol.json").read_text(encoding="utf-8"))
+
+    def test_registered_limits_and_plan_are_unchanged(self):
+        self.assertEqual(self.reg["live_limits"]["max_live_requests"], 3)
+        self.assertEqual(self.reg["live_limits"]["max_total_tokens"], 18000)
+        self.assertEqual(self.reg["live_limits"]["max_completion_tokens_per_request"], 4096)
+        self.assertEqual(self.reg["live_limits"]["retries"], 0)
+        self.assertEqual(len(self.reg["call_plan"]), 3)
+        self.assertNotIn('"foot_length":0.16', json.dumps(self.reg["prompts"]))
+
+    def test_frozen_prompts_hash_to_the_originally_registered_values(self):
+        from creature_forge.reproducibility import verify_frozen_prompts
+        res = verify_frozen_prompts(self.reg)
+        self.assertEqual(set(res), set(REGISTERED_SHA256))
+        for variant, (ok, registered, recomputed) in res.items():
+            self.assertEqual(registered, REGISTERED_SHA256[variant], variant)
+            self.assertTrue(ok, f"{variant}: stored messages hash to {recomputed}, registered {registered}")
+
+
+class PhysicsReproducibilityTests(unittest.TestCase):
+    """B. Does MuJoCo on this platform regenerate the registered evidence within the documented policy?
+
+    Compares evidence, never hashes. Structural/categorical content must match exactly; only floats get the
+    tolerance in creature_forge.reproducibility (RTOL/ATOL)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.reg = json.loads(Path("experiments/phase1/protocol.json").read_text(encoding="utf-8"))
+
+    def _regen(self, variant):
+        fn = build_forensic_evidence if variant == "forensic" else build_evidence
+        return fn(BODY, GAIT, PHASE0_PUSH, seeds=(0, 1, 2), duration=PHASE0_DURATION)
+
+    def test_regenerated_evidence_matches_registered_reference(self):
+        from creature_forge.reproducibility import compare_evidence, format_report, reference_evidence
+        for variant in ("legacy", "forensic"):
+            cmp = compare_evidence(reference_evidence(self.reg, variant), self._regen(variant))
+            print("\n" + format_report(cmp, variant))  # visible in CI logs
+            self.assertTrue(cmp.ok, "\n".join(cmp.failures()))
+
+    def test_scientific_conclusions_are_exactly_reproduced(self):
+        from creature_forge.reproducibility import reference_evidence
+        ref, new = reference_evidence(self.reg, "forensic"), self._regen("forensic")
+        self.assertEqual(new["matched_seed_results"]["fall_rate"], ref["matched_seed_results"]["fall_rate"])
+        rf, nf = ref["forensics"]["detailed"], new["forensics"]["detailed"]
+        self.assertEqual(nf["failure"]["fell"], rf["failure"]["fell"])
+        self.assertEqual(nf["contacts"]["transitions"], rf["contacts"]["transitions"])
+        self.assertEqual([e.get("type", e.get("event")) for e in new["detailed_run"]["events"]],
+                         [e.get("type", e.get("event")) for e in ref["detailed_run"]["events"]])
+        self.assertEqual(new["forensics"]["per_seed"], ref["forensics"]["per_seed"])
+
+
+class ProvenanceTests(unittest.TestCase):
+    def test_registration_provenance_is_complete_and_hash_matches(self):
+        from creature_forge.reproducibility import prompt_sha256, registration_provenance
+        msgs = [{"role": "user", "content": "x"}]
+        rec = registration_provenance(msgs, {"a": 1.0})
+        self.assertEqual(rec["frozen_prompt"]["sha256"], prompt_sha256(msgs))
+        self.assertEqual(rec["frozen_prompt"]["sha256"], prompt_hash(msgs))  # same as the historical scheme
+        for k in ("python", "mujoco", "numpy", "platform", "machine"):
+            self.assertIn(k, rec["generated_in"])
+        self.assertIn("rtol", rec["evidence_tolerance"])
+
+
+class CompareEvidencePolicyTests(unittest.TestCase):
+    """The tolerance policy must not silently accept scientifically material divergence."""
+
+    REF = {"seed": 0, "label": "fell", "fell": True, "t": 1.846, "v": 0.5, "rows": [[0.1, 2], [0.2, 3]],
+           "events": ["contact_loss"]}
+
+    def cmp(self, **chg):
+        from copy import deepcopy
+        from creature_forge.reproducibility import compare_evidence
+        new = deepcopy(self.REF)
+        new.update(chg)
+        return compare_evidence(self.REF, new)
+
+    def test_identical_and_ulp_level_differences_pass(self):
+        self.assertTrue(self.cmp().ok)
+        c = self.cmp(v=0.5 + 4e-14)
+        self.assertTrue(c.ok)
+        self.assertEqual(len(c.numeric), 1)  # reported, within tolerance
+
+    def test_float_beyond_tolerance_fails_and_is_reported(self):
+        c = self.cmp(v=0.5 + 1e-6)
+        self.assertFalse(c.ok)
+        self.assertIn("v:", c.failures()[0])
+
+    def test_one_rounding_unit_flip_is_not_silently_accepted(self):
+        c = self.cmp(t=1.847)
+        self.assertFalse(c.ok)
+        self.assertIn("rounding-boundary", c.failures()[0])
+
+    def test_categorical_and_structural_changes_fail(self):
+        for chg in ({"label": "recovered"}, {"fell": False}, {"seed": 1}, {"events": ["slip"]},
+                    {"events": []}, {"rows": [[0.1, 2]]}, {"rows": [[0.1, 2], [0.2, 4]]}, {"extra": 1},
+                    {"seed": 0.0}, {"fell": 1}):
+            self.assertFalse(self.cmp(**chg).ok, chg)
+
+    def test_missing_key_fails(self):
+        from creature_forge.reproducibility import compare_evidence
+        self.assertFalse(compare_evidence(self.REF, {k: v for k, v in self.REF.items() if k != "t"}).ok)
 
 
 class TrialViewTests(unittest.TestCase):

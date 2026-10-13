@@ -47,3 +47,7 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - **Forensic-variant validation:** a mechanism label and >=2 distinct scalar citations under `forensics.` (not definitions) are required. Labels are recorded, never used by the verifier.
 - **Baselines:** random is uninformed (seeded uniform parameter and value); heuristic prior knowledge is disclosed in `proposers.py`. Compare per-proposal success and budgets, not one model call against best-of-many.
 - **History rewrite:** AI co-author trailers removed from two unpublished commits (filter-branch, trees identical, identity preserved, backup branch kept). New commits omit those trailers at the owner's request.
+
+## 2026-10-13 - Cross-platform reproducibility policy
+- **Status:** active. Phase 1 prompt hashes differ on Linux because MuJoCo float low-order bits differ (max rel 3.9e-14; no categorical or structural difference; independent of NumPy 2.4.6 vs 2.5.4).
+- **Decision:** keep `protocol.json` untouched; test A re-hashes the stored frozen prompts exactly on every platform; test B regenerates evidence and compares it to the registered reference with exact categorical/structural matching and rtol 1e-9 / atol 1e-12 for floats. No platform-scoped skip, no rounding to match hashes. The `run_phase1_live.py` safeguard is unchanged. Pin `mujoco==3.15.0`, `numpy>=2.4.6,<2.6`. Details: `docs/REPRODUCIBILITY.md`.
