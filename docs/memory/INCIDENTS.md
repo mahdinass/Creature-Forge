@@ -41,3 +41,7 @@ Append one incident per significant recurring failure. Mark everything here as `
 ## 2026-10-13 — First live investigation: model hypothesis falsified (not a defect)
 - Nemotron 3 Nano blamed torso inertia; MuJoCo showed torso_mass 5->3 kg changes nothing (fall rate 1.0->1.0). Phase 0 already showed foot_length is the dominant lever. Kept as a recorded failed trial (`20261013T002054Z-aaad96`), the intended behavior of the verifier. Next: richer evidence in the prompt and repeated trials vs. a baseline proposer before judging the model.
 - Also: `reasoning_effort:"none"` returned null content (see PROJECT_STATE).
+
+## 2026-10-13 - Phase 1 live batch: weak claim-to-action link and an invalid citation (not defects)
+- Control and enriched-1 both proposed torso_mass 5->3, which is harmful (9/10 falls at 15 N where the baseline has 0/10). Enriched-1 cited real margins but the intervention did not follow from them. Enriched-2 cited a nonexistent path and was rejected. Prompts were NOT edited afterwards (pre-registered). Evidence: `experiments/phase1/results/live_summary.json`.
+- Disclosure: exploration seeds 100-105 included the 16 cm design (see protocol).

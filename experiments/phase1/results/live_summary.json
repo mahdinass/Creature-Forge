@@ -1,0 +1,174 @@
+{
+ "registered_prompt_sha256": {
+  "legacy": "77898ff0a6010058319b52e44ef17209a6ed7ba3e6ee58333320efa8caa21bac",
+  "forensic": "fbcf1e8064b54857d1e69369d6bf04ae572bf18003b59a6561b7222a336467b5"
+ },
+ "calls": [
+  {
+   "id": "control",
+   "trial_id": "20261013T010249Z-ca2db8",
+   "status": "rejected_by_verifier",
+   "reason": "tier=none",
+   "prompt_sha256": "77898ff0a6010058319b52e44ef17209a6ed7ba3e6ee58333320efa8caa21bac",
+   "model_call": {
+    "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "finish_reason": "stop",
+    "usage": {
+     "prompt_tokens": 1088,
+     "completion_tokens": 2080,
+     "total_tokens": 3168
+    },
+    "latency_s": 14.038,
+    "request_id": "0a302030165be13a6800a72b8c9afb4b",
+    "reasoning_present": true,
+    "http_status": 200,
+    "content_is_null": false
+   },
+   "hypothesis": {
+    "claim": "High torso mass (5\u202fkg) prevents recovery from a 25\u202fN push, resulting in a 100\u202f% fall rate; reducing torso mass should decrease fall_rate.",
+    "cited_evidence": [
+     "body.torso_mass",
+     "matched_seed_results.fall_rate"
+    ],
+    "prediction": {
+     "metric": "fall_rate",
+     "direction": "decrease"
+    },
+    "confidence": 0.8,
+    "intervention": {
+     "parameter": "torso_mass",
+     "value": 3.0
+    }
+   },
+   "screening_prediction_held": false,
+   "heldout_prediction_held": false,
+   "tier": "none",
+   "falls_by_push_baseline_vs_candidate": {
+    "15.0": [
+     0,
+     9
+    ],
+    "20.0": [
+     10,
+     10
+    ],
+    "25.0": [
+     10,
+     10
+    ],
+    "30.0": [
+     10,
+     10
+    ],
+    "35.0": [
+     10,
+     10
+    ]
+   },
+   "levels_worse": [
+    "15.0"
+   ],
+   "heldout_simulations": 100
+  },
+  {
+   "id": "enriched-1",
+   "trial_id": "20261013T010325Z-9d9310",
+   "status": "rejected_by_verifier",
+   "reason": "tier=none",
+   "prompt_sha256": "fbcf1e8064b54857d1e69369d6bf04ae572bf18003b59a6561b7222a336467b5",
+   "model_call": {
+    "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "finish_reason": "stop",
+    "usage": {
+     "prompt_tokens": 3002,
+     "completion_tokens": 1414,
+     "total_tokens": 4416
+    },
+    "latency_s": 8.47,
+    "request_id": "5bdcd341847994f60aca7315eac28f26",
+    "reasoning_present": true,
+    "http_status": 200,
+    "content_is_null": false
+   },
+   "hypothesis": {
+    "mechanism": "tipping_support_margin",
+    "claim": "Reducing torso mass will increase the pre\u2011push and post\u2011push support margins, preventing the extrapolated COM from going negative and thus eliminating falls under the 25\u202fN push.",
+    "cited_evidence": [
+     "forensics.detailed.support.com_margin_before_push_m",
+     "forensics.detailed.support.min_xcom_margin_after_push_m"
+    ],
+    "prediction": {
+     "metric": "fall_rate",
+     "direction": "decrease"
+    },
+    "confidence": 0.85,
+    "intervention": {
+     "parameter": "torso_mass",
+     "value": 3.0
+    }
+   },
+   "screening_prediction_held": false,
+   "heldout_prediction_held": false,
+   "tier": "none",
+   "falls_by_push_baseline_vs_candidate": {
+    "15.0": [
+     0,
+     9
+    ],
+    "20.0": [
+     10,
+     10
+    ],
+    "25.0": [
+     10,
+     10
+    ],
+    "30.0": [
+     10,
+     10
+    ],
+    "35.0": [
+     10,
+     10
+    ]
+   },
+   "levels_worse": [
+    "15.0"
+   ],
+   "heldout_simulations": 100
+  },
+  {
+   "id": "enriched-2",
+   "trial_id": "20261013T010405Z-9a3be8",
+   "status": "invalid_model_output",
+   "reason": "cited evidence path does not exist: 'forensics.detailed.xcom_margin_before_push_m'",
+   "prompt_sha256": "fbcf1e8064b54857d1e69369d6bf04ae572bf18003b59a6561b7222a336467b5",
+   "model_call": {
+    "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+    "finish_reason": "stop",
+    "usage": {
+     "prompt_tokens": 3002,
+     "completion_tokens": 2057,
+     "total_tokens": 5059
+    },
+    "latency_s": 40.435,
+    "request_id": "cc9517d785544f8ac1c200047086bc31",
+    "reasoning_present": true,
+    "http_status": 200,
+    "content_is_null": false
+   },
+   "hypothesis": null,
+   "screening_prediction_held": null,
+   "heldout_prediction_held": null,
+   "tier": null,
+   "falls_by_push_baseline_vs_candidate": null,
+   "levels_worse": null,
+   "heldout_simulations": null
+  }
+ ],
+ "stopped": null,
+ "totals": {
+  "requests": 3,
+  "tokens": 12643
+ }
+}
