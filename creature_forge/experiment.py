@@ -37,3 +37,6 @@ def compare_designs(baseline: BipedParams, candidate: BipedParams, gait: GaitPar
     return {"seeds": list(seeds), "duration": duration,
             "baseline": _evaluate(baseline, gait, seeds, duration, push),
             "candidate": _evaluate(candidate, gait, seeds, duration, push)}
+
+
+evaluate_design = _evaluate  # public name: matched-seed evaluation of one body (used by the investigator)

@@ -16,6 +16,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from ..controller import CTRL_BOUNDS, GaitParams
 from ..experiment import (PHASE0_BASELINE, PHASE0_CANDIDATE, PHASE0_DURATION, PHASE0_PUSH, PHASE0_SEEDS,
                           compare_designs)
+from ..investigator import INVESTIGATIONS_DIR, list_trials, load_trial
 from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
@@ -70,7 +71,7 @@ async def _warm(_: FastAPI):
     yield
 
 
-def create_app() -> FastAPI:
+def create_app(investigations_dir: Path = INVESTIGATIONS_DIR) -> FastAPI:
     app = FastAPI(title="Creature Forge Studio", lifespan=_warm)
 
     @app.get("/api/schema")
@@ -93,6 +94,17 @@ def create_app() -> FastAPI:
     @app.get("/api/experiments/phase0")
     def phase0():
         return _phase0()
+
+    @app.get("/api/investigations")
+    def investigations():
+        return list_trials(investigations_dir)  # read-only: trials are written by scripts, never by the web
+
+    @app.get("/api/investigations/{trial_id}")
+    def investigation(trial_id: str):
+        try:
+            return load_trial(trial_id, investigations_dir)
+        except (KeyError, FileNotFoundError):
+            raise HTTPException(404, "no such investigation") from None
 
     @app.get("/api/sketch/default")
     def sketch_default():

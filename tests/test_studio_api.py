@@ -56,3 +56,22 @@ class StudioApiTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class InvestigationApiTests(unittest.TestCase):
+    def test_lists_and_serves_saved_trials_read_only(self):
+        import json
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "t1.json").write_text(json.dumps({"trial_id": "t1", "status": "accepted", "mode": "fake",
+                                                         "created_utc": "x", "hypothesis": {"claim": "c"}}))
+            c = TestClient(create_app(investigations_dir=Path(d)))
+            self.assertEqual(c.get("/api/investigations").json()[0]["trial_id"], "t1")
+            self.assertEqual(c.get("/api/investigations/t1").json()["status"], "accepted")
+            self.assertEqual(c.get("/api/investigations/nope").status_code, 404)
+            from creature_forge.investigator import load_trial
+            for bad in ("../secret", "..\secret", "a/b", ""):
+                with self.assertRaises(KeyError):
+                    load_trial(bad, Path(d))
+            self.assertEqual(c.post("/api/investigations").status_code, 405)
