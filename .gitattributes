@@ -1,0 +1,2 @@
+# Immutable scientific records: store and check out byte-for-byte (no EOL conversion) so sha256 manifests hold on every platform.
+experiments/demo_trials/*.json -text

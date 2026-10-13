@@ -1,0 +1,21 @@
+{
+  "description": "Byte-identical copies of the four real Nemotron investigations recorded on 2026-10-13 (live Nebius calls, MuJoCo-verified). Bundled so a fresh checkout can display genuine records. Immutable: Studio never writes here; sha256 below is checked by tests. There is NO accepted/successful AI trial among them.",
+  "trials": {
+    "20261013T002054Z-aaad96": {
+      "sha256": "797ebc3223ab19afbec40ee12c0b037303f50aa9b711091b72a10d7011c552ac",
+      "note": "First live trial (legacy evidence, default settings, pre-registration NOT in force). Rejected by MuJoCo: fall rate unchanged."
+    },
+    "20261013T010249Z-ca2db8": {
+      "sha256": "86ec1e647c048e8db9d1525cca2fba1a8251f5636871ddf1ee465b7a94962341",
+      "note": "Phase 1 pre-registered call 'control' (legacy prompt). Rejected: tier none."
+    },
+    "20261013T010325Z-9d9310": {
+      "sha256": "134f85d23ac45805b12221a7406e818bbcd07b03d9ae69b83f17ae46bcd30b0a",
+      "note": "Phase 1 pre-registered call 'enriched-1' (forensic prompt, temperature 0). Rejected: tier none."
+    },
+    "20261013T010405Z-9a3be8": {
+      "sha256": "82b105ab240696d54874541f22539c715c1f87f09f446078d6d7f8cfaa7f24d6",
+      "note": "Phase 1 pre-registered call 'enriched-2' (forensic prompt, temperature 0.7). Invalid model output: cited evidence path does not exist; never tested in MuJoCo."
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { CompileResult, Params, Phase0, PushInfo, RunPayload, Schema, Sketch } from './types'
+import type { LabRow, LabView, Replay } from './lab/labTypes'
 
 async function j<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -31,3 +32,9 @@ export const compileSketch = (sketch: Sketch) =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(sketch),
   }).then((r) => j<CompileResult>(r))
+
+// Investigation Lab (read-only records; replay is a fresh deterministic MuJoCo run, no model call)
+export const getLabTrials = () => fetch('/api/lab/trials').then((r) => j<LabRow[]>(r))
+export const getLabTrial = (id: string) => fetch(`/api/lab/trials/${encodeURIComponent(id)}`).then((r) => j<LabView>(r))
+export const getLabReplay = (id: string, seed: number) =>
+  fetch(`/api/lab/trials/${encodeURIComponent(id)}/replay?seed=${seed}`).then((r) => j<Replay>(r))
