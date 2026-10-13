@@ -135,3 +135,10 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 ## Packaging check (2026-10-13)
 - Found: `[tool.setuptools] packages = ["creature_forge"]` omitted `creature_forge.studio`, so a built wheel lacked the Studio API (editable installs hid it). Fixed to list both packages. Verified: `uv build --wheel` now contains `creature_forge/studio/{__init__,app}.py`; installed into an isolated target directory (with the `[studio]` extra) and imported from the wheel, not the checkout: `create_app()` works and `GET /api/schema` returns 200.
 - Known limitation: the built React frontend (`studio/dist`) is not part of the wheel; Studio serves it only from a source checkout after `npm run build`.
+
+## Integration into main (2026-10-13) - actual merged state
+- **Phase 0:** PR #3 (`review/phase0-physics-93bcc43`, one commit `5a13a09`, verified as main + that commit only) merged with a merge commit: `82097b7`.
+- **Phase 0.5 + Phase 1:** PR #2 (`feature/phase0.5-studio`, 14 commits, all authored by Mahdi, 0 AI co-author trailers) retargeted to `main` and merged with a merge commit (no squash): `da9b4d8a42a3f3d98d5f1a12bd77894040920453`. Individual commits, including the pre-registration (`8bf6c4b`) and experiment records, are preserved on `main`; `experiments/phase1/*` was not altered.
+- **CI before merge:** `test-context-guards` and `studio-frontend` passed on the final PR head `1a61429` (push and pull_request runs). 115 Python tests, 6 frontend tests.
+- **Local backup branches kept** (`backup/pre-trailer-rewrite`, and the feature/review branches were not deleted). No Nebius requests were made during integration.
+- **Remaining limitations:** the Phase 1 live runner refuses on any platform whose rebuilt prompts do not hash to the registered values (e.g. Linux) by design; the built React frontend is not packaged in the wheel; Nemotron has not been shown to outperform baselines (see `experiments/phase1/REPORT.md`); walking/gait optimisation unsolved; Phase 2 not started.
