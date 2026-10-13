@@ -5,7 +5,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/context_preflight.py",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/scripts/context_preflight.py"],
             "timeout": 10
           }
         ]
@@ -17,7 +18,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python scripts/guard_venv.py",
+            "command": "python",
+            "args": ["${CLAUDE_PROJECT_DIR}/scripts/guard_venv.py"],
             "timeout": 5
           }
         ]

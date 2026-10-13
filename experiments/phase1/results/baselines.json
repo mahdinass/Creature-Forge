@@ -1,0 +1,1683 @@
+{
+ "protocol": {
+  "push_levels_N": [
+   15.0,
+   20.0,
+   25.0,
+   30.0,
+   35.0
+  ],
+  "primary_push_N": 25.0,
+  "push_time_s": 1.0,
+  "push_duration_s": 0.15,
+  "duration_s": 5.0,
+  "heldout_seeds": [
+   200,
+   201,
+   202,
+   203,
+   204,
+   205,
+   206,
+   207,
+   208,
+   209
+  ],
+  "success_max_fall_rate": 0.2,
+  "partial_min_reduction": 0.3
+ },
+ "baseline_design": {
+  "body": {
+   "torso_mass": 5.0,
+   "thigh_length": 0.3,
+   "shank_length": 0.3,
+   "foot_length": 0.08,
+   "foot_friction": 1.0,
+   "torque_limit": 60.0,
+   "leg_density": 1000.0
+  },
+  "by_push": {
+   "15.0": {
+    "fall_rate": 0.0,
+    "mean_survival_s": 5.0,
+    "mean_min_torso_height_m": 0.7584018942868878,
+    "mean_max_abs_pitch_rad": 0.07238856289645064,
+    "falls": 0,
+    "n": 10
+   },
+   "20.0": {
+    "fall_rate": 1.0,
+    "mean_survival_s": 2.122499999999877,
+    "mean_min_torso_height_m": 0.03409920084616854,
+    "mean_max_abs_pitch_rad": 1.6055698039021187,
+    "falls": 10,
+    "n": 10
+   },
+   "25.0": {
+    "fall_rate": 1.0,
+    "mean_survival_s": 1.8739999999999042,
+    "mean_min_torso_height_m": 0.03396715578692562,
+    "mean_max_abs_pitch_rad": 1.6070727531925033,
+    "falls": 10,
+    "n": 10
+   },
+   "30.0": {
+    "fall_rate": 1.0,
+    "mean_survival_s": 1.7524999999999178,
+    "mean_min_torso_height_m": 0.03372969470448341,
+    "mean_max_abs_pitch_rad": 1.6087600704349239,
+    "falls": 10,
+    "n": 10
+   },
+   "35.0": {
+    "fall_rate": 1.0,
+    "mean_survival_s": 1.6699999999999267,
+    "mean_min_torso_height_m": 0.03379871216081787,
+    "mean_max_abs_pitch_rad": 1.6070301474128688,
+    "falls": 10,
+    "n": 10
+   }
+  }
+ },
+ "references": {
+  "foot_length_0.16_known_phase0_answer": {
+   "proposal": {
+    "parameter": "foot_length",
+    "value": 0.16
+   },
+   "tier": "success",
+   "primary_fall_rate": {
+    "baseline": 1.0,
+    "candidate": 0.0,
+    "reduction": 1.0
+   },
+   "levels_where_candidate_worse": [],
+   "primary_survival_not_worse": true,
+   "falls_by_push": {
+    "15.0": [
+     0,
+     0
+    ],
+    "20.0": [
+     10,
+     0
+    ],
+    "25.0": [
+     10,
+     0
+    ],
+    "30.0": [
+     10,
+     0
+    ],
+    "35.0": [
+     10,
+     10
+    ]
+   },
+   "candidate_by_push": {
+    "15.0": {
+     "fall_rate": 0.0,
+     "mean_survival_s": 5.0,
+     "mean_min_torso_height_m": 0.7587837342241477,
+     "mean_max_abs_pitch_rad": 0.03484290670077139,
+     "falls": 0,
+     "n": 10
+    },
+    "20.0": {
+     "fall_rate": 0.0,
+     "mean_survival_s": 5.0,
+     "mean_min_torso_height_m": 0.7587089996175976,
+     "mean_max_abs_pitch_rad": 0.04875449846370737,
+     "falls": 0,
+     "n": 10
+    },
+    "25.0": {
+     "fall_rate": 0.0,
+     "mean_survival_s": 5.0,
+     "mean_min_torso_height_m": 0.7577933500203603,
+     "mean_max_abs_pitch_rad": 0.08600464358363925,
+     "falls": 0,
+     "n": 10
+    },
+    "30.0": {
+     "fall_rate": 0.0,
+     "mean_survival_s": 5.0,
+     "mean_min_torso_height_m": 0.7533801175821147,
+     "mean_max_abs_pitch_rad": 0.15832563957997303,
+     "falls": 0,
+     "n": 10
+    },
+    "35.0": {
+     "fall_rate": 1.0,
+     "mean_survival_s": 2.159999999999873,
+     "mean_min_torso_height_m": 0.03806935894467611,
+     "mean_max_abs_pitch_rad": 1.6392038273990988,
+     "falls": 10,
+     "n": 10
+    }
+   }
+  }
+ },
+ "heuristic": {
+  "proposal": {
+   "parameter": "foot_length",
+   "value": 0.12,
+   "mechanism": "tipping_support_margin",
+   "rule": "tipping_support_margin -> foot_length x1.5 (bounded)"
+  },
+  "evidence_simulations": 1,
+  "model_calls": 0,
+  "tier": "none",
+  "primary_fall_rate": {
+   "baseline": 1.0,
+   "candidate": 0.9,
+   "reduction": 0.09999999999999998
+  },
+  "levels_where_candidate_worse": [],
+  "primary_survival_not_worse": true,
+  "falls_by_push": {
+   "15.0": [
+    0,
+    0
+   ],
+   "20.0": [
+    10,
+    0
+   ],
+   "25.0": [
+    10,
+    9
+   ],
+   "30.0": [
+    10,
+    10
+   ],
+   "35.0": [
+    10,
+    10
+   ]
+  },
+  "candidate_by_push": {
+   "15.0": {
+    "fall_rate": 0.0,
+    "mean_survival_s": 5.0,
+    "mean_min_torso_height_m": 0.7590305042760008,
+    "mean_max_abs_pitch_rad": 0.03789059052557612,
+    "falls": 0,
+    "n": 10
+   },
+   "20.0": {
+    "fall_rate": 0.0,
+    "mean_survival_s": 5.0,
+    "mean_min_torso_height_m": 0.7581891924165689,
+    "mean_max_abs_pitch_rad": 0.07869494869303172,
+    "falls": 0,
+    "n": 10
+   },
+   "25.0": {
+    "fall_rate": 0.9,
+    "mean_survival_s": 2.7183999999998556,
+    "mean_min_torso_height_m": 0.10724568128214033,
+    "mean_max_abs_pitch_rad": 1.4623938684226663,
+    "falls": 9,
+    "n": 10
+   },
+   "30.0": {
+    "fall_rate": 1.0,
+    "mean_survival_s": 1.9449999999998966,
+    "mean_min_torso_height_m": 0.03512118428946757,
+    "mean_max_abs_pitch_rad": 1.6114090956274953,
+    "falls": 10,
+    "n": 10
+   },
+   "35.0": {
+    "fall_rate": 1.0,
+    "mean_survival_s": 1.7834999999999144,
+    "mean_min_torso_height_m": 0.03532860183071869,
+    "mean_max_abs_pitch_rad": 1.611093013153328,
+    "falls": 10,
+    "n": 10
+   }
+  }
+ },
+ "random": {
+  "n_proposals": 100,
+  "rng_seed": 1000,
+  "tiers": {
+   "success": 22,
+   "none": 72,
+   "partial": 6
+  },
+  "per_proposal_success_rate": 0.22,
+  "wilson95": [
+   0.15001174503655804,
+   0.3107053471500031
+  ],
+  "best_of_k_success_probability_analytic": {
+   "1": 0.21999999999999997,
+   "3": 0.5254479999999999,
+   "5": 0.7112825631999999,
+   "10": 0.916642241687638,
+   "20": 0.9930514841291378
+  },
+  "note_best_of_k": "analytic 1-(1-p)^k from the pooled per-proposal rate; assumes k independent proposals, each fully evaluated; it is an estimate with the Wilson interval above, not an observation",
+  "by_parameter": {
+   "foot_length": {
+    "n": 22,
+    "success": 19
+   },
+   "shank_length": {
+    "n": 15,
+    "success": 0
+   },
+   "foot_friction": {
+    "n": 14,
+    "success": 0
+   },
+   "torso_mass": {
+    "n": 12,
+    "success": 0
+   },
+   "torque_limit": {
+    "n": 11,
+    "success": 0
+   },
+   "thigh_length": {
+    "n": 11,
+    "success": 0
+   },
+   "leg_density": {
+    "n": 15,
+    "success": 3
+   }
+  },
+  "proposals": [
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.20492204328151908
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.36192380879501423
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.1869021661488126
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.1058487072193893
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.48915669848621723
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.1924012264154914
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 1.6204758307665474
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 4.477217284885944
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 196.83112521465006
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.2207993198270957
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.4476308068346925
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.21001552450858899
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 179.96389069219606
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.5886437013182251
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 140.4196765232807
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.167337947253845
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1014.8697356636006
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.7934113913152159
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 188.62384426629154
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 2167.4675230983526
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.719257693258519
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 1.6333894750614926
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 1.8305596811143243
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.1354599922055187
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.5136079686297762
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 226.62124121996587
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.19408487652785417
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.1512998852150983
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.0729117861208737
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1789.4725107581253
+    },
+    "tier": "partial",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.5,
+     "reduction": 0.5
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.4759231725443879
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 12.98929325975598
+    },
+    "tier": "partial",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.5,
+     "reduction": 0.5
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1263.0219311605
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.4219911277194863
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 14.837713727716196
+    },
+    "tier": "partial",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.3,
+     "reduction": 0.7
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 178.6636999373441
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 3.914895739661854
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.28452323048688133
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.10428155830359254
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 38.382894518376844
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.21796525975292347
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.18401544523276014
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.4198331230256786
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 196.13495149098262
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1469.6691953506363
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 967.9969387114759
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.43233767047057037
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1407.8226952140024
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.19437613024374129
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.1796310134586021
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.5588214178122524
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.3311439601575957
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.25884851391040165
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.4644343471745268
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 14.095924941039716
+    },
+    "tier": "partial",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.4,
+     "reduction": 0.6
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 3.704344831615327
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.453747139730429
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 11.369802590510263
+    },
+    "tier": "partial",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.7,
+     "reduction": 0.30000000000000004
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.20879910140066485
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.38834201042474187
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.25151355153390076
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.20951722024583783
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 2180.295939695361
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 5.865954174041304
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 56.56484749590662
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1497.673561889935
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 2.5112143502869815
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.4051428343332396
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.7975310633127519
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.2523524271397807
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 68.37251049970311
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 3.1373047694763825
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.5398573547542859
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.5485201720787469
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1347.9176922195936
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.17323349784634717
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.3963753836788012
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.4485088249030757
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.19115255782715343
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 127.79467279494587
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torque_limit",
+     "value": 191.31414034106717
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.43888701400493163
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.147086934967597
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.1663248505452189
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 337.6621929097159
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1422.9349235671823
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.1466147971109808
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_length",
+     "value": 0.22310998996247816
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "torso_mass",
+     "value": 2.106343190103494
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.1883639600098105
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 0.2884829147327759
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.49696303800862385
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 1852.0721392871146
+    },
+    "tier": "partial",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.5,
+     "reduction": 0.5
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.4556163842180806
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 1.5173147305744468
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "thigh_length",
+     "value": 0.41249197084962463
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.4299178473194947
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "shank_length",
+     "value": 0.41418889999930586
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   },
+   {
+    "proposal": {
+     "parameter": "leg_density",
+     "value": 2476.0413939504924
+    },
+    "tier": "success",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 0.0,
+     "reduction": 1.0
+    },
+    "levels_worse": []
+   },
+   {
+    "proposal": {
+     "parameter": "foot_friction",
+     "value": 1.8257223634819701
+    },
+    "tier": "none",
+    "primary_fall_rate": {
+     "baseline": 1.0,
+     "candidate": 1.0,
+     "reduction": 0.0
+    },
+    "levels_worse": [
+     "15.0"
+    ]
+   }
+  ],
+  "simulations_per_proposal": 50
+ },
+ "budget": {
+  "held_out_simulations": {
+   "baseline_eval": 50,
+   "heuristic": 50,
+   "random": 5000
+  },
+  "reference_simulations": 50,
+  "simulations_per_candidate_evaluation": 50,
+  "wall_seconds": 1104.1
+ }
+}

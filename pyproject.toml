@@ -3,11 +3,16 @@ name = "creature-forge"
 version = "0.0.1"
 description = "Physics-grounded robot failure investigation (Phase 0: MuJoCo foundation)"
 requires-python = ">=3.11"
-dependencies = ["mujoco>=3.2,<4", "numpy>=1.26"]
+# mujoco/numpy pinned to the versions verified to reproduce the registered Phase 1 evidence on Windows and
+# Linux (docs/REPRODUCIBILITY.md); numpy range covers the two verified releases (2.4.6, 2.5.4).
+dependencies = ["mujoco==3.15.0", "numpy>=2.4.6,<2.6", "python-dotenv>=1.0"]
+
+[project.optional-dependencies]
+studio = ["fastapi>=0.110", "uvicorn>=0.29", "httpx>=0.27"]
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["creature_forge"]
+packages = ["creature_forge", "creature_forge.studio"]

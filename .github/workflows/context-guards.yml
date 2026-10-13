@@ -13,10 +13,22 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install package (MuJoCo, NumPy)
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[studio]"
+      - name: Record simulator and dependency versions
+        run: python -c "import sys,platform,numpy,mujoco;print(sys.version);print(platform.platform());print('numpy',numpy.__version__,'mujoco',mujoco.__version__)"
       - name: Run memory, guard and physics tests
         run: python -m unittest discover -s tests -v
       - name: Session preflight smoke test
         run: python scripts/context_preflight.py
       - name: Physics smoke test
         run: python scripts/smoke_test.py
+  studio-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm --prefix studio ci
+      - run: npm --prefix studio test
+      - run: npm --prefix studio run build

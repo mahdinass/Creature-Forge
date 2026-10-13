@@ -40,3 +40,6 @@ The two promotional routes advertise up to $50 in Token Factory credits **subjec
 - [ ] Token / compute limits and spending guard configured
 
 Do not check boxes based on a promise or an AI-generated response; verify external state directly.
+
+## Client token-budget semantics
+`NebiusClient` blocks a request before any network call if `tokens_used + estimate_prompt_tokens(messages) + max_tokens` exceeds `max_total_tokens`. Completion size is hard-capped by `max_tokens`; the prompt estimate is a heuristic (~3 UTF-8 bytes per token + 64), not a server-verified count or guaranteed bound. Actual API-reported usage is added afterwards and blocks later calls. Request count and timeout are hard limits; there are no retries.

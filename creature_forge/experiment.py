@@ -9,6 +9,14 @@ from .morphology import BipedParams
 from .simulate import Push, run_rollout
 
 
+# Phase 0 reference experiment (shared by scripts/run_phase0.py and the Studio)
+PHASE0_PUSH = Push(time=1.0, force=25.0, duration=0.15)
+PHASE0_SEEDS = (0, 1, 2, 3, 4)
+PHASE0_DURATION = 5.0
+PHASE0_BASELINE = BipedParams(foot_length=0.08)
+PHASE0_CANDIDATE = PHASE0_BASELINE.replace(foot_length=0.16)
+
+
 def _evaluate(body: BipedParams, gait: GaitParams, seeds, duration, push) -> dict:
     runs = []
     for s in seeds:
@@ -29,3 +37,6 @@ def compare_designs(baseline: BipedParams, candidate: BipedParams, gait: GaitPar
     return {"seeds": list(seeds), "duration": duration,
             "baseline": _evaluate(baseline, gait, seeds, duration, push),
             "candidate": _evaluate(candidate, gait, seeds, duration, push)}
+
+
+evaluate_design = _evaluate  # public name: matched-seed evaluation of one body (used by the investigator)
