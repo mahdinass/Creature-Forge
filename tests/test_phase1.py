@@ -282,3 +282,38 @@ class RegistrationTests(unittest.TestCase):
         ev = build_forensic_evidence(BODY, GAIT, PHASE0_PUSH, seeds=(0, 1, 2), duration=PHASE0_DURATION)
         self.assertEqual(prompt_hash(build_messages(ev, BODY, "forensic")), reg["prompts"]["forensic"]["sha256"])
         self.assertNotIn('"foot_length":0.16', json.dumps(reg["prompts"]))
+
+
+class TrialViewTests(unittest.TestCase):
+    def test_view_reshapes_without_changing_numbers_and_serves_read_only(self):
+        from fastapi.testclient import TestClient
+        from creature_forge.studio.app import create_app
+        from creature_forge.trial_view import trial_view
+        proto = Protocol(push_levels_N=(15.0, 25.0), heldout_seeds=(200,))
+        fake = Fake(forensic_reply(intervention={"parameter": "foot_length", "value": 0.16}))
+        client = NebiusClient(transport=fake, api_key="k", limits=Limits(max_requests=1, max_total_tokens=8000))
+        with tempfile.TemporaryDirectory() as tmp:
+            t = investigate(client, BODY, GAIT, PHASE0_PUSH, evidence_seeds=(0,), verify_seeds=(0,),
+                            duration=PHASE0_DURATION, save_to=Path(tmp), variant="forensic", protocol=proto,
+                            label="view")
+            v = trial_view(t.as_dict())
+            self.assertEqual(v["design_change"]["original"], 0.08)
+            self.assertEqual(v["design_change"]["modified"], 0.16)
+            self.assertEqual(v["rationale"]["cited"][0]["value"],
+                             t.observed_evidence["forensics"]["detailed"]["support"]["com_margin_before_push_m"])
+            self.assertEqual(v["predicted_vs_measured"]["heldout_by_push"]["25.0"]["candidate"]["fall_rate"],
+                             t.measured_outcome["protocol"]["candidate"]["by_push"]["25.0"]["fall_rate"])
+            self.assertEqual(v["outcome"]["tier"], "success")
+            c = TestClient(create_app(investigations_dir=Path(tmp)))
+            self.assertEqual(c.get(f"/api/investigations/{t.trial_id}/view").json()["outcome"]["status"], "accepted")
+            self.assertEqual(c.get("/api/investigations/nope/view").status_code, 404)
+
+    def test_view_handles_legacy_trial(self):
+        from creature_forge.trial_view import trial_view
+        import glob
+        files = glob.glob("artifacts/investigations/20261013T002054Z-aaad96.json")
+        if not files:
+            self.skipTest("first live trial artifact not present")
+        v = trial_view(json.loads(Path(files[0]).read_text(encoding="utf-8")))
+        self.assertIsNone(v["observed"]["forensic_highlights"])
+        self.assertEqual(v["outcome"]["status"], "rejected_by_verifier")

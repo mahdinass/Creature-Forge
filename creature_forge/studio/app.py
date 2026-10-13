@@ -21,6 +21,7 @@ from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
 from ..sketch import SketchError, compile_sketch, default_sketch
+from ..trial_view import trial_view
 
 DIST = Path(__file__).resolve().parents[2] / "studio" / "dist"
 
@@ -103,6 +104,13 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR) -> FastAPI:
     def investigation(trial_id: str):
         try:
             return load_trial(trial_id, investigations_dir)
+        except (KeyError, FileNotFoundError):
+            raise HTTPException(404, "no such investigation") from None
+
+    @app.get("/api/investigations/{trial_id}/view")
+    def investigation_view(trial_id: str):
+        try:
+            return trial_view(load_trial(trial_id, investigations_dir))
         except (KeyError, FileNotFoundError):
             raise HTTPException(404, "no such investigation") from None
 
