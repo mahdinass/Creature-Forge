@@ -7,7 +7,7 @@ import os
 import sys
 import urllib.request
 
-BASE = os.environ.get("NEBIUS_BASE_URL", "https://api.studio.nebius.com/v1")  # verify against current docs
+BASE = os.environ.get("NEBIUS_BASE_URL", "https://api.tokenfactory.nebius.com/v1")  # verified 2026-10-13 (Nebius docs + live call)
 
 
 def main() -> int:
