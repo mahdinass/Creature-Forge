@@ -61,3 +61,18 @@ From the local `$HOME\.codex\.sandbox\sandbox*.log` provided by the project owne
 - An earlier file-lock warning for the user profile states `continuing setup` and is not the decisive failure.
 - This matches multiple reported openai/codex Windows regressions during October 7â€“12, 2026, e.g. https://github.com/openai/codex/issues/52000 and https://github.com/openai/codex/issues/51981 . Some reports persist after restart or reinstall. Exact locking process was not identified from these logs; it may be a Codex-owned helper.
 - **Safe next actions:** check for an official Codex update, quit all Codex app/CLI/VS Code integrations completely and restart Windows, then test one `Get-Location` with the normal sandbox. If still failing, leave sandbox restrictions intact and proceed with Claude Code while monitoring upstream fix. Do not delete `node_repl.exe`, indiscriminately kill processes, rewrite ACLs, or enable full access as a default remedy.
+
+## Phase 0 / T0 physics foundation — 2026-10-13 (verified by Claude Code in this session)
+
+**Implemented (code, not plans):** `creature_forge/{morphology,controller,simulate,failures,experiment,artifacts}.py`, `scripts/{run_phase0,smoke_test,nebius_check}.py`, `pyproject.toml`, `.venv` (Python 3.11.9, MuJoCo 3.15.0, NumPy 2.4.6; venv is gitignored).
+
+**Evidence:**
+- `.venv\Scripts\python -m unittest discover -s tests -v`: 23 tests pass (4 pre-existing guard tests + 19 new, written test-first; red runs observed).
+- `.venv\Scripts\python scripts\smoke_test.py`: 6/6 checks, exit 0 (10 s headless rollout, determinism by SHA-256 of telemetry, fall detection, parameter-change effect, artifacts).
+- `.venv\Scripts\python scriptsun_phase0.py`: 25 N push; foot_length 0.08 m falls on 5/5 seeds (fall at ~1.85 s, min torso height 0.03 m); changing only foot_length to 0.16 m falls on 0/5 (min height 0.76 m). Artifacts in `artifacts/phase0/` (gitignored): `telemetry.npz` + `manifest.json` per run.
+- Telemetry (200 Hz): torso pose/velocity, joint angles/velocities, applied and demanded torque, COM position/velocity, per-foot contact, slip speed, contact force. Detectors: fall, actuator saturation, foot slip (event + evidence; no causal claim).
+
+**Limitations / not done:** only standing balance + push recovery validated; open-loop walking gaits fell or walked backward (see INCIDENTS). Planar model; no hopper; no video/frontend viewer; no failure *causal* attribution yet (saturation/slip detectors were unit-tested on synthetic data and are quiet in the push experiment; torque and friction showed no effect there). Nebius: `NEBIUS_API_KEY` unset, **no API call made, nothing verified**; endpoint URL in `nebius_check.py` is an unverified assumption. Local `git push` not done.
+
+**Next:** Phase 1 - failure autopsy features, hypothesis schema, gait search with a classical baseline, Nemotron once a key exists.
+
