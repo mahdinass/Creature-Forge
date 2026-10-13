@@ -131,3 +131,7 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 ## Cross-platform reproducibility fix (2026-10-13)
 - Resolves the CI failure above. Correction: BOTH Phase 1 prompt hashes differ on Linux (the legacy one was never asserted). Measured: Windows (py3.11.9, numpy 2.4.6, mujoco 3.15.0) reproduces the registered evidence exactly; Linux (py3.12.14, numpy 2.5.4 and 2.4.6, mujoco 3.15.0; identical to each other) differs in 10 unrounded floats, max rel 3.9e-14, no structural/categorical difference. See `docs/REPRODUCIBILITY.md`.
 - New: `creature_forge/reproducibility.py` (exact frozen-prompt integrity check; evidence comparison with an explicit tolerance policy; provenance record for future registrations), tests A/B in `tests/test_phase1.py`, dependency pins in `pyproject.toml`, version logging in CI. `protocol.json`, call plan, limits and results are untouched; no Nebius calls.
+
+## Packaging check (2026-10-13)
+- Found: `[tool.setuptools] packages = ["creature_forge"]` omitted `creature_forge.studio`, so a built wheel lacked the Studio API (editable installs hid it). Fixed to list both packages. Verified: `uv build --wheel` now contains `creature_forge/studio/{__init__,app}.py`; installed into an isolated target directory (with the `[studio]` extra) and imported from the wheel, not the checkout: `create_app()` works and `GET /api/schema` returns 200.
+- Known limitation: the built React frontend (`studio/dist`) is not part of the wheel; Studio serves it only from a source checkout after `npm run build`.
