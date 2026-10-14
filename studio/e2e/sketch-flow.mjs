@@ -26,6 +26,7 @@ const dragBy = async (sel, dx, dy) => {
 const settle = () => page.waitForTimeout(700)
 try {
   await page.goto(`${BASE}/?tab=sketch`)
+  await page.click('[data-testid="mode-refine"]') // the handle editor is the Refine mode of Create
   await page.waitForSelector('[data-testid="sketch-valid"]', { timeout: 30000 })
   ok(true, 'a fresh sketch is valid and says it maps exactly to a MuJoCo model')
   ok(/0\.300/.test(await text('[data-testid="sketch-compiled"]')), 'the compiled table shows the default 0.300 m legs')
@@ -78,7 +79,7 @@ try {
   await page.waitForFunction(() => /thigh/i.test(document.body.innerText), null, { timeout: 60000 }).catch(() => {})
   await page.setViewportSize({ width: 360, height: 800 })
   await page.goto(`${BASE}/?tab=sketch`)
-  await page.waitForSelector('[data-testid="sketch-valid"]')
+  await page.waitForSelector('[data-testid="sketch-page"]')
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   ok(overflow <= 1, `no horizontal page overflow at 360 px (${overflow}px)`)
   ok(bad.length === 0, `every API response is JSON and < 400${bad.length ? ': ' + bad.join(' | ') : ''}`)

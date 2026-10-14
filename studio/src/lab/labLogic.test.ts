@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  changeRows, directionWord, filterRows, fmtDelta, fmtForensic, fmtMetric, formatWhen, metricLabel, parseDeepLink,
+  changeRows, directionWord, filterRows, fmtDelta, groupOf, GROUPS, fmtForensic, fmtMetric, formatWhen, metricLabel, parseDeepLink,
   fmtSeeds, pct, predictionVerdict, screeningText, statusInfo, stepState, STEPS,
 } from './labLogic'
 import type { LabRow, LabView } from './labTypes'
@@ -126,5 +126,18 @@ describe('screeningText (seed roles come from the saved record)', () => {
     expect(fmtSeeds([0, 1, 2, 3, 4])).toBe('0–4')
     expect(fmtSeeds([4, 0, 2])).toBe('0, 2, 4')
     expect(fmtSeeds([5, 6])).toBe('5, 6')
+  })
+})
+
+describe('failure archive grouping', () => {
+  it('sorts every status into one of four plain-language groups', () => {
+    expect(groupOf('accepted')).toBe('verified')
+    expect(groupOf('rejected_by_verifier')).toBe('rejected')
+    for (const s of ['invalid_model_output', 'model_error', 'budget_exceeded']) expect(groupOf(s)).toBe('invalid')
+    for (const s of ['started', 'unreadable', 'whatever']) expect(groupOf(s)).toBe('historical')
+    expect(GROUPS.map((g) => g.id)).toEqual(['verified', 'rejected', 'invalid', 'historical'])
+  })
+  it('is honest about an empty verified group', () => {
+    expect(GROUPS[0].empty).toMatch(/no AI intervention is verified/)
   })
 })

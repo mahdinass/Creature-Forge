@@ -1,0 +1,12 @@
+/* Experiment history: grouped by what happened to the AI suggestion. */
+.lab-list .purpose { color: #c4ccda; margin: 0 0 10px; } .groups { display: grid; gap: 18px; }
+.group h4 { margin: 0; font-size: 16px; display: flex; gap: 8px; align-items: center; } .group .count { font: 600 12px var(--font-body); padding: 1px 8px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line-2); }
+.group > p { margin: 2px 0 8px; font-size: 13px; } .empty-group { padding: 10px 12px; border-radius: var(--r-md); border: 1px dashed var(--line-2); color: var(--dim); font-size: 14px; }
+.group-verified h4 { color: var(--ok); } .group-rejected h4 { color: var(--warn); } .group-invalid h4 { color: #ff8b97; }
+.mini-bars { display: grid; gap: 2px; margin-top: 4px; } .mini-bars i { display: block; height: 4px; border-radius: 2px; min-width: 2px; } .mini-bars .b { background: var(--bad); } .mini-bars .c { background: var(--ok); }
+
+.lab.gallery { display: block; } .lab.gallery .lab-detail { margin-top: 28px; max-width: 70ch; }
+.lab.gallery .lab-list { width: auto; max-width: none; }
+.lab.gallery .group ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 0; }
+.lab.gallery .groups { gap: 28px; margin-top: 10px; } .lab.gallery .group h4 { font-size: 20px; }
+.back-all { margin-bottom: 12px; }

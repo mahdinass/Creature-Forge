@@ -7,7 +7,7 @@ import { Shell } from './shell/Shell'
 import { parseTab, stageOf, type Tab } from './shell/nav'
 import type { Change, SandboxBodyDict } from './sketch/freehandTypes'
 import { Lab } from './lab/Lab'
-import { Locomotion } from './locomotion/Locomotion'
+import { WalkingLab } from './walking/WalkingLab'
 import { parseDeepLink } from './lab/labLogic'
 import { Metrics } from './Metrics'
 import { ParamPanel, type PushSettings } from './ParamPanel'
@@ -183,9 +183,9 @@ export default function App() {
 
       {tab === 'overview' && <Home go={go} />}
 
-      {tab === 'locomotion' && <Locomotion />}
+      {tab === 'locomotion' && <WalkingLab />}
 
-      {tab === 'demo' && <Demo initialRun={q.get('run')} />}
+      {tab === 'demo' && <Demo initialRun={q.get('run')} go={go} />}
 
       {tab === 'lab' && <Lab initialTrial={link.trial} initialStep={link.step} />}
 

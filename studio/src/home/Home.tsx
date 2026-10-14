@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getOverview, getWalkingReplay, getWalkingSummary } from '../api'
 import { Overview } from '../overview/Overview'
 import type { OverviewData } from '../overview/overviewTypes'
 import { usePlayback } from '../store'
 import type { Tab } from '../shell/nav'
 import { Viewport } from '../Viewport'
+import { SeedDots } from '../walking/SeedDots'
 import type { WalkingReplay, WalkingSummary } from '../walking/walkingTypes'
 import './home.css'
 
@@ -43,7 +44,7 @@ function HeroStage({ summary }: { summary: WalkingSummary }) {
 
   return (
     <div className="hero-stage" data-testid="hero-stage">
-      {run ? <Viewport run={run} label="" bare className="hero-vp" /> : error ? (
+      {run ? <Viewport run={run} label="" bare closeup className="hero-vp" /> : error ? (
         <div className="state error" role="alert"><b>The hero replay could not load</b><span>{error}</span><button className="btn btn-ghost" onClick={() => { load('r2_winner'); load('incumbent') }}>Try again</button></div>
       ) : <div className="skeleton hero-skeleton" aria-label="Running MuJoCo" />}
       <div className="hero-caption" data-testid="hero-caption" aria-live="polite">
@@ -55,26 +56,6 @@ function HeroStage({ summary }: { summary: WalkingSummary }) {
         {paused && <button className="btn btn-ghost" onClick={() => { setPaused(false); usePlayback.getState().restart() }}>Play</button>}
         <small>Real MuJoCo replay · seed {seed} of the 150 untouched test seeds</small>
       </div>
-    </div>
-  )
-}
-
-function SeedDots({ s }: { s: WalkingSummary }) {
-  const rows = useMemo(() => [
-    { id: 'start', label: 'Starting controller', n: s.incumbent_walking, dots: s.seeds.map((x) => x.incumbent.walking) },
-    { id: 'improved', label: 'Improved controller', n: s.winner_walking, dots: s.seeds.map((x) => x.winner.walking) },
-  ], [s])
-  return (
-    <div className="seed-dots" data-testid="seed-dots">
-      {rows.map((r) => (
-        <div key={r.id} className="dot-row">
-          <div className="dot-head"><b>{r.label}</b><span><b className="big">{r.n}</b> of {s.n} walk</span></div>
-          <div className="dots" role="img" aria-label={`${r.label}: ${r.n} of ${s.n} test seeds walk`}>
-            {r.dots.map((w, i) => <i key={i} className={w ? 'walks' : 'falls'} />)}
-          </div>
-        </div>
-      ))}
-      <p className="dot-note">Each dot is one test start. The improvement came from a classical optimiser, <b>not from an AI model</b>.</p>
     </div>
   )
 }

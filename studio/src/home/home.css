@@ -28,12 +28,6 @@
 
 .band { display: grid; grid-template-columns: minmax(260px, 1fr) 1.6fr; gap: 40px; align-items: center; padding: 56px 48px; border-top: 1px solid var(--line); margin-top: 24px; }
 .band-head h2 { font-size: clamp(26px, 3vw, 40px); margin: 0 0 10px; line-height: 1.05; } .band-head p { color: #c4ccda; max-width: 44ch; margin: 0 0 18px; }
-.seed-dots { display: grid; gap: 22px; } .dot-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-.dot-head .big { font: 700 28px var(--font-display); }
-.dots { display: grid; grid-template-columns: repeat(50, 1fr); gap: 3px; } .dots i { aspect-ratio: 1; border-radius: 50%; display: block; }
-.dots i.walks { background: var(--ok); } .dots i.falls { background: transparent; box-shadow: inset 0 0 0 1.5px var(--bad); }
-@media (prefers-reduced-motion: no-preference) { .dots i { animation: pop .5s var(--ease) both; } @keyframes pop { from { transform: scale(0); } } .dots i:nth-child(3n) { animation-delay: .1s; } .dots i:nth-child(3n+1) { animation-delay: .2s; } }
-.dot-note { color: var(--dim); margin: 0; max-width: 60ch; }
 .band-model { background: linear-gradient(180deg, transparent, rgba(156, 140, 255, .06)); }
 .nem-preview { display: grid; gap: 22px; }
 .flow { display: flex; gap: 10px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; } .flow li { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-size: 14px; }

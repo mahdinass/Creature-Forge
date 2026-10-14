@@ -39,7 +39,11 @@ page.on('pageerror', (e) => pageErrors.push(e.message))
 try {
   // ---- history ------------------------------------------------------------------------------------------
   await page.goto(`${BASE}/?tab=lab`)
-  await page.waitForSelector('[data-testid="lab-empty"]')
+  await page.waitForSelector('[data-testid="archive-groups"]')
+  ok(/sorted by what happened/.test((await page.textContent('[data-testid="archive-purpose"]')) || ''), 'the archive states its purpose in one sentence')
+    for (const g of ['verified', 'rejected', 'invalid', 'historical']) ok((await page.$(`[data-testid="group-${g}"]`)) !== null, `the archive has a "${g}" group`)
+  if ((await page.getAttribute('[data-testid="group-verified"]', 'data-count')) === '0')
+    ok(/no AI intervention is verified/.test((await page.textContent('[data-testid="group-verified-empty"]')) || ''), 'an empty verified group says plainly that no AI intervention is verified as an improvement')
   await page.waitForSelector('.trial-card')
   const statuses = await page.$$eval('.trial-card .chip', (els) => els.map((e) => e.getAttribute('data-status')))
   ok(statuses.length === 4, `history lists the 4 bundled real records (${statuses.length})`)

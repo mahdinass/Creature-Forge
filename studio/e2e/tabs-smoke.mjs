@@ -24,14 +24,16 @@ page.on('response', (r) => {
 const ERR = /Unexpected token|is not valid JSON|Could not load|No Phase 2A locomotion results available|instead of JSON/i
 try {
   await page.goto(`${BASE}/`, { waitUntil: 'networkidle' })
-  const nav = (await page.$$eval('nav button, header button', (bs) => bs.map((b) => b.textContent.trim())))
-  for (const label of ['Overview', 'Studio', 'Investigations', 'Locomotion', 'AI Investigation', 'Sketch'])
-    ok(nav.some((n) => n.includes(label)), `nav has "${label}"`)
+  for (const g of ['home', 'create', 'simulate', 'investigate']) ok(await page.isVisible(`[data-testid="nav-${g}"]`), `top navigation has "${g}"`)
+  await page.click('[data-testid="nav-investigate"]')
+  for (const t of ['demo', 'locomotion', 'lab']) ok(await page.isVisible(`[data-testid="tab-${t}"]`), `Investigate offers the "${t}" view`)
+  ok(((await page.textContent('[data-testid="purpose"]')) || '').length > 20, 'every view states its purpose in a sentence')
   for (const tab of ['overview', 'studio', 'compare', 'lab', 'locomotion', 'demo', 'sketch']) {
     await page.goto(`${BASE}/?tab=${tab}`, { waitUntil: 'networkidle' })
     await page.waitForTimeout(1500)
     const text = await page.innerText('body')
     ok(!ERR.test(text), `tab ${tab}: no load/parse error text`)
+    if (tab !== 'overview') ok(((await page.textContent('[data-testid="purpose"]')) || '').length > 20, `tab ${tab}: purpose sentence shown`)
     if (SHOT) await page.screenshot({ path: `${SHOT}/tab-${tab}.png` })
   }
   ok(bad.length === 0, `every API response is JSON and < 400${bad.length ? ': ' + bad.join(' | ') : ''}`)

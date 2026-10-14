@@ -1,9 +1,10 @@
+import './lab.css'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getLabReplay, getLabTrial, getLabTrials } from '../api'
 import { usePlayback } from '../store'
 import { Notice, OriginBadge, StatusChip } from './Badges'
 import {
-  filterRows, formatWhen, pct, STEP_TITLE, STEPS, statusInfo, stepState, type Step,
+  filterRows, formatWhen, groupOf, GROUPS, pct, STEP_TITLE, STEPS, statusInfo, stepState, type Step,
 } from './labLogic'
 import type { LabRow, LabView } from './labTypes'
 import {
@@ -34,9 +35,10 @@ export function Lab({ initialTrial, initialStep }: { initialTrial: string | null
   const shown = useMemo(() => (rows ? filterRows(rows, filter) : []), [rows, filter])
 
   return (
-    <main className="lab" data-testid="lab">
+    <main className={`lab ${selected ? '' : 'gallery'}`} data-testid="lab">
       <aside className="lab-list" aria-label="Experiment history">
-        <h3>Experiments</h3>
+        <h3>Failure archive</h3>
+        <p className="purpose" data-testid="archive-purpose">Every earlier AI-assisted experiment on a falling robot, sorted by what happened to the AI’s suggestion.</p>
         <div className="filters" role="group" aria-label="filter by outcome">
           {FILTERS.map((f) => (
             <button key={f.id} className={filter === f.id ? 'on' : ''} onClick={() => setFilter(f.id)}>{f.label}</button>
@@ -56,16 +58,31 @@ export function Lab({ initialTrial, initialStep }: { initialTrial: string | null
           </Notice>
         )}
         {rows && rows.length > 0 && shown.length === 0 && <p className="dim">No experiments match this filter.</p>}
-        <ul>
-          {shown.map((r) => <TrialCard key={r.trial_id} row={r} active={r.trial_id === selected} onSelect={() => setSelected(r.trial_id)} />)}
-        </ul>
+        {rows && rows.length > 0 && (
+          <div className="groups" data-testid="archive-groups">
+            {GROUPS.map((g) => {
+              const items = shown.filter((r) => groupOf(r.status) === g.id)
+              if (filter !== 'all' && items.length === 0) return null
+              return (
+                <section key={g.id} className={`group group-${g.id}`} data-testid={`group-${g.id}`} data-count={items.length}>
+                  <h4>{g.title} <span className="count">{items.length}</span></h4>
+                  <p className="dim">{g.meaning}</p>
+                  {items.length === 0 ? <p className="empty-group" data-testid={`group-${g.id}-empty`}>{g.empty}</p> : (
+                    <ul>{items.map((r) => <TrialCard key={r.trial_id} row={r} active={r.trial_id === selected} onSelect={() => setSelected(r.trial_id)} />)}</ul>
+                  )}
+                </section>
+              )
+            })}
+          </div>
+        )}
         <small className="ref-note">
-          The 16 cm foot in the <b>Compare (Phase 0)</b> tab is a human-authored reference design. It is not an AI result and
+          The 16 cm foot in the <b>Compare designs</b> view is a human-authored reference design. It is not an AI result and
           is not one of these experiments.
         </small>
       </aside>
 
       <section className="lab-detail">
+        {selected && <button className="btn btn-ghost back-all" data-testid="back-to-archive" onClick={() => setSelected(null)}>← All experiments</button>}
         {selected ? <TrialDetail key={selected} id={selected} initialStep={selected === initialTrial ? initialStep : null} />
           : <EmptyDetail total={rows?.length ?? null} />}
       </section>
@@ -107,7 +124,8 @@ function TrialCard({ row, active, onSelect }: { row: LabRow; active: boolean; on
           <span className="tc-line">Proposed <code>{row.parameter}</code> → {row.value}</span>
         )}
         {row.fall_rate && row.fall_rate.baseline != null && (
-          <span className="tc-line">Fall rate {pct(row.fall_rate.baseline)} → {pct(row.fall_rate.candidate)}</span>
+          <span className="tc-line">Fall rate {pct(row.fall_rate.baseline)} → {pct(row.fall_rate.candidate)}
+            <span className="mini-bars" aria-hidden="true"><i className="b" style={{ width: `${(row.fall_rate.baseline ?? 0) * 100}%` }} /><i className="c" style={{ width: `${(row.fall_rate.candidate ?? 0) * 100}%` }} /></span></span>
         )}
         {row.parameter == null && row.readable && <span className="tc-line dim">{statusInfo(row.status).summary}</span>}
         <span className="dim tc-when">{formatWhen(row.created_utc)}</span>

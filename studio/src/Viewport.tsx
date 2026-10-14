@@ -139,7 +139,7 @@ function Scene({ run }: { run: RunPayload }) {
   )
 }
 
-export const Viewport = memo(function Viewport({ run, label, bare = false, className = '' }: { run: RunPayload; label: string; bare?: boolean; className?: string }) {
+export const Viewport = memo(function Viewport({ run, label, bare = false, className = '', closeup = false }: { run: RunPayload; label: string; bare?: boolean; className?: string; closeup?: boolean }) {
   const t = usePlayback((s) => s.simTime)
   const fall = fallEvent(run.events)
   const k = frameIndex(run.time, t)
@@ -147,7 +147,7 @@ export const Viewport = memo(function Viewport({ run, label, bare = false, class
   const fallen = fall !== undefined && t >= fall.time
   return (
     <div className={`viewport ${bare ? 'bare' : ''} ${className}`}>
-      <Canvas shadows camera={{ position: [0.5, 0.8, 2.4], fov: 45 }} dpr={[1, 2]}>
+      <Canvas shadows camera={{ position: closeup ? [0.45, 0.7, 1.75] : [0.5, 0.8, 2.4], fov: 45 }} dpr={[1, 2]}>
         <Scene run={run} />
       </Canvas>
       {!bare && <div className="vp-label">{label}</div>}

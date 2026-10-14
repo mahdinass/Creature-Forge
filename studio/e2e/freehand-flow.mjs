@@ -71,9 +71,11 @@ try {
   ok(!!raw && raw.includes('Q'), 'strokes render as smooth curves, not polylines')
 
   // --- the same strokes always read the same way (reload keeps the raw drawing and the reading)
+  await settle(['valid', 'valid_with_snaps', 'questionable'])
   const first = await text(T('outcome'))
   await page.reload(); await page.waitForSelector(T('sketch-page')); await settle(['valid', 'valid_with_snaps', 'questionable'])
-  ok((await nStrokes()) === 3 && (await text(T('outcome'))) === first, 'the raw drawing survives a reload and is interpreted identically')
+  const again = await text(T('outcome'))
+  ok((await nStrokes()) === 3 && again === first, `the raw drawing survives a reload and is interpreted identically (${first.slice(0, 40)} | ${again.slice(0, 40)})`)
 
   // --- guided ON snaps, OFF keeps the raw angle
   await page.click(T('clear'))

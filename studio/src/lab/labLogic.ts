@@ -188,3 +188,19 @@ export function screeningText(evidence: number[] | null, screening: number[] | n
       ` and adds ${fresh.length === 0 ? 'none' : `seeds ${fmtSeeds(fresh)}`}.`
   return { title, note, count }
 }
+
+export type Group = 'verified' | 'rejected' | 'invalid' | 'historical'
+export const GROUPS: { id: Group; title: string; meaning: string; empty: string }[] = [
+  { id: 'verified', title: 'Verified interventions', meaning: 'The AI suggested a change and the simulator confirmed it helped.',
+    empty: 'None yet. Every AI suggestion in this archive was rejected by the simulator or could not be used, so no AI intervention is verified as an improvement here.' },
+  { id: 'rejected', title: 'Rejected interventions', meaning: 'The AI suggested a valid change; the simulator measured no improvement.', empty: 'None.' },
+  { id: 'invalid', title: 'Invalid model responses', meaning: 'The reply could not be used (malformed, missing evidence, an error or over budget). Nothing was simulated.', empty: 'None.' },
+  { id: 'historical', title: 'Other historical records', meaning: 'Records that were interrupted or cannot be read.', empty: 'None.' },
+]
+
+export function groupOf(status: string): Group {
+  if (status === 'accepted') return 'verified'
+  if (status === 'rejected_by_verifier') return 'rejected'
+  if (status === 'invalid_model_output' || status === 'model_error' || status === 'budget_exceeded') return 'invalid'
+  return 'historical'
+}

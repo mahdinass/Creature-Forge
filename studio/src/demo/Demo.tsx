@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getDemoRun, getDemoRuns, getDemoStatus, startDemoRun } from '../api'
 import { Block, Notice } from '../lab/Badges'
 import { ReplayStep } from './Replay'
-import { Story } from './Story'
+import { Investigation } from './Investigation'
 import {
   bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, rowBadge, statusMessage, STEP_TITLE, STEPS, verdictText,
   type Step,
@@ -18,7 +18,7 @@ function KindBanner({ kind, note }: { kind: Kind; note: string }) {
   )
 }
 
-export function Demo({ initialRun }: { initialRun: string | null }) {
+export function Demo({ initialRun, go }: { initialRun: string | null; go?: (t: 'locomotion' | 'sketch') => void }) {
   const [status, setStatus] = useState<DemoStatus | null>(null)
   const [rows, setRows] = useState<DemoRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -54,70 +54,38 @@ export function Demo({ initialRun }: { initialRun: string | null }) {
 
   return (
     <main className="demo" data-testid="demo">
-      <div className="banner">
-        Observed MuJoCo failure → Nemotron proposal → bounded edit → MuJoCo verification → replay → measured verdict. Every number comes from
-        MuJoCo; every sentence the model wrote is marked as the model’s and is never treated as a result. The model call is either{' '}
-        <b>live</b> (made during the run), a <b>recording</b> of a real call, or a <b>scripted mock</b> — each is labelled on every screen.
+      <div className="run-switch" role="group" aria-label="recorded investigations" data-testid="run-switch">
+        {error && <Notice tone="bad" testid="demo-error">{error} <button className="link" onClick={load}>Try again</button></Notice>}
+        {!rows && !error && <div className="skeleton" style={{ height: 64, width: 320 }} aria-label="Loading runs" />}
+        {(rows ?? []).map((r) => (
+          <button key={`${r.source}-${r.run_id}`} className="run-chip" aria-pressed={r.run_id === selected} onClick={() => setSelected(r.run_id)} data-testid={`run-${r.run_id}`} data-source={r.source}>
+            <span className={`kind-chip kind-${r.kind ?? 'none'}`}>{r.kind ? KIND_INFO[r.kind].label.replace(' — not a model', '') : rowBadge(r)}</span>
+            <b>{r.label ?? r.run_id}</b>
+            <small>{r.status !== 'ok' ? `model: ${r.status}` : r.n_valid_proposals ? `${r.n_valid_proposals} valid proposal(s)` : 'no valid proposal'}
+              {r.verdict ? ` · first: ${r.verdict.replace(/_/g, ' ')} (${(r.gain_seeds ?? 0) >= 0 ? '+' : ''}${r.gain_seeds})` : ''}{r.hash_verified === false ? ' · HASH MISMATCH' : ''}</small>
+          </button>
+        ))}
       </div>
-      <div className="demo-layout">
-        <aside className="lab-list" aria-label="demo runs">
-          <h3>Runs</h3>
-          {error && <Notice tone="bad" testid="demo-error">{error} <button className="link" onClick={load}>Try again</button></Notice>}
-          {!rows && !error && <p className="dim">Loading…</p>}
-          <ul>
-            {(rows ?? []).map((r) => (
-              <li key={`${r.source}-${r.run_id}`}>
-                <button className={`trial-card ${r.run_id === selected ? 'on' : ''}`} onClick={() => setSelected(r.run_id)} data-testid={`run-${r.run_id}`} data-source={r.source}
-                  aria-pressed={r.run_id === selected}>
-                  <span className="tc-top">
-                    <span className={`kind-chip kind-${r.kind ?? 'none'}`}>{r.kind ? KIND_INFO[r.kind].label.replace(' — not a model', '') : rowBadge(r)}</span>
-                    <span className="dim">{r.source === 'bundled-recording' ? 'bundled' : 'local'}</span>
-                  </span>
-                  <b className="tc-title">{r.label ?? r.run_id}</b>
-                  <span className="tc-line">
-                    {r.status !== 'ok' ? `model: ${r.status}` : r.n_valid_proposals ? `${r.n_valid_proposals} valid proposal(s)` : 'no valid proposal'}
-                    {r.verdict ? ` · first: ${r.verdict.replace(/_/g, ' ')} (${(r.gain_seeds ?? 0) >= 0 ? '+' : ''}${r.gain_seeds})` : ''}
-                  </span>
-                  {r.hash_verified === false && <span className="dim">HASH MISMATCH</span>}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div className="demo-actions">
-            <h4>New run</h4>
-            <button onClick={() => void start('mock')} disabled={busy !== null} data-testid="run-mock">
-              {busy === 'mock' ? 'Running MuJoCo…' : 'Run scripted mock'}
-            </button>
-            <small>Scripted text, real physics; labelled SCRIPTED MOCK.</small>
-            <button onClick={() => void start('live')} disabled={busy !== null || !status?.live_enabled || !confirmLive} data-testid="run-live">
-              {busy === 'live' ? 'Calling Nemotron, then MuJoCo…' : 'Run live with Nemotron'}
-            </button>
-            <label className="dim">
-              <input type="checkbox" checked={confirmLive} onChange={(e) => setConfirmLive(e.target.checked)} disabled={!status?.live_enabled} /> I understand this
-              spends Nebius inference budget
-            </label>
-            {status && !status.live_enabled && (
-              <small data-testid="live-disabled">Live mode is off on this server (needs a Nebius key and CREATURE_FORGE_ENABLE_LIVE=1). Recordings show real earlier calls.</small>
-            )}
-            {status && (
-              <small>
-                Shared budget: {status.combined_budget.requests_used}/{status.combined_budget.requests_cap} requests ·{' '}
-                {status.combined_budget.tokens_used.toLocaleString()}/{status.combined_budget.tokens_cap.toLocaleString()} tokens
-              </small>
-            )}
-            {busy && <small data-testid="busy-note">A run takes 1–4 minutes: the verification simulates 160 MuJoCo rollouts.</small>}
-          </div>
-        </aside>
-        <section className="lab-detail">
-          {selected ? <RunDetail key={selected} id={selected} status={status} /> : <p className="dim">Pick or start a run.</p>}
-        </section>
-      </div>
+      {selected ? <RunDetail key={selected} id={selected} status={status} go={go} /> : rows ? <div className="state"><b>No investigation selected</b><span>Pick one above.</span></div> : null}
+      <details className="advanced new-run" data-testid="new-run">
+        <summary>Run another investigation (optional)</summary>
+        <div className="demo-actions">
+          <button className="btn btn-ghost" onClick={() => void start('mock')} disabled={busy !== null} data-testid="run-mock">{busy === 'mock' ? 'Running MuJoCo…' : 'Run scripted mock'}</button>
+          <small>Scripted text, real physics; labelled SCRIPTED MOCK.</small>
+          <button className="btn btn-ghost" onClick={() => void start('live')} disabled={busy !== null || !status?.live_enabled || !confirmLive} data-testid="run-live">
+            {busy === 'live' ? 'Calling Nemotron, then MuJoCo…' : 'Run live with Nemotron'}
+          </button>
+          <label className="dim"><input type="checkbox" checked={confirmLive} onChange={(e) => setConfirmLive(e.target.checked)} disabled={!status?.live_enabled} /> I understand this spends Nebius inference budget</label>
+          {status && !status.live_enabled && <small data-testid="live-disabled">Live mode is off on this server (needs a Nebius key and CREATURE_FORGE_ENABLE_LIVE=1). The recordings above are real earlier calls.</small>}
+          {status && <small>Shared budget: {status.combined_budget.requests_used}/{status.combined_budget.requests_cap} requests · {status.combined_budget.tokens_used.toLocaleString()}/{status.combined_budget.tokens_cap.toLocaleString()} tokens</small>}
+          {busy && <small data-testid="busy-note">A run takes 1–4 minutes: the verification simulates 160 MuJoCo rollouts.</small>}
+        </div>
+      </details>
     </main>
   )
 }
 
-
-function RunDetail({ id, status }: { id: string; status: DemoStatus | null }) {
+function RunDetail({ id, status, go }: { id: string; status: DemoStatus | null; go?: (t: 'locomotion' | 'sketch') => void }) {
   const [run, setRun] = useState<DemoRun | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [step, setStep] = useState<Step>('observe')
@@ -131,47 +99,33 @@ function RunDetail({ id, status }: { id: string; status: DemoStatus | null }) {
 
   if (error) return <Notice tone="bad" testid="run-error">{error}</Notice>
   if (!run) return <p className="dim" data-testid="run-loading">Opening run…</p>
-  const msg = statusMessage(run)
   return (
     <article className="detail" data-testid="demo-detail" data-run={run.run_id} data-kind={run.provenance.kind}>
-      <header className="detail-head">
-        <div>
-          <h2>{run.label ?? 'Investigation run'}</h2>
-          <p className="dim"><code>{run.run_id}</code> · {run.created_utc.replace('T', ' ')} UTC
-            {run.integrity && (run.integrity.verified ? ' · hash verified' : ' · HASH MISMATCH')}</p>
-        </div>
-      </header>
-      <KindBanner kind={run.provenance.kind} note={run.provenance.note} />
       {run.integrity && !run.integrity.verified && <Notice tone="bad">This bundled recording does not match its recorded SHA-256. Treat it as altered.</Notice>}
-      <p className={`headline tone-${msg.tone}`} data-testid="demo-headline">{honestHeadline(run)}</p>
-      <div className="view-toggle" role="tablist" aria-label="view">
-        <button role="tab" aria-selected={view === 'story'} className={view === 'story' ? 'on' : ''} data-testid="view-story" onClick={() => setView('story')}>Guided story</button>
-        <button role="tab" aria-selected={view === 'steps'} className={view === 'steps' ? 'on' : ''} data-testid="view-steps" onClick={() => setView('steps')}>Step-by-step details</button>
-      </div>
-      {view === 'story' ? <Story run={run} /> : (<>
-      <nav className="stepper" aria-label="investigation steps">
-        {STEPS.map((s, i) => (
-          <button key={s} data-step={s} className={step === s ? 'on' : ''} onClick={() => setStep(s)} aria-current={step === s ? 'step' : undefined}>
-            <span className="n">{i + 1}</span>{STEP_TITLE[s]}
-          </button>
-        ))}
-      </nav>
-      <div className="step" data-testid={`demo-step-${step}`}>
-        {step === 'observe' && <ObserveStep run={run} />}
-        {step === 'prompt' && <PromptStep run={run} />}
-        {step === 'proposal' && <ProposalStep run={run} />}
-        {step === 'verify' && <VerifyStep run={run} />}
-        {step === 'replay' && <ReplayStep run={run} />}
-      </div>
-      <footer className="step-nav">
-        <button disabled={step === STEPS[0]} onClick={() => setStep(STEPS[STEPS.indexOf(step) - 1])}>← Back</button>
-        <button disabled={step === STEPS[STEPS.length - 1]} onClick={() => setStep(STEPS[STEPS.indexOf(step) + 1])}>Next →</button>
+      <Investigation run={run} go={go} />
+      <details className="advanced" data-testid="advanced">
+        <summary>Evidence, raw replies and statistical caveats</summary>
+        <h3 className="adv-title">{run.label ?? 'Investigation run'}</h3>
+        <p className="dim"><code>{run.run_id}</code> · {run.created_utc.replace('T', ' ')} UTC{run.integrity && (run.integrity.verified ? ' · hash verified' : ' · HASH MISMATCH')}</p>
+        <p className="headline" data-testid="demo-headline">{honestHeadline(run)}</p>
+        <nav className="stepper" aria-label="investigation steps">
+          {STEPS.map((s, i) => (
+            <button key={s} data-step={s} className={step === s ? 'on' : ''} onClick={() => setStep(s)} aria-current={step === s ? 'step' : undefined}>
+              <span className="n">{i + 1}</span>{STEP_TITLE[s]}
+            </button>
+          ))}
+        </nav>
+        <div className="step" data-testid={`demo-step-${step}`}>
+          {step === 'observe' && <ObserveStep run={run} />}
+          {step === 'prompt' && <PromptStep run={run} />}
+          {step === 'proposal' && <ProposalStep run={run} />}
+          {step === 'verify' && <VerifyStep run={run} />}
+          {step === 'replay' && <ReplayStep run={run} />}
+        </div>
         {run.provenance.usage && (
           <small className="dim">{run.provenance.model} · {run.provenance.usage.total_tokens} tokens · reasoning effort {run.provenance.setting.reasoning_effort} · max {run.provenance.setting.max_tokens}</small>
         )}
-      </footer>
-      </>)}
-      <details className="limits"><summary>What this does and does not show</summary>
+        <h4>What this does and does not show</h4>
         <ul>{run.limits.map((l) => <li key={l}>{l}</li>)}</ul>
         {status && <small>Reasoning effort is a request, not a guarantee: the API did not report how much reasoning was used.</small>}
       </details>
