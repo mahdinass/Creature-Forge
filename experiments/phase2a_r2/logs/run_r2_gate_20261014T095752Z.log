@@ -1,0 +1,44 @@
+{
+ "arms": {
+  "S": {
+   "best": {
+    "index": 21,
+    "replicate": 1,
+    "walking_count": 60,
+    "survival_count": 60
+   },
+   "incumbent_walking_count": 43,
+   "gain_seeds": 17,
+   "gain_percentage_points": 26.5625,
+   "meets_threshold": true
+  },
+  "I": {
+   "best": {
+    "index": 44,
+    "replicate": 1,
+    "walking_count": 63,
+    "survival_count": 63
+   },
+   "incumbent_walking_count": 43,
+   "gain_seeds": 20,
+   "gain_percentage_points": 31.25,
+   "meets_threshold": true
+  },
+  "T": {
+   "best": {
+    "index": 101,
+    "replicate": 1,
+    "walking_count": 64,
+    "survival_count": 64
+   },
+   "incumbent_walking_count": 43,
+   "gain_seeds": 21,
+   "gain_percentage_points": 32.8125,
+   "meets_threshold": true
+  }
+ },
+ "proceed": true,
+ "threshold": ">= 5 more of the 64 validation seeds walking than the incumbent, among preserving candidates; a pragmatic stopping heuristic, not a significance test",
+ "ledger_rollouts": 5792
+}
+GATE: PROCEED to replicate 2
