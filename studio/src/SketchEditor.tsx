@@ -44,6 +44,8 @@ export function SketchEditor({ initialBody, onUse }: { initialBody: Params; onUs
   const svg = useRef<SVGSVGElement>(null)
   const req = useRef(0)
   const previewReq = useRef(0)
+  const resultFor = useRef<Nodes | null>(null) // the drawing the current `result` was computed for
+  const pendingCommit = useRef(false) // released before the server answered: commit when it does
   const segments = useMemo(() => startSketch(initialBody).segments, [initialBody]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { getSketchSupport().then(setSupport).catch((e: Error) => setApiError(e.message)) }, [])
@@ -53,7 +55,17 @@ export function SketchEditor({ initialBody, onUse }: { initialBody: Params; onUs
     const mine = ++req.current
     const id = setTimeout(() => {
       normalizeSketch({ nodes, segments }, extras)
-        .then((r) => { if (mine === req.current) { setResult(r); setApiError(null) } })
+        .then((r) => {
+          if (mine !== req.current) return
+          resultFor.current = nodes
+          setResult(r)
+          setApiError(null)
+          if (pendingCommit.current && r.ok) {
+            pendingCommit.current = false
+            setNotice(r.adjustments)
+            setNodes(r.sketch.nodes as Nodes)
+          }
+        })
         .catch((e: Error) => { if (mine === req.current) setApiError(e.message) })
     }, 100)
     return () => clearTimeout(id)
@@ -94,14 +106,18 @@ export function SketchEditor({ initialBody, onUse }: { initialBody: Params; onUs
     setNodes({ ...nodes, [drag]: s.point })
   }
   const release = () => {
-    if (drag && drag !== 'mass' && result?.ok) {
-      setNotice(result.adjustments)
-      setNodes(result.sketch.nodes as Nodes) // commit what the physics will actually get
+    if (drag && drag !== 'mass') {
+      if (result?.ok && resultFor.current === nodes) {
+        setNotice(result.adjustments)
+        setNodes(result.sketch.nodes as Nodes) // commit what the physics will actually get
+      } else {
+        pendingCommit.current = true // the answer for this drawing has not arrived yet; never commit a stale one
+      }
     }
     setDrag(null)
     setSnaps([])
   }
-  const loadPreset = (l: [number, number, number]) => { setNotice([]); setNodes(sketchFromLengths(...l).nodes as Nodes) }
+  const loadPreset = (l: [number, number, number]) => { pendingCommit.current = false; setNotice([]); setNodes(sketchFromLengths(...l).nodes as Nodes) }
 
   const solid: Nodes = drag || !result?.ok ? nodes : (result.sketch.nodes as Nodes)
   const ghost = result?.ok && !nodesEqual(nodes, result.sketch.nodes as Nodes, 1e-3) ? nodes : null
@@ -220,7 +236,7 @@ export function SketchEditor({ initialBody, onUse }: { initialBody: Params; onUs
         {Object.entries(solid).map(([k, [x, z]]) => (
           <g key={k}>
             <circle cx={sx(x)} cy={sz(z)} r={11} fill={col(k)} stroke="#10141c" strokeWidth={2} style={{ cursor: 'grab' }} data-testid={`handle-${k}`}
-              onPointerDown={(e) => { (e.target as Element).setPointerCapture(e.pointerId); setDrag(k); setNotice([]) }} />
+              onPointerDown={(e) => { (e.target as Element).setPointerCapture(e.pointerId); setDrag(k); setNotice([]); pendingCommit.current = false }} />
             <text x={sx(x) + 16} y={sz(z) - 10} className="axis">{k}</text>
           </g>
         ))}
