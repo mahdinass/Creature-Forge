@@ -1,5 +1,6 @@
 import type { CompileResult, Params, Phase0, PushInfo, RunPayload, Schema, Sketch } from './types'
 import type { LabRow, LabView, Replay } from './lab/labTypes'
+import type { LocomotionReplay, LocomotionSummary } from './locomotion/locoTypes'
 
 async function j<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -38,3 +39,9 @@ export const getLabTrials = () => fetch('/api/lab/trials').then((r) => j<LabRow[
 export const getLabTrial = (id: string) => fetch(`/api/lab/trials/${encodeURIComponent(id)}`).then((r) => j<LabView>(r))
 export const getLabReplay = (id: string, seed: number) =>
   fetch(`/api/lab/trials/${encodeURIComponent(id)}/replay?seed=${seed}`).then((r) => j<Replay>(r))
+
+// Phase 2A locomotion (read-only results; replay is a fresh deterministic MuJoCo rollout, no model call)
+export const getLocomotionSummary = () => fetch('/api/locomotion/summary').then((r) => j<LocomotionSummary>(r))
+export const getLocomotionReplay = (controller: string, seed: number, duration: number) =>
+  fetch(`/api/locomotion/replay?controller=${encodeURIComponent(controller)}&seed=${seed}&duration=${duration}`).then((r) =>
+    j<LocomotionReplay>(r))

@@ -52,8 +52,10 @@ def main() -> int:
         else:
             print("FAIL server did not start")
             return 1
-        rc = subprocess.run([node, "e2e/investigation-flow.mjs"], cwd=ROOT / "studio",
-                            env={**os.environ, "BASE_URL": base}, timeout=600).returncode
+        rc = 0
+        for flow in ("e2e/investigation-flow.mjs", "e2e/locomotion-flow.mjs"):
+            rc |= subprocess.run([node, flow], cwd=ROOT / "studio", env={**os.environ, "BASE_URL": base},
+                                 timeout=600).returncode
         server.should_exit = True
     return rc
 

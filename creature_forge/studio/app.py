@@ -18,6 +18,7 @@ from ..experiment import (PHASE0_BASELINE, PHASE0_CANDIDATE, PHASE0_DURATION, PH
                           compare_designs)
 from ..investigator import INVESTIGATIONS_DIR, list_trials, load_trial
 from ..lab import (DEMO_DIR, LabError, build_replay, lab_view, list_lab_trials, load_lab_trial)
+from ..locomotion_view import CONTROLLER_INFO, RESULTS as LOCOMOTION_DIR, cached_replay, load_summary
 from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
@@ -87,7 +88,7 @@ def resolve_static(root: Path, path: str) -> Path | None:
 
 
 def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = DIST,
-               demo_dir: Path = DEMO_DIR) -> FastAPI:
+               demo_dir: Path = DEMO_DIR, locomotion_dir: Path = LOCOMOTION_DIR) -> FastAPI:
     app = FastAPI(title="Creature Forge Studio", lifespan=_warm)
 
     @app.get("/api/schema")
@@ -154,6 +155,24 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             return build_replay(trial, seed)
         except LabError as exc:
             raise HTTPException(422, str(exc)) from None
+
+    @app.get("/api/locomotion/summary")
+    def locomotion_summary():
+        try:
+            return load_summary(locomotion_dir)  # read-only: results are written by scripts/run_phase2a.py
+        except FileNotFoundError:
+            raise HTTPException(404, "no Phase 2A locomotion results found") from None
+
+    @app.get("/api/locomotion/replay")
+    def locomotion_replay(controller: str, seed: int = 3000, duration: float = 10.0):
+        if controller not in CONTROLLER_INFO:
+            raise HTTPException(404, f"unknown controller; choose one of {sorted(CONTROLLER_INFO)}")
+        try:  # a fresh deterministic MuJoCo rollout of a committed controller; no model call
+            return cached_replay(controller, seed, round(float(duration), 3), str(locomotion_dir))
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        except FileNotFoundError:
+            raise HTTPException(404, "controller export not found") from None
 
     @app.get("/api/sketch/default")
     def sketch_default():

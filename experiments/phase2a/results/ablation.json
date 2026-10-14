@@ -1,0 +1,127 @@
+{
+ "seeds": [
+  2000,
+  2001,
+  2002,
+  2003,
+  2004,
+  2005,
+  2006,
+  2007,
+  2008,
+  2009
+ ],
+ "duration": 8.0,
+ "rollouts": 50,
+ "note": "analysis only; diagnostic seeds; not used to select or tune",
+ "variants": {
+  "selected": {
+   "change": {},
+   "walking_fraction": 0.6,
+   "labels": [
+    "walking",
+    "walking",
+    "fall",
+    "fall",
+    "walking",
+    "walking",
+    "fall",
+    "walking",
+    "contact_chatter",
+    "walking"
+   ],
+   "median_speed": 0.4883438660440461,
+   "fitness": 3.7796425632939594
+  },
+  "no_contact_sync": {
+   "change": {
+    "sync_gain": 0.0
+   },
+   "walking_fraction": 0.8,
+   "labels": [
+    "walking",
+    "walking",
+    "walking",
+    "fall",
+    "walking",
+    "walking",
+    "walking",
+    "walking",
+    "fall",
+    "walking"
+   ],
+   "median_speed": 0.44137999127234095,
+   "fitness": 4.620036624716759
+  },
+  "no_pitch_feedback": {
+   "change": {
+    "pitch_kp": 0.0
+   },
+   "walking_fraction": 0.0,
+   "labels": [
+    "falling_forward",
+    "fall",
+    "falling_forward",
+    "fall",
+    "fall",
+    "falling_forward",
+    "fall",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward"
+   ],
+   "median_speed": 0.25554014720043317,
+   "fitness": 0.9104462041053486
+  },
+  "no_ankle_balance": {
+   "change": {
+    "balance_gain": 0.0
+   },
+   "walking_fraction": 0.0,
+   "labels": [
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward",
+    "falling_forward"
+   ],
+   "median_speed": 0.5074802769887886,
+   "fitness": -0.12120586096247947
+  },
+  "no_knee_lift": {
+   "change": {
+    "knee_amp": 0.1
+   },
+   "walking_fraction": 0.0,
+   "labels": [
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary",
+    "stationary"
+   ],
+   "median_speed": 0.0036947460003975427,
+   "fitness": 1.0210321829688627
+  }
+ },
+ "provenance": {
+  "git_commit": "a4ddad0ae53d14a7ccadfecc6710cb692e2f3769",
+  "git_dirty": true,
+  "mujoco": "3.15.0",
+  "numpy": "2.4.6",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "cpu_count": 16,
+  "workers": 1
+ }
+}

@@ -9,7 +9,7 @@ button.link { background:none; border:none; color:var(--accent); padding:4px 0; 
 header { display:flex; align-items:center; gap:20px; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
 header h1 { margin:0; font-size:18px; } header h1 span { color:var(--accent); font-weight:400; }
 header small { color:var(--dim); margin-left:auto; }
-nav { display:flex; gap:6px; }
+nav { display:flex; gap:6px; flex-wrap:wrap; }
 main { padding:12px 16px; }
 .studio { display:grid; grid-template-columns:300px 1fr; gap:14px; }
 .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px 14px; }
@@ -117,3 +117,10 @@ button:focus-visible, select:focus-visible, summary:focus-visible { outline:2px 
 .vp-push { position:absolute; top:44px; left:10px; }
 .lab > *, .lab-detail, .detail, .step, .step-body { min-width:0; }
 .block { overflow-x:auto; }
+
+/* Phase 2A locomotion tab */
+.loco section { margin:14px 0; } .loco h3 { margin:0 0 8px; font-size:15px; }
+.loco-chart { margin:0 0 10px; } .loco-chart svg { width:100%; max-width:640px; height:auto; background:#10151c; border-radius:6px; }
+.loco-chart figcaption { font-size:12px; color:var(--dim); display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:4px; }
+.loco-table { border-collapse:collapse; font-size:13px; margin:6px 0; } .loco-table td { padding:3px 12px 3px 0; border-bottom:1px solid #222a34; }
+.loco-table thead td { color:var(--dim); font-size:12px; }

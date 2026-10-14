@@ -27,7 +27,7 @@ Append one incident per significant recurring failure. Mark everything here as `
 - Related: same session, logged `torso_pos` z was the slide-joint offset (~0), not world height; fixed to use `data.xpos`, test `test_torso_height_is_absolute_world_height`. A "collapse" test had passed only because of that bug.
 
 ### 2026-10-13 — Open-loop gait does not walk (limitation, not a fix)
-- Status: open. Sinusoidal hip/knee gaits tried (0.6-1.5 Hz) all fell within 10 s or walked backward; only standing balance is validated. Phase 1 should search/optimise a gait with a fair classical baseline.
+- Status: partly addressed in Phase 2A (see below); the open-loop family still does not walk (0/1000 sampled gaits pass the gates). Sinusoidal hip/knee gaits tried (0.6-1.5 Hz) all fell within 10 s or walked backward; only standing balance is validated for that family.
 
 ### 2026-10-13 — "Visual-only" leg offset changed the physics (Phase 0.5)
 - Status: reverted; mitigated by a regression test.
@@ -45,3 +45,12 @@ Append one incident per significant recurring failure. Mark everything here as `
 ## 2026-10-13 - Phase 1 live batch: weak claim-to-action link and an invalid citation (not defects)
 - Control and enriched-1 both proposed torso_mass 5->3, which is harmful (9/10 falls at 15 N where the baseline has 0/10). Enriched-1 cited real margins but the intervention did not follow from them. Enriched-2 cited a nonexistent path and was rejected. Prompts were NOT edited afterwards (pre-registered). Evidence: `experiments/phase1/results/live_summary.json`.
 - Disclosure: exploration seeds 100-105 included the 16 cm design (see protocol).
+
+### 2026-10-13 - Forward displacement was a reward-hacking exploit (Phase 2A)
+- Status: handled by design; regression test `test_phase2a_feasibility_exploit_fails_walking_classification`.
+- Symptom: a phase-lag variant of the open-loop gait moved +4 m in 5 s and survived 3/3 seeds. Telemetry: ~85 touchdowns per foot in 10 s (8.5/s vs 0.82 Hz commanded), 53-79% flight, saturated torque, slip up to 3.5 m/s, 2/5 seeds fell. It is chatter-hopping, not walking.
+- Fix: gate-based walking classification (chatter, flight, saturation, slip, valid alternating steps); falls stop crediting displacement.
+
+### 2026-10-13 - Phase 2A UI regressions caught by checks
+- A fifth Studio nav tab overflowed the header by 44 px at 390 px width (existing lab browser check caught it); fixed with `nav { flex-wrap: wrap }`.
+- A placeholder `peak_torso_vx = 0` in the replay payload showed 0.00 m/s for a walking robot (caught in a screenshot); now measured from the trajectory (tested).
