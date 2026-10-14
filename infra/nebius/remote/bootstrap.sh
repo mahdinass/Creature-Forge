@@ -11,6 +11,14 @@ git fetch --quiet "$BUNDLE" "refs/heads/$BRANCH:refs/remotes/bundle/$BRANCH"
 git checkout --quiet -B "$BRANCH" "refs/remotes/bundle/$BRANCH"
 git merge-base --is-ancestor "$REG" HEAD || { echo "registered commit $REG is not an ancestor of HEAD"; exit 2; }
 git diff --quiet "$REG" HEAD -- experiments/phase2a_r1/protocol.json || { echo "protocol.json differs from registered commit"; exit 3; }
+# R1 pre-registration hashes the Windows worktree bytes (CRLF via core.autocrlf), git stores LF. Reproduce the registered
+# byte layout with the same git setting instead of touching the immutable protocol. Only when the tree is clean.
+if [ "$(git config --get core.autocrlf || true)" != "true" ]; then
+  git diff --quiet && git diff --cached --quiet || { echo "dirty tree; refusing to re-checkout"; exit 5; }
+  git config core.autocrlf true
+  git ls-files -z | xargs -0 rm -f
+  git checkout -- .
+fi
 echo "HEAD=$(git rev-parse HEAD) registered=$REG protocol.json identical"
 # Linux-only environment, outside the checkout; the Windows .venv is never involved.
 [ -d "$VENV" ] || python3 -m venv "$VENV"
