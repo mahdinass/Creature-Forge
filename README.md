@@ -29,7 +29,11 @@ A creator builds a robot, it attempts locomotion under authoritative MuJoCo phys
 
 Deadline: October 30, 2026, 18:00 Norway time. Public source repository, open-source license, a working project using NVIDIA open-source model(s) on Nebius and an under-three-minute YouTube demo are required for final submission. The repository is private during development and must be made public for judging.
 
-Do not add real keys to git. A working app, license, dependency pins and deployment instructions will be added as implementation progresses.
+Do not add real keys to git. A working app, dependency pins and deployment instructions will be added as implementation progresses.
+
+## License
+
+Apache License 2.0: see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Third-party components and services (MuJoCo, NumPy, React Three Fiber, NVIDIA Nemotron via Nebius Token Factory, ...) are inventoried in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) (regenerate with `python scripts/generate_third_party_notices.py`). The repository remains private until the planned public-release review.
 
 ## Creature Forge Studio (local)
 
