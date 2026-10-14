@@ -63,3 +63,9 @@ Append one incident per significant recurring failure. Mark everything here as `
 - Found by the first browser run of the starter sketches (not by the synthetic unit strokes): a hand-like wobble gave knee angles of +0.0003 rad, outside the joint range [-2.2, 0], so a straight leg was refused. Fix: `KNEE_TOL = 0.1 rad` clamp, reported as a note (guided mode reports it as a snap). Regression test with a wobbly stroke added.
 ## 2026-10-14 Two-simulation layouts overflowed after a window shrink
 - R3F canvases keep their pixel width until the resize observer fires, and `1fr` grid tracks have `min-content` minimums, so a wide-to-narrow resize left the page 100+ px too wide. Fix: `minmax(0, 1fr)` tracks and `min-width: 0` on grid children; the existing responsive browser check (which resizes) caught it.
+## 2026-10-14 Windows text-mode stdin sent CRLF scripts to the VM
+- `forge_dev.py` piped bash scripts to `ssh ... bash -s` with `text=True`; Windows translated `\n` to `\r\n` and bash failed with `set: pipefail\r: invalid option`. Fix: send bytes (`remote_bash`). Also the Windows console (cp1252) crashed printing vitest's check marks; stdout/stderr are reconfigured to UTF-8 with replacement.
+## 2026-10-14 FastAPI 0.143 `include_router` entries have no `.path`
+- Mounting the forge router broke `/api/version` (`'_IncludedRouter' object has no attribute 'path'`), which the browser smoke flow calls. Caught by the new wiring test before any browser run. Fix: `_route_paths()` descends into `original_router`.
+## 2026-10-14 Nemotron calibration v1: valid transport, invalid contract
+- All 12 requests returned content (the R3 null-content mode did not recur with a 3.7k-token prompt), but 0/12 were machine-valid: proposals named hypotheses by sentence and cited invented paths. Fixed by enumerating ids, params and citable paths in the strict JSON schema (v2: 9/12, then 6/6). Lesson: constrain identifiers by construction instead of instructions.
