@@ -74,15 +74,16 @@ def _eval_job(job: dict) -> dict:
 class Executor:
     """workers=1 runs inline (used by tests); otherwise a spawn-context process pool."""
 
-    def __init__(self, workers: int, timeout_s: float = 1800.0):
+    def __init__(self, workers: int, timeout_s: float = 1800.0, fn=None):
         self.workers, self.timeout_s = workers, timeout_s
+        self.fn = fn or _eval_job  # must be a picklable module-level function when workers > 1
         self.pool = mp.get_context("spawn").Pool(workers) if workers > 1 else None
 
     def map(self, jobs: list[dict]) -> list[dict]:
         if self.pool is None:
-            out = [_eval_job(j) for j in jobs]
+            out = [self.fn(j) for j in jobs]
         else:
-            out = self.pool.map_async(_eval_job, jobs, chunksize=1).get(self.timeout_s)
+            out = self.pool.map_async(self.fn, jobs, chunksize=1).get(self.timeout_s)
         if len(out) != len(jobs):
             raise RuntimeError(f"lost jobs: submitted {len(jobs)}, received {len(out)}")
         return out
