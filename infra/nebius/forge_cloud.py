@@ -182,7 +182,7 @@ def cmd_monitor(_a=None) -> None:
 def cmd_sync_down(_a=None) -> Path:
     dest = ROOT / "artifacts" / "nebius_r1" / time.strftime("%Y%m%dT%H%M%S")
     dest.mkdir(parents=True)
-    ssh("cd ~ && tar czf /tmp/forge_results.tgz logs creature-forge/experiments/phase2a_r1/results && sha256sum /tmp/forge_results.tgz > /tmp/forge_results.sha")
+    ssh("cd ~ && mkdir -p logs creature-forge/experiments/phase2a_r1/results && tar czf /tmp/forge_results.tgz logs creature-forge/experiments/phase2a_r1/results && sha256sum /tmp/forge_results.tgz > /tmp/forge_results.sha")
     sc = ["scp", "-F", str(Path.home() / ".ssh" / "config")]
     subprocess.check_call(sc + [f"{HOST}:/tmp/forge_results.tgz", f"{HOST}:/tmp/forge_results.sha", str(dest)])
     import hashlib
