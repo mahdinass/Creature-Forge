@@ -24,7 +24,7 @@ SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
 HOST = "creature-forge-nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
 CFG = {
-    "project_id": "project-e00mj0m4pr00azkke6yt11", "region": "eu-north1", "subnet_id": "vpcsubnet-e00magzxqjd2ga6pvg",
+    "project_id": "project-e01jjnn2pa00wm820bree9", "region": "eu-west1", "subnet_id": "vpcsubnet-e01bb10pt7n200dkqh",
     "name": "creature-forge-r1-cpu", "platform": "cpu-d3", "preset": "8vcpu-32gb", "image_family": "ubuntu24.04-driverless",
     "disk_type": "network_ssd", "disk_gib": 50, "default_deadline_h": 6.0,
     # rates quoted on docs.nebius.com/compute/resources/pricing (from 2026-10-01); verify with `plan` before creating
