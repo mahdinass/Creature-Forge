@@ -1,0 +1,27 @@
+{
+ "stop": false,
+ "reason": null,
+ "n_pool": 180,
+ "n_failing": 80,
+ "n_walking": 100,
+ "token_estimate": {
+  "requests": 30,
+  "max_completion_tokens_each": 2200,
+  "total_tokens_ceiling": 120204,
+  "cost_usd_at_assumed_price_per_million_tokens": {
+   "0.25": 0.03,
+   "1.0": 0.12,
+   "5.0": 0.601
+  },
+  "note": "token prices for this model could not be verified from public docs; the figures bracket plausible list prices"
+ },
+ "control_identity_check": {
+  "controller_block_identical_in_M_and_N": true
+ },
+ "theta0_on_screening_seeds": {
+  "derived_from_screen_pool_no_new_rollouts": true,
+  "walking_count": 8,
+  "survival_count": 8
+ }
+}
+contexts.json written; COMMIT it before any model request
