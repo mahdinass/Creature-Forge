@@ -1,0 +1,458 @@
+{
+ "n_pool": 16,
+ "n_failing": 7,
+ "n_walking": 9,
+ "stop": false,
+ "seeds": [
+  9500,
+  9501,
+  9502,
+  9503,
+  9504,
+  9505
+ ],
+ "M": {
+  "context": {
+   "controller": {
+    "freq": {
+     "value": 1.6462,
+     "lower": 0.5,
+     "upper": 2.0,
+     "u": 0.7642,
+     "meaning": "gait frequency (Hz)"
+    },
+    "duty": {
+     "value": 0.5729,
+     "lower": 0.5,
+     "upper": 0.8,
+     "u": 0.2431,
+     "meaning": "stance duty fraction"
+    },
+    "hip_amp": {
+     "value": 0.061,
+     "lower": 0.05,
+     "upper": 0.5,
+     "u": 0.0245,
+     "meaning": "hip swing amplitude (rad)"
+    },
+    "knee_amp": {
+     "value": 0.6924,
+     "lower": 0.1,
+     "upper": 1.0,
+     "u": 0.6583,
+     "meaning": "knee flexion amplitude (rad)"
+    },
+    "knee_shift": {
+     "value": -0.0266,
+     "lower": -0.15,
+     "upper": 0.15,
+     "u": 0.4113,
+     "meaning": "knee phase shift (rad)"
+    },
+    "stance_knee": {
+     "value": -0.0423,
+     "lower": -0.4,
+     "upper": 0.0,
+     "u": 0.8943,
+     "meaning": "stance-leg knee bias (rad)"
+    },
+    "hip_bias": {
+     "value": 0.1439,
+     "lower": -0.2,
+     "upper": 0.2,
+     "u": 0.8598,
+     "meaning": "hip bias (rad)"
+    },
+    "kp": {
+     "value": 178.7755,
+     "lower": 40.0,
+     "upper": 300.0,
+     "u": 0.5338,
+     "meaning": "joint position gain"
+    },
+    "kd": {
+     "value": 10.6812,
+     "lower": 2.0,
+     "upper": 25.0,
+     "u": 0.3774,
+     "meaning": "joint damping gain"
+    },
+    "balance_gain": {
+     "value": 106.9484,
+     "lower": 0.0,
+     "upper": 150.0,
+     "u": 0.713,
+     "meaning": "ankle balance feedback gain"
+    },
+    "pitch_kp": {
+     "value": 85.1244,
+     "lower": 0.0,
+     "upper": 120.0,
+     "u": 0.7094,
+     "meaning": "stance torso-pitch feedback gain"
+    },
+    "pitch_ref": {
+     "value": 0.1547,
+     "lower": -0.05,
+     "upper": 0.25,
+     "u": 0.6823,
+     "meaning": "torso pitch reference (rad)"
+    },
+    "sync_gain": {
+     "value": 0.8424,
+     "lower": 0.0,
+     "upper": 1.0,
+     "u": 0.8424,
+     "meaning": "contact-informed phase sync gain"
+    },
+    "ramp_s": {
+     "value": 0.5,
+     "lower": 0.2,
+     "upper": 2.0,
+     "u": 0.1667,
+     "meaning": "start-up amplitude ramp duration (s)"
+    },
+    "start_lean": {
+     "value": 0.0,
+     "lower": 0.0,
+     "upper": 0.15,
+     "u": 0.0,
+     "meaning": "extra forward pitch reference at start, decays over 1 s (rad)"
+    }
+   },
+   "episode": {
+    "duration_s": 10.0,
+    "initial_state": "torso pitch and 6 joint angles ~ N(0, 0.03 rad) set by the seed"
+   },
+   "summary": {
+    "n_seeds": 6,
+    "walking_seeds": 2,
+    "fell_seeds": 3,
+    "labels": {
+     "slow_or_few_steps": 1,
+     "fall": 3,
+     "walking": 2
+    }
+   },
+   "failing_seeds": [
+    {
+     "seed": 9500,
+     "label": "slow_or_few_steps",
+     "fell": false,
+     "fall_time": null,
+     "fall_pitch": null,
+     "valid_steps": 11,
+     "backward_steps": 1,
+     "touchdowns": 31,
+     "speed_upright": 0.167,
+     "forward_disp_upright": 1.6703,
+     "max_abs_pitch": 0.2198,
+     "mean_pitch": 0.015,
+     "min_torso_height": 0.7344,
+     "single_support_frac": 0.914,
+     "mean_stance_s": 0.3574,
+     "mean_swing_s": 0.3064,
+     "raw_touchdown_rate": 2.6,
+     "violations": [
+      "too_slow",
+      "not_alternating"
+     ],
+     "initial_perturbation_rad": {
+      "pitch0": 0.0348,
+      "l_hip": -0.0226,
+      "l_knee": -0.0257,
+      "l_ankle": -0.0262,
+      "r_hip": 0.0481,
+      "r_knee": -0.0152,
+      "r_ankle": -0.0139
+     }
+    },
+    {
+     "seed": 9501,
+     "label": "fall",
+     "fell": true,
+     "fall_time": 1.841,
+     "fall_pitch": -1.0082,
+     "valid_steps": 0,
+     "backward_steps": 3,
+     "touchdowns": 7,
+     "speed_upright": -0.4052,
+     "forward_disp_upright": -0.748,
+     "max_abs_pitch": 1.0082,
+     "mean_pitch": -0.1843,
+     "min_torso_height": 0.2157,
+     "single_support_frac": 0.8835,
+     "mean_stance_s": 0.316,
+     "mean_swing_s": 0.289,
+     "raw_touchdown_rate": 3.792,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "not_upright",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "initial_perturbation_rad": {
+      "pitch0": -0.0132,
+      "l_hip": -0.0181,
+      "l_knee": -0.0011,
+      "l_ankle": -0.014,
+      "r_hip": 0.0275,
+      "r_knee": -0.0191,
+      "r_ankle": 0.0341
+     }
+    },
+    {
+     "seed": 9503,
+     "label": "fall",
+     "fell": true,
+     "fall_time": 2.521,
+     "fall_pitch": -1.0038,
+     "valid_steps": 0,
+     "backward_steps": 3,
+     "touchdowns": 6,
+     "speed_upright": -0.2887,
+     "forward_disp_upright": -0.7293,
+     "max_abs_pitch": 1.0038,
+     "mean_pitch": -0.1231,
+     "min_torso_height": 0.23,
+     "single_support_frac": 0.9564,
+     "mean_stance_s": 0.5537,
+     "mean_swing_s": 0.345,
+     "raw_touchdown_rate": 2.7712,
+     "violations": [
+      "fall",
+      "not_upright",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "initial_perturbation_rad": {
+      "pitch0": -0.013,
+      "l_hip": -0.0087,
+      "l_knee": -0.0425,
+      "l_ankle": 0.0089,
+      "r_hip": 0.0103,
+      "r_knee": 0.0218,
+      "r_ankle": -0.0386
+     }
+    },
+    {
+     "seed": 9505,
+     "label": "fall",
+     "fell": true,
+     "fall_time": 3.061,
+     "fall_pitch": -1.0094,
+     "valid_steps": 0,
+     "backward_steps": 3,
+     "touchdowns": 10,
+     "speed_upright": -0.2591,
+     "forward_disp_upright": -0.7945,
+     "max_abs_pitch": 1.0094,
+     "mean_pitch": -0.1036,
+     "min_torso_height": 0.2228,
+     "single_support_frac": 0.8434,
+     "mean_stance_s": 0.3862,
+     "mean_swing_s": 0.3187,
+     "raw_touchdown_rate": 3.2616,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "not_upright",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "initial_perturbation_rad": {
+      "pitch0": 0.0399,
+      "l_hip": -0.038,
+      "l_knee": -0.0003,
+      "l_ankle": -0.0229,
+      "r_hip": -0.0214,
+      "r_knee": -0.0034,
+      "r_ankle": -0.0176
+     }
+    }
+   ],
+   "walking_seeds": [
+    {
+     "seed": 9502,
+     "label": "walking",
+     "fell": false,
+     "fall_time": null,
+     "fall_pitch": null,
+     "valid_steps": 31,
+     "backward_steps": 0,
+     "touchdowns": 37,
+     "speed_upright": 0.5155,
+     "forward_disp_upright": 5.155,
+     "max_abs_pitch": 0.2181,
+     "mean_pitch": 0.0785,
+     "min_torso_height": 0.734,
+     "single_support_frac": 0.9395,
+     "mean_stance_s": 0.2873,
+     "mean_swing_s": 0.2634,
+     "raw_touchdown_rate": 1.8,
+     "violations": [],
+     "initial_perturbation_rad": {
+      "pitch0": 0.0257,
+      "l_hip": -0.0106,
+      "l_knee": -0.0327,
+      "l_ankle": -0.0441,
+      "r_hip": -0.0408,
+      "r_knee": -0.0112,
+      "r_ankle": 0.024
+     }
+    },
+    {
+     "seed": 9504,
+     "label": "walking",
+     "fell": false,
+     "fall_time": null,
+     "fall_pitch": null,
+     "valid_steps": 30,
+     "backward_steps": 0,
+     "touchdowns": 35,
+     "speed_upright": 0.5056,
+     "forward_disp_upright": 5.0562,
+     "max_abs_pitch": 0.204,
+     "mean_pitch": 0.0773,
+     "min_torso_height": 0.7384,
+     "single_support_frac": 0.952,
+     "mean_stance_s": 0.3015,
+     "mean_swing_s": 0.2735,
+     "raw_touchdown_rate": 2.1,
+     "violations": [],
+     "initial_perturbation_rad": {
+      "pitch0": 0.0225,
+      "l_hip": 0.0212,
+      "l_knee": 0.0483,
+      "l_ankle": 0.0047,
+      "r_hip": -0.0046,
+      "r_knee": -0.0322,
+      "r_ankle": -0.0091
+     }
+    }
+   ]
+  },
+  "prompt_sha256": "1ad68b2dc09166e99f8cd18771eaac980e3d51b6b84b355daff00fa6fbeeb607"
+ },
+ "N": {
+  "context": {
+   "controller": {
+    "freq": {
+     "value": 1.6462,
+     "lower": 0.5,
+     "upper": 2.0,
+     "u": 0.7642,
+     "meaning": "gait frequency (Hz)"
+    },
+    "duty": {
+     "value": 0.5729,
+     "lower": 0.5,
+     "upper": 0.8,
+     "u": 0.2431,
+     "meaning": "stance duty fraction"
+    },
+    "hip_amp": {
+     "value": 0.061,
+     "lower": 0.05,
+     "upper": 0.5,
+     "u": 0.0245,
+     "meaning": "hip swing amplitude (rad)"
+    },
+    "knee_amp": {
+     "value": 0.6924,
+     "lower": 0.1,
+     "upper": 1.0,
+     "u": 0.6583,
+     "meaning": "knee flexion amplitude (rad)"
+    },
+    "knee_shift": {
+     "value": -0.0266,
+     "lower": -0.15,
+     "upper": 0.15,
+     "u": 0.4113,
+     "meaning": "knee phase shift (rad)"
+    },
+    "stance_knee": {
+     "value": -0.0423,
+     "lower": -0.4,
+     "upper": 0.0,
+     "u": 0.8943,
+     "meaning": "stance-leg knee bias (rad)"
+    },
+    "hip_bias": {
+     "value": 0.1439,
+     "lower": -0.2,
+     "upper": 0.2,
+     "u": 0.8598,
+     "meaning": "hip bias (rad)"
+    },
+    "kp": {
+     "value": 178.7755,
+     "lower": 40.0,
+     "upper": 300.0,
+     "u": 0.5338,
+     "meaning": "joint position gain"
+    },
+    "kd": {
+     "value": 10.6812,
+     "lower": 2.0,
+     "upper": 25.0,
+     "u": 0.3774,
+     "meaning": "joint damping gain"
+    },
+    "balance_gain": {
+     "value": 106.9484,
+     "lower": 0.0,
+     "upper": 150.0,
+     "u": 0.713,
+     "meaning": "ankle balance feedback gain"
+    },
+    "pitch_kp": {
+     "value": 85.1244,
+     "lower": 0.0,
+     "upper": 120.0,
+     "u": 0.7094,
+     "meaning": "stance torso-pitch feedback gain"
+    },
+    "pitch_ref": {
+     "value": 0.1547,
+     "lower": -0.05,
+     "upper": 0.25,
+     "u": 0.6823,
+     "meaning": "torso pitch reference (rad)"
+    },
+    "sync_gain": {
+     "value": 0.8424,
+     "lower": 0.0,
+     "upper": 1.0,
+     "u": 0.8424,
+     "meaning": "contact-informed phase sync gain"
+    },
+    "ramp_s": {
+     "value": 0.5,
+     "lower": 0.2,
+     "upper": 2.0,
+     "u": 0.1667,
+     "meaning": "start-up amplitude ramp duration (s)"
+    },
+    "start_lean": {
+     "value": 0.0,
+     "lower": 0.0,
+     "upper": 0.15,
+     "u": 0.0,
+     "meaning": "extra forward pitch reference at start, decays over 1 s (rad)"
+    }
+   },
+   "episode": {
+    "duration_s": 10.0,
+    "initial_state": "torso pitch and 6 joint angles ~ N(0, 0.03 rad) set by the seed"
+   }
+  },
+  "prompt_sha256": "70d70106ba16ff97ab5b7cf0a1b35e048c48e609e0e5af9737b6d3cc10d23bb7"
+ },
+ "controller_block_identical": true
+}

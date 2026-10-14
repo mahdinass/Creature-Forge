@@ -201,7 +201,7 @@ def cmd_monitor(_a=None) -> None:
 def cmd_sync_down(_a=None) -> Path:
     dest = ROOT / "artifacts" / "nebius_r1" / time.strftime("%Y%m%dT%H%M%S")
     dest.mkdir(parents=True)
-    ssh("cd ~ && mkdir -p logs creature-forge/experiments/phase2a_r1/results creature-forge/experiments/phase2a_r2/results creature-forge/experiments/phase2a_r3/results && tar czf /tmp/forge_results.tgz logs creature-forge/experiments/phase2a_r1/results creature-forge/experiments/phase2a_r2/results creature-forge/experiments/phase2a_r3/results && sha256sum /tmp/forge_results.tgz > /tmp/forge_results.sha")
+    ssh("cd ~ && mkdir -p logs creature-forge/experiments/phase2a_r3/results_v2 creature-forge/experiments/phase2a_r1/results creature-forge/experiments/phase2a_r2/results creature-forge/experiments/phase2a_r3/results creature-forge/experiments/phase2a_r3/results_v2 && tar czf /tmp/forge_results.tgz logs creature-forge/experiments/phase2a_r1/results creature-forge/experiments/phase2a_r2/results creature-forge/experiments/phase2a_r3/results creature-forge/experiments/phase2a_r3/results_v2 && sha256sum /tmp/forge_results.tgz > /tmp/forge_results.sha")
     sc = ["scp", "-F", str(Path.home() / ".ssh" / "config")]
     subprocess.check_call(sc + [f"{HOST}:/tmp/forge_results.tgz", f"{HOST}:/tmp/forge_results.sha", str(dest)])
     import hashlib
