@@ -174,3 +174,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 ## R1 executed - NULL result (2026-10-14)
 - Pilot passed (15 rollouts/s, 65 MB/worker); replicate 1 of A/B/C trained and validated; **futility gate: STOP** (no candidate walked on any validation seed; incumbent 11/16). Replicate 2, selection and final evaluation not run; final seeds untouched. Ledger 3,872/8,500 rollouts, 81 s active wall, 0 errors. Full report: `experiments/phase2a_r1/REPORT.md`. VM is STOPPED (disk ~$0.12/day); delete with `forge_cloud.py delete --yes` when no longer needed.
 - Engineering changes before the pilot: session-based wall accounting; tolerance-based cross-platform test; verified VM deadline sync on `start`.
+
+## R1 finalization and R2 proposal (2026-10-14)
+- Verified: ledger chain (working copy and committed blob), 3,872 rollouts recomputed from histories, gate STOP, protocol/Phase 1/Phase 2A files byte-identical to `f33d429`, no `final.json`/`selection.json`. Local checks run sequentially: 210 Python tests, 27 frontend tests, production build, `smoke_test.py`, `studio_e2e_check.py --browser`, `lab_browser_check.py` (includes the locomotion flow) all pass. VM STOPPED, not deleted.
+- Offline analysis (no rollouts): `docs/R1_SEARCH_ANALYSIS.md`. Key points: 149 distinct sampled points not 447; none near the incumbent; the worst-2 objective ranked the incumbent 140/150; 30 final seeds were under-powered.
+- R2 (local robustness around the frozen walker) is a **proposal only**: `docs/R2_DESIGN_PROPOSAL.md`; not registered, not run. Nemotron integration plan in its section 11; no live requests made.
+- Basic Memory note: `creature-forge/implementation/r1-robustness-experiment-null-result-and-lessons-2026-10-14`.

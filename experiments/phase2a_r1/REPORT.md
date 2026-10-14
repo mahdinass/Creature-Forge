@@ -21,3 +21,7 @@ Ledger: **3,872 of 8,500 rollouts** (32 pilot + 3,600 training + 240 validation:
 
 ## Deviations (engineering only, disclosed)
 Before the pilot (commit after `f33d429`): the cumulative wall-time guard now sums whole-script sessions (`session_begin/session_end` ledger events) in addition to batch durations, counts crashed sessions up to their last ledger entry and the live elapsed time of the running session; a test asserting bit-exact Windows floats was replaced by the documented tolerance (discrete outcomes still exact). `protocol.json`, seeds, objective, gates, futility rule and arms are unchanged.
+
+---
+## Addendum 2026-10-14 (review; the result above is unchanged)
+Post-hoc offline analysis (`docs/R1_SEARCH_ANALYSIS.md`, `scripts/analyze_r1_search.py`, no new rollouts) shows: (1) the "447 candidates" above are **149 distinct 13-D points** evaluated by three arms (common random numbers), so the run was one 149-point random search; (2) the nearest sample was 0.78 normalized-L2 from the incumbent; (3) the registered worst-2 objective ranked the walking incumbent 140th of 150, so arms B and C selected non-walking survivors; (4) 30 final seeds would have given only ≈ 23% power to detect a +15 pp improvement. None of this alters the registered gate decision or any recorded file.
