@@ -8,6 +8,6 @@ S=$1; shift
 TS=$(date -u +%Y%m%dT%H%M%SZ)
 TAG=$(echo "${S%.py} $*" | tr ' ' '_' | tr -cd 'A-Za-z0-9_.-')
 LOG=$HOME/logs/${TAG}_$TS.log
-pgrep -f "[s]cripts/run_r[0-9].py" >/dev/null && { echo "an experiment stage is already running"; exit 4; }
+pgrep -f "[s]cripts/run_r[0-9a-z_]*.py" >/dev/null && { echo "an experiment stage is already running"; exit 4; }
 nohup setsid timeout 3500 "$HOME/venvs/creature-forge/bin/python" "scripts/$S" "$@" > "$LOG" 2>&1 &
 echo "$LOG pid=$!"

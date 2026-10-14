@@ -1,0 +1,16 @@
+{
+ "requests_sent": 3,
+ "requests_counted_by_client": 3,
+ "tokens_used": 13114,
+ "complete": false,
+ "stopped_reason": "ABORTED BY THE OPERATOR after 3 of 30 requests: every request ended with finish_reason=length, reasoning_present=true and null content (hidden reasoning consumed the whole 2200-token completion budget), so the registered settings cannot produce parseable replies; continuing would have measured a truncation artifact. The process was killed during request 4; client-side accounting counts 3 requests (a 4th may have been in flight and is not recorded).",
+ "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+ "models_reported": [
+  "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
+ ],
+ "estimated_inference_cost_usd_at_assumed_price_per_million_tokens": {
+  "0.25": 0.0033,
+  "1.0": 0.0131,
+  "5.0": 0.0656
+ }
+}

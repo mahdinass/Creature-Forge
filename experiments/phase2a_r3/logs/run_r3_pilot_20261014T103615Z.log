@@ -1,0 +1,33 @@
+{
+ "rollouts": 96,
+ "pilot_seeds": [
+  9500,
+  9515
+ ],
+ "workers_used": 4,
+ "wall_s": 10.021279161000002,
+ "throughput_rollouts_per_s": 9.579615382196414,
+ "peak_worker_rss_mb": 68.14453125,
+ "free_memory_gb_before": 30.603572845458984,
+ "recommended_workers": 4,
+ "planned": {
+  "pilot": 96,
+  "evidence_pool": 180,
+  "screen_pool": 64,
+  "screening_candidates_max": 3904,
+  "validation_theta0": 64,
+  "validation_top_k": 960,
+  "total_max": 5268
+ },
+ "projected_wall_s_at_this_rate": 539.8964147988752,
+ "checks": {
+  "no_job_errors": true,
+  "free_memory_after_ok": true,
+  "projected_wall_within_80pct_of_limit": true,
+  "memory_headroom_for_some_worker_count": true,
+  "rollouts_within_pilot_cap": true,
+  "planned_maximum_within_cap": true
+ },
+ "passed": true,
+ "use": "implementation and resource checks only"
+}
