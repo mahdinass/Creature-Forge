@@ -1,0 +1,216 @@
+{
+ "chosen": null,
+ "results": [
+  {
+   "setting": {
+    "name": "A",
+    "reasoning_effort": "none",
+    "max_tokens": 3500
+   },
+   "passes": false,
+   "checks": [
+    {
+     "arm": "M",
+     "status": "invalid_response",
+     "visible_content": false,
+     "envelope_valid": false,
+     "valid_proposals": 0,
+     "failure_reasons": [
+      "model returned no content"
+     ],
+     "finish_reason": "stop",
+     "usage": {
+      "prompt_tokens": 2743,
+      "completion_tokens": 611,
+      "total_tokens": 3354
+     },
+     "ok": false
+    },
+    {
+     "arm": "N",
+     "status": "invalid_response",
+     "visible_content": false,
+     "envelope_valid": false,
+     "valid_proposals": 0,
+     "failure_reasons": [
+      "model returned no content"
+     ],
+     "finish_reason": "stop",
+     "usage": {
+      "prompt_tokens": 1059,
+      "completion_tokens": 672,
+      "total_tokens": 1731
+     },
+     "ok": false
+    }
+   ]
+  },
+  {
+   "setting": {
+    "name": "B",
+    "reasoning_effort": "low",
+    "max_tokens": 3500
+   },
+   "passes": false,
+   "checks": [
+    {
+     "arm": "M",
+     "status": "invalid_response",
+     "visible_content": false,
+     "envelope_valid": false,
+     "valid_proposals": 0,
+     "failure_reasons": [
+      "model returned no content (finish_reason=length)"
+     ],
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 2743,
+      "completion_tokens": 3500,
+      "total_tokens": 6243
+     },
+     "ok": false
+    },
+    {
+     "arm": "N",
+     "status": "ok",
+     "visible_content": true,
+     "envelope_valid": true,
+     "valid_proposals": 4,
+     "failure_reasons": [],
+     "finish_reason": "stop",
+     "usage": {
+      "prompt_tokens": 1059,
+      "completion_tokens": 3370,
+      "total_tokens": 4429
+     },
+     "ok": true
+    }
+   ]
+  },
+  {
+   "setting": {
+    "name": "C",
+    "reasoning_effort": "low",
+    "max_tokens": 5000
+   },
+   "passes": false,
+   "checks": [
+    {
+     "arm": "M",
+     "status": "invalid_response",
+     "visible_content": false,
+     "envelope_valid": false,
+     "valid_proposals": 0,
+     "failure_reasons": [
+      "model returned no content (finish_reason=length)"
+     ],
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 2743,
+      "completion_tokens": 5000,
+      "total_tokens": 7743
+     },
+     "ok": false
+    },
+    {
+     "arm": "N",
+     "status": "invalid_response",
+     "visible_content": false,
+     "envelope_valid": false,
+     "valid_proposals": 0,
+     "failure_reasons": [
+      "model returned no content (finish_reason=length)"
+     ],
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 1059,
+      "completion_tokens": 5000,
+      "total_tokens": 6059
+     },
+     "ok": false
+    }
+   ]
+  },
+  {
+   "setting": {
+    "name": "D",
+    "reasoning_effort": "medium",
+    "max_tokens": 5000
+   },
+   "passes": false,
+   "checks": [
+    {
+     "arm": "M",
+     "status": "invalid_response",
+     "visible_content": false,
+     "envelope_valid": false,
+     "valid_proposals": 0,
+     "failure_reasons": [
+      "model returned no content (finish_reason=length)"
+     ],
+     "finish_reason": "length",
+     "usage": {
+      "prompt_tokens": 2743,
+      "completion_tokens": 5000,
+      "total_tokens": 7743
+     },
+     "ok": false
+    },
+    {
+     "arm": "N",
+     "status": "ok",
+     "visible_content": true,
+     "envelope_valid": true,
+     "valid_proposals": 4,
+     "failure_reasons": [],
+     "finish_reason": "stop",
+     "usage": {
+      "prompt_tokens": 1059,
+      "completion_tokens": 4635,
+      "total_tokens": 5694
+     },
+     "ok": true
+    }
+   ]
+  }
+ ],
+ "requests_sent": 8,
+ "stopped": null,
+ "not_tested": [],
+ "usage_before": {
+  "v1": {
+   "requests": 3,
+   "tokens": 13114
+  },
+  "calibration": {
+   "requests": 0,
+   "tokens": 0
+  },
+  "experiment": {
+   "requests": 0,
+   "tokens": 0
+  },
+  "requests": 3,
+  "tokens": 13114
+ },
+ "usage_after": {
+  "v1": {
+   "requests": 3,
+   "tokens": 13114
+  },
+  "calibration": {
+   "requests": 8,
+   "tokens": 42996
+  },
+  "experiment": {
+   "requests": 0,
+   "tokens": 0
+  },
+  "requests": 11,
+  "tokens": 56110
+ },
+ "combined_caps": {
+  "requests": 41,
+  "tokens": 300000
+ }
+}
