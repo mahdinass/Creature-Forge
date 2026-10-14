@@ -186,3 +186,18 @@ pre.ctx { max-height:260px; overflow:auto; background:#0b101a; border:1px solid 
 .hero-cta { display:flex; flex-direction:column; gap:6px; align-items:flex-start; margin-top:12px; }
 button.cta { background:linear-gradient(135deg,#1d6fb8,#6a5cff); border:none; color:#fff; font-size:15px; font-weight:600; padding:11px 20px; border-radius:8px; box-shadow:0 0 18px rgba(106,92,255,.35); }
 button.cta:hover { filter:brightness(1.12); }
+
+/* ---------- Sketch: direct-manipulation editor ------------------------------------------------ */
+.sketch2 { display:grid; grid-template-columns:minmax(300px,360px) 400px minmax(320px,1fr); gap:16px; align-items:start; }
+.sketch2 .sketch-svg { width:100%; max-width:400px; height:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px; touch-action:none; user-select:none; }
+.sketch2 .sketch-svg.invalid { border-color:var(--bad); }
+.sketch2 .dim-label { fill:#aeb9cc; font-size:11px; }
+.sk-side h4, .sk-preview h4 { margin:14px 0 6px; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); }
+.presets { display:flex; gap:6px; flex-wrap:wrap; }
+.sk-errors { margin:10px 0; padding:10px 12px; background:#3a1518; border:1px solid var(--bad); border-radius:8px; } .sk-errors ul, .sk-adjust ul { margin:6px 0; padding-left:18px; }
+.sk-adjust { margin:10px 0; padding:10px 12px; background:#10263a; border:1px solid #1d4a6e; border-radius:8px; }
+.sk-good { color:var(--ok); margin:10px 0; }
+.sk-preview .viewport { height:380px; } .sk-preview .viewport.dimmed { display:grid; place-items:center; } .pad { padding:20px; text-align:center; }
+.support { margin-top:12px; font-size:12px; }
+@media (max-width: 1150px) { .sketch2 { grid-template-columns:minmax(280px,360px) 1fr; } .sk-preview { grid-column:1 / -1; } }
+@media (max-width: 760px) { .sketch2 { grid-template-columns:1fr; } }

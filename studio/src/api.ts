@@ -1,4 +1,4 @@
-import type { CompileResult, Params, Phase0, PushInfo, RunPayload, Schema, Sketch } from './types'
+import type { CompileResult, NormalizeResult, Params, Phase0, PushInfo, RunPayload, Schema, Sketch, SketchSupport } from './types'
 import type { LabRow, LabView, Replay } from './lab/labTypes'
 import type { LocomotionReplay, LocomotionSummary } from './locomotion/locoTypes'
 import type { OverviewData } from './overview/overviewTypes'
@@ -69,3 +69,11 @@ export const startDemoRun = (mode: 'live' | 'mock', confirmLive: boolean) =>
   fetch('/api/demo/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode, confirm_live: confirmLive }) }).then((r) => j<DemoRun>(r))
 
 export const getVersion = () => fetch('/api/version').then((r) => j<{ git_commit: string | null; git_branch: string | null; started_at: string; dist_built: string | null; api_routes: string[] }>(r))
+
+export const getSketchSupport = () => fetch('/api/sketch/support').then((r) => j<SketchSupport>(r))
+export const normalizeSketch = (sketch: Sketch, extras: Params) =>
+  fetch('/api/sketch/normalize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nodes: sketch.nodes, segments: sketch.segments, extras }),
+  }).then((r) => j<NormalizeResult>(r))

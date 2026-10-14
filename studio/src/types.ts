@@ -72,3 +72,14 @@ export interface Sketch {
 }
 
 export type CompileResult = { ok: true; params: Params } | { ok: false; errors: string[] }
+
+export interface SketchAdjustment { kind: 'translate' | 'straighten' | 'level' | 'clamp'; node: string; message: string; amount: number }
+export type NormalizeResult =
+  | { ok: true; params: Params; sketch: Sketch; adjustments: SketchAdjustment[]; errors: string[] }
+  | { ok: false; params: null; sketch: null; adjustments: SketchAdjustment[]; errors: string[] }
+export interface SketchSupport {
+  summary: string
+  freedoms: Record<string, [number, number]>
+  snaps: Record<string, number>
+  not_supported: string[]
+}

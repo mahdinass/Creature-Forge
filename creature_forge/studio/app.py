@@ -27,7 +27,7 @@ from ..locomotion_view import CONTROLLER_INFO, RESULTS as LOCOMOTION_DIR, cached
 from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
-from ..sketch import SketchError, compile_sketch, default_sketch
+from ..sketch import SketchError, compile_sketch, default_sketch, normalize_sketch, support_info
 from ..trial_view import trial_view
 
 DIST = Path(__file__).resolve().parents[2] / "studio" / "dist"
@@ -48,6 +48,13 @@ class DemoRunIn(BaseModel):
 
 _DEMO_LOCK = threading.Lock()
 _DEMO_LIVE_CALLS = {"n": 0}
+
+
+class NormalizeIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    nodes: dict[str, list[float]]
+    segments: list[list[str]] = []
+    extras: dict[str, float] = {}
 
 
 class SimRequest(BaseModel):
@@ -280,6 +287,17 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             return {"ok": True, "params": compile_sketch(sketch).as_dict()}
         except SketchError as exc:
             return {"ok": False, "errors": exc.errors}
+
+    @app.get("/api/sketch/support")
+    def sketch_support():
+        return support_info()
+
+    @app.post("/api/sketch/normalize")
+    def sketch_normalize(req: NormalizeIn):
+        """Project a near-valid sketch onto the supported planar biped; every change is reported, nothing is guessed."""
+        if any(len(v) != 2 for v in req.nodes.values()):
+            raise HTTPException(422, "each node must be [x, z]")
+        return normalize_sketch({"nodes": req.nodes, "segments": req.segments}, req.extras)
 
     started_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     repo = Path(__file__).resolve().parents[2]

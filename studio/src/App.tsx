@@ -172,9 +172,11 @@ export default function App() {
 
       {tab === 'sketch' && (
         <main>
-          <SketchEditor onUse={(p) => {
-            setBody({ ...body, ...p })
+          <SketchEditor initialBody={body} onUse={(p) => {
+            const nb = { ...body, ...p }
+            setBody(nb)
             setTab('studio')
+            void forge(nb, schema)
           }} />
         </main>
       )}
