@@ -18,6 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from .. import demo as demo_mod
 from .. import overview as overview_mod
+from .. import walking as walking_mod
 from ..controller import CTRL_BOUNDS, GaitParams
 from ..experiment import (PHASE0_BASELINE, PHASE0_CANDIDATE, PHASE0_DURATION, PHASE0_PUSH, PHASE0_SEEDS,
                           compare_designs)
@@ -226,6 +227,20 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             raise HTTPException(422, str(exc)) from exc
         except FileNotFoundError:
             raise HTTPException(404, "controller export not found") from None
+
+    @app.get("/api/walking/summary")
+    def walking_summary():
+        try:
+            return walking_mod.summary()
+        except walking_mod.WalkingError as exc:
+            raise HTTPException(404, str(exc)) from exc
+
+    @app.get("/api/walking/replay")
+    def walking_replay(which: str, seed: int):
+        try:
+            return walking_mod.replay(which, seed)
+        except walking_mod.WalkingError as exc:
+            raise HTTPException(404 if "missing" in str(exc) else 422, str(exc)) from exc
 
     @app.get("/api/overview")
     def overview():
