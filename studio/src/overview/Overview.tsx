@@ -20,6 +20,10 @@ export function Overview({ go }: { go: (tab: 'demo' | 'locomotion' | 'compare' |
           Creature Forge turns a physical failure in MuJoCo into evidence, lets NVIDIA Nemotron propose bounded fixes, and lets the simulator decide.
           Two separate lines of evidence are shown below; they are not mixed.
         </p>
+        <div className="hero-cta">
+          <button className="cta" data-testid="cta-demo" onClick={() => go('demo')}>▶ Watch a real, recorded AI investigation</button>
+          <small className="dim">Failure → evidence → Nemotron’s proposal → the parameters it changes → MuJoCo’s verdict → side-by-side replay. No API key needed.</small>
+        </div>
       </section>
 
       <ol className="pipeline" aria-label="how Creature Forge works" data-testid="pipeline">

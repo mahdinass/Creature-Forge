@@ -4,7 +4,9 @@ No physics here; every pose served comes from creature_forge.render_export (MuJo
 """
 from __future__ import annotations
 
+import subprocess
 import threading
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from functools import lru_cache
 from pathlib import Path
@@ -25,7 +27,7 @@ from ..locomotion_view import CONTROLLER_INFO, RESULTS as LOCOMOTION_DIR, cached
 from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
-from ..sketch import SketchError, compile_sketch, default_sketch
+from ..sketch import SketchError, compile_sketch, default_sketch, normalize_sketch, support_info
 from ..trial_view import trial_view
 
 DIST = Path(__file__).resolve().parents[2] / "studio" / "dist"
@@ -46,6 +48,13 @@ class DemoRunIn(BaseModel):
 
 _DEMO_LOCK = threading.Lock()
 _DEMO_LIVE_CALLS = {"n": 0}
+
+
+class NormalizeIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    nodes: dict[str, list[float]]
+    segments: list[list[str]] = []
+    extras: dict[str, float] = {}
 
 
 class SimRequest(BaseModel):
@@ -279,12 +288,52 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
         except SketchError as exc:
             return {"ok": False, "errors": exc.errors}
 
+    @app.get("/api/sketch/support")
+    def sketch_support():
+        return support_info()
+
+    @app.post("/api/sketch/normalize")
+    def sketch_normalize(req: NormalizeIn):
+        """Project a near-valid sketch onto the supported planar biped; every change is reported, nothing is guessed."""
+        if any(len(v) != 2 for v in req.nodes.values()):
+            raise HTTPException(422, "each node must be [x, z]")
+        return normalize_sketch({"nodes": req.nodes, "segments": req.segments}, req.extras)
+
+    started_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    repo = Path(__file__).resolve().parents[2]
+
+    def _git(*args: str) -> str | None:
+        try:
+            out = subprocess.run(["git", *args], cwd=repo, capture_output=True, text=True, timeout=5)
+            return out.stdout.strip() or None if out.returncode == 0 else None
+        except (OSError, subprocess.SubprocessError):
+            return None
+
+    git_info = {"git_commit": _git("rev-parse", "--short", "HEAD"), "git_branch": _git("rev-parse", "--abbrev-ref", "HEAD")}
+
+    @app.get("/api/version")
+    def version():
+        """Identify the running backend so a stale process can be told apart from the current code."""
+        index = dist_dir / "index.html"
+        built = (datetime.fromtimestamp(index.stat().st_mtime, timezone.utc).isoformat(timespec="seconds")
+                 if index.is_file() else None)
+        return {**git_info, "started_at": started_at, "dist_built": built, "repo_root": str(repo),
+                "api_routes": sorted(r.path for r in app.routes if r.path.startswith("/api/"))}
+
+    @app.api_route("/api", methods=["GET", "HEAD"], include_in_schema=False)
+    @app.api_route("/api/{rest:path}", methods=["GET", "HEAD"], include_in_schema=False)
+    def api_not_found(rest: str = ""):
+        # Registered after every real /api route; keeps unknown API paths from falling into the SPA's HTML.
+        raise HTTPException(404, f"No such API route: /api/{rest}. If you expected it to exist, the running "
+                                 "server may be older than the frontend; restart it with scripts/start_studio.ps1.")
+
     if dist_dir.is_dir():
         app.mount("/assets", StaticFiles(directory=dist_dir / "assets"), name="assets")
 
         @app.get("/{path:path}")
         def spa(path: str):
-            return FileResponse(resolve_static(dist_dir, path) or dist_dir / "index.html")
+            return FileResponse(resolve_static(dist_dir, path) or dist_dir / "index.html",
+                                headers={"Cache-Control": "no-cache"})
 
     return app
 

@@ -45,6 +45,29 @@ class StaticServingTests(unittest.TestCase):
         c = TestClient(create_app(dist_dir=self.dist))
         self.assertEqual(c.get("/some/client/route").text, "INDEX-OK")
 
+    def test_unknown_api_route_is_json_404_not_html(self):
+        c = TestClient(create_app(dist_dir=self.dist))
+        for url in ("/api/nonexistent", "/api/lab/nope/deeper", "/api"):
+            r = c.get(url)
+            self.assertEqual(r.status_code, 404, url)
+            self.assertTrue(r.headers["content-type"].startswith("application/json"), url)
+            self.assertIn("detail", r.json())
+        r = c.post("/api/nonexistent", json={})
+        self.assertTrue(r.headers["content-type"].startswith("application/json"))
+
+    def test_version_endpoint_reports_routes_and_build(self):
+        c = TestClient(create_app(dist_dir=self.dist))
+        v = c.get("/api/version").json()
+        for key in ("git_commit", "started_at", "dist_built", "api_routes"):
+            self.assertIn(key, v)
+        self.assertIn("/api/version", v["api_routes"])
+        self.assertIn("/api/lab/trials", v["api_routes"])
+
+    def test_index_is_not_cached_but_assets_may_be(self):
+        c = TestClient(create_app(dist_dir=self.dist))
+        self.assertIn("no-cache", c.get("/").headers.get("cache-control", ""))
+        self.assertIn("no-cache", c.get("/some/client/route").headers.get("cache-control", ""))
+
 
 if __name__ == "__main__":
     unittest.main()

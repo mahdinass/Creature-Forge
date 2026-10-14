@@ -23,9 +23,11 @@ npm --prefix studio install && npm --prefix studio run build
 .venv/bin/python scripts/run_studio.py                               # http://127.0.0.1:8000
 ```
 
-Open the **Overview** tab (landing page), then **AI Investigation**: it replays two *recorded* real Nemotron runs and a clearly labelled scripted mock. Replays are fresh deterministic MuJoCo rollouts, so the 3D comparison is real physics, computed on demand.
+**Windows, one command (recommended):** `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1`. It replaces an older Studio left on port 8000, rebuilds a stale frontend, starts the current server, verifies that every API route the UI needs exists, and opens the browser. `GET /api/version` shows which commit is being served.
 
-Tabs: *Overview* (the story and both results) · *Studio* (design a biped, push it, watch it fall) · *Compare (Phase 0)* · *Investigations* (earlier push-recovery experiments) · *Locomotion* (walking controllers and held-out results) · *AI Investigation* (the Nemotron loop) · *Sketch*.
+Open the **Overview** tab (landing page) and press **Watch a real, recorded AI investigation**. The **AI Investigation** tab opens a guided story (failure → evidence → Nemotron's claim → the parameters it changes → MuJoCo's verdict → synchronized before/after replay), with the raw step-by-step view one click away: it replays two *recorded* real Nemotron runs and a clearly labelled scripted mock. Replays are fresh deterministic MuJoCo rollouts, so the 3D comparison is real physics, computed on demand.
+
+Tabs: *Overview* (the story and both results) · *Studio* (design a biped, push it, watch it fall) · *Compare (Phase 0)* · *Investigations* (earlier push-recovery experiments) · *Locomotion* (walking controllers and held-out results) · *AI Investigation* (the Nemotron loop) · *Sketch* (drag the joints and torso of a planar biped; near-valid drawings snap, unsupported ones are explained).
 
 ## Where NVIDIA Nemotron and Nebius are used
 

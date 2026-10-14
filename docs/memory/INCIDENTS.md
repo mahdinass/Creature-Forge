@@ -54,3 +54,7 @@ Append one incident per significant recurring failure. Mark everything here as `
 ### 2026-10-13 - Phase 2A UI regressions caught by checks
 - A fifth Studio nav tab overflowed the header by 44 px at 390 px width (existing lab browser check caught it); fixed with `nav { flex-wrap: wrap }`.
 - A placeholder `peak_torso_vx = 0` in the replay payload showed 0.00 m/s for a walking robot (caught in a screenshot); now measured from the trajectory (tested).
+
+## 2026-10-14 Stale Studio server: Locomotion/Investigations tabs showed "Unexpected token '<'"
+- **Cause (verified):** a Studio server started 2026-10-13 01:43 (PIDs 72876/216116) was still bound to :8000 and only had the Phase 0.5 routes (`/api/version`-less OpenAPI listed 5 paths). The SPA catch-all `/{path:path}` answered every unknown `/api/*` GET with `index.html` (HTTP 200, text/html), which `res.json()` could not parse. The `dist` bundle on disk was current; the missing Overview tab was a cached older bundle.
+- **Fix:** unknown `/api/*` now returns a JSON 404; `GET /api/version` (commit, start time, build time, routes); `index.html` served `Cache-Control: no-cache`; frontend `j()` turns non-JSON into an actionable message; `scripts/start_studio.ps1` replaces an older Creature Forge Studio (only if its command line contains `run_studio.py`), rebuilds a stale frontend and verifies required routes; `studio/e2e/tabs-smoke.mjs` checks every tab and every API response in a real browser.
