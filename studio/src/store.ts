@@ -5,6 +5,8 @@ interface PlaybackState extends Clock {
   speed: number
   duration: number
   follow: boolean
+  loop: boolean
+  setLoop: (l: boolean) => void
   setDuration: (d: number) => void
   play: () => void
   pause: () => void
@@ -24,6 +26,8 @@ export const usePlayback = create<PlaybackState>((set, get) => ({
   speed: 0.5,
   duration: 5,
   follow: true,
+  loop: false,
+  setLoop: (loop) => set({ loop }),
   setDuration: (duration) => set({ duration }),
   play: () => {
     const { simTime, duration } = get()
@@ -38,6 +42,7 @@ export const usePlayback = create<PlaybackState>((set, get) => ({
   tick: (wallDt) => {
     const s = get()
     if (!s.playing) return
-    set(advance(s, wallDt, s.speed, s.duration))
+    const next = advance(s, wallDt, s.speed, s.duration)
+    set(s.loop && !next.playing ? restart() : next)
   },
 }))

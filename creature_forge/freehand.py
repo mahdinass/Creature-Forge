@@ -30,6 +30,7 @@ EQUAL_LEG_FRAC = 0.15
 GUIDED_CLAMP_FRAC = 0.20  # guided: a value up to 20% beyond the supported range is clamped (reported); more is refused
 DEFAULT_MATERIALS = {"foot_friction": 1.0, "torque_limit": 60.0, "leg_density": 1000.0}
 KNEE_MIN, KNEE_MAX = POSE_RANGES[2]
+KNEE_TOL = 0.1  # rad: wobble in a straight hand-drawn leg
 
 
 # ------------------------------------------------------------------ geometry helpers
@@ -255,6 +256,13 @@ def _result(**kw) -> dict:
 
 
 def interpret(strokes: list[dict], *, guided: bool = True, materials: dict | None = None, px_per_m: float = PX_PER_M) -> dict:
+    res = _interpret(strokes, guided=guided, materials=materials, px_per_m=px_per_m)
+    for k in ("notes", "assumptions", "errors"):  # the same observation about two legs is said once
+        res[k] = list(dict.fromkeys(res[k]))
+    return res
+
+
+def _interpret(strokes: list[dict], *, guided: bool = True, materials: dict | None = None, px_per_m: float = PX_PER_M) -> dict:
     mats = {**DEFAULT_MATERIALS, **{k: float(v) for k, v in (materials or {}).items() if k in DEFAULT_MATERIALS}}
     ss = _parse(strokes, px_per_m)
     ambiguities = _classify(ss)
@@ -530,6 +538,15 @@ def _finish(res: dict, design: dict, base_m: tuple, guided: bool, mirror: bool) 
     d = _copy(design)
     if guided:
         _snap(d, res["adjustments"])
+    else:
+        # a hand-drawn "straight" leg is never exactly straight: a knee bent less than ~6 degrees the wrong way is the joint limit
+        # at work, not a different creature. It is clamped and reported (no other snapping happens when guidance is off).
+        for i, L in enumerate(d["legs"]):
+            knee = L["th_s"] - L["th_t"]
+            if 0 < knee <= KNEE_TOL:
+                if math.degrees(knee) >= 0.5:
+                    notes.append(f"The {('rear', 'front')[i]} knee bent {math.degrees(knee):.1f}° the wrong way; the joint limit makes it straight.")
+                L["th_s"] = L["th_t"]
     viol = _violations(d, guided)
     if viol:
         res["errors"] = [v["message"] for v in viol]

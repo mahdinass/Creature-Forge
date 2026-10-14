@@ -2,6 +2,8 @@ import type { CompileResult, NormalizeResult, Params, Phase0, PushInfo, RunPaylo
 import type { LabRow, LabView, Replay } from './lab/labTypes'
 import type { LocomotionReplay, LocomotionSummary } from './locomotion/locoTypes'
 import type { OverviewData } from './overview/overviewTypes'
+import type { WalkingReplay, WalkingSummary } from './walking/walkingTypes'
+import type { FreehandResult, SandboxBodyDict, SandboxSchema, StrokeIn } from './sketch/freehandTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
 
 export const STALE_HINT =
@@ -77,3 +79,15 @@ export const normalizeSketch = (sketch: Sketch, extras: Params) =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ nodes: sketch.nodes, segments: sketch.segments, extras }),
   }).then((r) => j<NormalizeResult>(r))
+
+// Walking lab (committed R2 records; replays are fresh deterministic rollouts, no model call)
+export const getWalkingSummary = () => fetch('/api/walking/summary').then((r) => j<WalkingSummary>(r))
+export const getWalkingReplay = (which: string, seed: number) =>
+  fetch(`/api/walking/replay?which=${encodeURIComponent(which)}&seed=${seed}`).then((r) => j<WalkingReplay>(r))
+
+// Creative sandbox: freehand interpretation and wider-bounds simulation (registered experiments keep their bounds)
+export const getSandboxSchema = () => fetch('/api/sandbox/schema').then((r) => j<SandboxSchema>(r))
+export const interpretFreehand = (strokes: StrokeIn[], guided: boolean, materials: Record<string, number>) =>
+  fetch('/api/freehand/interpret', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ strokes, guided, materials }) }).then((r) => j<FreehandResult>(r))
+export const sandboxSimulate = (body: SandboxBodyDict, push: PushInfo | null, seed = 0, duration = 5) =>
+  fetch('/api/sandbox/simulate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body, seed, duration, push }) }).then((r) => j<RunPayload & { sandbox: true; explanation: import('./sketch/freehandTypes').Explanation }>(r))

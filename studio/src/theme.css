@@ -1,0 +1,76 @@
+/* Creature Forge design system. Loaded after styles.css: the tokens below replace the old ones app-wide.
+   Idea: a forge workshop. The creature is the only bright object on a graphite stage; colour marks where you are
+   in the journey (Create = ember, Simulate = tide, Investigate = violet), not decoration. */
+:root {
+  --bg: #0d1016; --panel: #161b24; --panel-2: #1b212c; --line: #262e3c; --line-2: #313b4d;
+  --txt: #e9edf4; --dim: #8f9aae;
+  --create: #ff7a45; --simulate: #3cc9d6; --investigate: #9c8cff;
+  --accent: var(--simulate); --stage: var(--simulate);
+  --ok: #4fd18b; --bad: #ff5d6c; --warn: #f2b441; --model: #9c8cff; --model-bg: #1a1730;
+  --font-display: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Instrument Sans Variable', 'Segoe UI', system-ui, sans-serif;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+.app[data-stage='create'] { --stage: var(--create); }
+.app[data-stage='simulate'] { --stage: var(--simulate); }
+.app[data-stage='investigate'] { --stage: var(--investigate); }
+.app[data-stage='home'] { --stage: var(--simulate); }
+
+body { font-family: var(--font-body); font-size: 15px; line-height: 1.5; background: var(--bg); font-variant-numeric: tabular-nums; }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 650; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--stage); outline-offset: 2px; border-radius: 4px; }
+button { font-family: inherit; transition: border-color .15s var(--ease), background .15s var(--ease), transform .1s var(--ease); }
+button:active:not(:disabled) { transform: translateY(1px); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- shell -------------------------------------------------------------------------------- */
+header.shell { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 28px; padding: 0 24px; height: 60px;
+  background: rgba(13, 16, 22, .88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); flex-wrap: nowrap; }
+.brand { display: flex; align-items: center; gap: 10px; background: none; border: none; padding: 0; color: var(--txt); font: 650 19px var(--font-display); letter-spacing: -0.02em; cursor: pointer; }
+.brand svg { width: 26px; height: 26px; }
+.brand:hover { border: none; }
+.journey { display: flex; gap: 4px; margin-left: auto; }
+.journey button { position: relative; display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: none; border: none; border-radius: var(--r-sm); color: var(--dim); font-size: 15px; font-weight: 550; }
+.journey button:hover { color: var(--txt); border: none; background: var(--panel); }
+.journey button .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); opacity: .55; transition: opacity .2s, transform .2s var(--ease); }
+.journey button[aria-current='page'] { color: var(--txt); background: var(--panel); }
+.journey button[aria-current='page'] .dot { opacity: 1; transform: scale(1.25); box-shadow: 0 0 10px var(--c); }
+.journey button[aria-current='page']::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: -13px; height: 2px; background: var(--c); border-radius: 2px; }
+.subnav { display: flex; align-items: center; gap: 16px; padding: 12px 24px 0; flex-wrap: wrap; }
+.seg { display: inline-flex; padding: 3px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; gap: 2px; }
+.seg button { border: none; background: none; padding: 6px 16px; border-radius: 999px; color: var(--dim); font-weight: 550; }
+.seg button:hover { color: var(--txt); border: none; }
+.seg button[aria-selected='true'], .seg button.on { background: var(--stage); color: #0b0e14; border: none; }
+.subnav .lede { color: var(--dim); font-size: 14px; max-width: 70ch; }
+main { padding: 16px 24px 40px; }
+
+/* ---- buttons ------------------------------------------------------------------------------ */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--panel-2); color: var(--txt); font-weight: 600; font-size: 15px; }
+.btn:hover:not(:disabled) { border-color: var(--txt); }
+.btn-create { background: var(--create); border-color: var(--create); color: #1a0d05; }
+.btn-create:hover:not(:disabled) { background: #ff8e60; border-color: #ff8e60; }
+.btn-investigate { background: var(--investigate); border-color: var(--investigate); color: #120d2b; }
+.btn-investigate:hover:not(:disabled) { background: #b0a3ff; border-color: #b0a3ff; }
+.btn-simulate { background: var(--simulate); border-color: var(--simulate); color: #04181b; }
+.btn-ghost { background: transparent; }
+.btn-lg { padding: 14px 26px; font-size: 16px; }
+
+/* ---- states ------------------------------------------------------------------------------- */
+.skeleton { background: linear-gradient(100deg, var(--panel) 30%, var(--panel-2) 50%, var(--panel) 70%); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; border-radius: var(--r-md); }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.state { display: grid; place-items: center; gap: 10px; text-align: center; padding: 32px; color: var(--dim); }
+.state b { color: var(--txt); font-family: var(--font-display); font-size: 17px; }
+.state.error { color: #ffb3ba; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
+@media (max-width: 760px) {
+  header.shell { padding: 0 12px; gap: 8px; height: auto; min-height: 56px; flex-wrap: wrap; padding-top: 8px; padding-bottom: 6px; }
+  .journey { margin-left: 0; width: 100%; overflow-x: auto; }
+  .journey button { padding: 7px 10px; font-size: 14px; }
+  .journey button[aria-current='page']::after { bottom: 0; left: 10px; right: 10px; }
+  .subnav, main { padding-left: 12px; padding-right: 12px; }
+  .brand span { display: inline; }
+}

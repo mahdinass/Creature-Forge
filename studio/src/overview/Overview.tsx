@@ -4,25 +4,24 @@ import { Notice } from '../lab/Badges'
 import type { OverviewData } from './overviewTypes'
 import { pct, proposalLine } from './overviewLogic'
 
-export function Overview({ go }: { go: (tab: 'demo' | 'locomotion' | 'compare' | 'studio') => void }) {
+export function Overview({ go, embedded = false }: { go: (tab: 'demo' | 'locomotion' | 'compare' | 'studio') => void; embedded?: boolean }) {
   const [data, setData] = useState<OverviewData | null>(null)
   const [error, setError] = useState<string | null>(null)
   useEffect(() => { getOverview().then(setData).catch((e: Error) => setError(e.message)) }, [])
-  if (error) return <main><Notice tone="bad" testid="overview-error">Could not load the overview: {error}</Notice></main>
-  if (!data) return <main><Notice>Loading the project overview…</Notice></main>
+  if (error) return <div><Notice tone="bad" testid="overview-error">Could not load the overview: {error}</Notice></div>
+  if (!data) return <div><Notice>Loading the project overview…</Notice></div>
   const c = data.classical
   const n = data.nemotron
   return (
-    <main className="overview" data-testid="overview">
-      <section className="hero">
+    <div className={`overview ${embedded ? 'embedded' : ''}`} data-testid={embedded ? 'overview-research' : 'overview'}>
+      <section className="hero-old">
         <h2>{data.headline}</h2>
         <p>
           Creature Forge turns a physical failure in MuJoCo into evidence, lets NVIDIA Nemotron propose bounded fixes, and lets the simulator decide.
           Two separate lines of evidence are shown below; they are not mixed.
         </p>
         <div className="hero-cta">
-          <button className="cta" data-testid="cta-demo" onClick={() => go('demo')}>▶ Watch a real, recorded AI investigation</button>
-          <small className="dim">Failure → evidence → Nemotron’s proposal → the parameters it changes → MuJoCo’s verdict → side-by-side replay. No API key needed.</small>
+          <button className="btn btn-investigate" data-testid="cta-demo" onClick={() => go('demo')}>Watch a recorded AI investigation</button>
         </div>
       </section>
 
@@ -84,6 +83,6 @@ export function Overview({ go }: { go: (tab: 'demo' | 'locomotion' | 'compare' |
         <ul>{data.limits.map((l) => <li key={l}>{l}</li>)}</ul>
         <small>Every number on this page is read from the committed experiment records. Provenance labels in the demo: LIVE (real call made now), RECORDED LIVE (stored real call), SCRIPTED MOCK (not a model).</small>
       </section>
-    </main>
+    </div>
   )
 }

@@ -170,6 +170,15 @@ class RepresentabilityTests(unittest.TestCase):
         self.assertIsNotNone(r["approximation"])
         self.assertTrue(any("knee" in c["what"] for c in r["approximation"]["changes"]))
 
+    def test_a_wobbly_straight_leg_is_not_mistaken_for_a_forward_knee(self):
+        s = stick_figure()
+        s[1] = stroke("l1", [[x + (1.6 if i % 2 else -1.4) * (i % 7) / 7, y] for i, (x, y) in enumerate(line((0, 0.64), (0, 0.04), 60))])
+        for guided in (True, False):
+            r = interpret(s, guided=guided)
+            self.assertEqual(r["status"], "ok", r["errors"])
+            self.assertIsNotNone(r["body"], (guided, r["errors"]))
+        self.assertEqual(interpret(s, guided=False)["outcome"] in ("valid", "questionable"), True)
+
     def test_a_knee_that_points_backward_is_built_with_the_real_pose(self):
         r = interpret(self.bent(-0.12), guided=False)
         self.assertEqual(r["status"], "ok", r["errors"])

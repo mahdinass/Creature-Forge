@@ -95,12 +95,12 @@ class SandboxBody(BipedParams):
         for k, (lo, hi) in BOUNDS.items():
             v = getattr(self, k)
             if not (lo <= v <= hi):
-                out.append(f"{k.replace('_', ' ')} {v:g} (verified experiments use {lo:g} to {hi:g})")
+                out.append(f"{k.replace('_', ' ')} {v:.3g} (verified experiments use {lo:g} to {hi:g})")
         for key in ("thigh_length", "shank_length", "foot_length"):
             v = getattr(self, key + "_r")
             lo, hi = BOUNDS[key]
             if v is not None and not (lo <= v <= hi):
-                out.append(f"right {key.replace('_', ' ')} {v:g} (verified experiments use {lo:g} to {hi:g})")
+                out.append(f"right {key.replace('_', ' ')} {v:.3g} (verified experiments use {lo:g} to {hi:g})")
         return out
 
 
