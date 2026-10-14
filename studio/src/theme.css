@@ -82,3 +82,5 @@ main { padding: 16px 24px 40px; }
 .wl-hero, .inv-main { grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 1101px) { .wl-hero { grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); } }
 @media (min-width: 1251px) { .inv-main { grid-template-columns: minmax(0, 1fr) 460px; } }
+.run-line { margin: 0 0 8px; font: 650 22px var(--font-display); } .run-line.bad { color: #ff8b97; } .run-line.ok { color: var(--ok); }
+.studio .viewport { height: min(54vh, 600px); } .compare .pair .viewport { height: min(52vh, 560px); }

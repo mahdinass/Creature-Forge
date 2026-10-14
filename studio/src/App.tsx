@@ -132,7 +132,11 @@ export default function App() {
             )}
           </aside>
           <section>
-            <Viewport run={run} label={sandbox ? 'Your drawn creature' : `Your creature · foot ${run.body.foot_length.toFixed(3)} m`} />
+            <p className={`run-line ${run.metrics.fell ? 'bad' : 'ok'}`} data-testid="run-line">
+              {run.metrics.fell ? `It fell at ${run.events.find((e) => e.kind === 'fall')?.time.toFixed(2)} s.` : 'It stayed on its feet for the whole run.'}
+              {run.push ? ` A ${run.push.force} N push hit it at ${run.push.time.toFixed(1)} s.` : ''}
+            </p>
+            <Viewport closeup run={run} label={sandbox ? 'Your drawn creature' : `Your creature · foot ${run.body.foot_length.toFixed(3)} m`} />
             <Transport runs={[{ run, label: 'run', color: '#4cc2ff' }]} />
             <div className="below">
               <HeightChart runs={[{ run, label: 'run', color: '#4cc2ff' }]} />
@@ -150,8 +154,8 @@ export default function App() {
             Only the foot length differs: <b>{bf * 100} cm</b> vs <b>{cf * 100} cm</b>.
           </div>
           <div className="pair">
-            <Viewport run={phase0.baseline} label={`BASELINE · foot ${bf * 100} cm`} />
-            <Viewport run={phase0.candidate} label={`CANDIDATE · foot ${cf * 100} cm`} />
+            <Viewport closeup run={phase0.baseline} label={`BASELINE · foot ${bf * 100} cm`} />
+            <Viewport closeup run={phase0.candidate} label={`CANDIDATE · foot ${cf * 100} cm`} />
           </div>
           <Transport runs={[{ run: phase0.baseline, label: 'baseline', color: '#e5484d' },
             { run: phase0.candidate, label: 'candidate', color: '#3fb97f' }]} />
