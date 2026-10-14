@@ -28,6 +28,17 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1360, height: 1100 } })
 const pageErrors = []
 page.on('pageerror', (e) => pageErrors.push(e.message))
+// Real API problems must surface immediately, not after a long selector timeout.
+const apiLog = []
+page.on('response', async (res) => {
+  const u = res.url()
+  if (!u.includes('/api/demo/')) return
+  const entry = { url: u.replace(/^https?:\/\/[^/]+/, ''), status: res.status(), t: Date.now() }
+  if (res.status() >= 400) entry.body = (await res.text().catch(() => '')).slice(0, 400)
+  apiLog.push(entry)
+})
+page.on('requestfailed', (r) => { if (r.url().includes('/api/demo/')) apiLog.push({ url: r.url(), failed: r.failure()?.errorText, t: Date.now() }) })
+const apiFailure = () => apiLog.find((e) => e.failed || (e.status && e.status >= 400))
 
 try {
   await page.goto(`${BASE}/?tab=demo`)
@@ -66,8 +77,24 @@ try {
   ok(rows.every((r) => /\d+\/32/.test(r)), 'each row reports walking seeds out of 32')
   await shot(page, 'demo-verify')
   await page.click('button[data-step="replay"]')
+  const t0 = Date.now()
   await page.click('[data-testid="demo-load-replay"]')
-  await page.waitForSelector('[data-testid="demo-replay"]', { timeout: 240000 })
+  // wait for the replay, but stop at once on an API error, an error notice, or after 90 s with a full diagnostic
+  let state = 'waiting'
+  while (state === 'waiting') {
+    await page.waitForTimeout(500)
+    if (apiFailure()) state = 'api-error'
+    else if (await page.$('[data-testid="demo-replay"]')) state = 'ready'
+    else if (await page.$('.replay-bar ~ .notice-bad, .step-body > .notice-bad')) state = 'ui-error'
+    else if (Date.now() - t0 > 90000) state = 'timeout'
+  }
+  const diag = JSON.stringify({ state, waited_ms: Date.now() - t0, api: apiLog.map((e) => ({ ...e, t: e.t - t0 })),
+    canvases: (await page.$$('canvas')).length, notice: await page.$eval('.notice-bad', (e) => e.textContent).catch(() => null),
+    button: await page.$eval('[data-testid="demo-load-replay"]', (e) => e.textContent).catch(() => null) })
+  console.log(`replay wait: ${diag}`)
+  ok(state === 'ready', `the synchronized replay loads within 90 s and without API errors (${state})`)
+  ok(apiLog.some((e) => /\/api\/demo\/runs\/live-002-two-valid-proposals\/replay\?which=slot0/.test(e.url)), 'replays are requested under the id the record is served by')
+  if (state !== 'ready') throw new Error(`replay did not load: ${diag}`)
   await page.waitForSelector('canvas')
   ok((await page.$$('canvas')).length >= 2, 'two synchronized MuJoCo replays render side by side')
   const verdict = (await page.textContent('[data-testid="demo-verdict"]')) || ''

@@ -299,6 +299,8 @@ def load_run(run_id: str) -> dict:
         p = d / f"{run_id}.json"
         if p.is_file() and p.resolve().parent == d.resolve():
             rec = json.loads(p.read_text(encoding="utf-8"))
+            rec["id"] = p.stem                                  # the identity every API route and the UI use (the file stem), distinct from the stored run_id
+            rec["source"] = "bundled-recording" if d == RECORDS_DIR else "local"
             if d == RECORDS_DIR and MANIFEST.exists():
                 want = json.loads(MANIFEST.read_text(encoding="utf-8"))["records"].get(p.name)
                 rec["integrity"] = {"verified": hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest() == want}

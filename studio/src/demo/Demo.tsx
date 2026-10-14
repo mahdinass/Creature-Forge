@@ -6,7 +6,7 @@ import { usePlayback } from '../store'
 import { HeightChart, Transport } from '../Timeline'
 import { Viewport } from '../Viewport'
 import {
-  bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, rowBadge, statusMessage, STEP_TITLE, STEPS, verdictText,
+  apiId, bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, rowBadge, statusMessage, STEP_TITLE, STEPS, verdictText,
   type Step,
 } from './demoLogic'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus, Kind } from './demoTypes'
@@ -287,7 +287,7 @@ function ReplayStep({ run }: { run: DemoRun }) {
     const mine = ++reqId.current
     setState({ status: 'loading' })
     try {
-      const [a, b] = await Promise.all([getDemoReplay(run.run_id, 'baseline', seed), getDemoReplay(run.run_id, which, seed)])
+      const [a, b] = await Promise.all([getDemoReplay(apiId(run), 'baseline', seed), getDemoReplay(apiId(run), which, seed)])
       if (mine !== reqId.current) return
       setState({ status: 'ready', a, b, which, seed })
       usePlayback.getState().setDuration(Math.max(a.duration, b.duration))

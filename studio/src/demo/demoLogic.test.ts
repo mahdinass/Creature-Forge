@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, statusMessage, verdictText } from './demoLogic'
+import { apiId, bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, statusMessage, verdictText } from './demoLogic'
 import type { DemoRun, VResult } from './demoTypes'
 
 const vres = (walking: number, n = 4, verdict?: VResult['verdict']): VResult => ({
@@ -8,7 +8,7 @@ const vres = (walking: number, n = 4, verdict?: VResult['verdict']): VResult => 
 
 function run(over: Partial<DemoRun> = {}): DemoRun {
   const base = {
-    run_id: 'r1', created_utc: '2026-10-14T00:00:00+00:00',
+    id: 'stem-r1', run_id: 'r1', created_utc: '2026-10-14T00:00:00+00:00',
     provenance: { kind: 'RECORDED_LIVE', model: 'm', request_id: 'x', prompt_sha256: 'h', setting: { reasoning_effort: 'low', max_tokens: 8000 }, usage: null, note: '' },
     controller: { name: 'c', vector: [], params: {} },
     observed: { failing_seed: 9101, walking_seed: 9100, metrics: {}, failing_seed_walked: false },
@@ -69,6 +69,14 @@ describe('failure handling shows what happened', () => {
     expect(statusMessage(bad).text).toMatch(/Nothing was simulated or substituted/)
     expect(statusMessage(run()).tone).toBe('warn')
     expect(statusMessage(withProposal()).tone).toBe('ok')
+  })
+})
+
+describe('replay identity', () => {
+  it('addresses the API by the served id (file stem), never the id stored inside the record', () => {
+    const r = run({ id: 'live-002-two-valid-proposals', run_id: '20261014T111733Z-live-9f5ab0' })
+    expect(apiId(r)).toBe('live-002-two-valid-proposals')
+    expect(apiId(r)).not.toBe(r.run_id)
   })
 })
 

@@ -176,5 +176,46 @@ class RecordingTests(Sandbox):
             demo.build_replay(rec, "baseline", seed=3000)
 
 
+class ApiIdentityTests(Sandbox):
+    """Root cause of the PR 12 CI failure: the UI asked for replays by the id stored INSIDE a bundled record, but bundled records are served by
+    file name; a git-ignored local copy hid the bug on the developer machine. The API id is the file stem and nothing else."""
+
+    def client(self):
+        from fastapi.testclient import TestClient
+        from creature_forge.studio.app import create_app
+        return TestClient(create_app())
+
+    def test_replays_resolve_by_served_id_and_not_by_inner_run_id_and_never_from_a_shadowing_local_copy(self):
+        live = self.run_live(json.dumps({"proposals": [good()]}))
+        demo.promote_to_recording(live, "bundled-stem")
+        seen = []
+        with mock.patch.object(demo, "build_replay", side_effect=lambda rec, which, seed, duration=10.0: seen.append((rec["provenance"]["kind"], which)) or {"ok": which}):
+            api = self.client()
+            ids = [r["run_id"] for r in api.get("/api/demo/runs").json()]
+            self.assertEqual(ids, ["bundled-stem"])                         # the listing hands out the served id
+            body = api.get("/api/demo/runs/bundled-stem").json()
+            self.assertEqual(body["id"], "bundled-stem")
+            self.assertNotEqual(body["id"], body["run_id"])
+            self.assertEqual(api.get("/api/demo/runs/bundled-stem/replay?which=slot0&seed=9101").status_code, 200)
+            self.assertEqual(seen[-1], ("RECORDED_LIVE", "slot0"))          # served from the recording
+            # the inner id does not resolve unless a local run really exists under that name
+            self.assertEqual(api.get(f"/api/demo/runs/{body['run_id']}/replay?which=slot0&seed=9101").status_code, 404)
+            # a local file named like the inner id must not change what the recording id serves
+            shadow = json.loads(json.dumps(live))
+            demo.save_local(shadow)
+            self.assertEqual(api.get("/api/demo/runs/bundled-stem").json()["provenance"]["kind"], "RECORDED_LIVE")
+            self.assertEqual([r["source"] for r in api.get("/api/demo/runs").json()], ["bundled-recording"])    # promoted runs are listed once
+
+    def test_unknown_run_and_bad_replay_arguments_return_prompt_errors(self):
+        live = self.run_live(json.dumps({"proposals": [good()]}))
+        demo.promote_to_recording(live, "bundled-stem")
+        api = self.client()
+        self.assertEqual(api.get("/api/demo/runs/nope/replay?which=baseline&seed=9101").status_code, 404)
+        self.assertEqual(api.get("/api/demo/runs/bundled-stem/replay?which=slot9&seed=9101").status_code, 404)
+        r = api.get("/api/demo/runs/bundled-stem/replay?which=baseline&seed=3000")
+        self.assertEqual(r.status_code, 422)
+        self.assertIn("replay seed", r.json()["detail"])
+
+
 if __name__ == "__main__":
     unittest.main()

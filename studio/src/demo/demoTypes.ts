@@ -54,6 +54,8 @@ export interface VResult {
   verdict?: Verdict
 }
 export interface DemoRun {
+  id: string // file stem: the identity used by every /api/demo route
+  source?: string
   run_id: string
   created_utc: string
   label?: string | null

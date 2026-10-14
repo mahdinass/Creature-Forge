@@ -61,6 +61,11 @@ export function lookupPath(ctx: unknown, path: string): unknown {
   return cur
 }
 
+/** The id the API serves this record under. NOT run_id (the id stored inside the record), which can differ for bundled recordings. */
+export function apiId(run: DemoRun): string {
+  return run.id
+}
+
 export function bar(v: VResult): string {
   return v.walking_by_seed.map((w) => (w ? '■' : '□')).join('')
 }
