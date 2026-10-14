@@ -1,0 +1,4 @@
+incumbent validation: walking 11/16, survived 11/16
+A1: top-5 training indices [0, 11, 62, 80, 129]; validated walking counts [0, 0, 0, 0]
+B1: top-5 training indices [35, 62, 81, 84, 106]; validated walking counts [0, 0, 0, 0, 0]
+C1: top-5 training indices [11, 47, 35, 113, 84]; validated walking counts [0, 0, 0, 0, 0]

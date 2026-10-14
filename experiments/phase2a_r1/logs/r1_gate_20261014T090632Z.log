@@ -1,0 +1,41 @@
+{
+ "arms": {
+  "A": {
+   "best": {
+    "index": 11,
+    "replicate": 1,
+    "walking_count": 0
+   },
+   "incumbent_walking_count": 11,
+   "gain_seeds": -11,
+   "gain_percentage_points": -68.75,
+   "meets_threshold": false
+  },
+  "B": {
+   "best": {
+    "index": 62,
+    "replicate": 1,
+    "walking_count": 0
+   },
+   "incumbent_walking_count": 11,
+   "gain_seeds": -11,
+   "gain_percentage_points": -68.75,
+   "meets_threshold": false
+  },
+  "C": {
+   "best": {
+    "index": 11,
+    "replicate": 1,
+    "walking_count": 0
+   },
+   "incumbent_walking_count": 11,
+   "gain_seeds": -11,
+   "gain_percentage_points": -68.75,
+   "meets_threshold": false
+  }
+ },
+ "proceed": false,
+ "threshold": ">= 2 validation seeds (>= 10 pp of 16); an engineering stopping heuristic, not a significance test",
+ "ledger_rollouts": 3872
+}
+GATE: STOP - null result under the pre-registered futility rule

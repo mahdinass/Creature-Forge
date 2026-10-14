@@ -1,0 +1,1861 @@
+{
+ "arm": "B",
+ "replicate": 1,
+ "objective": "worst2",
+ "top5_training_indices": [
+  35,
+  62,
+  81,
+  84,
+  106
+ ],
+ "incumbent_in_top5": false,
+ "validated": [
+  {
+   "arm": "B",
+   "replicate": 1,
+   "index": 35,
+   "training_rank": 1,
+   "training_objective": {
+    "mean": -0.011458434959299171,
+    "worst2": -0.025289948107686727
+   },
+   "vector": [
+    0.9918919014494609,
+    0.7953165569389424,
+    0.07204620664228878,
+    0.13435869142724544,
+    0.025921948755994656,
+    -0.29458071653811185,
+    0.012398706868451737,
+    51.42861034124273,
+    13.119825942393197,
+    29.92487048674157,
+    28.68239688097728,
+    0.16662906017955437,
+    0.11209109001392004
+   ],
+   "seeds": [
+    4100,
+    4101,
+    4102,
+    4103,
+    4104,
+    4105,
+    4106,
+    4107,
+    4108,
+    4109,
+    4110,
+    4111,
+    4112,
+    4113,
+    4114,
+    4115
+   ],
+   "wall_s": 1.1915727370000013,
+   "error": null,
+   "objective": {
+    "mean": -0.06194145660440686,
+    "worst2": -0.3118638587857981
+   },
+   "walking_count": 0,
+   "survival_count": 0,
+   "median_speed": -0.5027494683616336,
+   "labels": [
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall"
+   ],
+   "per_seed": [
+    {
+     "seed": 4100,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.3159999999999659,
+     "speed_upright": -0.5409429990846806,
+     "forward_disp_upright": -0.7145857017908446,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.018069649501942148
+    },
+    {
+     "seed": 4101,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.5459999999999405,
+     "speed_upright": -0.4706495767937085,
+     "forward_disp_upright": -0.7299774936070138,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.029534917877068523
+    },
+    {
+     "seed": 4102,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.4759999999999482,
+     "speed_upright": -0.4622123426488354,
+     "forward_disp_upright": -0.6845364794629012,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.45252274642157747
+    },
+    {
+     "seed": 4103,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.2759999999999703,
+     "speed_upright": -0.5114694115199184,
+     "forward_disp_upright": -0.6551923161570002,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.03888431259991901
+    },
+    {
+     "seed": 4104,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.5759999999999372,
+     "speed_upright": -0.44381733081613367,
+     "forward_disp_upright": -0.7016752000202794,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.029548426641461623
+    },
+    {
+     "seed": 4105,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.405999999999956,
+     "speed_upright": -0.5028368747246761,
+     "forward_disp_upright": -0.7095028302364957,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.16023273488853648
+    },
+    {
+     "seed": 4106,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.350999999999962,
+     "speed_upright": -0.5199076668162103,
+     "forward_disp_upright": -0.7049947962027613,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.08852716057172338
+    },
+    {
+     "seed": 4107,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.3809999999999587,
+     "speed_upright": -0.5323396805616705,
+     "forward_disp_upright": -0.7378227972584532,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.01265209471760631
+    },
+    {
+     "seed": 4108,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.3359999999999637,
+     "speed_upright": -0.5160433915926559,
+     "forward_disp_upright": -0.6920141881257328,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.013058729078066822
+    },
+    {
+     "seed": 4109,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.340999999999963,
+     "speed_upright": -0.5288495685428551,
+     "forward_disp_upright": -0.7118315192586635,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.12348274486534008
+    },
+    {
+     "seed": 4110,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.7209999999999213,
+     "speed_upright": -0.41820286448098515,
+     "forward_disp_upright": -0.7218181440941474,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "not_upright",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.17120497115001868
+    },
+    {
+     "seed": 4111,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.785999999999914,
+     "speed_upright": -0.41960215671623974,
+     "forward_disp_upright": -0.7515074626787492,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": 0.017497469412561445
+    },
+    {
+     "seed": 4112,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.440999999999952,
+     "speed_upright": -0.49136322294349893,
+     "forward_disp_upright": -0.7105112203762759,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.0021293249216639
+    },
+    {
+     "seed": 4113,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.360999999999961,
+     "speed_upright": -0.5225064506118478,
+     "forward_disp_upright": -0.7137438115357636,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.017388329490270082
+    },
+    {
+     "seed": 4114,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.4309999999999532,
+     "speed_upright": -0.5026620619985911,
+     "forward_disp_upright": -0.7218227210299533,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": 0.008730492090708558
+    },
+    {
+     "seed": 4115,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.5109999999999444,
+     "speed_upright": -0.480358192851625,
+     "forward_disp_upright": -0.7282230203630368,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.02177818651435451
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "replicate": 1,
+   "index": 62,
+   "training_rank": 2,
+   "training_objective": {
+    "mean": 0.49000993003045223,
+    "worst2": -0.187436244817109
+   },
+   "vector": [
+    0.8738496651114542,
+    0.5502493110367499,
+    0.43773057110413627,
+    0.8332438227636222,
+    0.12889557034161928,
+    -0.1893177445301978,
+    0.12490891559018519,
+    190.18147792076243,
+    13.733388704264245,
+    7.40308669274527,
+    44.076352210904076,
+    0.12005630269835264,
+    0.7565456651863394
+   ],
+   "seeds": [
+    4100,
+    4101,
+    4102,
+    4103,
+    4104,
+    4105,
+    4106,
+    4107,
+    4108,
+    4109,
+    4110,
+    4111,
+    4112,
+    4113,
+    4114,
+    4115
+   ],
+   "wall_s": 3.8442571420000036,
+   "error": null,
+   "objective": {
+    "mean": 0.43872415231540196,
+    "worst2": -0.5355932322194402
+   },
+   "walking_count": 0,
+   "survival_count": 11,
+   "median_speed": -0.8935324785106925,
+   "labels": [
+    "falling_forward",
+    "body_dragging",
+    "body_dragging",
+    "body_dragging",
+    "body_dragging",
+    "body_dragging",
+    "body_dragging",
+    "fall",
+    "body_dragging",
+    "falling_forward",
+    "fall",
+    "body_dragging",
+    "falling_forward",
+    "body_dragging",
+    "body_dragging",
+    "body_dragging"
+   ],
+   "per_seed": [
+    {
+     "seed": 4100,
+     "label": "falling_forward",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.1359999999999857,
+     "speed_upright": 0.402908966864133,
+     "forward_disp_upright": 0.45971913119196994,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "torque_saturated",
+      "not_upright",
+      "not_alternating"
+     ],
+     "fitness": -0.4274982377893368
+    },
+    {
+     "seed": 4101,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.9134102906589907,
+     "forward_disp_upright": -9.134102906589908,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8258363643723159
+    },
+    {
+     "seed": 4102,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8927836686572412,
+     "forward_disp_upright": -8.927836686572412,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8896010384452204
+    },
+    {
+     "seed": 4103,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8870776885222765,
+     "forward_disp_upright": -8.870776885222766,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.7803567588565454
+    },
+    {
+     "seed": 4104,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.9011565184174092,
+     "forward_disp_upright": -9.011565184174092,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8242031313235203
+    },
+    {
+     "seed": 4105,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.9098810659533987,
+     "forward_disp_upright": -9.098810659533987,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.824988447848866
+    },
+    {
+     "seed": 4106,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8942812883641438,
+     "forward_disp_upright": -8.942812883641437,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.804005054617573
+    },
+    {
+     "seed": 4107,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.1709999999999818,
+     "speed_upright": -0.5773839358914161,
+     "forward_disp_upright": -0.6790035086082948,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "not_upright",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.43825476214767295
+    },
+    {
+     "seed": 4108,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8853035105798177,
+     "forward_disp_upright": -8.853035105798178,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8042415505521605
+    },
+    {
+     "seed": 4109,
+     "label": "falling_forward",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.4559999999999504,
+     "speed_upright": 0.4860006201028962,
+     "forward_disp_upright": 0.7100469059703072,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "not_upright",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.4011069839970281
+    },
+    {
+     "seed": 4110,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.940999999999897,
+     "speed_upright": -0.7769370391223893,
+     "forward_disp_upright": -1.5119194781320895,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "not_upright",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.6329317022912075
+    },
+    {
+     "seed": 4111,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.9130751567563996,
+     "forward_disp_upright": -9.130751567563996,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8181780423965674
+    },
+    {
+     "seed": 4112,
+     "label": "falling_forward",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.1209999999999873,
+     "speed_upright": 0.32436140602668867,
+     "forward_disp_upright": 0.3652309431860473,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "torque_saturated",
+      "not_upright",
+      "too_few_steps"
+     ],
+     "fitness": -0.21023825131174556
+    },
+    {
+     "seed": 4113,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8989502526408775,
+     "forward_disp_upright": -8.989502526408774,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8204699383555927
+    },
+    {
+     "seed": 4114,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8952909061840215,
+     "forward_disp_upright": -8.952909061840215,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8743142355539326
+    },
+    {
+     "seed": 4115,
+     "label": "body_dragging",
+     "walking": false,
+     "fell": false,
+     "fall_time": null,
+     "speed_upright": -0.8962648209838389,
+     "forward_disp_upright": -8.962648209838388,
+     "valid_steps": 0,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": 0.8634218122611279
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "replicate": 1,
+   "index": 81,
+   "training_rank": 3,
+   "training_objective": {
+    "mean": -0.15735513379085841,
+    "worst2": -0.22258859210199652
+   },
+   "vector": [
+    1.0123349050764223,
+    0.7983975751563819,
+    0.20610314922068612,
+    0.2689569080613027,
+    -0.03760522678869098,
+    -0.34517911021677117,
+    -0.18600763809441148,
+    105.615721185117,
+    4.6238613037168985,
+    70.9953052439162,
+    43.71230970748279,
+    0.15521629356930383,
+    0.3767421312726592
+   ],
+   "seeds": [
+    4100,
+    4101,
+    4102,
+    4103,
+    4104,
+    4105,
+    4106,
+    4107,
+    4108,
+    4109,
+    4110,
+    4111,
+    4112,
+    4113,
+    4114,
+    4115
+   ],
+   "wall_s": 0.5166311509999559,
+   "error": null,
+   "objective": {
+    "mean": -0.15188991792366502,
+    "worst2": -0.24146034195620525
+   },
+   "walking_count": 0,
+   "survival_count": 0,
+   "median_speed": -0.8948822608803382,
+   "labels": [
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall"
+   ],
+   "per_seed": [
+    {
+     "seed": 4100,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7960000000000006,
+     "speed_upright": -0.8560584472150158,
+     "forward_disp_upright": -0.6857028162192281,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.10799731390207724
+    },
+    {
+     "seed": 4101,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7910000000000006,
+     "speed_upright": -0.9552806338978652,
+     "forward_disp_upright": -0.7604033845827013,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.14143333924702767
+    },
+    {
+     "seed": 4102,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7810000000000006,
+     "speed_upright": -0.8764094319145994,
+     "forward_disp_upright": -0.6888578134848756,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "not_upright",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.23582628995407962
+    },
+    {
+     "seed": 4103,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7510000000000006,
+     "speed_upright": -0.8605458113766644,
+     "forward_disp_upright": -0.6505726334007588,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.10217209546477475
+    },
+    {
+     "seed": 4104,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7760000000000006,
+     "speed_upright": -0.9115975460418682,
+     "forward_disp_upright": -0.7119576834586996,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.12518599536616049
+    },
+    {
+     "seed": 4105,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7660000000000006,
+     "speed_upright": -0.9221085213808226,
+     "forward_disp_upright": -0.7109456699846147,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.2162396949802416
+    },
+    {
+     "seed": 4106,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7560000000000006,
+     "speed_upright": -0.9335317217362925,
+     "forward_disp_upright": -0.7104176402413191,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "not_upright",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.24709439395833085
+    },
+    {
+     "seed": 4107,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.8310000000000006,
+     "speed_upright": -0.881463175173655,
+     "forward_disp_upright": -0.7369032144451761,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.17637119061557524
+    },
+    {
+     "seed": 4108,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7810000000000006,
+     "speed_upright": -0.8757565677305146,
+     "forward_disp_upright": -0.688344662236185,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.21048744282041917
+    },
+    {
+     "seed": 4109,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7960000000000006,
+     "speed_upright": -0.8693325391041875,
+     "forward_disp_upright": -0.6963353638224548,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.191143703738055
+    },
+    {
+     "seed": 4110,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7860000000000006,
+     "speed_upright": -0.922471043855277,
+     "forward_disp_upright": -0.7296745956895246,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.097477663802392
+    },
+    {
+     "seed": 4111,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.8160000000000006,
+     "speed_upright": -0.9929561770699133,
+     "forward_disp_upright": -0.8152170213743994,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.12863092037163038
+    },
+    {
+     "seed": 4112,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7760000000000006,
+     "speed_upright": -0.9083013465870212,
+     "forward_disp_upright": -0.7093833516844641,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.1520760472725866
+    },
+    {
+     "seed": 4113,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7960000000000006,
+     "speed_upright": -0.8703787769677466,
+     "forward_disp_upright": -0.6971734003511655,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.10473113228987602
+    },
+    {
+     "seed": 4114,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7860000000000006,
+     "speed_upright": -0.8784221987671865,
+     "forward_disp_upright": -0.6948319592248451,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.10538353304245186
+    },
+    {
+     "seed": 4115,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.7910000000000006,
+     "speed_upright": -0.9335008753516963,
+     "forward_disp_upright": -0.7430666967799509,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.0879879299529622
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "replicate": 1,
+   "index": 84,
+   "training_rank": 4,
+   "training_objective": {
+    "mean": -0.15510592848262525,
+    "worst2": -0.22849521957727156
+   },
+   "vector": [
+    1.3063120595251685,
+    0.5472593113524968,
+    0.2765890620804891,
+    0.8105062055102121,
+    0.13520796475868316,
+    -0.39065253319905874,
+    -0.1921371348969194,
+    92.12069824358917,
+    18.092097808877416,
+    83.01643127791975,
+    59.64382896588464,
+    0.03243677201680353,
+    0.322989179915098
+   ],
+   "seeds": [
+    4100,
+    4101,
+    4102,
+    4103,
+    4104,
+    4105,
+    4106,
+    4107,
+    4108,
+    4109,
+    4110,
+    4111,
+    4112,
+    4113,
+    4114,
+    4115
+   ],
+   "wall_s": 0.6361179129999641,
+   "error": null,
+   "objective": {
+    "mean": -0.17390543043111484,
+    "worst2": -0.28014623828642254
+   },
+   "walking_count": 0,
+   "survival_count": 0,
+   "median_speed": -0.7237958364845991,
+   "labels": [
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall"
+   ],
+   "per_seed": [
+    {
+     "seed": 4100,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.350999999999962,
+     "speed_upright": -0.6555443061413851,
+     "forward_disp_upright": -0.8889180791276933,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.15187562845632874
+    },
+    {
+     "seed": 4101,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.4459999999999515,
+     "speed_upright": -0.6631859820331827,
+     "forward_disp_upright": -0.9622828599301159,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.08299256898354668
+    },
+    {
+     "seed": 4102,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.1859999999999802,
+     "speed_upright": -0.6563356152577653,
+     "forward_disp_upright": -0.7816957177719853,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.161007940346895
+    },
+    {
+     "seed": 4103,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.0859999999999912,
+     "speed_upright": -0.7213232107674005,
+     "forward_disp_upright": -0.7869636229472274,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.12649879279984488
+    },
+    {
+     "seed": 4104,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.495999999999946,
+     "speed_upright": -0.7262684622017979,
+     "forward_disp_upright": -1.0901289617648593,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.07419768788795505
+    },
+    {
+     "seed": 4105,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.4259999999999537,
+     "speed_upright": -0.6819035684160203,
+     "forward_disp_upright": -0.9758040064032935,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.09815370819055776
+    },
+    {
+     "seed": 4106,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.8910000000000007,
+     "speed_upright": -0.7747551806778068,
+     "forward_disp_upright": -0.6941806418873154,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.25543722499535576
+    },
+    {
+     "seed": 4107,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.9809999999998926,
+     "speed_upright": -0.451389127671688,
+     "forward_disp_upright": -0.8964588075559238,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.10456239728798858
+    },
+    {
+     "seed": 4108,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.2709999999999708,
+     "speed_upright": -0.7762646567249655,
+     "forward_disp_upright": -0.9905137019810332,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.26052823223095734
+    },
+    {
+     "seed": 4109,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.3209999999999653,
+     "speed_upright": -0.6748609326462266,
+     "forward_disp_upright": -0.894865596688873,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.1714725684442216
+    },
+    {
+     "seed": 4110,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.2109999999999774,
+     "speed_upright": -0.8284614631419017,
+     "forward_disp_upright": -1.0074091391805338,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.25031574989076644
+    },
+    {
+     "seed": 4111,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.55099999999994,
+     "speed_upright": -0.8153571174497072,
+     "forward_disp_upright": -1.2686956747516953,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.20253114607195477
+    },
+    {
+     "seed": 4112,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.250999999999973,
+     "speed_upright": -0.7501671949343102,
+     "forward_disp_upright": -0.9422099968374733,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.20234071944888948
+    },
+    {
+     "seed": 4113,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9460000000000007,
+     "speed_upright": -0.8319832791749808,
+     "forward_disp_upright": -0.7912160984954074,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.29976424434188775
+    },
+    {
+     "seed": 4114,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.7359999999999196,
+     "speed_upright": -0.6504732786627639,
+     "forward_disp_upright": -1.1324739781518196,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.17341447766665546
+    },
+    {
+     "seed": 4115,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.1409999999999851,
+     "speed_upright": -0.8405164720735739,
+     "forward_disp_upright": -0.9632318769963032,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.16739379985403233
+    }
+   ]
+  },
+  {
+   "arm": "B",
+   "replicate": 1,
+   "index": 106,
+   "training_rank": 5,
+   "training_objective": {
+    "mean": -0.2184052800468642,
+    "worst2": -0.24518253926459949
+   },
+   "vector": [
+    1.5333400560604749,
+    0.5860804711038308,
+    0.16611046419509196,
+    0.7274597364605176,
+    -0.06344877894438108,
+    -0.3526121498411323,
+    -0.14427030168686072,
+    164.45509366721896,
+    19.254178199008994,
+    52.28355349009585,
+    82.23400215744965,
+    -0.021928154458132967,
+    0.23455730426094923
+   ],
+   "seeds": [
+    4100,
+    4101,
+    4102,
+    4103,
+    4104,
+    4105,
+    4106,
+    4107,
+    4108,
+    4109,
+    4110,
+    4111,
+    4112,
+    4113,
+    4114,
+    4115
+   ],
+   "wall_s": 0.5064055710000162,
+   "error": null,
+   "objective": {
+    "mean": -0.24160009640939567,
+    "worst2": -0.3035780979148958
+   },
+   "walking_count": 0,
+   "survival_count": 0,
+   "median_speed": -0.7553809590740563,
+   "labels": [
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall",
+    "fall"
+   ],
+   "per_seed": [
+    {
+     "seed": 4100,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.0259999999999978,
+     "speed_upright": -0.7546708473805314,
+     "forward_disp_upright": -0.7780656436493261,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.3247470682276089
+    },
+    {
+     "seed": 4101,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.1259999999999868,
+     "speed_upright": -0.7923807744142404,
+     "forward_disp_upright": -0.8961826558624953,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.25278540333756094
+    },
+    {
+     "seed": 4102,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9410000000000007,
+     "speed_upright": -0.7474084396820629,
+     "forward_disp_upright": -0.7070483839392321,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow"
+     ],
+     "fitness": -0.23033035484109388
+    },
+    {
+     "seed": 4103,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9560000000000007,
+     "speed_upright": -0.7546865885378907,
+     "forward_disp_upright": -0.7252538115849135,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.2509219109853159
+    },
+    {
+     "seed": 4104,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9660000000000007,
+     "speed_upright": -0.7943013110150345,
+     "forward_disp_upright": -0.7712665729955991,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.2656886930005755
+    },
+    {
+     "seed": 4105,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.0759999999999923,
+     "speed_upright": -0.6911546347446271,
+     "forward_disp_upright": -0.7471381601589365,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.28240912760218273
+    },
+    {
+     "seed": 4106,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9010000000000007,
+     "speed_upright": -0.7325208948494346,
+     "forward_disp_upright": -0.6636639307335883,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow"
+     ],
+     "fitness": -0.2210930394208998
+    },
+    {
+     "seed": 4107,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.2109999999999774,
+     "speed_upright": -0.6786319129623739,
+     "forward_disp_upright": -0.8252164061622312,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow"
+     ],
+     "fitness": -0.18660073739792898
+    },
+    {
+     "seed": 4108,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.195999999999979,
+     "speed_upright": -0.7009400802725675,
+     "forward_disp_upright": -0.8418290364073389,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.18769048397509838
+    },
+    {
+     "seed": 4109,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.2459999999999736,
+     "speed_upright": -0.7259993162401146,
+     "forward_disp_upright": -0.908225144616364,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.21512820144438025
+    },
+    {
+     "seed": 4110,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9760000000000008,
+     "speed_upright": -0.8186503525104297,
+     "forward_disp_upright": -0.8030959958127322,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps",
+      "not_alternating"
+     ],
+     "fitness": -0.2673194973171952
+    },
+    {
+     "seed": 4111,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.0459999999999956,
+     "speed_upright": -0.7729190555608177,
+     "forward_disp_upright": -0.812337927394416,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.27577125839216354
+    },
+    {
+     "seed": 4112,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9060000000000007,
+     "speed_upright": -0.7695737578269133,
+     "forward_disp_upright": -0.7010816933803186,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow"
+     ],
+     "fitness": -0.241979560755393
+    },
+    {
+     "seed": 4113,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9660000000000007,
+     "speed_upright": -0.7560753296102221,
+     "forward_disp_upright": -0.7341491450515262,
+     "valid_steps": 1,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "not_alternating"
+     ],
+     "fitness": -0.242149663856396
+    },
+    {
+     "seed": 4114,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 0.9310000000000007,
+     "speed_upright": -0.8637695248409044,
+     "forward_disp_upright": -0.8084882752510871,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.23282083160992292
+    },
+    {
+     "seed": 4115,
+     "label": "fall",
+     "walking": false,
+     "fell": true,
+     "fall_time": 1.2259999999999758,
+     "speed_upright": -0.7989524741449567,
+     "forward_disp_upright": -0.9835104956724223,
+     "valid_steps": 0,
+     "violations": [
+      "fall",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ],
+     "fitness": -0.1881657103866149
+    }
+   ]
+  }
+ ]
+}

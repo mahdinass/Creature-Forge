@@ -170,3 +170,7 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Compatibility/reproducibility on the VM passed (Windows-reference match, max rel 5.5e-15); 207/208 tests pass, the exception being a bit-exact cross-platform test (known libm noise). **R1 not started, pilot not run, ledger empty**; protocol untouched.
 - Finding: R1's registered file hashes cover CRLF Windows bytes; Linux needs `core.autocrlf=true` (handled in bootstrap).
 - Credit balance and the public-IP price are not verified via the CLI.
+
+## R1 executed - NULL result (2026-10-14)
+- Pilot passed (15 rollouts/s, 65 MB/worker); replicate 1 of A/B/C trained and validated; **futility gate: STOP** (no candidate walked on any validation seed; incumbent 11/16). Replicate 2, selection and final evaluation not run; final seeds untouched. Ledger 3,872/8,500 rollouts, 81 s active wall, 0 errors. Full report: `experiments/phase2a_r1/REPORT.md`. VM is STOPPED (disk ~$0.12/day); delete with `forge_cloud.py delete --yes` when no longer needed.
+- Engineering changes before the pilot: session-based wall accounting; tolerance-based cross-platform test; verified VM deadline sync on `start`.
