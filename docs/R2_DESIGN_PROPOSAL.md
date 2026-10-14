@@ -1,4 +1,6 @@
-# R2 — local robustness optimisation around the frozen Phase 2A walker (PROPOSAL, not registered, not executed)
+# R2 — local robustness optimisation around the frozen Phase 2A walker
+
+> **Update 2026-10-14:** approved with corrections and executed. The binding protocol is `experiments/phase2a_r2/protocol.json` (commit `463c603`); the corrections (Tango non-inferiority with a hierarchy, frozen training-seed rule, exact 49-point grid, explicit reference accounting, pilot seeds 7300-7315) supersede the text below where they differ. Results: `experiments/phase2a_r2/REPORT.md`. This file is kept as the original proposal.
 
 Status: design for review. Nothing here is committed as a protocol; after approval it becomes `experiments/phase2a_r2/protocol.json`, committed **before** any optimisation, with the same guard machinery as R1 (committed-file check, hash-chained ledger, session-based wall guard, futility gate). Basis: `docs/R1_SEARCH_ANALYSIS.md` (post-hoc).
 
