@@ -186,7 +186,7 @@ def cmd_wait(a) -> None:
     """Block until no experiment stage is running on the VM, then print the tail of the newest log."""
     t0 = time.time()
     while time.time() - t0 < a.timeout:
-        r = ssh("pgrep -f '[s]cripts/run_r[0-9].py' >/dev/null && echo busy || echo done", timeout=60, check=False)
+        r = ssh("pgrep -f '[s]cripts/run_r[0-9a-z_]*.py' >/dev/null && echo busy || echo done", timeout=60, check=False)
         if "done" in r.stdout:
             print(ssh("tail -n 25 $(ls -t ~/logs/run_r*.log | head -1)", timeout=60).stdout)
             return
