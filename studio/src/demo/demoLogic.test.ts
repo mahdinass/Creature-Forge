@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { apiId, bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, statusMessage, verdictText } from './demoLogic'
+import { apiId, bar, citedEvidence, paramDiffs, proposalOutcome, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, statusMessage, verdictText } from './demoLogic'
 import type { DemoRun, VResult } from './demoTypes'
 
 const vres = (walking: number, n = 4, verdict?: VResult['verdict']): VResult => ({
@@ -96,5 +96,53 @@ describe('helpers', () => {
     expect(lookupPath(c, 'failing_seeds.0.fall_time')).toBe(1.5)
     expect(lookupPath(c, 'failing_seeds.fell')).toBeUndefined()
     expect(bar(vres(2))).toBe('■■□□')
+  })
+})
+
+describe('parameter diffs (what the proposal physically changes)', () => {
+  const r = (): DemoRun => {
+    const x = withProposal()
+    x.controller = { name: 'c', vector: [], params: {
+      kp: { value: 100, lower: 0, upper: 200, u: 0.5, meaning: 'joint position gain' },
+      kd: { value: 10, lower: 0, upper: 20, u: 0.5, meaning: 'damping' },
+    } }
+    x.interventions[0].matched_random.realised = [{ parameter: 'kd', requested_delta_u: -0.1, realised_delta_u: -0.1, reflected: false }]
+    return x
+  }
+  it('lists every parameter, marks only the edited ones, and computes the new physical value from the realised step', () => {
+    const d = paramDiffs(r(), 0, 'model')
+    expect(d.map((p) => p.name)).toEqual(['kp', 'kd'])
+    const kp = d.find((p) => p.name === 'kp')!
+    expect(kp.changed).toBe(true)
+    expect(kp.before).toBe(100)
+    expect(kp.after).toBeCloseTo(120) // u 0.5 -> 0.6 of [0, 200]
+    expect(d.find((p) => p.name === 'kd')!.changed).toBe(false)
+  })
+  it('uses the realised step (after reflection at a bound), not the requested one', () => {
+    const x = r()
+    x.interventions[0].realised = [{ parameter: 'kp', requested_delta_u: 0.3, realised_delta_u: -0.3, reflected: true }]
+    const kp = paramDiffs(x, 0, 'model').find((p) => p.name === 'kp')!
+    expect(kp.after).toBeCloseTo(40)
+    expect(kp.reflected).toBe(true)
+  })
+  it('shows the matched random edit separately', () => {
+    const d = paramDiffs(r(), 0, 'random')
+    expect(d.find((p) => p.name === 'kd')!.changed).toBe(true)
+    expect(d.find((p) => p.name === 'kp')!.changed).toBe(false)
+  })
+})
+
+describe('story evidence', () => {
+  it('resolves the evidence the model cited to the measured value, flagging unresolved citations', () => {
+    const x = withProposal()
+    x.interventions[0].proposal.cited_evidence = ['failing_seeds.0.fall_time', 'nope.path']
+    const ev = citedEvidence(x, 0)
+    expect(ev[0]).toEqual({ path: 'failing_seeds.0.fall_time', value: '1.5', resolved: true })
+    expect(ev[1].resolved).toBe(false)
+  })
+  it('summarises the outcome of one proposal against frozen and random', () => {
+    const o = proposalOutcome(withProposal(), 0)!
+    expect(o).toMatchObject({ frozen: 2, model: 3, random: 4, n: 4, beatRandom: false, predictionMet: false })
+    expect(proposalOutcome(run(), 0)).toBeNull()
   })
 })

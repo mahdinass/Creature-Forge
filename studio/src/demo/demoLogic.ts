@@ -86,3 +86,44 @@ export function honestHeadline(run: DemoRun): string {
   })
   return `Measured on ${ver.seeds.length} fresh seeds: ${parts.join('; ')}. One instance; not a statistical claim.`
 }
+
+export interface ParamDiff {
+  name: string; meaning: string; lower: number; upper: number
+  before: number; after: number; uBefore: number; uAfter: number
+  changed: boolean; reflected: boolean
+}
+
+/** Every controller parameter with the physical value before/after one edit set. "after" is derived from the
+ *  realised step in normalised units (the step the verifier actually applied), never from the model's request. */
+export function paramDiffs(run: DemoRun, slot: number, who: 'model' | 'random'): ParamDiff[] {
+  const iv = run.interventions.find((x) => x.slot === slot)
+  const realised = iv ? (who === 'model' ? iv.realised : iv.matched_random.realised) : []
+  return Object.entries(run.controller.params).map(([name, p]) => {
+    const r = realised.find((x) => x.parameter === name)
+    const uAfter = r ? p.u + r.realised_delta_u : p.u
+    return {
+      name, meaning: p.meaning, lower: p.lower, upper: p.upper, before: p.value, uBefore: p.u, uAfter,
+      after: r ? p.lower + (p.upper - p.lower) * uAfter : p.value, changed: !!r, reflected: !!r?.reflected,
+    }
+  })
+}
+
+export function citedEvidence(run: DemoRun, slot: number): { path: string; value: string; resolved: boolean }[] {
+  const iv = run.interventions.find((x) => x.slot === slot)
+  return (iv?.proposal.cited_evidence ?? []).map((path) => {
+    const v = lookupPath(run.context, path)
+    return { path, value: v === undefined ? 'unresolved' : String(v), resolved: v !== undefined }
+  })
+}
+
+export function proposalOutcome(run: DemoRun, slot: number) {
+  const ver = run.verification
+  const iv = run.interventions.find((x) => x.slot === slot)
+  if (!ver || !iv) return null
+  const m = ver.results[`slot${slot}`]
+  const r = ver.results[`slot${slot}_random`]
+  return {
+    frozen: ver.results['theta0'].walking_count, model: m.walking_count, random: r.walking_count, n: m.n,
+    beatRandom: m.walking_count > r.walking_count, predictionMet: m.verdict?.prediction_met, verdict: m.verdict,
+  }
+}

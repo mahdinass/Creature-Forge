@@ -55,8 +55,23 @@ try {
   ok(((await page.textContent('[data-testid="kind-banner"]')) || '').includes('Nothing is re-sent'), 'the banner says nothing is re-sent to the model')
   ok(await page.isDisabled('[data-testid="run-live"]'), 'the live button is disabled (server flag off / not confirmed)')
   ok(((await page.textContent('[data-testid="live-disabled"]')) || '').includes('Live mode is off'), 'the page explains why live mode is off')
+  await page.waitForSelector('[data-testid="demo-story"]')
+  const storyText = async (id) => (await page.textContent(`[data-testid="${id}"]`)) || ''
+  ok(/seed 9101/.test(await storyText('story-failure')) && /falls at/.test(await storyText('story-failure')), 'story 1: the failure (seed and fall time) is stated')
+  ok(/measurements only/.test(await storyText('story-evidence')), 'story 2: says what evidence the model received')
+  ok((await page.$$('[data-testid="story-claim"]')).length === 1 && /recorded call/.test(await storyText('story-claim')), 'story 3: the model claim is shown and marked as a recorded call')
+  const changed = await page.$$eval('[data-testid^="ptrack-"][data-changed="true"]', (e) => e.map((x) => x.getAttribute('data-testid')))
+  ok(changed.length >= 1, `story 4: the changed physical parameters are visualised (${changed.join(', ')})`)
+  ok((await page.$$('[data-testid="outcome-frozen"], [data-testid="outcome-model"], [data-testid="outcome-random"]')).length === 3, 'story 5: unchanged vs model vs matched-random outcomes are shown')
+  ok(/random edit/.test(await storyText('story-verdict')), 'story 5: the verdict compares with the matched random edit')
+  await page.waitForSelector('[data-testid="story-replay"] [data-testid="demo-replay"]', { timeout: 240000 })
+  ok(true, 'story 6: the side-by-side replay loads automatically, with no button press')
+  ok(/not a statistical comparison/.test(await storyText('story-honesty')) && /classical optimiser/.test(await storyText('story-honesty')), 'the honest-reading note separates the classical result and states the unfinished comparison')
+  await page.click('[data-testid="view-steps"]')
   ok(/seed 9101/.test((await page.textContent('[data-testid="demo-observed"]')) || ''), 'step 1 shows the measured failing seed')
 
+  // the default view is the guided story; the numbered stepper lives under "Step-by-step details"
+  await page.click('[data-testid="view-steps"]')
   await page.click('button[data-step="prompt"]')
   ok(((await page.textContent('[data-testid="demo-context"]')) || '').includes('Exact context sent'), 'step 2 shows the exact context sent to the model')
   await page.click('button[data-step="proposal"]')
@@ -107,6 +122,10 @@ try {
 
   // the recorded run whose reply was rejected: shown honestly, nothing simulated or substituted
   await page.locator('.trial-card', { hasText: 'reply rejected' }).first().click()
+  await page.waitForSelector('[data-testid="story-noproposal"]')
+  ok(/Nothing was simulated or substituted/.test(await storyText('story-noproposal')) && (await page.$('[data-testid="story-params"]')) === null,
+    'story: a rejected reply shows no parameter changes or outcomes, only the honest stop')
+  await page.click('[data-testid="view-steps"]')
   await page.click('button[data-step="proposal"]')
   await page.waitForSelector('[data-testid="demo-slot-0"]')
   ok(((await page.textContent('[data-testid="demo-slot-0"]')) || '').includes('Rejected by schema validation'), 'an invalid proposal is shown as rejected, with the reason')
@@ -119,6 +138,8 @@ try {
   await page.locator('.trial-card', { hasText: 'SCRIPTED MOCK' }).first().click()
   await page.waitForFunction(() => document.querySelector('[data-testid="kind-banner"]')?.getAttribute('data-kind') === 'SCRIPTED_MOCK')
   ok(((await page.textContent('[data-testid="kind-banner"]')) || '').includes('not a model'), 'the mock banner says it is not a model')
+  ok(/not Nemotron/.test(await storyText('story-claim')), 'story: the scripted proposal is tagged "not Nemotron"')
+  await page.click('[data-testid="view-steps"]')
   await page.click('button[data-step="proposal"]')
   ok(((await page.textContent('[data-testid="demo-slot-0"]')) || '').includes('SCRIPTED MOCK'), 'the mock proposal text itself says SCRIPTED MOCK')
 

@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { getDemoReplay, getDemoRun, getDemoRuns, getDemoStatus, startDemoRun } from '../api'
+import { useCallback, useEffect, useState } from 'react'
+import { getDemoRun, getDemoRuns, getDemoStatus, startDemoRun } from '../api'
 import { Block, Notice } from '../lab/Badges'
-import { Metrics } from '../Metrics'
-import { usePlayback } from '../store'
-import { HeightChart, Transport } from '../Timeline'
-import { Viewport } from '../Viewport'
+import { ReplayStep } from './Replay'
+import { Story } from './Story'
 import {
-  apiId, bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, replayOptions, rowBadge, statusMessage, STEP_TITLE, STEPS, verdictText,
+  bar, describeEdit, honestHeadline, KIND_INFO, lookupPath, predictionText, rowBadge, statusMessage, STEP_TITLE, STEPS, verdictText,
   type Step,
 } from './demoLogic'
-import type { DemoReplay, DemoRow, DemoRun, DemoStatus, Kind } from './demoTypes'
+import type { DemoRow, DemoRun, DemoStatus, Kind } from './demoTypes'
 
 function KindBanner({ kind, note }: { kind: Kind; note: string }) {
   const k = KIND_INFO[kind]
@@ -118,12 +116,12 @@ export function Demo({ initialRun }: { initialRun: string | null }) {
   )
 }
 
-type ReplayState = { status: 'idle' } | { status: 'loading' } | { status: 'error'; message: string } | { status: 'ready'; a: DemoReplay; b: DemoReplay; which: string; seed: number }
 
 function RunDetail({ id, status }: { id: string; status: DemoStatus | null }) {
   const [run, setRun] = useState<DemoRun | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [step, setStep] = useState<Step>('observe')
+  const [view, setView] = useState<'story' | 'steps'>('story')
 
   useEffect(() => {
     let live = true
@@ -146,6 +144,11 @@ function RunDetail({ id, status }: { id: string; status: DemoStatus | null }) {
       <KindBanner kind={run.provenance.kind} note={run.provenance.note} />
       {run.integrity && !run.integrity.verified && <Notice tone="bad">This bundled recording does not match its recorded SHA-256. Treat it as altered.</Notice>}
       <p className={`headline tone-${msg.tone}`} data-testid="demo-headline">{honestHeadline(run)}</p>
+      <div className="view-toggle" role="tablist" aria-label="view">
+        <button role="tab" aria-selected={view === 'story'} className={view === 'story' ? 'on' : ''} data-testid="view-story" onClick={() => setView('story')}>Guided story</button>
+        <button role="tab" aria-selected={view === 'steps'} className={view === 'steps' ? 'on' : ''} data-testid="view-steps" onClick={() => setView('steps')}>Step-by-step details</button>
+      </div>
+      {view === 'story' ? <Story run={run} /> : (<>
       <nav className="stepper" aria-label="investigation steps">
         {STEPS.map((s, i) => (
           <button key={s} data-step={s} className={step === s ? 'on' : ''} onClick={() => setStep(s)} aria-current={step === s ? 'step' : undefined}>
@@ -167,6 +170,7 @@ function RunDetail({ id, status }: { id: string; status: DemoStatus | null }) {
           <small className="dim">{run.provenance.model} · {run.provenance.usage.total_tokens} tokens · reasoning effort {run.provenance.setting.reasoning_effort} · max {run.provenance.setting.max_tokens}</small>
         )}
       </footer>
+      </>)}
       <details className="limits"><summary>What this does and does not show</summary>
         <ul>{run.limits.map((l) => <li key={l}>{l}</li>)}</ul>
         {status && <small>Reasoning effort is a request, not a guarantee: the API did not report how much reasoning was used.</small>}
@@ -274,69 +278,3 @@ function VerifyStep({ run }: { run: DemoRun }) {
   )
 }
 
-function ReplayStep({ run }: { run: DemoRun }) {
-  const opts = replayOptions(run)
-  const [which, setWhich] = useState(opts[Math.min(1, opts.length - 1)].id)
-  const [seed, setSeed] = useState(run.observed.failing_seed)
-  const [state, setState] = useState<ReplayState>({ status: 'idle' })
-  const reqId = useRef(0)
-  const seeds = [run.observed.failing_seed, run.observed.walking_seed, ...(run.verification?.seeds ?? [])]
-
-  const change = (apply: () => void) => { reqId.current += 1; apply(); setState({ status: 'idle' }) }
-  const load = async () => {
-    const mine = ++reqId.current
-    setState({ status: 'loading' })
-    try {
-      const [a, b] = await Promise.all([getDemoReplay(apiId(run), 'baseline', seed), getDemoReplay(apiId(run), which, seed)])
-      if (mine !== reqId.current) return
-      setState({ status: 'ready', a, b, which, seed })
-      usePlayback.getState().setDuration(Math.max(a.duration, b.duration))
-      usePlayback.getState().restart()
-    } catch (e) {
-      if (mine === reqId.current) setState({ status: 'error', message: (e as Error).message })
-    }
-  }
-  const ver = run.verification
-  const sel = ver && which !== 'baseline' ? ver.results[which] : null
-  return (
-    <div className="step-body">
-      <div className="replay-bar">
-        <label>Compare the frozen controller with{' '}
-          <select value={which} onChange={(e) => change(() => setWhich(e.target.value))} aria-label="edited controller">
-            {opts.filter((o) => o.id !== 'baseline').map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
-          </select>
-        </label>
-        <label>Seed{' '}
-          <select value={seed} onChange={(e) => change(() => setSeed(Number(e.target.value)))} aria-label="seed">
-            {seeds.map((s) => <option key={s} value={s}>{s}{s === run.observed.failing_seed ? ' (observed failure)' : s === run.observed.walking_seed ? ' (observed walker)' : ''}</option>)}
-          </select>
-        </label>
-        <button data-testid="demo-load-replay" onClick={() => void load()} disabled={state.status === 'loading' || opts.length < 2}>
-          {state.status === 'loading' ? 'Running MuJoCo…' : 'Load synchronized replay'}
-        </button>
-        <small>Fresh deterministic MuJoCo rollouts of the stored controller vectors; no model call.</small>
-      </div>
-      {opts.length < 2 && <Notice testid="demo-noreplay">There is no proposed controller to replay because the model produced no valid proposal.</Notice>}
-      {state.status === 'error' && <Notice tone="bad">{state.message}</Notice>}
-      {state.status === 'ready' && (
-        <>
-          <div className="pair" data-testid="demo-replay">
-            <Viewport run={state.a} label={`FROZEN CONTROLLER · seed ${state.seed}`} />
-            <Viewport run={state.b} label={`${opts.find((o) => o.id === state.which)?.label.toUpperCase()} · seed ${state.seed}`} />
-          </div>
-          <Transport runs={[{ run: state.a, label: 'frozen', color: '#e5484d' }, { run: state.b, label: 'edited', color: '#3fb97f' }]} />
-          <div className="below">
-            <HeightChart runs={[{ run: state.a, label: 'frozen', color: '#e5484d' }, { run: state.b, label: 'edited', color: '#3fb97f' }]} />
-            <div className="pair"><Metrics run={state.a} label="Frozen" /><Metrics run={state.b} label="Edited" /></div>
-          </div>
-        </>
-      )}
-      <section className="verdict" data-testid="demo-verdict">
-        <h4>Measured verdict</h4>
-        <p>{honestHeadline(run)}</p>
-        {sel?.verdict && <p>Selected controller: <span className={`chip chip-${verdictText(sel.verdict).tone === 'ok' ? 'ok' : verdictText(sel.verdict).tone === 'bad' ? 'bad' : 'muted'}`}>{verdictText(sel.verdict).text}</span></p>}
-        <small>Replay shows one seed; the verdict above is over all {ver?.seeds.length ?? 0} verification seeds. Nothing here is a statistical claim about the model.</small>
-      </section>
-    </div>
-  )
-}
