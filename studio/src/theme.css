@@ -78,3 +78,7 @@ main { padding: 16px 24px 40px; }
 .seg { max-width: 100%; flex-wrap: wrap; border-radius: 18px; }
 .wl-hero > *, .inv-main > *, .sk-grid > * { min-width: 0; }
 .walking { grid-template-columns: minmax(0, 1fr); } .walking > * { min-width: 0; }
+.duo-cell, .viewport { min-width: 0; } .viewport { max-width: 100%; }
+.wl-hero, .inv-main { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1101px) { .wl-hero { grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); } }
+@media (min-width: 1251px) { .inv-main { grid-template-columns: minmax(0, 1fr) 460px; } }
