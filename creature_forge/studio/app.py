@@ -27,6 +27,8 @@ from ..locomotion_view import CONTROLLER_INFO, RESULTS as LOCOMOTION_DIR, cached
 from ..morphology import BOUNDS, BipedParams
 from ..render_export import build_run_payload
 from ..simulate import Push
+from ..freehand import interpret as interpret_freehand
+from ..sandbox import POSE_RANGES, SANDBOX_BOUNDS, SandboxBody, SandboxError, build_sandbox_payload
 from ..sketch import SketchError, compile_sketch, default_sketch, normalize_sketch, support_info
 from ..trial_view import trial_view
 
@@ -55,6 +57,22 @@ class NormalizeIn(BaseModel):
     nodes: dict[str, list[float]]
     segments: list[list[str]] = []
     extras: dict[str, float] = {}
+
+
+class FreehandIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    strokes: list[dict] = Field(max_length=80)
+    guided: bool = True
+    materials: dict[str, float] = {}
+
+
+class SandboxSimIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    body: dict
+    gait: dict[str, float] = {}
+    seed: int = Field(default=0, ge=0, le=2**31 - 1)
+    duration: float = Field(default=5.0, ge=0.2, le=12.0)
+    push: PushIn | None = None
 
 
 class SimRequest(BaseModel):
@@ -287,6 +305,40 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             return {"ok": True, "params": compile_sketch(sketch).as_dict()}
         except SketchError as exc:
             return {"ok": False, "errors": exc.errors}
+
+    # ---- creative sandbox: freehand interpretation + wider-bounds simulation (scientific bounds are untouched)
+    @app.get("/api/sandbox/schema")
+    def sandbox_schema():
+        return {"sandbox_bounds": {k: list(v) for k, v in SANDBOX_BOUNDS.items()},
+                "scientific_bounds": {k: list(v) for k, v in BOUNDS.items()},
+                "pose_ranges": [list(r) for r in POSE_RANGES],
+                "defaults": {"push": {"time": PHASE0_PUSH.time, "force": PHASE0_PUSH.force, "duration": PHASE0_PUSH.duration}}}
+
+    @app.post("/api/freehand/interpret")
+    def freehand_interpret(req: FreehandIn):
+        for st in req.strokes:
+            pts = st.get("points", [])
+            if "id" not in st or not isinstance(pts, list) or len(pts) > 6000:
+                raise HTTPException(422, "each stroke needs an id and at most 6000 points")
+            if any(not (isinstance(p, list) and len(p) == 2 and all(isinstance(v, (int, float)) and abs(v) < 1e6 for v in p)) for p in pts):
+                raise HTTPException(422, "stroke points must be [x, y] numbers")
+        return interpret_freehand(req.strokes, guided=req.guided, materials=req.materials)
+
+    @app.post("/api/sandbox/simulate")
+    def sandbox_simulate(req: SandboxSimIn):
+        allowed = set(SandboxBody.__dataclass_fields__)
+        unknown = set(req.body) - allowed
+        if unknown:
+            raise HTTPException(422, f"unknown body field(s): {sorted(unknown)}")
+        try:
+            body = SandboxBody(**{**req.body, **({"pose": tuple(req.body["pose"])} if "pose" in req.body else {})}).validate()
+            gait = _params(GaitParams, {**GaitParams().as_dict(), **req.gait}, "gait")
+            push = Push(**req.push.model_dump()) if req.push else None
+            return build_sandbox_payload(body, gait, seed=req.seed, duration=req.duration, push=push)
+        except (SandboxError, TypeError) as exc:
+            raise HTTPException(422, str(exc)) from exc
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
 
     @app.get("/api/sketch/support")
     def sketch_support():

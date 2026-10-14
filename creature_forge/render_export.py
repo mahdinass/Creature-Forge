@@ -53,6 +53,11 @@ def export_scene(model: mujoco.MjModel) -> dict:
 def build_run_payload(body: BipedParams, gait: GaitParams, *, seed: int = 0, duration: float = 5.0,
                       push: Push | None = None, ndigits: int = 5) -> dict:
     tel = run_rollout(body, gait, seed=seed, duration=duration, push=push, record_poses=True)
+    return payload_from_telemetry(body, gait, tel, seed=seed, duration=duration, push=push, ndigits=ndigits)
+
+
+def payload_from_telemetry(body: BipedParams, gait: GaitParams, tel: dict, *, seed: int, duration: float,
+                           push: Push | None, ndigits: int = 5) -> dict:
     events = detect_failures(tel, body)
     pos = np.round([[mj_to_three_pos(p) for p in f] for f in tel["geom_xpos"]], ndigits)
     quat = np.round([[mj_to_three_quat(q) for q in f] for f in tel["geom_xquat"]], ndigits)
