@@ -4,7 +4,16 @@ import type { LocomotionReplay, LocomotionSummary } from './locomotion/locoTypes
 import type { OverviewData } from './overview/overviewTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
 
-async function j<T>(res: Response): Promise<T> {
+export const STALE_HINT =
+  'The running Studio server is probably older than this page. Close it and start the current one with scripts\start_studio.ps1.'
+
+/** Parse a JSON API response; HTML (the SPA fallback of an old server) or a bad body becomes a clear error. */
+export async function j<T>(res: Response): Promise<T> {
+  const type = res.headers.get('content-type') ?? ''
+  const isJson = type.includes('json')
+  if (!isJson) {
+    throw new Error(`${res.url ? new URL(res.url, 'http://x').pathname : 'API'} returned ${type || 'no content type'} (HTTP ${res.status}) instead of JSON. ${STALE_HINT}`)
+  }
   if (!res.ok) {
     let detail = res.statusText
     try {
@@ -58,3 +67,5 @@ export const getDemoReplay = (id: string, which: string, seed: number) =>
   fetch(`/api/demo/runs/${encodeURIComponent(id)}/replay?which=${encodeURIComponent(which)}&seed=${seed}`).then((r) => j<DemoReplay>(r))
 export const startDemoRun = (mode: 'live' | 'mock', confirmLive: boolean) =>
   fetch('/api/demo/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode, confirm_live: confirmLive }) }).then((r) => j<DemoRun>(r))
+
+export const getVersion = () => fetch('/api/version').then((r) => j<{ git_commit: string | null; git_branch: string | null; started_at: string; dist_built: string | null; api_routes: string[] }>(r))
