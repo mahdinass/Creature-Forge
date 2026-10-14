@@ -63,6 +63,7 @@ class SettingsAndCapsTests(unittest.TestCase):
         self.assertEqual((c.limits.max_requests, c.limits.max_total_tokens), (41, 300_000))
 
     def test_combined_request_cap_is_enforced_including_v1(self):
+        already = r3v2.prior_usage()["requests"]                      # v1 + any calibration/experiment/demo requests recorded so far
         c = client([OK2] * 60)
         sent = 0
         for _ in range(60):
@@ -70,7 +71,7 @@ class SettingsAndCapsTests(unittest.TestCase):
             if r["status"] == "budget_exceeded":
                 break
             sent += 1
-        self.assertEqual(sent, 41 - 3)                              # 38 new requests fit under 41 combined
+        self.assertEqual(sent, 41 - already)                        # only what is left under the 41 combined cap can be sent
 
     def test_spend_bound_is_below_two_dollars_including_v1_tokens(self):
         s = r3v2.spend_bound()

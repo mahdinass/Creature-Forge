@@ -195,3 +195,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Usage: 11 of 41 requests, 56,110 of 300,000 tokens (v1 3 + calibration 8); R3 physics ledger 356 of 6,000 rollouts (chain verified); VM STOPPED. Docs check: `reasoning_effort` accepted but not shown to shorten reasoning; `reasoning_tokens` not reported.
 - No estimate exists of Nemotron-proposed vs matched-random edits. R2's improvement is classical-optimiser work and is not attributed to Nemotron.
 - Next: authentic Investigation Lab demo with a short single-failure prompt (remaining combined headroom 30 requests / 243,890 tokens), clearly separating live, recorded-live and scripted results.
+
+## AI Investigation demo (2026-10-14, branch `feature/investigation-demo`, stacked on the R3 branch)
+- Studio tab **AI Investigation** with explicit provenance (LIVE / RECORDED LIVE / SCRIPTED MOCK), backend `creature_forge/demo.py`, `/api/demo/*`, CLI `scripts/run_demo.py`, docs `docs/INVESTIGATION_DEMO.md`.
+- Two real Nemotron calls were made and stored as hash-verified recordings: run 1 (valid envelope, citations rejected, nothing simulated) and run 2 (two valid proposals, both improved 19/32 -> 28/32 and 25/32, but matched random edits reached 25/32 and 30/32). A labelled scripted-mock example is also bundled. Shared Nebius budget now 13 of 41 requests, 70,764 of 300,000 tokens.
+- Checks: 12 backend demo tests, 13 new frontend tests (35 total), browser flow `demo-flow.mjs` (recorded run, verification table, synchronized replay, rejected-reply run, mock label, 360 px layout) inside `lab_browser_check.py`: 82 PASS, 0 FAIL.
+- Not claimed: no statistical evidence about the model (R3 not run); R2's improvement is classical optimisation.

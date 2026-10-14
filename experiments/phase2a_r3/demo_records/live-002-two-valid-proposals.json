@@ -1,0 +1,979 @@
+{
+ "run_id": "20261014T111733Z-live-9f5ab0",
+ "created_utc": "2026-10-14T11:21:42+00:00",
+ "label": "Recorded live run 2: two valid proposals; both improved, matched random edits did too",
+ "schema": 1,
+ "provenance": {
+  "kind": "RECORDED_LIVE",
+  "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "request_id": "dd6b42a27be88e0fc1a8985710a643de",
+  "prompt_sha256": "eab757a19cd3d660df2684bca0b817f56dec59f2ed576ffcad546d691602ef33",
+  "setting": {
+   "name": "demo",
+   "reasoning_effort": "low",
+   "max_tokens": 8000
+  },
+  "usage": {
+   "prompt_tokens": 1682,
+   "completion_tokens": 6692,
+   "total_tokens": 8374
+  },
+  "note": "RECORDED LIVE: a stored copy of a real Nebius Token Factory call made on 2026-10-14T11:21:42+00:00. Nothing is re-sent to the model; the MuJoCo replays below are fresh deterministic rollouts of the stored controller vectors.",
+  "recorded_from": {
+   "original_kind": "LIVE",
+   "original_sha256": "02491ec0dd5d74ab08178d947f7baf09ae1ee8edee8ad5453a796bb949353e9a",
+   "note": "stored copy of a real call made on 2026-10-14T11:21:42+00:00"
+  }
+ },
+ "controller": {
+  "name": "frozen Phase 2A incumbent",
+  "vector": [
+   1.646239548925801,
+   0.5729446517844355,
+   0.06101980708909241,
+   0.6924277704621796,
+   -0.02662269165497158,
+   -0.042295661954438124,
+   0.1439390110186835,
+   178.7755444387619,
+   10.681215465076788,
+   106.9484311388033,
+   85.12436346148849,
+   0.1546848679414043,
+   0.8424240543403356,
+   0.5,
+   0.0
+  ],
+  "params": {
+   "freq": {
+    "value": 1.6462,
+    "lower": 0.5,
+    "upper": 2.0,
+    "u": 0.7642,
+    "meaning": "gait frequency (Hz)"
+   },
+   "duty": {
+    "value": 0.5729,
+    "lower": 0.5,
+    "upper": 0.8,
+    "u": 0.2431,
+    "meaning": "stance duty fraction"
+   },
+   "hip_amp": {
+    "value": 0.061,
+    "lower": 0.05,
+    "upper": 0.5,
+    "u": 0.0245,
+    "meaning": "hip swing amplitude (rad)"
+   },
+   "knee_amp": {
+    "value": 0.6924,
+    "lower": 0.1,
+    "upper": 1.0,
+    "u": 0.6583,
+    "meaning": "knee flexion amplitude (rad)"
+   },
+   "knee_shift": {
+    "value": -0.0266,
+    "lower": -0.15,
+    "upper": 0.15,
+    "u": 0.4113,
+    "meaning": "knee phase shift (rad)"
+   },
+   "stance_knee": {
+    "value": -0.0423,
+    "lower": -0.4,
+    "upper": 0.0,
+    "u": 0.8943,
+    "meaning": "stance-leg knee bias (rad)"
+   },
+   "hip_bias": {
+    "value": 0.1439,
+    "lower": -0.2,
+    "upper": 0.2,
+    "u": 0.8598,
+    "meaning": "hip bias (rad)"
+   },
+   "kp": {
+    "value": 178.7755,
+    "lower": 40.0,
+    "upper": 300.0,
+    "u": 0.5338,
+    "meaning": "joint position gain"
+   },
+   "kd": {
+    "value": 10.6812,
+    "lower": 2.0,
+    "upper": 25.0,
+    "u": 0.3774,
+    "meaning": "joint damping gain"
+   },
+   "balance_gain": {
+    "value": 106.9484,
+    "lower": 0.0,
+    "upper": 150.0,
+    "u": 0.713,
+    "meaning": "ankle balance feedback gain"
+   },
+   "pitch_kp": {
+    "value": 85.1244,
+    "lower": 0.0,
+    "upper": 120.0,
+    "u": 0.7094,
+    "meaning": "stance torso-pitch feedback gain"
+   },
+   "pitch_ref": {
+    "value": 0.1547,
+    "lower": -0.05,
+    "upper": 0.25,
+    "u": 0.6823,
+    "meaning": "torso pitch reference (rad)"
+   },
+   "sync_gain": {
+    "value": 0.8424,
+    "lower": 0.0,
+    "upper": 1.0,
+    "u": 0.8424,
+    "meaning": "contact-informed phase sync gain"
+   },
+   "ramp_s": {
+    "value": 0.5,
+    "lower": 0.2,
+    "upper": 2.0,
+    "u": 0.1667,
+    "meaning": "start-up amplitude ramp duration (s)"
+   },
+   "start_lean": {
+    "value": 0.0,
+    "lower": 0.0,
+    "upper": 0.15,
+    "u": 0.0,
+    "meaning": "extra forward pitch reference at start, decays over 1 s (rad)"
+   }
+  }
+ },
+ "observed": {
+  "failing_seed": 9101,
+  "walking_seed": 9100,
+  "metrics": {
+   "9100": {
+    "seed": 9100,
+    "label": "walking",
+    "fell": false,
+    "fall_time": null,
+    "fall_pitch": null,
+    "valid_steps": 27,
+    "backward_steps": 1,
+    "touchdowns": 34,
+    "speed_upright": 0.4460023111372853,
+    "forward_disp_upright": 4.460023111372853,
+    "max_abs_pitch": 0.1490898923247838,
+    "mean_pitch": 0.06571288361562794,
+    "min_torso_height": 0.7465084819419103,
+    "single_support_frac": 0.9555,
+    "mean_stance_s": 0.3071875000000053,
+    "mean_swing_s": 0.2890625000000009,
+    "raw_touchdown_rate": 1.9,
+    "violations": [],
+    "walking": true
+   },
+   "9101": {
+    "seed": 9101,
+    "label": "fall",
+    "fell": true,
+    "fall_time": 3.0759999999997722,
+    "fall_pitch": -1.0174391547316646,
+    "valid_steps": 0,
+    "backward_steps": 4,
+    "touchdowns": 9,
+    "speed_upright": -0.29821765756892477,
+    "forward_disp_upright": -0.9188086029697893,
+    "max_abs_pitch": 1.0174391547316646,
+    "mean_pitch": -0.1202005664441255,
+    "min_torso_height": 0.1997021082305006,
+    "single_support_frac": 0.9172077922077922,
+    "mean_stance_s": 0.41285714285711267,
+    "mean_swing_s": 0.3457142857142564,
+    "raw_touchdown_rate": 4.5439792275238675,
+    "violations": [
+     "fall",
+     "contact_chatter",
+     "not_upright",
+     "too_slow",
+     "too_few_steps",
+     "not_alternating"
+    ],
+    "walking": false
+   }
+  },
+  "failing_seed_walked": false
+ },
+ "context": {
+  "controller": {
+   "freq": {
+    "value": 1.6462,
+    "lower": 0.5,
+    "upper": 2.0,
+    "u": 0.7642,
+    "meaning": "gait frequency (Hz)"
+   },
+   "duty": {
+    "value": 0.5729,
+    "lower": 0.5,
+    "upper": 0.8,
+    "u": 0.2431,
+    "meaning": "stance duty fraction"
+   },
+   "hip_amp": {
+    "value": 0.061,
+    "lower": 0.05,
+    "upper": 0.5,
+    "u": 0.0245,
+    "meaning": "hip swing amplitude (rad)"
+   },
+   "knee_amp": {
+    "value": 0.6924,
+    "lower": 0.1,
+    "upper": 1.0,
+    "u": 0.6583,
+    "meaning": "knee flexion amplitude (rad)"
+   },
+   "knee_shift": {
+    "value": -0.0266,
+    "lower": -0.15,
+    "upper": 0.15,
+    "u": 0.4113,
+    "meaning": "knee phase shift (rad)"
+   },
+   "stance_knee": {
+    "value": -0.0423,
+    "lower": -0.4,
+    "upper": 0.0,
+    "u": 0.8943,
+    "meaning": "stance-leg knee bias (rad)"
+   },
+   "hip_bias": {
+    "value": 0.1439,
+    "lower": -0.2,
+    "upper": 0.2,
+    "u": 0.8598,
+    "meaning": "hip bias (rad)"
+   },
+   "kp": {
+    "value": 178.7755,
+    "lower": 40.0,
+    "upper": 300.0,
+    "u": 0.5338,
+    "meaning": "joint position gain"
+   },
+   "kd": {
+    "value": 10.6812,
+    "lower": 2.0,
+    "upper": 25.0,
+    "u": 0.3774,
+    "meaning": "joint damping gain"
+   },
+   "balance_gain": {
+    "value": 106.9484,
+    "lower": 0.0,
+    "upper": 150.0,
+    "u": 0.713,
+    "meaning": "ankle balance feedback gain"
+   },
+   "pitch_kp": {
+    "value": 85.1244,
+    "lower": 0.0,
+    "upper": 120.0,
+    "u": 0.7094,
+    "meaning": "stance torso-pitch feedback gain"
+   },
+   "pitch_ref": {
+    "value": 0.1547,
+    "lower": -0.05,
+    "upper": 0.25,
+    "u": 0.6823,
+    "meaning": "torso pitch reference (rad)"
+   },
+   "sync_gain": {
+    "value": 0.8424,
+    "lower": 0.0,
+    "upper": 1.0,
+    "u": 0.8424,
+    "meaning": "contact-informed phase sync gain"
+   },
+   "ramp_s": {
+    "value": 0.5,
+    "lower": 0.2,
+    "upper": 2.0,
+    "u": 0.1667,
+    "meaning": "start-up amplitude ramp duration (s)"
+   },
+   "start_lean": {
+    "value": 0.0,
+    "lower": 0.0,
+    "upper": 0.15,
+    "u": 0.0,
+    "meaning": "extra forward pitch reference at start, decays over 1 s (rad)"
+   }
+  },
+  "episode": {
+   "duration_s": 10.0,
+   "initial_state": "torso pitch and 6 joint angles ~ N(0, 0.03 rad) set by the seed"
+  },
+  "summary": {
+   "n_seeds": 2,
+   "walking_seeds": 1,
+   "fell_seeds": 1,
+   "labels": {
+    "walking": 1,
+    "fall": 1
+   }
+  },
+  "failing_seeds": [
+   {
+    "seed": 9101,
+    "label": "fall",
+    "fell": true,
+    "fall_time": 3.076,
+    "fall_pitch": -1.0174,
+    "valid_steps": 0,
+    "backward_steps": 4,
+    "touchdowns": 9,
+    "speed_upright": -0.2982,
+    "forward_disp_upright": -0.9188,
+    "max_abs_pitch": 1.0174,
+    "mean_pitch": -0.1202,
+    "min_torso_height": 0.1997,
+    "single_support_frac": 0.9172,
+    "mean_stance_s": 0.4129,
+    "mean_swing_s": 0.3457,
+    "raw_touchdown_rate": 4.544,
+    "violations": [
+     "fall",
+     "contact_chatter",
+     "not_upright",
+     "too_slow",
+     "too_few_steps",
+     "not_alternating"
+    ],
+    "initial_perturbation_rad": {
+     "pitch0": 0.0116,
+     "l_hip": 0.002,
+     "l_knee": 0.0485,
+     "l_ankle": 0.0553,
+     "r_hip": -0.045,
+     "r_knee": 0.0135,
+     "r_ankle": -0.0088
+    }
+   }
+  ],
+  "walking_seeds": [
+   {
+    "seed": 9100,
+    "label": "walking",
+    "fell": false,
+    "fall_time": null,
+    "fall_pitch": null,
+    "valid_steps": 27,
+    "backward_steps": 1,
+    "touchdowns": 34,
+    "speed_upright": 0.446,
+    "forward_disp_upright": 4.46,
+    "max_abs_pitch": 0.1491,
+    "mean_pitch": 0.0657,
+    "min_torso_height": 0.7465,
+    "single_support_frac": 0.9555,
+    "mean_stance_s": 0.3072,
+    "mean_swing_s": 0.2891,
+    "raw_touchdown_rate": 1.9,
+    "violations": [],
+    "initial_perturbation_rad": {
+     "pitch0": -0.0088,
+     "l_hip": 0.0079,
+     "l_knee": -0.0208,
+     "l_ankle": -0.015,
+     "r_hip": 0.0169,
+     "r_knee": 0.047,
+     "r_ankle": 0.0072
+    }
+   }
+  ]
+ },
+ "prompt": {
+  "system": "You are the Physics Investigator for a MuJoCo planar-biped locomotion tool. A frozen phase-based walking controller fails to walk (every walking gate) on some random initial conditions. You are shown its parameter table and possibly measured evidence. Propose bounded edits to its 15 normalised parameters that you predict will make it walk on MORE seeds. A deterministic MuJoCo experiment on unseen seeds judges you; your opinion is never the verdict, and you are scored against random and rule-based baselines. Reply with ONE JSON object and nothing else: {\"proposals\": [ ... exactly 2 items ... ]}. Each item has exactly: \"claim\" (10-400 chars: the mechanism you suspect), \"cited_evidence\" (list of at least 2 DISTINCT dotted paths into the provided context, each pointing to a single number or string, e.g. \"controller.pitch_ref.u\" or \"episode.duration_s\"), \"edits\" (1-4 items {\"parameter\": one of the 15 names, \"delta_u\": a nonzero number with |delta_u| <= 0.15, a change in normalised units where u=(value-lower)/(upper-lower)}, each parameter at most once), \"prediction\" ({\"metric\": \"walking_seeds_screen\", \"direction\": \"increase\", \"min_gain_seeds\": integer 1-8}) and \"confidence\" (0-1). The 4 items must propose different edits. Do not claim certainty you cannot have. Path format: list entries are addressed by index (for example failing_seeds.0.fall_time, never failing_seeds.fell); a path that ends at a list or an object is invalid.",
+  "user": "CONTEXT:\n{\"controller\":{\"balance_gain\":{\"lower\":0.0,\"meaning\":\"ankle balance feedback gain\",\"u\":0.713,\"upper\":150.0,\"value\":106.9484},\"duty\":{\"lower\":0.5,\"meaning\":\"stance duty fraction\",\"u\":0.2431,\"upper\":0.8,\"value\":0.5729},\"freq\":{\"lower\":0.5,\"meaning\":\"gait frequency (Hz)\",\"u\":0.7642,\"upper\":2.0,\"value\":1.6462},\"hip_amp\":{\"lower\":0.05,\"meaning\":\"hip swing amplitude (rad)\",\"u\":0.0245,\"upper\":0.5,\"value\":0.061},\"hip_bias\":{\"lower\":-0.2,\"meaning\":\"hip bias (rad)\",\"u\":0.8598,\"upper\":0.2,\"value\":0.1439},\"kd\":{\"lower\":2.0,\"meaning\":\"joint damping gain\",\"u\":0.3774,\"upper\":25.0,\"value\":10.6812},\"knee_amp\":{\"lower\":0.1,\"meaning\":\"knee flexion amplitude (rad)\",\"u\":0.6583,\"upper\":1.0,\"value\":0.6924},\"knee_shift\":{\"lower\":-0.15,\"meaning\":\"knee phase shift (rad)\",\"u\":0.4113,\"upper\":0.15,\"value\":-0.0266},\"kp\":{\"lower\":40.0,\"meaning\":\"joint position gain\",\"u\":0.5338,\"upper\":300.0,\"value\":178.7755},\"pitch_kp\":{\"lower\":0.0,\"meaning\":\"stance torso-pitch feedback gain\",\"u\":0.7094,\"upper\":120.0,\"value\":85.1244},\"pitch_ref\":{\"lower\":-0.05,\"meaning\":\"torso pitch reference (rad)\",\"u\":0.6823,\"upper\":0.25,\"value\":0.1547},\"ramp_s\":{\"lower\":0.2,\"meaning\":\"start-up amplitude ramp duration (s)\",\"u\":0.1667,\"upper\":2.0,\"value\":0.5},\"stance_knee\":{\"lower\":-0.4,\"meaning\":\"stance-leg knee bias (rad)\",\"u\":0.8943,\"upper\":0.0,\"value\":-0.0423},\"start_lean\":{\"lower\":0.0,\"meaning\":\"extra forward pitch reference at start, decays over 1 s (rad)\",\"u\":0.0,\"upper\":0.15,\"value\":0.0},\"sync_gain\":{\"lower\":0.0,\"meaning\":\"contact-informed phase sync gain\",\"u\":0.8424,\"upper\":1.0,\"value\":0.8424}},\"episode\":{\"duration_s\":10.0,\"initial_state\":\"torso pitch and 6 joint angles ~ N(0, 0.03 rad) set by the seed\"},\"failing_seeds\":[{\"backward_steps\":4,\"fall_pitch\":-1.0174,\"fall_time\":3.076,\"fell\":true,\"forward_disp_upright\":-0.9188,\"initial_perturbation_rad\":{\"l_ankle\":0.0553,\"l_hip\":0.002,\"l_knee\":0.0485,\"pitch0\":0.0116,\"r_ankle\":-0.0088,\"r_hip\":-0.045,\"r_knee\":0.0135},\"label\":\"fall\",\"max_abs_pitch\":1.0174,\"mean_pitch\":-0.1202,\"mean_stance_s\":0.4129,\"mean_swing_s\":0.3457,\"min_torso_height\":0.1997,\"raw_touchdown_rate\":4.544,\"seed\":9101,\"single_support_frac\":0.9172,\"speed_upright\":-0.2982,\"touchdowns\":9,\"valid_steps\":0,\"violations\":[\"fall\",\"contact_chatter\",\"not_upright\",\"too_slow\",\"too_few_steps\",\"not_alternating\"]}],\"summary\":{\"fell_seeds\":1,\"labels\":{\"fall\":1,\"walking\":1},\"n_seeds\":2,\"walking_seeds\":1},\"walking_seeds\":[{\"backward_steps\":1,\"fall_pitch\":null,\"fall_time\":null,\"fell\":false,\"forward_disp_upright\":4.46,\"initial_perturbation_rad\":{\"l_ankle\":-0.015,\"l_hip\":0.0079,\"l_knee\":-0.0208,\"pitch0\":-0.0088,\"r_ankle\":0.0072,\"r_hip\":0.0169,\"r_knee\":0.047},\"label\":\"walking\",\"max_abs_pitch\":0.1491,\"mean_pitch\":0.0657,\"mean_stance_s\":0.3072,\"mean_swing_s\":0.2891,\"min_torso_height\":0.7465,\"raw_touchdown_rate\":1.9,\"seed\":9100,\"single_support_frac\":0.9555,\"speed_upright\":0.446,\"touchdowns\":34,\"valid_steps\":27,\"violations\":[]}]}",
+  "sha256": "eab757a19cd3d660df2684bca0b817f56dec59f2ed576ffcad546d691602ef33"
+ },
+ "model_reply": {
+  "status": "ok",
+  "reason": null,
+  "raw_reply": "\n{\n  \"proposals\": [\n    {\n      \"claim\": \"Boosting ankle balance feedback and joint position gain will increase stance stability, lowering fall incidence and letting more seeds achieve upright walking.\",\n      \"cited_evidence\": [\n        \"controller.balance_gain.value\",\n        \"failing_seeds.0.fall_time\",\n        \"walking_seeds.0.speed_upright\"\n      ],\n      \"edits\": [\n        {\n          \"parameter\": \"balance_gain\",\n          \"delta_u\": 0.1\n        },\n        {\n          \"parameter\": \"kp\",\n          \"delta_u\": 0.1\n        }\n      ],\n      \"prediction\": {\n        \"metric\": \"walking_seeds_screen\",\n        \"direction\": \"increase\",\n        \"min_gain_seeds\": 1\n      },\n      \"confidence\": 0.8\n    },\n    {\n      \"claim\": \"Reducing knee phase shift negativity and raising torso pitch reference amplifies forward momentum while dampening destabilizing pitch, boosting walking seed count.\",\n      \"cited_evidence\": [\n        \"controller.knee_shift.value\",\n        \"controller.pitch_ref.value\",\n        \"walking_seeds.0.touchdowns\"\n      ],\n      \"edits\": [\n        {\n          \"parameter\": \"knee_shift\",\n          \"delta_u\": -0.1\n        },\n        {\n          \"parameter\": \"pitch_ref\",\n          \"delta_u\": 0.1\n        }\n      ],\n      \"prediction\": {\n        \"metric\": \"walking_seeds_screen\",\n        \"direction\": \"increase\",\n        \"min_gain_seeds\": 1\n      },\n      \"confidence\": 0.7\n    }\n  ]\n}",
+  "call": {
+   "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+   "finish_reason": "stop",
+   "usage": {
+    "prompt_tokens": 1682,
+    "completion_tokens": 6692,
+    "total_tokens": 8374
+   },
+   "latency_s": 81.12,
+   "request_id": "dd6b42a27be88e0fc1a8985710a643de",
+   "reasoning_present": true,
+   "http_status": 200,
+   "content_is_null": false
+  },
+  "slots": [
+   {
+    "proposal": {
+     "claim": "Boosting ankle balance feedback and joint position gain will increase stance stability, lowering fall incidence and letting more seeds achieve upright walking.",
+     "cited_evidence": [
+      "controller.balance_gain.value",
+      "failing_seeds.0.fall_time",
+      "walking_seeds.0.speed_upright"
+     ],
+     "edits": [
+      {
+       "parameter": "balance_gain",
+       "delta_u": 0.1
+      },
+      {
+       "parameter": "kp",
+       "delta_u": 0.1
+      }
+     ],
+     "prediction": {
+      "metric": "walking_seeds_screen",
+      "direction": "increase",
+      "min_gain_seeds": 1
+     },
+     "confidence": 0.8
+    },
+    "reason": null
+   },
+   {
+    "proposal": {
+     "claim": "Reducing knee phase shift negativity and raising torso pitch reference amplifies forward momentum while dampening destabilizing pitch, boosting walking seed count.",
+     "cited_evidence": [
+      "controller.knee_shift.value",
+      "controller.pitch_ref.value",
+      "walking_seeds.0.touchdowns"
+     ],
+     "edits": [
+      {
+       "parameter": "knee_shift",
+       "delta_u": -0.1
+      },
+      {
+       "parameter": "pitch_ref",
+       "delta_u": 0.1
+      }
+     ],
+     "prediction": {
+      "metric": "walking_seeds_screen",
+      "direction": "increase",
+      "min_gain_seeds": 1
+     },
+     "confidence": 0.7
+    },
+    "reason": null
+   }
+  ],
+  "setting": {
+   "name": "demo",
+   "reasoning_effort": "low",
+   "max_tokens": 8000
+  },
+  "temperature": 0.7,
+  "slots_requested": 2
+ },
+ "interventions": [
+  {
+   "slot": 0,
+   "proposal": {
+    "claim": "Boosting ankle balance feedback and joint position gain will increase stance stability, lowering fall incidence and letting more seeds achieve upright walking.",
+    "cited_evidence": [
+     "controller.balance_gain.value",
+     "failing_seeds.0.fall_time",
+     "walking_seeds.0.speed_upright"
+    ],
+    "edits": [
+     {
+      "parameter": "balance_gain",
+      "delta_u": 0.1
+     },
+     {
+      "parameter": "kp",
+      "delta_u": 0.1
+     }
+    ],
+    "prediction": {
+     "metric": "walking_seeds_screen",
+     "direction": "increase",
+     "min_gain_seeds": 1
+    },
+    "confidence": 0.8
+   },
+   "realised": [
+    {
+     "parameter": "balance_gain",
+     "requested_delta_u": 0.1,
+     "realised_delta_u": 0.09999999999999998,
+     "reflected": false
+    },
+    {
+     "parameter": "kp",
+     "requested_delta_u": 0.1,
+     "realised_delta_u": 0.09999999999999998,
+     "reflected": false
+    }
+   ],
+   "vector": [
+    1.646239548925801,
+    0.5729446517844355,
+    0.06101980708909241,
+    0.6924277704621796,
+    -0.02662269165497158,
+    -0.042295661954438124,
+    0.1439390110186835,
+    204.7755444387619,
+    10.681215465076788,
+    121.9484311388033,
+    85.12436346148849,
+    0.1546848679414043,
+    0.8424240543403356,
+    0.5,
+    0.0
+   ],
+   "matched_random": {
+    "edits": [
+     {
+      "parameter": "balance_gain",
+      "delta_u": -0.1
+     },
+     {
+      "parameter": "knee_amp",
+      "delta_u": 0.1
+     }
+    ],
+    "realised": [
+     {
+      "parameter": "balance_gain",
+      "requested_delta_u": -0.1,
+      "realised_delta_u": -0.09999999999999998,
+      "reflected": false
+     },
+     {
+      "parameter": "knee_amp",
+      "requested_delta_u": 0.1,
+      "realised_delta_u": 0.09999999999999987,
+      "reflected": false
+     }
+    ],
+    "vector": [
+     1.646239548925801,
+     0.5729446517844355,
+     0.06101980708909241,
+     0.7824277704621796,
+     -0.02662269165497158,
+     -0.042295661954438124,
+     0.1439390110186835,
+     178.7755444387619,
+     10.681215465076788,
+     91.94843113880331,
+     85.12436346148849,
+     0.1546848679414043,
+     0.8424240543403356,
+     0.5,
+     0.0
+    ]
+   }
+  },
+  {
+   "slot": 1,
+   "proposal": {
+    "claim": "Reducing knee phase shift negativity and raising torso pitch reference amplifies forward momentum while dampening destabilizing pitch, boosting walking seed count.",
+    "cited_evidence": [
+     "controller.knee_shift.value",
+     "controller.pitch_ref.value",
+     "walking_seeds.0.touchdowns"
+    ],
+    "edits": [
+     {
+      "parameter": "knee_shift",
+      "delta_u": -0.1
+     },
+     {
+      "parameter": "pitch_ref",
+      "delta_u": 0.1
+     }
+    ],
+    "prediction": {
+     "metric": "walking_seeds_screen",
+     "direction": "increase",
+     "min_gain_seeds": 1
+    },
+    "confidence": 0.7
+   },
+   "realised": [
+    {
+     "parameter": "knee_shift",
+     "requested_delta_u": -0.1,
+     "realised_delta_u": -0.09999999999999998,
+     "reflected": false
+    },
+    {
+     "parameter": "pitch_ref",
+     "requested_delta_u": 0.1,
+     "realised_delta_u": 0.09999999999999998,
+     "reflected": false
+    }
+   ],
+   "vector": [
+    1.646239548925801,
+    0.5729446517844355,
+    0.06101980708909241,
+    0.6924277704621796,
+    -0.056622691654971566,
+    -0.042295661954438124,
+    0.1439390110186835,
+    178.7755444387619,
+    10.681215465076788,
+    106.9484311388033,
+    85.12436346148849,
+    0.18468486794140426,
+    0.8424240543403356,
+    0.5,
+    0.0
+   ],
+   "matched_random": {
+    "edits": [
+     {
+      "parameter": "knee_amp",
+      "delta_u": 0.1
+     },
+     {
+      "parameter": "pitch_kp",
+      "delta_u": 0.1
+     }
+    ],
+    "realised": [
+     {
+      "parameter": "knee_amp",
+      "requested_delta_u": 0.1,
+      "realised_delta_u": 0.09999999999999987,
+      "reflected": false
+     },
+     {
+      "parameter": "pitch_kp",
+      "requested_delta_u": 0.1,
+      "realised_delta_u": 0.09999999999999998,
+      "reflected": false
+     }
+    ],
+    "vector": [
+     1.646239548925801,
+     0.5729446517844355,
+     0.06101980708909241,
+     0.7824277704621796,
+     -0.02662269165497158,
+     -0.042295661954438124,
+     0.1439390110186835,
+     178.7755444387619,
+     10.681215465076788,
+     106.9484311388033,
+     97.12436346148849,
+     0.1546848679414043,
+     0.8424240543403356,
+     0.5,
+     0.0
+    ]
+   }
+  }
+ ],
+ "verification": {
+  "seeds": [
+   9600,
+   9601,
+   9602,
+   9603,
+   9604,
+   9605,
+   9606,
+   9607,
+   9608,
+   9609,
+   9610,
+   9611,
+   9612,
+   9613,
+   9614,
+   9615,
+   9616,
+   9617,
+   9618,
+   9619,
+   9620,
+   9621,
+   9622,
+   9623,
+   9624,
+   9625,
+   9626,
+   9627,
+   9628,
+   9629,
+   9630,
+   9631
+  ],
+  "results": {
+   "theta0": {
+    "walking_count": 19,
+    "survival_count": 20,
+    "walking_by_seed": [
+     true,
+     true,
+     true,
+     false,
+     true,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true,
+     false,
+     false,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true,
+     false,
+     true,
+     false,
+     true,
+     false,
+     false,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true,
+     true
+    ],
+    "n": 32,
+    "labels": {
+     "contact_chatter": 1,
+     "fall": 12,
+     "walking": 19
+    }
+   },
+   "slot0": {
+    "walking_count": 28,
+    "survival_count": 28,
+    "walking_by_seed": [
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     true,
+     true,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true,
+     true
+    ],
+    "n": 32,
+    "labels": {
+     "fall": 4,
+     "walking": 28
+    },
+    "verdict": {
+     "gain_seeds": 9,
+     "kind": "improved",
+     "prediction_met": true
+    }
+   },
+   "slot0_random": {
+    "walking_count": 25,
+    "survival_count": 27,
+    "walking_by_seed": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     false,
+     false,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     false,
+     true,
+     true,
+     false,
+     true,
+     true
+    ],
+    "n": 32,
+    "labels": {
+     "fall": 1,
+     "falling_forward": 4,
+     "slow_or_few_steps": 2,
+     "walking": 25
+    },
+    "verdict": {
+     "gain_seeds": 6,
+     "kind": "improved"
+    }
+   },
+   "slot1": {
+    "walking_count": 25,
+    "survival_count": 29,
+    "walking_by_seed": [
+     true,
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     false,
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     true,
+     true
+    ],
+    "n": 32,
+    "labels": {
+     "contact_chatter": 1,
+     "fall": 3,
+     "slow_or_few_steps": 3,
+     "walking": 25
+    },
+    "verdict": {
+     "gain_seeds": 6,
+     "kind": "improved",
+     "prediction_met": true
+    }
+   },
+   "slot1_random": {
+    "walking_count": 30,
+    "survival_count": 31,
+    "walking_by_seed": [
+     true,
+     true,
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     false,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "n": 32,
+    "labels": {
+     "contact_chatter": 1,
+     "fall": 1,
+     "walking": 30
+    },
+    "verdict": {
+     "gain_seeds": 11,
+     "kind": "improved"
+    }
+   }
+  },
+  "rollouts": 160,
+  "rule": "improved = at least 2 more walking seeds than the frozen controller on the same 32 seeds"
+ },
+ "limits": [
+  "One instance on one planar biped: a demonstration of the propose -> simulate -> verify loop, not evidence that the model reasons correctly about physics.",
+  "A matched-random edit of the same size is shown beside every proposal; random local edits of the frozen controller often help too (R2), so a single success proves little.",
+  "The registered statistical comparison (R3) was not run: no generation setting passed calibration (experiments/phase2a_r3/REPORT_V2.md).",
+  "The R2 controller that walks 150/150 seeds was found by a classical optimiser; none of that is attributed to Nemotron."
+ ],
+ "elapsed_s": 248.4
+}
