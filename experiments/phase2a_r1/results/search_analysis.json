@@ -1,0 +1,335 @@
+{
+ "note": "post-hoc descriptive analysis of R1 replicate-1 histories; no new rollouts",
+ "incumbent_normalized": {
+  "freq": 0.764,
+  "duty": 0.243,
+  "hip_amp": 0.024,
+  "knee_amp": 0.658,
+  "knee_shift": 0.411,
+  "stance_knee": 0.894,
+  "hip_bias": 0.86,
+  "kp": 0.534,
+  "kd": 0.377,
+  "balance_gain": 0.713,
+  "pitch_kp": 0.709,
+  "pitch_ref": 0.682,
+  "sync_gain": 0.842,
+  "ramp_s": 0.167,
+  "start_lean": 0.0
+ },
+ "common_random_numbers": {
+  "A_equals_B_candidates_1_149": true,
+  "C_first13_equals_A_candidates_1_149": true,
+  "distinct_13d_points_evaluated": 149
+ },
+ "coverage_13d": {
+  "min_L2_to_incumbent": 0.778848917688983,
+  "median_L2": 1.414176851186137,
+  "uniform_L2_p1_p50_p99": [
+   0.8587707786467903,
+   1.409666602683159,
+   1.885806909337903
+  ],
+  "min_Linf": 0.3971978978219946,
+  "boxes": {
+   "box_halfwidth_0.05": {
+    "prob_per_uniform_draw": 7.448846019798368e-14,
+    "expected_hits_in_149": 1.109878056949957e-11,
+    "observed_hits": 0
+   },
+   "box_halfwidth_0.1": {
+    "prob_per_uniform_draw": 5.099047329709378e-10,
+    "expected_hits_in_149": 7.597580521266974e-08,
+    "observed_hits": 0
+   },
+   "box_halfwidth_0.2": {
+    "prob_per_uniform_draw": 2.188401136786375e-06,
+    "expected_hits_in_149": 0.00032607176938116993,
+    "observed_hits": 0
+   },
+   "box_halfwidth_0.3": {
+    "prob_per_uniform_draw": 0.0002080580653375495,
+    "expected_hits_in_149": 0.031000651735294878,
+    "observed_hits": 0
+   }
+  }
+ },
+ "viability_random_candidates": {
+  "A": {
+   "candidates": 149,
+   "walking_seeds_total": 0,
+   "candidates_with_any_valid_step": 78,
+   "candidates_with_ge3_valid_steps_on_some_seed": 8,
+   "max_valid_steps_any_seed": 8,
+   "candidates_surviving_all_8": 0,
+   "candidates_surviving_ge4": 2,
+   "candidates_surviving_ge1": 14,
+   "label_counts_seed_level": {
+    "fall": 1092,
+    "falling_forward": 68,
+    "body_dragging": 18,
+    "contact_chatter": 10,
+    "backward_shuffle": 2,
+    "hopping": 2
+   },
+   "median_fall_time_s": 1.2634999999999716
+  },
+  "B": {
+   "candidates": 149,
+   "walking_seeds_total": 0,
+   "candidates_with_any_valid_step": 78,
+   "candidates_with_ge3_valid_steps_on_some_seed": 8,
+   "max_valid_steps_any_seed": 8,
+   "candidates_surviving_all_8": 0,
+   "candidates_surviving_ge4": 2,
+   "candidates_surviving_ge1": 14,
+   "label_counts_seed_level": {
+    "fall": 1092,
+    "falling_forward": 68,
+    "body_dragging": 18,
+    "contact_chatter": 10,
+    "backward_shuffle": 2,
+    "hopping": 2
+   },
+   "median_fall_time_s": 1.2634999999999716
+  },
+  "C": {
+   "candidates": 149,
+   "walking_seeds_total": 0,
+   "candidates_with_any_valid_step": 61,
+   "candidates_with_ge3_valid_steps_on_some_seed": 10,
+   "max_valid_steps_any_seed": 9,
+   "candidates_surviving_all_8": 0,
+   "candidates_surviving_ge4": 3,
+   "candidates_surviving_ge1": 12,
+   "label_counts_seed_level": {
+    "fall": 1082,
+    "falling_forward": 83,
+    "body_dragging": 19,
+    "contact_chatter": 5,
+    "backward_shuffle": 2,
+    "hopping": 1
+   },
+   "median_fall_time_s": 1.3759999999999593
+  }
+ },
+ "incumbent_training": {
+  "walking_of_8": 4,
+  "survival_of_8": 4,
+  "labels": {
+   "walking": 4,
+   "fall": 4
+  },
+  "objective": {
+   "mean": 2.6307517477227877,
+   "worst2": -0.7939849791106662
+  },
+  "per_seed_valid_steps": [
+   25,
+   0,
+   34,
+   33,
+   0,
+   0,
+   27,
+   0
+  ]
+ },
+ "objective_behaviour": {
+  "incumbent_mean": 2.6307517477227877,
+  "incumbent_worst2": -0.7939849791106662,
+  "best_candidate_mean": 0.624119523718451,
+  "best_candidate_worst2": -0.025289948107686727,
+  "candidates_with_worst2_above_incumbent": 139,
+  "candidates_with_mean_above_incumbent": 0,
+  "spearman_mean_vs_worst2": 0.45869036822056963,
+  "top5_overlap_A_vs_B_excluding_incumbent_idx": null,
+  "per_seed_fitness_percentiles_random_candidates": {
+   "1": -1.1652850617078043,
+   "10": -0.606730719097948,
+   "50": -0.4061164166080555,
+   "90": -0.1293645364842147,
+   "99": 0.9473340078428116,
+   "100": 1.0473884688471722
+  },
+  "per_seed_fitness_walking_incumbent": [
+   5.9931929953324765,
+   -0.6613292276825281,
+   5.99333952031411,
+   5.993280895125124,
+   -0.8333706521804447,
+   -0.7545993060408878,
+   5.993063465860685,
+   -0.6775637089462316
+  ],
+  "top5_training_indices": {
+   "A": [
+    0,
+    11,
+    62,
+    80,
+    129
+   ],
+   "B": [
+    35,
+    62,
+    81,
+    84,
+    106
+   ],
+   "C": [
+    11,
+    47,
+    35,
+    113,
+    84
+   ]
+  },
+  "top5_overlap_A_B": 1,
+  "incumbent_rank_B_worst2": 140
+ },
+ "train_validation_transfer": {
+  "n": 14,
+  "validated_survival_fraction": [
+   0.875,
+   0.688,
+   0.0,
+   0.25,
+   0.0,
+   0.688,
+   0.0,
+   0.0,
+   0.0,
+   1.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "training_survival_fraction": [
+   0.75,
+   0.625,
+   0.0,
+   0.25,
+   0.0,
+   0.625,
+   0.0,
+   0.0,
+   0.0,
+   0.875,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "spearman_train_vs_val_mean_fitness": 0.9823788546255506
+ },
+ "parameter_association_13d_uncorrected": {
+  "freq": {
+   "spearman_with_mean_fitness": -0.05,
+   "spearman_with_survival_count": -0.034
+  },
+  "duty": {
+   "spearman_with_mean_fitness": 0.017,
+   "spearman_with_survival_count": 0.018
+  },
+  "hip_amp": {
+   "spearman_with_mean_fitness": -0.05,
+   "spearman_with_survival_count": 0.349
+  },
+  "knee_amp": {
+   "spearman_with_mean_fitness": 0.047,
+   "spearman_with_survival_count": -0.022
+  },
+  "knee_shift": {
+   "spearman_with_mean_fitness": 0.011,
+   "spearman_with_survival_count": 0.112
+  },
+  "stance_knee": {
+   "spearman_with_mean_fitness": -0.087,
+   "spearman_with_survival_count": 0.051
+  },
+  "hip_bias": {
+   "spearman_with_mean_fitness": -0.14,
+   "spearman_with_survival_count": 0.11
+  },
+  "kp": {
+   "spearman_with_mean_fitness": -0.155,
+   "spearman_with_survival_count": 0.012
+  },
+  "kd": {
+   "spearman_with_mean_fitness": -0.247,
+   "spearman_with_survival_count": -0.172
+  },
+  "balance_gain": {
+   "spearman_with_mean_fitness": -0.095,
+   "spearman_with_survival_count": -0.013
+  },
+  "pitch_kp": {
+   "spearman_with_mean_fitness": 0.093,
+   "spearman_with_survival_count": -0.041
+  },
+  "pitch_ref": {
+   "spearman_with_mean_fitness": 0.052,
+   "spearman_with_survival_count": 0.019
+  },
+  "sync_gain": {
+   "spearman_with_mean_fitness": -0.023,
+   "spearman_with_survival_count": -0.123
+  }
+ },
+ "top10_by_mean_fitness_vs_incumbent_normalized_abs_diff": {
+  "freq": {
+   "incumbent_u": 0.764,
+   "top10_mean_abs_diff": 0.317
+  },
+  "duty": {
+   "incumbent_u": 0.243,
+   "top10_mean_abs_diff": 0.354
+  },
+  "hip_amp": {
+   "incumbent_u": 0.024,
+   "top10_mean_abs_diff": 0.607
+  },
+  "knee_amp": {
+   "incumbent_u": 0.658,
+   "top10_mean_abs_diff": 0.361
+  },
+  "knee_shift": {
+   "incumbent_u": 0.411,
+   "top10_mean_abs_diff": 0.294
+  },
+  "stance_knee": {
+   "incumbent_u": 0.894,
+   "top10_mean_abs_diff": 0.418
+  },
+  "hip_bias": {
+   "incumbent_u": 0.86,
+   "top10_mean_abs_diff": 0.215
+  },
+  "kp": {
+   "incumbent_u": 0.534,
+   "top10_mean_abs_diff": 0.199
+  },
+  "kd": {
+   "incumbent_u": 0.377,
+   "top10_mean_abs_diff": 0.1
+  },
+  "balance_gain": {
+   "incumbent_u": 0.713,
+   "top10_mean_abs_diff": 0.41
+  },
+  "pitch_kp": {
+   "incumbent_u": 0.709,
+   "top10_mean_abs_diff": 0.296
+  },
+  "pitch_ref": {
+   "incumbent_u": 0.682,
+   "top10_mean_abs_diff": 0.188
+  },
+  "sync_gain": {
+   "incumbent_u": 0.842,
+   "top10_mean_abs_diff": 0.426
+  }
+ }
+}

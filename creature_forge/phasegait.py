@@ -128,6 +128,12 @@ class PhaseGaitController:
         self.p = params.validate()
         self.contact_cfg = contact
 
+    # Extension hooks (R1 gait initiation overrides these; the defaults reproduce the Phase 2A behaviour exactly).
+    _ramp_s = RAMP_S
+
+    def _pitch_ref(self, t: float) -> float:
+        return self.p.pitch_ref
+
     def reset(self, torque_limit: float, weight_n: float) -> None:
         self.limit = torque_limit
         self.est = FootContactEstimator(weight_n, 2, self.contact_cfg)
@@ -158,7 +164,7 @@ class PhaseGaitController:
         step = min(self.pending, MAX_PHASE_BOOST * p.freq * dt)
         self.pending -= step
         self.phi = (self.phi + p.freq * dt + step) % 1.0
-        ramp = _smoothstep(t / RAMP_S)
+        ramp = _smoothstep(t / self._ramp_s)
         q = q.tolist() if hasattr(q, "tolist") else list(q)
         qd = qd.tolist() if hasattr(qd, "tolist") else list(qd)
         tau = [0.0] * 6
@@ -169,7 +175,7 @@ class PhaseGaitController:
                 i = 3 * leg + j
                 tau[i] = p.kp * (ref[j] - q[i]) - p.kd * qd[i]
             if self.est.deb[leg]:  # stance feedback only on a physically loaded foot
-                fb = p.pitch_kp * (pitch - p.pitch_ref) + 0.25 * p.pitch_kp * pitch_rate
+                fb = p.pitch_kp * (pitch - self._pitch_ref(t)) + 0.25 * p.pitch_kp * pitch_rate
                 tau[3 * leg] += min(max(fb, -cap), cap)
                 ab = p.balance_gain * (pitch + 0.3 * pitch_rate)
                 tau[3 * leg + 2] += min(max(ab, -cap), cap)

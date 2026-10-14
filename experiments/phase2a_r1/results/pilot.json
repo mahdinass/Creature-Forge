@@ -1,0 +1,30 @@
+{
+ "rollouts": 32,
+ "workers_used": 4,
+ "wall_s": 2.1340463960000022,
+ "throughput_rollouts_per_s": 14.994987953392165,
+ "peak_worker_rss_mb": 64.61328125,
+ "free_memory_gb_before": 30.66790771484375,
+ "free_memory_gb_after": 30.56192398071289,
+ "remaining_planned_rollouts": 7756,
+ "projected_wall_s_at_this_rate": 517.2394952305006,
+ "recommended_workers": 4,
+ "checks": {
+  "no_job_errors": true,
+  "free_memory_after_ok": true,
+  "projected_wall_within_80pct_of_limit": true,
+  "memory_headroom_for_some_worker_count": true
+ },
+ "passed": true,
+ "rule": "recommended_workers = largest k <= 4 with k * peak_worker_rss <= 50% of free memory before the pilot",
+ "provenance": {
+  "git_commit": "842f9838a36c542162ac4ed18717364ca9ccf849",
+  "git_dirty": true,
+  "mujoco": "3.15.0",
+  "numpy": "2.5.4",
+  "python": "3.12.3",
+  "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+  "cpu_count": 8,
+  "workers": 4
+ }
+}

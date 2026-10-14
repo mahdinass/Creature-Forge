@@ -1,0 +1,53 @@
+{
+ "all_passed": true,
+ "checks": {
+  "mujoco_version": {
+   "ok": true,
+   "detail": "3.15.0"
+  },
+  "numpy_in_pinned_range": {
+   "ok": true,
+   "detail": "2.5.4"
+  },
+  "free_memory_ge_floor": {
+   "ok": true,
+   "detail": "30.59 GB (floor 4.0)"
+  },
+  "cpu_count_ge_4": {
+   "ok": true,
+   "detail": "8"
+  },
+  "preregistration_intact": {
+   "ok": true,
+   "detail": "protocol commit f33d429c7aaf4a01e5cb960c384350c80a6f50bf"
+  },
+  "incumbent_sha256_matches_registered": {
+   "ok": true,
+   "detail": ""
+  },
+  "ledger_chain_valid": {
+   "ok": true,
+   "detail": "0 rollouts counted"
+  },
+  "in_process_determinism_bit_identical": {
+   "ok": true,
+   "detail": "044e3fc3c33cb209"
+  },
+  "two_seed_rollout_wall": {
+   "ok": true,
+   "detail": "0.8 s per 2-seed job"
+  },
+  "spawn_worker_bit_identical": {
+   "ok": true,
+   "detail": ""
+  },
+  "matches_reference_within_policy": {
+   "ok": true,
+   "detail": "16 float diffs (max rel 5.5e-15), 0 structural; reference Windows-10-10.0.26200-SP0 py3.11.9; rtol=1e-09 atol=1e-12"
+  }
+ },
+ "python": "3.12.3",
+ "numpy": "2.5.4",
+ "mujoco": "3.15.0",
+ "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39"
+}
