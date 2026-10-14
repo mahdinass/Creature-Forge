@@ -26,16 +26,26 @@ class InitControllerTests(unittest.TestCase):
         for k in ("t", "x", "z", "pitch", "q", "qd", "tau", "demand", "force"):
             self.assertTrue(np.array_equal(a[k], b[k]), k)
 
-    def test_frozen_incumbent_reproduces_saved_heldout_results_exactly(self):
+    def test_frozen_incumbent_reproduces_saved_heldout_results(self):
+        """Discrete outcomes exact; floats within the documented cross-platform policy (creature_forge.reproducibility
+        RTOL/ATOL). Windows reproduces the saved floats bit-for-bit; Linux differs by ~1e-15 relative (platform libm)."""
+        from creature_forge.reproducibility import ATOL, RTOL
         held = json.loads((P2A / "heldout.json").read_text(encoding="utf-8"))["controllers"]["random_search"]["aggregate"]["per_seed"]
         saved = {r["seed"]: r for r in held}
         ctrl = controller_from_vector(r1.incumbent_vector(15))   # goes through the 15-D init path
         from creature_forge.locomotion import compute_metrics
         for seed in (3000, 3006):
             m = compute_metrics(rollout(ctrl, BipedParams(), seed, 10.0))
-            self.assertEqual(m["forward_disp_upright"], saved[seed]["forward_disp_upright"])
+            self.assertTrue(math.isclose(m["forward_disp_upright"], saved[seed]["forward_disp_upright"], rel_tol=RTOL, abs_tol=ATOL),
+                            (m["forward_disp_upright"], saved[seed]["forward_disp_upright"]))
             self.assertEqual(m["valid_steps"], saved[seed]["valid_steps"])
             self.assertEqual(m["fall_time"], saved[seed]["fall_time"])
+
+    def test_same_platform_rollouts_are_bit_identical(self):
+        ctrl = controller_from_vector(r1.incumbent_vector(15))
+        a, b = rollout(ctrl, BipedParams(), 3000, 3.0), rollout(ctrl, BipedParams(), 3000, 3.0)
+        for k in ("t", "x", "z", "pitch", "q", "qd", "tau", "force"):
+            self.assertTrue(np.array_equal(a[k], b[k]), k)
 
     def test_nondefault_parameters_change_behaviour_as_specified(self):
         p = PhaseGaitParams()
@@ -136,6 +146,33 @@ class LedgerTests(unittest.TestCase):
             with mock.patch.object(r1, "free_memory_gb", return_value=3.0):
                 with self.assertRaises(r1.ResourceAbort):
                     r1.check_resources(led2)
+
+    def test_session_wall_time_counts_overhead_crashes_and_live_time(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "l.jsonl"
+            led = r1.Ledger(path)
+            led.session_begin("train")
+            b = led.begin("x", 1)
+            led.end(b, 1, 0, 10.0, 1.0, 9.0)                      # batches account for only 10 s ...
+            led.session_end()
+            # a synthetic closed session of 3000 s (overhead outside batches)
+            led._append({"event": "session_begin", "stage": "s2", "pid": 1})
+            led._append({"event": "session_end", "wall_s": 3000.0})
+            fresh = r1.Ledger(path)
+            self.assertGreaterEqual(fresh.total_wall_s(), 3000.0)  # ... sessions include the overhead
+            # a crashed session (begin, entries, no end) counts up to its last entry
+            led._append({"event": "session_begin", "stage": "s3", "pid": 2})
+            fresh = r1.Ledger(path)
+            before = fresh.total_wall_s()
+            self.assertGreaterEqual(before, 3000.0)
+            # the open session of this process counts live elapsed time
+            live = r1.Ledger(path)
+            live.session_begin("s4")
+            live._session_t0 -= 2500.0
+            self.assertGreaterEqual(live.total_wall_s(), 5500.0)
+            with self.assertRaises(r1.ResourceAbort):
+                r1.check_resources(live)                           # 3000 + 2500 live >= 5400
+            live.verify()
 
     def test_resource_probes_return_sane_values(self):
         self.assertGreater(r1.free_memory_gb(), 0.1)

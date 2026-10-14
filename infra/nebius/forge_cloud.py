@@ -172,6 +172,7 @@ def cmd_exec(a) -> None:
 
 
 def cmd_run_stage(a) -> None:
+    cmd_verify_deadline()
     print(ssh(f"~/run_stage.sh {shlex.quote(a.stage)} --rep {a.rep}").stdout)
 
 
@@ -199,11 +200,8 @@ def cmd_sync_down(_a=None) -> Path:
 
 
 def cmd_extend(a) -> None:
-    st = load()
-    st["deadline_epoch"] = int(time.time() + a.hours * 3600)
-    save(st)
-    ssh(f"echo {st['deadline_epoch']} | sudo tee /var/lib/forge/deadline >/dev/null")
-    print(f"deadline now {a.hours} h from now (est. cap ${a.hours * costs()['total_usd_per_h']:.2f})")
+    dl = set_deadline(a.hours)
+    print(f"deadline now {a.hours} h from now ({dl}), local and VM verified equal (est. cap ${a.hours * costs()['total_usd_per_h']:.2f})")
 
 
 def cmd_stop(_a=None) -> None:
@@ -211,12 +209,50 @@ def cmd_stop(_a=None) -> None:
     print("stop requested (compute billing ends when STOPPED; the boot disk keeps billing ~$%s/day)" % costs()["disk_usd_per_day_when_stopped"])
 
 
+def remote_deadline() -> int:
+    return int(ssh("cat /var/lib/forge/deadline", timeout=60).stdout.strip())
+
+
+def set_deadline(hours: float) -> int:
+    """Set the local AND VM-side deadline to the same epoch, then read the VM value back and require equality."""
+    st = load()
+    dl = int(time.time() + hours * 3600)
+    ssh(f"echo {dl} | sudo tee /var/lib/forge/deadline >/dev/null", timeout=60)
+    got = remote_deadline()
+    if got != dl:
+        raise SystemExit(f"deadline sync failed: local {dl} vs VM {got}; the VM would run unguarded - stop it")
+    st["deadline_epoch"] = dl
+    save(st)
+    return dl
+
+
 def cmd_start(_a=None) -> None:
     nebius("compute", "instance", "start", "--id", load()["instance_id"])
-    st = load()
-    st["deadline_epoch"] = int(time.time() + CFG["default_deadline_h"] * 3600)
-    save(st)
-    print("start requested; new deadline in", CFG["default_deadline_h"], "h (VM-side deadline needs `extend` after boot)")
+    for _ in range(30):
+        time.sleep(10)
+        s = cmd_status()
+        if s.get("state") == "RUNNING" and s.get("ip"):
+            break
+    else:
+        raise SystemExit("VM did not reach RUNNING; check `status`")
+    cmd_ssh_config()
+    for _ in range(30):
+        if ssh("true", timeout=30, check=False).returncode == 0:
+            break
+        time.sleep(10)
+    else:
+        raise SystemExit("SSH not reachable after start")
+    dl = set_deadline(CFG["default_deadline_h"])
+    print(f"started; local and VM-side deadline verified equal ({dl}, {CFG['default_deadline_h']} h from now)")
+
+
+def cmd_verify_deadline(_a=None) -> None:
+    local, vm = load().get("deadline_epoch", 0), remote_deadline()
+    left = (vm - time.time()) / 3600
+    ok = local == vm and left > 0
+    print(json.dumps({"local": local, "vm": vm, "hours_left": round(left, 2), "in_sync": local == vm}))
+    if not ok:
+        raise SystemExit("deadline mismatch or expired: refusing to proceed")
 
 
 def cmd_delete(a) -> None:
@@ -261,7 +297,7 @@ def cmd_watchdog(_a=None) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
-    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog"):
+    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline"):
         sp.add_parser(n)
     e = sp.add_parser("exec"); e.add_argument("command"); e.add_argument("--timeout", type=int, default=600)
     r = sp.add_parser("run-stage"); r.add_argument("stage", choices=["pilot", "train", "validate", "gate", "select"]); r.add_argument("--rep", type=int, default=1)
@@ -270,7 +306,7 @@ def main() -> None:
     a = ap.parse_args()
     {"plan": cmd_plan, "create": cmd_create, "status": cmd_status, "ssh-config": cmd_ssh_config, "bootstrap": cmd_bootstrap,
      "check": cmd_check, "exec": cmd_exec, "run-stage": cmd_run_stage, "monitor": cmd_monitor, "sync-down": cmd_sync_down,
-     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "delete": cmd_delete, "watchdog": cmd_watchdog}[a.cmd](a)
+     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "delete": cmd_delete, "watchdog": cmd_watchdog}[a.cmd](a)
 
 
 if __name__ == "__main__":

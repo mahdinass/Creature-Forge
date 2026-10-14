@@ -197,7 +197,46 @@ class Ledger:
         return sum(e["rollouts"] for e in self.entries() if e["event"] == "begin" and e["stage"] == stage)
 
     def total_wall_s(self) -> float:
-        return sum(e.get("wall_s", 0.0) for e in self.entries() if e["event"] == "end")
+        """Cumulative ACTIVE wall time across all runs, for the 90-minute hard stop. Takes the larger of (a) the sum of
+        completed batch durations and (b) the sum of whole script sessions (batches + pool start-up, ranking, I/O and
+        stage overhead). A session that crashed without `session_end` counts up to the last ledger entry it wrote; the
+        session open in THIS process counts its live elapsed time. Idle time between runs is not counted."""
+        ents = self.entries()
+        batches = sum(e.get("wall_s", 0.0) for e in ents if e["event"] == "end")
+        sessions, open_t = 0.0, None
+        last_t = None
+        for e in ents:
+            t = datetime.fromisoformat(e["time_utc"])
+            if e["event"] == "session_begin":
+                if open_t is not None:
+                    sessions += max(0.0, (last_t - open_t).total_seconds())   # previous session never ended (crash)
+                open_t = t
+            elif e["event"] == "session_end":
+                sessions += e["wall_s"]
+                open_t = None
+            last_t = t
+        live = 0.0
+        if open_t is not None:
+            if getattr(self, "_session_t0", None) is not None and getattr(self, "_session_open_utc", None) == open_t:
+                live = time.perf_counter() - self._session_t0          # this process's own open session
+            else:
+                live = max(0.0, (last_t - open_t).total_seconds())     # crashed session
+        return max(batches, sessions + live)
+
+    def session_begin(self, stage: str) -> None:
+        self.verify()
+        self._append({"event": "session_begin", "stage": stage, "pid": os.getpid()})
+        self._session_t0 = time.perf_counter()
+        self._session_open_utc = datetime.fromisoformat(self._lines_last()["time_utc"])
+
+    def session_end(self) -> None:
+        if getattr(self, "_session_t0", None) is None:
+            return
+        self._append({"event": "session_end", "wall_s": time.perf_counter() - self._session_t0})
+        self._session_t0 = None
+
+    def _lines_last(self) -> dict:
+        return json.loads(self._lines()[-1])
 
     def _append(self, entry: dict) -> None:
         lines = self._lines()

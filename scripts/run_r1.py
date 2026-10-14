@@ -149,14 +149,18 @@ def main() -> None:
     ledger = r1.Ledger()
     ledger.verify()
     RES.mkdir(parents=True, exist_ok=True)
-    if args.stage == "pilot":
-        return stage_pilot(args, ledger)
-    if args.stage == "gate":
-        return stage_gate(ledger)
-    if args.stage == "select":
-        return stage_select(ledger, commits)
-    w = workers_for(args)
-    (stage_train if args.stage == "train" else stage_validate)(args, ledger, w)
+    ledger.session_begin(args.stage)       # whole-session wall time (incl. pool start-up and stage overhead) feeds the 90-min stop
+    try:
+        if args.stage == "pilot":
+            return stage_pilot(args, ledger)
+        if args.stage == "gate":
+            return stage_gate(ledger)
+        if args.stage == "select":
+            return stage_select(ledger, commits)
+        w = workers_for(args)
+        (stage_train if args.stage == "train" else stage_validate)(args, ledger, w)
+    finally:
+        ledger.session_end()
 
 
 if __name__ == "__main__":

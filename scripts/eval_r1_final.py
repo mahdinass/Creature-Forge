@@ -10,6 +10,7 @@ tunes or stops anything. No Nebius calls.
 from __future__ import annotations
 
 import argparse
+import atexit
 import json
 import sys
 from pathlib import Path
@@ -33,6 +34,8 @@ def main() -> None:
     commits = r1.require_preregistration(need_selection=True)
     ledger = r1.Ledger()
     ledger.verify()
+    ledger.session_begin("final")
+    atexit.register(ledger.session_end)    # session wall time (incl. overhead) feeds the 90-min stop
     pilot = json.loads((RES / "pilot.json").read_text(encoding="utf-8"))
     workers = max(1, min(a.workers, r1.MAX_WORKERS, pilot["recommended_workers"]))
     sel = json.loads(r1.SELECTION.read_text(encoding="utf-8"))
