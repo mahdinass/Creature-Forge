@@ -62,16 +62,60 @@ class SettingsAndCapsTests(unittest.TestCase):
         self.assertEqual((c.requests_made, c.tokens_used), (u["requests"], u["tokens"]))
         self.assertEqual((c.limits.max_requests, c.limits.max_total_tokens), (41, 300_000))
 
-    def test_combined_request_cap_is_enforced_including_v1(self):
-        already = r3v2.prior_usage()["requests"]                      # v1 + any calibration/experiment/demo requests recorded so far
-        c = client([OK2] * 60)
-        sent = 0
+    def isolated_usage(self, v1_requests=3, v1_tokens=13114):
+        """Synthetic usage files in a temp dir (independent of the repository's real records): v1 only, no calibration/experiment/demo."""
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        d = Path(tmp.name)
+        per = [v1_tokens // v1_requests] * v1_requests
+        per[-1] += v1_tokens - sum(per)                                  # exact total
+        (d / "requests.jsonl").write_text("".join(json.dumps({"call": {"usage": {"total_tokens": n}}}) + chr(10) for n in per), encoding="utf-8")
+        for k, v in {"RES1": d, "CAL_REQUESTS": d / "none1", "REQUESTS2": d / "none2", "DEMO_REQUESTS": d / "none3"}.items():
+            if hasattr(r3v2, k):                                         # DEMO_REQUESTS exists once the demo module is merged
+                p = mock.patch.object(r3v2, k, v)
+                p.start()
+                self.addCleanup(p.stop)
+
+    def test_request_cap_alone_stops_at_41_combined_requests_including_v1(self):
+        """Isolate the request guard: a huge token allowance, so only max_requests can refuse."""
+        from unittest import mock
+        self.isolated_usage()
+        with mock.patch.object(r3v2, "TOTAL_TOKENS_CAP", 10 ** 9):
+            c = client([OK2] * 60)
+            self.assertEqual((c.requests_made, c.tokens_used), (3, 13114))
+            sent, last = 0, None
+            for _ in range(60):
+                last = r3v2.request_with_setting(c, "M", -1, CAL["M"]["context"], r3v2.SETTINGS[0])
+                if last["status"] == "budget_exceeded":
+                    break
+                sent += 1
+        self.assertEqual(sent, 41 - 3)                                  # exactly the 38 requests left under the 41 combined cap
+        self.assertIn("request limit", last["reason"])
+        self.assertEqual(c.requests_made, 41)                           # the refused 39th request was never sent
+
+    def test_token_cap_alone_stops_before_the_request_cap_under_realistic_usage(self):
+        """Isolate the token guard: with realistic per-request usage the 300k combined token cap is hit while requests remain."""
+        self.isolated_usage()
+        c = client([OK2] * 60, usage=(2800, 5200))                      # 8,000 tokens per request incl. reasoning
+        sent, last = 0, None
         for _ in range(60):
-            r = r3v2.request_with_setting(c, "M", -1, CAL["M"]["context"], r3v2.SETTINGS[0])
-            if r["status"] == "budget_exceeded":
+            last = r3v2.request_with_setting(c, "M", -1, CAL["M"]["context"], r3v2.SETTINGS[2])
+            if last["status"] == "budget_exceeded":
                 break
             sent += 1
-        self.assertEqual(sent, 41 - already)                        # only what is left under the 41 combined cap can be sent
+        self.assertLess(sent, 41 - 3)
+        self.assertIn("token budget", last["reason"])
+        self.assertLessEqual(c.tokens_used, r3v2.TOTAL_TOKENS_CAP)
+        self.assertLess(c.requests_made, 41)
+
+    def test_combined_counters_include_every_recorded_source(self):
+        self.isolated_usage()
+        u = r3v2.prior_usage()
+        self.assertEqual((u["requests"], u["tokens"]), (3, 13114))
+        self.assertEqual((u["calibration"]["requests"], u["experiment"]["requests"], u.get("demo", {"requests": 0})["requests"]), (0, 0, 0))
 
     def test_spend_bound_is_below_two_dollars_including_v1_tokens(self):
         s = r3v2.spend_bound()
