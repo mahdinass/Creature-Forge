@@ -1,0 +1,188 @@
+{
+ "id": "phase2a-r3-protocol-v1",
+ "status": "immutable once committed; changes require a new protocol id and re-registration",
+ "question": "Do Nemotron-proposed, MuJoCo-grounded, bounded edits to the frozen Phase 2A incumbent raise its walking success more often than matched random edits? Secondary: measured evidence vs none; a rule-based heuristic. MuJoCo alone decides.",
+ "approved_limits": {
+  "live_requests": 30,
+  "combined_tokens": 130000,
+  "physics_rollouts": 6000,
+  "additional_estimated_spend_usd": 2.0,
+  "no_automatic_extension": true,
+  "no_retries": true,
+  "no_gpu": true
+ },
+ "model": {
+  "id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "endpoint": "Nebius Token Factory (OpenAI-compatible chat completions)",
+  "temperature": 0.7,
+  "max_tokens_per_request": 2200,
+  "reasoning_effort": "default (not set)",
+  "response_format": "none (prompted JSON)",
+  "one_request_per_block_and_arm": true,
+  "request_order": "interleaved M0, N0, M1, N1, ... M14, N14"
+ },
+ "spend_estimate": {
+  "inference_worst_case_usd_at_assumed_5_per_million_tokens": 0.65,
+  "vm_usd_per_hour": 0.269,
+  "vm_hours_assumed_upper_bound": 1.0,
+  "vm_usd_upper_bound": 0.27,
+  "total_upper_bound_usd": 0.92,
+  "note": "the token price of this model could not be verified; 5 USD per million tokens is a deliberately high assumed bound"
+ },
+ "frozen_inputs": {
+  "incumbent_export": "experiments/phase2a/results/best_random_search.json",
+  "incumbent_sha256_lf": "40d0774800ffdf640f6a190f21805a76face9ef4c9eac84f585a6ac394593e84",
+  "r2_protocol_sha256_lf": "b0364f6b5c1928c91c339bc464df92ecc47667bea5a27ec9695f61c07ca63a0c",
+  "phase2a_protocol_sha256_lf": "bd011b9ee84b2e5928f10cc7bd364cbf273c2b194e14ce79a383ba29a27a7669"
+ },
+ "base_controller": "frozen Phase 2A incumbent theta0 (15 parameters incl. ramp_s/start_lean at their defaults); R2's winner is not used",
+ "morphology": {
+  "torso_mass": 5.0,
+  "thigh_length": 0.3,
+  "shank_length": 0.3,
+  "foot_length": 0.16,
+  "foot_friction": 1.0,
+  "torque_limit": 60.0,
+  "leg_density": 1000.0
+ },
+ "durations_s": {
+  "all": 10.0
+ },
+ "seeds": {
+  "evidence_pool": [
+   9100,
+   9279
+  ],
+  "screen_pool": [
+   9300,
+   9363
+  ],
+  "validation": [
+   9400,
+   9463
+  ],
+  "pilot": [
+   9500,
+   9515
+  ],
+  "disclosure": "Disjoint from every Phase 2A, R1 and R2 seed (including the R2 final seeds 8000-8149, which R3 does not touch) and from the infrastructure-only seeds 9000-9001 (used only by check_env.py compatibility checks; never an experimental role). No R3 seed has been used before registration."
+ },
+ "contexts": {
+  "n": 15,
+  "rule": "theta0 is run once on the 180 evidence-pool seeds. Context c (c = 0..14) shows the failing seeds with ascending rank 4c..4c+3 and the walking seeds with ascending rank 2c..2c+1 (6 seeds, ordered by seed number). STOP if the pool has fewer than 60 failing or 30 walking seeds.",
+  "freeze": "contexts.json (15 contexts, both prompts per block, SHA-256 of every prompt) is committed BEFORE any model request",
+  "treatment_difference": "arm M receives controller table + episode + measured evidence; arm N receives byte-identical controller table and episode block and the same system prompt; the only difference is the measured evidence"
+ },
+ "screening_set": {
+  "rule": "theta0 once on the 64 screen-pool seeds; screening seeds = first 8 walking + first 8 failing in ascending seed order; STOP if either class has fewer",
+  "frozen_in": "contexts.json"
+ },
+ "arms": {
+  "M": "Nemotron with measured evidence (15 requests x 4 slots)",
+  "N": "Nemotron without measured evidence, identical controller/bounds/descriptions (15 x 4)",
+  "RM": "matched random counterpart of every M slot",
+  "RN": "matched random counterpart of every N slot",
+  "H": "rule-based heuristic (fixed edits, descriptive only): Derived from docs/PHASE2A_FAILURE_DIAGNOSIS.md (pre-R2): the failures are start-up failures to establish forward stepping with backward lean, so lean forward at start, lengthen the start-up ramp, raise the pitch reference. Fires only if at least half of the failing seeds of the evidence pool have <= 1 valid step. Written by the authors knowing the R2 outcome: a knowledgeable baseline, not a blind one."
+ },
+ "proposal_contract": {
+  "slots_per_request": 4,
+  "max_edits": 4,
+  "max_abs_delta_u": 0.15,
+  "min_citations": 2,
+  "same_schema_in_both_arms": true,
+  "invalid_handling": "no repair, no retries, no reordering; an invalid item or a missing item (fewer than 4 returned) is an empty slot = failure; a malformed envelope leaves all 4 slots empty"
+ },
+ "matched_random": {
+  "streams": "per (arm, block, slot): default_rng(SeedSequence([rng_base, 11 for M | 12 for N, block, slot])) permutation of the 15 parameters and 4 signs, drawn before any request",
+  "rng_base": 20261016,
+  "valid_slot": "k = number of model edits; magnitudes = the model's |delta_u| in the model's edit order; parameters/signs = first k of the stream",
+  "invalid_or_empty_slot": "fallback: 2 edits with magnitudes [0.1, 0.05]; same stream",
+  "every_slot_has_a_counterpart": true,
+  "audit": "requested and realised (after reflection at the bounds) delta_u are recorded per edit; matching is on requested magnitudes and the realised differences are reported",
+  "freeze": "candidates.json (all candidate vectors with provenance) is committed BEFORE any candidate is simulated; screening outcomes never alter prompts, comparators or selection"
+ },
+ "evaluation": {
+  "screening": {
+   "seeds": "the 16 screening seeds (common random numbers for every candidate and theta0)",
+   "improved": ">= 2 more walking seeds than theta0 on the same seeds"
+  },
+  "validation": {
+   "seeds": [
+    9400,
+    9463
+   ],
+   "n": 64,
+   "theta0": "once",
+   "top_k_per_arm": 3,
+   "ranking": "screening gain, ties by earlier (block, slot)",
+   "validated_improvement": ">= 5 more walking seeds than theta0",
+   "arms_validated": [
+    "M",
+    "RM",
+    "N",
+    "RN",
+    "H"
+   ],
+   "status": "descriptive, no multiplicity claim"
+  }
+ },
+ "primary_analysis": {
+  "endpoint": "per request block c: successes among the 4 slots (success = improved on screening seeds; invalid/empty model slot = failure); d_c = successes(M) - successes(RM)",
+  "test": "paired request-block exact sign-flip (randomisation) test over the 15 blocks, statistic sum d_c, null distribution enumerated exactly, two-sided",
+  "alpha": 0.05,
+  "claim_rule": "claim 'model edits improve more often than matched random edits' only if p < 0.05 and mean d_c > 0",
+  "reporting": [
+   "per-block table",
+   "sum and mean of d_c",
+   "exact p (two-sided and one-sided)",
+   "block bootstrap 95% interval of mean d_c (descriptive)",
+   "totals per arm"
+  ],
+  "completeness_rule": "the confirmatory test is run only if all 30 requests were sent and none ended in a transport/HTTP error or budget refusal; otherwise the experiment is reported as incomplete"
+ },
+ "exploratory_analyses": [
+  "M vs N, paired by block (sign-flip)",
+  "N vs RN",
+  "valid-slot-only comparisons ignoring clustering",
+  "H outcomes",
+  "prediction hit rate vs confidence",
+  "requested vs realised magnitude audit",
+  "validated improvements per arm"
+ ],
+ "budget": {
+  "hard_cap_rollouts": 6000,
+  "pilot_cap_rollouts": 100,
+  "planned": {
+   "pilot": 96,
+   "evidence_pool": 180,
+   "screen_pool": 64,
+   "screening_candidates_max": 3904,
+   "validation_theta0": 64,
+   "validation_top_k": 960,
+   "total_max": 5268
+  },
+  "wall_clock_hard_stop_s": 3600,
+  "max_workers": 4,
+  "min_free_memory_gb": 4.0,
+  "ledger": "experiments/phase2a_r3/results/ledger.jsonl (hash-chained, begin entries precede physics, session events feed the wall guard)",
+  "feasibility": "planned maximum 5268 rollouts <= cap 6000; verified by tests and by the pilot",
+  "token_limits": {
+   "max_requests": 30,
+   "max_total_tokens": 130000,
+   "max_tokens_per_request": 2200
+  }
+ },
+ "stopping_rules": [
+  "any hard limit reached (requests, tokens, rollouts, wall time, memory floor) stops the run; no extension, no retry",
+  "a transport/HTTP error or budget refusal on any request makes the experiment incomplete: remaining requests are not sent",
+  "screening-set or evidence-pool STOP outcomes are reported as the result",
+  "no model reply is edited, repaired, selected by hand or re-requested; scripted replies are never saved as results"
+ ],
+ "provenance": [
+  "prompt SHA-256 per request and arm",
+  "redacted call metadata per request (model id, usage, latency, request id)",
+  "raw reply as received",
+  "per-slot validation outcome and reason",
+  "token totals and estimated spend (assumed price bounds)"
+ ]
+}
