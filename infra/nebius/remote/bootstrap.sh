@@ -8,7 +8,15 @@ until [ -f /var/lib/forge/cloud-init-done ]; do sleep 5; done
 if [ ! -d "$REPO/.git" ]; then git clone --quiet "$BUNDLE" "$REPO"; fi
 cd "$REPO"
 git fetch --quiet "$BUNDLE" "refs/heads/$BRANCH:refs/remotes/bundle/$BRANCH"
-git checkout --quiet -B "$BRANCH" "refs/remotes/bundle/$BRANCH"
+NEW=refs/remotes/bundle/$BRANCH
+# Frozen files (training_set.json, selection.json, ...) are produced on the VM untracked and later committed locally; accept
+# the incoming commit only if each such untracked file is byte-identical (as git sees it) to the committed blob.
+for f in $(git diff --name-only --diff-filter=A HEAD "$NEW" 2>/dev/null || true); do
+  if [ -f "$f" ] && ! git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+    if [ "$(git hash-object "$f")" = "$(git rev-parse "$NEW:$f")" ]; then rm "$f"; else echo "untracked $f differs from the committed blob; refusing"; exit 6; fi
+  fi
+done
+git checkout --quiet -B "$BRANCH" "$NEW"
 git merge-base --is-ancestor "$REG" HEAD || { echo "registered commit $REG is not an ancestor of HEAD"; exit 2; }
 git diff --quiet "$REG" HEAD -- experiments/phase2a_r1/protocol.json || { echo "protocol.json differs from registered commit"; exit 3; }
 # R1 pre-registration hashes the Windows worktree bytes (CRLF via core.autocrlf), git stores LF. Reproduce the registered
