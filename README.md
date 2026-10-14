@@ -33,7 +33,7 @@ Do not add real keys to git. A working app, dependency pins and deployment instr
 
 ## License
 
-Apache License 2.0: see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Third-party components and services (MuJoCo, NumPy, React Three Fiber, NVIDIA Nemotron via Nebius Token Factory, ...) are inventoried in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) (regenerate with `python scripts/generate_third_party_notices.py`). The repository remains private until the planned public-release review.
+Apache License 2.0: see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Third-party components and services (MuJoCo, NumPy, React Three Fiber, NVIDIA Nemotron via Nebius Token Factory, ...) are inventoried in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) (regenerate with `python scripts/generate_third_party_notices.py`). The NVIDIA Nemotron model is used only as a hosted service and is governed by the separate NVIDIA Nemotron Open Model License; model and service terms are summarised in [`docs/MODEL_AND_SERVICE_TERMS.md`](docs/MODEL_AND_SERVICE_TERMS.md). The repository remains private until the planned public-release review.
 
 ## Creature Forge Studio (local)
 
