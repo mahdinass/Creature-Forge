@@ -139,8 +139,9 @@ class NebiusClient:
             usage = raw.get("usage") or {}
             result = ChatResult(
                 content=msg.get("content"), finish_reason=choice.get("finish_reason"),
-                model=raw.get("model"), usage={k: usage.get(k) for k in
-                                               ("prompt_tokens", "completion_tokens", "total_tokens")},
+                model=raw.get("model"), usage={**{k: usage.get(k) for k in ("prompt_tokens", "completion_tokens", "total_tokens")},
+                                               **({"reasoning_tokens": (usage.get("completion_tokens_details") or {}).get("reasoning_tokens")}
+                                                  if (usage.get("completion_tokens_details") or {}).get("reasoning_tokens") is not None else {})},
                 latency_s=latency,
                 request_id=(resp_headers or {}).get("x-request-id") or (resp_headers or {}).get("request-id"),
                 reasoning_present=any(k.startswith("reasoning") and msg.get(k) for k in msg),
