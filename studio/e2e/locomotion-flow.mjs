@@ -59,10 +59,50 @@ try {
     null, { timeout: 120000 })
   ok(true, 'standing controller replay is classified stationary')
 
-  // phone width: no horizontal page scroll
-  await page.setViewportSize({ width: 390, height: 900 })
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
-  ok(overflow <= 1, `no horizontal page overflow at phone width (${overflow}px)`)
+  // changing controller or seed must invalidate the loaded simulation
+  await page.selectOption('select[aria-label="controller"]', 'random_search')
+  await page.click('[data-testid="load-loco-replay"]')
+  await page.waitForSelector('[data-testid="loco-verdict"]', { timeout: 120000 })
+  await page.selectOption('select[aria-label="seed"]', '3001')
+  ok((await page.$('[data-testid="loco-verdict"]')) === null, 'changing the seed clears the previously loaded replay')
+  await page.click('[data-testid="load-loco-replay"]')
+  await page.waitForSelector('[data-testid="loco-verdict"]', { timeout: 120000 })
+  await page.selectOption('select[aria-label="controller"]', 'standing')
+  ok((await page.$('[data-testid="loco-verdict"]')) === null, 'changing the controller clears the previously loaded replay')
+
+  // a slow earlier request must not overwrite a newer selection
+  let held = null
+  await page.route('**/api/locomotion/replay**', async (route) => {
+    if (route.request().url().includes('seed=3002')) { held = route; return } // hold the first request open
+    await route.continue()
+  })
+  await page.selectOption('select[aria-label="controller"]', 'random_search')
+  await page.selectOption('select[aria-label="seed"]', '3002')
+  await page.click('[data-testid="load-loco-replay"]')
+  await page.waitForFunction(() => true)
+  for (let i = 0; i < 50 && !held; i++) await page.waitForTimeout(100)
+  ok(held !== null, 'first replay request is in flight')
+  await page.selectOption('select[aria-label="seed"]', '3003') // newer selection while the old request is pending
+  await held.continue() // the stale response now arrives
+  await page.waitForTimeout(4000)
+  ok((await page.$('[data-testid="loco-verdict"]')) === null, 'a stale response does not display a replay for the superseded selection')
+  ok(await page.isEnabled('[data-testid="load-loco-replay"]'), 'load button is usable again after the selection changed')
+  await page.unroute('**/api/locomotion/replay**')
+
+  // phone widths: no horizontal page scroll; wide tables scroll inside their own container.
+  // 360 and 320 px are stricter than 390 and expose font-dependent overflow even where the CI font is narrower.
+  for (const w of [390, 360, 320]) {
+    await page.setViewportSize({ width: w, height: 900 })
+    const m = await page.evaluate((w) => {
+      const d = document.documentElement
+      const wide = [...document.querySelectorAll('body *')].filter((e) => !e.closest('.table-scroll') && e.getBoundingClientRect().right > w + 1)
+        .slice(0, 5).map((e) => `${e.tagName}.${e.className?.baseVal ?? e.className}@${Math.round(e.getBoundingClientRect().right)}`)
+      return { overflow: d.scrollWidth - d.clientWidth, wide }
+    }, w)
+    ok(m.overflow <= 1, `no horizontal page overflow at ${w}px (${m.overflow}px; offenders outside scroll containers: ${m.wide.join(', ') || 'none'})`)
+  }
+  const scrolls = await page.$$eval('.table-scroll', (els) => els.map((e) => e.scrollWidth > e.clientWidth))
+  ok(scrolls.some(Boolean), 'at 320 px a wide table scrolls inside its own container instead of the page')
 
   ok(pageErrors.length === 0, `no page errors (${pageErrors.join(' | ')})`)
 } catch (e) {

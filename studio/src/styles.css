@@ -124,3 +124,5 @@ button:focus-visible, select:focus-visible, summary:focus-visible { outline:2px 
 .loco-chart figcaption { font-size:12px; color:var(--dim); display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:4px; }
 .loco-table { border-collapse:collapse; font-size:13px; margin:6px 0; } .loco-table td { padding:3px 12px 3px 0; border-bottom:1px solid #222a34; }
 .loco-table thead td { color:var(--dim); font-size:12px; }
+
+.table-scroll { overflow-x:auto; max-width:100%; }

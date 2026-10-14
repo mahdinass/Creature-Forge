@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getLocomotionReplay, getLocomotionSummary } from '../api'
 import { Metrics } from '../Metrics'
 import { usePlayback } from '../store'
@@ -47,6 +47,7 @@ export function Locomotion() {
   const [busy, setBusy] = useState(false)
   const [replayError, setReplayError] = useState<string | null>(null)
   const setDuration = usePlayback((s) => s.setDuration)
+  const requestId = useRef(0) // identifies the latest replay request; older responses are discarded
 
   useEffect(() => {
     getLocomotionSummary().then(setSummary).catch((e: Error) => setError(e.message))
@@ -57,19 +58,30 @@ export function Locomotion() {
     [summary],
   )
 
+  // Changing the controller or seed invalidates the loaded simulation and any request still in flight.
+  const select = useCallback((apply: () => void) => {
+    requestId.current += 1
+    apply()
+    setReplay(null)
+    setReplayError(null)
+    setBusy(false)
+  }, [])
+
   const load = useCallback(async () => {
     if (!summary) return
+    const mine = ++requestId.current
     setBusy(true)
     setReplayError(null)
     try {
       const r = await getLocomotionReplay(controller, seed, durationForSeed(seed, summary.seed_roles, summary.durations))
+      if (mine !== requestId.current) return
       setReplay(r)
       setDuration(r.duration)
       usePlayback.getState().restart()
     } catch (e) {
-      setReplayError((e as Error).message)
+      if (mine === requestId.current) setReplayError((e as Error).message)
     } finally {
-      setBusy(false)
+      if (mine === requestId.current) setBusy(false)
     }
   }, [summary, controller, seed, setDuration])
 
@@ -90,7 +102,7 @@ export function Locomotion() {
       <section>
         <h3>Training progress</h3>
         <ProgressChart s={summary} />
-        <table className="loco-table">
+        <div className="table-scroll"><table className="loco-table">
           <thead>
             <tr><td>Candidates by majority outcome over their 3 training seeds</td>{methodNames.map((m) => <td key={m}>{METHOD_NAME[m] ?? m}</td>)}</tr>
           </thead>
@@ -102,13 +114,13 @@ export function Locomotion() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </section>
 
       {h && (
         <section>
           <h3>Held-out evaluation ({h.seeds.length} unseen seeds × {h.duration} s, evaluated once)</h3>
-          <table className="loco-table" data-testid="heldout-table">
+          <div className="table-scroll"><table className="loco-table" data-testid="heldout-table">
             <thead><tr><td>Controller</td><td>walking seeds</td><td>survived</td><td>median speed</td><td>steps/s</td><td>verdict</td></tr></thead>
             <tbody>
               {Object.entries(h.controllers).map(([name, c]) => {
@@ -125,7 +137,7 @@ export function Locomotion() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
           {summary.success_criteria && (
             <small>
               Pre-registered walking criterion: ≥ {pct(summary.success_criteria.walking.min_fraction_seeds_walking)} of seeds pass every gate and
@@ -140,14 +152,14 @@ export function Locomotion() {
         <h3>Replay</h3>
         <div className="replay-bar">
           <label>Controller{' '}
-            <select value={controller} onChange={(e) => setController(e.target.value)} aria-label="controller">
+            <select value={controller} onChange={(e) => select(() => setController(e.target.value))} aria-label="controller">
               {Object.entries(summary.controllers).map(([k, d]) => (
                 <option key={k} value={k} title={d}>{METHOD_NAME[k] ?? k.replace(/_/g, ' ')}</option>
               ))}
             </select>
           </label>
           <label>Seed{' '}
-            <select value={seed} onChange={(e) => setSeed(Number(e.target.value))} aria-label="seed">
+            <select value={seed} onChange={(e) => select(() => setSeed(Number(e.target.value)))} aria-label="seed">
               {seeds.map((s) => <option key={s} value={s}>{s} ({seedRole(s, summary.seed_roles)})</option>)}
             </select>
           </label>
