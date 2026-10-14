@@ -85,7 +85,11 @@ try {
   await page.click(T('pen-foot')); await drawStroke([[500, G - 16], [570, G - 16]])
   await page.waitForFunction(() => document.querySelector('[data-testid="adjustments"]'), null, { timeout: 15000 })
   ok(/vertical|straight/i.test(await text(T('adjustments'))), 'guided ON: a nearly vertical leg is snapped in the interpretation and says so')
-  await page.click(T('guided-switch')); await settle()
+  await page.click(T('guided-switch'))
+  // wait for the re-interpretation (debounced + API round trip) instead of a fixed delay: the guided-ON outcome is
+  // still on screen right after the click, so settle() alone can return before the OFF reading arrives on slow runners
+  await page.waitForFunction(() => !document.querySelector('[data-testid="adjustments"]'), null, { timeout: 15000 }).catch(() => {})
+  await settle()
   ok((await page.$(T('adjustments'))) === null, 'guided OFF: no snapping, the raw angle is kept')
   ok(((await text(T('guided-switch'))) || '').includes('OFF'), 'the switch shows OFF · Experimental')
   await page.click(T('guided-switch')); await settle()
