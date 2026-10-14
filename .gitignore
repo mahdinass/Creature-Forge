@@ -30,3 +30,8 @@ checkpoints/
 .DS_Store
 Thumbs.db
 *.egg-info/
+
+# Nebius VM controller state (no secrets, but machine-specific)
+infra/nebius/state.json
+infra/nebius/repo.bundle
+infra/nebius/watchdog.log

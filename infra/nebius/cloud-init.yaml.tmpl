@@ -1,0 +1,41 @@
+#cloud-config
+# Rendered by infra/nebius/forge_cloud.py; @@SSH_PUBKEY@@ is a PUBLIC key. No secrets belong in this file.
+users:
+  - name: forge
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    lock_passwd: true
+    ssh_authorized_keys:
+      - @@SSH_PUBKEY@@
+ssh_pwauth: false
+package_update: true
+packages: [git, python3-venv, python3-pip, build-essential, tmux, jq, rsync, htop, sysstat, ufw, fail2ban, unattended-upgrades]
+write_files:
+  - path: /usr/local/sbin/forge-deadman
+    permissions: "0755"
+    content: |
+      #!/bin/bash
+      # Cost safeguard: power off when the deadline (epoch seconds) in /var/lib/forge/deadline has passed.
+      f=/var/lib/forge/deadline
+      [ -f "$f" ] || exit 0
+      if [ "$(date +%s)" -ge "$(cat $f)" ]; then logger -t forge-deadman "deadline passed; powering off"; /sbin/shutdown -h now; fi
+  - path: /etc/systemd/system/forge-deadman.service
+    content: |
+      [Service]
+      Type=oneshot
+      ExecStart=/usr/local/sbin/forge-deadman
+  - path: /etc/systemd/system/forge-deadman.timer
+    content: |
+      [Timer]
+      OnBootSec=2min
+      OnUnitActiveSec=5min
+      [Install]
+      WantedBy=timers.target
+runcmd:
+  - mkdir -p /var/lib/forge
+  - echo $(( $(date +%s) + @@DEADLINE_S@@ )) > /var/lib/forge/deadline
+  - systemctl daemon-reload && systemctl enable --now forge-deadman.timer
+  - ufw default deny incoming && ufw allow 22/tcp && ufw --force enable
+  - systemctl enable --now fail2ban
+  - mkdir -p /home/forge/logs /home/forge/venvs && chown -R forge:forge /home/forge
+  - touch /var/lib/forge/cloud-init-done
