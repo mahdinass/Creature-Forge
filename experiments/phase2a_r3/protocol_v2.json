@@ -1,0 +1,136 @@
+{
+ "id": "phase2a-r3-protocol-v2",
+ "supersedes": {
+  "id": "phase2a-r3-protocol-v1",
+  "commit": "7def51f",
+  "status": "immutable and preserved; aborted after 3 of 30 requests (empty replies)",
+  "preserved_files_sha256_lf": {
+   "protocol": "55e63eee7b5e164e0d55075830408ddae14d4b119e26c49548dfc57c6d14ffb3",
+   "contexts": "9ac529dfbf655f74bc91bfb738bb39f2463526b0ebd05b3cdd1315ea9066f618",
+   "requests": "faafc315f52bb6d5d263f21efe0238d73de9919bf8736cf8996edce539dc026c",
+   "live_summary": "7053304321457caa11012b3b314ae416a3c09327f2d5a75cb9784c034a3c01d9",
+   "aborted_report": "c6ba7a5b903b09b865e417952e94a8b73654eee0c3789e5106e76cdb6523a13c",
+   "evidence_pool": "22e57df861888f01127046ed0b95a105cd8a28458c1f84439e083ee0f861848c",
+   "screen_pool": "9c85a197d66c82fda11aa5199f98e44ff198099f066f58db3ab0c5070fd77213",
+   "pilot": "9245ae232dadd658d1e566684df302f07d8a70aca36fbd4492a8fcda12bd6e2c"
+  }
+ },
+ "status": "immutable once committed; changes require a new protocol id",
+ "reason": "v1's generation settings (default reasoning, max_tokens 2200) produced HTTP 200 / finish_reason=length / null visible content on 3 of 3 requests (hidden reasoning exhausted the completion budget). v2 calibrates the generation settings on non-experimental pilot contexts, then runs the unchanged corrected experiment.",
+ "generation_diagnosis": {
+  "source": "Nebius Token Factory docs (create-chat-completion, structured output), read 2026-10-14",
+  "documented": [
+   "reasoning_effort accepts none|minimal|low|medium|high|xhigh|max (no per-model behaviour is documented)",
+   "max_completion_tokens is documented as including visible and reasoning tokens; max_tokens is the generic limit",
+   "usage.completion_tokens_details.reasoning_tokens may be reported (nullable)",
+   "response_format json_object / json_schema exist; support is model dependent ('test and compare')",
+   "enable_thinking and chat_template_kwargs are not documented"
+  ],
+  "consequences": [
+   "accepted parameters are NOT assumed to be honoured: every call records the requested effort/max_tokens, finish_reason, completion tokens, reasoning_present and reported reasoning_tokens",
+   "structured-output modes are not part of the four preregistered settings and are not used"
+  ]
+ },
+ "model": {
+  "id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "endpoint": "Nebius Token Factory",
+  "temperature": 0.7,
+  "response_format": "none (prompted JSON)"
+ },
+ "limits": {
+  "combined_requests_v1_and_v2": 41,
+  "combined_tokens_v1_and_v2": 300000,
+  "calibration_requests_max": 8,
+  "experimental_requests": 30,
+  "historical_v1_requests_included": 3,
+  "historical_v1_tokens_included": 13114,
+  "max_tokens_per_request_hard": 5000,
+  "physics_rollouts_total_cap": 6000,
+  "physics_existing_rollouts_counted": 340,
+  "physics_ledger": "experiments/phase2a_r3/results/ledger.jsonl (continued, not reset)",
+  "spend": {
+   "inference_worst_case_usd_at_assumed_5_per_million": 1.5,
+   "vm_usd_bound": 0.3,
+   "total_bound_usd": 1.8,
+   "cap_usd": 2.0,
+   "within_cap": true,
+   "note": "the Nemotron token price was not verifiable from public docs; 5 USD per million tokens is a deliberately high assumed bound and the v1 tokens are included"
+  },
+  "no_retries": true,
+  "no_automatic_extension": true,
+  "no_gpu": true
+ },
+ "calibration": {
+  "contexts": "derived from the designated pilot seeds 9500-9515: theta0 is run on those 16 seeds (a counted batch labelled calibration-context; the v1 pilot ran the same rollouts but did not store per-seed results); context = first 4 failing + first 2 walking seeds in ascending seed order; STOP if the pool has fewer; two prompts per setting: M (measured evidence) and N (control, byte-identical controller block and system prompt)",
+  "no_outcome_leakage": "no R3 screening/validation outcome and no R2 final outcome is used; screening/validation seeds are not touched",
+  "settings_in_order": [
+   {
+    "name": "A",
+    "reasoning_effort": "none",
+    "max_tokens": 3500
+   },
+   {
+    "name": "B",
+    "reasoning_effort": "low",
+    "max_tokens": 3500
+   },
+   {
+    "name": "C",
+    "reasoning_effort": "low",
+    "max_tokens": 5000
+   },
+   {
+    "name": "D",
+    "reasoning_effort": "medium",
+    "max_tokens": 5000
+   }
+  ],
+  "temperature": 0.7,
+  "procedure": "sequential: for each setting in order make exactly one M and one N request (<= 8 requests in total); stop at the first passing setting; later settings are then not tested",
+  "pass_rule": "a setting passes iff BOTH responses have non-null visible content, a valid JSON envelope and at least 2 schema-valid proposals each (r3.parse_proposal against the context shown)",
+  "selection": "the FIRST passing setting in the prespecified order; proposal quality, physics, or how convincing an edit sounds play no part",
+  "if_none_passes": "the statistical experiment is not run; the generation blocker is reported as the R3 result",
+  "recorded_per_request": [
+   "requested reasoning_effort and max_tokens",
+   "temperature",
+   "finish_reason",
+   "usage incl. reasoning_tokens if reported",
+   "reasoning_present",
+   "raw reply as received",
+   "per-slot validation outcome and reason",
+   "prompt SHA-256",
+   "request id",
+   "model id reported by the API"
+  ],
+  "freeze": "generation_config.json (the selected setting + the observed calibration metadata) is committed before the first experimental request"
+ },
+ "experiment": {
+  "same_as_v1": [
+   "15 frozen evidence contexts and prompt SHA-256 (contexts.json, commit 196de48)",
+   "screening seeds and theta0's derived screening baseline",
+   "4 slots per request, all-slot ITT endpoint, invalid/empty = failure",
+   "matched-random streams (SeedSequence([rng_base, 11|12, block, slot])) and fallback magnitudes",
+   "heuristic comparator",
+   "paired request-block exact sign-flip test (two-sided, alpha 0.05)",
+   "comparators frozen in candidates.json before any simulation",
+   "validation of the top-3 candidates per arm (descriptive)"
+  ],
+  "generation": "the SAME selected setting for the evidence and the no-evidence arm (reasoning_effort and max_tokens from generation_config.json); temperature 0.7",
+  "requests": 30,
+  "request_order": "interleaved M0, N0, M1, N1, ... M14, N14",
+  "early_abort": "if the first 4 experimental requests all return null visible content, stop and report a generation failure (protects the budget)",
+  "carryover": "v1 pilot (96), evidence pool (180) and screen pool (64) rollouts are carried forward and NOT rerun; v1's three request records stay in results/requests.jsonl and count toward the combined caps; no v1 file is modified",
+  "completeness_rule": "the primary test is run only if all 30 experimental requests were sent, none ended in a transport/HTTP error or budget refusal, the combined caps were respected and every frozen hash verified; otherwise the experiment is reported as incomplete",
+  "no_adaptation": "no model physics outcome is inspected to change a prompt, a generation setting, a comparator or the analysis"
+ },
+ "physics_budget": {
+  "remaining_planned": {
+   "calibration_context": 16,
+   "screening_candidates_max": 3904,
+   "validation": 1024
+  },
+  "planned_total_including_existing": 5284,
+  "cap": 6000
+ },
+ "reporting": "no result is described as an AI success unless MuJoCo independently verifies the measured intervention; scripted replies are never saved as results"
+}
