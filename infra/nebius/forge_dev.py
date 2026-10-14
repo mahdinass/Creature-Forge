@@ -114,6 +114,7 @@ def run_remote(slot: str, cmd: str, timeout: int, heavy: bool, tail: int = 60) -
     lock = "flock -w 3600 $HOME/dev/.heavy.lock " if heavy else ""
     script = f"""cd "$HOME/dev/{slot}" || exit 90
 export VIRTUAL_ENV=$HOME/dev/venvs/{slot} PATH=$HOME/dev/venvs/{slot}/bin:$PATH CF_SLOT={slot} PYTHONUNBUFFERED=1
+export CF_INFERENCE_LEDGER=$HOME/dev/ledger/inference_ledger.jsonl; mkdir -p $HOME/dev/ledger
 left=$(( $(cat /var/lib/forge/deadline 2>/dev/null || echo 0) - $(date +%s) ))
 [ "$left" -lt {timeout} ] && echo "WARNING: VM deadline in $((left/60)) min (< command timeout); extend with forge_cloud.py extend"
 log=$HOME/logs/dev/$(date +%Y%m%dT%H%M%S)-{slot}.log
@@ -145,7 +146,8 @@ def cmd_test(a) -> None:
 
 def cmd_serve(a) -> None:
     slot = a.slot or default_slot(Path(a.tree).resolve())
-    inner = (f'cd $HOME/dev/{slot} && export PATH=$HOME/dev/venvs/{slot}/bin:$PATH CF_SLOT={slot} && '
+    inner = (f'cd $HOME/dev/{slot} && export PATH=$HOME/dev/venvs/{slot}/bin:$PATH CF_SLOT={slot} '
+             f'CF_INFERENCE_LEDGER=$HOME/dev/ledger/inference_ledger.jsonl && mkdir -p $HOME/dev/ledger && '
              f'(test -f studio/dist/index.html || npm --prefix studio run build) && python scripts/run_studio.py '
              f'2>&1 | tee -a $HOME/logs/dev/studio-{slot}.log')
     fc.ssh(f"tmux kill-session -t studio 2>/dev/null; tmux new-session -d -s studio {shlex.quote(inner)}", timeout=60, check=False)
