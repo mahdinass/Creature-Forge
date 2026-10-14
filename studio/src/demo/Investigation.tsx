@@ -67,6 +67,7 @@ export function Investigation({ run, go }: { run: DemoRun; go?: (t: 'locomotion'
       pb.restart()
       // warm the cache with the other replays for the observed failure so stepping through is instant (sequential: one MuJoCo run at a time)
       void (async () => {
+        await new Promise((r) => setTimeout(r, 2500)) // let the visible pair finish first
         for (const w of run.interventions.flatMap((iv) => [`slot${iv.slot}`, `slot${iv.slot}_random`])) {
           if (!live) return
           const k = `${apiId(run)}|${w}|${run.observed.failing_seed}`

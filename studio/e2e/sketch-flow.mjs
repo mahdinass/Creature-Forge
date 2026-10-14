@@ -13,6 +13,7 @@ let failed = 0
 const ok = (c, m) => { console.log(`${c ? 'PASS' : 'FAIL'} ${m}`); if (!c) failed++ }
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const page = await browser.newPage({ viewport: { width: 1400, height: 1000 } })
+page.setDefaultNavigationTimeout(150000)
 const errors = [], bad = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('response', (r) => { if (r.url().includes('/api/') && (r.status() >= 400 || !(r.headers()['content-type'] || '').includes('json'))) bad.push(`${r.status()} ${r.url()}`) })

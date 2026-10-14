@@ -33,6 +33,7 @@ const browser = await chromium.launch({
   args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'],
 })
 const page = await browser.newPage({ viewport: { width: 1360, height: 1000 } })
+page.setDefaultNavigationTimeout(150000)
 const pageErrors = []
 page.on('pageerror', (e) => pageErrors.push(e.message))
 

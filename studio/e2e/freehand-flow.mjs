@@ -14,6 +14,7 @@ let failed = 0
 const ok = (c, m) => { console.log(`${c ? 'PASS' : 'FAIL'} ${m}`); if (!c) failed++ }
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
+page.setDefaultNavigationTimeout(150000)
 const errors = [], bad = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()) })

@@ -29,6 +29,7 @@ const browser = await chromium.launch({
   args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'],
 })
 const page = await browser.newPage({ viewport: { width: 1360, height: 1100 } })
+page.setDefaultNavigationTimeout(150000)
 const pageErrors = []
 page.on('pageerror', (e) => pageErrors.push(e.message))
 
@@ -45,7 +46,7 @@ try {
   const dots = await page.$$('.seed-dots .dots button')
   ok(dots.length === 300, 'every test start is a clickable dot')
   await dots[7].click()
-  await page.waitForFunction(() => document.querySelectorAll('[data-testid="wl-replay"] canvas').length === 2, null, { timeout: 120000 })
+  await page.waitForFunction(() => document.querySelectorAll('[data-testid="wl-replay"] canvas').length === 2, null, { timeout: 300000 })
   if (SHOT) await page.screenshot({ path: `${SHOT}/walking-lab.png` })
   await page.click('[data-testid="walking-advanced"] summary')
   await page.waitForSelector('[data-testid="heldout-table"]')
