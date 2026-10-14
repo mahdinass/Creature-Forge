@@ -1,0 +1,1503 @@
+{
+ "status": "POST-HOC DIAGNOSTIC; held-out seeds already consumed; not used to select or tune",
+ "rollout_budget": 20,
+ "controller": "frozen best_random_search.json",
+ "support_offset_note": "torso x minus mean x of loaded feet; a proxy, not a whole-body COM margin",
+ "initial_perturbation_vs_outcome": {
+  "pitch0": {
+   "mean_fail": -0.0028,
+   "mean_ok": 0.008,
+   "p_uncorrected": 0.507,
+   "p_bonferroni_x9": 1.0
+  },
+  "abs_pitch0": {
+   "mean_fail": 0.0313,
+   "mean_ok": 0.0305,
+   "p_uncorrected": 0.882,
+   "p_bonferroni_x9": 1.0
+  },
+  "joint0_norm": {
+   "mean_fail": 0.0778,
+   "mean_ok": 0.0708,
+   "p_uncorrected": 0.543,
+   "p_bonferroni_x9": 1.0
+  },
+  "joint0_l_hip": {
+   "mean_fail": -0.006,
+   "mean_ok": 0.0051,
+   "p_uncorrected": 0.438,
+   "p_bonferroni_x9": 1.0
+  },
+  "joint0_l_knee": {
+   "mean_fail": 0.0076,
+   "mean_ok": 0.0016,
+   "p_uncorrected": 0.724,
+   "p_bonferroni_x9": 1.0
+  },
+  "joint0_l_ankle": {
+   "mean_fail": -0.0162,
+   "mean_ok": 0.004,
+   "p_uncorrected": 0.244,
+   "p_bonferroni_x9": 1.0
+  },
+  "joint0_r_hip": {
+   "mean_fail": 0.0183,
+   "mean_ok": -0.0053,
+   "p_uncorrected": 0.085,
+   "p_bonferroni_x9": 0.769
+  },
+  "joint0_r_knee": {
+   "mean_fail": 0.0354,
+   "mean_ok": 0.0016,
+   "p_uncorrected": 0.016,
+   "p_bonferroni_x9": 0.145
+  },
+  "joint0_r_ankle": {
+   "mean_fail": -0.002,
+   "mean_ok": 0.0003,
+   "p_uncorrected": 0.889,
+   "p_bonferroni_x9": 1.0
+  }
+ },
+ "rows": [
+  {
+   "seed": 3006,
+   "saved_fell": true,
+   "saved_fall_time": 2.3459999999998526,
+   "reproduced_fell": true,
+   "end_time": 2.441,
+   "init": {
+    "pitch0": 0.019693493197340414,
+    "joint0": [
+     0.027,
+     0.0185,
+     -0.0413,
+     0.0359,
+     0.0165,
+     -0.0325
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.036,
+     "L"
+    ],
+    [
+     0.041,
+     "R"
+    ],
+    [
+     0.246,
+     "L"
+    ],
+    [
+     0.431,
+     "L"
+    ],
+    [
+     1.016,
+     "R"
+    ],
+    [
+     1.171,
+     "R"
+    ],
+    [
+     1.631,
+     "R"
+    ],
+    [
+     1.906,
+     "L"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.171,
+     "L"
+    ],
+    [
+     0.271,
+     "L"
+    ],
+    [
+     0.496,
+     "R"
+    ],
+    [
+     1.051,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 11,
+   "valid_steps_saved": 0,
+   "pitch_at": {
+    "0.25s": 0.031,
+    "0.5s": 0.094,
+    "1.0s": -0.072,
+    "1.5s": -0.155
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.062,
+    "0.5s": 0.576,
+    "1.0s": 0.642,
+    "1.5s": -1.266
+   },
+   "sync_events_first_2s": 0,
+   "window_0_1s": {
+    "pitch_mean": 0.03,
+    "pitch_min": -0.085,
+    "pitch_rate_min": -1.391,
+    "pitch_rate_max": 0.677,
+    "frac_no_foot": 0.055,
+    "frac_double": 0.22,
+    "peak_force_over_weight": 3.67,
+    "demand_max": 0.43,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.43,
+    "hip_demand_max": 0.43,
+    "support_offset_mean": -0.001,
+    "support_offset_min": -0.051
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.089,
+    "pitch_min": 0.037,
+    "pitch_rate_min": -0.371,
+    "pitch_rate_max": 0.677,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.186,
+    "peak_force_over_weight": 3.67,
+    "demand_max": 0.43,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.43,
+    "hip_demand_max": 0.43,
+    "support_offset_mean": 0.014,
+    "support_offset_min": -0.013
+   },
+   "x_at": {
+    "0.5s": 0.013,
+    "1.0s": -0.077,
+    "1.5s": -0.162,
+    "2.0s": -0.38
+   },
+   "touchdown_foot_minus_torso_x": [
+    -0.035,
+    -0.045
+   ],
+   "onset_s": 1.4909999999999466,
+   "at_onset": {
+    "phase": 0.455,
+    "pitch_rate": -1.414,
+    "loaded_feet": [
+     "L"
+    ],
+    "nearest_contact_event": {
+     "kind": "liftoff",
+     "foot": "L",
+     "dt_s": 0.14
+    },
+    "valid_steps_before_onset": 5,
+    "window_onset-0.3_to_onset": {
+     "pitch_mean": -0.021,
+     "pitch_min": -0.143,
+     "pitch_rate_min": -1.597,
+     "pitch_rate_max": -0.008,
+     "frac_no_foot": 0.0,
+     "frac_double": 0.098,
+     "peak_force_over_weight": 2.29,
+     "demand_max": 0.22,
+     "demand_sat_frac": 0.0,
+     "applied_max": 0.22,
+     "hip_demand_max": 0.22,
+     "support_offset_mean": -0.08,
+     "support_offset_min": -0.128
+    }
+   },
+   "group": "failure"
+  },
+  {
+   "seed": 3009,
+   "saved_fell": true,
+   "saved_fall_time": 7.071000000000696,
+   "reproduced_fell": true,
+   "end_time": 7.166,
+   "init": {
+    "pitch0": 0.032597375824825026,
+    "joint0": [
+     -0.0149,
+     -0.0029,
+     -0.0169,
+     0.0154,
+     0.0366,
+     0.0164
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.051,
+     "L"
+    ],
+    [
+     0.056,
+     "R"
+    ],
+    [
+     0.456,
+     "L"
+    ],
+    [
+     0.986,
+     "R"
+    ],
+    [
+     1.046,
+     "L"
+    ],
+    [
+     1.601,
+     "R"
+    ],
+    [
+     2.216,
+     "R"
+    ],
+    [
+     2.841,
+     "R"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.166,
+     "L"
+    ],
+    [
+     0.501,
+     "R"
+    ],
+    [
+     0.996,
+     "L"
+    ],
+    [
+     1.121,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 21,
+   "valid_steps_saved": 1,
+   "pitch_at": {
+    "0.25s": 0.023,
+    "0.5s": 0.102,
+    "1.0s": -0.022,
+    "1.5s": -0.036
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.234,
+    "0.5s": 0.547,
+    "1.0s": 0.489,
+    "1.5s": -0.686
+   },
+   "sync_events_first_2s": 0,
+   "window_0_1s": {
+    "pitch_mean": 0.042,
+    "pitch_min": -0.041,
+    "pitch_rate_min": -1.385,
+    "pitch_rate_max": 0.852,
+    "frac_no_foot": 0.07,
+    "frac_double": 0.155,
+    "peak_force_over_weight": 4.39,
+    "demand_max": 0.57,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.57,
+    "hip_demand_max": 0.5,
+    "support_offset_mean": 0.011,
+    "support_offset_min": -0.018
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.101,
+    "pitch_min": 0.044,
+    "pitch_rate_min": -0.306,
+    "pitch_rate_max": 0.852,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.129,
+    "peak_force_over_weight": 2.96,
+    "demand_max": 0.5,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.5,
+    "hip_demand_max": 0.5,
+    "support_offset_mean": 0.027,
+    "support_offset_min": 0.003
+   },
+   "x_at": {
+    "0.5s": 0.009,
+    "1.0s": -0.045,
+    "1.5s": -0.063,
+    "2.0s": -0.049
+   },
+   "touchdown_foot_minus_torso_x": [
+    -0.053,
+    0.052
+   ],
+   "onset_s": 6.351000000000456,
+   "at_onset": {
+    "phase": 0.455,
+    "pitch_rate": -1.637,
+    "loaded_feet": [
+     "L"
+    ],
+    "nearest_contact_event": {
+     "kind": "liftoff",
+     "foot": "L",
+     "dt_s": 0.135
+    },
+    "valid_steps_before_onset": 16,
+    "window_onset-0.3_to_onset": {
+     "pitch_mean": 0.005,
+     "pitch_min": -0.15,
+     "pitch_rate_min": -1.879,
+     "pitch_rate_max": -0.183,
+     "frac_no_foot": 0.0,
+     "frac_double": 0.0,
+     "peak_force_over_weight": 3.91,
+     "demand_max": 0.28,
+     "demand_sat_frac": 0.0,
+     "applied_max": 0.28,
+     "hip_demand_max": 0.23,
+     "support_offset_mean": -0.071,
+     "support_offset_min": -0.129
+    }
+   },
+   "group": "failure"
+  },
+  {
+   "seed": 3010,
+   "saved_fell": true,
+   "saved_fall_time": 2.115999999999878,
+   "reproduced_fell": true,
+   "end_time": 2.211,
+   "init": {
+    "pitch0": -0.028506973552871583,
+    "joint0": [
+     0.0013,
+     0.0758,
+     0.0441,
+     0.0365,
+     0.048,
+     -0.0288
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.051,
+     "L"
+    ],
+    [
+     0.051,
+     "R"
+    ],
+    [
+     0.401,
+     "R"
+    ],
+    [
+     1.021,
+     "R"
+    ],
+    [
+     1.316,
+     "L"
+    ],
+    [
+     1.606,
+     "R"
+    ],
+    [
+     1.861,
+     "L"
+    ],
+    [
+     2.076,
+     "R"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.236,
+     "R"
+    ],
+    [
+     0.441,
+     "R"
+    ],
+    [
+     1.021,
+     "L"
+    ],
+    [
+     1.321,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 8,
+   "valid_steps_saved": 0,
+   "pitch_at": {
+    "0.25s": -0.017,
+    "0.5s": 0.068,
+    "1.0s": -0.149,
+    "1.5s": -0.21
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.028,
+    "0.5s": 0.898,
+    "1.0s": 0.539,
+    "1.5s": -0.873
+   },
+   "sync_events_first_2s": 0,
+   "window_0_1s": {
+    "pitch_mean": -0.015,
+    "pitch_min": -0.158,
+    "pitch_rate_min": -1.639,
+    "pitch_rate_max": 1.013,
+    "frac_no_foot": 0.07,
+    "frac_double": 0.225,
+    "peak_force_over_weight": 5.24,
+    "demand_max": 0.48,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.48,
+    "hip_demand_max": 0.42,
+    "support_offset_mean": -0.04,
+    "support_offset_min": -0.121
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.057,
+    "pitch_min": -0.021,
+    "pitch_rate_min": -0.451,
+    "pitch_rate_max": 1.013,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.114,
+    "peak_force_over_weight": 3.77,
+    "demand_max": 0.42,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.42,
+    "hip_demand_max": 0.3,
+    "support_offset_mean": -0.02,
+    "support_offset_min": -0.05
+   },
+   "x_at": {
+    "0.5s": 0.035,
+    "1.0s": -0.089,
+    "1.5s": -0.214,
+    "2.0s": -0.629
+   },
+   "touchdown_foot_minus_torso_x": [
+    0.011
+   ],
+   "onset_s": 1.4209999999999543,
+   "at_onset": {
+    "phase": 0.339,
+    "pitch_rate": -0.261,
+    "loaded_feet": [
+     "L"
+    ],
+    "nearest_contact_event": {
+     "kind": "liftoff",
+     "foot": "R",
+     "dt_s": -0.1
+    },
+    "valid_steps_before_onset": 4,
+    "window_onset-0.3_to_onset": {
+     "pitch_mean": -0.159,
+     "pitch_min": -0.186,
+     "pitch_rate_min": -0.896,
+     "pitch_rate_max": 0.555,
+     "frac_no_foot": 0.0,
+     "frac_double": 0.016,
+     "peak_force_over_weight": 3.03,
+     "demand_max": 0.23,
+     "demand_sat_frac": 0.0,
+     "applied_max": 0.23,
+     "hip_demand_max": 0.23,
+     "support_offset_mean": -0.148,
+     "support_offset_min": -0.177
+    }
+   },
+   "group": "failure"
+  },
+  {
+   "seed": 3014,
+   "saved_fell": true,
+   "saved_fall_time": 1.5009999999999455,
+   "reproduced_fell": true,
+   "end_time": 1.596,
+   "init": {
+    "pitch0": -0.04116850494104188,
+    "joint0": [
+     -0.0041,
+     -0.0006,
+     -0.0486,
+     0.0167,
+     0.045,
+     -0.0241
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.021,
+     "L"
+    ],
+    [
+     0.176,
+     "R"
+    ],
+    [
+     0.326,
+     "R"
+    ],
+    [
+     0.931,
+     "R"
+    ],
+    [
+     1.191,
+     "L"
+    ],
+    [
+     1.421,
+     "R"
+    ],
+    [
+     1.576,
+     "R"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.226,
+     "R"
+    ],
+    [
+     0.361,
+     "R"
+    ],
+    [
+     0.931,
+     "L"
+    ],
+    [
+     1.196,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 7,
+   "valid_steps_saved": 0,
+   "pitch_at": {
+    "0.25s": -0.048,
+    "0.5s": 0.038,
+    "1.0s": -0.19,
+    "1.5s": -1.013
+   },
+   "pitch_rate_at": {
+    "0.25s": -0.184,
+    "0.5s": -0.429,
+    "1.0s": -0.075,
+    "1.5s": -4.443
+   },
+   "sync_events_first_2s": 1,
+   "window_0_1s": {
+    "pitch_mean": -0.068,
+    "pitch_min": -0.229,
+    "pitch_rate_min": -1.78,
+    "pitch_rate_max": 0.866,
+    "frac_no_foot": 0.04,
+    "frac_double": 0.085,
+    "peak_force_over_weight": 3.58,
+    "demand_max": 0.44,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.44,
+    "hip_demand_max": 0.44,
+    "support_offset_mean": -0.088,
+    "support_offset_min": -0.199
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.008,
+    "pitch_min": -0.078,
+    "pitch_rate_min": -1.66,
+    "pitch_rate_max": 0.753,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.0,
+    "peak_force_over_weight": 3.54,
+    "demand_max": 0.27,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.27,
+    "hip_demand_max": 0.23,
+    "support_offset_mean": -0.069,
+    "support_offset_min": -0.116
+   },
+   "x_at": {
+    "0.5s": 0.025,
+    "1.0s": -0.146,
+    "1.5s": -0.683
+   },
+   "touchdown_foot_minus_torso_x": [
+    0.024,
+    0.177
+   ],
+   "onset_s": 0.7860000000000006,
+   "at_onset": {
+    "phase": 0.445,
+    "pitch_rate": -1.663,
+    "loaded_feet": [
+     "L"
+    ],
+    "nearest_contact_event": {
+     "kind": "liftoff",
+     "foot": "L",
+     "dt_s": 0.145
+    },
+    "valid_steps_before_onset": 2,
+    "window_onset-0.3_to_onset": {
+     "pitch_mean": -0.017,
+     "pitch_min": -0.148,
+     "pitch_rate_min": -1.78,
+     "pitch_rate_max": -0.043,
+     "frac_no_foot": 0.0,
+     "frac_double": 0.0,
+     "peak_force_over_weight": 3.54,
+     "demand_max": 0.27,
+     "demand_sat_frac": 0.0,
+     "applied_max": 0.27,
+     "hip_demand_max": 0.23,
+     "support_offset_mean": -0.085,
+     "support_offset_min": -0.135
+    }
+   },
+   "group": "failure"
+  },
+  {
+   "seed": 3018,
+   "saved_fell": true,
+   "saved_fall_time": 2.0459999999998857,
+   "reproduced_fell": true,
+   "end_time": 2.141,
+   "init": {
+    "pitch0": 0.03330578657321583,
+    "joint0": [
+     -0.0183,
+     -0.0433,
+     -0.0574,
+     -0.001,
+     0.017,
+     -0.0036
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.026,
+     "L"
+    ],
+    [
+     0.186,
+     "R"
+    ],
+    [
+     0.326,
+     "L"
+    ],
+    [
+     0.941,
+     "R"
+    ],
+    [
+     1.236,
+     "L"
+    ],
+    [
+     1.526,
+     "R"
+    ],
+    [
+     1.781,
+     "L"
+    ],
+    [
+     2.001,
+     "R"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.296,
+     "L"
+    ],
+    [
+     0.451,
+     "R"
+    ],
+    [
+     0.936,
+     "L"
+    ],
+    [
+     1.236,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 8,
+   "valid_steps_saved": 1,
+   "pitch_at": {
+    "0.25s": -0.002,
+    "0.5s": 0.082,
+    "1.0s": -0.104,
+    "1.5s": -0.248
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.146,
+    "0.5s": -0.325,
+    "1.0s": 0.176,
+    "1.5s": -0.117
+   },
+   "sync_events_first_2s": 1,
+   "window_0_1s": {
+    "pitch_mean": -0.014,
+    "pitch_min": -0.155,
+    "pitch_rate_min": -1.649,
+    "pitch_rate_max": 0.808,
+    "frac_no_foot": 0.05,
+    "frac_double": 0.235,
+    "peak_force_over_weight": 3.62,
+    "demand_max": 0.52,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.52,
+    "hip_demand_max": 0.48,
+    "support_offset_mean": -0.039,
+    "support_offset_min": -0.127
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.053,
+    "pitch_min": -0.022,
+    "pitch_rate_min": -1.401,
+    "pitch_rate_max": 0.607,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.2,
+    "peak_force_over_weight": 3.62,
+    "demand_max": 0.25,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.25,
+    "hip_demand_max": 0.25,
+    "support_offset_mean": -0.024,
+    "support_offset_min": -0.073
+   },
+   "x_at": {
+    "0.5s": 0.029,
+    "1.0s": -0.094,
+    "1.5s": -0.247,
+    "2.0s": -0.743
+   },
+   "touchdown_foot_minus_torso_x": [
+    -0.003,
+    0.116
+   ],
+   "onset_s": 1.3459999999999626,
+   "at_onset": {
+    "phase": 0.353,
+    "pitch_rate": -0.402,
+    "loaded_feet": [
+     "L"
+    ],
+    "nearest_contact_event": {
+     "kind": "touchdown",
+     "foot": "L",
+     "dt_s": -0.11
+    },
+    "valid_steps_before_onset": 4,
+    "window_onset-0.3_to_onset": {
+     "pitch_mean": -0.158,
+     "pitch_min": -0.185,
+     "pitch_rate_min": -0.886,
+     "pitch_rate_max": 0.552,
+     "frac_no_foot": 0.0,
+     "frac_double": 0.0,
+     "peak_force_over_weight": 3.06,
+     "demand_max": 0.24,
+     "demand_sat_frac": 0.0,
+     "applied_max": 0.24,
+     "hip_demand_max": 0.24,
+     "support_offset_mean": -0.147,
+     "support_offset_min": -0.176
+    }
+   },
+   "group": "failure"
+  },
+  {
+   "seed": 3019,
+   "saved_fell": true,
+   "saved_fall_time": 1.8009999999999124,
+   "reproduced_fell": true,
+   "end_time": 1.896,
+   "init": {
+    "pitch0": -0.0326492879328486,
+    "joint0": [
+     -0.0269,
+     -0.002,
+     0.0227,
+     0.0062,
+     0.0491,
+     0.0603
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.046,
+     "L"
+    ],
+    [
+     0.051,
+     "R"
+    ],
+    [
+     0.366,
+     "R"
+    ],
+    [
+     1.026,
+     "R"
+    ],
+    [
+     1.306,
+     "L"
+    ],
+    [
+     1.556,
+     "R"
+    ],
+    [
+     1.756,
+     "L"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.111,
+     "R"
+    ],
+    [
+     0.431,
+     "R"
+    ],
+    [
+     1.021,
+     "L"
+    ],
+    [
+     1.311,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 7,
+   "valid_steps_saved": 0,
+   "pitch_at": {
+    "0.25s": -0.065,
+    "0.5s": 0.063,
+    "1.0s": -0.178,
+    "1.5s": -0.393
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.059,
+    "0.5s": 0.937,
+    "1.0s": 0.497,
+    "1.5s": -1.771
+   },
+   "sync_events_first_2s": 1,
+   "window_0_1s": {
+    "pitch_mean": -0.034,
+    "pitch_min": -0.186,
+    "pitch_rate_min": -1.749,
+    "pitch_rate_max": 1.08,
+    "frac_no_foot": 0.065,
+    "frac_double": 0.125,
+    "peak_force_over_weight": 4.01,
+    "demand_max": 0.51,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.51,
+    "hip_demand_max": 0.51,
+    "support_offset_mean": -0.055,
+    "support_offset_min": -0.145
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.051,
+    "pitch_min": -0.031,
+    "pitch_rate_min": -0.463,
+    "pitch_rate_max": 1.08,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.143,
+    "peak_force_over_weight": 4.01,
+    "demand_max": 0.28,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.28,
+    "hip_demand_max": 0.28,
+    "support_offset_mean": -0.025,
+    "support_offset_min": -0.058
+   },
+   "x_at": {
+    "0.5s": 0.069,
+    "1.0s": -0.077,
+    "1.5s": -0.333
+   },
+   "touchdown_foot_minus_torso_x": [
+    0.026
+   ],
+   "onset_s": 1.1259999999999868,
+   "at_onset": {
+    "phase": 0.854,
+    "pitch_rate": -0.554,
+    "loaded_feet": [
+     "R"
+    ],
+    "nearest_contact_event": {
+     "kind": "touchdown",
+     "foot": "R",
+     "dt_s": -0.1
+    },
+    "valid_steps_before_onset": 3,
+    "window_onset-0.3_to_onset": {
+     "pitch_mean": -0.144,
+     "pitch_min": -0.186,
+     "pitch_rate_min": -1.749,
+     "pitch_rate_max": 0.795,
+     "frac_no_foot": 0.016,
+     "frac_double": 0.0,
+     "peak_force_over_weight": 3.73,
+     "demand_max": 0.29,
+     "demand_sat_frac": 0.0,
+     "applied_max": 0.29,
+     "hip_demand_max": 0.29,
+     "support_offset_mean": -0.131,
+     "support_offset_min": -0.159
+    }
+   },
+   "group": "failure"
+  },
+  {
+   "seed": 3000,
+   "saved_fell": false,
+   "saved_fall_time": null,
+   "reproduced_fell": false,
+   "end_time": 9.996,
+   "init": {
+    "pitch0": 0.013167085042918584,
+    "joint0": [
+     -0.0195,
+     -0.0177,
+     -0.0279,
+     -0.0221,
+     0.0116,
+     -0.0178
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.021,
+     "L"
+    ],
+    [
+     0.026,
+     "R"
+    ],
+    [
+     0.291,
+     "R"
+    ],
+    [
+     0.421,
+     "L"
+    ],
+    [
+     0.981,
+     "R"
+    ],
+    [
+     1.026,
+     "L"
+    ],
+    [
+     1.561,
+     "R"
+    ],
+    [
+     1.821,
+     "L"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.121,
+     "R"
+    ],
+    [
+     0.311,
+     "L"
+    ],
+    [
+     0.461,
+     "R"
+    ],
+    [
+     0.991,
+     "L"
+    ]
+   ],
+   "n_touchdowns": 37,
+   "valid_steps_saved": 28,
+   "pitch_at": {
+    "0.25s": -0.023,
+    "0.5s": 0.104,
+    "1.0s": -0.02,
+    "1.5s": -0.01
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.106,
+    "0.5s": 0.83,
+    "1.0s": 0.493,
+    "1.5s": -0.582
+   },
+   "sync_events_first_2s": 0,
+   "window_0_1s": {
+    "pitch_mean": 0.028,
+    "pitch_min": -0.053,
+    "pitch_rate_min": -1.731,
+    "pitch_rate_max": 0.91,
+    "frac_no_foot": 0.04,
+    "frac_double": 0.155,
+    "peak_force_over_weight": 3.42,
+    "demand_max": 0.49,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.49,
+    "hip_demand_max": 0.49,
+    "support_offset_mean": 0.002,
+    "support_offset_min": -0.046
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.1,
+    "pitch_min": 0.028,
+    "pitch_rate_min": -0.397,
+    "pitch_rate_max": 0.91,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.114,
+    "peak_force_over_weight": 3.42,
+    "demand_max": 0.39,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.39,
+    "hip_demand_max": 0.39,
+    "support_offset_mean": 0.026,
+    "support_offset_min": 0.006
+   },
+   "x_at": {
+    "0.5s": 0.09,
+    "1.0s": 0.053,
+    "1.5s": 0.062,
+    "2.0s": 0.271
+   },
+   "touchdown_foot_minus_torso_x": [
+    0.012,
+    -0.037,
+    0.054
+   ],
+   "onset_s": null,
+   "group": "success"
+  },
+  {
+   "seed": 3001,
+   "saved_fell": false,
+   "saved_fall_time": null,
+   "reproduced_fell": false,
+   "end_time": 9.996,
+   "init": {
+    "pitch0": 0.01622420419283156,
+    "joint0": [
+     -0.0581,
+     0.0167,
+     0.0593,
+     -0.0247,
+     -0.0254,
+     -0.0654
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.021,
+     "R"
+    ],
+    [
+     0.421,
+     "L"
+    ],
+    [
+     0.936,
+     "R"
+    ],
+    [
+     1.221,
+     "L"
+    ],
+    [
+     1.501,
+     "R"
+    ],
+    [
+     1.776,
+     "L"
+    ],
+    [
+     2.066,
+     "R"
+    ],
+    [
+     2.346,
+     "L"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.446,
+     "R"
+    ],
+    [
+     0.956,
+     "L"
+    ],
+    [
+     1.231,
+     "R"
+    ],
+    [
+     1.511,
+     "L"
+    ]
+   ],
+   "n_touchdowns": 35,
+   "valid_steps_saved": 32,
+   "pitch_at": {
+    "0.25s": 0.001,
+    "0.5s": 0.095,
+    "1.0s": -0.002,
+    "1.5s": 0.059
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.09,
+    "0.5s": 1.045,
+    "1.0s": 0.234,
+    "1.5s": -0.34
+   },
+   "sync_events_first_2s": 1,
+   "window_0_1s": {
+    "pitch_mean": 0.036,
+    "pitch_min": -0.062,
+    "pitch_rate_min": -1.952,
+    "pitch_rate_max": 1.126,
+    "frac_no_foot": 0.04,
+    "frac_double": 0.045,
+    "peak_force_over_weight": 3.1,
+    "demand_max": 0.65,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.65,
+    "hip_demand_max": 0.6,
+    "support_offset_mean": 0.001,
+    "support_offset_min": -0.056
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.102,
+    "pitch_min": 0.014,
+    "pitch_rate_min": -0.352,
+    "pitch_rate_max": 1.126,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.071,
+    "peak_force_over_weight": 3.1,
+    "demand_max": 0.45,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.45,
+    "hip_demand_max": 0.45,
+    "support_offset_mean": 0.03,
+    "support_offset_min": -0.022
+   },
+   "x_at": {
+    "0.5s": 0.046,
+    "1.0s": 0.033,
+    "1.5s": 0.242,
+    "2.0s": 0.469
+   },
+   "touchdown_foot_minus_torso_x": [
+    -0.044,
+    0.071
+   ],
+   "onset_s": null,
+   "group": "success"
+  },
+  {
+   "seed": 3012,
+   "saved_fell": false,
+   "saved_fall_time": null,
+   "reproduced_fell": false,
+   "end_time": 9.996,
+   "init": {
+    "pitch0": 0.04389864511909873,
+    "joint0": [
+     0.0016,
+     0.003,
+     -0.0019,
+     0.022,
+     0.0101,
+     -0.0237
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.041,
+     "L"
+    ],
+    [
+     0.046,
+     "R"
+    ],
+    [
+     0.616,
+     "L"
+    ],
+    [
+     0.901,
+     "R"
+    ],
+    [
+     1.191,
+     "L"
+    ],
+    [
+     1.476,
+     "R"
+    ],
+    [
+     1.761,
+     "L"
+    ],
+    [
+     2.046,
+     "R"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.161,
+     "L"
+    ],
+    [
+     0.631,
+     "R"
+    ],
+    [
+     0.911,
+     "L"
+    ],
+    [
+     1.196,
+     "R"
+    ]
+   ],
+   "n_touchdowns": 36,
+   "valid_steps_saved": 34,
+   "pitch_at": {
+    "0.25s": 0.039,
+    "0.5s": 0.069,
+    "1.0s": 0.021,
+    "1.5s": 0.057
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.187,
+    "0.5s": -0.392,
+    "1.0s": 0.534,
+    "1.5s": -0.082
+   },
+   "sync_events_first_2s": 3,
+   "window_0_1s": {
+    "pitch_mean": 0.025,
+    "pitch_min": -0.02,
+    "pitch_rate_min": -1.316,
+    "pitch_rate_max": 0.481,
+    "frac_no_foot": 0.06,
+    "frac_double": 0.14,
+    "peak_force_over_weight": 3.66,
+    "demand_max": 0.55,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.55,
+    "hip_demand_max": 0.42,
+    "support_offset_mean": 0.005,
+    "support_offset_min": -0.067
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.034,
+    "pitch_min": 0.001,
+    "pitch_rate_min": -0.757,
+    "pitch_rate_max": 0.458,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.043,
+    "peak_force_over_weight": 1.87,
+    "demand_max": 0.27,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.27,
+    "hip_demand_max": 0.27,
+    "support_offset_mean": 0.002,
+    "support_offset_min": -0.055
+   },
+   "x_at": {
+    "0.5s": 0.009,
+    "1.0s": 0.182,
+    "1.5s": 0.431,
+    "2.0s": 0.718
+   },
+   "touchdown_foot_minus_torso_x": [
+    0.067,
+    0.085
+   ],
+   "onset_s": null,
+   "group": "success"
+  },
+  {
+   "seed": 3016,
+   "saved_fell": false,
+   "saved_fall_time": null,
+   "reproduced_fell": false,
+   "end_time": 9.996,
+   "init": {
+    "pitch0": -0.017838570542058164,
+    "joint0": [
+     0.0203,
+     0.007,
+     0.0516,
+     0.0084,
+     0.0189,
+     -0.0177
+    ]
+   },
+   "first_touchdowns": [
+    [
+     0.041,
+     "R"
+    ],
+    [
+     0.046,
+     "L"
+    ],
+    [
+     0.381,
+     "R"
+    ],
+    [
+     1.001,
+     "R"
+    ],
+    [
+     1.626,
+     "R"
+    ],
+    [
+     1.931,
+     "L"
+    ],
+    [
+     2.201,
+     "R"
+    ],
+    [
+     2.786,
+     "R"
+    ]
+   ],
+   "first_liftoffs": [
+    [
+     0.241,
+     "R"
+    ],
+    [
+     0.431,
+     "R"
+    ],
+    [
+     1.041,
+     "R"
+    ],
+    [
+     1.676,
+     "L"
+    ]
+   ],
+   "n_touchdowns": 33,
+   "valid_steps_saved": 25,
+   "pitch_at": {
+    "0.25s": -0.013,
+    "0.5s": 0.091,
+    "1.0s": -0.044,
+    "1.5s": -0.087
+   },
+   "pitch_rate_at": {
+    "0.25s": 0.07,
+    "0.5s": 0.981,
+    "1.0s": 0.717,
+    "1.5s": -0.982
+   },
+   "sync_events_first_2s": 0,
+   "window_0_1s": {
+    "pitch_mean": 0.013,
+    "pitch_min": -0.078,
+    "pitch_rate_min": -1.255,
+    "pitch_rate_max": 1.108,
+    "frac_no_foot": 0.06,
+    "frac_double": 0.245,
+    "peak_force_over_weight": 3.55,
+    "demand_max": 0.53,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.53,
+    "hip_demand_max": 0.4,
+    "support_offset_mean": -0.011,
+    "support_offset_min": -0.04
+   },
+   "window_0.4_0.75s": {
+    "pitch_mean": 0.083,
+    "pitch_min": -0.005,
+    "pitch_rate_min": -0.436,
+    "pitch_rate_max": 1.108,
+    "frac_no_foot": 0.0,
+    "frac_double": 0.143,
+    "peak_force_over_weight": 3.55,
+    "demand_max": 0.34,
+    "demand_sat_frac": 0.0,
+    "applied_max": 0.34,
+    "hip_demand_max": 0.29,
+    "support_offset_mean": 0.008,
+    "support_offset_min": -0.01
+   },
+   "x_at": {
+    "0.5s": 0.059,
+    "1.0s": 0.014,
+    "1.5s": -0.036,
+    "2.0s": -0.019
+   },
+   "touchdown_foot_minus_torso_x": [
+    0.005
+   ],
+   "onset_s": null,
+   "group": "success"
+  }
+ ],
+ "provenance": {
+  "git_commit": "1d1192626d6805f0cecfb75944522568987de17d",
+  "git_dirty": true,
+  "mujoco": "3.15.0",
+  "numpy": "2.4.6",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "cpu_count": 16,
+  "workers": 1
+ },
+ "unique_rollouts": 10,
+ "rollouts_executed_in_review": 30,
+ "rollout_cap_note": "OVER the review cap of 20: the same 10 deterministic seeds were executed 3 times (initial pass; a second pass adding like-for-like window, drift and foot-placement fields; a third pass only to add the non-physics perturbation analysis, which should not have re-run MuJoCo). Results are identical across passes; only 10 distinct trajectories exist. Use --perturbation-only to avoid re-running."
+}

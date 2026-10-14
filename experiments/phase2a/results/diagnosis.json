@@ -1,0 +1,1021 @@
+{
+ "purpose": "Phase 2A Stage A: capability of the existing open-loop gait family, evaluated by physical gates",
+ "config": {
+  "samples_per_family": 500,
+  "rng_seed": 123,
+  "diagnostic_seeds": [
+   2000,
+   2001,
+   2002
+  ],
+  "duration": 5.0,
+  "open_loop_names": [
+   "gait_freq",
+   "hip_amp",
+   "knee_amp",
+   "stand_hip",
+   "stand_knee",
+   "kp",
+   "kd",
+   "balance_gain"
+  ],
+  "open_loop_bounds": [
+   [
+    0.3,
+    0.0,
+    0.0,
+    -0.3,
+    -0.8,
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    2.5,
+    0.8,
+    1.2,
+    0.3,
+    0.0,
+    500.0,
+    50.0,
+    200.0
+   ]
+  ],
+  "lag_range": [
+   0.0,
+   6.283185307179586
+  ],
+  "rollouts": 3000
+ },
+ "open_loop": {
+  "n": 500,
+  "label_counts": {
+   "fall": 367,
+   "falling_forward": 103,
+   "contact_chatter": 26,
+   "body_dragging": 3,
+   "backward_shuffle": 1
+  },
+  "seed_rollouts": 1500,
+  "survive_all_seeds": 20,
+  "survive_and_forward_gt_0.2": 0,
+  "forward_gt_0.2_but_not_walking": 15,
+  "walking_all_seeds": 0,
+  "walking_any_seed": 0,
+  "best_survivor_speed": -0.15610808139551702,
+  "worst_survivor_speed": -1.3126682977694049,
+  "best_by_fitness": {
+   "family": "open_loop",
+   "vector": [
+    1.088987900934013,
+    0.4570965113115191,
+    0.030046510653120116,
+    0.12441152627007923,
+    -0.344900521130516,
+    356.285504853701,
+    15.077250682723614,
+    100.93966839088368
+   ],
+   "fitness": 0.8980709287173935,
+   "label": "contact_chatter",
+   "feasible": false,
+   "walking_fraction": 0.0,
+   "per_seed": [
+    {
+     "label": "body_dragging",
+     "speed_upright": -1.0904362378025831,
+     "forward_disp_upright": -5.452181189012916,
+     "fell": false,
+     "flight_frac": 0.104,
+     "raw_touchdown_rate": 5.0,
+     "saturation_frac": 0.656,
+     "valid_step_rate": 0.0,
+     "slip_frac": 0.0496969696969697,
+     "body_contact_frac": 0.008,
+     "violations": [
+      "body_dragging",
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ]
+    },
+    {
+     "label": "contact_chatter",
+     "speed_upright": -1.0923610130526273,
+     "forward_disp_upright": -5.461805065263136,
+     "fell": false,
+     "flight_frac": 0.08,
+     "raw_touchdown_rate": 6.6,
+     "saturation_frac": 0.672,
+     "valid_step_rate": 0.0,
+     "slip_frac": 0.05778301886792453,
+     "body_contact_frac": 0.005,
+     "violations": [
+      "contact_chatter",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ]
+    },
+    {
+     "label": "contact_chatter",
+     "speed_upright": -1.0939373939004693,
+     "forward_disp_upright": -5.469686969502346,
+     "fell": false,
+     "flight_frac": 0.11,
+     "raw_touchdown_rate": 5.8,
+     "saturation_frac": 0.684,
+     "valid_step_rate": 0.0,
+     "slip_frac": 0.04884004884004884,
+     "body_contact_frac": 0.004,
+     "violations": [
+      "contact_chatter",
+      "hopping",
+      "torque_saturated",
+      "too_slow",
+      "too_few_steps"
+     ]
+    }
+   ]
+  },
+  "forward_not_walking_examples": [
+   {
+    "family": "open_loop",
+    "vector": [
+     0.5053867564881963,
+     0.0220856296790104,
+     0.3337745213321943,
+     0.10749356235683072,
+     -0.14196768019956107,
+     289.7721355665036,
+     10.740898327405102,
+     0.35255470985116055
+    ],
+    "fitness": 0.6535743731748273,
+    "label": "falling_forward",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.4136134004877238,
+      "forward_disp_upright": 0.5422471680393922,
+      "fell": true,
+      "flight_frac": 0.030534351145038167,
+      "raw_touchdown_rate": 2.288329519450859,
+      "saturation_frac": 0.003816793893129771,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.3350121961780885,
+      "forward_disp_upright": 0.569855745698903,
+      "fell": true,
+      "flight_frac": 0.026470588235294117,
+      "raw_touchdown_rate": 2.351557907113568,
+      "saturation_frac": 0.0029411764705882353,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.3584802551775519,
+      "forward_disp_upright": 0.582888894918675,
+      "fell": true,
+      "flight_frac": 0.036923076923076927,
+      "raw_touchdown_rate": 0.6150061500615263,
+      "saturation_frac": 0.003076923076923077,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "not_upright",
+       "too_few_steps"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "open_loop",
+    "vector": [
+     1.2062080916988038,
+     0.09957032389182913,
+     0.6732365403910803,
+     0.29718153735124325,
+     -0.13236614617757225,
+     170.84923827865939,
+     7.504780666700894,
+     108.47242922324168
+    ],
+    "fitness": -0.06722286222268618,
+    "label": "falling_forward",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.5547386185495475,
+      "forward_disp_upright": 0.6801095463417322,
+      "fell": true,
+      "flight_frac": 0.04081632653061224,
+      "raw_touchdown_rate": 8.156606851549913,
+      "saturation_frac": 0.004081632653061225,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.061946902654867256,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.5427137992765435,
+      "forward_disp_upright": 0.7304927738262075,
+      "fell": true,
+      "flight_frac": 0.08178438661710037,
+      "raw_touchdown_rate": 5.200594353640559,
+      "saturation_frac": 0.0037174721189591076,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.02666666666666667,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "not_upright",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.18512003586423398,
+      "forward_disp_upright": 0.5277772222488936,
+      "fell": true,
+      "flight_frac": 0.11052631578947368,
+      "raw_touchdown_rate": 6.664328305858067,
+      "saturation_frac": 0.0017543859649122807,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.102,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "not_upright",
+       "too_slow",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "open_loop",
+    "vector": [
+     0.5481196287786203,
+     0.7787511732987422,
+     0.5910218563697869,
+     0.1654071241899185,
+     -0.2722574701006709,
+     139.60121146811565,
+     4.564016116970065,
+     132.3939783436155
+    ],
+    "fitness": -0.30462691415236215,
+    "label": "falling_forward",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.2539920353911652,
+      "forward_disp_upright": 0.31647407609738526,
+      "fell": true,
+      "flight_frac": 0.5421686746987951,
+      "raw_touchdown_rate": 4.01284109149286,
+      "saturation_frac": 0.27710843373493976,
+      "valid_step_rate": 0.8025682182985722,
+      "slip_frac": 0.21176470588235294,
+      "body_contact_frac": 0.008032128514056224,
+      "violations": [
+       "fall",
+       "body_dragging",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "foot_sliding",
+       "not_upright",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.36243409519042036,
+      "forward_disp_upright": 0.4316590073717834,
+      "fell": true,
+      "flight_frac": 0.33613445378151263,
+      "raw_touchdown_rate": 16.79261125104982,
+      "saturation_frac": 0.13865546218487396,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.33191489361702126,
+      "body_contact_frac": 0.004201680672268907,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "foot_sliding",
+       "not_upright",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.37749483271144346,
+      "forward_disp_upright": 0.4835708807033478,
+      "fell": true,
+      "flight_frac": 0.4296875,
+      "raw_touchdown_rate": 3.1225604996097527,
+      "saturation_frac": 0.2578125,
+      "valid_step_rate": 0.7806401249024382,
+      "slip_frac": 0.08256880733944955,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "not_upright",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "open_loop",
+    "vector": [
+     0.7349020204093826,
+     0.3586205252260857,
+     0.40350629568006957,
+     -0.04878732147185505,
+     -0.294256729530772,
+     309.70284558462697,
+     10.155373988127781,
+     177.90614431919212
+    ],
+    "fitness": -0.33088316325823913,
+    "label": "falling_forward",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.19560917685391918,
+      "forward_disp_upright": 0.17526582246111172,
+      "fell": true,
+      "flight_frac": 0.5251396648044693,
+      "raw_touchdown_rate": 7.812499999999994,
+      "saturation_frac": 0.061452513966480445,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.04477611940298507,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "not_upright",
+       "too_slow",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.186722485420553,
+      "forward_disp_upright": 0.1682369593639184,
+      "fell": true,
+      "flight_frac": 0.4388888888888889,
+      "raw_touchdown_rate": 6.659267480577132,
+      "saturation_frac": 0.05555555555555555,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.07142857142857142,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "not_upright",
+       "too_slow",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.23355559285448974,
+      "forward_disp_upright": 0.21160136712616787,
+      "fell": true,
+      "flight_frac": 0.3701657458563536,
+      "raw_touchdown_rate": 4.415011037527591,
+      "saturation_frac": 0.049723756906077346,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.02912621359223301,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "not_upright",
+       "too_few_steps"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "open_loop",
+    "vector": [
+     0.5359938222965126,
+     0.04948380910421664,
+     0.7376944662555752,
+     0.20707504588685482,
+     -0.6896818226670585,
+     374.73479897241583,
+     15.49679358149027,
+     31.571155591338297
+    ],
+    "fitness": -0.3597508059011541,
+    "label": "falling_forward",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.29882766393089505,
+      "forward_disp_upright": 0.1945368092190128,
+      "fell": true,
+      "flight_frac": 0.26153846153846155,
+      "raw_touchdown_rate": 1.5360983102918575,
+      "saturation_frac": 0.7461538461538462,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "hopping",
+       "torque_saturated",
+       "not_upright",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.24127034019050686,
+      "forward_disp_upright": 0.3295752847002229,
+      "fell": true,
+      "flight_frac": 0.10256410256410256,
+      "raw_touchdown_rate": 5.124450951683896,
+      "saturation_frac": 0.6263736263736264,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.19173220032010663,
+      "forward_disp_upright": 0.2791620836660658,
+      "fell": true,
+      "flight_frac": 0.0859106529209622,
+      "raw_touchdown_rate": 2.06043956043963,
+      "saturation_frac": 0.6872852233676976,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "torque_saturated",
+       "not_upright",
+       "too_slow",
+       "too_few_steps"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "lag_sinusoid": {
+  "n": 500,
+  "label_counts": {
+   "fall": 404,
+   "falling_forward": 69,
+   "contact_chatter": 20,
+   "body_dragging": 6,
+   "torque_saturated": 1
+  },
+  "seed_rollouts": 1500,
+  "survive_all_seeds": 14,
+  "survive_and_forward_gt_0.2": 3,
+  "forward_gt_0.2_but_not_walking": 26,
+  "walking_all_seeds": 0,
+  "walking_any_seed": 0,
+  "best_survivor_speed": 0.5301229669282471,
+  "worst_survivor_speed": -1.3030509915413182,
+  "best_by_fitness": {
+   "family": "lag_sinusoid",
+   "vector": [
+    0.682740761127901,
+    0.32946554587807464,
+    0.7985867809773967,
+    0.10231562517062781,
+    -0.4007636154391097,
+    170.2033556469379,
+    7.404391006709954,
+    11.960441918059184,
+    1.8897290068960182
+   ],
+   "fitness": 2.76076532435653,
+   "label": "torque_saturated",
+   "feasible": false,
+   "walking_fraction": 0.0,
+   "per_seed": [
+    {
+     "label": "torque_saturated",
+     "speed_upright": 0.5840332515473866,
+     "forward_disp_upright": 2.920166257736933,
+     "fell": false,
+     "flight_frac": 0.056,
+     "raw_touchdown_rate": 2.0,
+     "saturation_frac": 0.161,
+     "valid_step_rate": 1.2,
+     "slip_frac": 0.002224694104560623,
+     "body_contact_frac": 0.0,
+     "violations": [
+      "torque_saturated",
+      "not_alternating"
+     ]
+    },
+    {
+     "label": "fall",
+     "speed_upright": -0.21733750949950897,
+     "forward_disp_upright": -0.3914248546085967,
+     "fell": true,
+     "flight_frac": 0.022222222222222223,
+     "raw_touchdown_rate": 2.2209883398113233,
+     "saturation_frac": 0.42777777777777776,
+     "valid_step_rate": 0.5552470849528308,
+     "slip_frac": 0.017241379310344827,
+     "body_contact_frac": 0.0,
+     "violations": [
+      "fall",
+      "torque_saturated",
+      "not_upright",
+      "too_slow",
+      "too_few_steps"
+     ]
+    },
+    {
+     "label": "torque_saturated",
+     "speed_upright": 0.6152028696964799,
+     "forward_disp_upright": 3.076014348482399,
+     "fell": false,
+     "flight_frac": 0.064,
+     "raw_touchdown_rate": 1.6,
+     "saturation_frac": 0.137,
+     "valid_step_rate": 1.2,
+     "slip_frac": 0.0,
+     "body_contact_frac": 0.0,
+     "violations": [
+      "torque_saturated",
+      "not_alternating"
+     ]
+    }
+   ]
+  },
+  "forward_not_walking_examples": [
+   {
+    "family": "lag_sinusoid",
+    "vector": [
+     0.682740761127901,
+     0.32946554587807464,
+     0.7985867809773967,
+     0.10231562517062781,
+     -0.4007636154391097,
+     170.2033556469379,
+     7.404391006709954,
+     11.960441918059184,
+     1.8897290068960182
+    ],
+    "fitness": 2.76076532435653,
+    "label": "torque_saturated",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "torque_saturated",
+      "speed_upright": 0.5840332515473866,
+      "forward_disp_upright": 2.920166257736933,
+      "fell": false,
+      "flight_frac": 0.056,
+      "raw_touchdown_rate": 2.0,
+      "saturation_frac": 0.161,
+      "valid_step_rate": 1.2,
+      "slip_frac": 0.002224694104560623,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "torque_saturated",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "fall",
+      "speed_upright": -0.21733750949950897,
+      "forward_disp_upright": -0.3914248546085967,
+      "fell": true,
+      "flight_frac": 0.022222222222222223,
+      "raw_touchdown_rate": 2.2209883398113233,
+      "saturation_frac": 0.42777777777777776,
+      "valid_step_rate": 0.5552470849528308,
+      "slip_frac": 0.017241379310344827,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "torque_saturated",
+       "not_upright",
+       "too_slow",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "torque_saturated",
+      "speed_upright": 0.6152028696964799,
+      "forward_disp_upright": 3.076014348482399,
+      "fell": false,
+      "flight_frac": 0.064,
+      "raw_touchdown_rate": 1.6,
+      "saturation_frac": 0.137,
+      "valid_step_rate": 1.2,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "torque_saturated",
+       "not_alternating"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "lag_sinusoid",
+    "vector": [
+     0.5053867564881963,
+     0.0220856296790104,
+     0.3337745213321943,
+     0.10749356235683072,
+     -0.14196768019956107,
+     289.7721355665036,
+     10.740898327405102,
+     0.35255470985116055,
+     2.970967658117706
+    ],
+    "fitness": 1.3928742092557769,
+    "label": "falling_forward",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.4732428039149867,
+      "forward_disp_upright": 0.6369848140695545,
+      "fell": true,
+      "flight_frac": 0.04460966542750929,
+      "raw_touchdown_rate": 1.4858841010401598,
+      "saturation_frac": 0.0037174721189591076,
+      "valid_step_rate": 0.7429420505200799,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.41514663821566544,
+      "forward_disp_upright": 0.7663606941460802,
+      "fell": true,
+      "flight_frac": 0.024390243902439025,
+      "raw_touchdown_rate": 2.1668472372698804,
+      "saturation_frac": 0.0027100271002710027,
+      "valid_step_rate": 1.0834236186349402,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "not_upright"
+      ]
+     },
+     {
+      "label": "falling_forward",
+      "speed_upright": 0.44605261263506124,
+      "forward_disp_upright": 0.6873670760706033,
+      "fell": true,
+      "flight_frac": 0.016233766233766232,
+      "raw_touchdown_rate": 2.595717066839813,
+      "saturation_frac": 0.003246753246753247,
+      "valid_step_rate": 0.6489292667099532,
+      "slip_frac": 0.0028653295128939827,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "fall",
+       "not_upright",
+       "too_few_steps"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "lag_sinusoid",
+    "vector": [
+     0.9684352286572779,
+     0.38403987618609525,
+     0.8448283297047172,
+     -0.01999956842193429,
+     -0.5735894036640258,
+     397.226847905781,
+     28.5074391816642,
+     76.73757028198283,
+     1.7433122972937158
+    ],
+    "fitness": 0.54943235880863,
+    "label": "body_dragging",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "body_dragging",
+      "speed_upright": 0.4682330160923617,
+      "forward_disp_upright": 2.3411650804618085,
+      "fell": false,
+      "flight_frac": 0.691,
+      "raw_touchdown_rate": 10.2,
+      "saturation_frac": 0.94,
+      "valid_step_rate": 0.2,
+      "slip_frac": 0.05531914893617021,
+      "body_contact_frac": 0.019,
+      "violations": [
+       "body_dragging",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "body_dragging",
+      "speed_upright": 0.487452051350657,
+      "forward_disp_upright": 2.437260256753285,
+      "fell": false,
+      "flight_frac": 0.795,
+      "raw_touchdown_rate": 12.2,
+      "saturation_frac": 0.958,
+      "valid_step_rate": 0.2,
+      "slip_frac": 0.140625,
+      "body_contact_frac": 0.024,
+      "violations": [
+       "body_dragging",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "body_dragging",
+      "speed_upright": 0.6346838333417228,
+      "forward_disp_upright": 3.1734191667086145,
+      "fell": false,
+      "flight_frac": 0.69,
+      "raw_touchdown_rate": 8.6,
+      "saturation_frac": 0.941,
+      "valid_step_rate": 0.4,
+      "slip_frac": 0.08018867924528301,
+      "body_contact_frac": 0.035,
+      "violations": [
+       "body_dragging",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "lag_sinusoid",
+    "vector": [
+     1.1536069360916392,
+     0.36881173383391136,
+     0.8194427196818365,
+     -0.1566952173516545,
+     -0.6539677195441862,
+     449.6302562702688,
+     34.140588152564625,
+     174.259896230613,
+     2.1138093276028918
+    ],
+    "fitness": 0.3849590630913598,
+    "label": "contact_chatter",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "contact_chatter",
+      "speed_upright": 0.35189354149941315,
+      "forward_disp_upright": 1.7594677074970657,
+      "fell": false,
+      "flight_frac": 0.887,
+      "raw_touchdown_rate": 13.2,
+      "saturation_frac": 0.978,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.0,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "contact_chatter",
+      "speed_upright": 0.3777735449222108,
+      "forward_disp_upright": 1.8888677246110541,
+      "fell": false,
+      "flight_frac": 0.881,
+      "raw_touchdown_rate": 15.0,
+      "saturation_frac": 0.978,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.05263157894736842,
+      "body_contact_frac": 0.0,
+      "violations": [
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "contact_chatter",
+      "speed_upright": 0.37704896851435876,
+      "forward_disp_upright": 1.8852448425717938,
+      "fell": false,
+      "flight_frac": 0.878,
+      "raw_touchdown_rate": 14.8,
+      "saturation_frac": 0.981,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.023809523809523808,
+      "body_contact_frac": 0.002,
+      "violations": [
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "not_upright",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     }
+    ]
+   },
+   {
+    "family": "lag_sinusoid",
+    "vector": [
+     1.1030461489995882,
+     0.3348803144344039,
+     0.7887739571128972,
+     -0.05584127735092076,
+     -0.7054402416730612,
+     461.42350906860224,
+     35.41410286883389,
+     54.25857495326652,
+     1.8637360064294193
+    ],
+    "fitness": 0.35041998668152224,
+    "label": "body_dragging",
+    "feasible": false,
+    "walking_fraction": 0.0,
+    "per_seed": [
+     {
+      "label": "body_dragging",
+      "speed_upright": 0.3169482388921038,
+      "forward_disp_upright": 1.584741194460519,
+      "fell": false,
+      "flight_frac": 0.865,
+      "raw_touchdown_rate": 12.2,
+      "saturation_frac": 0.97,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.1746031746031746,
+      "body_contact_frac": 0.02,
+      "violations": [
+       "body_dragging",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "foot_sliding",
+       "not_upright",
+       "too_few_steps"
+      ]
+     },
+     {
+      "label": "body_dragging",
+      "speed_upright": 0.17073170961110598,
+      "forward_disp_upright": 0.8536585480555299,
+      "fell": false,
+      "flight_frac": 0.868,
+      "raw_touchdown_rate": 12.8,
+      "saturation_frac": 0.969,
+      "valid_step_rate": 0.2,
+      "slip_frac": 0.14102564102564102,
+      "body_contact_frac": 0.01,
+      "violations": [
+       "body_dragging",
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "not_upright",
+       "too_slow",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     },
+     {
+      "label": "contact_chatter",
+      "speed_upright": 0.1647131580538222,
+      "forward_disp_upright": 0.8235657902691109,
+      "fell": false,
+      "flight_frac": 0.86,
+      "raw_touchdown_rate": 13.8,
+      "saturation_frac": 0.975,
+      "valid_step_rate": 0.0,
+      "slip_frac": 0.1744186046511628,
+      "body_contact_frac": 0.005,
+      "violations": [
+       "contact_chatter",
+       "hopping",
+       "torque_saturated",
+       "foot_sliding",
+       "not_upright",
+       "too_slow",
+       "too_few_steps",
+       "not_alternating"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "wall_s": 95.42466360004619,
+ "provenance": {
+  "git_commit": "2bb9e516aeabc52391e01bc957a3dcd299ef475e",
+  "git_dirty": true,
+  "mujoco": "3.15.0",
+  "numpy": "2.4.6",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "cpu_count": 16,
+  "workers": 8
+ }
+}
