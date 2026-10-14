@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
 from .. import demo as demo_mod
+from .. import overview as overview_mod
 from ..controller import CTRL_BOUNDS, GaitParams
 from ..experiment import (PHASE0_BASELINE, PHASE0_CANDIDATE, PHASE0_DURATION, PHASE0_PUSH, PHASE0_SEEDS,
                           compare_designs)
@@ -198,6 +199,10 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             raise HTTPException(422, str(exc)) from exc
         except FileNotFoundError:
             raise HTTPException(404, "controller export not found") from None
+
+    @app.get("/api/overview")
+    def overview():
+        return overview_mod.overview()  # read from committed experiment records at request time
 
     @app.get("/api/demo/status")
     def demo_status():
