@@ -64,3 +64,8 @@ This is the Git-visible decision index. Add one dated section per consequential 
 
 ## 2026-10-14 - Run R1 on a Nebius CPU VM (eu-west1)
 - **Decision:** CPU-only `cpu-d3` 8vcpu-32gb in eu-west1 (quota 0 in eu-north1/us-central1); Nebius CLI via WSL Ubuntu; dedicated SSH key; code shipped as git bundle (no GitHub token on VM); deadman timer + Windows watchdog task for cost control; `core.autocrlf=true` on the VM to reproduce registered hash bytes. See `docs/NEBIUS_CLOUD_R1.md`.
+
+## 2026-10-14 - R2 approved, executed; R3 prepared offline
+- **R2:** local robustness around the frozen walker, arms S/I/T, 150 final seeds, 12,000-rollout cap, Tango non-inferiority (margin 5 pp) then exact McNemar in a fixed sequence, frozen training seeds and selection committed before dependent stages. Result: gate PROCEED, winner T1#101 150/150 vs incumbent 91/150, both claims confirmed, engineering criterion met; Linux-only evidence. See `experiments/phase2a_r2/REPORT.md`.
+- **R3 (Nemotron):** kept separate from R2; strict proposal schema, matched-random / heuristic / no-evidence baselines, ITT accounting, no live call until the protocol and cap (~121k tokens) are approved. See `docs/R3_DESIGN.md`; schedule in `docs/MILESTONE_PLAN.md`.
+- **Lesson:** a lexicographic gate-pass-count criterion with a preservation constraint worked where R1's continuous worst-k fitness did not; local search from a working controller succeeded where a global 149-point random search found nothing.

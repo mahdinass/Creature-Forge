@@ -1,0 +1,50 @@
+{
+ "rollouts": 96,
+ "pilot_seeds": [
+  7300,
+  7301,
+  7302,
+  7303,
+  7304,
+  7305,
+  7306,
+  7307,
+  7308,
+  7309,
+  7310,
+  7311,
+  7312,
+  7313,
+  7314,
+  7315
+ ],
+ "seed_provenance": "pilot-only seeds 7300-7315, disjoint from all other roles; results are used only for implementation/resource checks",
+ "workers_used": 4,
+ "wall_s": 10.793276983000005,
+ "throughput_rollouts_per_s": 8.89442568287696,
+ "peak_worker_rss_mb": 65.046875,
+ "free_memory_gb_before": 30.679515838623047,
+ "free_memory_gb_after": 30.630661010742188,
+ "remaining_planned_rollouts": 10604,
+ "projected_wall_s_at_this_rate": 1192.2073867472088,
+ "recommended_workers": 4,
+ "checks": {
+  "no_job_errors": true,
+  "free_memory_after_ok": true,
+  "projected_wall_within_80pct_of_limit": true,
+  "memory_headroom_for_some_worker_count": true,
+  "rollouts_within_pilot_cap": true
+ },
+ "passed": true,
+ "rule": "recommended_workers = largest k <= 4 with k * peak_worker_rss <= 50% of free memory before the pilot",
+ "provenance": {
+  "git_commit": "463c603dca217ea76c9ddd516d51a091612167bc",
+  "git_dirty": true,
+  "mujoco": "3.15.0",
+  "numpy": "2.5.4",
+  "python": "3.12.3",
+  "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+  "cpu_count": 8,
+  "workers": 4
+ }
+}

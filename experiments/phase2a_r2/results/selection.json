@@ -1,0 +1,314 @@
+{
+ "protocol_commit": "463c603dca217ea76c9ddd516d51a091612167bc",
+ "training_set_commit": "9c1a26f86d8b7a54a96b5641c6739cb53378d146",
+ "rule": "Eligible candidates ranked by (1) validation seeds passing every walking gate, (2) non-falling validation seeds, (3) mean validation fitness, higher better; ties by arm order S<I<T, replicate, candidate index. Origin plays no role; training ranks and final seeds play no part.",
+ "ledger_rollouts_at_selection": 10272,
+ "winner": {
+  "arm": "T",
+  "replicate": 1,
+  "index": 101,
+  "walking_count": 64,
+  "survival_count": 64,
+  "objective": {
+   "mean": 5.994479243702906,
+   "worst2": 5.994423790976377
+  },
+  "vector": [
+   1.555141834114274,
+   0.5746145348782157,
+   0.06360334138900163,
+   0.8595200316946476,
+   -0.08113199129340379,
+   -0.004597134741325837,
+   0.1995479649846929,
+   121.70337151766175,
+   10.762497323989722,
+   133.01587595349372,
+   86.46280690087647,
+   0.10615164042268156,
+   0.8745373874736129,
+   0.37308082048845015,
+   0.01830344347150241
+  ],
+  "training_score": [
+   16,
+   16,
+   5.99448441141322
+  ]
+ },
+ "incumbent_validation": {
+  "walking_count": 43,
+  "survival_count": 43,
+  "objective": {
+   "mean": 3.8101713480636246,
+   "worst2": -0.902879540614787
+  }
+ },
+ "validation_ranking": [
+  {
+   "arm": "T",
+   "replicate": 1,
+   "index": 101,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.994479243702906,
+    "worst2": 5.994423790976377
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 1,
+   "index": 105,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.9944746437112935,
+    "worst2": 5.994367139703455
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 1,
+   "index": 86,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.994183840873123,
+    "worst2": 5.994072816844771
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 2,
+   "index": 83,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.991919026457585,
+    "worst2": 5.991816549986195
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 1,
+   "index": 108,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.990958485450605,
+    "worst2": 5.880219592389274
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 2,
+   "index": 36,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.989330863793023,
+    "worst2": 5.889928663354746
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 1,
+   "index": 109,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.9834398553377826,
+    "worst2": 5.765662140020893
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 2,
+   "index": 80,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.981656711918607,
+    "worst2": 5.762019146659176
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 2,
+   "index": 90,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.978856597268809,
+    "worst2": 5.650244817679947
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 2,
+   "index": 75,
+   "walking_count": 64,
+   "survival_count": 64,
+   "objective": {
+    "mean": 5.96571269939926,
+    "worst2": 5.53509192200918
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 2,
+   "index": 6,
+   "walking_count": 63,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.8879538093737,
+    "worst2": 2.6447432838870495
+   }
+  },
+  {
+   "arm": "I",
+   "replicate": 1,
+   "index": 44,
+   "walking_count": 63,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.886417906493575,
+    "worst2": 2.5570073658907932
+   }
+  },
+  {
+   "arm": "I",
+   "replicate": 1,
+   "index": 43,
+   "walking_count": 63,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.885909771843606,
+    "worst2": 2.540657755933407
+   }
+  },
+  {
+   "arm": "I",
+   "replicate": 1,
+   "index": 42,
+   "walking_count": 63,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.885564129952537,
+    "worst2": 2.5294618454067592
+   }
+  },
+  {
+   "arm": "T",
+   "replicate": 2,
+   "index": 85,
+   "walking_count": 63,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.880784722828061,
+    "worst2": 2.5442799300343935
+   }
+  },
+  {
+   "arm": "I",
+   "replicate": 1,
+   "index": 45,
+   "walking_count": 62,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.871126184804247,
+    "worst2": 2.0678444965643736
+   }
+  },
+  {
+   "arm": "I",
+   "replicate": 1,
+   "index": 46,
+   "walking_count": 62,
+   "survival_count": 63,
+   "objective": {
+    "mean": 5.8705041853040125,
+    "worst2": 2.0480270812674903
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 1,
+   "index": 21,
+   "walking_count": 60,
+   "survival_count": 60,
+   "objective": {
+    "mean": 5.468132276231927,
+    "worst2": -0.6880375508614045
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 1,
+   "index": 117,
+   "walking_count": 59,
+   "survival_count": 61,
+   "objective": {
+    "mean": 5.632866298342613,
+    "worst2": -0.8340263636518994
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 1,
+   "index": 94,
+   "walking_count": 54,
+   "survival_count": 62,
+   "objective": {
+    "mean": 5.567876378986362,
+    "worst2": -0.5804978668548493
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 2,
+   "index": 55,
+   "walking_count": 54,
+   "survival_count": 57,
+   "objective": {
+    "mean": 5.061454035014003,
+    "worst2": -0.7608176892841068
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 2,
+   "index": 94,
+   "walking_count": 52,
+   "survival_count": 55,
+   "objective": {
+    "mean": 4.95213054244646,
+    "worst2": -0.9020565530186252
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 1,
+   "index": 9,
+   "walking_count": 48,
+   "survival_count": 50,
+   "objective": {
+    "mean": 4.679829065810929,
+    "worst2": -0.7877462028948223
+   }
+  },
+  {
+   "arm": "S",
+   "replicate": 2,
+   "index": 87,
+   "walking_count": 47,
+   "survival_count": 50,
+   "objective": {
+    "mean": 4.487292933067903,
+    "worst2": -0.8271493681325297
+   }
+  }
+ ],
+ "note": "final seeds were not used; commit this file before running the final stage"
+}

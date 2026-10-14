@@ -1,0 +1,294 @@
+{
+ "note": "descriptive, exploratory; the confirmatory analysis is final.json",
+ "theta0_training_walking_of_16": 8,
+ "basin_map_arm_S_training_seeds": [
+  {
+   "sigma_u": 0.02,
+   "k": 2,
+   "n": 20,
+   "feasible": 19,
+   "feasible_frac": 0.95,
+   "wilson95": [
+    0.763868806553258,
+    0.9911185511992047
+   ],
+   "improved_on_training_seeds": 14,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.02,
+   "k": 4,
+   "n": 20,
+   "feasible": 20,
+   "feasible_frac": 1.0,
+   "wilson95": [
+    0.8388748419471806,
+    1.0
+   ],
+   "improved_on_training_seeds": 13,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.02,
+   "k": 8,
+   "n": 20,
+   "feasible": 17,
+   "feasible_frac": 0.85,
+   "wilson95": [
+    0.6395811352592431,
+    0.9476312541037835
+   ],
+   "improved_on_training_seeds": 11,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.05,
+   "k": 2,
+   "n": 20,
+   "feasible": 19,
+   "feasible_frac": 0.95,
+   "wilson95": [
+    0.763868806553258,
+    0.9911185511992047
+   ],
+   "improved_on_training_seeds": 15,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.05,
+   "k": 4,
+   "n": 20,
+   "feasible": 13,
+   "feasible_frac": 0.65,
+   "wilson95": [
+    0.43285427668523624,
+    0.818808175898918
+   ],
+   "improved_on_training_seeds": 11,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.05,
+   "k": 8,
+   "n": 20,
+   "feasible": 13,
+   "feasible_frac": 0.65,
+   "wilson95": [
+    0.43285427668523624,
+    0.818808175898918
+   ],
+   "improved_on_training_seeds": 9,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.1,
+   "k": 2,
+   "n": 20,
+   "feasible": 11,
+   "feasible_frac": 0.55,
+   "wilson95": [
+    0.34208534245034233,
+    0.7418021417443759
+   ],
+   "improved_on_training_seeds": 7,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.1,
+   "k": 4,
+   "n": 20,
+   "feasible": 9,
+   "feasible_frac": 0.45,
+   "wilson95": [
+    0.2581978582556243,
+    0.6579146575496577
+   ],
+   "improved_on_training_seeds": 5,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.1,
+   "k": 8,
+   "n": 20,
+   "feasible": 7,
+   "feasible_frac": 0.35,
+   "wilson95": [
+    0.18119182410108206,
+    0.5671457233147638
+   ],
+   "improved_on_training_seeds": 5,
+   "walk_all_16": 1
+  },
+  {
+   "sigma_u": 0.25,
+   "k": 2,
+   "n": 20,
+   "feasible": 9,
+   "feasible_frac": 0.45,
+   "wilson95": [
+    0.2581978582556243,
+    0.6579146575496577
+   ],
+   "improved_on_training_seeds": 6,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.25,
+   "k": 4,
+   "n": 20,
+   "feasible": 6,
+   "feasible_frac": 0.3,
+   "wilson95": [
+    0.1454772448676043,
+    0.5189728183535235
+   ],
+   "improved_on_training_seeds": 6,
+   "walk_all_16": 0
+  },
+  {
+   "sigma_u": 0.25,
+   "k": 8,
+   "n": 20,
+   "feasible": 2,
+   "feasible_frac": 0.1,
+   "wilson95": [
+    0.027866481213768224,
+    0.3010336452284873
+   ],
+   "improved_on_training_seeds": 1,
+   "walk_all_16": 0
+  }
+ ],
+ "validation_by_run": {
+  "theta0_walking_of_64": 43,
+  "runs": {
+   "S1": {
+    "validated_walking": [
+     54,
+     59,
+     60,
+     48,
+     38
+    ],
+    "best_gain_over_theta0": 17
+   },
+   "S2": {
+    "validated_walking": [
+     64,
+     47,
+     52,
+     54,
+     63
+    ],
+    "best_gain_over_theta0": 21
+   },
+   "T1": {
+    "validated_walking": [
+     64,
+     64,
+     64,
+     64,
+     64
+    ],
+    "best_gain_over_theta0": 21
+   },
+   "T2": {
+    "validated_walking": [
+     63,
+     64,
+     64,
+     64,
+     64
+    ],
+    "best_gain_over_theta0": 21
+   },
+   "I1": {
+    "validated_walking": [
+     63,
+     63,
+     63,
+     62,
+     62
+    ],
+    "best_gain_over_theta0": 20
+   }
+  }
+ },
+ "train_all16_counts": {
+  "S1": 1,
+  "S2": 0,
+  "T1": 46,
+  "T2": 26,
+  "I1": 20
+ },
+ "winner": {
+  "source": "T1#101",
+  "normalised_delta_vs_theta0": {
+   "freq": -0.061,
+   "duty": 0.006,
+   "hip_amp": 0.006,
+   "knee_amp": 0.186,
+   "knee_shift": -0.182,
+   "stance_knee": 0.094,
+   "hip_bias": 0.139,
+   "kp": -0.22,
+   "kd": 0.004,
+   "balance_gain": 0.174,
+   "pitch_kp": 0.011,
+   "pitch_ref": -0.162,
+   "sync_gain": 0.032,
+   "ramp_s": -0.071,
+   "start_lean": 0.122
+  },
+  "l2_distance_normalised": 0.4743740477130511,
+  "ramp_s": 0.37308082048845015,
+  "start_lean": 0.01830344347150241
+ },
+ "theta0_final_failures": {
+  "n": 59,
+  "labels": {
+   "contact_chatter": 2,
+   "fall": 55,
+   "slow_or_few_steps": 2
+  },
+  "valid_steps_le_1": 55
+ },
+ "diagnostic_walking_of_32": {
+  "standard": {
+   "winner": 31,
+   "incumbent": 23
+  },
+  "stress": {
+   "winner": 32,
+   "incumbent": 20
+  }
+ },
+ "exact_intervals_final": {
+  "winner": {
+   "successes": 150,
+   "n": 150,
+   "rate": 1.0,
+   "wilson_95ci": [
+    0.9750297556319235,
+    1.0
+   ],
+   "exact_95ci": [
+    0.9757074028338915,
+    1.0
+   ]
+  },
+  "incumbent": {
+   "successes": 91,
+   "n": 150,
+   "rate": 0.6066666666666667,
+   "wilson_95ci": [
+    0.5267662048449178,
+    0.681240143023226
+   ],
+   "exact_95ci": [
+    0.5236848599831525,
+    0.6853473699894044
+   ]
+  }
+ }
+}

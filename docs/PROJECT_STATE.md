@@ -180,3 +180,8 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Offline analysis (no rollouts): `docs/R1_SEARCH_ANALYSIS.md`. Key points: 149 distinct sampled points not 447; none near the incumbent; the worst-2 objective ranked the incumbent 140/150; 30 final seeds were under-powered.
 - R2 (local robustness around the frozen walker) is a **proposal only**: `docs/R2_DESIGN_PROPOSAL.md`; not registered, not run. Nemotron integration plan in its section 11; no live requests made.
 - Basic Memory note: `creature-forge/implementation/r1-robustness-experiment-null-result-and-lessons-2026-10-14`.
+
+## R2 executed (2026-10-14, branch `feature/phase2a-r2-local-robustness`)
+- PR #8 (R1) merged into main with a merge commit (`b3ac549`). R2 protocol registered in `463c603` before any rollout; training set frozen `9c1a26f`; selection frozen `f4820f8`.
+- Result: futility gate PROCEED; winner T1#101 walks 150/150 untouched final seeds vs frozen incumbent 91/150 (paired 59 vs 0). Registered hierarchy: non-inferiority (Tango score, margin 5 pp) confirmed, superiority (exact McNemar p = 3.5e-18) confirmed; engineering criterion (>= 135/150) met by the winner. Ledger 10,700 / 12,000 rollouts, 1,003 s active of 3,600 s. Report `experiments/phase2a_r2/REPORT.md`; limits: one planar morphology/distribution, Linux-only evidence (Windows replication blocked by the 4 GB free-memory floor), no causal claim about which parameters matter.
+- VM STOPPED (not deleted). R3 (Nemotron physical investigations): `docs/R3_DESIGN.md` (design, offline machinery `creature_forge/r3.py`, 14 tests, no live calls) and dated plan `docs/MILESTONE_PLAN.md`.

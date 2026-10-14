@@ -1,0 +1,24 @@
+{
+ "stop": false,
+ "n_incumbent_walking": 41,
+ "n_incumbent_failing": 23,
+ "train_seeds": [
+  7000,
+  7001,
+  7002,
+  7003,
+  7004,
+  7005,
+  7006,
+  7007,
+  7008,
+  7009,
+  7010,
+  7011,
+  7012,
+  7014,
+  7015,
+  7017
+ ]
+}
+training_set.json written; COMMIT it before running any training stage

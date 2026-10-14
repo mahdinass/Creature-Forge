@@ -150,7 +150,7 @@ def cmd_bootstrap(_a=None) -> None:
     subprocess.check_call(["git", "-C", str(ROOT), "bundle", "create", str(bundle), branch], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     sc = ["scp", "-F", str(Path.home() / ".ssh" / "config")]
     subprocess.check_call(sc + [str(bundle), f"{HOST}:repo.bundle"])
-    subprocess.check_call(sc + [str(HERE / "remote" / "bootstrap.sh"), str(HERE / "remote" / "run_stage.sh"), str(HERE / "remote" / "status.sh"),
+    subprocess.check_call(sc + [str(HERE / "remote" / "bootstrap.sh"), str(HERE / "remote" / "run_stage.sh"), str(HERE / "remote" / "status.sh"), str(HERE / "remote" / "run_script.sh"),
                                 str(HERE / "remote" / "check_env.py"), str(HERE / "reference_windows.json"), f"{HOST}:"])
     bundle.unlink()
     r = ssh(f"chmod +x ~/*.sh && ~/bootstrap.sh ~/repo.bundle {shlex.quote(branch)} {REGISTERED_COMMIT}", timeout=1800)
@@ -176,6 +176,24 @@ def cmd_run_stage(a) -> None:
     print(ssh(f"~/run_stage.sh {shlex.quote(a.stage)} --rep {a.rep}").stdout)
 
 
+def cmd_run(a) -> None:
+    """Launch scripts/<script> <args...> detached on the VM (refuses unless local and VM deadlines are in sync)."""
+    cmd_verify_deadline()
+    print(ssh("~/run_script.sh " + " ".join(shlex.quote(x) for x in [a.script, *a.args])).stdout)
+
+
+def cmd_wait(a) -> None:
+    """Block until no experiment stage is running on the VM, then print the tail of the newest log."""
+    t0 = time.time()
+    while time.time() - t0 < a.timeout:
+        r = ssh("pgrep -f '[s]cripts/run_r[0-9].py' >/dev/null && echo busy || echo done", timeout=60, check=False)
+        if "done" in r.stdout:
+            print(ssh("tail -n 25 $(ls -t ~/logs/run_r*.log | head -1)", timeout=60).stdout)
+            return
+        time.sleep(10)
+    raise SystemExit(f"still running after {a.timeout}s")
+
+
 def cmd_monitor(_a=None) -> None:
     print(ssh("~/status.sh", timeout=60).stdout)
 
@@ -183,7 +201,7 @@ def cmd_monitor(_a=None) -> None:
 def cmd_sync_down(_a=None) -> Path:
     dest = ROOT / "artifacts" / "nebius_r1" / time.strftime("%Y%m%dT%H%M%S")
     dest.mkdir(parents=True)
-    ssh("cd ~ && mkdir -p logs creature-forge/experiments/phase2a_r1/results && tar czf /tmp/forge_results.tgz logs creature-forge/experiments/phase2a_r1/results && sha256sum /tmp/forge_results.tgz > /tmp/forge_results.sha")
+    ssh("cd ~ && mkdir -p logs creature-forge/experiments/phase2a_r1/results creature-forge/experiments/phase2a_r2/results && tar czf /tmp/forge_results.tgz logs creature-forge/experiments/phase2a_r1/results creature-forge/experiments/phase2a_r2/results && sha256sum /tmp/forge_results.tgz > /tmp/forge_results.sha")
     sc = ["scp", "-F", str(Path.home() / ".ssh" / "config")]
     subprocess.check_call(sc + [f"{HOST}:/tmp/forge_results.tgz", f"{HOST}:/tmp/forge_results.sha", str(dest)])
     import hashlib
@@ -301,12 +319,14 @@ def main() -> None:
         sp.add_parser(n)
     e = sp.add_parser("exec"); e.add_argument("command"); e.add_argument("--timeout", type=int, default=600)
     r = sp.add_parser("run-stage"); r.add_argument("stage", choices=["pilot", "train", "validate", "gate", "select"]); r.add_argument("--rep", type=int, default=1)
+    w = sp.add_parser("wait"); w.add_argument("--timeout", type=int, default=3300)
+    ru = sp.add_parser("run"); ru.add_argument("script"); ru.add_argument("args", nargs=argparse.REMAINDER)
     x = sp.add_parser("extend"); x.add_argument("--hours", type=float, required=True)
     d = sp.add_parser("delete"); d.add_argument("--yes", action="store_true"); d.add_argument("--skip-sync", action="store_true")
     a = ap.parse_args()
     {"plan": cmd_plan, "create": cmd_create, "status": cmd_status, "ssh-config": cmd_ssh_config, "bootstrap": cmd_bootstrap,
      "check": cmd_check, "exec": cmd_exec, "run-stage": cmd_run_stage, "monitor": cmd_monitor, "sync-down": cmd_sync_down,
-     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "delete": cmd_delete, "watchdog": cmd_watchdog}[a.cmd](a)
+     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog}[a.cmd](a)
 
 
 if __name__ == "__main__":
