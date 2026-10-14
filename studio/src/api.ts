@@ -1,6 +1,7 @@
 import type { CompileResult, Params, Phase0, PushInfo, RunPayload, Schema, Sketch } from './types'
 import type { LabRow, LabView, Replay } from './lab/labTypes'
 import type { LocomotionReplay, LocomotionSummary } from './locomotion/locoTypes'
+import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
 
 async function j<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -45,3 +46,12 @@ export const getLocomotionSummary = () => fetch('/api/locomotion/summary').then(
 export const getLocomotionReplay = (controller: string, seed: number, duration: number) =>
   fetch(`/api/locomotion/replay?controller=${encodeURIComponent(controller)}&seed=${seed}&duration=${duration}`).then((r) =>
     j<LocomotionReplay>(r))
+
+// Investigation demo (observed failure -> model proposal -> bounded edit -> MuJoCo verification). Replays are fresh deterministic rollouts.
+export const getDemoStatus = () => fetch('/api/demo/status').then((r) => j<DemoStatus>(r))
+export const getDemoRuns = () => fetch('/api/demo/runs').then((r) => j<DemoRow[]>(r))
+export const getDemoRun = (id: string) => fetch(`/api/demo/runs/${encodeURIComponent(id)}`).then((r) => j<DemoRun>(r))
+export const getDemoReplay = (id: string, which: string, seed: number) =>
+  fetch(`/api/demo/runs/${encodeURIComponent(id)}/replay?which=${encodeURIComponent(which)}&seed=${seed}`).then((r) => j<DemoReplay>(r))
+export const startDemoRun = (mode: 'live' | 'mock', confirmLive: boolean) =>
+  fetch('/api/demo/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode, confirm_live: confirmLive }) }).then((r) => j<DemoRun>(r))

@@ -1,0 +1,7 @@
+{
+ "records": {
+  "live-001-invalid-citations.json": "9efe6c220dc407642c87cff605a539b40a3732ef8cca292da2d87971767c587f",
+  "scripted-mock-example.json": "a9e56528ca98e4cc25fed203a504e151e945fa697b1e0ed7da22daca2cb686e1",
+  "live-002-two-valid-proposals.json": "c262928df430d4eaffb6de792d1647d02fe265253ee24213faf6473267e05723"
+ }
+}

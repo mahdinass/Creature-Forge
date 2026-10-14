@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getPhase0, getSchema, simulate } from './api'
+import { Demo } from './demo/Demo'
 import { Lab } from './lab/Lab'
 import { Locomotion } from './locomotion/Locomotion'
 import { parseDeepLink } from './lab/labLogic'
@@ -12,11 +13,11 @@ import { fmtPct } from './playback'
 import { usePlayback } from './store'
 import type { Params, Phase0, RunPayload, Schema } from './types'
 
-type Tab = 'studio' | 'compare' | 'lab' | 'locomotion' | 'sketch'
+type Tab = 'studio' | 'compare' | 'lab' | 'locomotion' | 'demo' | 'sketch'
 
 export default function App() {
   const q = new URLSearchParams(window.location.search)
-  const [tab, setTab] = useState<Tab>((['studio', 'compare', 'lab', 'locomotion', 'sketch'] as Tab[]).find((t) => t === q.get('tab')) ?? 'studio')
+  const [tab, setTab] = useState<Tab>((['studio', 'compare', 'lab', 'locomotion', 'demo', 'sketch'] as Tab[]).find((t) => t === q.get('tab')) ?? 'studio')
   const link = parseDeepLink(window.location.search)
   const [schema, setSchema] = useState<Schema | null>(null)
   const [phase0, setPhase0] = useState<Phase0 | null>(null)
@@ -89,7 +90,7 @@ export default function App() {
       <header>
         <h1>🦿 Creature Forge <span>Studio</span></h1>
         <nav>
-          {(['studio', 'compare', 'lab', 'locomotion', 'sketch'] as Tab[]).map((t) => (
+          {(['studio', 'compare', 'lab', 'locomotion', 'demo', 'sketch'] as Tab[]).map((t) => (
             <button key={t} className={tab === t ? 'on' : ''}
               onClick={() => {
                 setTab(t)
@@ -97,7 +98,7 @@ export default function App() {
                 setDuration(d)
                 usePlayback.getState().restart()
               }}>
-              {{ studio: 'Studio', compare: 'Compare (Phase 0)', lab: 'Investigations', locomotion: 'Locomotion', sketch: 'Sketch' }[t]}
+              {{ studio: 'Studio', compare: 'Compare (Phase 0)', lab: 'Investigations', locomotion: 'Locomotion', demo: 'AI Investigation', sketch: 'Sketch' }[t]}
             </button>
           ))}
         </nav>
@@ -161,6 +162,8 @@ export default function App() {
       )}
 
       {tab === 'locomotion' && <Locomotion />}
+
+      {tab === 'demo' && <Demo initialRun={q.get('run')} />}
 
       {tab === 'lab' && <Lab initialTrial={link.trial} initialStep={link.step} />}
 

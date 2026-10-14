@@ -4,6 +4,7 @@ No physics here; every pose served comes from creature_forge.render_export (MuJo
 """
 from __future__ import annotations
 
+import threading
 from contextlib import asynccontextmanager
 from functools import lru_cache
 from pathlib import Path
@@ -13,6 +14,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
+from .. import demo as demo_mod
 from ..controller import CTRL_BOUNDS, GaitParams
 from ..experiment import (PHASE0_BASELINE, PHASE0_CANDIDATE, PHASE0_DURATION, PHASE0_PUSH, PHASE0_SEEDS,
                           compare_designs)
@@ -33,6 +35,16 @@ class PushIn(BaseModel):
     time: float = Field(ge=0, le=20)
     force: float = Field(ge=-200, le=200)
     duration: float = Field(default=0.15, gt=0, le=2)
+
+
+class DemoRunIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    mode: str = Field(pattern="^(live|mock)$")
+    confirm_live: bool = False
+
+
+_DEMO_LOCK = threading.Lock()
+_DEMO_LIVE_CALLS = {"n": 0}
 
 
 class SimRequest(BaseModel):
@@ -85,6 +97,19 @@ def resolve_static(root: Path, path: str) -> Path | None:
     except (ValueError, OSError):
         return None
     return f if f.is_file() else None
+
+
+_DEMO_REPLAYS: dict = {}
+
+
+def _demo_replay_cached(run_id: str, which: str, seed: int, rec: dict) -> dict:
+    """Fresh deterministic MuJoCo replay of a stored controller vector; cached per (run, which, seed, vector)."""
+    key = (run_id, which, seed, hash(tuple(demo_mod.replay_vector(rec, which))))
+    if key not in _DEMO_REPLAYS:
+        if len(_DEMO_REPLAYS) >= 24:
+            _DEMO_REPLAYS.pop(next(iter(_DEMO_REPLAYS)))
+        _DEMO_REPLAYS[key] = demo_mod.build_replay(rec, which, seed)
+    return _DEMO_REPLAYS[key]
 
 
 def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = DIST,
@@ -173,6 +198,70 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
             raise HTTPException(422, str(exc)) from exc
         except FileNotFoundError:
             raise HTTPException(404, "controller export not found") from None
+
+    @app.get("/api/demo/status")
+    def demo_status():
+        used = demo_mod.r3v2.prior_usage()
+        return {"live_enabled": demo_mod.live_enabled(), "live_calls_this_process": _DEMO_LIVE_CALLS["n"],
+                "live_calls_cap_per_process": demo_mod.MAX_LIVE_REQUESTS_PER_PROCESS,
+                "combined_budget": {"requests_used": used["requests"], "requests_cap": demo_mod.r3v2.TOTAL_REQUESTS_CAP,
+                                    "tokens_used": used["tokens"], "tokens_cap": demo_mod.r3v2.TOTAL_TOKENS_CAP},
+                "setting": demo_mod.SETTING, "limits": demo_mod.LIMITS,
+                "kinds": {"LIVE": "a real Nebius call made during this run",
+                          "RECORDED_LIVE": "a stored, hash-verified copy of an earlier real call",
+                          "SCRIPTED_MOCK": "text written by this repository to exercise the pipeline; not a model"}}
+
+    @app.get("/api/demo/runs")
+    def demo_runs():
+        return demo_mod.list_runs()
+
+    @app.get("/api/demo/runs/{run_id}")
+    def demo_run(run_id: str):
+        try:
+            return demo_mod.load_run(run_id)
+        except (KeyError, FileNotFoundError):
+            raise HTTPException(404, "no such demo run") from None
+
+    @app.get("/api/demo/runs/{run_id}/replay")
+    def demo_replay(run_id: str, which: str = "baseline", seed: int = demo_mod.FAILING_SEED):
+        try:
+            rec = demo_mod.load_run(run_id)
+            return _demo_replay_cached(run_id, which, seed, rec)
+        except (KeyError, FileNotFoundError):
+            raise HTTPException(404, "no such demo run or replay") from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+
+    @app.post("/api/demo/run")
+    def demo_run_new(req: DemoRunIn):
+        from ..optimize import Executor
+        from ..r2 import r2_job
+        if req.mode == "live":
+            if not demo_mod.live_enabled():
+                raise HTTPException(403, "live mode is disabled on this server (needs CREATURE_FORGE_ENABLE_LIVE=1 and a Nebius key)")
+            if not req.confirm_live:
+                raise HTTPException(422, "live mode needs confirm_live=true: it spends Nebius inference budget")
+            if _DEMO_LIVE_CALLS["n"] >= demo_mod.MAX_LIVE_REQUESTS_PER_PROCESS:
+                raise HTTPException(429, "live-call cap for this server process reached")
+        if not _DEMO_LOCK.acquire(blocking=False):
+            raise HTTPException(409, "another demo run is in progress")
+        try:
+            client = None
+            if req.mode == "live":
+                client = demo_mod.r3v2.make_client()
+                client.limits = type(client.limits)(max_requests=client.limits.max_requests, max_total_tokens=client.limits.max_total_tokens,
+                                                    max_tokens_per_request=demo_mod.SETTING["max_tokens"], timeout_s=client.limits.timeout_s)
+                _DEMO_LIVE_CALLS["n"] += 1
+            with Executor(4, timeout_s=600, fn=r2_job) as ex:
+                rec = demo_mod.run_investigation(req.mode, ex, client)
+            if req.mode == "live":
+                demo_mod.record_live_request(rec)
+            demo_mod.save_local(rec)
+            return rec
+        except RuntimeError as exc:
+            raise HTTPException(500, str(exc)) from exc
+        finally:
+            _DEMO_LOCK.release()
 
     @app.get("/api/sketch/default")
     def sketch_default():

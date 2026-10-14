@@ -27,6 +27,7 @@ CONFIG = RES2 / "generation_config.json"
 REQUESTS2 = RES2 / "requests.jsonl"
 LIVE_SUMMARY2 = RES2 / "live_summary.json"
 CANDIDATES2 = RES2 / "candidates.json"
+DEMO_REQUESTS = RES2 / "demo_requests.jsonl"       # live demo calls (not R3 experiments) draw on the same combined caps
 
 # combined caps across v1 and v2
 TOTAL_REQUESTS_CAP = 41
@@ -72,9 +73,10 @@ def prior_usage() -> dict:
     v1 = usage_from(_records(RES1 / "requests.jsonl"))
     cal = usage_from(_records(CAL_REQUESTS))
     exp = usage_from(_records(REQUESTS2))
+    demo = usage_from(_records(DEMO_REQUESTS))
     return {"v1": {"requests": v1[0], "tokens": v1[1]}, "calibration": {"requests": cal[0], "tokens": cal[1]},
-            "experiment": {"requests": exp[0], "tokens": exp[1]},
-            "requests": v1[0] + cal[0] + exp[0], "tokens": v1[1] + cal[1] + exp[1]}
+            "experiment": {"requests": exp[0], "tokens": exp[1]}, "demo": {"requests": demo[0], "tokens": demo[1]},
+            "requests": v1[0] + cal[0] + exp[0] + demo[0], "tokens": v1[1] + cal[1] + exp[1] + demo[1]}
 
 
 def make_client(**overrides) -> NebiusClient:

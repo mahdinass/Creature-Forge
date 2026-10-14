@@ -16,6 +16,10 @@ for f in $(git diff --name-only --diff-filter=A HEAD "$NEW" 2>/dev/null || true)
     if [ "$(git hash-object "$f")" = "$(git rev-parse "$NEW:$f")" ]; then rm "$f"; else echo "untracked $f differs from the committed blob; refusing"; exit 6; fi
   fi
 done
+# Tracked results files that the VM appended to (e.g. the append-only ledger) are accepted only when they already equal the incoming blob.
+for f in $(git diff --name-only); do
+  if [ "$(git hash-object "$f")" = "$(git rev-parse "$NEW:$f" 2>/dev/null)" ]; then git checkout -- "$f"; else echo "modified $f differs from the incoming commit; refusing"; exit 7; fi
+done
 git checkout --quiet -B "$BRANCH" "$NEW"
 git merge-base --is-ancestor "$REG" HEAD || { echo "registered commit $REG is not an ancestor of HEAD"; exit 2; }
 git diff --quiet "$REG" HEAD -- experiments/phase2a_r1/protocol.json || { echo "protocol.json differs from registered commit"; exit 3; }
