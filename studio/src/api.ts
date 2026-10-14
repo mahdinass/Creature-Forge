@@ -1,6 +1,7 @@
 import type { CompileResult, Params, Phase0, PushInfo, RunPayload, Schema, Sketch } from './types'
 import type { LabRow, LabView, Replay } from './lab/labTypes'
 import type { LocomotionReplay, LocomotionSummary } from './locomotion/locoTypes'
+import type { OverviewData } from './overview/overviewTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
 
 async function j<T>(res: Response): Promise<T> {
@@ -46,6 +47,8 @@ export const getLocomotionSummary = () => fetch('/api/locomotion/summary').then(
 export const getLocomotionReplay = (controller: string, seed: number, duration: number) =>
   fetch(`/api/locomotion/replay?controller=${encodeURIComponent(controller)}&seed=${seed}&duration=${duration}`).then((r) =>
     j<LocomotionReplay>(r))
+
+export const getOverview = () => fetch('/api/overview').then((r) => j<OverviewData>(r))
 
 // Investigation demo (observed failure -> model proposal -> bounded edit -> MuJoCo verification). Replays are fresh deterministic rollouts.
 export const getDemoStatus = () => fetch('/api/demo/status').then((r) => j<DemoStatus>(r))

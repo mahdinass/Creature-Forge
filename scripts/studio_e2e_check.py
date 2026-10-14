@@ -98,7 +98,7 @@ def main() -> int:
         with tempfile.TemporaryDirectory() as prof:
             out = subprocess.run(
                 [exe, "--headless=new", "--disable-gpu-sandbox", "--enable-unsafe-swiftshader", "--use-angle=swiftshader",
-                 f"--user-data-dir={prof}", "--virtual-time-budget=8000", "--dump-dom", f"{base}/?t=2.6"],
+                 f"--user-data-dir={prof}", "--virtual-time-budget=8000", "--dump-dom", f"{base}/?tab=studio&t=2.6"],
                 capture_output=True, text=True, timeout=120).stdout
         m = re.search(r"FALL detected at sim t = ([0-9.]+) s", out)
         check(m is not None and abs(float(m.group(1)) - fall[0]["time"]) < 0.01,
