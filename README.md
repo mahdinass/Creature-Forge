@@ -25,9 +25,13 @@ npm --prefix studio install && npm --prefix studio run build
 
 **Windows, one command (recommended):** `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1`. It replaces an older Studio left on port 8000, rebuilds a stale frontend, starts the current server, verifies that every API route the UI needs exists, and opens the browser. `GET /api/version` shows which commit is being served.
 
-Open the **Overview** tab (landing page) and press **Watch a real, recorded AI investigation**. The **AI Investigation** tab opens a guided story (failure → evidence → Nemotron's claim → the parameters it changes → MuJoCo's verdict → synchronized before/after replay), with the raw step-by-step view one click away: it replays two *recorded* real Nemotron runs and a clearly labelled scripted mock. Replays are fresh deterministic MuJoCo rollouts, so the 3D comparison is real physics, computed on demand.
+Open **Home**: the hero is a real MuJoCo replay of the walking controllers. Navigation follows the journey **Create → Simulate → Investigate**:
 
-Tabs: *Overview* (the story and both results) · *Studio* (design a biped, push it, watch it fall) · *Compare (Phase 0)* · *Investigations* (earlier push-recovery experiments) · *Locomotion* (walking controllers and held-out results) · *AI Investigation* (the Nemotron loop) · *Sketch* (drag the joints and torso of a planar biped; near-valid drawings snap, unsupported ones are explained).
+- **Create → Draw:** draw a side-view biped freehand (mouse, touch or pen; undo, redo, erase, zoom, pan). Deterministic stroke interpretation shows the torso, joints and feet it found, a live MuJoCo preview, and what it assumed. **Guided constraints ON** (default) snaps gently and keeps the creature inside the verified design range; **OFF (experimental)** uses your strokes exactly as drawn and runs bad-but-buildable creatures through MuJoCo so they can fall. Drawings the model cannot represent are refused with the exact reason, with an optional consent-gated approximation. *Refine* keeps the older joint-handle editor.
+- **Simulate → Playground / Compare designs:** push a creature and read, in plain words, why it fell.
+- **Investigate → AI investigation / Walking lab / Experiment history:** the recorded Nemotron investigation (failure → evidence → proposal → verification → verdict, with synchronized before/after simulations), the tuned walking robot next to the starting one, and an archive of earlier experiments sorted by outcome.
+
+Old `?tab=` links (`overview`, `studio`, `compare`, `lab`, `locomotion`, `demo`, `sketch`) keep working.
 
 ## Where NVIDIA Nemotron and Nebius are used
 

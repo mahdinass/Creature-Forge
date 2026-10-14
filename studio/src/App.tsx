@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useState } from 'react'
-import { getPhase0, getSchema, simulate } from './api'
+import { getPhase0, getSchema, sandboxSimulate, simulate } from './api'
 import { Demo } from './demo/Demo'
-import { Overview } from './overview/Overview'
+import { Home } from './home/Home'
+import { SandboxResult, type SandboxMeta } from './sandbox/SandboxResult'
+import { Shell } from './shell/Shell'
+import { parseTab, stageOf, type Tab } from './shell/nav'
+import type { Change, SandboxBodyDict } from './sketch/freehandTypes'
 import { Lab } from './lab/Lab'
-import { Locomotion } from './locomotion/Locomotion'
+import { WalkingLab } from './walking/WalkingLab'
 import { parseDeepLink } from './lab/labLogic'
 import { Metrics } from './Metrics'
 import { ParamPanel, type PushSettings } from './ParamPanel'
-import { SketchEditor } from './SketchEditor'
+import { SketchPage } from './sketch/SketchPage'
 import { HeightChart, Transport } from './Timeline'
 import { Viewport } from './Viewport'
 import { fmtPct } from './playback'
 import { usePlayback } from './store'
 import type { Params, Phase0, RunPayload, Schema } from './types'
 
-type Tab = 'overview' | 'studio' | 'compare' | 'lab' | 'locomotion' | 'demo' | 'sketch'
-
 export default function App() {
   const q = new URLSearchParams(window.location.search)
-  const [tab, setTab] = useState<Tab>((['overview', 'studio', 'compare', 'lab', 'locomotion', 'demo', 'sketch'] as Tab[]).find((t) => t === q.get('tab')) ?? 'overview')
+  const [tab, setTab] = useState<Tab>(parseTab(window.location.search))
+  const [sandbox, setSandbox] = useState<SandboxMeta | null>(null)
   const link = parseDeepLink(window.location.search)
   const [schema, setSchema] = useState<Schema | null>(null)
   const [phase0, setPhase0] = useState<Phase0 | null>(null)
@@ -36,6 +39,7 @@ export default function App() {
       setBusy(true)
       setError(null)
       try {
+        setSandbox(null)
         const r = await simulate(b, seed, s.preset.duration,
           push.enabled ? { ...s.preset.push, force: push.force } : null)
         setRun(r)
@@ -79,6 +83,32 @@ export default function App() {
     return () => cancelAnimationFrame(raf)
   }, [])
 
+  const go = (t: Tab) => {
+    setTab(t)
+    history.replaceState(null, '', `?tab=${t}`)
+    const d = !phase0 ? 5 : t === 'compare' ? phase0.baseline.duration : run ? run.duration : 5
+    setDuration(d)
+    usePlayback.getState().restart()
+    window.scrollTo({ top: 0 })
+  }
+
+  const simulateDrawn = async (b: SandboxBodyDict, approximated: Change[] | null): Promise<string | null> => {
+    if (!schema) return 'The Studio backend is not ready yet.'
+    try {
+      const r = await sandboxSimulate(b, push.enabled ? { ...schema.preset.push, force: push.force } : null, seed, schema.preset.duration)
+      setRun(r)
+      setBody({ ...body!, ...Object.fromEntries(Object.entries(b).filter(([, v]) => typeof v === 'number')) } as Params)
+      setSandbox({ explanation: r.explanation, approximated })
+      setTab('studio')
+      history.replaceState(null, '', '?tab=studio')
+      setDuration(r.duration)
+      usePlayback.getState().restart()
+      return null
+    } catch (e) {
+      return (e as Error).message
+    }
+  }
+
   if (fatal) return <div className="fatal">{fatal}</div>
   if (!schema || !phase0 || !body || !run) return <div className="fatal">Loading MuJoCo experiments…</div>
 
@@ -87,33 +117,26 @@ export default function App() {
   const cf = phase0.candidate.body.foot_length
 
   return (
-    <div className="app">
-      <header>
-        <h1>🦿 Creature Forge <span>Studio</span></h1>
-        <nav>
-          {(['overview', 'studio', 'compare', 'lab', 'locomotion', 'demo', 'sketch'] as Tab[]).map((t) => (
-            <button key={t} className={tab === t ? 'on' : ''}
-              onClick={() => {
-                setTab(t)
-                const d = (t === 'compare' ? phase0.baseline : run).duration
-                setDuration(d)
-                usePlayback.getState().restart()
-              }}>
-              {{ overview: 'Overview', studio: 'Studio', compare: 'Compare (Phase 0)', lab: 'Investigations', locomotion: 'Locomotion', demo: 'AI Investigation', sketch: 'Sketch' }[t]}
-            </button>
-          ))}
-        </nav>
-        <small>Poses are MuJoCo output recorded server-side; the browser only replays them.</small>
-      </header>
+    <div className="app" data-stage={stageOf(tab)}>
+      <Shell tab={tab} go={go} />
+      <div className="page" key={tab}>
 
       {tab === 'studio' && (
         <main className="studio">
           <aside>
-            <ParamPanel schema={schema} body={body} onBody={setBody} push={push} onPush={setPush} seed={seed}
-              onSeed={setSeed} busy={busy} error={error} onForge={() => void forge(body, schema)} />
+            {sandbox ? (
+              <SandboxResult meta={sandbox} onEdit={() => go('sketch')} onSliders={() => setSandbox(null)} onInvestigate={() => go('demo')} />
+            ) : (
+              <ParamPanel schema={schema} body={body} onBody={setBody} push={push} onPush={setPush} seed={seed}
+                onSeed={setSeed} busy={busy} error={error} onForge={() => void forge(body, schema)} />
+            )}
           </aside>
           <section>
-            <Viewport run={run} label={`Your creature · foot ${run.body.foot_length.toFixed(3)} m`} />
+            <p className={`run-line ${run.metrics.fell ? 'bad' : 'ok'}`} data-testid="run-line">
+              {run.metrics.fell ? `It fell at ${run.events.find((e) => e.kind === 'fall')?.time.toFixed(2)} s.` : 'It stayed on its feet for the whole run.'}
+              {run.push ? ` A ${run.push.force} N push hit it at ${run.push.time.toFixed(1)} s.` : ''}
+            </p>
+            <Viewport closeup run={run} label={sandbox ? 'Your drawn creature' : `Your creature · foot ${run.body.foot_length.toFixed(3)} m`} />
             <Transport runs={[{ run, label: 'run', color: '#4cc2ff' }]} />
             <div className="below">
               <HeightChart runs={[{ run, label: 'run', color: '#4cc2ff' }]} />
@@ -131,8 +154,8 @@ export default function App() {
             Only the foot length differs: <b>{bf * 100} cm</b> vs <b>{cf * 100} cm</b>.
           </div>
           <div className="pair">
-            <Viewport run={phase0.baseline} label={`BASELINE · foot ${bf * 100} cm`} />
-            <Viewport run={phase0.candidate} label={`CANDIDATE · foot ${cf * 100} cm`} />
+            <Viewport closeup run={phase0.baseline} label={`BASELINE · foot ${bf * 100} cm`} />
+            <Viewport closeup run={phase0.candidate} label={`CANDIDATE · foot ${cf * 100} cm`} />
           </div>
           <Transport runs={[{ run: phase0.baseline, label: 'baseline', color: '#e5484d' },
             { run: phase0.candidate, label: 'candidate', color: '#3fb97f' }]} />
@@ -162,24 +185,22 @@ export default function App() {
         </main>
       )}
 
-      {tab === 'overview' && <Overview go={(t) => { setTab(t); usePlayback.getState().restart() }} />}
+      {tab === 'overview' && <Home go={go} />}
 
-      {tab === 'locomotion' && <Locomotion />}
+      {tab === 'locomotion' && <WalkingLab />}
 
-      {tab === 'demo' && <Demo initialRun={q.get('run')} />}
+      {tab === 'demo' && <Demo initialRun={q.get('run')} go={go} />}
 
       {tab === 'lab' && <Lab initialTrial={link.trial} initialStep={link.step} />}
 
-      {tab === 'sketch' && (
-        <main>
-          <SketchEditor initialBody={body} onUse={(p) => {
-            const nb = { ...body, ...p }
-            setBody(nb)
-            setTab('studio')
-            void forge(nb, schema)
-          }} />
-        </main>
-      )}
+      {tab === 'sketch' && <SketchPage initialBody={body} onSimulate={simulateDrawn} onUseParams={(p) => {
+        const nb = { ...body, ...p }
+        setBody(nb)
+        setSandbox(null)
+        go('studio')
+        void forge(nb, schema)
+      }} />}
+      </div>
     </div>
   )
 }

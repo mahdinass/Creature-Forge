@@ -13,6 +13,7 @@ let failed = 0
 const ok = (c, m) => { console.log(`${c ? 'PASS' : 'FAIL'} ${m}`); if (!c) failed++ }
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const page = await browser.newPage({ viewport: { width: 1400, height: 1000 } })
+page.setDefaultNavigationTimeout(150000)
 const errors = [], bad = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('response', (r) => { if (r.url().includes('/api/') && (r.status() >= 400 || !(r.headers()['content-type'] || '').includes('json'))) bad.push(`${r.status()} ${r.url()}`) })
@@ -26,6 +27,7 @@ const dragBy = async (sel, dx, dy) => {
 const settle = () => page.waitForTimeout(700)
 try {
   await page.goto(`${BASE}/?tab=sketch`)
+  await page.click('[data-testid="mode-refine"]') // the handle editor is the Refine mode of Create
   await page.waitForSelector('[data-testid="sketch-valid"]', { timeout: 30000 })
   ok(true, 'a fresh sketch is valid and says it maps exactly to a MuJoCo model')
   ok(/0\.300/.test(await text('[data-testid="sketch-compiled"]')), 'the compiled table shows the default 0.300 m legs')
@@ -78,7 +80,7 @@ try {
   await page.waitForFunction(() => /thigh/i.test(document.body.innerText), null, { timeout: 60000 }).catch(() => {})
   await page.setViewportSize({ width: 360, height: 800 })
   await page.goto(`${BASE}/?tab=sketch`)
-  await page.waitForSelector('[data-testid="sketch-valid"]')
+  await page.waitForSelector('[data-testid="sketch-page"]')
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   ok(overflow <= 1, `no horizontal page overflow at 360 px (${overflow}px)`)
   ok(bad.length === 0, `every API response is JSON and < 400${bad.length ? ': ' + bad.join(' | ') : ''}`)

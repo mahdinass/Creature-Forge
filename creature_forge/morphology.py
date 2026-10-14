@@ -44,7 +44,11 @@ class BipedParams:
 
 
 def _leg(side: str, p: BipedParams) -> str:
-    t, s, f = p.thigh_length, p.shank_length, p.foot_length
+    return _leg_xml(side, p.thigh_length, p.shank_length, p.foot_length, p)
+
+
+def _leg_xml(side: str, t: float, s: float, f: float, p: BipedParams) -> str:
+    """One leg with explicit segment lengths (the scientific path passes the shared lengths; the sandbox may differ per leg)."""
     col = 'contype="2" conaffinity="1" condim="3"'
     return f"""
       <body name="thigh_{side}" pos="0 0 -0.12">
@@ -94,4 +98,7 @@ def build_mjcf(p: BipedParams) -> str:
 
 
 def build_model(p: BipedParams) -> mujoco.MjModel:
+    builder = getattr(p, "build_model", None)  # sandbox bodies bring their own validated compiler
+    if builder is not None:
+        return builder()
     return mujoco.MjModel.from_xml_string(build_mjcf(p))

@@ -1,0 +1,44 @@
+/* AI investigation: the two simulations are the centrepiece; violet marks the model's part. */
+.inv { display: grid; gap: 14px; }
+.inv-top { display: grid; gap: 12px; }
+.prov { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; padding: 8px 14px; border-radius: var(--r-md); border: 1px solid var(--line-2); background: var(--panel); }
+.prov b { padding: 2px 10px; border-radius: 999px; font-size: 13px; letter-spacing: .02em; }
+.prov-RECORDED_LIVE b { background: var(--investigate); color: #120d2b; } .prov-LIVE b { background: var(--ok); color: #05210f; } .prov-SCRIPTED_MOCK b { background: var(--warn); color: #2a1d02; }
+.prov-SCRIPTED_MOCK { border-color: var(--warn); } .prov span { color: #c4ccda; font-size: 14px; }
+.rail { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
+.rail li { flex: 1 1 0; min-width: 120px; }
+.rail button { width: 100%; display: flex; gap: 8px; align-items: center; justify-content: center; padding: 10px 12px; border-radius: var(--r-md); background: var(--panel); border: 1px solid var(--line); color: var(--dim); font-weight: 600; position: relative; }
+.rail button .n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--panel-2); font-size: 12px; }
+.rail button.done { color: var(--txt); } .rail button.done .n { background: var(--investigate); color: #120d2b; }
+.rail button.on { color: var(--txt); border-color: var(--investigate); background: rgba(156, 140, 255, .12); } .rail button.on .n { background: var(--investigate); color: #120d2b; }
+.rail button:disabled { opacity: .4; cursor: not-allowed; }
+.inv-main { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 18px; align-items: start; }
+.stage { display: grid; gap: 10px; min-width: 0; }
+.stage-bar { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; min-height: 40px; }
+.seed-pick { display: flex; gap: 8px; align-items: center; color: var(--dim); } .seed-pick select { background: var(--panel); color: var(--txt); border: 1px solid var(--line-2); border-radius: 8px; padding: 5px 8px; }
+.duo { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .duo-cell { position: relative; }
+.duo .viewport { height: min(52vh, 560px); } .duo-skel { height: min(52vh, 560px); } .loading-note { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); pointer-events: none; }
+.result-chip { position: absolute; right: 12px; bottom: 12px; padding: 6px 14px; border-radius: 999px; font-weight: 700; background: rgba(13, 16, 22, .85); border: 1.5px solid var(--line-2); backdrop-filter: blur(6px); }
+.result-chip.ok { color: var(--ok); border-color: var(--ok); } .result-chip.bad { color: #ff8b97; border-color: var(--bad); } .result-chip.warn { color: var(--warn); border-color: var(--warn); }
+.inspector { display: grid; gap: 12px; padding: 18px 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg); position: sticky; top: 76px; max-height: calc(100vh - 92px); overflow-y: auto; }
+.inspector h2 { margin: 0; font-size: 24px; line-height: 1.1; } .inspector h3 { margin: 4px 0 0; font-size: 16px; } .inspector p { margin: 0; color: #d3d9e5; max-width: 60ch; }
+.pair-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .fact { display: grid; gap: 2px; padding: 12px; border-radius: var(--r-md); background: var(--panel-2); border: 1px solid var(--line-2); }
+.fact b { font: 650 17px var(--font-display); } .fact span { font-size: 22px; font-weight: 650; } .fact.bad span { color: #ff8b97; } .fact.ok span { color: var(--ok); }
+.ctx-facts { margin: 0; padding-left: 18px; } .ctx-facts li { margin: 4px 0; } .ctx-facts b { font-size: 18px; }
+.claim { margin: 0; padding: 14px 16px; border-radius: var(--r-md); background: var(--model-bg); border: 1.5px dashed var(--investigate); font-size: 17px; line-height: 1.45; display: grid; gap: 8px; }
+.claim .tag { justify-self: start; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--investigate); color: var(--investigate); font-size: 12px; }
+.big-verdict { font: 700 30px var(--font-display) !important; }
+.caveats { padding: 10px 12px; border-radius: var(--r-md); background: var(--panel-2); border: 1px solid var(--line-2); } .caveats p { font-size: 14px; }
+.notice-stop { padding: 14px; border-radius: var(--r-md); border: 1px solid var(--warn); background: #231c0a; }
+.seed-strips { display: grid; gap: 6px; } .strip { display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: center; font-size: 13px; color: #c4ccda; }
+.strip .cells { display: grid; grid-template-columns: repeat(32, 1fr); gap: 2px; } .strip i { aspect-ratio: 1; border-radius: 2px; display: block; } .strip i.walks { background: var(--ok); } .strip i.falls { box-shadow: inset 0 0 0 1px var(--bad); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; } .step-nav2 { display: flex; gap: 8px; justify-content: space-between; margin-top: 4px; }
+.mini-metrics { display: none; } .kind-note { display: block; }
+.pt-after { transition: left .9s var(--ease); } .pt-span { transition: width .9s var(--ease); }
+.advanced { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; } .advanced > summary { cursor: pointer; font: 650 17px var(--font-display); padding: 8px 0; }
+.run-switch { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; margin-bottom: 14px; }
+.run-chip { display: grid; gap: 2px; text-align: left; padding: 10px 14px; border-radius: var(--r-md); background: var(--panel); border: 1px solid var(--line); max-width: 340px; color: var(--txt); }
+.run-chip[aria-pressed='true'] { border-color: var(--investigate); background: rgba(156, 140, 255, .1); } .run-chip .kind-chip { justify-self: start; }
+.run-chip b { font: 600 15px var(--font-body); line-height: 1.25; } .run-chip small { color: var(--dim); }
+@media (max-width: 1250px) { .inv-main { grid-template-columns: 1fr; } .inspector { position: static; max-height: none; } }
+@media (max-width: 760px) { .duo { grid-template-columns: minmax(0, 1fr); } .duo .viewport, .duo-skel { height: 300px; } .rail li { min-width: 96px; } .pair-facts { grid-template-columns: 1fr; } }

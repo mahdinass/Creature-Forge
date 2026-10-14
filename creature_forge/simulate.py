@@ -20,6 +20,16 @@ class Push:
     duration: float = 0.1
 
 
+def _geom_lowest(model, data, i: int) -> float:
+    """Lowest world z of a capsule or box geom."""
+    centre = data.geom_xpos[i]
+    rot = data.geom_xmat[i].reshape(3, 3)
+    if model.geom_type[i] == mujoco.mjtGeom.mjGEOM_CAPSULE:
+        radius, half = model.geom_size[i][0], model.geom_size[i][1]
+        return float(centre[2] - abs(rot[2, 2]) * half - radius)
+    return float(centre[2] - np.abs(rot[2]) @ model.geom_size[i])
+
+
 def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: float = 10.0,
                 perturb: float = 0.02, push: Push | None = None,
                 record_poses: bool = False) -> dict[str, np.ndarray]:
@@ -31,6 +41,10 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
     rng = np.random.default_rng(seed)
     data.qpos[2] = perturb * rng.standard_normal()
     data.qpos[3:9] = perturb * rng.standard_normal(6)
+    pose = getattr(body, "pose", None)  # sandbox bodies may start in an unusual real joint configuration
+    if pose is not None:
+        data.qpos[2] += pose[0]
+        data.qpos[3:9] += np.asarray(pose[1:], dtype=float)
     mujoco.mj_forward(model, data)
     # Place the body so the lowest foot sits just above the floor.
     foot_ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, f"foot_{s}") for s in "lr"]
@@ -39,6 +53,8 @@ def run_rollout(body: BipedParams, gait: GaitParams, seed: int = 0, duration: fl
     # exact lowest point of each (rotated) foot box
     lowest = min(data.geom_xpos[i][2] - np.abs(data.geom_xmat[i].reshape(3, 3)[2]) @ model.geom_size[i]
                  for i in foot_ids)
+    if pose is not None:  # a bent or tilted pose can put a shank or knee lower than the feet: use every body geom
+        lowest = min(_geom_lowest(model, data, i) for i in range(model.ngeom) if i != floor_id)
     data.qpos[1] -= max(lowest, 0.0) - 0.002
     mujoco.mj_forward(model, data)
 

@@ -29,11 +29,26 @@ const browser = await chromium.launch({
   args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'],
 })
 const page = await browser.newPage({ viewport: { width: 1360, height: 1100 } })
+page.setDefaultNavigationTimeout(150000)
 const pageErrors = []
 page.on('pageerror', (e) => pageErrors.push(e.message))
 
 try {
   await page.goto(`${BASE}/?tab=locomotion`)
+  // Walking lab leads with the robots: two synchronized replays, the one-line result, then the numbers
+  await page.waitForSelector('[data-testid="wl-replay"] canvas', { timeout: 120000 })
+  ok((await page.$$('[data-testid="wl-replay"] canvas')).length === 2, 'the Walking lab shows the starting and the improved robot side by side')
+  const nums = ((await page.textContent('[data-testid="wl-numbers"]')) || '').replace(/\s+/g, ' ')
+  ok(nums.includes('91') && nums.includes('150'), `the result is stated before any table (${nums})`)
+  ok(/falls at/.test((await page.textContent('[data-testid="wl-result-0"]')) || '') && /walks/.test((await page.textContent('[data-testid="wl-result-1"]')) || ''), 'on the featured start the old controller falls and the improved one walks (measured now)')
+  ok(/No language model/.test((await page.textContent('[data-testid="wl-attribution"]')) || ''), 'the improvement is attributed to a classical optimiser')
+  ok(/fresh MuJoCo run on this computer/.test((await page.textContent('[data-testid="wl-provenance"]')) || ''), 'the committed record and the local replay are kept distinct')
+  const dots = await page.$$('.seed-dots .dots button')
+  ok(dots.length === 300, 'every test start is a clickable dot')
+  await dots[7].click()
+  await page.waitForFunction(() => document.querySelectorAll('[data-testid="wl-replay"] canvas').length === 2, null, { timeout: 300000 })
+  if (SHOT) await page.screenshot({ path: `${SHOT}/walking-lab.png` })
+  await page.click('[data-testid="walking-advanced"] summary')
   await page.waitForSelector('[data-testid="heldout-table"]')
   ok((await page.$$('.loco-chart polyline')).length === 2, 'progress chart draws both optimiser curves')
   const rows = await page.$$eval('[data-testid="heldout-table"] tbody tr', (r) => r.map((x) => x.textContent))

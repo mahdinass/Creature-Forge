@@ -14,6 +14,7 @@ let failed = 0
 const ok = (c, m) => { console.log(`${c ? 'PASS' : 'FAIL'} ${m}`); if (!c) failed++ }
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const page = await browser.newPage({ viewport: { width: 1360, height: 900 } })
+page.setDefaultNavigationTimeout(150000)
 const bad = [], errors = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('response', (r) => {
@@ -23,15 +24,18 @@ page.on('response', (r) => {
 })
 const ERR = /Unexpected token|is not valid JSON|Could not load|No Phase 2A locomotion results available|instead of JSON/i
 try {
-  await page.goto(`${BASE}/`, { waitUntil: 'networkidle' })
-  const nav = (await page.$$eval('nav button, header button', (bs) => bs.map((b) => b.textContent.trim())))
-  for (const label of ['Overview', 'Studio', 'Investigations', 'Locomotion', 'AI Investigation', 'Sketch'])
-    ok(nav.some((n) => n.includes(label)), `nav has "${label}"`)
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' })
+  await page.waitForSelector('[data-testid="nav-home"]', { timeout: 60000 })
+  for (const g of ['home', 'create', 'simulate', 'investigate']) ok(await page.isVisible(`[data-testid="nav-${g}"]`), `top navigation has "${g}"`)
+  await page.click('[data-testid="nav-investigate"]')
+  for (const t of ['demo', 'locomotion', 'lab']) ok(await page.isVisible(`[data-testid="tab-${t}"]`), `Investigate offers the "${t}" view`)
+  ok(((await page.textContent('[data-testid="purpose"]')) || '').length > 20, 'every view states its purpose in a sentence')
   for (const tab of ['overview', 'studio', 'compare', 'lab', 'locomotion', 'demo', 'sketch']) {
-    await page.goto(`${BASE}/?tab=${tab}`, { waitUntil: 'networkidle' })
+    await page.goto(`${BASE}/?tab=${tab}`, { waitUntil: 'domcontentloaded' })
     await page.waitForTimeout(1500)
     const text = await page.innerText('body')
     ok(!ERR.test(text), `tab ${tab}: no load/parse error text`)
+    if (tab !== 'overview') ok(((await page.textContent('[data-testid="purpose"]')) || '').length > 20, `tab ${tab}: purpose sentence shown`)
     if (SHOT) await page.screenshot({ path: `${SHOT}/tab-${tab}.png` })
   }
   ok(bad.length === 0, `every API response is JSON and < 400${bad.length ? ': ' + bad.join(' | ') : ''}`)

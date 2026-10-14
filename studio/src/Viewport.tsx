@@ -139,28 +139,28 @@ function Scene({ run }: { run: RunPayload }) {
   )
 }
 
-export const Viewport = memo(function Viewport({ run, label }: { run: RunPayload; label: string }) {
+export const Viewport = memo(function Viewport({ run, label, bare = false, className = '', closeup = false }: { run: RunPayload; label: string; bare?: boolean; className?: string; closeup?: boolean }) {
   const t = usePlayback((s) => s.simTime)
   const fall = fallEvent(run.events)
   const k = frameIndex(run.time, t)
   const h = run.series.torso_height[k]
   const fallen = fall !== undefined && t >= fall.time
   return (
-    <div className="viewport">
-      <Canvas shadows camera={{ position: [0.5, 0.8, 2.4], fov: 45 }} dpr={[1, 2]}>
+    <div className={`viewport ${bare ? 'bare' : ''} ${className}`}>
+      <Canvas shadows camera={{ position: closeup ? [0.45, 0.7, 1.75] : [0.5, 0.8, 2.4], fov: 45 }} dpr={[1, 2]}>
         <Scene run={run} />
       </Canvas>
-      <div className="vp-label">{label}</div>
-      {run.push && t >= run.push.time && t < run.push.time + run.push.duration && (
+      {!bare && <div className="vp-label">{label}</div>}
+      {!bare && run.push && t >= run.push.time && t < run.push.time + run.push.duration && (
         // plain DOM overlay (a drei <Html> portal threw removeChild errors when a viewport unmounted)
         <div className="push-label vp-push">{run.push.force} N push</div>
       )}
-      <div className="vp-hud">
+      {!bare && <div className="vp-hud">
         <div>torso height <b>{h.toFixed(3)} m</b></div>
         <div>pitch <b>{(run.series.torso_pitch[k] * 57.2958).toFixed(1)}°</b></div>
         <div>feet in contact <b>{run.series.foot_contact[k].reduce((a, b) => a + b, 0)}/2</b></div>
-      </div>
-      {fallen && fall && (
+      </div>}
+      {!bare && fallen && fall && (
         <div className="vp-fall">FALL detected at sim t = {fall.time.toFixed(2)} s</div>
       )}
     </div>
