@@ -93,3 +93,7 @@ Ablation on diagnostic seeds (`ablation.json`, analysis only): without pitch fee
 ## Is a contact-triggered FSM or another family warranted?
 
 Not yet shown. The failure is a startup transient (backward-leaning torso), not mistimed contacts, and the existing contact-triggered correction is not demonstrably useful, so swapping the phase clock for an FSM has no evidence behind it. Untested next steps, in order of cost: (1) robustness-aware training (more seeds per candidate, e.g. 5-8, and optimiser replicates) - cheapest and addresses the seed-fragile winner; (2) a gait-initiation / startup strategy; (3) only then an FSM. These need review before any larger budget is spent.
+
+## Post-review update (2026-10-14)
+
+PR review fixes (mobile table overflow, stale-replay guard) and a post-hoc diagnosis of the six held-out failures are in `docs/PHASE2A_FAILURE_DIAGNOSIS.md`; that document supersedes the statement above that the held-out failures were not inspected. The experimental result is unchanged: random search 14/20, DE 2/20, full-success threshold 90%, outcome partial. A follow-up robustness experiment (R1) is proposed there and is not approved or run.
