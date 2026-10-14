@@ -1,0 +1,262 @@
+{
+ "id": "phase2a-r1-protocol-v1",
+ "status": "immutable once committed; changes require a new protocol id and re-registration",
+ "question": "Does training for robustness (more seeds per candidate, longer episodes, a lower-tail objective) and an optional 2-parameter gait-initiation extension raise the fraction of fresh seeds on which the phase-gait controller reaches gate-validated walking?",
+ "basis": "docs/PHASE2A_FAILURE_DIAGNOSIS.md (post-hoc, correlational)",
+ "frozen_inputs": {
+  "incumbent_export": "experiments/phase2a/results/best_random_search.json",
+  "incumbent_sha256": "8ba7d5ee1324abab07b77a55df2fea6e4f072a5124043fb804d5dbcc60da292c",
+  "phase2a_protocol_sha256": "409b2d1f09ac541a11f528f7cbc8857a1d23d74efb979e2af6f1199603e3e4ce",
+  "phase2a_heldout_sha256": "885f9dd072e360bde760071e6e94a21bfcfd1d2925cd4e1c63bae90465e76256"
+ },
+ "morphology": {
+  "torso_mass": 5.0,
+  "thigh_length": 0.3,
+  "shank_length": 0.3,
+  "foot_length": 0.16,
+  "foot_friction": 1.0,
+  "torque_limit": 60.0,
+  "leg_density": 1000.0
+ },
+ "walking_criteria": {
+  "min_speed": 0.2,
+  "min_step_rate": 0.8,
+  "min_alternation": 0.9,
+  "max_touchdown_rate": 3.0,
+  "max_flight_frac": 0.1,
+  "max_slip_frac": 0.15,
+  "slip_speed": 0.1,
+  "max_body_contact_frac": 0.005,
+  "max_saturation_frac": 0.1,
+  "max_abs_pitch": 0.8,
+  "min_swing_s": 0.1,
+  "min_stance_s": 0.12,
+  "min_step_advance": 0.05,
+  "skip_after_touchdown_s": 0.03
+ },
+ "controller": {
+  "arms_A_B": "PhaseGaitController, 13 parameters (phasegait.BOUNDS), unchanged",
+  "arm_C": "PhaseGaitInitController: the 13 parameters plus ramp_s (bounds (0.2, 2.0), default 0.5 s = Phase 2A RAMP_S) and start_lean (bounds (0.0, 0.15) rad, default 0; extra forward pitch reference decaying to zero over 1.0 s by smoothstep). Defaults reproduce Phase 2A bit-identically (tested).",
+  "no_fsm_no_rl": true
+ },
+ "seeds": {
+  "train": [
+   4000,
+   4001,
+   4002,
+   4003,
+   4004,
+   4005,
+   4006,
+   4007
+  ],
+  "validation": [
+   4100,
+   4101,
+   4102,
+   4103,
+   4104,
+   4105,
+   4106,
+   4107,
+   4108,
+   4109,
+   4110,
+   4111,
+   4112,
+   4113,
+   4114,
+   4115
+  ],
+  "diagnostic": [
+   5000,
+   5001,
+   5002,
+   5003,
+   5004,
+   5005,
+   5006,
+   5007,
+   5008,
+   5009
+  ],
+  "final": [
+   6000,
+   6001,
+   6002,
+   6003,
+   6004,
+   6005,
+   6006,
+   6007,
+   6008,
+   6009,
+   6010,
+   6011,
+   6012,
+   6013,
+   6014,
+   6015,
+   6016,
+   6017,
+   6018,
+   6019,
+   6020,
+   6021,
+   6022,
+   6023,
+   6024,
+   6025,
+   6026,
+   6027,
+   6028,
+   6029
+  ]
+ },
+ "seed_policy": "train: optimisation objective only. validation: choose among each run's top-5 and the overall winner only. diagnostic: post-hoc analysis only. final: touched once by scripts/eval_r1_final.py after selection.json is committed; never used to select, tune or stop. Phase 2A seeds 1000-1002, 2000-2009 and 3000-3019 are not reused for any R1 selection or final evaluation.",
+ "durations_s": {
+  "train": 10.0,
+  "validation": 10.0,
+  "final": 10.0,
+  "diagnostic": 10.0
+ },
+ "initial_state": "torso pitch and 6 joint angles ~ N(0, 0.03 rad) from the episode seed; feet 2 mm above floor",
+ "arms": {
+  "A": {
+   "parameters": 13,
+   "training_objective": "mean"
+  },
+  "B": {
+   "parameters": 13,
+   "training_objective": "worst2"
+  },
+  "C": {
+   "parameters": 15,
+   "training_objective": "worst2"
+  }
+ },
+ "objectives": {
+  "mean": "mean over the 8 training seeds of per-seed fitness (creature_forge.locomotion.fitness_components)",
+  "worst2": "mean of the 2 lowest per-seed fitness values among the 8 training seeds (lower-tail)"
+ },
+ "optimization": {
+  "method": "random_search (uniform in bounds), no polishing, no adaptive step",
+  "replicates_per_arm": [
+   1,
+   2
+  ],
+  "candidates_per_replicate": 150,
+  "rollouts_per_candidate": 8,
+  "candidate_zero": "frozen Phase 2A incumbent (counts toward the 150)",
+  "common_random_numbers": "candidates 1..149 of arms A, B, C share the first 13 dimensions within a replicate; arm C's 2 extra dimensions use a separate stream; replicates use independent streams",
+  "rng_base": 20261014,
+  "determinism_audit": "arms A and B evaluate identical vectors on identical seeds, so their rollout results must be bit-identical; they are executed separately (and counted) and compared as a determinism check"
+ },
+ "validation": {
+  "top_k_per_run": 5,
+  "ranking": "by the run's own training objective, ties by earlier index",
+  "incumbent": "if the incumbent is among a run's top-5 it is not re-executed; the incumbent is validated once, separately, on the same 16 seeds"
+ },
+ "selection_rule": "Eligible: validated candidates that are not the incumbent. Rank by (1) number of the 16 validation seeds passing every walking gate, (2) number of validation seeds that did not fall, (3) mean validation fitness, all higher is better; remaining ties by arm order A<B<C, then replicate, then candidate index. Training ranks and final seeds play no part.",
+ "futility": {
+  "after": "replicate 1 of A, B, C is trained and validated",
+  "rule": "stop and report a null result unless, for some arm, the best eligible validated candidate passes every walking gate on at least 2 more of the 16 validation seeds than the incumbent (>= 10 percentage points)",
+  "nature": "pragmatic engineering stopping heuristic, not a significance test",
+  "if_proceeding": "replicate 2 of A, B, C, then selection of ONE overall winner, committed before final evaluation"
+ },
+ "final_evaluation": {
+  "controllers": [
+   "selected R1 winner",
+   "frozen Phase 2A incumbent"
+  ],
+  "seeds": [
+   6000,
+   6001,
+   6002,
+   6003,
+   6004,
+   6005,
+   6006,
+   6007,
+   6008,
+   6009,
+   6010,
+   6011,
+   6012,
+   6013,
+   6014,
+   6015,
+   6016,
+   6017,
+   6018,
+   6019,
+   6020,
+   6021,
+   6022,
+   6023,
+   6024,
+   6025,
+   6026,
+   6027,
+   6028,
+   6029
+  ],
+  "conditions": "identical seeds, duration, morphology and gates for both",
+  "engineering_criterion": {
+   "min_walking_seeds": 27,
+   "n_seeds": 30,
+   "min_median_speed_upright": 0.25,
+   "max_body_dragging_seeds": 0
+  },
+  "superiority": {
+   "test": "exact two-sided McNemar on the 30 paired seeds (success = passes every walking gate)",
+   "alpha": 0.05,
+   "requires": "p < alpha AND a positive paired success-rate difference"
+  },
+  "reporting": [
+   "paired 2x2 table",
+   "discordant counts",
+   "exact McNemar p",
+   "paired difference with Newcombe 95% interval",
+   "Wilson and exact intervals per controller",
+   "conditional odds ratio"
+  ],
+  "caveat": "27/30 does not establish a true success probability >= 90%; report the exact interval. Comparisons between arms are exploratory and are not additional confirmatory tests."
+ },
+ "secondary_exploratory": {
+  "hypothesis": "failure on the final seeds is associated with a larger right-knee initial offset (from Phase 2A post-hoc exploratory p=0.016 uncorrected, 0.145 Bonferroni)",
+  "method": "two-sided permutation test, difference of means, 20000 permutations, rng seed 0",
+  "status": "exploratory; not causal; never a basis for selection"
+ },
+ "interpretation_notes": [
+  "Comparing arm A with historical Phase 2A changes BOTH the number of training seeds (3 -> 8) and the episode duration (6 s -> 10 s) (and the sampling streams); it does not isolate a single factor and must not be described as doing so.",
+  "A vs B isolates the objective (identical candidates and rollouts); B vs C isolates the initiation parameters only to the extent that random search over 15-D vs 13-D is comparable; all arm comparisons are exploratory.",
+  "A single selected winner is evaluated on the final seeds; only the winner-vs-incumbent test is confirmatory."
+ ],
+ "budget": {
+  "hard_cap_rollouts": 8500,
+  "counted": "every MuJoCo rollout executed or started: training, validation, final, diagnostics, pilot, duplicates, retries, failed jobs, reruns",
+  "ledger": "experiments/phase2a_r1/results/ledger.jsonl (append-only, hash-chained; begin entries are written before any physics runs)",
+  "pilot_cap_rollouts": 40,
+  "planned": {
+   "training": 7200,
+   "validation": 496,
+   "final": 60,
+   "pilot": 40
+  },
+  "no_automatic_extension": true
+ },
+ "resources": {
+  "max_workers": 4,
+  "min_free_memory_gb": 4.0,
+  "wall_clock_hard_stop_s": 5400,
+  "start_method": "spawn",
+  "no_overlap_with_verification": true,
+  "pilot": "at most 40 rollouts; measures throughput and per-worker peak memory; failing resource checks stops the experiment"
+ },
+ "stopping_rules": [
+  "any lost or errored job, memory abort, wall-clock stop or budget breach stops the run (no silent retry)",
+  "the final evaluation runs once and cannot be used to revise the controller, objective, gates or stopping rule",
+  "a null or partial result is reported as such; the search is not extended automatically"
+ ]
+}
