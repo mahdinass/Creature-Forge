@@ -1,0 +1,14 @@
+Creature Forge
+Copyright 2026 Mahdi Nasser
+
+This product includes software developed for the Nebius x NVIDIA Global AI Hackathon 2026 (Physical AI track).
+
+Licensed under the Apache License, Version 2.0; see LICENSE.
+
+Third-party components and services are listed in THIRD_PARTY_NOTICES.md. In particular:
+  - MuJoCo (Apache-2.0), (c) Google DeepMind, is used as the physics engine.
+  - NVIDIA Nemotron models are accessed only as a hosted service through Nebius Token Factory; no model weights are
+    distributed with this project. The model's use is governed by the NVIDIA Nemotron Open Model License, which is separate
+    from this project's Apache-2.0 license (see docs/MODEL_AND_SERVICE_TERMS.md).
+  - "NVIDIA" and "Nebius" are trademarks of their respective owners and are used here only to describe compatibility and
+    the hackathon context; no endorsement is implied.
