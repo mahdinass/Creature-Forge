@@ -1,0 +1,60 @@
+{
+ "id": "forge-scoreboard-v1",
+ "question": "Do Nemotron-selected redesigns of drawn creatures pass the verification rule more often than size-matched random edits?",
+ "cells": [
+  {
+   "starter": "balanced",
+   "challenge": "push"
+  },
+  {
+   "starter": "bird-knees",
+   "challenge": "push"
+  },
+  {
+   "starter": "weak-slippery",
+   "challenge": "push"
+  },
+  {
+   "starter": "tiny-feet",
+   "challenge": "stand"
+  },
+  {
+   "starter": "top-heavy",
+   "challenge": "stand"
+  },
+  {
+   "starter": "stilts",
+   "challenge": "stand"
+  }
+ ],
+ "replicates_per_cell": 2,
+ "n_investigations": 12,
+ "investigation": {
+  "mode": "live",
+  "profile": "default (experiments/forge_loop/model_config.json)",
+  "probes": true,
+  "loop": false,
+  "challenge_seeds": 8,
+  "creature": "fresh per investigation, experimental mode, starter strokes interpreted by /api/freehand/interpret"
+ },
+ "unit": "one investigation",
+ "primary_outcome": "paired binary per investigation: AI = the arena's selected AI arm has verdict VERIFIED_IMPROVEMENT; TWIN = that arm's own matched-random twin (validated on the same held-out seeds) has VERIFIED_IMPROVEMENT",
+ "primary_analysis": "exact one-sided McNemar (binomial on discordant pairs, H1: AI-only > twin-only) over investigations in which an AI arm and its twin were both validated; alpha 0.05. Claim 'AI-selected edits verified more often than matched random edits on this zoo' ONLY if p < 0.05; otherwise report 'no evidence of a difference'.",
+ "missing_data": "investigations with model failure, no valid proposal, or no validated twin are counted and reported separately and excluded from the paired test (they count as AI failures in the secondary 'AI verified per attempted investigation' rate)",
+ "secondary": [
+  "AI verified rate per attempted investigation (Wilson 95% CI)",
+  "twin verified rate",
+  "heuristic verified rate",
+  "median paired diff AI vs original and twin vs original",
+  "probe confirmation rate",
+  "model calls, tokens, USD, rollouts, wall time"
+ ],
+ "caps": {
+  "model_requests": 36,
+  "usd": 1.0,
+  "wall_hours": 2.0
+ },
+ "no_retries": "a failed investigation is recorded, never rerun",
+ "verdict_rule": "verdict_v1 (creature_forge/verdict.py at the registered commit)",
+ "registered_utc": "2026-10-15T12:53:07Z"
+}
