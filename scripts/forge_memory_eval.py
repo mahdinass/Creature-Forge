@@ -111,8 +111,15 @@ def run(base: str, forge_dir: Path, resume: bool = False) -> None:
         raise SystemExit("runs already recorded; use --resume to continue the remaining registered pairs (no reruns)")
     existing = set()
     if resume:
+        # A pair counts as interrupted only if its creature already has at least one investigation (then it is excluded, never
+        # rerun). A creature created just before the stop with NO investigation started no investigation: the pair runs normally
+        # with a fresh creature, which repeats nothing.
         _, creatures = call(base, "GET", "/api/forge/creatures")
-        existing = {c.get("name") for c in creatures or []}
+        for c in creatures or []:
+            if str(c.get("name", "")).startswith("mem-"):
+                _, invs = call(base, "GET", f"/api/forge/investigations?cid={c['id']}")
+                if invs:
+                    existing.add(c.get("name"))
     t0 = time.time()
     for rep in range(1, p["replicates"] + 1):
         for name in p["creatures"]:

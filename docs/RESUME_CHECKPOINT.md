@@ -121,3 +121,24 @@ Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|f
   the orchestrator stops it through the API after the evaluation. If the session died first, the deadman powers the guest
   off at the deadline and the Windows watchdog stops it via the API when the PC is on — run `forge_cloud.py status` and
   `stop` on resume (INCIDENTS 2026-10-15: a powered-off guest may still show RUNNING).
+
+### Shutdown record — 2026-10-15 19:07 UTC (owner disconnecting)
+**Memory evaluation forge-memory-eval-v1: STOPPED at a clean pair boundary, 5 of 12 pairs complete.**
+- Completed (both investigations `done`, results committed in `experiments/forge_loop/memory_eval/results/`): replicate 1 of
+  `short-legs`, `long-legs`, `big-torso`, `small-feet`, `heavy-legs`. Raw `runs.jsonl` + 10 unedited records (`records/`,
+  SHA-256 in `records/MANIFEST.json`).
+- Remaining (7 pairs, NOT started): replicate 1 of `soft-motors`; replicate 2 of all six creatures.
+- `mem-soft-motors-1` (`c-2fd9f160`) was created by the driver just before the stop and has **zero investigations**, so no
+  investigation was interrupted and nothing is excluded. `--resume` (updated in this commit) creates a fresh creature for
+  that pair; it excludes a pair only if its creature already has an investigation, and it never reruns a recorded pair.
+- **No interim analysis was run** (the pre-declared test is defined on all 12 pairs; looking early would invite optional
+  stopping). Run `--analyze` only after `--resume` has completed the remaining pairs.
+- Code for the remaining pairs must stay the same as for the completed ones: **do not change** `creature_forge/` investigation,
+  evidence, memory, probes, arena or verdict code before resuming (each record stores `code.commit`; compare it).
+- Resume: start the VM → `forge_dev.py serve --slot integ --live` (never `CF_MEMORY`) →
+  `forge_dev.py exec --slot integ --timeout 9000 "python scripts/forge_memory_eval.py --resume"` (or run it inside `tmux` on
+  the VM so it does not depend on the local SSH session) → pull `runs.jsonl` and records → `--analyze` → write `REPORT.md`.
+  A `forge_dev.py sync --slot integ` is now safe: `runs.jsonl` is committed, so the slot keeps it.
+- Inference ledger at stop: **111 requests, $0.4764** of $15 (backup `artifacts/vm/ledger_backup/inference_ledger_20261015b.jsonl`).
+- VM: stopped through the Nebius API right after this commit (see `forge_cloud.py status`; infra ledger `spend`).
+- Nothing merged; repository private; PR #16 still Draft.
