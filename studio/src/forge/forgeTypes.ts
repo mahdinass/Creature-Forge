@@ -230,6 +230,7 @@ export interface InvestigationRecord {
   model_calls?: ModelCall[]
   reply?: { diagnosis?: { summary?: string; hypotheses?: Hypothesis[] }; proposals?: ValidatedProposal[] } | null
   probes?: ProbesRecord | null
+  memory?: { used: boolean; retrieved: { lesson_id: string; similarity: number }[]; bank_size: number | null; k: number | null } | null
   validation?: { proposals?: ValidatedProposal[]; hypotheses?: ValidatedHypothesis[]; summary?: string; warnings?: string[]; schema_errors?: string[] } | null
   arms?: Arm[]
   seeds?: { train?: number[]; screen?: number[]; validate?: number[]; round_used?: number }

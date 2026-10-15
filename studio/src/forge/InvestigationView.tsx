@@ -130,6 +130,29 @@ function Step({ s, provenance }: { s: TimelineStep; provenance: string }) {
   }
 }
 
+type MemoryCase = { similarity?: number; creature?: Record<string, number | string>; challenge?: string; original_score?: number
+  tried?: { edit?: string; source?: string; verdict?: string; median_diff?: number }[]; probes?: { probe_id?: string; observed?: string }[] }
+
+/** The past cases of OTHER creatures that were put in the evidence (measured outcomes only; they may not transfer). */
+function MemoryBlock({ record }: { record: InvestigationRecord }) {
+  if (!record.memory?.used) return null
+  const cases = ((record.evidence as { memory?: MemoryCase[] } | undefined)?.memory ?? [])
+  return (
+    <div className="fg-note-box" data-testid="memory-block">
+      <b>Past cases consulted</b>
+      <span className="fg-dim"> {cases.length === 0 ? `Engineering memory was on, but no past case of another creature matched (bank of ${record.memory.bank_size ?? 0}).` : 'Measured outcomes of other creatures. Different bodies: they are hypotheses to test, not answers.'}</span>
+      {cases.map((c, i) => (
+        <div key={i} className="fg-hyp" data-testid="memory-case">
+          <b>Case {i + 1}</b> (similarity {(c.similarity ?? 0).toFixed(2)}, {c.challenge}{c.original_score !== undefined ? `, original score ${c.original_score}` : ''}):
+          {' '}foot/leg {String(c.creature?.foot_to_leg ?? '?')}, torque/weight {String(c.creature?.torque_to_weight ?? '?')}, mass {String(c.creature?.mass_total ?? '?')} kg.
+          {(c.tried ?? []).map((t, j) => <div key={j} className="fg-dim">Tried {t.edit} ({t.source}): {t.verdict}{t.median_diff !== undefined ? `, median change ${t.median_diff}` : ''}</div>)}
+          {(c.probes ?? []).length > 0 && <div className="fg-dim">Probes: {(c.probes ?? []).map((p) => `${p.probe_id} ${p.observed}`).join(', ')}</div>}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function RecordView({ cid, version, record, onAccepted }: { cid: string; version: CreatureVersion; record: InvestigationRecord; onAccepted: (c: Creature) => void }) {
   const trip = validationTriplet(record)
   const arms = (record.arms ?? []).filter((a) => a.source !== 'original' && !a.unavailable)
@@ -148,6 +171,7 @@ function RecordView({ cid, version, record, onAccepted }: { cid: string; version
         <span>{record.provenance === 'LIVE' ? 'A real model call made for this investigation.' : 'Not a model. Text from a fixture, never counted as a result.'}</span>
         <span className="fg-dim">{STATUS_TEXT[record.status] ?? record.status}{record.creature.round && record.creature.round > 1 ? `, round ${record.creature.round}` : ''}</span></div>
       {hyp && <div className="fg-note-box" data-testid="hypothetical-note">{hyp}</div>}
+      <MemoryBlock record={record} />
       <ol className="fg-timeline" data-testid="inv-timeline">{steps.map((s) => <Step key={s.id} s={s} provenance={record.provenance} />)}</ol>
       <p className="fg-dim" data-testid="budget-line">Budget used: {budgetLine(record.budget)}.</p>
       {validated.length > 0 && (
@@ -209,6 +233,7 @@ export function InvestigationView({ cid, version, versions, run, status, openId,
   const [message, setMessage] = useState<string | null>(null)
   const [loop, setLoop] = useState(false)
   const [probes, setProbes] = useState(false)
+  const [memory, setMemory] = useState(false)
   const [jobId, setJobId] = useState<string | null>(null)
   const [record, setRecord] = useState<InvestigationRecord | null>(null)
   const [recordError, setRecordError] = useState<string | null>(null)
@@ -220,7 +245,7 @@ export function InvestigationView({ cid, version, versions, run, status, openId,
     if (!run) return
     setPhase('starting'); setMessage(null); setRecord(null); onOpenId(null)
     try {
-      const r = await startInvestigation(cid, version.n, { run_id: run.run_id, mode, loop, probes })
+      const r = await startInvestigation(cid, version.n, { run_id: run.run_id, mode, loop, probes, ...(memory ? { memory } : {}) })
       setJobId(r.job_id)
       setPhase('running')
     } catch (e) {
@@ -266,6 +291,8 @@ export function InvestigationView({ cid, version, versions, run, status, openId,
             Keep investigating (up to 3 rounds, stops after 2 rounds without a verified change, never accepts for you)</label>
           <label className="fg-check" data-testid="probes-option"><input type="checkbox" checked={probes} onChange={(e) => setProbes(e.target.checked)} disabled={busy} data-testid="probes-checkbox" />
             Run diagnostic probes first (the model picks up to 3 what-if experiments, MuJoCo runs them, then it proposes; costs one more model call)</label>
+          <label className="fg-check" data-testid="memory-option"><input type="checkbox" checked={memory} onChange={(e) => setMemory(e.target.checked)} disabled={busy} data-testid="memory-checkbox" />
+            Use engineering memory (measured outcomes of past investigations of other creatures are added to the evidence as hypotheses to test)</label>
           <div className="fg-actions">
             <button className="btn btn-investigate" disabled={busy || !live} data-testid="investigate-btn" onClick={() => void start('live')}>
               {phase === 'starting' ? 'Starting...' : 'Investigate with AI'}

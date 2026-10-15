@@ -30,7 +30,8 @@ from typing import Callable
 
 from . import interventions as iv
 from .creatures import atomic_write_json, content_hash, now_iso, seed_block
-from .evidence import build_evidence, leaf_items, leaf_paths
+from .evidence import build_evidence, leaf_items, leaf_paths, memory_block
+from . import memory as mem
 from . import probes as pb
 from .forge_ai import (PROBE_STEP_MARK, ModelConfig, accepted_proposals, investigate_once, investigate_with_probes,
                        make_client)
@@ -66,7 +67,7 @@ def investigation_scale() -> str:
 DEFAULT_RETUNE_BUDGET = 48  # zoo pilot: K=48 (2 ES generations x 8 x 3 train seeds); only used when an AI walk proposal asks for retuning; applied to EVERY arm
 RECORD_KEYS = ("id", "created", "mode", "provenance", "creature", "challenge_run_id", "spec", "evidence", "model_calls", "reply",
                "validation", "probes", "arms", "seeds", "screening", "selection", "validation_results", "verdicts", "budget", "code",
-               "status", "error")
+               "status", "error", "memory")
 STATUSES = ("done", "model_failed", "no_valid_proposals", "cancelled", "failed")
 VERIFIED = "VERIFIED_IMPROVEMENT"
 LIVE_PROMPT_TOKENS_ESTIMATE = 6000  # headroom check only; the ledger's own reserve() is the hard gate
@@ -393,7 +394,8 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
                       investigation_id: str | None = None, profile: str = "default", model_config_path=None, sizes: dict | None = None,
                       parent: dict | None = None, loop_id: str | None = None, code_fn: Callable | None = None,
                       max_requests: int | None = None, fixture_dir=None, retune_budget: int = DEFAULT_RETUNE_BUDGET,
-                      probes: bool = False, probe_seeds_n: int = pb.MAX_PROBE_SEEDS) -> dict:
+                      probes: bool = False, probe_seeds_n: int = pb.MAX_PROBE_SEEDS,
+                      memory: bool = False, memory_bank=None, memory_k: int = 3) -> dict:
     """One investigation round on stored creature version (cid, n) and stored challenge run `run_id`. Returns the saved record.
 
     `parent` (rounds 2+ of the loop): {"version": <hypothetical parent version dict>, "from": {"investigation_id", "arm_id"}}; the run
@@ -404,6 +406,8 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
     probes, MuJoCo runs them on `probe` seeds disjoint from the arena seeds, and the proposals are written with the results in hand. Probes
     never change the creature and never enter the arena; their rollouts count in `budget.rollouts`. Model requests: 2 (+ <= 1 repair), so
     `max_requests` defaults to 3 with probes (2 without); with fewer than 2 requests available the probes are skipped (and say so).
+    `memory=True` retrieves up to `memory_k` lessons of OTHER creatures from `memory_bank` (default `<forge_dir>/memory/lessons.jsonl`) and adds
+    them to the evidence as `memory` (record key `memory` says what was retrieved; see `creature_forge.memory`).
     Raises LiveRefused (nothing written, no transport call) when live mode is not allowed."""
     if mode not in MODES:
         raise ValueError(f"mode must be one of {list(MODES)}, got {mode!r}")
@@ -462,13 +466,22 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
            "arms": [],
            "seeds": {}, "screening": None, "selection": None, "validation_results": None, "verdicts": {},
            "budget": {"rollouts": 0, "wall_s": 0.0, "calls": 0, "tokens": 0, "usd": 0.0}, "code": (code_fn or default_code_info)(),
-           "status": "failed", "error": None}
+           "status": "failed", "error": None, "memory": {"used": False, "retrieved": [], "bank_size": None, "k": None}}
     fns = baseline_fns
     pre_sets = None
     try:
         ev("phase", {"phase": "evidence", "kind": kind, "round": round})
         check()
         evidence = build_evidence(version, run, history)
+        mem_block = None
+        if memory:
+            bank = memory_bank if memory_bank is not None else mem.MemoryBank.for_forge_dir(forge_dir)
+            hits = bank.retrieve(mem.features_from_evidence(evidence), kind, k=memory_k, exclude_creature=cid)
+            rec["memory"] = {"used": True, "retrieved": [{"lesson_id": les["lesson_id"], "similarity": sim} for sim, les in hits],
+                             "bank_size": len(bank), "k": memory_k}
+            mem_block = memory_block(hits) or None
+            if mem_block:
+                evidence = build_evidence(version, run, history, memory=mem_block)
         factory = client_factory or default_client_factory
         client = factory(cfg, mode=mode, max_requests=max_requests, evidence=evidence, version=version, challenge_kind=kind,
                          **({"fixture_dir": fixture_dir} if (client_factory is None and fixture_dir) else {}))
@@ -503,13 +516,13 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
                 return ran
 
             out = investigate_with_probes(client, cfg, version, run, history, use_ledger, investigation_id=iid, probe_runner=probe_runner,
-                                          n_probe_seeds=len(probe_seeds), probe_spec=probe_spec)
+                                          n_probe_seeds=len(probe_seeds), probe_spec=probe_spec, memory=mem_block)
             if out.get("probes") is not None:
                 out["probes"] = {**out["probes"], "provenance": provenance, "seed_role": pb.ROLE,
                                  "seeds": out["probes"].get("seeds") or list(probe_seeds)}
             rec["probes"] = out["probes"]
         else:
-            out = investigate_once(client, cfg, version, run, history, use_ledger, investigation_id=iid)
+            out = investigate_once(client, cfg, version, run, history, use_ledger, investigation_id=iid, memory=mem_block)
         rec.update(evidence=out["evidence"], model_calls=out["calls"], reply=out["reply"], validation=out["validation"])
         for c in out["calls"]:
             ev("model_response", {"request_id": c.get("request_id"), "ok": c.get("ok"), "finish_reason": c.get("finish_reason"),
@@ -594,6 +607,11 @@ def _finish(rec: dict, forge_dir: Path, t0: float) -> dict:
     missing = [k for k in RECORD_KEYS if k not in rec]
     assert not missing, missing
     atomic_write_json(investigation_path(forge_dir, rec["id"]), jsonable({k: rec[k] for k in RECORD_KEYS}))
+    if mem.memory_enabled():   # CF_MEMORY=1 on the server: a finished LIVE investigation becomes a lesson (evaluations freeze the bank by leaving it off)
+        try:
+            mem.MemoryBank.for_forge_dir(forge_dir).add_record(rec)
+        except Exception:  # noqa: BLE001 - memory is an aid; it never fails an investigation
+            pass
     return rec
 
 

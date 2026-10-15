@@ -175,12 +175,20 @@ def evidence_lines(evidence: dict) -> list[str]:
     return [f"{p}={json.dumps(v, ensure_ascii=False)}" for p, v in leaf_items(evidence)]
 
 
+MEMORY_NOTE = ("PAST CASES from OTHER creatures (measured outcomes; physically different bodies - they may not transfer). Use them as hypotheses to "
+               "test, not as answers; cite memory.* paths if they inform a hypothesis.")
+
+
+def _memory_note(evidence: dict) -> str:
+    return "\n\n" + MEMORY_NOTE if evidence.get("memory") else ""
+
+
 def build_messages(evidence: dict, *, allowed: dict, max_proposals: int = 3) -> list[dict]:
     """[system, user] messages. `allowed` = `interventions.editable_params(version, kind)`. The user message renders the evidence pack as flat
     `path=value` lines (the model copies exact paths; they are the same paths the reply schema enumerates) plus the edit bounds. Contains no
     hint of which change is right."""
     ch, cr = evidence["challenge"], evidence["creature"]
-    system = build_system_prompt(ch["kind"], cr["mode"], allowed, max_proposals, float(ch.get("duration", 0.0)))
+    system = build_system_prompt(ch["kind"], cr["mode"], allowed, max_proposals, float(ch.get("duration", 0.0))) + _memory_note(evidence)
     user = "EVIDENCE (path=value):\n" + "\n".join(evidence_lines(evidence)) + "\n\nEDIT BOUNDS:\n" + "\n".join(_bounds_lines(allowed))
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
@@ -555,7 +563,8 @@ def _assess(call: ModelCall, evidence: dict, version: dict, kind: str, max_propo
 
 
 def investigate_once(client, cfg: ModelConfig, version: dict, challenge_result: dict, history: list[dict] | None,
-                     ledger: InferenceLedger, *, investigation_id: str | None = None, max_proposals: int = 3) -> dict:
+                     ledger: InferenceLedger, *, investigation_id: str | None = None, max_proposals: int = 3,
+                     memory: list | None = None) -> dict:
     """Evidence -> prompt -> model -> parse -> validate, with at most ONE repair call (so <= 2 requests).
     Returns {status, investigation_id, evidence, evidence_bytes, calls, reply, validation, accepted, repaired, error, allowed}.
     status: 'ok' (>= 1 accepted proposal) | 'no_valid_proposal' (replies arrived but none valid) | 'model_failed' (the call that was needed failed:
@@ -563,7 +572,7 @@ def investigate_once(client, cfg: ModelConfig, version: dict, challenge_result: 
     reply, never after a failed call."""
     kind = challenge_result["spec"]["kind"]
     inv = investigation_id or f"i-{uuid.uuid4().hex[:12]}"
-    evidence = build_evidence(version, challenge_result, history)
+    evidence = build_evidence(version, challenge_result, history, memory=memory)
     allowed = iv.editable_params(version, kind)
     messages = build_messages(evidence, allowed=allowed, max_proposals=max_proposals)
     schema = build_reply_schema(evidence, allowed, max_proposals=max_proposals)
@@ -640,7 +649,7 @@ def build_probe_system_prompt(kind: str, mode: str, allowed: dict, probe_ids, *,
 def build_probe_messages(evidence: dict, *, allowed: dict, probe_ids, n_seeds: int, resolution: float) -> list[dict]:
     ch, cr = evidence["challenge"], evidence["creature"]
     system = build_probe_system_prompt(ch["kind"], cr["mode"], allowed, probe_ids, n_seeds=n_seeds, resolution=resolution,
-                                       duration=float(ch.get("duration", 0.0)))
+                                       duration=float(ch.get("duration", 0.0))) + _memory_note(evidence)
     user = "EVIDENCE (path=value):\n" + "\n".join(evidence_lines(evidence)) + "\n\nEDIT BOUNDS:\n" + "\n".join(_bounds_lines(allowed))
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
@@ -750,7 +759,7 @@ def _assess_probe_plan(call: ModelCall, evidence: dict, probe_ids) -> dict:
 
 def investigate_with_probes(client, cfg: ModelConfig, version: dict, challenge_result: dict, history: list[dict] | None,
                             ledger: InferenceLedger, *, probe_runner, investigation_id: str | None = None, max_proposals: int = 3,
-                            n_probe_seeds: int = pb.MAX_PROBE_SEEDS, probe_spec: dict | None = None) -> dict:
+                            n_probe_seeds: int = pb.MAX_PROBE_SEEDS, probe_spec: dict | None = None, memory: list | None = None) -> dict:
     """Two-step investigation with diagnostic probes. `probe_runner(requests, probe_ids) -> run_probes() dict` runs the MuJoCo probes (it never
     sees the model). Returns what `investigate_once` returns (evidence = the step-B pack incl. `probes`; calls = every request) plus
     `probes`: {requested, step_a_reply, step_a_validation, results, original, expectations, seeds, rollouts, resolution, available}.
@@ -761,10 +770,11 @@ def investigate_with_probes(client, cfg: ModelConfig, version: dict, challenge_r
     pspec = probe_spec or challenge_result["spec"]   # the spec the probes will run with (push: finer bisection than the stored run)
     avail = pb.available_probes(version, kind, pspec)
     if not avail:
-        out = investigate_once(client, cfg, version, challenge_result, history, ledger, investigation_id=inv, max_proposals=max_proposals)
+        out = investigate_once(client, cfg, version, challenge_result, history, ledger, investigation_id=inv, max_proposals=max_proposals,
+                               memory=memory)
         out["probes"] = {"requested": [], "skipped": "no probe is available for this creature and challenge", "available": []}
         return out
-    evidence = build_evidence(version, challenge_result, history)
+    evidence = build_evidence(version, challenge_result, history, memory=memory)
     allowed = iv.editable_params(version, kind)
     res_tol = pb.resolution_for(kind, pspec)
     out = {"status": "model_failed", "investigation_id": inv, "evidence": evidence, "evidence_bytes": pack_size(evidence), "calls": [],

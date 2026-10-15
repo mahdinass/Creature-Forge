@@ -142,7 +142,7 @@ export const cancelForgeJob = (jobId: string) => postJson(`${FORGE}/jobs/${encod
 export const getForgeReplay = (q: ForgeReplayQuery) => fetch(forgeReplayUrl(q)).then((r) => fj<RunPayload>(r))
 export const getForgeArmReplay = (investigationId: string, arm: string, seed: number) =>
   fetch(forgeArmReplayUrl(investigationId, arm, seed)).then((r) => fj<RunPayload>(r))
-export const startInvestigation = (cid: string, n: number, b: { run_id: string; mode: 'live' | 'scripted'; loop?: boolean; probes?: boolean; profile?: 'default' | 'deep' }) =>
+export const startInvestigation = (cid: string, n: number, b: { run_id: string; mode: 'live' | 'scripted'; loop?: boolean; probes?: boolean; memory?: boolean; profile?: 'default' | 'deep' }) =>
   postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/versions/${n}/investigations`, b).then((r) => fj<StartedInvestigation>(r))
 export const getInvestigation = (id: string) => fetch(`${FORGE}/investigations/${encodeURIComponent(id)}`).then((r) => fj<InvestigationRecord>(r))
 export const listInvestigations = (cid: string) => fetch(`${FORGE}/investigations?cid=${encodeURIComponent(cid)}`).then((r) => fj<InvestigationSummary[]>(r))
