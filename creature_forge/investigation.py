@@ -53,6 +53,16 @@ SIZES_BY_KIND = {"push": {"train": 3, "screen": 6, "validate": 12}, "stand": {"t
                  "walk": {"train": 3, "screen": 12, "validate": 24}}
 VARY_VALIDATION = ("push", "walk")
 ARENA_PUSH_BISECTION_STEPS = 7   # first live loop (2026-10-15): a real +2.5 N effect was one 2.5 N step and counted as a tie
+# Test servers (CI browser flows) may set CF_INVESTIGATION_SCALE=smoke: tiny seed sets, 2 probe seeds, 5-step push bisection, so a
+# scripted investigation finishes in CI time. The scale is recorded in every record (seeds.scale) and is REFUSED for live mode.
+SMOKE_SIZES = {"train": 3, "screen": 2, "validate": 6}
+
+
+def investigation_scale() -> str:
+    s = os.environ.get("CF_INVESTIGATION_SCALE", "full")
+    if s not in ("full", "smoke"):
+        raise ValueError(f"CF_INVESTIGATION_SCALE must be full or smoke, got {s!r}")
+    return s
 DEFAULT_RETUNE_BUDGET = 48  # zoo pilot: K=48 (2 ES generations x 8 x 3 train seeds); only used when an AI walk proposal asks for retuning; applied to EVERY arm
 RECORD_KEYS = ("id", "created", "mode", "provenance", "creature", "challenge_run_id", "spec", "evidence", "model_calls", "reply",
                "validation", "probes", "arms", "seeds", "screening", "selection", "validation_results", "verdicts", "budget", "code",
@@ -397,6 +407,13 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
     cfg = cfg or load_model_config(profile, model_config_path)
     if max_requests is None:
         max_requests = 3 if probes else 2
+    scale = investigation_scale()
+    if scale == "smoke":
+        if mode == "live":
+            raise LiveRefused("live investigations always run at full scale; unset CF_INVESTIGATION_SCALE=smoke on this server")
+        sizes = sizes or dict(SMOKE_SIZES)
+        probe_seeds_n = min(probe_seeds_n, 2)
+    push_steps = 5 if scale == "smoke" else ARENA_PUSH_BISECTION_STEPS
     if mode == "live":
         reason = live_refusal(ledger, cfg)
         if reason:
@@ -465,7 +482,7 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
             pre_sets = (sets, used_round)
             probe_spec = {k: v for k, v in spec.items() if k != "seeds"}
             if kind == "push":
-                probe_spec["bisection_steps"] = ARENA_PUSH_BISECTION_STEPS
+                probe_spec["bisection_steps"] = push_steps
 
             def probe_runner(requests: list[dict], ids: list[str]) -> dict:
                 check()
@@ -510,7 +527,7 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
         avoid = set(spec.get("seeds") or [])
         sets, used_round = (pre_sets if pre_sets else
                             _disjoint_seed_sets(fns["seed_sets"], cid, n, round, sizes or SIZES_BY_KIND.get(kind, DEFAULT_SIZES), avoid))
-        rec["seeds"] = {**{k: list(v) for k, v in sets.items()}, "round_used": used_round}
+        rec["seeds"] = {**{k: list(v) for k, v in sets.items()}, "round_used": used_round, "scale": scale}
         rb = retune_budget if any(a["retune"] for a in arms) else 0
         if arena_runner is None:
             arena_runner, arena_cls = _default_arena()
@@ -519,7 +536,7 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
         acfg = _arena_config(arena_cls, sets, rb, kind)
         overrides = {k: v for k, v in spec.items() if k not in ("kind", "seeds")}
         if kind == "push":   # finer, identical measurement for every arm: 0.625 N steps so a +2.5 N effect is not a tie
-            overrides["bisection_steps"] = ARENA_PUSH_BISECTION_STEPS
+            overrides["bisection_steps"] = push_steps
         ev("phase", {"phase": "arena", "arms": [a["arm_id"] for a in runnable], "retune_budget": rb})
         check()
         arena_arms = [{k: a.get(k) for k in ("arm_id", "source", "proposal_id", "edits", "retune")} for a in runnable]

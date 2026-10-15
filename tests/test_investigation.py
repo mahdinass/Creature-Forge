@@ -534,7 +534,7 @@ class ProbeInvestigationTests(Base):
         rec = self.run_inv()
         self.assertIsNone(rec["probes"])
         self.assertEqual((len(rec["model_calls"]), rec["budget"]["calls"], rec["budget"]["rollouts"]), (1, 1, 100))
-        self.assertEqual(set(rec["seeds"]), {"train", "screen", "validate", "round_used"})
+        self.assertEqual(set(rec["seeds"]), {"train", "screen", "validate", "round_used", "scale"})
         self.assertNotIn("probe_request", [t for t, _ in self.events])
         self.assertEqual(self.pool.jobs, [])
 
