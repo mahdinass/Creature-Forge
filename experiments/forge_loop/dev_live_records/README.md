@@ -53,3 +53,17 @@ Findings: the model repeatedly identifies the support base and the probes confir
 the 0.5 m walking bar; it never chose morphology-controller co-design (`retune_controller`) even after the adaptation probe was
 confirmed. Probe and arena seeds are deterministic per creature version and round, so the three loops are replications of
 the model's behaviour on the same measurements, not independent physics samples. No walking redesign was verified.
+
+## Live end-to-end UI test (owner's merge condition, 2026-10-15)
+
+Real browser (headless Chrome on the VM) driving the Studio exactly as a user would, against the live server, with
+`studio/e2e/forge-live-flow.mjs` (LIVE_OK=1 only; never in CI): draw → Use this creature → Push challenge → Investigate with AI
+(probes on) → verdict → accept only if verified → challenge v2.
+
+| run | code | investigation | result |
+|---|---|---|---|
+| rehearsal | c641071's parent tree before the S8/S9 integration (6c3f0f6 slot snapshot) | i-b3c9a249933a | 15/15 checks PASS; AI arm VERIFIED, twin INCONCLUSIVE; accepted as v2; v2 challenged |
+| **final** | `feature/forge-loop` with engineering memory + security hardening (slot snapshot c641071) | **i-140b1435cb84** | **15/15 checks PASS**; probes: friction ×2 refuted, foot ×1.5 confirmed; Nemotron `foot_length ×1.35` VERIFIED +6.25 N, 12/0/0 on 12 held-out seeds; matched twin (foot grip ×0.7) INCONCLUSIVE; accepted as v2 attributed to Nemotron; v2 challenged |
+
+Screenshots and summaries: `ui_live/`. Both runs used the default drawn figure of the browser flow on the push challenge —
+the same creature family the pipeline was developed on, so these are functional acceptance tests, not new evidence.

@@ -1,0 +1,28 @@
+{
+ "ledger_before": {
+  "requests": 86,
+  "usd": 0.421541,
+  "tokens": 601442,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "creature_url": "http://127.0.0.1:8000/?tab=forge&creature=c-832a9f27&v=1",
+ "record_status": "done",
+ "investigation_id": "i-b3c9a249933a",
+ "request_ids": [
+  "780ab2c31cf21ab54ca4d65075c29336",
+  "48d9da77e2b27f3e407ec651ffc4127a"
+ ],
+ "ai_verdict": "VERIFIED_IMPROVEMENT",
+ "accepted": true,
+ "failed_checks": 0
+}

@@ -617,5 +617,69 @@
    "usd": 0.003738
   },
   "sha256": "8a4957812816ac66b904f8510bf5b4f1f91fa3d6c757e7358bb151ec49e74566"
+ },
+ {
+  "id": "i-b3c9a249933a",
+  "created": "2026-10-15T18:11:10Z",
+  "creature": {
+   "cid": "c-832a9f27",
+   "n": 1,
+   "content_hash": "b6df4d3cc7274bdc8835e01e4c00c79ca69bb04c1447a6c9ca2ccaf57455d768",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "780ab2c31cf21ab54ca4d65075c29336",
+   "48d9da77e2b27f3e407ec651ffc4127a"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1224,
+   "wall_s": 319.25,
+   "calls": 2,
+   "tokens": 11850,
+   "usd": 0.004016
+  },
+  "via": "live browser flow (studio/e2e/forge-live-flow.mjs)",
+  "sha256": "23abed4daeb8c4ac0a84221176e02d5ca79796c8f8eb5011fc37d47677519ae5"
+ },
+ {
+  "id": "i-140b1435cb84",
+  "created": "2026-10-15T18:26:34Z",
+  "creature": {
+   "cid": "c-95b0ef4f",
+   "n": 1,
+   "content_hash": "9cd0e3eedd102800e1cef79a16fcfa4bb9548d5a3bba0c87abd40ed8123d629e",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "bdc6f816bf58544ff0b1614a9ee08b35",
+   "43eccb20e4b1971f27fa2e038aa84e03"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1394,
+   "wall_s": 331.587,
+   "calls": 2,
+   "tokens": 12328,
+   "usd": 0.004319
+  },
+  "via": "live browser flow (studio/e2e/forge-live-flow.mjs)",
+  "sha256": "1bf42aeaa019029a939d0b99f51abdb58f9fefb70bd7334d914d97aa9155ec79"
  }
 ]
