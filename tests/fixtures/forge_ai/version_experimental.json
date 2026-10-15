@@ -1,0 +1,40 @@
+{
+ "n": 2,
+ "parent": 1,
+ "mode": "experimental",
+ "body": {
+  "torso_mass": 9.0,
+  "thigh_length": 0.35,
+  "shank_length": 0.25,
+  "foot_length": 0.08,
+  "foot_friction": 1.0,
+  "torque_limit": 45.0,
+  "leg_density": 1000.0,
+  "thigh_length_r": 0.3,
+  "shank_length_r": 0.28,
+  "foot_length_r": 0.1,
+  "pose": [
+   0.12,
+   0.2,
+   -0.4,
+   0.1,
+   0.1,
+   -0.3,
+   0.05
+  ]
+ },
+ "controllers": {
+  "stand": {
+   "kp": 150.0,
+   "kd": 8.0,
+   "gait_freq": 0.0,
+   "hip_amp": 0.0,
+   "knee_amp": 0.0,
+   "balance_gain": 80.0,
+   "stand_hip": 0.0,
+   "stand_knee": 0.0
+  },
+  "walk": null
+ },
+ "origin": "user"
+}

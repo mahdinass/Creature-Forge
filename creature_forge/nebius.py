@@ -17,6 +17,9 @@ from .config import load_env, nebius_api_key, nebius_base_url
 DEFAULT_BASE_URL = "https://api.tokenfactory.nebius.com/v1"
 DEFAULT_MODEL = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
 REASONING_EFFORTS = ("none", "low", "medium", "high")  # per Nebius docs; model support must be verified
+# Request-body keys that `extra_body` may never set: the client owns them (model, messages, max_tokens, temperature) or they
+# have a dedicated, validated argument (reasoning_effort, response_format).
+RESERVED_BODY_KEYS = frozenset({"model", "messages", "max_tokens", "temperature", "reasoning_effort", "response_format"})
 
 
 class NebiusError(RuntimeError):
@@ -98,9 +101,18 @@ class NebiusClient:
         self.base_url = (self.base_url or nebius_base_url(DEFAULT_BASE_URL)).rstrip("/")
 
     def chat(self, messages: list[dict], *, max_tokens: int = 1024, temperature: float = 0.0,
-             reasoning_effort: str | None = None, response_format: dict | None = None) -> ChatResult:
+             reasoning_effort: str | None = None, response_format: dict | None = None,
+             extra_body: dict | None = None) -> ChatResult:
         if reasoning_effort is not None and reasoning_effort not in REASONING_EFFORTS:
             raise ValueError(f"reasoning_effort must be one of {REASONING_EFFORTS}")
+        if extra_body is not None:
+            # Additive provider-specific fields (e.g. {"chat_template_kwargs": {"enable_thinking": False}}). Validated BEFORE any
+            # budget is touched; it can never override what the client itself controls.
+            if not isinstance(extra_body, dict):
+                raise ValueError("extra_body must be a dict")
+            clash = sorted(set(extra_body) & RESERVED_BODY_KEYS)
+            if clash:
+                raise ValueError(f"extra_body may not override {clash}")
         if not (1 <= max_tokens <= self.limits.max_tokens_per_request):
             raise BudgetExceeded(f"max_tokens={max_tokens} outside 1..{self.limits.max_tokens_per_request}")
         if self.requests_made >= self.limits.max_requests:
@@ -121,6 +133,8 @@ class NebiusClient:
             body["reasoning_effort"] = reasoning_effort
         if response_format is not None:
             body["response_format"] = response_format
+        if extra_body:
+            body.update(extra_body)
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
         self.requests_made += 1  # counted before the call: a failed/timed-out request still costs budget

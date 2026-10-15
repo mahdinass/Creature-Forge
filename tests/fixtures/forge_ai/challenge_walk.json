@@ -1,0 +1,317 @@
+{
+ "spec": {
+  "kind": "walk",
+  "seeds": [
+   100000,
+   100001,
+   100002,
+   100003,
+   100004,
+   100005,
+   100006,
+   100007
+  ],
+  "duration": 10.0,
+  "perturb": 0.02,
+  "settle_s": 0.3,
+  "start": "neutral"
+ },
+ "body": {
+  "torso_mass": 5.0,
+  "thigh_length": 0.3,
+  "shank_length": 0.3,
+  "foot_length": 0.16,
+  "foot_friction": 1.0,
+  "torque_limit": 60.0,
+  "leg_density": 1000.0,
+  "thigh_length_r": 0.3,
+  "shank_length_r": 0.3,
+  "foot_length_r": 0.16,
+  "pose": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "controller": {
+  "stand": {
+   "kind": "stand-pd",
+   "params": {
+    "kp": 150.0,
+    "kd": 8.0,
+    "gait_freq": 0.0,
+    "hip_amp": 0.0,
+    "knee_amp": 0.0,
+    "balance_gain": 80.0,
+    "stand_hip": 0.0,
+    "stand_knee": 0.0
+   },
+   "edited": false
+  },
+  "walk": {
+   "kind": "r2-transfer",
+   "vector": [
+    1.555141834114274,
+    0.5746145348782157,
+    0.06360334138900163,
+    0.8595200316946476,
+    -0.08113199129340379,
+    -0.004597134741325837,
+    0.1995479649846929,
+    121.70337151766175,
+    10.762497323989722,
+    133.01587595349372,
+    86.46280690087647,
+    0.10615164042268156,
+    0.8745373874736129,
+    0.37308082048845015,
+    0.01830344347150241
+   ],
+   "adaptation": null
+  }
+ },
+ "per_seed": [
+  {
+   "seed": 100000,
+   "outcome": "PASS",
+   "score": 2.153,
+   "metrics": {
+    "forward_displacement": 2.153,
+    "label": "walking",
+    "valid_steps": 4,
+    "fell": false,
+    "speed_upright": 0.215,
+    "max_abs_pitch": 0.884,
+    "mean_pitch": 0.192,
+    "single_support_frac": 0.151,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 6,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100001,
+   "outcome": "PASS",
+   "score": 1.057,
+   "metrics": {
+    "forward_displacement": 1.057,
+    "label": "walking",
+    "valid_steps": 2,
+    "fell": false,
+    "speed_upright": 0.106,
+    "max_abs_pitch": 0.232,
+    "mean_pitch": 0.047,
+    "single_support_frac": 0.485,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 3,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100002,
+   "outcome": "PASS",
+   "score": 3.535,
+   "metrics": {
+    "forward_displacement": 3.535,
+    "label": "walking",
+    "valid_steps": 7,
+    "fell": false,
+    "speed_upright": 0.354,
+    "max_abs_pitch": 0.263,
+    "mean_pitch": 0.001,
+    "single_support_frac": 0.419,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 10,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100003,
+   "outcome": "PASS",
+   "score": 2.216,
+   "metrics": {
+    "forward_displacement": 2.216,
+    "label": "walking",
+    "valid_steps": 4,
+    "fell": false,
+    "speed_upright": 0.222,
+    "max_abs_pitch": 0.566,
+    "mean_pitch": 0.191,
+    "single_support_frac": 0.69,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 6,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100004,
+   "outcome": "PASS",
+   "score": 3.093,
+   "metrics": {
+    "forward_displacement": 3.093,
+    "label": "walking",
+    "valid_steps": 6,
+    "fell": false,
+    "speed_upright": 0.309,
+    "max_abs_pitch": 0.618,
+    "mean_pitch": 0.135,
+    "single_support_frac": 0.054,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 9,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100005,
+   "outcome": "PASS",
+   "score": 5.397,
+   "metrics": {
+    "forward_displacement": 5.397,
+    "label": "walking",
+    "valid_steps": 10,
+    "fell": false,
+    "speed_upright": 0.54,
+    "max_abs_pitch": 0.78,
+    "mean_pitch": 0.175,
+    "single_support_frac": 0.798,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 16,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100006,
+   "outcome": "PASS",
+   "score": 2.354,
+   "metrics": {
+    "forward_displacement": 2.354,
+    "label": "walking",
+    "valid_steps": 4,
+    "fell": false,
+    "speed_upright": 0.235,
+    "max_abs_pitch": 0.399,
+    "mean_pitch": 0.021,
+    "single_support_frac": 0.634,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 7,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [],
+   "rollouts": 1
+  },
+  {
+   "seed": 100007,
+   "outcome": "FAIL",
+   "score": 0.373,
+   "metrics": {
+    "forward_displacement": 0.373,
+    "label": "fell",
+    "valid_steps": 0,
+    "fell": true,
+    "speed_upright": 0.037,
+    "max_abs_pitch": 0.067,
+    "mean_pitch": 0.042,
+    "single_support_frac": 0.162,
+    "mean_stance_s": 0.5,
+    "mean_swing_s": 0.3,
+    "touchdowns": 1,
+    "min_torso_height": 0.5,
+    "violations": 0
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 2.0,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.6,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 1
+  }
+ ],
+ "outcome": "PASS",
+ "summary": {
+  "counts": {
+   "FAIL": 1,
+   "POOR": 0,
+   "PASS": 7
+  },
+  "score_median": 2.354,
+  "score_mean": 2.52225,
+  "score_min": 0.373,
+  "score_max": 5.397,
+  "pass_wilson": [
+   0.1,
+   0.6
+  ]
+ },
+ "forensics": {
+  "summary": {
+   "fell": true,
+   "fall_time_s": 2.0,
+   "forward_displacement_m": 0.4,
+   "valid_steps": 1,
+   "mean_speed_mps": 0.2
+  },
+  "gait": {
+   "single_support_frac": 0.4,
+   "touchdowns": 3,
+   "stance_s": [
+    0.5,
+    0.45,
+    0.4
+   ]
+  },
+  "worst_seed": 100000
+ },
+ "rollouts": 8,
+ "wall_s": 12.3
+}

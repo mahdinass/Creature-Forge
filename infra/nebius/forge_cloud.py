@@ -73,7 +73,8 @@ def spend_record(event: str, **kw) -> None:
 
 def spend_total(now: float | None = None) -> dict:
     """Conservative spend since the ledger started: every run interval is charged from its start until the next recorded
-    stop or, if none, its (latest) deadline - the deadman timer powers the VM off then - capped at `now`. Disk is charged
+    API stop (or `now` if none). The deadman timer powers the GUEST off at the deadline, but on 2026-10-15 the instance
+    still reported RUNNING 3.75 h later, so a guest poweroff is not assumed to end compute billing. Disk is charged
     continuously from the first event. Rates are the quoted ones in CFG, not a billing statement."""
     now = time.time() if now is None else now
     ev = spend_events()
@@ -84,15 +85,15 @@ def spend_total(now: float | None = None) -> dict:
     for e in ev:
         if e["event"] == "start":
             if run_start is not None:
-                hours += max(0.0, min(e["epoch"], deadline) - run_start) / 3600
+                hours += max(0.0, e["epoch"] - run_start) / 3600
             run_start, deadline = e["epoch"], e["deadline"]
         elif e["event"] == "extend" and run_start is not None:
             deadline = e["deadline"]
         elif e["event"] == "stop" and run_start is not None:
-            hours += max(0.0, min(e["epoch"], deadline) - run_start) / 3600
+            hours += max(0.0, e["epoch"] - run_start) / 3600
             run_start = None
     if run_start is not None:
-        hours += max(0.0, min(now, deadline) - run_start) / 3600
+        hours += max(0.0, now - run_start) / 3600
     disk_h = max(0.0, now - ev[0]["epoch"]) / 3600
     usd = hours * c["compute_usd_per_h"] + disk_h * c["disk_usd_per_h"]
     return {"compute_h": round(hours, 3), "usd": round(usd, 3), "cap_usd": SPEND_CAP_USD}

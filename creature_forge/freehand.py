@@ -335,20 +335,33 @@ def _interpret(strokes: list[dict], *, guided: bool = True, materials: dict | No
         assumptions.append("Only one leg was drawn: the second leg mirrors it exactly (same lengths and pose).")
 
     # ---- feet and facing
-    feet = []
-    for f in foot_strokes:
-        a, b = f.pts[0], f.pts[-1]
-        near = min(range(2), key=lambda i: min(_dist(p, legs[i]["ankle"]) for p in f.pts))
-        d = min(_dist(p, legs[near]["ankle"]) for p in f.pts)
+    def foot_on(f, i: int) -> dict:
+        a, b, ank = f.pts[0], f.pts[-1], legs[i]["ankle"]
+        toe, heel = (b, a) if abs(b[0] - ank[0]) >= abs(a[0] - ank[0]) else (a, b)
+        return {"leg": i, "toe": toe, "heel": heel, "dir": 1 if toe[0] >= ank[0] else -1}
+
+    dist = [[min(_dist(p, legs[i]["ankle"]) for p in f.pts) for i in range(2)] for f in foot_strokes]
+    near = [min(range(2), key=lambda i: dist[k][i]) for k in range(len(foot_strokes))]
+    for k, f in enumerate(foot_strokes):
+        d = dist[k][near[k]]
         if d > 0.2:
             res["status"] = "needs_input"
             amb = {"kind": "foot", "strokes": [f.id], "message": f"Foot stroke {f.id} is {d:.2f} m from the nearest ankle, so it is unclear which leg it belongs to.",
                    "options": [{"label": f"Ignore {f.id}", "assign": {f.id: "ignore"}}]}
             res["ambiguities"], res["errors"] = [amb], [amb["message"]]
             return res
-        ank = legs[near]["ankle"]
-        toe, heel = (b, a) if abs(b[0] - ank[0]) >= abs(a[0] - ank[0]) else (a, b)
-        feet.append({"leg": near, "toe": toe, "heel": heel, "dir": 1 if toe[0] >= ank[0] else -1})
+    feet = [foot_on(f, near[k]) for k, f in enumerate(foot_strokes)]
+    if len(foot_strokes) == 2 and len({f["dir"] for f in feet}) > 1:
+        # Two feet close to both ankles (legs drawn a few cm apart) can each look nearest to the other leg, which flips
+        # toe and heel. Use the one-to-one assignment in which both feet point the same way (closest first); only if no
+        # such reading exists is the facing genuinely ambiguous and the user is asked below.
+        options = []
+        for perm in ((0, 1), (1, 0)):
+            cand = [foot_on(f, perm[k]) for k, f in enumerate(foot_strokes)]
+            if len({c["dir"] for c in cand}) == 1 and max(dist[k][perm[k]] for k in range(2)) <= 0.2:
+                options.append((dist[0][perm[0]] + dist[1][perm[1]], cand))
+        if options:
+            feet = min(options, key=lambda o: o[0])[1]
     mirror = False
     if feet:
         dirs = {f["dir"] for f in feet}
