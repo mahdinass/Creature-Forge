@@ -74,3 +74,21 @@
 .table-scroll { overflow-x: auto; max-width: 100%; }
 @media (max-width: 1100px) { .fg-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) { .fg-pair { grid-template-columns: minmax(0, 1fr); } .fg-replay .viewport, .fg-pair .viewport { height: 300px; } .fg-badge { font-size: 22px; padding: 6px 16px; } .fg-scorerow { grid-template-columns: minmax(0, 1fr) auto; } .fg-scorerow .fg-track { grid-column: 1 / -1; } .fg-inline { grid-template-columns: minmax(0, 1fr); } }
+
+/* phase 2: live investigation, validation cards, investigation list */
+.fg-check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: #c4ccda; }
+.fg-stages { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.fg-stage { padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--dim); font-size: 13px; }
+.fg-stage-done { color: var(--txt); border-color: var(--investigate); } .fg-stage-active { color: #120d2b; background: var(--investigate); border-color: var(--investigate); font-weight: 700; }
+.fg-vgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.fg-vcard { display: grid; gap: 4px; padding: 10px 12px; border-radius: var(--r-md); border: 1px solid var(--line-2); background: var(--panel); align-content: start; } .fg-vcard p { margin: 0; font-size: 14px; }
+.fg-vcard.tone-ok { border-color: var(--ok); } .fg-vcard.tone-bad { border-color: var(--bad); } .fg-vcard.tone-warn { border-color: var(--warn); }
+.fg-ilist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; } .fg-ilist li { display: grid; gap: 4px; } .fg-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.fg-linkbtn.on { text-decoration: underline; color: var(--investigate); }
+.fg-pair-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fg-looprs { display: grid; gap: 6px; padding: 10px 14px; border: 1px solid var(--investigate); border-radius: var(--r-md); } .fg-looprs ul { margin: 0; padding-left: 18px; }
+.fg-accepted { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border-color: var(--ok); background: #10241a; }
+@media (max-width: 900px) { .fg-pair-3 { grid-template-columns: minmax(0, 1fr); } .fg-pair-3 .viewport { height: 260px; } }
+
+.fg-probe { display: grid; gap: 3px; padding: 8px 10px; border-radius: var(--r-sm); border: 1px solid var(--line-2); }
+.fg-probe-CONFIRMED { border-color: var(--ok); } .fg-probe-REFUTED { border-color: var(--bad); } .fg-probe-NOT_EVALUATED { border-style: dashed; }

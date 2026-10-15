@@ -26,7 +26,7 @@ export function CreatureBar({ creature, viewN, onView, onMakeCurrent, busy, erro
               <button className="fg-linkbtn" aria-current={r.n === viewN ? 'true' : undefined} onClick={() => onView(r.n)}>
                 <b>v{r.n}</b>
               </button>
-              <span className={`fg-origin fg-origin-${r.origin}`}>{originLabel(r.origin)}</span>
+              <span className={`fg-origin fg-origin-${r.origin}`}>{originLabel(r.origin, r.version.change?.source)}</span>
               {r.parent !== null && <span className="fg-dim">from v{r.parent}</span>}
               <span className="fg-summary">{r.summary}</span>
               {r.current ? <em className="fg-current-tag">current</em> : (

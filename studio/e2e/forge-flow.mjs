@@ -18,13 +18,10 @@ const browser = await chromium.launch({ executablePath: exe, headless: true, arg
 const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
 page.setDefaultNavigationTimeout(150000)
 const errors = [], bad = []
-// the investigation endpoints legitimately answer 503 until the backend exists; nothing else may fail
-const expected503 = (url, status) => status === 503 && /\/api\/forge\/(creatures\/[^/]+\/versions\/\d+\/investigations|investigations|replay)/.test(url)
 page.on('pageerror', (e) => errors.push(e.message))
-page.on('console', (m) => { if (m.type() === 'error' && !/status of 503/.test(m.text())) errors.push(m.text()) })
+page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()) })
 page.on('response', (r) => {
   if (!r.url().includes('/api/')) return
-  if (expected503(r.url(), r.status())) return
   if (r.status() >= 400 || !(r.headers()['content-type'] || '').includes('json')) bad.push(`${r.status()} ${r.url()}`)
 })
 const T = (id) => `[data-testid="${id}"]`
@@ -88,17 +85,80 @@ try {
     }
     if (SHOT) await page.screenshot({ path: `${SHOT}/forge-1920.png`, fullPage: true })
 
-    // --- AI investigation is honest about not being available yet
-    await page.click(T('investigate-btn'))
-    await page.waitForSelector(T('investigation-unavailable'), { timeout: 30000 })
-    ok(/not available yet/i.test(await text(T('investigation-unavailable'))), `investigation says it is not available yet: "${(await text(T('investigation-unavailable'))).slice(0, 90)}"`)
+    // --- investigation: the live button is gated by the server, the scripted mock runs the whole pipeline (no model is ever called here)
+    const status = await page.evaluate(() => fetch('/api/forge/status').then((r) => r.json()))
+    if (!status.live_available) {
+      ok(await page.isDisabled(T('investigate-btn')) && /Live model calls are off/.test(await text(T('live-hint'))), 'live investigation is disabled with the reason shown (live calls are off on this server)')
+    } else {
+      ok(!(await page.isDisabled(T('investigate-btn'))), 'live investigation is enabled when the server allows it (not clicked here)')
+    }
+    ok(await page.isVisible(T('loop-checkbox')) && /3 rounds/.test(await text(T('loop-option'))) && /never accepts for you/.test(await text(T('loop-option'))), 'the keep-investigating option states its limits and that it never accepts')
+    ok(await page.isVisible(T('probes-checkbox')), 'the "Run diagnostic probes first" option is offered')
+    await page.check(T('probes-checkbox'))
+    await page.click(T('investigate-mock-btn'))
+    await page.waitForSelector(T('inv-progress'), { timeout: 60000 })
+    ok(await page.isVisible(T('inv-stages')), 'live progress shows the six stages')
+    await page.waitForSelector(`${T('investigation-record')}, ${T('investigation-failed')}, ${T('investigation-error')}`, { timeout: 900000 })
+    ok(await page.isVisible(T('investigation-record')), 'the scripted investigation finished and its record is shown')
+    const recStatus = await page.getAttribute(T('investigation-record'), 'data-status')
+    ok(/SCRIPTED MOCK/.test(await text(T('inv-provenance'))), 'the provenance banner says SCRIPTED MOCK')
+    const chipLabels = await page.locator(`${T('investigation-record')} ${T('prov-chip')}`).allTextContents()
+    ok(chipLabels.length > 0 && !chipLabels.some((c) => /NEMOTRON/.test(c)), `no arm is labelled NEMOTRON in a scripted record (${[...new Set(chipLabels)].join(', ')})`)
+    ok(/Budget used: .*rollouts/.test(await text(T('budget-line'))), 'the budget line shows the recorded rollouts')
+    if (recStatus === 'done') {
+      ok(await page.isVisible(T('model-call')), 'the model call card is shown')
+      const probeRows = await page.locator(T('probe-row')).count()
+      if (probeRows > 0) {
+        const verdicts = await page.locator(T('probe-row')).evaluateAll((els) => els.map((e) => e.getAttribute('data-verdict')))
+        ok(verdicts.every((v) => ['CONFIRMED', 'REFUTED', 'NOT EVALUATED'].includes(v)), `each probe shows CONFIRMED / REFUTED / NOT EVALUATED (${verdicts.join(', ')})`)
+      } else {
+        console.log('INFO the scripted record carries no probe rows (probes skipped or not requested by the fixture)')
+      }
+      ok((await page.locator('[data-step="proposals"] [data-status]').count()) >= 1, 'proposals are listed as accepted or rejected')
+      ok((await page.locator(`${T('arms-table')} tbody tr`).count()) >= 2, 'the arms table lists the original and the candidates')
+      ok(await page.isVisible(T('verdict-ai')), 'the AI-arm verdict is shown')
+      ok(await page.isVisible(T('verdict-twin')), 'its matched random twin is shown next to it')
+      const vt = await text(T('verdict-ai'))
+      ok(/held-out seeds|No measurable effect|Inconclusive/.test(vt) && !/significan/i.test(vt), `the verdict uses held-out-seed wording (${vt.replace(/\s+/g, ' ').slice(0, 110)})`)
+      await page.waitForSelector(`${T('arena-viewports')} canvas`, { timeout: 180000 })
+      ok(true, 'the original and the selected arm replay side by side on a held-out seed')
+      if (await page.isVisible(T('arena-twin-toggle'))) {
+        await page.check(T('arena-twin-toggle'))
+        await page.waitForSelector('.fg-pair-3 canvas', { timeout: 180000 })
+        ok(true, 'the matched twin can be added as a third synchronized replay')
+      }
+      const armStatus = await page.getAttribute(T('verdict-ai'), 'data-status')
+      const accBtn = T('accept-btn')
+      await page.waitForSelector(accBtn)
+      if (await page.getAttribute(T('accept-panel'), 'data-can-accept') === 'true') {
+        ok(!(await page.isDisabled(accBtn)), `a verified arm can be accepted (${armStatus})`)
+        await page.click(accBtn)
+        await page.waitForSelector(T('lineage-v2'), { timeout: 60000 })
+        ok((await text(T('version-chip'))).trim() === 'v2', 'after accepting, the version chip shows v2')
+        const lin = await text(T('lineage-v2'))
+        ok(/from v1/.test(lin) && /Scripted mock/.test(lin) && /verified/.test(lin), `the lineage shows parent, source, edits and verdict (${lin.replace(/\s+/g, ' ').slice(0, 120)})`)
+        ok(await page.isVisible(T('challenge-new-version')), 'the page offers "Challenge v2"')
+        await page.click(T('challenge-new-version'))
+        await page.waitForSelector(`${T('run-result')}, ${T('run-failed')}`, { timeout: 420000 })
+        ok(await page.isVisible(T('run-result')), 'v2 was challenged in MuJoCo')
+      } else {
+        ok(await page.isDisabled(accBtn), `accept is disabled because the arm is not a verified improvement (${armStatus})`)
+        ok(/Only a verified improvement can be accepted|nothing to accept/.test(await text(T('accept-blocked'))), 'the refusal says why: only a verified improvement can be accepted')
+      }
+    } else {
+      ok(await page.isVisible(T('model-failure')), `a scripted record that did not complete shows an honest failure (${recStatus})`)
+    }
+    await page.waitForSelector(`${T('investigation-item')}`, { timeout: 30000 })
+    ok((await page.locator(`${T('investigation-list')} ${T('prov-chip')}`).allTextContents()).some((c) => /SCRIPTED MOCK/.test(c)), 'the investigations list shows the run with a SCRIPTED MOCK chip')
+    if (SHOT) await page.screenshot({ path: `${SHOT}/forge-investigation-1920.png`, fullPage: true })
   }
 
   // --- reload keeps the creature and the run
   const url = page.url()
+  const chipBefore = (await text(T('version-chip'))).trim()
   await page.reload(); await page.waitForSelector(T('creature-bar'), { timeout: 30000 })
-  ok((await text(T('version-chip'))).trim() === 'v1', 'after a reload the same creature is still on the bench')
-  ok(page.url().includes('creature=') && page.url().includes('v=1'), 'the deep link survives a reload')
+  ok((await text(T('version-chip'))).trim() === chipBefore, `after a reload the same creature and version are still on the bench (${chipBefore})`)
+  ok(page.url().includes('creature=') && page.url().includes(`v=${chipBefore.slice(1)}`), 'the deep link survives a reload')
   if (!jobFailed) {
     await page.waitForSelector(T('run-result'), { timeout: 60000 })
     ok(page.url() === url, 'the run id is in the link, so the stored result reopens after a reload')
@@ -109,8 +169,14 @@ try {
   await page.waitForFunction(() => window.innerWidth === 390)
   ok((await overflow()) <= 1, `no horizontal page overflow at 390 px (${await overflow()}px)`)
   if (SHOT) await page.screenshot({ path: `${SHOT}/forge-390.png`, fullPage: true })
+  if (!jobFailed) {
+    await page.locator(T('investigation-item')).first().click()
+    await page.waitForSelector(T('investigation-record'), { timeout: 60000 })
+    ok((await overflow()) <= 1, `no horizontal overflow at 390 px with an investigation open (${await overflow()}px)`)
+    if (SHOT) await page.screenshot({ path: `${SHOT}/forge-investigation-390.png`, fullPage: true })
+  }
 
-  ok(bad.length === 0, `every API response is JSON and < 400, except the expected 503 from investigations${bad.length ? ': ' + bad.join(' | ') : ''}`)
+  ok(bad.length === 0, `every API response is JSON and < 400${bad.length ? ': ' + bad.join(' | ') : ''}`)
   ok(errors.length === 0, `no console or page errors${errors.length ? ': ' + errors.join(' | ') : ''}`)
 } catch (e) { ok(false, `flow threw: ${e.message}`) }
 await browser.close()

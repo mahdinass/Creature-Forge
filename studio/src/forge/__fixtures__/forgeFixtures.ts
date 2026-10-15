@@ -1,6 +1,7 @@
 // TEST-ONLY fixtures: hand-written records in the documented API shapes, used by vitest to exercise rendering logic.
 // They are imported only from *.test.ts and are never imported by application code or shown in the UI.
 import type { ChallengeRun, Creature, CreatureVersion, InvestigationRecord, Job, JobEvent } from '../forgeTypes'
+import { liveVerified } from './real_liveVerified'
 
 const body = {
   torso_mass: 6, thigh_length: 0.3, shank_length: 0.3, foot_length: 0.08, foot_friction: 0.9, torque_limit: 40, leg_density: 400,
@@ -71,43 +72,12 @@ export const job = (over: Partial<Job> = {}): Job => ({
 })
 export const ev = (i: number, type = 'progress', data: Record<string, unknown> = {}): JobEvent => ({ i, t: i * 0.5, type, data })
 
-const verified = { status: 'VERIFIED_IMPROVEMENT' as const, rule: 'verdict_v1', n: 24, wins: 20, losses: 2, ties: 2, median_diff: 6.5, p_one_sided: 0.0001, min_effect: { abs: 3, rel: 0.1 } }
-
-export const investigation: InvestigationRecord = {
-  id: 'i-aaaa1111', created: '2026-10-15T11:00:00Z', mode: 'live', provenance: 'LIVE',
-  creature: { cid: 'c-1a2b3c4d', n: 1, content_hash: 'h1' }, challenge_run_id: 'r-0a0b0c0d',
-  evidence: { creature: { mode: 'experimental' }, outcome: { aggregate: 'FAIL' }, seeds: [{ seed: 100003, score: 4, metrics: { critical_force_bwd: 4 } }] },
-  model_calls: [{ model: 'nvidia/nemotron-test', request_id: 'req-1', latency_s: 12.3, usage: { prompt_tokens: 2000, completion_tokens: 800 }, cost_usd: 0.01, finish_reason: 'stop', http_status: 200, error: null }],
-  reply: {
-    diagnosis: { summary: 'Falls backwards.', hypotheses: [{ id: 'H1', mechanism: 'Short feet.', evidence: ['seeds[0].metrics.critical_force_bwd', 'seeds[0].metrics.nothing', 'seeds[0]'] }] },
-    proposals: [{ id: 'P1', hypothesis: 'H1', category: 'morphology', prediction: { expected_change: 'more force' } }, { id: 'P2', hypothesis: 'H1' }],
-  },
-  validation: { proposals: [{ id: 'P1', status: 'accepted' }, { id: 'P2', status: 'rejected', reasons: ['foot_length: ratio 2.0 outside [0.5, 1.5]'] }] },
-  arms: [
-    { arm_id: 'original', source: 'original' },
-    { arm_id: 'ai:P1', source: 'nemotron', proposal_id: 'P1', body: { ...body, foot_length: 0.104 } },
-    { arm_id: 'random:P1', source: 'random_baseline' },
-    { arm_id: 'heuristic', source: 'heuristic', unavailable: undefined },
-  ],
-  seeds: { screen: [1, 2, 3], validate: [11, 12, 13, 14] },
-  validation_results: {
-    original: [{ seed: 11, score: 10 }, { seed: 12, score: 12 }],
-    'ai:P1': { 11: { score: 20 }, 12: { score: 22 } },
-  },
-  verdicts: {
-    'ai:P1': verified,
-    'random:P1': { status: 'NOT_VERIFIED', n: 24, wins: 9, losses: 8, ties: 7, median_diff: 0.4, p_one_sided: 0.4, min_effect: 3, reasons: ['effect below minimum'] },
-    heuristic: { status: 'WORSE', reasons: ['mirrored test significant'] },
-  },
-  status: 'done',
+// Variants of a REAL record, only to exercise provenance and failure rendering (they are labelled as test variants, never shown):
+export const mockVariant: InvestigationRecord = {
+  ...liveVerified, id: 'i-test-mock', mode: 'scripted', provenance: 'SCRIPTED_MOCK',
+  arms: liveVerified.arms!.map((a) => (a.source === 'nemotron' ? { ...a, source: 'scripted_mock' as const } : a)),
 }
-
-export const mockInvestigation: InvestigationRecord = { ...investigation, id: 'i-bbbb2222', mode: 'scripted', provenance: 'SCRIPTED_MOCK' }
-
-export const failedInvestigation: InvestigationRecord = {
-  id: 'i-cccc3333', created: 'x', mode: 'live', provenance: 'LIVE', creature: { cid: 'c-1a2b3c4d', n: 1, content_hash: 'h1' },
-  challenge_run_id: 'r-0a0b0c0d', evidence: { a: 1 },
-  model_calls: [{ model: 'nvidia/nemotron-test', error: 'HTTP 429 rate limited', http_status: 429 }],
-  arms: [{ arm_id: 'original', source: 'original' }, { arm_id: 'heuristic', source: 'heuristic' }],
-  status: 'model_failed', error: 'model call failed: HTTP 429 rate limited',
+export const modelFailedVariant: InvestigationRecord = {
+  ...liveVerified, id: 'i-test-failed', status: 'model_failed', error: 'model call failed: HTTP 429 (test variant)', reply: null, validation: null,
+  arms: [liveVerified.arms![0]], verdicts: {}, selection: undefined, validation_results: undefined, screening: undefined,
 }

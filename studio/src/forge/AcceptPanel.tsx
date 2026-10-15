@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { acceptArm, getSandboxSchema } from '../api'
 import { ParamTrack } from '../demo/parts'
 import type { SandboxSchema } from '../sketch/freehandTypes'
-import { acceptBlockReason, armChip, bodyDiffs, canAccept, controllerDiffs, verdictText } from './forgeLogic'
+import { acceptBlockReason, armChip, bodyDiffs, canAccept, controllerDiffs, describeEdit, hypotheticalNote, verdictText } from './forgeLogic'
 import type { Arm, Creature, CreatureVersion, InvestigationRecord } from './forgeTypes'
 import { ProvChip } from './ArenaCompare'
 
@@ -29,6 +29,7 @@ export function AcceptPanel({ cid, version, record, arm, onAccepted }: {
   const changed = diffs.filter((d) => d.changed)
   const ctrl = controllerDiffs(version.controllers, arm.controllers)
   const chip = armChip(arm, record.provenance)
+  const hyp = allowed ? hypotheticalNote(record) : null
 
   const accept = async () => {
     setBusy(true)
@@ -47,7 +48,7 @@ export function AcceptPanel({ cid, version, record, arm, onAccepted }: {
     <section className="fg-card fg-accept" data-testid="accept-panel" data-can-accept={allowed}>
       <h3>What this change does <ProvChip {...chip} /></h3>
       {arm.edits && arm.edits.length > 0 && (
-        <ul className="fg-edits">{arm.edits.map((e, i) => <li key={i}><b>{e.param}</b> {e.op === 'scale' ? `x ${e.value}` : `set to ${e.value}`}{e.target && e.target !== 'both' ? ` (${e.target} leg)` : ''}</li>)}</ul>
+        <ul className="fg-edits">{arm.edits.map((e, i) => <li key={i}>{describeEdit(e)}</li>)}</ul>
       )}
       {changed.map((d) => <ParamTrack key={d.name} d={d} tone="model" />)}
       {ctrl.length > 0 && (
@@ -57,6 +58,7 @@ export function AcceptPanel({ cid, version, record, arm, onAccepted }: {
       {changed.length === 0 && ctrl.length === 0 && <p className="fg-dim">No parameter differences were recorded for this arm.</p>}
       <p className="fg-dim" data-testid="accept-verdict">{verdictText(verdict)}</p>
       {reason && <p className="fg-note-box" data-testid="accept-blocked">{reason}</p>}
+      {hyp && <p className="fg-note-box" data-testid="accept-hypothetical">{hyp}</p>}
       {error && <div className="error" role="alert" data-testid="accept-error">{error}</div>}
       <div className="fg-actions">
         <button className="btn btn-investigate" disabled={!allowed || busy} data-testid="accept-btn" onClick={() => void accept()}>{busy ? 'Accepting...' : 'Accept as a new version'}</button>

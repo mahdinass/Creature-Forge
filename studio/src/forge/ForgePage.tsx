@@ -4,7 +4,7 @@ import { ChallengePicker } from './ChallengePicker'
 import { CreatureBar } from './CreatureBar'
 import { DEFAULT_TARGET_FORCE, forgeUrl, parseForgeLink } from './forgeLogic'
 import type { ChallengeRun, Creature, ForgeStatus, Kind } from './forgeTypes'
-import { InvestigationView } from './InvestigationView'
+import { InvestigationList, InvestigationView } from './InvestigationView'
 import { RunView } from './RunView'
 import './forge.css'
 
@@ -31,6 +31,9 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
   const [run, setRun] = useState<ChallengeRun | null>(null)
   const [barBusy, setBarBusy] = useState(false)
   const [barError, setBarError] = useState<string | null>(null)
+  const [openInv, setOpenInv] = useState<string | null>(null)
+  const [invNonce, setInvNonce] = useState(0)
+  const [acceptedN, setAcceptedN] = useState<number | null>(null)
 
   useEffect(() => { getForgeStatus().then(setStatus).catch(() => undefined) }, [])
 
@@ -87,7 +90,7 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
       setStarting(false)
     }
   }
-  const selectVersion = (n: number) => { setViewN(n); setJobId(null); setRunId(null); setRun(null) }
+  const selectVersion = (n: number) => { setViewN(n); setJobId(null); setRunId(null); setRun(null); setAcceptedN(null) }
   const makeCurrent = async (n: number) => {
     if (!creature) return
     setBarBusy(true)
@@ -95,7 +98,9 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
     try { const c = await setCurrentVersion(creature.id, n); setCreature(c); selectVersion(n) } catch (e) { setBarError((e as Error).message) } finally { setBarBusy(false) }
   }
   const accepted = (c: Creature) => {
-    if (c && Array.isArray(c.versions)) { setCreature(c); selectVersion(c.current) } else if (cid) void getCreature(cid).then((x) => { setCreature(x); selectVersion(x.current) })
+    const done = (x: Creature) => { setCreature(x); selectVersion(x.current); setAcceptedN(x.current); setInvNonce((k) => k + 1) }
+    if (c && Array.isArray(c.versions)) done(c)
+    else if (cid) void getCreature(cid).then(done)
   }
 
   return (
@@ -113,10 +118,18 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
             <ChallengePicker kind={kind} onKind={setKind} targetForce={targetForce} onTargetForce={setTargetForce} seeds={seeds} onSeeds={setSeeds}
               onRun={() => void run_()} busy={starting} lastRun={run} versionLabel={`v${version.n}`} />
             {startError && <div className="error" role="alert" data-testid="start-error">Could not start the challenge: {startError}</div>}
+            <InvestigationList cid={creature.id} nonce={invNonce} openId={openInv} onOpen={setOpenInv} />
           </div>
           <div className="fg-main">
+            {acceptedN !== null && acceptedN === version.n && (
+              <div className="fg-note-box fg-accepted" role="status" data-testid="accepted-banner">
+                <b>Accepted as v{acceptedN}.</b> Your creature changed; the version history above records what changed and why.
+                <button className="btn btn-simulate fg-small" data-testid="challenge-new-version" onClick={() => void run_()}>Challenge v{acceptedN}</button>
+              </div>
+            )}
             <RunView jobId={jobId} runId={runId} onRun={onRun} />
-            {run && <InvestigationView cid={creature.id} version={version} run={run} status={status} onAccepted={accepted} />}
+            <InvestigationView cid={creature.id} version={version} versions={creature.versions} run={run} status={status} openId={openInv} onOpenId={setOpenInv}
+              onChanged={() => setInvNonce((k) => k + 1)} onAccepted={accepted} />
           </div>
         </div>
       )}
