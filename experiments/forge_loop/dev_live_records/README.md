@@ -39,3 +39,17 @@ Loop on the balanced creature, push (twin validated on the same held-out seeds i
 - Round 3 (same parent, patience): foot ×1.5 probe confirmed (+11.25 N); rear `foot_length ×1.25` again: **VERIFIED** +4.375 N, 12/0/0;
   twin INCONCLUSIVE.
 One creature, one challenge: a worked case, not a statistic. 2 model calls per round, ≈ $0.002 each.
+
+## Walking (2026-10-15): tiny-feet creature, walk challenge (24 held-out seeds per validation)
+
+| records | protocol |
+|---|---|
+| i-80d07dde758e | no probes: controller-only `walk.knee_amp ×0.8` → NOT_VERIFIED, worse on 12/24 seeds (0 wins) |
+| i-b9adf9d9a843, i-7ef344a03dd2 (loop) | probes: foot ×1.5 CONFIRMED (+0.90 m), torso/torque refuted; `foot_length ×1.5` then `×1.4`: 13–14 wins / 1–2 losses, median +0.07–0.10 m → NOT_VERIFIED (min effect 0.5 m). In i-7ef344a03dd2 the random twin drew the AI's identical edit (v1 rule) — fixed as `matched_random_v2`. |
+| i-105c4c50be98, i-fd78f195f334 (loop) | + `retune_controller` probe (48-rollout adaptation on training seeds): round 1 −0.76 m (refuted), round 2 +1.79 m (CONFIRMED); the model still proposed hand-edited walk parameters (`stance_knee`, `hip_bias`): +0.26 m, 15/0/9 → NOT_VERIFIED |
+| i-26f00f643708, i-0a274446ce1a (loop) | + probe text says how to act on it (`retune_controller: true`); probes again confirmed feet and adaptation; the model chose body edits (foot ×1.4, torso ×0.7): small consistent gains, NOT_VERIFIED |
+
+Findings: the model repeatedly identifies the support base and the probes confirm it, but its edits are too small to clear
+the 0.5 m walking bar; it never chose morphology-controller co-design (`retune_controller`) even after the adaptation probe was
+confirmed. Probe and arena seeds are deterministic per creature version and round, so the three loops are replications of
+the model's behaviour on the same measurements, not independent physics samples. No walking redesign was verified.
