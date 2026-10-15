@@ -4,3 +4,4 @@ experiments/demo_trials/*.json -text
 infra/** text eol=lf
 experiments/forge_loop/dev_live_records/*.json -text
 experiments/forge_loop/scoreboard/results/records/*.json -text
+experiments/forge_loop/memory_eval/bank.jsonl -text
