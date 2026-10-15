@@ -31,7 +31,9 @@ from typing import Callable
 from . import interventions as iv
 from .creatures import atomic_write_json, content_hash, now_iso, seed_block
 from .evidence import build_evidence, leaf_items, leaf_paths
-from .forge_ai import ModelConfig, accepted_proposals, investigate_once, make_client
+from . import probes as pb
+from .forge_ai import (PROBE_STEP_MARK, ModelConfig, accepted_proposals, investigate_once, investigate_with_probes,
+                       make_client)
 from .inference_ledger import InferenceLedger
 from .jobs import JobCancelled, jsonable
 from .nebius import estimate_prompt_tokens
@@ -53,7 +55,7 @@ VARY_VALIDATION = ("push", "walk")
 ARENA_PUSH_BISECTION_STEPS = 7   # first live loop (2026-10-15): a real +2.5 N effect was one 2.5 N step and counted as a tie
 DEFAULT_RETUNE_BUDGET = 48  # zoo pilot: K=48 (2 ES generations x 8 x 3 train seeds); only used when an AI walk proposal asks for retuning; applied to EVERY arm
 RECORD_KEYS = ("id", "created", "mode", "provenance", "creature", "challenge_run_id", "spec", "evidence", "model_calls", "reply",
-               "validation", "arms", "seeds", "screening", "selection", "validation_results", "verdicts", "budget", "code",
+               "validation", "probes", "arms", "seeds", "screening", "selection", "validation_results", "verdicts", "budget", "code",
                "status", "error")
 STATUSES = ("done", "model_failed", "no_valid_proposals", "cancelled", "failed")
 VERIFIED = "VERIFIED_IMPROVEMENT"
@@ -161,6 +163,15 @@ class ScriptedTransport:
                 return cand
         return candidates[0]
 
+    def probe_plan(self, available: list[str]) -> dict:
+        """Step-A reply (diagnosis + probe requests) from the fixture's `probe_plan`, restricted to the probes the prompt offered."""
+        t = self.template
+        full = self.reply()
+        plan = [p for p in t.get("probe_plan", []) if p["probe_id"] in available][:pb.MAX_PROBES]
+        if not plan and available:
+            plan = [{"probe_id": available[0], "hypothesis": t["hypotheses"][0]["id"], "expect": "increase"}]
+        return {"diagnosis": full["diagnosis"], "probes": [dict(p) for p in plan]}
+
     def reply(self) -> dict:
         t = self.template
         hyps = [{"id": h["id"], "mechanism": h["mechanism"], "evidence": self._cite(h.get("evidence_hints", [])),
@@ -180,7 +191,12 @@ class ScriptedTransport:
 
     def __call__(self, url, headers, body, timeout):
         self.requests += 1
-        content = json.dumps(self.reply())
+        system = next((m.get("content", "") for m in body.get("messages", []) if m.get("role") == "system"), "")
+        if PROBE_STEP_MARK in system:   # step A of the probe protocol: offer the probes the prompt lists
+            head = system.split("AVAILABLE PROBES:", 1)[1].split("\nREPLY:", 1)[0] if "AVAILABLE PROBES:" in system else ""
+            content = json.dumps(self.probe_plan(re.findall(r"^- ([a-z0-9_]+):", head, re.M)))
+        else:
+            content = json.dumps(self.reply())
         pt = estimate_prompt_tokens(body.get("messages", []))
         ct = max(1, len(content) // 3)
         raw = {"model": SCRIPTED_MODEL, "choices": [{"message": {"role": "assistant", "content": content}, "finish_reason": "stop"}],
@@ -360,13 +376,18 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
                       baseline_fns: dict | None = None, history: list | None = None, round: int = 1,  # noqa: A002 - contract name
                       investigation_id: str | None = None, profile: str = "default", model_config_path=None, sizes: dict | None = None,
                       parent: dict | None = None, loop_id: str | None = None, code_fn: Callable | None = None,
-                      max_requests: int = 2, fixture_dir=None, retune_budget: int = DEFAULT_RETUNE_BUDGET) -> dict:
+                      max_requests: int | None = None, fixture_dir=None, retune_budget: int = DEFAULT_RETUNE_BUDGET,
+                      probes: bool = False, probe_seeds_n: int = pb.MAX_PROBE_SEEDS) -> dict:
     """One investigation round on stored creature version (cid, n) and stored challenge run `run_id`. Returns the saved record.
 
     `parent` (rounds 2+ of the loop): {"version": <hypothetical parent version dict>, "from": {"investigation_id", "arm_id"}}; the run
     `run_id` must then be a challenge run of THAT body. `arena_runner(version, kind, arms, cfg, *, pool, progress, emit, spec_overrides)`
     defaults to `arena.run_arena`; `baseline_fns` = {"matched_random", "heuristic", "seed_sets"} defaults to S3's functions.
     `client_factory(cfg, *, mode, max_requests, evidence, version, challenge_kind)` defaults to `default_client_factory`.
+    `probes=True` adds the diagnostic-probe protocol (forge_ai.investigate_with_probes): the model first picks <= 3 whitelisted counterfactual
+    probes, MuJoCo runs them on `probe` seeds disjoint from the arena seeds, and the proposals are written with the results in hand. Probes
+    never change the creature and never enter the arena; their rollouts count in `budget.rollouts`. Model requests: 2 (+ <= 1 repair), so
+    `max_requests` defaults to 3 with probes (2 without); with fewer than 2 requests available the probes are skipped (and say so).
     Raises LiveRefused (nothing written, no transport call) when live mode is not allowed."""
     if mode not in MODES:
         raise ValueError(f"mode must be one of {list(MODES)}, got {mode!r}")
@@ -374,6 +395,8 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
     provenance = PROVENANCE[mode]
     iid = investigation_id or new_investigation_id()
     cfg = cfg or load_model_config(profile, model_config_path)
+    if max_requests is None:
+        max_requests = 3 if probes else 2
     if mode == "live":
         reason = live_refusal(ledger, cfg)
         if reason:
@@ -390,6 +413,13 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
         if emit:
             emit(type_, {**(data or {}), "provenance": provenance, "investigation_id": iid})
 
+    def ev_probe(type_: str, data: dict) -> None:
+        """Probe events: native type if the job manager knows it, else a `note` carrying the event name (jobs.EVENT_TYPES is not ours)."""
+        try:
+            ev(type_, data)
+        except ValueError:
+            ev("note", {**data, "event": type_})
+
     def prog(done=0, total=0, *_a) -> None:
         if progress:
             progress(done, total, "arena")
@@ -405,11 +435,13 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
     rec = {"id": iid, "created": now_iso(), "mode": mode, "provenance": provenance,
            "creature": {"cid": cid, "n": n, "content_hash": version["content_hash"], "round": round,
                         "hypothetical_parent": (parent or {}).get("from"), "loop_id": loop_id},
-           "challenge_run_id": run_id, "spec": spec, "evidence": None, "model_calls": [], "reply": None, "validation": None, "arms": [],
+           "challenge_run_id": run_id, "spec": spec, "evidence": None, "model_calls": [], "reply": None, "validation": None, "probes": None,
+           "arms": [],
            "seeds": {}, "screening": None, "selection": None, "validation_results": None, "verdicts": {},
            "budget": {"rollouts": 0, "wall_s": 0.0, "calls": 0, "tokens": 0, "usd": 0.0}, "code": (code_fn or default_code_info)(),
            "status": "failed", "error": None}
     fns = baseline_fns
+    pre_sets = None
     try:
         ev("phase", {"phase": "evidence", "kind": kind, "round": round})
         check()
@@ -419,7 +451,41 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
                          **({"fixture_dir": fixture_dir} if (client_factory is None and fixture_dir) else {}))
         ev("model_request", {"model": cfg.model, "max_tokens": cfg.max_tokens, "temperature": cfg.temperature, "profile": profile,
                              "evidence_bytes": len(json.dumps(evidence, separators=(",", ":")))})
-        out = investigate_once(client, cfg, version, run, history, use_ledger, investigation_id=iid)
+        if probes and max_requests < 2:
+            probes = False
+            rec["probes"] = {"requested": [], "skipped": f"only {max_requests} model request(s) available; the probe protocol needs 2"}
+        if probes:
+            fns = fns or _default_baselines()
+            sizes_all = {**(sizes or SIZES_BY_KIND.get(kind, DEFAULT_SIZES)), "probe": int(probe_seeds_n)}
+            sets, used_round = _disjoint_seed_sets(fns["seed_sets"], cid, n, round, sizes_all, set(spec.get("seeds") or []))
+            probe_seeds = tuple(sets["probe"])
+            arena_blocks = [x for r_, v in sets.items() if r_ != "probe" for x in v]
+            assert probe_seeds and not (set(probe_seeds) & set(arena_blocks)), "probe seeds must be disjoint from the train/screen/validate seeds"
+            assert not (set(probe_seeds) & set(spec.get("seeds") or [])), "probe seeds must be disjoint from the challenge seeds"
+            pre_sets = (sets, used_round)
+            probe_spec = {k: v for k, v in spec.items() if k != "seeds"}
+            if kind == "push":
+                probe_spec["bisection_steps"] = ARENA_PUSH_BISECTION_STEPS
+
+            def probe_runner(requests: list[dict], ids: list[str]) -> dict:
+                check()
+                ev_probe("probe_request", {"probes": requests, "seeds": list(probe_seeds)})
+                ran = pb.run_probes(version, kind, probe_spec, ids, list(probe_seeds)[:pb.MAX_PROBE_SEEDS], pool)
+                for r in pb.evaluate_expectations(requests, ran):
+                    pr = ran["results"][r["probe_id"]]
+                    ev_probe("probe_result", {**r, "status": pr.get("status"), "median": pr.get("median"),
+                                              "median_delta": pr.get("median_delta"), "rollouts": ran["rollouts"]})
+                check()
+                return ran
+
+            out = investigate_with_probes(client, cfg, version, run, history, use_ledger, investigation_id=iid, probe_runner=probe_runner,
+                                          n_probe_seeds=len(probe_seeds), probe_spec=probe_spec)
+            if out.get("probes") is not None:
+                out["probes"] = {**out["probes"], "provenance": provenance, "seed_role": pb.ROLE,
+                                 "seeds": out["probes"].get("seeds") or list(probe_seeds)}
+            rec["probes"] = out["probes"]
+        else:
+            out = investigate_once(client, cfg, version, run, history, use_ledger, investigation_id=iid)
         rec.update(evidence=out["evidence"], model_calls=out["calls"], reply=out["reply"], validation=out["validation"])
         for c in out["calls"]:
             ev("model_response", {"request_id": c.get("request_id"), "ok": c.get("ok"), "finish_reason": c.get("finish_reason"),
@@ -442,7 +508,8 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
             rec["error"] = (rec["error"] + "; " if rec["error"] else "") + "no comparable arm could be built; the arena was not run"
             return _finish(rec, forge_dir, t0)
         avoid = set(spec.get("seeds") or [])
-        sets, used_round = _disjoint_seed_sets(fns["seed_sets"], cid, n, round, sizes or SIZES_BY_KIND.get(kind, DEFAULT_SIZES), avoid)
+        sets, used_round = (pre_sets if pre_sets else
+                            _disjoint_seed_sets(fns["seed_sets"], cid, n, round, sizes or SIZES_BY_KIND.get(kind, DEFAULT_SIZES), avoid))
         rec["seeds"] = {**{k: list(v) for k, v in sets.items()}, "round_used": used_round}
         rb = retune_budget if any(a["retune"] for a in arms) else 0
         if arena_runner is None:
@@ -497,6 +564,7 @@ def _finish(rec: dict, forge_dir: Path, t0: float) -> dict:
     calls = rec.get("model_calls") or []
     tokens = sum(int((c.get("usage") or {}).get("total_tokens") or ((c.get("usage") or {}).get("prompt_tokens") or 0)
                      + ((c.get("usage") or {}).get("completion_tokens") or 0)) for c in calls)
+    rec["budget"]["rollouts"] = int(rec["budget"]["rollouts"]) + int((rec.get("probes") or {}).get("rollouts") or 0)   # probe rollouts count too
     rec["budget"].update(wall_s=round(time.monotonic() - t0, 3), calls=sum(1 for c in calls if c.get("sent")), tokens=tokens,
                          usd=round(sum(float(c.get("cost_usd") or 0) for c in calls), 6))
     missing = [k for k in RECORD_KEYS if k not in rec]
@@ -554,7 +622,7 @@ def build_accept(store, cid: str, rec: dict, arm_id: str) -> tuple[int, dict, di
 class LoopLimits:
     max_rounds: int = 3
     max_rollouts: int = 3000
-    max_calls: int = 4
+    max_calls: int = 8   # with probes a round uses 2-3 calls (~$0.002 each); the per-investigation ledger cap of 4 still applies
     wall_s: float = 600.0
     patience: int = 2   # stop after this many CONSECUTIVE rounds without a verified AI arm (failures feed the next round)
 
@@ -602,7 +670,7 @@ def run_loop(store, cid: str, n: int, run_id: str, *, mode: str, forge_dir, limi
         rec = run_investigation(store, cid, n, cur_run, mode=mode, forge_dir=forge_dir, emit=emit, progress=progress, cancelled=cancelled,
                                 pool=pool, history=list(history) or None, round=r, parent=parent, loop_id=loop_id,
                                 investigation_id=investigation_id if r == 1 else None,
-                                max_requests=min(2, lim.max_calls - totals["calls"]), **kw)
+                                max_requests=min(3 if kw.get("probes") else 2, lim.max_calls - totals["calls"]), **kw)
         totals["rollouts"] += rec["budget"]["rollouts"]
         totals["calls"] += rec["budget"]["calls"]
         best = best_verified_ai_arm(rec)

@@ -74,6 +74,7 @@ class InvestigationIn(BaseModel):
     mode: Literal["live", "scripted"]
     profile: Literal["default", "deep"] = "default"
     loop: bool = False
+    probes: bool = False   # diagnostic-probe protocol (2 model calls + MuJoCo probes before the proposals)
 
 
 class AcceptIn(BaseModel):
@@ -430,6 +431,8 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
                 raise HTTPException(503, reason)
         iid = inv.new_investigation_id()
         options = dict(investigation_options or {})
+        if req.probes:
+            options["probes"] = True
         if req.loop and challenge_runner is not None:
             options.setdefault("challenge_runner", challenge_runner)
         try:

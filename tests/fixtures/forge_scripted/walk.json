@@ -8,6 +8,8 @@
   {"id": "H2", "mechanism": "SCRIPTED MOCK hypothesis: the feet are too short for the stride.",
    "evidence_hints": ["outcome.score.min"], "competing": []}
  ],
+ "probe_plan_note": "SCRIPTED MOCK: probe requests used only when the investigation runs with probes=True.",
+ "probe_plan": [{"probe_id": "foot_x1_5", "hypothesis": "H2", "expect": "increase"}, {"probe_id": "friction_x2", "hypothesis": "H1", "expect": "no_change"}],
  "proposals": [
   {"id": "P1", "hypothesis": "H1",
    "edits_candidates": [[{"param": "walk.balance_gain", "op": "scale", "value": 1.1, "target": "both"}],

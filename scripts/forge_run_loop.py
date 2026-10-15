@@ -23,9 +23,13 @@ def main() -> None:
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--mode", default="scripted", choices=["scripted", "live"])
     ap.add_argument("--profile", default="default")
+    ap.add_argument("--probes", action="store_true", help="diagnostic probes before proposing (active experimentation)")
+    ap.add_argument("--single", action="store_true", help="one investigation instead of the bounded loop")
     a = ap.parse_args()
+    _, before = call(a.base, "GET", f"/api/forge/investigations?cid={a.cid}")
+    seen_before = {r["id"] for r in before}
     st, out = call(a.base, "POST", f"/api/forge/creatures/{a.cid}/versions/{a.n}/investigations",
-                   {"run_id": a.run_id, "mode": a.mode, "profile": a.profile, "loop": True})
+                   {"run_id": a.run_id, "mode": a.mode, "profile": a.profile, "loop": not a.single, "probes": a.probes})
     if st != 200:
         raise SystemExit(f"refused ({st}): {out.get('detail')}")
     job = wait_job(a.base, out["job_id"], limit_s=1800)
@@ -34,7 +38,7 @@ def main() -> None:
     loop = (job.get("result") or {}) if isinstance(job.get("result"), dict) else {}
     for row in sorted(rows, key=lambda r: r.get("created", "")):
         _, rec = call(a.base, "GET", f"/api/forge/investigations/{row['id']}")
-        if not rec.get("creature", {}).get("loop_id"):
+        if rec["id"] in seen_before or (not a.single and not rec.get("creature", {}).get("loop_id")):
             continue
         print(f"\nround {rec['creature'].get('round')}  {rec['id']}  {rec['status']}  {rec['provenance']}  "
               f"history entries {len((rec.get('evidence') or {}).get('history') or [])}")
@@ -42,6 +46,11 @@ def main() -> None:
             u = c.get("usage") or {}
             print(f"  model {c.get('model')} request {c.get('request_id')} {c.get('latency_s', 0):.1f} s tokens "
                   f"{u.get('prompt_tokens')}+{u.get('completion_tokens')} finish {c.get('finish_reason')}")
+        pr = rec.get("probes") or {}
+        for e in pr.get("expectations") or []:
+            print(f"  probe {e.get('probe_id'):18s} for {e.get('hypothesis')}: expected {e.get('expect')}, observed {e.get('observed')} "
+                  f"-> {'CONFIRMED' if e.get('confirmed') else ('refuted' if e.get('confirmed') is False else 'n/a')}  "
+                  f"(median delta {((pr.get('results') or {}).get(e.get('probe_id')) or {}).get('median_delta')})")
         for h in (rec.get("validation") or {}).get("hypotheses", []):
             print(f"  {h.get('id')}: {str(h.get('mechanism'))[:160]}")
         for p in (rec.get("validation") or {}).get("proposals", []):

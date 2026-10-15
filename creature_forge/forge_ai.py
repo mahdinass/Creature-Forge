@@ -24,6 +24,7 @@ import uuid
 from dataclasses import dataclass, field
 
 from . import interventions as iv
+from . import probes as pb
 from .evidence import UnresolvedCitation, build_evidence, leaf_items, leaf_paths, pack_size, resolve
 from .inference_ledger import InferenceLedger
 from .nebius import (RESERVED_BODY_KEYS, REASONING_EFFORTS, BudgetExceeded, Limits, NebiusClient, NebiusError,
@@ -592,4 +593,229 @@ def investigate_once(client, cfg: ModelConfig, version: dict, challenge_result: 
     else:
         out["status"] = "no_valid_proposal"
         out["error"] = "; ".join(a["errors"])[:600] or "no proposal passed validation"
+    return out
+
+
+# ------------------------------------------------------------------------------------------------------------------ diagnostic probes (two-step)
+# Additive: `investigate_once` above is unchanged and stays the default. With probes the model is called in two steps:
+#   step A: evidence + probe catalogue -> hypotheses + 1-3 probe requests (no proposals);
+#   executor: validate the requests, run the probes in MuJoCo (`probe_runner`), compute expectation outcomes deterministically;
+#   step B: the same evidence + `probes.*` measurements + the step-A hypotheses -> the normal proposal reply.
+# Calls: A + B = 2, plus AT MOST ONE repair shared by both steps (<= 3 requests, below the ledger's per-investigation cap of 4).
+PROBE_STEP_MARK = "PROBE STEP A"
+_REPLY_MARK = "\nREPLY: ONE JSON object"
+
+
+def build_probe_schema(evidence: dict, probe_ids, allowed_params=None) -> dict:
+    """Step-A reply schema: the diagnosis exactly as in the proposal schema (citations enumerated) and `probes` with the probe ids enumerated."""
+    diag = _schema(leaf_paths(evidence), list(allowed_params) if allowed_params else None)["properties"]["diagnosis"]
+    probe = {"type": "object", "additionalProperties": False, "required": ["probe_id", "hypothesis", "expect"],
+             "properties": {"probe_id": {"type": "string", "enum": list(probe_ids)},
+                            "hypothesis": {"type": "string", "enum": list(HYPOTHESIS_IDS)},
+                            "expect": {"type": "string", "enum": list(pb.EXPECTATIONS)}}}
+    return {"type": "object", "additionalProperties": False, "required": ["diagnosis", "probes"],
+            "properties": {"diagnosis": diag, "probes": {"type": "array", "items": probe}}}
+
+
+def build_probe_system_prompt(kind: str, mode: str, allowed: dict, probe_ids, *, n_seeds: int, resolution: float, duration: float = 0.0,
+                              max_probes: int = pb.MAX_PROBES) -> str:
+    head = build_system_prompt(kind, mode, allowed, 3, duration).split(_REPLY_MARK)[0]
+    return "\n".join([
+        head, "",
+        f"{PROBE_STEP_MARK} (diagnosis). Before you propose anything you may run diagnostic probes: counterfactual MuJoCo experiments on the CURRENT "
+        "creature. A probe is never a proposal and is never adopted; it only tells you which mechanism matters. Each probe is run on "
+        f"{n_seeds} fresh random seeds, paired with the unchanged creature, and you will receive the median per-seed change in score "
+        f"(a change smaller than the score resolution {resolution:g} counts as no change).",
+        "AVAILABLE PROBES:", *pb.catalogue_lines(probe_ids), "",
+        "REPLY: ONE JSON object, nothing else (no prose, no code fence), with NO proposals yet:",
+        '{"diagnosis":{"summary":"<=400 chars","hypotheses":[{"id":"H1","mechanism":"what physically happens and why",'
+        '"evidence":["<path copied from the EVIDENCE lines>"],"competing":["an alternative explanation"]}]},'
+        '"probes":[{"probe_id":"<one of the available probes>","hypothesis":"H1","expect":"increase|decrease|no_change"}]}',
+        f"Rules: 1-{MAX_HYPOTHESES} hypotheses with ids exactly H1, H2, H3, each citing 1-{MAX_CITATIONS} paths copied EXACTLY from the EVIDENCE lines. "
+        f"1-{max_probes} distinct probes; each names the hypothesis it tests and what you EXPECT the median change in score to be relative to the "
+        "unchanged creature (increase, decrease or no_change). Choose probes that would tell your hypotheses apart. Keep every text field short.",
+    ])
+
+
+def build_probe_messages(evidence: dict, *, allowed: dict, probe_ids, n_seeds: int, resolution: float) -> list[dict]:
+    ch, cr = evidence["challenge"], evidence["creature"]
+    system = build_probe_system_prompt(ch["kind"], cr["mode"], allowed, probe_ids, n_seeds=n_seeds, resolution=resolution,
+                                       duration=float(ch.get("duration", 0.0)))
+    user = "EVIDENCE (path=value):\n" + "\n".join(evidence_lines(evidence)) + "\n\nEDIT BOUNDS:\n" + "\n".join(_bounds_lines(allowed))
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
+
+
+_STEP_B_NOTE = (
+    "PROBE RESULTS. In step A you stated hypotheses and asked for diagnostic probes; MuJoCo has run them. The measurements are in the EVIDENCE as "
+    "probes.* (probes.<id>.median_delta = median per-seed change in score of the probed variant versus the unchanged creature; wins/losses/ties "
+    "count seeds beyond probes.resolution; probes.no_push.* is a measurement of the unchanged creature without a push). Revise your hypotheses in "
+    "light of them: drop or reword one a probe contradicted, and cite probes.* paths where they support one. A probe is a counterfactual "
+    "measurement, not a verified improvement: your proposals below are still tested independently on held-out seeds.")
+
+
+def build_step_b_messages(evidence: dict, *, allowed: dict, hypotheses: list[dict], requests: list[dict], max_proposals: int = 3) -> list[dict]:
+    """[system, user] for step B: the normal proposal prompt (+ a probe note) over the evidence INCLUDING the `probes` section."""
+    msgs = build_messages(evidence, allowed=allowed, max_proposals=max_proposals)
+    msgs[0]["content"] += "\n\n" + _STEP_B_NOTE
+    lines = [f"- {h['id']}: {h.get('mechanism', '')}" for h in hypotheses if h.get("status") == "accepted"]
+    lines += [f"- probe {r['probe_id']} tested {r['hypothesis']}; you expected: {r['expect']}" for r in requests]
+    msgs[1]["content"] += "\n\nYOUR STEP A (hypotheses and probes requested):\n" + "\n".join(lines)
+    return msgs
+
+
+def validate_probe_reply(reply, evidence: dict, probe_ids, *, max_probes: int = pb.MAX_PROBES) -> dict:
+    """{schema_errors, hypotheses, probes: [{probe_id, hypothesis, expect, status, reasons}], accepted_probes, warnings}. A probe is accepted only
+    if its id is in `probe_ids` (the available catalogue), it is not a duplicate, its hypothesis is an ACCEPTED hypothesis of this reply and
+    `expect` is valid; at most `max_probes` are accepted."""
+    res = {"schema_errors": [], "hypotheses": [], "probes": [], "accepted_probes": [], "warnings": []}
+    errs, warns = res["schema_errors"], res["warnings"]
+    if not _exact(reply, {"diagnosis", "probes"}, set(), "reply", errs):
+        return res
+    diag = reply["diagnosis"]
+    if _exact(diag, {"summary", "hypotheses"}, set(), "diagnosis", errs):
+        _text(diag["summary"], "diagnosis summary", SUMMARY_MAX, errs, warns)
+        hl = diag["hypotheses"]
+        if not isinstance(hl, list) or not hl:
+            errs.append("diagnosis: hypotheses must be a non-empty list")
+        else:
+            seen: set = set()
+            for i, h in enumerate(hl):
+                hv = _validate_hypothesis(h, evidence, seen, warns)
+                if i >= MAX_HYPOTHESES:
+                    hv["status"] = "rejected"
+                    hv["reasons"].append(f"hypothesis {hv['id']}: at most {MAX_HYPOTHESES} hypotheses allowed")
+                res["hypotheses"].append(hv)
+            res["summary"] = diag["summary"] if isinstance(diag["summary"], str) else ""
+    pl = reply["probes"]
+    if not isinstance(pl, list) or not pl:
+        errs.append("probes must be a non-empty list")
+        return res
+    hyps = {h["id"]: h for h in res["hypotheses"]}
+    seen_p: set = set()
+    for i, p in enumerate(pl):
+        reasons: list[str] = []
+        pid = p.get("probe_id") if isinstance(p, dict) else None
+        out = {"probe_id": pid if isinstance(pid, str) else f"#{i + 1}", "hypothesis": None, "expect": None, "status": "rejected", "reasons": reasons}
+        w = f"probe {out['probe_id']}"
+        if _exact(p, {"probe_id", "hypothesis", "expect"}, set(), w, reasons):
+            if pid not in probe_ids:
+                reasons.append(f"{w}: probe_id must be one of {list(probe_ids)}")
+            elif pid in seen_p:
+                reasons.append(f"{w}: duplicate probe")
+            seen_p.add(pid)
+            hid = p["hypothesis"]
+            if hid not in HYPOTHESIS_IDS:
+                reasons.append(f"{w}: hypothesis must be a hypothesis id {list(HYPOTHESIS_IDS)}")
+            elif hid not in hyps or hyps[hid]["status"] != "accepted":
+                reasons.append(f"{w}: hypothesis {hid} is not an accepted hypothesis of this reply")
+            if p["expect"] not in pb.EXPECTATIONS:
+                reasons.append(f"{w}: expect must be one of {list(pb.EXPECTATIONS)}")
+            out.update(hypothesis=hid if isinstance(hid, str) else None, expect=p["expect"] if isinstance(p["expect"], str) else None)
+        if not reasons and len(res["accepted_probes"]) >= max_probes:
+            reasons.append(f"{w}: at most {max_probes} probes allowed")
+        if not reasons:
+            out["status"] = "accepted"
+            res["accepted_probes"].append({"probe_id": pid, "hypothesis": out["hypothesis"], "expect": out["expect"]})
+        res["probes"].append(out)
+    return res
+
+
+def _probe_errors(val: dict) -> list[str]:
+    out = list(val["schema_errors"])
+    for h in val["hypotheses"]:
+        out += h["reasons"] if h["status"] != "accepted" else []
+    for p in val["probes"]:
+        out += p["reasons"] if p["status"] != "accepted" else []
+    return out
+
+
+def _assess_probe_plan(call: ModelCall, evidence: dict, probe_ids) -> dict:
+    try:
+        reply = parse_reply(call.content)
+    except ReplyParseError as e:
+        return {"reply": None, "validation": None, "errors": [str(e)]}
+    val = validate_probe_reply(reply, evidence, probe_ids)
+    errors = _probe_errors(val) if (val["schema_errors"] or not val["accepted_probes"]) else []
+    return {"reply": reply, "validation": val, "errors": errors}
+
+
+def investigate_with_probes(client, cfg: ModelConfig, version: dict, challenge_result: dict, history: list[dict] | None,
+                            ledger: InferenceLedger, *, probe_runner, investigation_id: str | None = None, max_proposals: int = 3,
+                            n_probe_seeds: int = pb.MAX_PROBE_SEEDS, probe_spec: dict | None = None) -> dict:
+    """Two-step investigation with diagnostic probes. `probe_runner(requests, probe_ids) -> run_probes() dict` runs the MuJoCo probes (it never
+    sees the model). Returns what `investigate_once` returns (evidence = the step-B pack incl. `probes`; calls = every request) plus
+    `probes`: {requested, step_a_reply, step_a_validation, results, original, expectations, seeds, rollouts, resolution, available}.
+    Requests: step A, step B, and at most ONE repair in total (shared). A failed/invalid step A ends the run without running probes
+    (`model_failed` / `no_valid_proposal`). If no probe is available for this challenge, falls back to `investigate_once`."""
+    kind = challenge_result["spec"]["kind"]
+    inv = investigation_id or f"i-{uuid.uuid4().hex[:12]}"
+    pspec = probe_spec or challenge_result["spec"]   # the spec the probes will run with (push: finer bisection than the stored run)
+    avail = pb.available_probes(version, kind, pspec)
+    if not avail:
+        out = investigate_once(client, cfg, version, challenge_result, history, ledger, investigation_id=inv, max_proposals=max_proposals)
+        out["probes"] = {"requested": [], "skipped": "no probe is available for this creature and challenge", "available": []}
+        return out
+    evidence = build_evidence(version, challenge_result, history)
+    allowed = iv.editable_params(version, kind)
+    res_tol = pb.resolution_for(kind, pspec)
+    out = {"status": "model_failed", "investigation_id": inv, "evidence": evidence, "evidence_bytes": pack_size(evidence), "calls": [],
+           "reply": None, "validation": None, "accepted": [], "repaired": False, "error": None, "allowed": list(allowed),
+           "probes": {"requested": [], "available": avail, "step_a_reply": None, "step_a_validation": None}}
+    msgs_a = build_probe_messages(evidence, allowed=allowed, probe_ids=avail, n_seeds=n_probe_seeds, resolution=res_tol)
+    schema_a = build_probe_schema(evidence, avail, allowed)
+    call = call_model(client, cfg, msgs_a, ledger, investigation_id=inv, purpose="investigation_probe_plan", response_schema=schema_a)
+    out["calls"].append(call.as_dict())
+    if not call.ok:
+        out["error"] = call.error
+        return out
+    a = _assess_probe_plan(call, evidence, avail)
+    repairs = 1
+    if a["errors"]:
+        repairs, out["repaired"] = 0, True
+        call2 = call_model(client, cfg, _repair_messages(msgs_a, call, a["errors"]), ledger, investigation_id=inv,
+                           purpose="investigation_repair", response_schema=schema_a)
+        out["calls"].append(call2.as_dict())
+        if not call2.ok:
+            out["error"] = f"repair call failed: {call2.error}"
+            return out
+        a = _assess_probe_plan(call2, evidence, avail)
+    out["probes"]["step_a_reply"], out["probes"]["step_a_validation"] = a["reply"], a["validation"]
+    if a["errors"]:
+        out["status"] = "no_valid_proposal"
+        out["error"] = "step A (probe plan): " + "; ".join(a["errors"])[:560]
+        return out
+    val_a = a["validation"]
+    requests = list(val_a["accepted_probes"])
+    out["probes"]["requested"] = requests
+    ran = probe_runner(requests, [r["probe_id"] for r in requests])
+    expectations = pb.evaluate_expectations(requests, ran)
+    out["probes"].update(results=ran["results"], original=ran.get("original"), expectations=expectations, seeds=ran["seeds"],
+                         rollouts=ran["rollouts"], resolution=ran["resolution"], bisection_steps=ran.get("bisection_steps"))
+    evidence_b = {**evidence, "probes": pb.evidence_block(ran)}
+    out["evidence"], out["evidence_bytes"] = evidence_b, pack_size(evidence_b)
+    msgs_b = build_step_b_messages(evidence_b, allowed=allowed, hypotheses=val_a["hypotheses"], requests=requests, max_proposals=max_proposals)
+    schema_b = build_reply_schema(evidence_b, allowed, max_proposals=max_proposals)
+    callb = call_model(client, cfg, msgs_b, ledger, investigation_id=inv, purpose="investigation", response_schema=schema_b)
+    out["calls"].append(callb.as_dict())
+    if not callb.ok:
+        out["error"] = f"step B failed: {callb.error}"
+        return out
+    b = _assess(callb, evidence_b, version, kind, max_proposals)
+    out["reply"], out["validation"] = b["reply"], b["validation"]
+    if b["errors"] and repairs:
+        out["repaired"] = True
+        callr = call_model(client, cfg, _repair_messages(msgs_b, callb, b["errors"]), ledger, investigation_id=inv,
+                           purpose="investigation_repair", response_schema=schema_b)
+        out["calls"].append(callr.as_dict())
+        if not callr.ok:
+            out["error"] = f"repair call failed: {callr.error}"
+            return out
+        b = _assess(callr, evidence_b, version, kind, max_proposals)
+        out["reply"], out["validation"] = b["reply"], b["validation"]
+    out["accepted"] = accepted_proposals(out["validation"])
+    if out["accepted"]:
+        out["status"], out["error"] = "ok", None
+    else:
+        out["status"] = "no_valid_proposal"
+        out["error"] = "; ".join(b["errors"])[:600] or "no proposal passed validation"
     return out

@@ -543,5 +543,54 @@ class InvestigationTests(InvestigationApiCase):
         self.assertEqual(rec["verdicts"], {})
 
 
+# ---- diagnostic probes flag (fake pool: no MuJoCo)
+try:
+    from tests.test_investigation import ProbePool
+except ImportError:  # run from inside tests/
+    from test_investigation import ProbePool
+
+
+class ProbeApiTests(InvestigationApiCase):
+    def make_client(self):
+        self.arena, self.bl, self.pool = FakeArena(), FakeBaselines(), ProbePool()
+        self.ledger = InferenceLedger(Path(self._tmp.name) / "ledger.jsonl")
+        self.router = create_forge_router(
+            self.dir, challenge_runner=self.fakes.runner, replay_builder=self.fakes.replay, ledger=self.ledger, pool_factory=lambda: self.pool,
+            investigation_options={"arena_runner": self.arena, "baseline_fns": self.bl.fns(),
+                                   "code_fn": lambda: {"commit": "abc", "dirty": False}})
+        self.addCleanup(self.router.forge.close)
+        app = FastAPI()
+        app.include_router(self.router)
+        self.c = TestClient(app)
+
+    def test_probes_flag_runs_the_probe_protocol(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        out = self.investigate(cr["id"], run_id, probes=True)
+        self.assertEqual(self.job(out["job_id"])["job"]["status"], "done")
+        rec = self.c.get(f"/api/forge/investigations/{out['investigation_id']}").json()
+        self.assertEqual((rec["status"], rec["provenance"], len(rec["model_calls"])), ("done", "SCRIPTED_MOCK", 2))
+        self.assertTrue(rec["probes"]["requested"] and rec["probes"]["results"] and rec["probes"]["expectations"])
+        self.assertEqual(len(rec["probes"]["seeds"]), 4)
+        events = self.job(out["job_id"])["events"]
+        names = [e["data"].get("event", e["type"]) for e in events]
+        self.assertEqual((names.count("probe_request"), names.count("probe_result")), (1, 3))   # the job manager has no such types: recorded as notes
+
+    def test_default_has_no_probes(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        out = self.investigate(cr["id"], run_id)
+        rec = self.c.get(f"/api/forge/investigations/{out['investigation_id']}").json()
+        self.assertIsNone(rec["probes"])
+        self.assertEqual(len(rec["model_calls"]), 1)
+        self.assertEqual(self.pool.jobs, [])
+
+    def test_probes_must_be_a_boolean(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        r = self.c.post(f"/api/forge/creatures/{cr['id']}/versions/1/investigations", json={"run_id": run_id, "mode": "scripted", "probes": 5})
+        self.assertEqual(r.status_code, 422)
+
+
 if __name__ == "__main__":
     unittest.main()

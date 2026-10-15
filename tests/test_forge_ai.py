@@ -946,5 +946,195 @@ class StandScenarioTests(Case):
         self.assertEqual(body["foot_length_r"], 0.1)
 
 
+# ---------------------------------------------------------------------------------------------------------------- diagnostic probes
+class ProbeFlowTests(Case):
+    PROBE_PATH = "probes.balance_gain_x1_5.median_delta"
+
+    def setUp(self):
+        super().setUp()
+        self.runner_calls = []
+
+    def plan(self, probes=None, hyps=None):
+        r = self.good_reply()
+        probes = [{"probe_id": "balance_gain_x1_5", "hypothesis": "H2", "expect": "increase"},
+                  {"probe_id": "no_push", "hypothesis": "H1", "expect": "decrease"}] if probes is None else probes
+        return {"diagnosis": hyps or r["diagnosis"], "probes": probes}
+
+    def step_b(self):
+        r = self.good_reply()
+        r["diagnosis"]["hypotheses"][1]["evidence"].append(self.PROBE_PATH)
+        return r
+
+    def runner(self, requests, ids):
+        self.runner_calls.append((requests, ids))
+        res = {}
+        for i in ids:
+            res[i] = ({"probe_id": i, "measurement": "static", "status": "ok", "median": 5.0, "n_seeds": 4, "static_fall_frac": 0.0}
+                      if i == "no_push" else
+                      {"probe_id": i, "measurement": "paired", "status": "ok", "median": 12.0, "median_delta": 2.0, "mean_delta": 2.0,
+                       "wins": 3, "losses": 0, "ties": 1, "n_seeds": 4})
+        return {"seeds": [1, 2, 3, 4], "resolution": 0.625, "rollouts": 68, "bisection_steps": 7,
+                "original": {"median": 10.0, "scores": [10.0] * 4, "status": "ok"}, "results": res}
+
+    def run_probe_flow(self, items, ledger=None, runner=None):
+        t = Scripted(items)
+        led = ledger or self.ledger()
+        out = fa.investigate_with_probes(self.client(t), self.cfg, self.version, self.cr, None, led, probe_runner=runner or self.runner,
+                                         investigation_id="i-p")
+        return out, t, led
+
+    def ok(self, obj):
+        return completion(reply_text(obj))
+
+    # -- protocol
+    def test_two_calls_probe_results_in_step_b(self):
+        out, t, led = self.run_probe_flow([self.ok(self.plan()), self.ok(self.step_b())])
+        self.assertEqual((out["status"], len(t.calls), out["repaired"]), ("ok", 2, False))
+        self.assertEqual([c["settings"]["purpose"] for c in out["calls"]], ["investigation_probe_plan", "investigation"])
+        self.assertEqual(led.investigation_status("i-p")["requests"], 2)
+        self.assertEqual(self.runner_calls[0][1], ["balance_gain_x1_5", "no_push"])
+        a, b = t.calls[0]["body"]["messages"], t.calls[1]["body"]["messages"]
+        self.assertIn(fa.PROBE_STEP_MARK, a[0]["content"])
+        self.assertIn("AVAILABLE PROBES:", a[0]["content"])
+        self.assertNotIn("probes.", a[1]["content"])
+        self.assertNotIn(fa.PROBE_STEP_MARK, b[0]["content"])
+        self.assertIn("PROBE RESULTS", b[0]["content"])
+        self.assertIn(self.PROBE_PATH + "=2.0", b[1]["content"])
+        self.assertIn("probes.no_push.static_fall_frac=0.0", b[1]["content"])
+        self.assertIn("YOUR STEP A", b[1]["content"])
+        self.assertIn("Ankle control is too weak.", b[1]["content"])        # the step-A hypotheses are echoed
+        self.assertEqual([p["id"] for p in out["accepted"]], ["P1", "P2", "P3"])
+        self.assertEqual(out["evidence"]["probes"]["balance_gain_x1_5"]["median_delta"], 2.0)
+        self.assertIn(self.PROBE_PATH, [x for x in evm.leaf_paths(out["evidence"])])
+        self.assertTrue(any(self.PROBE_PATH in h["evidence"] for h in out["validation"]["hypotheses"]))   # citing a probe path validates
+
+    def test_step_a_schema_enumerates_available_probe_ids_and_citations(self):
+        out, t, _ = self.run_probe_flow([self.ok(self.plan()), self.ok(self.step_b())])
+        s = t.calls[0]["body"]["response_format"]["json_schema"]["schema"]
+        enum = s["properties"]["probes"]["items"]["properties"]["probe_id"]["enum"]
+        self.assertEqual(enum, out["probes"]["available"])
+        self.assertTrue(set(enum) <= set(pb_ids()))
+        self.assertIn("no_push", enum)
+        self.assertEqual(s["properties"]["probes"]["items"]["properties"]["expect"]["enum"], ["increase", "decrease", "no_change"])
+        self.assertEqual(s["required"], ["diagnosis", "probes"])
+        self.assertNotIn("proposals", s["properties"])
+        hyp = s["properties"]["diagnosis"]["properties"]["hypotheses"]["items"]["properties"]
+        self.assertEqual(hyp["evidence"]["items"]["enum"], evm.leaf_paths(self.ev))
+        b = t.calls[1]["body"]["response_format"]["json_schema"]["schema"]
+        self.assertIn(self.PROBE_PATH, b["properties"]["diagnosis"]["properties"]["hypotheses"]["items"]["properties"]["evidence"]["items"]["enum"])
+        self.assertIn("proposals", b["properties"])
+
+    def test_expectations_are_computed_by_the_executor_not_the_model(self):
+        out, _, _ = self.run_probe_flow([self.ok(self.plan()), self.ok(self.step_b())])
+        e = {x["probe_id"]: x for x in out["probes"]["expectations"]}
+        self.assertEqual((e["balance_gain_x1_5"]["observed"], e["balance_gain_x1_5"]["confirmed"]), ("increase", True))
+        self.assertEqual((e["no_push"]["observed"], e["no_push"]["confirmed"]), (None, None))   # measurement-only probe
+        self.assertEqual(out["probes"]["requested"], [{"probe_id": "balance_gain_x1_5", "hypothesis": "H2", "expect": "increase"},
+                                                      {"probe_id": "no_push", "hypothesis": "H1", "expect": "decrease"}])
+        self.assertEqual((out["probes"]["rollouts"], out["probes"]["seeds"]), (68, [1, 2, 3, 4]))
+
+    # -- validation of the plan
+    def test_probe_plan_validation(self):
+        avail = ["balance_gain_x1_5", "no_push", "foot_x1_5"]
+        v = lambda probes: fa.validate_probe_reply(self.plan(probes), self.ev, avail)
+        ok = {"probe_id": "foot_x1_5", "hypothesis": "H1", "expect": "no_change"}
+        self.assertEqual(len(v([ok])["accepted_probes"]), 1)
+        self.assertIn("probe_id must be one of", v([{**ok, "probe_id": "friction_x2"}])["probes"][0]["reasons"][0])   # not offered
+        self.assertIn("probe_id must be one of", v([{**ok, "probe_id": "heel_x2_rear"}])["probes"][0]["reasons"][0])  # invented
+        self.assertIn("duplicate", " ".join(v([ok, ok])["probes"][1]["reasons"]))
+        self.assertIn("expect must be", " ".join(v([{**ok, "expect": "maybe"}])["probes"][0]["reasons"]))
+        self.assertIn("not an accepted hypothesis", " ".join(v([{**ok, "hypothesis": "H3"}])["probes"][0]["reasons"]))
+        self.assertIn("unknown field", " ".join(v([{**ok, "extra": 1}])["probes"][0]["reasons"]))
+        avail4 = avail + ["friction_x2"]
+        four = [{"probe_id": i, "hypothesis": "H1", "expect": "increase"} for i in avail4]
+        res = fa.validate_probe_reply(self.plan(four), self.ev, avail4)
+        self.assertEqual(len(res["accepted_probes"]), 3)
+        self.assertIn("at most 3", " ".join(res["probes"][3]["reasons"]))
+        self.assertTrue(fa.validate_probe_reply({"diagnosis": self.good_reply()["diagnosis"], "probes": []}, self.ev, avail)["schema_errors"])
+        self.assertTrue(fa.validate_probe_reply({"diagnosis": self.good_reply()["diagnosis"], "proposals": []}, self.ev, avail)["schema_errors"])
+
+    def test_unavailable_probe_requested_is_repaired_once_then_runs(self):
+        bad = self.plan([{"probe_id": "heel_x2_rear", "hypothesis": "H1", "expect": "increase"}])
+        out, t, _ = self.run_probe_flow([self.ok(bad), self.ok(self.plan()), self.ok(self.step_b())])
+        self.assertEqual((out["status"], len(t.calls), out["repaired"]), ("ok", 3, True))
+        self.assertEqual([c["settings"]["purpose"] for c in out["calls"]], ["investigation_probe_plan", "investigation_repair", "investigation"])
+        self.assertIn("probe_id must be one of", t.calls[1]["body"]["messages"][-1]["content"])
+
+    # -- repair cap and failures
+    def test_one_repair_in_total_step_a_repair_leaves_none_for_step_b(self):
+        bad_b = self.good_reply()
+        for p in bad_b["proposals"]:
+            p["edits"][0]["value"] = 9.0
+        bad_a = {"diagnosis": self.good_reply()["diagnosis"], "probes": []}
+        out, t, _ = self.run_probe_flow([self.ok(bad_a), self.ok(self.plan()), self.ok(bad_b), self.ok(self.step_b())])
+        self.assertEqual(len(t.calls), 3)                      # A, A-repair, B: no second repair
+        self.assertEqual(out["status"], "no_valid_proposal")
+        self.assertLessEqual(len(out["calls"]), 3)
+
+    def test_step_b_repair_when_step_a_was_clean(self):
+        bad_b = self.good_reply()
+        for p in bad_b["proposals"]:
+            p["edits"][0]["value"] = 9.0
+        out, t, led = self.run_probe_flow([self.ok(self.plan()), self.ok(bad_b), self.ok(self.step_b())])
+        self.assertEqual((out["status"], len(t.calls), out["repaired"]), ("ok", 3, True))
+        self.assertEqual(led.investigation_status("i-p")["requests"], 3)
+        self.assertLessEqual(led.investigation_status("i-p")["requests"], led.caps.inv_max_requests)
+        self.assertEqual(len(self.runner_calls), 1)            # probes ran once, the repair does not re-run them
+
+    def test_step_a_invalid_after_repair_runs_no_probes(self):
+        bad = {"diagnosis": self.good_reply()["diagnosis"], "probes": []}
+        out, t, _ = self.run_probe_flow([self.ok(bad), self.ok(bad)])
+        self.assertEqual((out["status"], len(t.calls)), ("no_valid_proposal", 2))
+        self.assertEqual(self.runner_calls, [])
+        self.assertIn("step A", out["error"])
+        self.assertEqual(out["probes"]["requested"], [])
+
+    def test_step_a_model_failure_is_recorded_and_not_retried(self):
+        out, t, _ = self.run_probe_flow([NebiusError("HTTP 500: boom")])
+        self.assertEqual((out["status"], len(t.calls), self.runner_calls), ("model_failed", 1, []))
+
+    def test_step_b_model_failure_keeps_the_probe_results(self):
+        out, t, _ = self.run_probe_flow([self.ok(self.plan()), NebiusError("HTTP 500: boom")])
+        self.assertEqual((out["status"], len(t.calls)), ("model_failed", 2))
+        self.assertIn("step B failed", out["error"])
+        self.assertIn("balance_gain_x1_5", out["probes"]["results"])
+        self.assertEqual(out["accepted"], [])
+
+    def test_ledger_refusal_before_the_network(self):
+        led = self.ledger(caps=Caps(inv_max_requests=0))
+        out, t, _ = self.run_probe_flow([self.ok(self.plan())], ledger=led)
+        self.assertEqual((t.calls, out["status"], self.runner_calls), ([], "model_failed", []))
+        self.assertTrue(out["calls"][0]["budget_refused"])
+
+    def test_ledger_cap_of_one_refuses_step_b_before_the_network(self):
+        led = self.ledger(caps=Caps(inv_max_requests=1))
+        out, t, _ = self.run_probe_flow([self.ok(self.plan()), self.ok(self.step_b())], ledger=led)
+        self.assertEqual(len(t.calls), 1)
+        self.assertTrue(out["calls"][1]["budget_refused"])
+        self.assertEqual(out["status"], "model_failed")
+
+    def test_no_available_probe_falls_back_to_the_one_step_path(self):
+        orig = fa.pb.available_probes
+        fa.pb.available_probes = lambda *a, **k: []
+        self.addCleanup(setattr, fa.pb, "available_probes", orig)
+        out, t, _ = self.run_probe_flow([self.ok(self.good_reply())])
+        self.assertEqual((out["status"], len(t.calls), self.runner_calls), ("ok", 1, []))
+        self.assertEqual(out["probes"]["available"], [])
+        self.assertIn("skipped", out["probes"])
+
+    def test_one_step_path_is_unchanged(self):
+        t = Scripted([completion(reply_text(self.good_reply()))])
+        out = fa.investigate_once(self.client(t), self.cfg, self.version, self.cr, None, self.ledger(), investigation_id="i-1")
+        self.assertEqual((out["status"], len(t.calls)), ("ok", 1))
+        self.assertNotIn("probes", out)
+        self.assertNotIn("probes", out["evidence"])
+        self.assertNotIn(fa.PROBE_STEP_MARK, t.calls[0]["body"]["messages"][0]["content"])
+
+
+def pb_ids():
+    from creature_forge import probes
+    return probes.PROBE_IDS
+
+
 if __name__ == "__main__":
     unittest.main()

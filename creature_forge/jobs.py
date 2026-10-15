@@ -31,7 +31,7 @@ KINDS = ("challenge", "investigation", "loop")
 STATUSES = ("queued", "running", "done", "failed", "cancelled")
 TERMINAL = ("done", "failed", "cancelled")
 EVENT_TYPES = ("phase", "progress", "model_request", "model_response", "validation", "arm_result", "verdict",
-               "error", "note")
+               "error", "note", "probe_request", "probe_result")
 JOB_ID_RE = re.compile(r"^j-[0-9a-f]{8}$")
 RESTART_ERROR = "server restarted"
 _TRACE_TAIL = 2000

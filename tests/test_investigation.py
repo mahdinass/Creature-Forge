@@ -502,5 +502,220 @@ class ConfigTests(unittest.TestCase):
         self.assertNotIn("key", json.dumps(s).lower())
 
 
+# ---------------------------------------------------------------------------------------------------------------- diagnostic probes
+class ProbePool:
+    """Stands in for the MuJoCo pool: a deterministic fake score per job; remembers every job (probe seeds, arms)."""
+
+    def __init__(self):
+        self.jobs = []
+
+    def imap(self, fn, jobs):
+        for i, j in enumerate(jobs):
+            self.jobs.append(j)
+            b = j["body"]
+            score = 4.0 + 10 * (b["foot_length"] + b["foot_length_r"]) + (j["seed"] % 5) * 0.01
+            yield i, {"seed": j["seed"], "outcome": "PASS", "score": score, "metrics": {"fell": False}, "error": None,
+                      "rollouts": 17 if j["spec"]["kind"] == "push" else 1}
+
+    @property
+    def rollouts(self):
+        return sum(17 if j["spec"]["kind"] == "push" else 1 for j in self.jobs)
+
+
+class ProbeInvestigationTests(Base):
+    def setUp(self):
+        super().setUp()
+        self.pool = ProbePool()
+
+    def probe_inv(self, mode="scripted", **kw):
+        return self.run_inv(mode, probes=True, pool=self.pool, **kw)
+
+    def test_probes_false_is_the_default_and_unchanged(self):
+        rec = self.run_inv()
+        self.assertIsNone(rec["probes"])
+        self.assertEqual((len(rec["model_calls"]), rec["budget"]["calls"], rec["budget"]["rollouts"]), (1, 1, 100))
+        self.assertEqual(set(rec["seeds"]), {"train", "screen", "validate", "round_used"})
+        self.assertNotIn("probe_request", [t for t, _ in self.events])
+        self.assertEqual(self.pool.jobs, [])
+
+    def test_scripted_probe_record_shape_provenance_and_calls(self):
+        rec = self.probe_inv()
+        self.assertEqual((rec["status"], rec["provenance"]), ("done", "SCRIPTED_MOCK"))
+        self.assertEqual(set(rec), set(inv.RECORD_KEYS))
+        p = rec["probes"]
+        self.assertEqual([r["probe_id"] for r in p["requested"]], ["foot_x1_5", "balance_gain_x1_5", "no_push"])   # the fixture's plan
+        self.assertEqual(set(p["results"]), {"foot_x1_5", "balance_gain_x1_5", "no_push"})
+        self.assertEqual([e["probe_id"] for e in p["expectations"]], [r["probe_id"] for r in p["requested"]])
+        for e in p["expectations"]:
+            self.assertEqual(set(e), {"probe_id", "hypothesis", "expect", "observed", "confirmed"})
+        self.assertEqual((p["provenance"], p["seed_role"]), ("SCRIPTED_MOCK", "probe"))
+        self.assertEqual(len(p["seeds"]), 4)
+        self.assertEqual(len(rec["model_calls"]), 2)
+        self.assertEqual([c["settings"]["purpose"] for c in rec["model_calls"]], ["investigation_probe_plan", "investigation"])
+        self.assertTrue(all(c["model"] == inv.SCRIPTED_MODEL for c in rec["model_calls"]))
+        self.assertEqual(rec["budget"]["calls"], 2)
+        self.assertIn("probes", rec["evidence"])                   # step-B evidence incl. the measured results
+        self.assertTrue(all(a["provenance"] == "SCRIPTED_MOCK" for a in rec["arms"]))
+        on_disk = json.loads((self.dir / "investigations" / f"{rec['id']}.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(on_disk), list(inv.RECORD_KEYS))
+        self.assertEqual(on_disk["probes"]["requested"], p["requested"])
+
+    def test_probe_events(self):
+        self.probe_inv()
+        types = [t for t, _ in self.events]
+        self.assertEqual(types.count("probe_request"), 1)
+        self.assertEqual(types.count("probe_result"), 3)
+        self.assertLess(types.index("model_request"), types.index("probe_request"))
+        self.assertLess(types.index("probe_request"), types.index("probe_result"))
+        self.assertLess(types.index("probe_result"), types.index("model_response"))   # responses are emitted after the whole exchange
+        self.assertTrue(all(d["provenance"] == "SCRIPTED_MOCK" for t, d in self.events if t.startswith("probe")))
+
+    def test_unknown_event_type_falls_back_to_a_note(self):
+        seen = []
+
+        def strict_emit(type_, data):
+            if type_.startswith("probe"):
+                raise ValueError(f"unknown event type {type_!r}")
+            seen.append((type_, data))
+        rec = self.probe_inv(emit=strict_emit)
+        self.assertEqual(rec["status"], "done")
+        notes = [d for t, d in seen if t == "note" and str(d.get("event", "")).startswith("probe")]
+        self.assertEqual(len(notes), 4)
+
+    def test_probe_seeds_are_disjoint_from_arena_and_challenge_seeds(self):
+        rec = self.probe_inv()
+        probe = set(rec["seeds"]["probe"])
+        self.assertEqual(len(probe), 4)
+        for role in ("train", "screen", "validate"):
+            self.assertFalse(probe & set(rec["seeds"][role]), role)
+        self.assertFalse(probe & set(rec["spec"]["seeds"]))
+        self.assertTrue(all(s >= 100_000 for s in probe))
+        self.assertEqual(rec["probes"]["seeds"], rec["seeds"]["probe"])
+        self.assertEqual({j["seed"] for j in self.pool.jobs}, probe)   # probes ran on the probe seeds only
+        cfg = self.arena.calls[0]["cfg"]
+        self.assertFalse(probe & (set(cfg.screen_seeds) | set(cfg.validate_seeds) | set(cfg.train_seeds)))
+
+    def test_colliding_probe_seeds_are_refused_by_the_assertion(self):
+        class Overlap(FakeBaselines):
+            def seed_sets(self, cid, n, round_, sizes):
+                out = super().seed_sets(cid, n, round_, sizes)
+                out["probe"] = out["screen"][:2] + out["probe"][2:]
+                return out
+        self.bl = Overlap()
+        rec = self.probe_inv()
+        self.assertIn("seeds", rec["error"] or "")
+        self.assertIn(rec["status"], ("failed",))
+
+    def test_probes_never_reach_the_arena_or_the_arms(self):
+        before = json.dumps(self.version, sort_keys=True)
+        rec = self.probe_inv()
+        ids = {a["arm_id"] for a in rec["arms"]}
+        self.assertTrue(all(i == "original" or i.startswith(("ai:", "random:", "heuristic")) for i in ids), ids)
+        self.assertTrue(all(a["arm_id"] in ids for a in self.arena.calls[0]["arms"]))
+        self.assertEqual(json.dumps(self.store.version(self.cid, 1), sort_keys=True), before)
+        self.assertEqual(len(self.store.get(self.cid)["versions"]), 1)
+        self.assertFalse(any("probe" in json.dumps(a["edits"]) for a in rec["arms"]))
+
+    def test_probe_rollouts_count_in_the_budget(self):
+        rec = self.probe_inv()
+        self.assertEqual(rec["probes"]["rollouts"], self.pool.rollouts)
+        self.assertEqual(rec["budget"]["rollouts"], 100 + self.pool.rollouts)   # FakeArena reports 100
+
+    def test_push_probes_use_the_arena_bisection_resolution(self):
+        rec = self.probe_inv()
+        self.assertEqual(rec["probes"]["resolution"], 80.0 / 2 ** inv.ARENA_PUSH_BISECTION_STEPS)
+        self.assertTrue(all(j["spec"]["bisection_steps"] == inv.ARENA_PUSH_BISECTION_STEPS for j in self.pool.jobs))
+
+    def test_stand_costs_few_rollouts(self):
+        spec = {**spec_for("stand"), "duration": 8.0}
+        self.run_id = self.write_run(self.version, spec)
+        rec = self.probe_inv()
+        self.assertEqual(rec["status"], "done")
+        self.assertEqual(set(rec["probes"]["results"]), {"foot_x1_5", "balance_gain_x1_5"})
+        self.assertEqual(rec["probes"]["rollouts"], 3 * 4)   # original + 2 probes, 4 seeds, 1 rollout each
+
+    def test_too_few_requests_skips_the_probes_and_says_so(self):
+        rec = self.probe_inv(max_requests=1)
+        self.assertEqual(rec["status"], "done")
+        self.assertIn("skipped", rec["probes"])
+        self.assertEqual((len(rec["model_calls"]), self.pool.jobs), (1, []))
+        self.assertEqual(rec["budget"]["rollouts"], 100)
+
+    def test_default_request_cap_is_three_with_probes_two_without(self):
+        caps, base = [], self.factory()
+
+        def f(cfg, **kw):
+            caps.append(kw["max_requests"])
+            return base(cfg, **kw)
+        self.probe_inv(client_factory=f)
+        self.run_inv(client_factory=f)
+        self.assertEqual(caps, [3, 2])
+
+    def test_step_b_refused_by_the_ledger_before_the_network(self):
+        led = InferenceLedger(self.dir / "live_ledger.jsonl", caps=Caps(inv_max_requests=1))
+        with mock.patch.dict(os.environ, LIVE_ENV), mock.patch.object(inv, "api_key_present", return_value=True):
+            rec = self.probe_inv("live", ledger=led, client_factory=self.factory())
+        self.assertEqual(self.transports[0].requests, 1)
+        self.assertTrue(rec["model_calls"][-1]["budget_refused"])
+        self.assertEqual(rec["status"], "model_failed")
+        self.assertEqual(rec["provenance"], "LIVE")
+        self.assertFalse([a for a in rec["arms"] if a["source"] in AI_SOURCES])
+
+    def test_live_probe_flow_is_two_ledger_requests(self):
+        led = InferenceLedger(self.dir / "live_ledger.jsonl")
+        with mock.patch.dict(os.environ, LIVE_ENV), mock.patch.object(inv, "api_key_present", return_value=True):
+            rec = self.probe_inv("live", ledger=led, client_factory=self.factory())
+        self.assertEqual((rec["provenance"], rec["status"], led.status()["requests"]), ("LIVE", "done", 2))
+        self.assertEqual(rec["probes"]["provenance"], "LIVE")
+
+    def test_step_a_failure_runs_no_probe_rollouts(self):
+        rec = self.probe_inv(client_factory=self.factory(status=500))
+        self.assertEqual(rec["status"], "model_failed")
+        self.assertEqual(self.pool.jobs, [])
+        self.assertEqual(rec["probes"]["requested"], [])
+        self.assertNotIn("results", rec["probes"])
+
+
+class ProbeLoopTests(Base):
+    def setUp(self):
+        super().setUp()
+        self.pool = ProbePool()
+        self.challenge_calls = []
+
+    def challenge_runner(self, body, controllers, spec, progress):
+        self.challenge_calls.append(1)
+        v = {**self.version, "body": body, "controllers": controllers}
+        rec = challenge_record(v, self.cid, spec)
+        return {k: rec[k] for k in ("spec", "controller", "per_seed", "outcome", "summary", "forensics", "rollouts", "wall_s")}
+
+    def loop(self, **kw):
+        base = dict(mode="scripted", forge_dir=self.dir, arena_runner=self.arena, baseline_fns=self.bl.fns(), probes=True, pool=self.pool,
+                    challenge_runner=self.challenge_runner, emit=self.emit, progress=lambda *a: None, **self.fixed)
+        base.update(kw)
+        return inv.run_loop(self.store, self.cid, 1, self.run_id, **base)
+
+    def test_loop_rollouts_include_probe_rollouts_and_calls_stop_the_loop(self):
+        out = self.loop(limits=inv.LoopLimits(max_calls=4))
+        self.assertEqual((len(out["rounds"]), out["stop_reason"]), (2, "max_model_calls"))   # 2 calls per round, max_calls 4
+        self.assertEqual(out["budget"]["calls"], 4)
+        recs = [inv.load_investigation(self.dir, r["investigation_id"]) for r in out["rounds"]]
+        self.assertTrue(all(r["probes"] and r["probes"]["rollouts"] > 0 for r in recs))
+        fresh_challenge_rollouts = 12 * len(self.challenge_calls)   # challenge_record: 4 seeds x 3 rollouts per hypothetical-parent run
+        self.assertEqual(out["budget"]["rollouts"], sum(r["budget"]["rollouts"] for r in recs) + fresh_challenge_rollouts)
+        self.assertGreater(out["budget"]["rollouts"], 2 * 100)   # more than the arena alone
+        self.assertTrue(all(r["probes"]["rollouts"] <= r["budget"]["rollouts"] for r in recs))
+
+    def test_rollout_limit_counts_probe_rollouts(self):
+        out = self.loop(limits=inv.LoopLimits(max_rollouts=250, max_calls=20))
+        # round 1 costs 100 arena + 208 probe rollouts: without the probes (112 with the fresh challenge) the loop would go on
+        self.assertEqual((len(out["rounds"]), out["stop_reason"]), (1, "max_rollouts"))
+
+    def test_remaining_calls_cap_the_probe_protocol(self):
+        out = self.loop(limits=inv.LoopLimits(max_calls=1))
+        rec = inv.load_investigation(self.dir, out["rounds"][0]["investigation_id"])
+        self.assertIn("skipped", rec["probes"])
+        self.assertEqual(self.pool.jobs, [])
+
+
 if __name__ == "__main__":
     unittest.main()
