@@ -95,6 +95,21 @@ _CHALLENGES = {
 }
 
 
+def _acceptance_rule(kind: str) -> str:
+    """The deterministic verification rule in words (protocol facts from verdict.MIN_EFFECT, not a hint about which change helps)."""
+    from .verdict import MIN_EFFECT
+    m = MIN_EFFECT[kind]
+    if kind == "push":
+        need = (f"the median per-seed gain in critical push force must be at least {m['abs']:g} N and at least {m['rel']:.0%} of the "
+                "original's median; forces are measured to 0.625 N")
+    elif kind == "stand":
+        need = f"the median per-seed gain in survival time must be at least {m['abs']:g} s"
+    else:
+        need = f"the median per-seed gain in valid walking distance must be at least {m['abs']:g} m"
+    return (f"verdict_v1): on held-out seeds, paired with the unchanged creature, {need}, and the gains must be consistent across seeds "
+            "(one-sided sign test, p < 0.05).")
+
+
 def build_system_prompt(kind: str, mode: str, allowed: dict, max_proposals: int = 3, duration: float = 0.0) -> str:
     lines = [f"- {p} [{d['kind']}; targets {'|'.join(d['targets'])}] {d['meaning']}" for p, d in allowed.items()]
     guided = mode == "guided"
@@ -111,6 +126,8 @@ def build_system_prompt(kind: str, mode: str, allowed: dict, max_proposals: int 
         "random seeds, and ALSO a matched-random edit of the same size and a simple rule-based heuristic. A change is adopted only if it beats the "
         "original significantly; your confidence is never used. So diagnose carefully and honestly. If no change is likely to help, say so: "
         "give low confidence (<= 0.2) on your best small proposal instead of guessing.",
+        "ACCEPTANCE RULE (" + _acceptance_rule(kind) + " A change smaller than this is recorded as not verified even if it helps a little, "
+        "so size each edit to the effect you predict (within the edit rules below).",
         "",
         "EVIDENCE. The user message lists every measurement as one `path=value` line; these paths are the ONLY citable ones. Seeds are ordered "
         "worst to best by score (seeds[0] is the worst). Derived: leg_length = thigh + shank; foot_to_leg = mean foot length / mean leg length; "
