@@ -2,3 +2,4 @@
 experiments/demo_trials/*.json -text
 *.sh text eol=lf
 infra/** text eol=lf
+experiments/forge_loop/dev_live_records/*.json -text
