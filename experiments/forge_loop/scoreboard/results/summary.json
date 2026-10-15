@@ -1,0 +1,219 @@
+{
+ "protocol": "forge-scoreboard-v1",
+ "n_attempted": 12,
+ "n_paired": 12,
+ "paired_table": {
+  "ai_only": 5,
+  "twin_only": 0,
+  "both": 1,
+  "neither": 6
+ },
+ "mcnemar_one_sided_p": 0.03125,
+ "conclusion": "AI-selected edits verified more often than matched random edits on this zoo (pre-declared test, p < 0.05)",
+ "ai_verified_per_attempt": {
+  "k": 6,
+  "n": 12,
+  "wilson95": [
+   0.2538,
+   0.7462
+  ]
+ },
+ "twin_verified_per_pair": {
+  "k": 1,
+  "n": 12,
+  "wilson95": [
+   0.0149,
+   0.3539
+  ]
+ },
+ "heuristic_verified_per_attempt": {
+  "k": 0,
+  "n": 12,
+  "wilson95": [
+   0.0,
+   0.2425
+  ]
+ },
+ "probe_confirmation": {
+  "confirmed": 8,
+  "evaluated": 28
+ },
+ "cost": {
+  "calls": 24,
+  "tokens": 146901,
+  "usd": 0.0501,
+  "rollouts": 8870,
+  "wall_s": 1289.29
+ },
+ "per_investigation": [
+  {
+   "investigation_id": "i-cae7dd55f2ce",
+   "starter": "balanced",
+   "challenge": "push",
+   "replicate": 1,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "VERIFIED_IMPROVEMENT",
+   "ai_median_diff": 3.125,
+   "twin": "random:P1",
+   "twin_verdict": "NOT_VERIFIED",
+   "twin_median_diff": -1.875,
+   "heuristic_verdict": "INCONCLUSIVE"
+  },
+  {
+   "investigation_id": "i-d9db23bf7829",
+   "starter": "bird-knees",
+   "challenge": "push",
+   "replicate": 1,
+   "status": "done",
+   "ai_arm": "ai:P2",
+   "ai_verdict": "VERIFIED_IMPROVEMENT",
+   "ai_median_diff": 3.75,
+   "twin": "random:P2",
+   "twin_verdict": "INCONCLUSIVE",
+   "twin_median_diff": 0.0,
+   "heuristic_verdict": "INCONCLUSIVE"
+  },
+  {
+   "investigation_id": "i-40c52952d527",
+   "starter": "weak-slippery",
+   "challenge": "push",
+   "replicate": 1,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "VERIFIED_IMPROVEMENT",
+   "ai_median_diff": 3.4375,
+   "twin": "random:P1",
+   "twin_verdict": "NOT_VERIFIED",
+   "twin_median_diff": -1.875,
+   "heuristic_verdict": null
+  },
+  {
+   "investigation_id": "i-58a3e0984023",
+   "starter": "tiny-feet",
+   "challenge": "stand",
+   "replicate": 1,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "NOT_VERIFIED",
+   "ai_median_diff": 0.3649999999999598,
+   "twin": "random:P1",
+   "twin_verdict": "INCONCLUSIVE",
+   "twin_median_diff": -0.02749999999999797,
+   "heuristic_verdict": "NOT_VERIFIED"
+  },
+  {
+   "investigation_id": "i-0369e71bef7a",
+   "starter": "top-heavy",
+   "challenge": "stand",
+   "replicate": 1,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "NOT_VERIFIED",
+   "ai_median_diff": 0.10249999999998871,
+   "twin": "random:P1",
+   "twin_verdict": "NOT_VERIFIED",
+   "twin_median_diff": -0.09249999999998981,
+   "heuristic_verdict": "NOT_VERIFIED"
+  },
+  {
+   "investigation_id": "i-fd0ee5f8c14c",
+   "starter": "stilts",
+   "challenge": "stand",
+   "replicate": 1,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "NOT_VERIFIED",
+   "ai_median_diff": 0.2524999999999722,
+   "twin": "random:P1",
+   "twin_verdict": "INCONCLUSIVE",
+   "twin_median_diff": 0.014999999999998348,
+   "heuristic_verdict": "NOT_VERIFIED"
+  },
+  {
+   "investigation_id": "i-01e9f9f313cb",
+   "starter": "balanced",
+   "challenge": "push",
+   "replicate": 2,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "VERIFIED_IMPROVEMENT",
+   "ai_median_diff": 4.375,
+   "twin": "random:P1",
+   "twin_verdict": "INCONCLUSIVE",
+   "twin_median_diff": -0.625,
+   "heuristic_verdict": null
+  },
+  {
+   "investigation_id": "i-36a16fd06073",
+   "starter": "bird-knees",
+   "challenge": "push",
+   "replicate": 2,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "INCONCLUSIVE",
+   "ai_median_diff": -0.3125,
+   "twin": "random:P1",
+   "twin_verdict": "WORSE",
+   "twin_median_diff": -11.875,
+   "heuristic_verdict": "INCONCLUSIVE"
+  },
+  {
+   "investigation_id": "i-552c1018ce1f",
+   "starter": "weak-slippery",
+   "challenge": "push",
+   "replicate": 2,
+   "status": "done",
+   "ai_arm": "ai:P2",
+   "ai_verdict": "VERIFIED_IMPROVEMENT",
+   "ai_median_diff": 4.375,
+   "twin": "random:P2",
+   "twin_verdict": "NOT_VERIFIED",
+   "twin_median_diff": 2.5,
+   "heuristic_verdict": null
+  },
+  {
+   "investigation_id": "i-f27a322d00c2",
+   "starter": "tiny-feet",
+   "challenge": "stand",
+   "replicate": 2,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "NOT_VERIFIED",
+   "ai_median_diff": 0.10749999999998816,
+   "twin": "random:P1",
+   "twin_verdict": "NOT_VERIFIED",
+   "twin_median_diff": -0.04749999999999477,
+   "heuristic_verdict": "NOT_VERIFIED"
+  },
+  {
+   "investigation_id": "i-b7dab78bf96e",
+   "starter": "top-heavy",
+   "challenge": "stand",
+   "replicate": 2,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "NOT_VERIFIED",
+   "ai_median_diff": 0.1799999999999803,
+   "twin": "random:P1",
+   "twin_verdict": "NOT_VERIFIED",
+   "twin_median_diff": 0.1324999999999854,
+   "heuristic_verdict": "NOT_VERIFIED"
+  },
+  {
+   "investigation_id": "i-d0836634a468",
+   "starter": "stilts",
+   "challenge": "stand",
+   "replicate": 2,
+   "status": "done",
+   "ai_arm": "ai:P1",
+   "ai_verdict": "VERIFIED_IMPROVEMENT",
+   "ai_median_diff": 0.7124999999999215,
+   "twin": "random:P1",
+   "twin_verdict": "VERIFIED_IMPROVEMENT",
+   "twin_median_diff": 3.1670000000003515,
+   "heuristic_verdict": null
+  }
+ ],
+ "excluded": []
+}
