@@ -24,3 +24,18 @@ Findings (one creature, one challenge, n = 1 per protocol state — anecdotal):
   now always validates the selected AI arm's own matched-random twin (commit after these runs), because the A/A null pilot
   showed ~15 % of random push edits verify. No claim of AI superiority is made from these records.
 - Round 3 evaluated the proposed (not accepted) body as a hypothetical parent; nothing was accepted automatically.
+
+## With diagnostic probes (2026-10-15, after the probe commits)
+
+| records | protocol at the time |
+|---|---|
+| i-c2c4c48729d3 (single) | probes on; step B saw raw probe numbers only. Both probes refuted the model's hypotheses, yet it proposed a refuted mechanism (torque/balance): INCONCLUSIVE. |
+| i-47bc91e407c2, i-f2ac2a96792d, i-172b6a48a0ad (loop) | + step B states each probe's measured verdict (CONFIRMED/REFUTED) and the method rule for refuted mechanisms. |
+
+Loop on the balanced creature, push (twin validated on the same held-out seeds in every round):
+- Round 1: probes foot ×1.5 **CONFIRMED** (+8.75 N), torque ×1.5 **refuted** (no change). Proposal rear `foot_length ×1.25`:
+  **VERIFIED_IMPROVEMENT** +3.125 N, 12/0/0; its matched-random twin: INCONCLUSIVE (0/0/12).
+- Round 2 (hypothetical parent = round-1 body): torque and friction probes refuted; balance-gain proposal INCONCLUSIVE; twin WORSE (−10 N).
+- Round 3 (same parent, patience): foot ×1.5 probe confirmed (+11.25 N); rear `foot_length ×1.25` again: **VERIFIED** +4.375 N, 12/0/0;
+  twin INCONCLUSIVE.
+One creature, one challenge: a worked case, not a statistic. 2 model calls per round, ≈ $0.002 each.
