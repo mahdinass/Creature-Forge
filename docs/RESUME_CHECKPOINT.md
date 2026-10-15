@@ -48,7 +48,7 @@ over any conversation summary. The objective is to resume in minutes without red
 - VM-side (not in Git): `~/dev/integ/artifacts/forge/` (creatures, runs, jobs, investigations), `~/logs/dev/*.log`,
   inference ledger `~/dev/ledger/inference_ledger.jsonl` (local backup `artifacts/vm/ledger_backup/`, may be stale).
 
-## 4. Memory evaluation (forge-memory-eval-v1) — state at checkpoint
+## 4. Memory evaluation (forge-memory-eval-v1) — **COMPLETE 2026-10-16** (no evidence of a benefit; see §11 and `memory_eval/REPORT.md`; do not rerun or re-analyse)
 - Protocol: 6 new creatures × 2 replicates = 12 pairs; per pair one push challenge run and two LIVE investigations (memory
   on/off) on identical seeds; frozen 34-lesson bank (sha256 in protocol); primary = exact one-sided McNemar; low power stated.
 - Running at checkpoint time on the VM slot `integ` (driver `scripts/forge_memory_eval.py --run`, started ~18:36 UTC).
@@ -75,8 +75,7 @@ https-only base URL, slot/pull validation, safe tar extraction, nesting guard, `
 legacy `/api/demo/run` uses its own (R3) budget, scoreboard caps were enforced by the global ledger only (disclosed).
 
 ## 7. Next actions in priority order
-1. Verify states (§9). If the memory evaluation finished: pull results (§9), run `--analyze`, write `memory_eval/REPORT.md`,
-   commit. If it was interrupted: start the VM, serve live (no `CF_MEMORY`), run `--resume`, then analyze.
+1. ~~Memory evaluation~~ DONE 2026-10-16 (12/12 pairs, analysed once, `REPORT.md` committed). Verify states (§9) on resume.
 2. Ask the owner for approval to merge PR #16 (all owner conditions are met; re-check CI on HEAD first).
 3. Submission (D): record demo footage with a scripted Playwright capture of the live flow (raw clips; the owner does the
    voice-over/edit), update `SCREEN_CAPTURE_PLAN.md` and `NEBIUS_NVIDIA_FEEDBACK.md` to Super-120B, fresh-clone test on a
@@ -142,3 +141,13 @@ Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|f
 - Inference ledger at stop: **111 requests, $0.4764** of $15 (backup `artifacts/vm/ledger_backup/inference_ledger_20261015b.jsonl`).
 - VM: stopped through the Nebius API right after this commit (see `forge_cloud.py status`; infra ledger `spend`).
 - Nothing merged; repository private; PR #16 still Draft.
+
+### Completion record — 2026-10-16 (memory evaluation finished)
+- Resumed 2026-10-15 21:49 UTC in remote `tmux` session `memeval` on slot `integ` (synced to `6dc214f`, snapshot `6314247`;
+  `creature_forge/`, protocol and bank identical to run 1's `50f24a7`), live server without `CF_MEMORY`. Ran the 7 remaining
+  pairs; finished 22:29 UTC, driver exit 0. 12/12 pairs, 24/24 investigations `done`, 0 exclusions, no reruns.
+- `runs.jsonl` append-only (first 5 lines byte-identical); 24 records archived with SHA-256 manifest; `--analyze` run ONCE
+  after completion: memory 6/12 vs no memory 7/12, discordant 3 vs 4, p = 0.773 -> **no evidence of a benefit**; memory cited
+  0/12 (delivered and citable; checked); twins 0/24 verified. `experiments/forge_loop/memory_eval/REPORT.md`.
+- Inference ledger after the run: 140 requests, $0.5412 (backup `artifacts/vm/ledger_backup/inference_ledger_20261016.jsonl`).
+- Do NOT repeat: the memory evaluation (any part), its analysis, or the delivery/citability audit.

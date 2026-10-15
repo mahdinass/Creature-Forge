@@ -260,3 +260,13 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Owner merge conditions for PR #16 met (CI green; live end-to-end UI test 15/15 with a verified redesign accepted as v2 in the browser, `i-140b1435cb84`; security fixes) — merge still awaits the owner's explicit approval.
 - Live walking investigations done (nothing verified). Submission docs updated; repo private.
 - Memory evaluation `forge-memory-eval-v1` registered before running (frozen 34-lesson bank) and in progress; resume/analysis procedure and "do not repeat" list in the checkpoint; copy-paste prompt in `docs/RESUME_PROMPT.md`.
+
+## 2026-10-16 - memory evaluation complete: no evidence of a benefit
+- `forge-memory-eval-v1` finished: 12/12 pairs (5 before the pause, 7 via `--resume` in remote tmux; no reruns, 0 exclusions,
+  all 24 investigations `done`; investigation code identical across both runs). Pre-registered result: AI verified 6/12 with
+  memory vs 7/12 without, discordant 3 vs 4, exact one-sided McNemar p = 0.773 -> **no evidence of a benefit**. The model
+  cited a memory lesson in 0/12 memory-on investigations although lessons were delivered and citable. Twins 0/24 verified.
+  Report: `experiments/forge_loop/memory_eval/REPORT.md`. Memory stays off by default; no benefit claimed.
+- Budgets after the evaluation: inference 140 requests, $0.54 of $15; infra ledger in `forge_cloud.py spend`.
+- Submission docs: capture plan rewritten for the Forge Loop, feedback updated for Nemotron-3-Super, `webgl-constants`
+  confirmed MIT (`4a43440`).

@@ -96,3 +96,12 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - **Evidence and prompt facts, not hints:** foot heel/toe extents from the compiled model; the acceptance rule; per-probe CONFIRMED/REFUTED with the method rule for refuted mechanisms (added after a live run proposed a mechanism its own probe had refuted).
 - **Loop:** patience 2 (falsified proposals become history), max 8 model calls, never auto-accepts; rounds 2+ evaluate a hypothetical parent and cannot be accepted until the parent is.
 - **Claims:** only the pre-registered scoreboard supports a comparison claim (AI 6/12 vs twin 1/12, p = 0.031, push-dominated, small); development live records are worked cases.
+
+## 2026-10-16 - Engineering memory: no measured benefit; stays off by default
+- `forge-memory-eval-v1` (12 pairs, registered before running): memory 6/12 vs no memory 7/12 verified, McNemar p = 0.773; the
+  model never cited a lesson (0/12) although lessons were in the prompt and in the citation enum. Decision: memory remains an
+  opt-in experimental feature (API `memory=false` default, `CF_MEMORY` off); submission text may mention it only as tried
+  with a null result. Any further memory work needs a different design (e.g. past edits offered as arena candidates) and a
+  new registration; the v1 protocol, bank and records are frozen.
+- Interrupted evaluations are paused only at pair boundaries and resumed with `--resume` (never rerun a recorded pair); the
+  driver for long runs is launched in a remote `tmux` session so it survives the local machine disconnecting.

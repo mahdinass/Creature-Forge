@@ -1,0 +1,289 @@
+{
+ "protocol": "forge-memory-eval-v1",
+ "n_pairs": 12,
+ "paired_table": {
+  "memory_only": 3,
+  "no_memory_only": 4,
+  "both": 3,
+  "neither": 2
+ },
+ "mcnemar_one_sided_p": 0.773438,
+ "conclusion": "no evidence of a benefit from engineering memory (pre-declared test)",
+ "memory_verified": {
+  "k": 6,
+  "n": 12,
+  "wilson95": [
+   0.2538,
+   0.7462
+  ]
+ },
+ "no_memory_verified": {
+  "k": 7,
+  "n": 12,
+  "wilson95": [
+   0.3195,
+   0.8067
+  ]
+ },
+ "cost": {
+  "calls": 49,
+  "tokens": 323902,
+  "usd": 0.1091,
+  "rollouts": 31274
+ },
+ "excluded": [],
+ "per_pair": [
+  {
+   "creature": "short-legs",
+   "replicate": 1,
+   "memory": {
+    "id": "i-24722cb58470",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-76d7eabfea13",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "memory_median_diff": 3.125,
+   "no_memory_median_diff": 2.5,
+   "error": null
+  },
+  {
+   "creature": "long-legs",
+   "replicate": 1,
+   "memory": {
+    "id": "i-b7063afa299f",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-060c67b5de79",
+    "status": "done",
+    "ai": "ai:P2",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "memory_median_diff": 2.8125,
+   "no_memory_median_diff": 1.875,
+   "error": null
+  },
+  {
+   "creature": "big-torso",
+   "replicate": 1,
+   "memory": {
+    "id": "i-5ec0d86ab84c",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-f7399efc8e43",
+    "status": "done",
+    "ai": "ai:P2",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": 5.0,
+   "no_memory_median_diff": 5.3125,
+   "error": null
+  },
+  {
+   "creature": "small-feet",
+   "replicate": 1,
+   "memory": {
+    "id": "i-a63694951add",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-b60b6bd7f00d",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": 2.1875,
+   "no_memory_median_diff": 4.375,
+   "error": null
+  },
+  {
+   "creature": "heavy-legs",
+   "replicate": 1,
+   "memory": {
+    "id": "i-308e524dcd1b",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-3200b2c3cb23",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "memory_median_diff": 9.6875,
+   "no_memory_median_diff": 1.25,
+   "error": null
+  },
+  {
+   "creature": "soft-motors",
+   "replicate": 1,
+   "memory": {
+    "id": "i-9a0833673147",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-6b412b8d15a3",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": 3.4375,
+   "no_memory_median_diff": 3.4375,
+   "error": null
+  },
+  {
+   "creature": "short-legs",
+   "replicate": 2,
+   "memory": {
+    "id": "i-cd3f973b86ec",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-4a6a13744636",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "INCONCLUSIVE",
+    "memory_cited": false
+   },
+   "memory_median_diff": 2.5,
+   "no_memory_median_diff": 0.0,
+   "error": null
+  },
+  {
+   "creature": "long-legs",
+   "replicate": 2,
+   "memory": {
+    "id": "i-abd868e03b88",
+    "status": "done",
+    "ai": "ai:P3",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-c69432d83e93",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": 0.0,
+   "no_memory_median_diff": 6.25,
+   "error": null
+  },
+  {
+   "creature": "big-torso",
+   "replicate": 2,
+   "memory": {
+    "id": "i-e34feb3a8a57",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "WORSE",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-ceb5d1e48eb7",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": -12.8125,
+   "no_memory_median_diff": 10.9375,
+   "error": null
+  },
+  {
+   "creature": "small-feet",
+   "replicate": 2,
+   "memory": {
+    "id": "i-5d21233e469e",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-4790fc6a7439",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": 1.875,
+   "no_memory_median_diff": 5.0,
+   "error": null
+  },
+  {
+   "creature": "heavy-legs",
+   "replicate": 2,
+   "memory": {
+    "id": "i-58f2d3030f5a",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-893d7978c394",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "NOT_VERIFIED",
+    "memory_cited": false
+   },
+   "memory_median_diff": 10.0,
+   "no_memory_median_diff": 1.25,
+   "error": null
+  },
+  {
+   "creature": "soft-motors",
+   "replicate": 2,
+   "memory": {
+    "id": "i-b29c52161e32",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "no_memory": {
+    "id": "i-e2ff22e9268e",
+    "status": "done",
+    "ai": "ai:P1",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "memory_cited": false
+   },
+   "memory_median_diff": 3.75,
+   "no_memory_median_diff": 4.375,
+   "error": null
+  }
+ ]
+}
