@@ -87,5 +87,39 @@ class ForgeIntegrationTests(unittest.TestCase):
         self.assertTrue(all(p["status"] == "rejected" for p in out["proposals"]), out)
 
 
+class RealArenaThroughApiTests(unittest.TestCase):
+    """The whole loop through the real router, real MuJoCo arena and a SCRIPTED model reply (no network)."""
+
+    def test_scripted_investigation_completes_with_real_rollouts_and_honest_labels(self):
+        import time
+        from fastapi.testclient import TestClient
+        from creature_forge.studio.app import create_app
+        with tempfile.TemporaryDirectory() as d:
+            client = TestClient(create_app(forge_dir=Path(d) / "forge"))
+
+            def wait(job_id):
+                for _ in range(600):
+                    job = client.get(f"/api/forge/jobs/{job_id}").json()["job"]
+                    if job["status"] in ("done", "failed", "cancelled"):
+                        return job
+                    time.sleep(0.25)
+                self.fail("job did not finish")
+
+            c = client.post("/api/forge/creatures", json={"name": "Stubby", "body": STUBBY, "mode": "experimental", "drawing": {}}).json()
+            r = client.post(f"/api/forge/creatures/{c['id']}/versions/1/challenges", json={"kind": "stand", "seeds": 2}).json()
+            self.assertEqual(wait(r["job_id"])["status"], "done")
+            out = client.post(f"/api/forge/creatures/{c['id']}/versions/1/investigations",
+                              json={"run_id": r["run_id"], "mode": "scripted"}).json()
+            wait(out["job_id"])
+            rec = client.get(f"/api/forge/investigations/{out['investigation_id']}").json()
+            self.assertEqual(rec["status"], "done", rec.get("error"))
+            self.assertEqual(rec["provenance"], "SCRIPTED_MOCK")
+            self.assertGreater(rec["budget"]["rollouts"], 0)
+            self.assertTrue(all(a["source"] != "nemotron" for a in rec["arms"]))
+            self.assertTrue(rec["verdicts"])
+            for v in rec["verdicts"].values():
+                self.assertEqual(v["rule"], "verdict_v1")
+
+
 if __name__ == "__main__":
     unittest.main()

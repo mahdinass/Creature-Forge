@@ -486,7 +486,8 @@ def _merge_arena(rec: dict, res: dict, provenance: str) -> None:
     rec["screening"], rec["selection"], rec["validation_results"] = res.get("screening"), res.get("selection"), res.get("validation")
     src = {a["arm_id"]: a["source"] for a in rec["arms"]}
     rec["verdicts"] = {k: {**(v or {}), "source": src.get(k), "provenance": provenance} for k, v in (res.get("verdicts") or {}).items()}
-    rec["budget"]["rollouts"] = int(res.get("rollouts") or 0)
+    r = res.get("rollouts") or 0   # arena: {"per_arm": {...}, "total": int}; fakes may give an int
+    rec["budget"]["rollouts"] = int(r.get("total", 0) if isinstance(r, dict) else r)
 
 
 def _finish(rec: dict, forge_dir: Path, t0: float) -> dict:

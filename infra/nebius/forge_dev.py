@@ -146,7 +146,8 @@ def cmd_test(a) -> None:
 
 def cmd_serve(a) -> None:
     slot = a.slot or default_slot(Path(a.tree).resolve())
-    inner = (f'cd $HOME/dev/{slot} && export PATH=$HOME/dev/venvs/{slot}/bin:$PATH CF_SLOT={slot} '
+    live = "export CREATURE_FORGE_ENABLE_LIVE=1 && " if a.live else ""   # live Nemotron calls only when explicitly asked
+    inner = (f'cd $HOME/dev/{slot} && {live}export PATH=$HOME/dev/venvs/{slot}/bin:$PATH CF_SLOT={slot} '
              f'CF_INFERENCE_LEDGER=$HOME/dev/ledger/inference_ledger.jsonl && mkdir -p $HOME/dev/ledger && '
              f'(test -f studio/dist/index.html || npm --prefix studio run build) && python scripts/run_studio.py '
              f'2>&1 | tee -a $HOME/logs/dev/studio-{slot}.log')
@@ -215,7 +216,7 @@ def main() -> None:
     e.add_argument("--timeout", type=int, default=1800); e.add_argument("--tail", type=int, default=60)
     t = sp.add_parser("test", parents=[common]); t.add_argument("kind", choices=[*TESTS, "all"])
     t.add_argument("--timeout", type=int, default=3000); t.add_argument("--tail", type=int, default=25)
-    sp.add_parser("serve", parents=[common])
+    sv = sp.add_parser("serve", parents=[common]); sv.add_argument("--live", action="store_true")
     tu = sp.add_parser("tunnel"); tu.add_argument("--stop", action="store_true")
     p = sp.add_parser("pull", parents=[common]); p.add_argument("path", nargs="?", default="artifacts/forge")
     a = ap.parse_args()
