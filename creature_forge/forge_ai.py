@@ -650,15 +650,24 @@ _STEP_B_NOTE = (
     "probes.* (probes.<id>.median_delta = median per-seed change in score of the probed variant versus the unchanged creature; wins/losses/ties "
     "count seeds beyond probes.resolution; probes.no_push.* is a measurement of the unchanged creature without a push). Revise your hypotheses in "
     "light of them: drop or reword one a probe contradicted, and cite probes.* paths where they support one. A probe is a counterfactual "
-    "measurement, not a verified improvement: your proposals below are still tested independently on held-out seeds.")
+    "measurement, not a verified improvement: your proposals below are still tested independently on held-out seeds. "
+    "METHOD: a refuted expectation is evidence against that mechanism. Do not propose strengthening a factor whose probe showed no change, "
+    "or a change in the direction a probe showed to be harmful, unless you cite other evidence that explains why; prefer mechanisms a probe "
+    "confirmed, then ones no probe has tested. If every tested mechanism was refuted, say so in the summary and form a new hypothesis.")
 
 
-def build_step_b_messages(evidence: dict, *, allowed: dict, hypotheses: list[dict], requests: list[dict], max_proposals: int = 3) -> list[dict]:
+def build_step_b_messages(evidence: dict, *, allowed: dict, hypotheses: list[dict], requests: list[dict], max_proposals: int = 3,
+                          expectations: list[dict] | None = None) -> list[dict]:
     """[system, user] for step B: the normal proposal prompt (+ a probe note) over the evidence INCLUDING the `probes` section."""
     msgs = build_messages(evidence, allowed=allowed, max_proposals=max_proposals)
     msgs[0]["content"] += "\n\n" + _STEP_B_NOTE
     lines = [f"- {h['id']}: {h.get('mechanism', '')}" for h in hypotheses if h.get("status") == "accepted"]
-    lines += [f"- probe {r['probe_id']} tested {r['hypothesis']}; you expected: {r['expect']}" for r in requests]
+    outcome = {e.get("probe_id"): e for e in expectations or []}
+    for r in requests:
+        e = outcome.get(r["probe_id"]) or {}
+        verdict = {True: "CONFIRMED", False: "REFUTED"}.get(e.get("confirmed"), "not decidable")
+        measured = f"; MuJoCo measured: {e.get('observed')} -> {verdict}" if e else ""
+        lines.append(f"- probe {r['probe_id']} tested {r['hypothesis']}; you expected: {r['expect']}{measured}")
     msgs[1]["content"] += "\n\nYOUR STEP A (hypotheses and probes requested):\n" + "\n".join(lines)
     return msgs
 
@@ -793,7 +802,8 @@ def investigate_with_probes(client, cfg: ModelConfig, version: dict, challenge_r
                          rollouts=ran["rollouts"], resolution=ran["resolution"], bisection_steps=ran.get("bisection_steps"))
     evidence_b = {**evidence, "probes": pb.evidence_block(ran)}
     out["evidence"], out["evidence_bytes"] = evidence_b, pack_size(evidence_b)
-    msgs_b = build_step_b_messages(evidence_b, allowed=allowed, hypotheses=val_a["hypotheses"], requests=requests, max_proposals=max_proposals)
+    msgs_b = build_step_b_messages(evidence_b, allowed=allowed, hypotheses=val_a["hypotheses"], requests=requests, max_proposals=max_proposals,
+                                   expectations=expectations)
     schema_b = build_reply_schema(evidence_b, allowed, max_proposals=max_proposals)
     callb = call_model(client, cfg, msgs_b, ledger, investigation_id=inv, purpose="investigation", response_schema=schema_b)
     out["calls"].append(callb.as_dict())
