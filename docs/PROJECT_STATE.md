@@ -254,3 +254,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Live walking investigations done and archived (nothing verified; model never chose controller co-design).
 - Unfinished, preserved as UNVERIFIED branches: `wip/s9-security-hardening-UNVERIFIED` (20224db), `wip/s8-engineering-memory-UNVERIFIED` (54aec28).
 - Next: finish/verify S9 -> live end-to-end UI test -> ask owner to merge PR #16 -> memory (pre-registered eval) -> submission assets.
+
+## 2026-10-15 evening — integration complete, memory evaluation running; see `docs/RESUME_CHECKPOINT.md`
+- Integrated and verified on the VM: engineering memory (`d3cda1f`) and all security-review fixes (`269ec90`); 894 Python tests, frontend, 237 browser checks; CI green; frozen records 105/105; secret scan 0 hits.
+- Owner merge conditions for PR #16 met (CI green; live end-to-end UI test 15/15 with a verified redesign accepted as v2 in the browser, `i-140b1435cb84`; security fixes) — merge still awaits the owner's explicit approval.
+- Live walking investigations done (nothing verified). Submission docs updated; repo private.
+- Memory evaluation `forge-memory-eval-v1` registered before running (frozen 34-lesson bank) and in progress; resume/analysis procedure and "do not repeat" list in the checkpoint; copy-paste prompt in `docs/RESUME_PROMPT.md`.
