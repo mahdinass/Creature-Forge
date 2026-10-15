@@ -355,10 +355,13 @@ class ReplayTests(ApiCase):
 
 class StatusAndStubTests(ApiCase):
     def test_status_shape_and_the_key_is_never_returned(self):
-        env = {k: v for k, v in os.environ.items() if k not in ("CREATURE_FORGE_ENABLE_LIVE", "NEBIUS_API_KEY", "CF_WORKERS")}
+        env = {k: v for k, v in os.environ.items() if k not in ("CREATURE_FORGE_ENABLE_LIVE", "NEBIUS_API_KEY", "CF_WORKERS", "CF_INFERENCE_LEDGER")}
         with mock.patch.dict(os.environ, env, clear=True):
             s = self.c.get("/api/forge/status").json()
-            self.assertEqual(s, {"live_available": False, "model": None, "ledger": None, "workers": 6, "version": "forge-v1"})
+            self.assertEqual((s["live_available"], s["workers"], s["version"]), (False, 6, "forge-v1"))
+            self.assertEqual(s["model"]["model"], "nvidia/nemotron-3-super-120b-a12b")
+            self.assertEqual(set(s["model"]["profiles"]), {"default", "deep"})
+            self.assertEqual((s["ledger"]["requests"], s["ledger"]["usd"], s["ledger"]["caps"]["requests"]), (0, 0, 1500))
             os.environ["NEBIUS_API_KEY"] = "sk-super-secret-value"
             self.assertFalse(self.c.get("/api/forge/status").json()["live_available"])  # live flag missing
             os.environ["CREATURE_FORGE_ENABLE_LIVE"] = "1"
@@ -372,16 +375,171 @@ class StatusAndStubTests(ApiCase):
             os.environ["CF_WORKERS"] = "banana"
             self.assertEqual(self.c.get("/api/forge/status").json()["workers"], 6)
 
-    def test_investigation_endpoints_are_503_stubs_but_lists_stay_200(self):
-        cr = self.create()
-        self.assertEqual(self.c.post(f"/api/forge/creatures/{cr['id']}/versions/1/investigations",
-                                     json={"run_id": "r-00000000", "mode": "scripted"}).status_code, 503)
-        r = self.c.get("/api/forge/investigations/i-00000000")
-        self.assertEqual((r.status_code, r.json()["detail"]), (503, "investigations not yet available"))
-        self.assertEqual(self.c.post(f"/api/forge/creatures/{cr['id']}/accept",
-                                     json={"investigation_id": "i-1", "arm_id": "ai:P1"}).status_code, 503)
-        self.assertEqual(self.c.get("/api/forge/replay", params={"investigation_id": "i-1", "arm": "ai:P1", "seed": 1}).status_code, 503)
-        self.assertEqual(self.c.get("/api/forge/investigations", params={"cid": cr["id"]}).json(), [])
+
+
+# ---- investigations (fake arena, fake baselines, scripted fixture transport: no MuJoCo, no network)
+try:
+    from tests.test_investigation import FakeArena, FakeBaselines
+except ImportError:  # run from inside tests/
+    from test_investigation import FakeArena, FakeBaselines
+
+from creature_forge import investigation as inv
+from creature_forge.inference_ledger import InferenceLedger
+
+
+class InvestigationApiCase(ApiCase):
+    def make_client(self):
+        self.arena, self.bl = FakeArena(), FakeBaselines()
+        self.ledger = InferenceLedger(Path(self._tmp.name) / "ledger.jsonl")
+        self.router = create_forge_router(
+            self.dir, challenge_runner=self.fakes.runner, replay_builder=self.fakes.replay, ledger=self.ledger,
+            investigation_options={"arena_runner": self.arena, "baseline_fns": self.bl.fns(),
+                                   "code_fn": lambda: {"commit": "abc", "dirty": False}})
+        self.addCleanup(self.router.forge.close)
+        app = FastAPI()
+        app.include_router(self.router)
+        self.c = TestClient(app)
+
+    def run_challenge(self, cid, n=1):
+        out = self.start(cid, n, kind="push", seeds=4).json()
+        self.wait_job(out["job_id"], "done")
+        return out["run_id"]
+
+    def investigate(self, cid, run_id, n=1, **req):
+        r = self.c.post(f"/api/forge/creatures/{cid}/versions/{n}/investigations", json={"run_id": run_id, "mode": "scripted", **req})
+        self.assertEqual(r.status_code, 200, r.text)
+        out = r.json()
+        self.wait_job(out["job_id"], "done", "failed", "cancelled")
+        return out
+
+    def setup_scripted(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        return cr["id"], run_id, self.investigate(cr["id"], run_id)
+
+
+class InvestigationTests(InvestigationApiCase):
+    def test_scripted_investigation_job_events_record_list_get(self):
+        cid, run_id, out = self.setup_scripted()
+        self.assertEqual(set(out), {"job_id", "investigation_id"})
+        done = self.job(out["job_id"])
+        self.assertEqual(done["job"]["status"], "done")
+        self.assertEqual(done["job"]["result_ref"]["provenance"], "SCRIPTED_MOCK")
+        types = {e["type"] for e in done["events"]}
+        self.assertTrue({"phase", "model_request", "model_response", "validation", "arm_result", "verdict"} <= types, types)
+        self.assertTrue(all(e["data"].get("provenance") == "SCRIPTED_MOCK" for e in done["events"]
+                            if e["type"] in ("model_request", "model_response", "validation", "arm_result", "verdict")))
+        self.assertEqual(done["job"]["kind"], "investigation")
+        rec = self.c.get(f"/api/forge/investigations/{out['investigation_id']}").json()
+        self.assertEqual((rec["id"], rec["status"], rec["provenance"], rec["challenge_run_id"]),
+                         (out["investigation_id"], "done", "SCRIPTED_MOCK", run_id))
+        self.assertEqual(rec["creature"]["cid"], cid)
+        rows = self.c.get("/api/forge/investigations", params={"cid": cid}).json()
+        self.assertEqual([r["id"] for r in rows], [out["investigation_id"]])
+        self.assertEqual(rows[0]["verdicts"]["ai:P1"], "VERIFIED_IMPROVEMENT")
+        self.assertEqual(self.c.get("/api/forge/investigations", params={"cid": "c-00000000"}).json(), [])
+        self.assertEqual(self.ledger.status()["requests"], 0)  # scripted calls never spend the real ledger
+
+    def test_live_refusals_are_503_with_a_reason_and_start_no_job(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        url = f"/api/forge/creatures/{cr['id']}/versions/1/investigations"
+        env = {k: v for k, v in os.environ.items() if k != "CREATURE_FORGE_ENABLE_LIVE"}
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(inv, "api_key_present", return_value=True):
+            r = self.c.post(url, json={"run_id": run_id, "mode": "live"})
+            self.assertEqual(r.status_code, 503)
+            self.assertIn("CREATURE_FORGE_ENABLE_LIVE", r.json()["detail"])
+            os.environ["CREATURE_FORGE_ENABLE_LIVE"] = "1"
+            with mock.patch.object(inv, "api_key_present", return_value=False):
+                r = self.c.post(url, json={"run_id": run_id, "mode": "live"})
+                self.assertEqual((r.status_code, "API key" in r.json()["detail"]), (503, True))
+        self.assertFalse((self.dir / "investigations").exists())
+
+    def test_bad_requests(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        base = f"/api/forge/creatures/{cr['id']}/versions/1/investigations"
+        self.assertEqual(self.c.post(base, json={"run_id": run_id, "mode": "mock"}).status_code, 422)
+        self.assertEqual(self.c.post(base, json={"run_id": run_id, "mode": "scripted", "profile": "turbo"}).status_code, 422)
+        self.assertEqual(self.c.post(base, json={"run_id": "r-ffffffff", "mode": "scripted"}).status_code, 404)
+        self.assertEqual(self.c.post(base, json={"run_id": "../x", "mode": "scripted"}).status_code, 404)
+        self.assertEqual(self.c.post(f"/api/forge/creatures/{cr['id']}/versions/9/investigations",
+                                     json={"run_id": run_id, "mode": "scripted"}).status_code, 404)
+        other = self.create(mode="experimental", name="Other")
+        r = self.c.post(f"/api/forge/creatures/{other['id']}/versions/1/investigations", json={"run_id": run_id, "mode": "scripted"})
+        self.assertEqual(r.status_code, 409)
+        self.assertEqual(self.c.get("/api/forge/investigations/i-ffffffffffff").status_code, 404)
+        self.assertEqual(self.c.get("/api/forge/investigations/..%2Fsecret").status_code, 404)
+
+    def test_accept_409_unless_verified_then_lineage(self):
+        self.arena.plan = [{"ai:P1": "VERIFIED_IMPROVEMENT", "ai:P2": "NOT_VERIFIED", "random:P1": "VERIFIED_IMPROVEMENT"}]
+        cid, run_id, out = self.setup_scripted()
+        iid = out["investigation_id"]
+        acc = f"/api/forge/creatures/{cid}/accept"
+        r = self.c.post(acc, json={"investigation_id": iid, "arm_id": "ai:P2"})
+        self.assertEqual(r.status_code, 409)
+        self.assertIn("NOT_VERIFIED", r.json()["detail"])
+        self.assertEqual(self.c.post(acc, json={"investigation_id": iid, "arm_id": "heuristic"}).status_code, 409)
+        self.assertEqual(self.c.post(acc, json={"investigation_id": iid, "arm_id": "nope"}).status_code, 409)
+        self.assertEqual(self.c.post(acc, json={"investigation_id": "i-ffffffffffff", "arm_id": "ai:P1"}).status_code, 404)
+        self.assertEqual(self.c.post("/api/forge/creatures/c-00000000/accept", json={"investigation_id": iid, "arm_id": "ai:P1"}).status_code, 404)
+        self.assertEqual(len(self.c.get(f"/api/forge/creatures/{cid}").json()["versions"]), 1)
+        rec = self.c.post(acc, json={"investigation_id": iid, "arm_id": "ai:P1"}).json()
+        self.assertEqual((rec["current"], len(rec["versions"])), (2, 2))
+        v2 = rec["versions"][1]
+        self.assertEqual((v2["parent"], v2["origin"]), (1, "ai_accepted"))
+        ch = v2["change"]
+        self.assertEqual((ch["investigation_id"], ch["arm_id"], ch["source"], ch["provenance"]), (iid, "ai:P1", "scripted_mock", "SCRIPTED_MOCK"))
+        self.assertEqual(ch["verdict"]["status"], "VERIFIED_IMPROVEMENT")
+        self.assertTrue(ch["rationale"] and ch["edits"] and ch["category"])
+        self.assertNotEqual(v2["content_hash"], rec["versions"][0]["content_hash"])
+        # a verified random twin may be accepted but is attributed honestly
+        r2 = self.c.post(acc, json={"investigation_id": iid, "arm_id": "random:P1"})
+        self.assertEqual(r2.status_code, 200)
+        self.assertEqual(r2.json()["versions"][2]["change"]["source"], "random_baseline")
+        self.assertIsNone(r2.json()["versions"][2]["change"]["model"])
+
+    def test_replay_of_an_arm_is_resimulated_cached_and_bounded_to_used_seeds(self):
+        cid, run_id, out = self.setup_scripted()
+        iid = out["investigation_id"]
+        rec = self.c.get(f"/api/forge/investigations/{iid}").json()
+        seed = rec["seeds"]["validate"][0]
+        q = {"investigation_id": iid, "arm": "ai:P1", "seed": seed}
+        a = self.c.get("/api/forge/replay", params=q)
+        self.assertEqual(a.status_code, 200, a.text)
+        self.assertEqual(self.c.get("/api/forge/replay", params=q).json(), a.json())
+        self.assertEqual(len(self.fakes.replays), 1)  # LRU cache hit
+        arm_body = next(x for x in rec["arms"] if x["arm_id"] == "ai:P1")["body"]
+        self.assertNotEqual(arm_body, rec["arms"][0]["body"])
+        self.assertEqual(self.c.get("/api/forge/replay", params={**q, "arm": "original"}).status_code, 200)
+        self.assertEqual(self.c.get("/api/forge/replay", params={**q, "seed": 1}).status_code, 404)
+        self.assertEqual(self.c.get("/api/forge/replay", params={**q, "arm": "zzz"}).status_code, 404)
+        self.assertEqual(self.c.get("/api/forge/replay", params={"investigation_id": iid, "arm": "ai:P1"}).status_code, 422)
+        self.assertEqual(self.c.get("/api/forge/replay", params={**q, "investigation_id": "i-ffffffffffff"}).status_code, 404)
+
+    def test_loop_job_never_accepts(self):
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        out = self.investigate(cr["id"], run_id, loop=True)
+        j = self.job(out["job_id"])
+        self.assertEqual((j["job"]["kind"], j["job"]["status"]), ("loop", "done"))
+        loop = j["job"]["result_ref"]["loop"]
+        self.assertEqual((len(loop["rounds"]), loop["stop_reason"], loop["auto_accepted"]), (3, "max_rounds", False))
+        self.assertEqual(loop["rounds"][0]["investigation_id"], out["investigation_id"])
+        self.assertEqual(len(self.c.get(f"/api/forge/creatures/{cr['id']}").json()["versions"]), 1)
+        self.assertEqual(len(self.c.get("/api/forge/investigations", params={"cid": cr["id"]}).json()), 3)
+
+    def test_arena_failure_is_a_failed_job_and_a_stored_failed_record(self):
+        self.arena.fail = "pool crashed"
+        cr = self.create(mode="experimental")
+        run_id = self.run_challenge(cr["id"])
+        out = self.investigate(cr["id"], run_id)
+        j = self.job(out["job_id"])
+        self.assertEqual(j["job"]["status"], "failed")
+        self.assertIn("pool crashed", j["job"]["error"])
+        rec = self.c.get(f"/api/forge/investigations/{out['investigation_id']}").json()
+        self.assertEqual(rec["status"], "failed")
+        self.assertEqual(rec["verdicts"], {})
 
 
 if __name__ == "__main__":

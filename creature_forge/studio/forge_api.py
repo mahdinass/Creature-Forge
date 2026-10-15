@@ -3,7 +3,8 @@
 `create_forge_router(forge_dir, ...)` returns an `APIRouter` and does nothing else: the creature store, the job
 manager (and its worker thread) and every directory are created lazily on first use. The challenge runner and the
 replay builder are injectable; the defaults import `creature_forge.challenges` inside the function that needs it.
-Investigation endpoints are stubs (503) until the orchestration module lands.
+Investigation endpoints (start, list, get, replay of an arm, accept) delegate to `creature_forge.investigation`; the arena, the
+baselines, the model client and the ledger are injectable (`ledger`, `client_factory`, `investigation_options`).
 """
 from __future__ import annotations
 
@@ -21,8 +22,10 @@ from typing import Callable, Literal
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
+from .. import investigation as inv
 from ..creatures import CreatureStore, atomic_write_json, now_iso, seed_block
-from ..jobs import JobContext, JobManager, jsonable
+from ..inference_ledger import InferenceLedger
+from ..jobs import JobCancelled, JobContext, JobManager, jsonable
 from ..sandbox import SandboxBody
 
 API_VERSION = "forge-v1"
@@ -30,7 +33,6 @@ RUN_ID_RE = re.compile(r"^r-[0-9a-f]{8}$")
 REPLAY_CACHE_SIZE = 16
 DEFAULT_SEED_COUNT = 8
 MAX_SEED_COUNT = 64
-NOT_YET = "investigations not yet available"
 
 # Contract defaults (section 3); used when `creature_forge.challenges` is not injected/importable.
 _KIND_DEFAULTS = {
@@ -64,6 +66,14 @@ class ChallengeIn(BaseModel):
     kind: Literal["stand", "push", "walk"]
     seeds: int | None = Field(default=None, ge=1, le=MAX_SEED_COUNT)  # a count; the seeds come from the namespace
     overrides: dict | None = None
+
+
+class InvestigationIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    run_id: str
+    mode: Literal["live", "scripted"]
+    profile: Literal["default", "deep"] = "default"
+    loop: bool = False
 
 
 class AcceptIn(BaseModel):
@@ -145,8 +155,30 @@ def _challenge_job(ctx: JobContext, *, runner: Callable, runs_dir: Path, run_id:
     return {"run_id": run_id}
 
 
+def _investigation_job(ctx: JobContext, *, loop: bool, store, cid: str, n: int, run_id: str, iid: str, mode: str, profile: str,
+                       forge_dir: Path, ledger, options: dict, model_config_path) -> dict:
+    kw = dict(mode=mode, forge_dir=forge_dir, ledger=ledger, emit=ctx.emit, progress=ctx.progress, cancelled=ctx.cancelled, pool=ctx.pool,
+              investigation_id=iid, profile=profile, model_config_path=model_config_path, **options)
+    ctx.emit("phase", {"phase": "loop" if loop else "investigation", "mode": mode, "provenance": inv.PROVENANCE[mode]})
+    if loop:
+        out = inv.run_loop(store, cid, n, run_id, **kw)
+        if out["stop_reason"] == "cancelled":
+            raise JobCancelled()
+        return {"investigation_id": iid, "loop": out, "provenance": out["provenance"]}
+    rec = inv.run_investigation(store, cid, n, run_id, **kw)
+    if rec["status"] == "cancelled":
+        raise JobCancelled()
+    if rec["status"] == "failed":
+        raise RuntimeError(rec["error"] or "investigation failed")
+    return {"investigation_id": iid, "status": rec["status"], "provenance": rec["provenance"]}
+
+
 def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = None,
-                        replay_builder: Callable | None = None, pool_factory: Callable | None = None) -> APIRouter:
+                        replay_builder: Callable | None = None, pool_factory: Callable | None = None,
+                        ledger: InferenceLedger | None = None, investigation_options: dict | None = None,
+                        model_config_path: Path | str | None = None) -> APIRouter:
+    """`investigation_options`: extra keyword arguments for `run_investigation` / `run_loop` (arena_runner, baseline_fns,
+    client_factory, code_fn, challenge_runner, ...). `ledger` defaults to `InferenceLedger(default_path=<forge_dir>/inference_ledger.jsonl)`."""
     forge_dir = Path(forge_dir)
     runs_dir = forge_dir / "runs"
     use_real_challenges = challenge_runner is None
@@ -169,6 +201,12 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
             if "jobs" not in services:
                 services["jobs"] = JobManager(forge_dir, pool_factory)
             return services["jobs"]
+
+    def get_ledger() -> InferenceLedger:
+        with lock:
+            if "ledger" not in services:
+                services["ledger"] = ledger or InferenceLedger(default_path=forge_dir / "inference_ledger.jsonl")
+            return services["ledger"]
 
     def close() -> None:
         with lock:
@@ -200,8 +238,12 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         except ValueError:
             workers = 6
         live = os.environ.get("CREATURE_FORGE_ENABLE_LIVE") == "1" and bool(os.environ.get("NEBIUS_API_KEY"))
-        return {"live_available": live, "model": None, "ledger": None, "workers": max(1, min(7, workers)),
-                "version": API_VERSION}
+        try:
+            led = get_ledger().status()
+        except Exception as exc:  # noqa: BLE001 - status must never fail because of the ledger
+            led = {"error": f"{type(exc).__name__}: {exc}"}
+        return {"live_available": live, "model": inv.model_summary(model_config_path), "ledger": led,
+                "workers": max(1, min(7, workers)), "version": API_VERSION}
 
     # ---- creatures
     @router.get("/creatures")
@@ -289,7 +331,7 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
     def replay(run_id: str | None = None, investigation_id: str | None = None, arm: str | None = None,
                seed: int | None = None, direction: int = 1, force: float | None = None):
         if investigation_id or arm:
-            raise HTTPException(503, NOT_YET)
+            return replay_arm(investigation_id, arm, seed, direction, force)
         if not run_id:
             raise HTTPException(422, "run_id is required")
         if seed is None:
@@ -320,21 +362,104 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
                 replay_cache.popitem(last=False)
         return payload
 
-    # ---- investigations: stubs until the orchestration milestone
+    # ---- investigations
+    def load_investigation(iid: str) -> dict:
+        try:
+            return inv.load_investigation(forge_dir, iid)
+        except KeyError:
+            raise HTTPException(404, f"No such investigation: {iid}") from None
+
+    def replay_arm(iid, arm_id, seed, direction, force):
+        if not iid or not arm_id or seed is None:
+            raise HTTPException(422, "investigation_id, arm and seed are all required to replay an arm")
+        if direction not in (-1, 1):
+            raise HTTPException(422, "direction must be +1 or -1")
+        if force is not None and not (math.isfinite(force) and 0 <= force <= 500):
+            raise HTTPException(422, "force must be a number in [0, 500] N")
+        rec = load_investigation(iid)
+        arm = next((a for a in rec.get("arms") or [] if a.get("arm_id") == arm_id), None)
+        if arm is None or arm.get("unavailable"):
+            raise HTTPException(404, f"Investigation {iid} has no runnable arm {arm_id}")
+        allowed = {s for k in ("train", "screen", "validate") for s in (rec.get("seeds") or {}).get(k, []) if isinstance(s, int)}
+        allowed |= set((rec.get("spec") or {}).get("seeds") or [])
+        if seed not in allowed:
+            raise HTTPException(404, f"Investigation {iid} used no seed {seed}")
+        key = ("arm", iid, arm_id, seed, direction, force)
+        with lock:
+            if key in replay_cache:
+                replay_cache.move_to_end(key)
+                return replay_cache[key]
+        try:
+            cr = rec["creature"]
+            parent = store().version(cr["cid"], cr["n"])
+            if cr.get("hypothetical_parent"):  # the evaluated parent was a proposal: its body is stored with its challenge run
+                run = load_run(rec["challenge_run_id"])
+                parent = {**parent, "body": run["body"], "controllers": run["controllers"]}
+            body, controllers = inv.materialize_arm(parent, arm)
+            payload = replayer(body, controllers, {**rec["spec"], "seeds": [seed]}, seed, force=force, direction=direction)
+        except HTTPException:
+            raise
+        except (ValueError, KeyError) as exc:
+            raise HTTPException(422, f"replay failed: {exc}") from exc
+        except Exception as exc:  # noqa: BLE001
+            raise HTTPException(500, f"replay failed: {type(exc).__name__}: {exc}") from exc
+        with lock:
+            replay_cache[key] = payload
+            while len(replay_cache) > REPLAY_CACHE_SIZE:
+                replay_cache.popitem(last=False)
+        return payload
+
     @router.post("/creatures/{cid}/versions/{n}/investigations")
-    def start_investigation(cid: str, n: int):
-        raise HTTPException(503, NOT_YET)
+    def start_investigation(cid: str, n: int, req: InvestigationIn):
+        try:
+            version = store().version(cid, n)
+        except KeyError:
+            raise HTTPException(404, f"No such creature or version: {cid} v{n}") from None
+        run = load_run(req.run_id)
+        rc = run.get("creature") or {}
+        if rc.get("cid") != cid or rc.get("n") != n or rc.get("content_hash") != version["content_hash"]:
+            raise HTTPException(409, f"Run {req.run_id} is not a challenge run of {cid} v{n}")
+        try:
+            cfg = inv.load_model_config(req.profile, model_config_path)
+        except (OSError, ValueError, KeyError) as exc:
+            raise HTTPException(503, f"model configuration unavailable: {exc}") from exc
+        if req.mode == "live":
+            reason = inv.live_refusal(get_ledger(), cfg)
+            if reason:
+                raise HTTPException(503, reason)
+        iid = inv.new_investigation_id()
+        options = dict(investigation_options or {})
+        if req.loop and challenge_runner is not None:
+            options.setdefault("challenge_runner", challenge_runner)
+        try:
+            job_id = jobs().submit("loop" if req.loop else "investigation", _investigation_job, loop=req.loop, store=store(), cid=cid,
+                                   n=n, run_id=req.run_id, iid=iid, mode=req.mode, profile=req.profile, forge_dir=forge_dir,
+                                   ledger=get_ledger(), options=options, model_config_path=model_config_path)
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
+        return {"job_id": job_id, "investigation_id": iid}
 
     @router.get("/investigations")
     def list_investigations(cid: str | None = None):
-        return []  # nothing can exist yet; an empty list keeps list views free of errors
+        return inv.list_investigations(forge_dir, cid)
 
     @router.get("/investigations/{iid}")
     def get_investigation(iid: str):
-        raise HTTPException(503, NOT_YET)
+        return load_investigation(iid)
 
     @router.post("/creatures/{cid}/accept")
     def accept(cid: str, req: AcceptIn):
-        raise HTTPException(503, NOT_YET)
+        try:
+            store().get(cid)
+        except KeyError:
+            raise HTTPException(404, f"No such creature: {cid}") from None
+        rec = load_investigation(req.investigation_id)
+        try:
+            parent_n, body, controllers, change = inv.build_accept(store(), cid, rec, req.arm_id)
+            return store().accept(cid, parent_n=parent_n, body=body, controllers=controllers, change=change)
+        except inv.AcceptRefused as exc:
+            raise HTTPException(409, str(exc)) from exc
+        except ValueError as exc:  # store-level refusal
+            raise HTTPException(409, str(exc)) from exc
 
     return router
