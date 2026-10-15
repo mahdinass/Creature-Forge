@@ -24,31 +24,33 @@ are installed by `pip` / `npm`.
 | certifi | 2026.7.22 | MPL-2.0 |
 | click | 8.5.0 | BSD-3-Clause |
 | etils | 1.14.0 | Apache Software License |
-| fastapi | 0.143.0 | MIT |
+| fastapi | 0.143.1 | MIT |
 | glfw | 2.10.2 | MIT |
 | h11 | 0.16.0 | MIT |
 | httpcore | 1.0.9 | BSD-3-Clause |
 | httpx | 0.28.1 | BSD-3-Clause |
 | idna | 3.20 | BSD-3-Clause |
 | mujoco | 3.15.0 | Apache-2.0 |
-| numpy | 2.4.6 | BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 |
+| numpy | 2.5.4 | BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 |
 | opentelemetry-api | 1.45.1 | Apache-2.0 |
 | pydantic | 2.14.1 | MIT |
 | pydantic_core | 2.50.1 | MIT |
 | PyOpenGL | 3.1.10 | BSD License |
 | python-dotenv | 1.2.4 | BSD-3-Clause |
-| starlette | 1.7.0 | BSD-3-Clause |
+| starlette | 1.8.0 | BSD-3-Clause |
 | typing_extensions | 4.16.0 | PSF-2.0 |
 | typing-inspection | 0.4.4 | MIT |
 | uvicorn | 0.54.0 | BSD-3-Clause |
 | websockets | 17.2 | BSD-3-Clause |
 
-## npm packages, production (66)
+## npm packages, production (68)
 
 | package | version | license |
 |---|---|---|
 | @babel/runtime | 7.29.10 | MIT |
 | @dimforge/rapier3d-compat | 0.12.0 | Apache-2.0 |
+| @fontsource-variable/bricolage-grotesque | 5.3.0 | OFL-1.1 |
+| @fontsource-variable/instrument-sans | 5.3.0 | OFL-1.1 |
 | @mediapipe/tasks-vision | 0.10.17 | Apache-2.0 |
 | @monogrid/gainmap-js | 3.4.0 | MIT |
 | @react-three/drei | 10.7.9 | MIT |

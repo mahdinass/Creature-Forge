@@ -1,25 +1,30 @@
-# Demo video storyboard (English, target 2:40, hard limit < 3:00)
+# Demo video storyboard (English, target 2:50, hard limit < 3:00)
 
-Hackathon rules (see `docs/PROJECT_SPEC.md` §1.2): YouTube, under three minutes, no unlicensed third-party content, simulation-only entries need **at least one minute of the key modules actually operating**. Here ≈ 1:55 of the runtime is live software (shots 3–7). Everything shown is real: recorded Nemotron runs are labelled RECORDED LIVE; nothing scripted is presented as a model.
+Hackathon rules (see `docs/PROJECT_SPEC.md` §1.2): YouTube, under three minutes, no unlicensed third-party content, simulation-only entries need **at least one minute of the key modules actually operating**. Here about 1:50 of the runtime is the running Studio (shots 2-8). The video centres on the live loop; everything shown is real. Live Nemotron replies carry the LIVE label, archived ones RECORDED, fixtures SCRIPTED MOCK; nothing scripted is presented as a model. Footage comes from the live end-to-end flow (`studio/e2e/forge-live-flow.mjs`, run on the Nebius VM with `LIVE_OK=1`); the Nemotron wait may be cut, with a visible "(wait cut)" caption. Capture details: `SCREEN_CAPTURE_PLAN.md`.
 
-Voice-over (plain English, calm pace ≈ 130 words per minute). On-screen text in brackets. Capture commands and the state to prepare are in `SCREEN_CAPTURE_PLAN.md`.
+Voice-over: plain English, calm pace (about 130 words per minute). On-screen text in brackets.
 
 | # | Time | Screen | Voice-over |
 |---|---|---|---|
-| 1 | 0:00–0:12 | Studio: a biped is pushed and falls (Compare tab, 8 cm foot). | "Robots fall. The hard part isn't the fall — it's knowing why, and proving that a fix really works. This is Creature Forge." |
-| 2 | 0:12–0:25 | Overview tab: five-step pipeline. | "A failure is measured in MuJoCo. We capture the evidence. NVIDIA Nemotron, running on Nebius Token Factory, proposes bounded fixes. MuJoCo tests every one — next to a random edit of the same size — and decides." |
-| 3 | 0:25–0:50 | AI Investigation → recorded live run 2 → **Observed failure**: failing seed 9101 measured; then **What the model saw**: the exact evidence JSON. | "Here the starting controller falls at start-up on this seed. This exact, measured context is all the model sees — no conclusions, only numbers." |
-| 4 | 0:50–1:15 | **Model proposal**: banner RECORDED LIVE, raw reply, two proposals with the evidence values they cite, requested vs realised edit, predicted gain. | "Nemotron returns two proposals, each citing measured values and making a falsifiable prediction. This is a stored copy of a real call; the banner says so. Anything invalid is rejected — like the first recorded run, where the model cited the wrong paths and nothing was simulated." |
-| 5 | 1:15–1:45 | **Verification**: table 19/32 → 28/32 and 25/32; matched random edits 25/32 and 30/32; per-seed bars. | "MuJoCo tests each proposal on thirty-two fresh seeds. Both edits help: twenty-eight and twenty-five walking seeds, against nineteen. But look at the random edits: twenty-five, and thirty. Random edits of this size help too, so one run can't show the model is better — and we say so." |
-| 6 | 1:45–2:10 | **Replay and verdict**: synchronized replay seed 9101: frozen controller falls at 3 s, edited walks; height chart. Verdict text. | "Replay the same failure side by side. The original falls after three seconds; the edited controller keeps walking. These are fresh deterministic simulations, not recordings of video." |
-| 7 | 2:10–2:30 | Overview: classical card (150/150 vs 91/150, "no language model"); Nemotron card with "not completed" notice. | "Separately, a classical local optimiser found a controller that walks on 150 of 150 untouched seeds versus 91, statistically confirmed — with no language model involved. Our systematic Nemotron-versus-random study wasn't completed: generation calibration failed, and the report says so." |
-| 8 | 2:30–2:40 | Repo / README with license and the Nebius VM controller; end card. | "Everything is preregistered, reproducible and Apache-2.0. Simulation on Nebius AI Cloud, inference on Nebius Token Factory, with NVIDIA Nemotron. Creature Forge: machines that learn from falling." |
+| 1 | 0:00-0:12 | A drawn biped tips over in a push test. | "Robots fall. The hard part is knowing why, and proving that a fix really works. A user draws a robot; Nemotron investigates its failures; MuJoCo verifies the fix." |
+| 2 | 0:12-0:27 | Studio: draw a creature, click *Use this creature*. | "This is Creature Forge. I draw a robot, and it becomes version one." |
+| 3 | 0:27-0:42 | Push challenge runs; outcome FAIL, per-seed scores, replay of a fall. | "MuJoCo challenges it. It fails: the push-resistance score is below target. The failure is measured, not described." |
+| 4 | 0:42-1:07 | *Investigate with AI* (LIVE banner, probes on); progress; cut the wait. | "Now a real call to NVIDIA Nemotron on Nebius Token Factory. It reads the measured evidence and requests diagnostic probes: counterfactual simulations run by code." |
+| 5 | 1:07-1:30 | Probe cards: foot x1.5 CONFIRMED, friction x2 REFUTED (use the real values of the run shown). | "Each probe is judged by physics, not by the model. Longer feet: confirmed. More friction: refuted. The model has to propose with those results in front of it." |
+| 6 | 1:30-1:55 | Proposal with cited evidence, then the arena table: AI arm VERIFIED beside its matched-random twin (INCONCLUSIVE in the archived run). | "It proposes a longer foot. MuJoCo tests it on held-out seeds, next to a random edit of the same size. A fixed rule decides: verified. The twin is not." |
+| 7 | 1:55-2:10 | Click *Accept*; creature shows v2 attributed to Nemotron; v2 challenged. | "Only a verified redesign can be accepted. It becomes version two, and we challenge it again." |
+| 8 | 2:10-2:25 | Honest negative: a walking investigation, status NOT_VERIFIED (probes confirm feet, gains below the 0.5 metre bar). | "It does not always work. On walking, the probes confirmed the feet, but the gains stayed below our bar, so nothing was verified. We show that too." |
+| 9 | 2:25-2:50 | Slide: scoreboard with caveats (below), then end card. | "Pre-registered across twelve investigations: the Nemotron-selected redesign verified six times, its matched random twin once. Encouraging, but small, six starter shapes, mostly the push challenge, and the AI picked from up to three proposals. Built for the Nebius and NVIDIA hackathon." |
+
+**Scoreboard slide text (all lines required, none omitted):** "Pre-registered, 12 investigations: Nemotron-selected redesign verified 6/12; matched-random twin 1/12 (exact one-sided p = 0.03125). Encouraging evidence for the tested creatures and challenges only. Small sample (12). Six starter families, each repeated. 5 of 6 successes on the push challenge. AI chose the best of up to 3 proposals; the twin is one edit (post-hoc best-of-k check: 5 vs 0). Walking: nothing verified."
+
+If the honest-negative clip should show an INCONCLUSIVE verdict instead of walking, use the development record `i-c2c4c48729d3` (INCONCLUSIVE) or a scoreboard cell such as bird-knees/push rep 2 (AI INCONCLUSIVE); keep the verdict label visible.
 
 ## Rules for the edit
-- Keep the RECORDED LIVE / SCRIPTED MOCK / LIVE banners visible whenever a model reply is on screen.
+- Keep the LIVE / RECORDED / SCRIPTED MOCK banner visible whenever a model reply is on screen. A cut wait must be captioned.
 - Do not show terminals with environment variables, `.env`, tokens, request headers, or the Nebius console with account identifiers or balances.
-- Use only footage captured from the app; no stock clips, no third-party music unless the track's licence is documented (preferred: no music, or a track licensed for this use).
+- Use only footage captured from the app; no stock clips, no third-party music unless the track's licence is documented (preferred: no music).
 - Do not display NVIDIA or Nebius logos or marks (not licensed for use here); name them in text only.
-- Do not say "partner", "sponsored by" or "endorsed by"; say "built for the Nebius × NVIDIA Global AI Hackathon".
-- Never say the model "discovered" the 150/150 controller; never say it "beat" random edits.
-- Optional live segment (only if budget and time allow, within the shared cap): a single *Run live* click, cut to the finished result; the banner must read LIVE.
+- Do not say "partner", "sponsored by" or "endorsed by"; say "built for the Nebius x NVIDIA Global AI Hackathon".
+- Never say the model "proves", "beats random", or is "significantly better"; never present the scoreboard without its caveats; never say Nemotron produced the classical 150/150 controller.
+- The memory evaluation is pending: do not mention results for it.

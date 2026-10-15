@@ -11,7 +11,7 @@ Updated: 2026-10-13. Local environment audit **reported by Claude Code and relay
 
 ## Local toolchain — Claude-reported audit
 
-- Windows local memory: Basic Memory `0.23.2`, local SQLite, `creature-forge` default project at `C:/Users/mbnas/basic-memory/creature-forge`.
+- Windows local memory: Basic Memory `0.23.2`, local SQLite, `creature-forge` default project at `<user home>/basic-memory/creature-forge`.
 - Basic Memory operations: **write, read-by-permalink, text search and recent-activity confirmed by Claude**; hybrid/semantic query took ~2 minutes and missed a known note. Use `search_type="text"` until proven otherwise.
 - Python reported as system `3.11.9`. The Basic Memory installed tool may use a separate uv-managed interpreter; do not infer the project has Python 3.12. No venv was detected within the scanned repository depth, **not proof no environment exists elsewhere**.
 - `uv`, `node`, `npm`, `git`, `basic-memory` were reported on PATH. `conda`, `nvidia-smi` were not; this alone is not a complete GPU availability test.
@@ -45,9 +45,9 @@ Update with date, exact commands/tests, linked log or commit, scope, unresolved 
 
 ## Windows PowerShell verification — 2026-10-13 (user-provided execution results)
 
-- Working directory: `C:\\Users\\mbnas\\.vscode\\Creature-Forge`.
+- Working directory: `<repository root>`.
 - `git status`: clean `main`, tracking `origin/main`; `git pull --ff-only` succeeded and advanced local HEAD from `24a9008` to `488cc05` at time of audit. Later documentation commits still require a new pull.
-- `python scripts/context_preflight.py`: successful; current interpreter `C:\\Users\\mbnas\\AppData\\Local\\Programs\\Python\\Python311\\python.exe`, Python `3.11.9`, `VIRTUAL_ENV=False`, no known project venv directories reported; no `pyproject.toml`, `requirements.txt`, `package.json` or lockfile yet. These are observed at audit time, not permanent declarations.
+- `python scripts/context_preflight.py`: successful; current interpreter `<user home>\\AppData\\Local\\Programs\\Python\\Python311\\python.exe`, Python `3.11.9`, `VIRTUAL_ENV=False`, no known project venv directories reported; no `pyproject.toml`, `requirements.txt`, `package.json` or lockfile yet. These are observed at audit time, not permanent declarations.
 - `python -m unittest discover -s tests -v`: **4 tests passed**, including duplicate-venv guard behavior and hook JSON parsing. This verifies the tested Python logic but does not alone prove Claude Code actually invoked its hooks.
 - Codex separately attempted `Get-Location` but every sandbox shell command still failed before launch with `helper_unknown_error: setup refresh had errors`. Standalone PowerShell is healthy; Codex sandbox diagnostics/log inspection remains to be done. Do not alter Windows ACLs or disable security without identifying the log's specific cause.
 
