@@ -68,7 +68,7 @@ class ChallengeSpec:
     seeds: tuple[int, ...]            # explicit; see §7 for namespaces
     duration: float                   # stand 8.0, push 5.0, walk 10.0 (defaults via default_spec(kind, seeds))
     perturb: float = 0.02             # initial perturbation std (stand/push); walk default locomotion.PERTURB (0.03)
-    target_force: float = 25.0        # push: N that defines PASS (score >= target)
+    target_force: float = 10.0        # push: N that defines PASS; pilot: backward is the weak direction (default robot 10 N)
     push_time: float = 1.0            # push: nominal onset, jittered per seed by ±0.1 s (seeded)
     push_duration: float = 0.15
     max_force: float = 80.0           # push: search ceiling (score censored at max_force)
@@ -118,7 +118,7 @@ Physics rules:
   `score = min(fwd, bwd)`. Metrics: `critical_force_fwd`, `critical_force_bwd`, `weak_direction`, `censored`,
   `bisection_trace` (list of (force, survived)). Forensics: `forensics.build_forensics` at the first failing force of the
   weak direction (mirror sign conventions for backward pushes: forensics' "+x = push direction"; set `mirrored: true`).
-  Outcome: PASS if score ≥ target_force, POOR if ≥ 0.6·target, else FAIL.
+  Outcome: PASS if score ≥ target_force, POOR if ≥ 0.6·target, else FAIL. Default target 10 N (zoo pilot).
 - **Walk**: `creature_walk.rollout(...)` + `locomotion.compute_metrics(tr, crit=creature_criteria(body))` +
   `locomotion.classify`. Score = forward displacement while upright and gait-valid (0 if fallen before 1 s). PASS if
   label `walking`; POOR if upright at the end but not walking; FAIL if fell.

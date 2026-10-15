@@ -38,7 +38,7 @@ _KIND_DEFAULTS = {
     "push": {"duration": 5.0, "perturb": 0.02, "start": "drawn"},
     "walk": {"duration": 10.0, "perturb": 0.03, "start": "neutral"},
 }
-_COMMON_DEFAULTS = {"target_force": 25.0, "push_time": 1.0, "push_duration": 0.15, "max_force": 80.0, "settle_s": 0.3}
+_COMMON_DEFAULTS = {"target_force": 10.0, "push_time": 1.0, "push_duration": 0.15, "max_force": 80.0, "settle_s": 0.3}
 _OVERRIDE_RANGES = {  # key -> (lo, hi)
     "duration": (0.5, 30.0), "perturb": (0.0, 0.2), "target_force": (0.0, 200.0), "push_time": (0.0, 20.0),
     "push_duration": (0.01, 1.0), "max_force": (1.0, 500.0), "settle_s": (0.0, 2.0),

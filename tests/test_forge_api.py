@@ -188,7 +188,7 @@ class ChallengeTests(ApiCase):
         self.assertEqual(run["outcome"], "PASS")
         self.assertEqual(run["spec"]["kind"], "push")
         self.assertEqual(run["spec"]["seeds"], list(seed_block(cr["id"], 1, 0, "challenge", 8)))
-        self.assertEqual(run["spec"]["target_force"], 25.0)
+        self.assertEqual(run["spec"]["target_force"], 10.0)
         self.assertEqual(run["controllers"], v["controllers"])
         self.assertEqual(len(run["per_seed"]), 8)
         # the runner got the stored, explicit version data
@@ -208,7 +208,7 @@ class ChallengeTests(ApiCase):
         self.assertTrue(all(s >= 100_000 for s in ra["spec"]["seeds"] + rb["spec"]["seeds"]))
         self.assertNotEqual(ra["spec"]["seeds"], rb["spec"]["seeds"])
         self.assertEqual((ra["spec"]["target_force"], ra["spec"]["duration"]), (30.0, 4.0))
-        self.assertEqual((rb["spec"]["target_force"], rb["spec"]["duration"]), (25.0, 5.0))
+        self.assertEqual((rb["spec"]["target_force"], rb["spec"]["duration"]), (10.0, 5.0))
 
     def test_run_counter_survives_a_restart(self):
         cr = self.create()
