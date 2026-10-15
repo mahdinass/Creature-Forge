@@ -286,7 +286,7 @@ Validation: original + selected arms × `validate_seeds`. Results stored per arm
 
 ### 6.3 Verdict — `verdict.py` (`verdict_v1`, thresholds frozen after the M3 pilot)
 ```python
-MIN_EFFECT = {"push": {"abs": 3.0, "rel": 0.10}, "stand": {"abs": 1.0}, "walk": {"abs": 0.5}}   # draft
+MIN_EFFECT = {"push": {"abs": 3.0, "rel": 0.10}, "stand": {"abs": 0.5}, "walk": {"abs": 0.5}}   # frozen 2026-10-15 after the null pilot
 def paired_sign_test(diffs) -> float                       # one-sided exact binomial on non-zero diffs
 def verdict(kind, original_scores, candidate_scores, guard: dict | None) -> dict
 # -> {"status": VERIFIED_IMPROVEMENT|NOT_VERIFIED|WORSE|INCONCLUSIVE, "rule": "verdict_v1", "n": .., "wins": .., "losses": ..,
@@ -317,7 +317,7 @@ Cancel sets a flag checked between rollouts batches. On server restart, `running
 evidence → model (`investigate_once`) → validation → arms (AI accepted + twins + heuristic + original) → arena →
 verdicts → record `<data_root>/investigations/<inv_id>.json`. If the model is unavailable or fails, the record is
 saved with `status: model_failed` and the error, and **no AI arm exists** (baselines may still be shown, labelled).
-Bounded loop (M4): `max_rounds 3, max_proposals 9, max_rollouts 3000, max_calls 4, wall 600 s, stop on no improvement`.
+Bounded loop (M4): `max_rounds 3, max_proposals 9, max_rollouts 3000, max_calls 8 (probes use 2-3 per round), wall 600 s, patience 2 (stop after two consecutive rounds without a verified AI arm)`.
 Investigation record keys: `id, created, mode (live|scripted), provenance (LIVE|SCRIPTED_MOCK), creature {cid, n,
 content_hash}, challenge_run_id, spec, evidence, model_calls [ModelCall], reply, validation, arms, seeds {train, screen,
 validate}, screening, selection, validation_results, verdicts {arm_id: verdict}, budget {rollouts, wall_s, calls,

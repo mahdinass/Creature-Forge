@@ -13,6 +13,32 @@ A robot fails in MuJoCo → Creature Forge records measured evidence about the f
 >
 > The systematic Nemotron-vs-random comparison (experiment R3) was **not completed**: no generation setting passed our preregistered calibration (the evidence prompt returned empty replies because hidden reasoning used the whole token budget). It is reported as such in `experiments/phase2a_r3/REPORT_V2.md`.
 
+## Forge Loop (new): Draw, Challenge, AI Redesign, Verify, Evolve
+
+Forge Loop runs a creature you drew through a stand, push or walk challenge in MuJoCo. Nemotron reads the measured failure
+evidence and proposes bounded edits. Deterministic code validates each proposal. Each AI proposal is then tested beside a
+matched-random twin (a random edit of the same size) on held-out seeds, and `verdict_v1` gives a verdict. You decide whether
+to accept a verified version. The model never decides a score, and the loop never accepts a design on its own.
+
+Full guide for judges and developers: [`docs/FORGE_LOOP.md`](docs/FORGE_LOOP.md). Contracts: [`docs/FORGE_LOOP_CONTRACTS.md`](docs/FORGE_LOOP_CONTRACTS.md).
+
+**Headline results (honest, development stage):**
+
+- Most live Nemotron investigations so far ended NOT_VERIFIED or INCONCLUSIVE. The archived records are in
+  [`experiments/forge_loop/dev_live_records/`](experiments/forge_loop/dev_live_records/README.md).
+- Three records on one balanced creature (push) reached VERIFIED_IMPROVEMENT on 12 held-out seeds each: `i-f9873480e42a`
+  (rear foot x1.25, +3.125 N median) and, with diagnostic probes, `i-47bc91e407c2` (+3.125 N) and `i-172b6a48a0ad`
+  (+4.375 N). These are worked cases on one creature and one challenge, not statistics.
+- A null pilot found that about 15% of random push edits on standing creatures also verify. A single VERIFIED arm is
+  therefore not evidence of model skill, and every AI verdict is shown beside its matched-random twin.
+- The pre-registered comparison of AI-selected edits against their matched-random twins is in progress.
+  Results: see `experiments/forge_loop/scoreboard/` (pending at the time of writing).
+- The R2 result (150/150 vs 91/150) is classical optimisation, not Nemotron. The earlier recorded Nemotron demo did not
+  beat matched random edits. R3 produced no statistical result.
+
+**Run it:** locally, `python scripts/run_studio.py` (scripted mock only, no key). Live Nemotron needs `NEBIUS_API_KEY` in
+`.env` and `CREATURE_FORGE_ENABLE_LIVE=1`. Commands for the Nebius VM are in the guide.
+
 ## Try it (no API key needed)
 
 ```sh

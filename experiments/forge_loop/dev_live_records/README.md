@@ -1,6 +1,6 @@
 # Forge Loop — development live records (2026-10-15)
 
-The first nine **real** Nemotron investigations of user-drawn creatures, run on the Nebius VM through the Studio API
+The first **real** Nemotron investigations of user-drawn creatures (nine without probes, then four with diagnostic probes; see the tables), run on the Nebius VM through the Studio API
 (`scripts/forge_acceptance.py`, `scripts/forge_run_loop.py`). Kept unedited for provenance (raw prompts, raw responses, request
 ids, usage, arms, seeds, per-seed results, verdicts). `INDEX.json` lists each record with its SHA-256.
 
