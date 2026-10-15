@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { getSandboxSchema, interpretFreehand, sandboxSimulate } from '../api'
+import { createCreature, getSandboxSchema, interpretFreehand, sandboxSimulate } from '../api'
 import { SketchEditor } from '../SketchEditor'
 import { usePlayback } from '../store'
 import type { Params, RunPayload } from '../types'
@@ -53,9 +53,10 @@ function MiniCompare({ a, b }: { a: Skeleton; b: Skeleton }) {
   )
 }
 
-export function SketchPage({ initialBody, onSimulate, onUseParams }: {
+export function SketchPage({ initialBody, onSimulate, onUseCreature, onUseParams }: {
   initialBody: Params
   onSimulate: (b: SandboxBodyDict, approximated: Change[] | null) => Promise<string | null>
+  onUseCreature?: (cid: string, n: number) => void
   onUseParams: (p: Params) => void
 }) {
   const { strokes, tool, pen, guided, guides, materials, view, past, future } = useSketch()
@@ -74,6 +75,9 @@ export function SketchPage({ initialBody, onSimulate, onUseParams }: {
   const [consent, setConsent] = useState(false)
   const [highlight, setHighlight] = useState<string | null>(null)
   const [note, setNote] = useState<string | null>(null)
+  const [creatureName, setCreatureName] = useState('My creature')
+  const [useBusy, setUseBusy] = useState(false)
+  const [useError, setUseError] = useState<string | null>(null)
   const req = useRef(0)
   const preq = useRef(0)
 
@@ -115,6 +119,26 @@ export function SketchPage({ initialBody, onSimulate, onUseParams }: {
     setBusy(true); setSimError(null)
     const err = await onSimulate(body, changes)
     if (err) { setSimError(err); setBusy(false) }
+  }
+  // Save the interpreted creature as version 1 of a new forge creature, then open the forge workspace on it.
+  const useThisCreature = async () => {
+    const body = res?.body ?? ap?.body
+    if (!body || !onUseCreature) return
+    setUseBusy(true); setUseError(null)
+    try {
+      const interp = res ? { status: res.status, outcome: res.outcome, roles: res.roles, notes: res.notes, assumptions: res.assumptions, adjustments: res.adjustments, skeleton: res.skeleton, guided: res.guided } : null
+      const c = await createCreature({
+        name: creatureName.trim() || 'My creature', body, mode: guided ? 'guided' : 'experimental',
+        drawing: {
+          strokes: strokes.map(({ id: sid, role, points }) => ({ id: sid, role, points: points.map((p) => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10]) })),
+          interpretation: interp,
+          approximation: !res?.body && ap ? { changes: ap.changes, consented: consent } : null,
+        },
+      })
+      onUseCreature(c.id, c.current)
+    } catch (e) {
+      setUseError((e as Error).message); setUseBusy(false)
+    }
   }
   const ranges = schema ? (guided ? schema.scientific_bounds : schema.sandbox_bounds) : null
   const overlay = useMemo(() => ({
@@ -283,6 +307,17 @@ export function SketchPage({ initialBody, onSimulate, onUseParams }: {
             <button className="btn btn-create btn-lg sim-btn" data-testid="simulate-btn" disabled={!canSim} onClick={() => res?.body && void sim(res.body, null)}>
               {busy ? 'Running MuJoCo…' : 'Simulate my creature'}
             </button>
+            {onUseCreature && (
+              <div className="use-creature" data-testid="use-creature">
+                <label className="param"><span>Creature name</span>
+                  <input type="text" maxLength={80} value={creatureName} onChange={(e) => setCreatureName(e.target.value)} data-testid="creature-name-input" aria-label="creature name" /></label>
+                <button className="btn btn-simulate btn-lg sim-btn" data-testid="use-creature-btn" disabled={useBusy || !(res?.body || (ap && consent))} onClick={() => void useThisCreature()}>
+                  {useBusy ? 'Saving...' : 'Use this creature'}
+                </button>
+                <small className="dim">Saves it as version 1 and opens the Forge workspace: challenge it, investigate, improve it.</small>
+                {useError && <div className="error" role="alert" data-testid="use-creature-error">{useError}</div>}
+              </div>
+            )}
             {!canSim && strokes.length > 0 && !busy && <small className="dim" data-testid="sim-hint">{ap ? 'Confirm the approximation above to simulate it.' : 'Fix the points above, or turn Guided constraints off to try it anyway.'}</small>}
             {res?.body && <button className="link" data-testid="to-refine" onClick={() => setMode('refine')}>Refine joints with handles instead</button>}
           </aside>

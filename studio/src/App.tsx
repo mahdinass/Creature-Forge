@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getPhase0, getSchema, sandboxSimulate, simulate } from './api'
 import { Demo } from './demo/Demo'
+import { ForgePage } from './forge/ForgePage'
+import { forgeUrl } from './forge/forgeLogic'
 import { Home } from './home/Home'
 import { SandboxResult, type SandboxMeta } from './sandbox/SandboxResult'
 import { Shell } from './shell/Shell'
@@ -22,6 +24,11 @@ export default function App() {
   const q = new URLSearchParams(window.location.search)
   const [tab, setTab] = useState<Tab>(parseTab(window.location.search))
   const [sandbox, setSandbox] = useState<SandboxMeta | null>(null)
+  const [forgeTarget, setForgeTarget] = useState<{ cid: string; n: number | null } | null>(() => {
+    const cid = q.get('creature')
+    const v = parseInt(q.get('v') ?? '', 10)
+    return cid ? { cid, n: Number.isFinite(v) ? v : null } : null
+  })
   const link = parseDeepLink(window.location.search)
   const [schema, setSchema] = useState<Schema | null>(null)
   const [phase0, setPhase0] = useState<Phase0 | null>(null)
@@ -85,10 +92,18 @@ export default function App() {
 
   const go = (t: Tab) => {
     setTab(t)
+    if (t === 'forge') setForgeTarget(null) // the workspace reopens the last creature it showed
     history.replaceState(null, '', `?tab=${t}`)
     const d = !phase0 ? 5 : t === 'compare' ? phase0.baseline.duration : run ? run.duration : 5
     setDuration(d)
     usePlayback.getState().restart()
+    window.scrollTo({ top: 0 })
+  }
+
+  const useCreature = (cid: string, n: number) => {
+    setForgeTarget({ cid, n })
+    setTab('forge')
+    history.replaceState(null, '', forgeUrl(cid, n))
     window.scrollTo({ top: 0 })
   }
 
@@ -193,7 +208,9 @@ export default function App() {
 
       {tab === 'lab' && <Lab initialTrial={link.trial} initialStep={link.step} />}
 
-      {tab === 'sketch' && <SketchPage initialBody={body} onSimulate={simulateDrawn} onUseParams={(p) => {
+      {tab === 'forge' && <ForgePage target={forgeTarget} go={go} />}
+
+      {tab === 'sketch' && <SketchPage initialBody={body} onSimulate={simulateDrawn} onUseCreature={useCreature} onUseParams={(p) => {
         const nb = { ...body, ...p }
         setBody(nb)
         setSandbox(null)
