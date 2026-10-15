@@ -69,6 +69,7 @@ class ChallengeSpec:
     max_force: float = 80.0
     start: Literal["drawn", "neutral"] = "drawn"
     settle_s: float = 0.3
+    bisection_steps: int = PUSH_BISECTION_STEPS   # push: resolution = max_force / 2**steps (5 -> 2.5 N, 7 -> 0.625 N)
 
     def __post_init__(self):
         object.__setattr__(self, "seeds", tuple(self.seeds))
@@ -94,6 +95,8 @@ class ChallengeSpec:
         num("push_duration", self.push_duration, 0.01, 2.0)
         num("max_force", self.max_force, 0.1, 500.0)
         num("settle_s", self.settle_s, 0.0, 5.0)
+        if isinstance(self.bisection_steps, bool) or not isinstance(self.bisection_steps, (int, np.integer)) or not 3 <= self.bisection_steps <= 9:
+            raise ValueError(f"bisection_steps={self.bisection_steps!r} must be an integer in [3, 9]")
         if self.start not in ("drawn", "neutral"):
             raise ValueError(f"start must be 'drawn' or 'neutral', got {self.start!r}")
         if self.settle_s >= self.duration:
@@ -115,7 +118,7 @@ class ChallengeSpec:
         if not isinstance(d, dict):
             raise ValueError("a challenge spec must be an object")
         allowed = {"kind", "seeds", "duration", "perturb", "target_force", "push_time", "push_duration", "max_force",
-                   "start", "settle_s"}
+                   "start", "settle_s", "bisection_steps"}
         extra = sorted(set(d) - allowed)
         if extra:
             raise ValueError(f"unknown challenge field(s): {', '.join(extra)}")
@@ -388,7 +391,7 @@ def _run_push(body, controllers, spec, seed) -> SeedResult:
                 crit[d], censored[d] = spec.max_force, True
                 continue
             lo, hi = 0.0, spec.max_force
-            for _ in range(PUSH_BISECTION_STEPS):
+            for _ in range(spec.bisection_steps):
                 mid = 0.5 * (lo + hi)
                 if survives(mid, d):
                     lo = mid
@@ -419,7 +422,7 @@ def _run_push(body, controllers, spec, seed) -> SeedResult:
         "censored": bool(censored[+1] and censored[-1]), "censored_fwd": censored[+1], "censored_bwd": censored[-1],
         "falls_without_push": not base_ok, "bisection_trace": trace, "push_time_s": t_push,
         "push_duration_s": spec.push_duration, "max_force": spec.max_force, "target_force": spec.target_force,
-        "force_resolution_N": spec.max_force / 2 ** PUSH_BISECTION_STEPS, "settle_s": spec.settle_s,
+        "force_resolution_N": spec.max_force / 2 ** spec.bisection_steps, "settle_s": spec.settle_s,
         "z_ref": z_ref[0],
     }
     return SeedResult(seed, outcome, float(score), metrics, events, rollouts, forensics=forensics)

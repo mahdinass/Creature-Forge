@@ -150,7 +150,7 @@ def seed_sets(cid: str, n: int, round: int, sizes: dict | None = None, *, max_bu
 def resolution_for(kind: str, spec: ChallengeSpec) -> float:
     """Score resolution (tie tolerance of the sign test): push = one bisection step, otherwise the verdict default."""
     if kind == "push":
-        return float(spec.max_force) / 2 ** PUSH_BISECTION_STEPS
+        return float(spec.max_force) / 2 ** spec.bisection_steps
     return vd.DEFAULT_RESOLUTION[kind]
 
 

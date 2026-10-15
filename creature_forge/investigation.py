@@ -50,6 +50,7 @@ DEFAULT_SIZES = {"train": 3, "screen": 12, "validate": 24}
 SIZES_BY_KIND = {"push": {"train": 3, "screen": 6, "validate": 12}, "stand": {"train": 3, "screen": 8, "validate": 16},
                  "walk": {"train": 3, "screen": 12, "validate": 24}}
 VARY_VALIDATION = ("push", "walk")
+ARENA_PUSH_BISECTION_STEPS = 7   # first live loop (2026-10-15): a real +2.5 N effect was one 2.5 N step and counted as a tie
 DEFAULT_RETUNE_BUDGET = 48  # zoo pilot: K=48 (2 ES generations x 8 x 3 train seeds); only used when an AI walk proposal asks for retuning; applied to EVERY arm
 RECORD_KEYS = ("id", "created", "mode", "provenance", "creature", "challenge_run_id", "spec", "evidence", "model_calls", "reply",
                "validation", "arms", "seeds", "screening", "selection", "validation_results", "verdicts", "budget", "code",
@@ -450,6 +451,8 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
             arena_cls = None
         acfg = _arena_config(arena_cls, sets, rb, kind)
         overrides = {k: v for k, v in spec.items() if k not in ("kind", "seeds")}
+        if kind == "push":   # finer, identical measurement for every arm: 0.625 N steps so a +2.5 N effect is not a tie
+            overrides["bisection_steps"] = ARENA_PUSH_BISECTION_STEPS
         ev("phase", {"phase": "arena", "arms": [a["arm_id"] for a in runnable], "retune_budget": rb})
         check()
         arena_arms = [{k: a.get(k) for k in ("arm_id", "source", "proposal_id", "edits", "retune")} for a in runnable]
