@@ -51,6 +51,19 @@ def _twin_edit(version: dict, param: str, mag: float, sign: int) -> Edit:
     return Edit(param, "scale", float(math.exp(sign * mag)), "both")
 
 
+MATCHED_RANDOM_VERSION = "matched_random_v2"   # v2 (2026-10-15): never reproduces the AI's own edit; scoreboard v1 had 0 such cases
+
+
+def _same_edit(version: dict, a: "Edit", b: "Edit") -> bool:
+    """Same field(s) changed to the same value (compared on the resulting body/controllers, so scale/set forms compare equal)."""
+    if a.param != b.param or a.target != b.target:
+        return False
+    try:
+        return iv.apply_edits(version, [a]) == iv.apply_edits(version, [b])
+    except ValueError:
+        return False
+
+
 def matched_random(version: dict, kind: str, ai_edits: Sequence[Edit], rng: np.random.Generator) -> list[Edit] | None:
     """Matched-magnitude random twin of `ai_edits`, or None when no valid twin was found (record it as `unavailable`).
 
@@ -76,6 +89,8 @@ def matched_random(version: dict, kind: str, ai_edits: Sequence[Edit], rng: np.r
             sign = 1 if rng.random() < 0.5 else -1
             for s in (sign, -sign):
                 e = _twin_edit(version, param, mag, s)
+                if _same_edit(version, e, ai):
+                    continue   # matched_random_v2: a twin that reproduces the AI's own edit is not a control
                 ok, reasons = iv.validate_edits(version, kind, [c.to_dict() for c in chosen] + [e.to_dict()])
                 if not reasons:
                     found = e

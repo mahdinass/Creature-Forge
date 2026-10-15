@@ -334,6 +334,11 @@ def history_entry(round_: int, arm: dict, verdict: dict | None) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------------------------ one investigation
+def baselines_mod():
+    from . import baselines
+    return baselines
+
+
 def _build_arms(version: dict, kind: str, iid: str, accepted: list[dict], challenge_result: dict, fns: dict,
                 ai_source: str = "nemotron") -> list[dict]:
     retune = any(p.get("retune_controller") for p in accepted)
@@ -342,7 +347,8 @@ def _build_arms(version: dict, kind: str, iid: str, accepted: list[dict], challe
         arms.append({"arm_id": f"ai:{p['id']}", "source": ai_source, "proposal_id": p["id"], "edits": list(p["edits"]), "retune": retune,
                      "hypothesis": p.get("hypothesis"), "category": p.get("category")})
     for p in accepted:
-        arm = {"arm_id": f"random:{p['id']}", "source": "random_baseline", "proposal_id": p["id"], "edits": [], "retune": retune}
+        arm = {"arm_id": f"random:{p['id']}", "source": "random_baseline", "proposal_id": p["id"], "edits": [], "retune": retune,
+               "twin_rule": getattr(baselines_mod(), "MATCHED_RANDOM_VERSION", None)}
         rng = fns["make_rng"](iid, p["id"]) if "make_rng" in fns else random.Random(f"{iid}:{p['id']}")
         try:
             edits = fns["matched_random"](version, kind, _edit_objs(p["edits"]), rng)
