@@ -81,7 +81,8 @@ PROBES: dict[str, Probe] = {p.id: p for p in (
           spec_patch={"start": "neutral"}, transformation="challenge start = neutral"),
     Probe("retune_controller", "Walking controller re-adapted to this body (the arena's 48-rollout (1+8)-ES on separate training seeds, "
           "body unchanged): tests whether the controller, rather than the body, limits walking. To act on it in a proposal, set "
-          "retune_controller: true (alone or with body edits): every arena arm then gets the same adaptation.", ("walk",), adapt_budget=48,
+          "retune_controller: true on a proposal (with its 1-4 edits, body or control): every arena arm then gets the same adaptation.",
+          ("walk",), adapt_budget=48,
           transformation="walk controller adapted to this body, budget 48 rollouts, training seeds disjoint from the probe seeds"),
     Probe("no_push", "Same creature, no shove at all: tests whether it is already unstable without the disturbance.", ("push",),
           spec_patch={"kind": "stand"}, measurement="static", transformation="stand rollout of the push duration, no push"),
