@@ -90,7 +90,10 @@ def register() -> None:
     print("registered", PROTOCOL, "bank lessons", n)
 
 
-def run(base: str, forge_dir: Path) -> None:
+def run(base: str, forge_dir: Path, resume: bool = False) -> None:
+    """`resume=True` continues an interrupted run: registered pairs already in runs.jsonl are skipped; a pair whose creature
+    (`mem-<name>-<rep>`) already exists on the server WITHOUT a recorded row was interrupted mid-pair, so it is recorded as
+    `interrupted` and EXCLUDED - never rerun (no investigation is repeated)."""
     from scripts.forge_acceptance import call, wait_job
     if not (committed_unchanged(PROTOCOL) and committed_unchanged(BANK)):
         raise SystemExit("protocol.json and bank.jsonl must be committed unchanged before any run")
@@ -102,11 +105,23 @@ def run(base: str, forge_dir: Path) -> None:
     live_bank.write_bytes(BANK.read_bytes())          # the server reads the frozen bank; CF_MEMORY must be unset (no auto-add)
     RESULTS.mkdir(parents=True, exist_ok=True)
     log = RESULTS / "runs.jsonl"
-    if log.exists() and log.read_text(encoding="utf-8").strip():
-        raise SystemExit("runs already recorded; the evaluation runs once (no reruns)")
+    done = {(r["creature"], r["replicate"]) for r in (json.loads(l) for l in log.read_text(encoding="utf-8").splitlines() if l.strip())} \
+        if log.exists() else set()
+    if done and not resume:
+        raise SystemExit("runs already recorded; use --resume to continue the remaining registered pairs (no reruns)")
+    existing = set()
+    if resume:
+        _, creatures = call(base, "GET", "/api/forge/creatures")
+        existing = {c.get("name") for c in creatures or []}
     t0 = time.time()
     for rep in range(1, p["replicates"] + 1):
         for name in p["creatures"]:
+            if (name, rep) in done:
+                continue
+            if resume and f"mem-{name}-{rep}" in existing:
+                _append(log, {"creature": name, "replicate": rep, "interrupted": True,
+                              "error": "interrupted mid-pair in an earlier session; excluded, not rerun"})
+                continue
             if time.time() - t0 > p["caps"]["wall_hours"] * 3600:
                 raise SystemExit("wall-clock cap reached")
             strokes, materials = strokes_for(name)
@@ -166,7 +181,11 @@ def analyze(records: Path) -> dict:
         cited = any(str(c).startswith("memory") for h in ((rec.get("validation") or {}).get("hypotheses") or []) for c in h.get("evidence", []))
         return v.get("status") == "VERIFIED_IMPROVEMENT", v.get("median_diff"), {"id": rec["id"], "status": rec["status"], "ai": ai,
                                                                                    "verdict": v.get("status"), "memory_cited": cited}
+    excluded = []
     for row in rows:
+        if row.get("interrupted") or ("memory" not in row and "no_memory" not in row):
+            excluded.append({"creature": row["creature"], "replicate": row["replicate"], "reason": row.get("error")})
+            continue   # no investigation pair exists: excluded from the paired test and reported (never rerun)
         m_ok, m_d, m_rec = outcome(row.get("memory"))
         n_ok, n_d, n_rec = outcome(row.get("no_memory"))
         pairs.append((m_ok, n_ok))
@@ -184,7 +203,7 @@ def analyze(records: Path) -> dict:
                         else "no evidence of a benefit from engineering memory (pre-declared test)"),
          "memory_verified": {"k": sum(m for m, _ in pairs), "n": len(pairs), "wilson95": wilson(sum(m for m, _ in pairs), len(pairs))},
          "no_memory_verified": {"k": sum(n for _, n in pairs), "n": len(pairs), "wilson95": wilson(sum(n for _, n in pairs), len(pairs))},
-         "cost": {k: round(v, 4) for k, v in cost.items()}, "per_pair": per}
+         "cost": {k: round(v, 4) for k, v in cost.items()}, "excluded": excluded, "per_pair": per}
     (RESULTS / "summary.json").write_text(json.dumps(s, indent=1), encoding="utf-8")
     return s
 
@@ -193,6 +212,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--register", action="store_true")
     ap.add_argument("--run", action="store_true")
+    ap.add_argument("--resume", action="store_true", help="continue an interrupted run (completed pairs skipped, interrupted pairs excluded)")
     ap.add_argument("--analyze", action="store_true")
     ap.add_argument("--base", default="http://127.0.0.1:8000")
     ap.add_argument("--forge-dir", default=str(ROOT / "artifacts" / "forge"))
@@ -200,8 +220,8 @@ def main() -> None:
     a = ap.parse_args()
     if a.register:
         register()
-    elif a.run:
-        run(a.base, Path(a.forge_dir))
+    elif a.run or a.resume:
+        run(a.base, Path(a.forge_dir), resume=a.resume)
     elif a.analyze:
         print(json.dumps({k: v for k, v in analyze(Path(a.records)).items() if k != "per_pair"}, indent=1))
 
