@@ -1,67 +1,123 @@
-# Resume checkpoint — 2026-10-15 (session paused by the owner)
+# RESUME CHECKPOINT — Creature Forge (written 2026-10-15 ~19:10 UTC)
 
-Say **"continue"** and the orchestrator resumes from here. Everything below was verified at pause time.
+Read this first. **Verify each fact against Git / the VM / GitHub before acting** (commands in §9); trust files and commits
+over any conversation summary. The objective is to resume in minutes without redoing finished work.
 
-## Ground truth at pause
-- **Branch** `feature/forge-loop` @ `d60b155` (pushed; local tree clean). **Draft PR #16** → `main`, **NOT merged**.
-- **CI on `d60b155`: green** (`test-context-guards`, `studio-frontend` incl. all browser flows).
-- **VM `creature-forge-r1-cpu`: STOPPED** via the API (no processes left; no jobs queued/running at stop). Infra spend ledger:
-  **$3.86 of $10** (conservative). Inference ledger (on the VM disk, `~/dev/ledger/inference_ledger.jsonl`; local backup
-  `artifacts/vm/ledger_backup/inference_ledger_20261015.jsonl`, 142 lines): **86 requests, $0.42 of $15**.
-- **Repository: PRIVATE.** No publication action taken.
+## 1. Repository
+- Repo `mahdinass/Creature-Forge` — **PRIVATE** (owner: keep private until the publication audit; ask before any publication).
+- Working branch **`feature/forge-loop`**; HEAD at checkpoint = the commit that adds this file (see `git log -1`); previous
+  code commit `be9b8d7`. Working tree clean at checkpoint (verify `git status`).
+- **Draft PR #16** `feature/forge-loop` → `main`: **NOT merged**. Owner approval is required before merging (merge commit,
+  never squash). Owner's merge conditions: CI green ✅, real live end-to-end UI test ✅ (see §3), critical security checks ✅
+  (see §6) — all satisfied; **still ask the owner explicitly before merging.**
+- **CI**: green on `9a18291` (both `test-context-guards` and `studio-frontend` incl. all browser flows). Re-check on HEAD.
+- Superseded WIP branches (content already integrated; keep until the owner agrees to delete):
+  `wip/s9-security-hardening-UNVERIFIED` (→ integrated as `269ec90`), `wip/s8-engineering-memory-UNVERIFIED` (→ `d3cda1f`).
+- Local `.claude/worktrees/agent-*` directories are leftover agent worktrees; **all their work is integrated**; safe to
+  remove with `git worktree remove` after a check.
+- Authorship: commits by Mahdi, **no AI co-author trailers** (verified 0 on the branch). Keep it so.
 
-## Owner decisions in force (2026-10-15)
-1. PR #16 approved *in principle*; merge only after final CI green, a **real live end-to-end UI test** passes, and the
-   critical security/integration checks are complete — and **ask the owner before merging** (latest instruction).
-2. Keep the repo private until the publication audit and licensing/service-term review are complete; ask before any
-   publication action.
-3. Present the scoreboard (AI 6/12 vs matched twin 1/12, exact one-sided p = 0.03125) as encouraging evidence limited to the
-   tested set; disclose small n, six starter families, push-dominated success, selection-budget asymmetry, untested walking.
-4. Preserve all protocols, outcomes and historical evidence.
-Priorities: A finish/merge (with approval) → B live walking → C engineering memory (evaluate vs no-memory before claiming)
-→ D submission assets. Scope discipline: core + submission quality first.
+## 2. Completed and verified (do NOT redo)
+| milestone | evidence |
+|---|---|
+| M0 infra: remote dev loop on the Nebius VM, spend ledger, calibration | `infra/nebius/forge_dev.py`, `forge_cloud.py`; `experiments/forge_loop/calibration/REPORT.md` (model choice: Nemotron-3-Super-120B, thinking off, strict per-evidence JSON schema) |
+| M1 challenges stand/push/walk on drawn creatures; zoo pilot | `creature_forge/challenges.py`, `creature_walk.py`; `experiments/forge_loop/pilot/` |
+| M2 AI investigator, evidence, edit validation, ledger | `evidence.py`, `interventions.py`, `forge_ai.py`, `inference_ledger.py` |
+| M3 arena + twins + verdict_v1 (frozen after A/A null pilot) | `arena.py`, `baselines.py` (matched_random_v2), `verdict.py`; `experiments/forge_loop/null_pilot/` |
+| M4 orchestration, bounded loop (patience 2, never auto-accepts), accept/revert | `investigation.py`, `creatures.py`, `jobs.py`, `studio/forge_api.py` |
+| M5 Studio "My creature" workspace (challenge, investigate, probes, twin, replay, accept, lineage) | `studio/src/forge/*`; browser flow `studio/e2e/forge-flow.mjs` |
+| M6 diagnostic probes (incl. walk `retune_controller` probe) | `probes.py`; step-B CONFIRMED/REFUTED + method rule |
+| Pre-registered scoreboard v1 (12 live investigations) | `experiments/forge_loop/scoreboard/REPORT.md` — AI 6/12 vs twin 1/12, exact one-sided p = 0.03125, push-dominated, with all owner-required caveats |
+| Live walking investigations (B) | 7 records, `experiments/forge_loop/dev_live_records/README.md` "Walking": nothing verified; model never chose co-design |
+| Engineering memory (C, implementation) | `creature_forge/memory.py`, `scripts/forge_memory.py`, evidence/prompt hooks, API flag, UI block (no vitest for the UI block yet) |
+| Security hardening (all review findings) | `269ec90`, `creature_forge/studio/security.py`, `tests/test_security_review.py` (§6) |
+| CI smoke scale for browser flows | `CF_INVESTIGATION_SCALE=smoke` (refused for live, recorded per record) |
+| **Live end-to-end UI test** (owner merge condition) | `studio/e2e/forge-live-flow.mjs`; **final run i-140b1435cb84: 15/15 PASS**, verified redesign accepted as v2 in the browser; `experiments/forge_loop/dev_live_records/ui_live/` |
+| Submission docs (D, partial) | `docs/submission/DEVPOST.md`, `STORYBOARD.md`, `SETUP_AND_REPRODUCTION.md`, `SUBMISSION_CHECKLIST.md`, `LICENSE_REVIEW.md`; regenerated `THIRD_PARTY_NOTICES.md`; terms doc updated; pydantic declared; local paths scrubbed |
+| Tests (VM, combined tree) | 894 Python OK, frontend vitest + strict tsc + build OK, 237 browser checks PASS; frozen-record guard 105/105; secret scan of all 1,625 objects: 0 key hits |
 
-## Done (committed, verified)
-- Forge Loop end to end (challenges, creatures/jobs/API, AI investigator, probes incl. walk `retune_controller` probe,
-  arena with twin validation, verdict_v1, bounded loop, accept/revert, Studio workspace). 840 Python tests OK on the VM at
-  `5a8b9c2`+; frontend 137 vitest + build; 237 browser checks; CI green.
-- Smoke scale for CI browser flows (`CF_INVESTIGATION_SCALE=smoke`, refused for live, recorded per record).
-- `matched_random_v2` (twin never copies the AI edit; scoreboard v1 had 0 such cases).
-- Pre-registered scoreboard v1: `experiments/forge_loop/scoreboard/REPORT.md`.
-- **B (live walking) — done for now:** 7 live walk investigations on the tiny-feet creature archived in
-  `experiments/forge_loop/dev_live_records/` (README "Walking"). Probes confirm feet; small consistent gains below the 0.5 m
-  bar; nothing verified; the model never chose `retune_controller` co-design even after the adaptation probe was confirmed.
-- Licence/dependency review: `docs/submission/LICENSE_REVIEW.md` (fonts missing from THIRD_PARTY_NOTICES; terms doc lacks
-  Super/Ultra; benchmarking-clause question for the owner; emails in git history; local paths in docs/PROJECT_STATE.md).
+## 3. Experiment artifacts and logs (all committed unless noted)
+- Calibration: `experiments/forge_loop/calibration/` (requests.jsonl, requests_v2.jsonl, REPORT.md).
+- Zoo pilot / null pilot: `experiments/forge_loop/pilot/`, `experiments/forge_loop/null_pilot/`.
+- Development live records (unedited, protocol-state notes): `experiments/forge_loop/dev_live_records/` (+ `INDEX.json`,
+  `ui_live/` screenshots and summaries).
+- Scoreboard v1: `experiments/forge_loop/scoreboard/{protocol.json, REPORT.md, results/}` (registered `e12dd0e`).
+- Memory evaluation: `experiments/forge_loop/memory_eval/{protocol.json, bank.jsonl}` (registered `670ffa3`-era commit
+  "Memory evaluation: pre-register forge-memory-eval-v1"); **results NOT yet committed** — see §4.
+- Frozen research records R1/R2/R3/Phase 1/2A/demo: unchanged (`experiments/FROZEN_MANIFEST.json`, `tests/test_frozen_records.py`).
+- VM-side (not in Git): `~/dev/integ/artifacts/forge/` (creatures, runs, jobs, investigations), `~/logs/dev/*.log`,
+  inference ledger `~/dev/ledger/inference_ledger.jsonl` (local backup `artifacts/vm/ledger_backup/`, may be stale).
 
-## Unfinished work (preserved, NOT verified)
-| work | where | state |
-|---|---|---|
-| **S9 security hardening** (M1 queue/creature/body limits, M2 ledger worst-case settle, M3 TrustedHost + Origin check, L1 no tracebacks to clients, L2 fullmatch ids, L3 idempotent accept, L4 replay quantise + semaphore, L5 reservation release, key redaction, no-redirect opener, https base URL, slot validation, safe tar extraction, nesting guard, `/api/version` without repo_root) | branch **`wip/s9-security-hardening-UNVERIFIED`** @ `20224db` (base `fb3cab5`); local worktree `.claude/worktrees/agent-abfb82fb32069e96b` | agent stopped mid-fix ("settle rows have no `kind`; use `.get`"). It also touched `tests/test_demo.py`, `tests/test_r3.py`, `tests/test_r3v2.py` — **review these carefully: frozen-research tests must not be weakened.** New: `creature_forge/studio/security.py`, `tests/test_security_review.py`. Full suites never ran green. |
-| **S8 engineering memory** (`creature_forge/memory.py`, `scripts/forge_memory.py`, evidence/prompt hooks, API flag, UI block) | branch **`wip/s8-engineering-memory-UNVERIFIED`** @ `54aec28` (base `fb3cab5`); worktree `.claude/worktrees/agent-aaba8e5014f9b1404` | agent stopped mid-fix (a prompt string built in a heredoc got literal newlines instead of `\n\n`). Not tested. |
-Other `.claude/worktrees/agent-*` directories are already-integrated agents (their content is in `feature/forge-loop`); they can be removed after resume.
+## 4. Memory evaluation (forge-memory-eval-v1) — state at checkpoint
+- Protocol: 6 new creatures × 2 replicates = 12 pairs; per pair one push challenge run and two LIVE investigations (memory
+  on/off) on identical seeds; frozen 34-lesson bank (sha256 in protocol); primary = exact one-sided McNemar; low power stated.
+- Running at checkpoint time on the VM slot `integ` (driver `scripts/forge_memory_eval.py --run`, started ~18:36 UTC).
+  Progress and final state are recorded in §11 (appended at shutdown).
+- **Results live ONLY on the VM** until pulled: `~/dev/integ/experiments/forge_loop/memory_eval/results/runs.jsonl` and the
+  records in `~/dev/integ/artifacts/forge/investigations/`. **Never run `forge_dev.py sync --slot integ` before pulling them**
+  (sync runs `git clean -fd` and would delete the untracked results file).
+- Resume: `python scripts/forge_memory_eval.py --resume` (on the VM, against a live server WITHOUT `CF_MEMORY`) runs only the
+  registered pairs not yet in runs.jsonl; a pair interrupted mid-way is recorded as `interrupted` and excluded — never rerun.
+- Analysis after completion: `python scripts/forge_memory_eval.py --analyze --records <records dir>` (pre-declared), then
+  write `experiments/forge_loop/memory_eval/REPORT.md` honestly (null result is the expected outcome given the power).
 
-## Next steps on "continue" (in order)
-1. `python infra/nebius/forge_cloud.py start` (refuses beyond the $10 cap; sets a 6 h deadline). Stop through the API at the
-   end of every work block (the deadman powers the guest off but may not stop billing — INCIDENTS 2026-10-15).
-2. **S9:** check out `wip/s9-security-hardening-UNVERIFIED` into a worktree (or resume the agent there), finish the
-   `.get("kind")` fix, review the three research-test edits (revert anything that weakens frozen checks), run
-   `forge_dev.py test py|fe|e2e --tree <wt> --slot s9-sec`; integrate into `feature/forge-loop` only when green.
-3. **Live end-to-end UI test** (owner merge condition): `forge_dev.py serve --slot integ --live`, then a real-browser flow
-   that clicks "Investigate with AI" (LIVE) on a drawn creature, waits for the verdict, checks labels/twin/replay, and accepts
-   only if verified. Record the run (investigation id, screenshots) in `experiments/forge_loop/dev_live_records/`.
-4. Confirm CI green on the final head, then **ask the owner** before merging PR #16 (merge commit, no squash).
-5. **C:** finish S8 from its WIP branch; build a memory bank from archived LIVE records (`scripts/forge_memory.py --build`);
-   pre-register a paired memory vs no-memory evaluation on NEW creatures not in the bank (commit the protocol before any run);
-   run; report honestly.
-6. **D:** fix licence gaps (add OFL fonts to THIRD_PARTY_NOTICES, terms doc for Super/Ultra, declare pydantic), scrub local
-   paths, secret scan of all refs, fresh-clone test on a clean VM slot, Devpost narrative + reproducibility guide, scripted
-   demo capture (< 3 min). Disclose: scoreboard caps were enforced by the global ledger only (actual use 24 calls / $0.05).
-   **No publication without the owner.**
+## 5. Budgets (keep the caps; ask before raising)
+- Infra: conservative ledger `infra/nebius/forge_cloud.py spend` (cap **$10**); ~$4.1 used at checkpoint (+ eval time).
+- Inference: Forge ledger cap **$15 / 1,500 requests**; ~90+ requests, ~$0.45 used before the memory eval (+ ~24-36 calls).
+- R3 legacy cap (41 requests / 300k tokens) untouched.
 
-## How to resume tooling
-- Local: `C:\Users\mbnas\.vscode\Creature-Forge`, Python `.venv`, never run tests/builds locally (no free RAM).
-- Remote: `infra/nebius/forge_dev.py sync|exec|test|serve|tunnel|pull` (slots in `~/dev/<slot>`; `sync` cleans untracked
-  files in the slot — pull outputs first). Studio via `tunnel` at http://127.0.0.1:8765.
-- State/decisions: `docs/PROJECT_STATE.md`, `docs/memory/DECISIONS.md`, `docs/memory/INCIDENTS.md`, `docs/FORGE_LOOP.md`,
-  `docs/FORGE_LOOP_CONTRACTS.md`; Basic Memory project `creature-forge` (text search).
+## 6. Security review status
+Fixed and tested (`269ec90`): M1 job/creature/body limits (429/413), M2+L5 worst-case ledger settle / reservation release,
+M3 Host allow-list + same-origin writes (`RequestGuard`; tests set `CF_ALLOW_TESTSERVER=1`), L1 no tracebacks to clients,
+L2 fullmatch ids, L3 idempotent accept, L4 replay quantisation + concurrency cap; key redaction, no-redirect opener,
+https-only base URL, slot/pull validation, safe tar extraction, nesting guard, `/api/version` without repo_root.
+**Open (low, not blocking):** list endpoints read every record (no pagination), unbounded growth of jobs/runs/ledger files,
+legacy `/api/demo/run` uses its own (R3) budget, scoreboard caps were enforced by the global ledger only (disclosed).
+
+## 7. Next actions in priority order
+1. Verify states (§9). If the memory evaluation finished: pull results (§9), run `--analyze`, write `memory_eval/REPORT.md`,
+   commit. If it was interrupted: start the VM, serve live (no `CF_MEMORY`), run `--resume`, then analyze.
+2. Ask the owner for approval to merge PR #16 (all owner conditions are met; re-check CI on HEAD first).
+3. Submission (D): record demo footage with a scripted Playwright capture of the live flow (raw clips; the owner does the
+   voice-over/edit), update `SCREEN_CAPTURE_PLAN.md` and `NEBIUS_NVIDIA_FEEDBACK.md` to Super-120B, fresh-clone test on a
+   clean VM slot, publication audit (git-history emails, `webgl-constants` licence UNKNOWN, model licence texts, Nebius
+   benchmarking-clause question) — **no publication without the owner**.
+4. Optional, only if time remains: vitest for the memory UI block; pagination for list endpoints.
+
+## 8. Do NOT repeat
+- Do not rerun calibration, zoo/null pilots, the scoreboard, the walking investigations or the live UI test.
+- Do not re-register or edit any `protocol.json`, `bank.jsonl`, frozen record, or archived live record.
+- Do not reinstall environments: VM slots `~/dev/<slot>` have venvs + node_modules; local `.venv` exists.
+- Do not redo the codebase audit, security review or licence review; their outputs are committed.
+- Do not rebuild working components (challenges, arena, verdict, probes, memory, Studio workspace).
+
+## 9. Commands to resume
+```powershell
+cd C:\Users\<user>\.vscode\Creature-Forge
+git fetch; git status -sb; git log -3 --oneline            # expect feature/forge-loop, clean
+gh pr view 16 --json state,isDraft; gh pr checks 16         # Draft, open, CI
+.venv\Scripts\python infra\nebius\forge_cloud.py status     # VM state; `spend` for the infra ledger
+.venv\Scripts\python infra\nebius\forge_cloud.py start      # only when needed (cap-guarded, 6 h deadline)
+.venv\Scripts\python infra\nebius\forge_dev.py exec --slot integ "wc -l experiments/forge_loop/memory_eval/results/runs.jsonl"
+.venv\Scripts\python infra\nebius\forge_dev.py pull --slot integ experiments/forge_loop/memory_eval/results
+.venv\Scripts\python infra\nebius\forge_dev.py pull --slot integ artifacts/forge/investigations
+.venv\Scripts\python infra\nebius\forge_dev.py serve --slot integ --live   # live server (never set CF_MEMORY for the eval)
+.venv\Scripts\python infra\nebius\forge_cloud.py stop       # ALWAYS stop via the API at the end of a block
+```
+Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|fe|e2e --slot verify`.
+
+## 10. Where state lives
+`docs/PROJECT_STATE.md` (dated sections), `docs/memory/DECISIONS.md`, `docs/memory/INCIDENTS.md`, `docs/FORGE_LOOP.md`,
+`docs/FORGE_LOOP_CONTRACTS.md`, this file, Basic Memory project `creature-forge` (text search "checkpoint").
+
+## 11. Shutdown record
+(appended at shutdown — see below)
+
+### Interim (pushed 2026-10-15T19:03:26Z)
+- Memory evaluation RUNNING on the VM: **4 of 12 pairs recorded** (~8 min per pair). The driver runs through the
+  orchestrator's SSH session: if that session ended before completion, the pair in flight was interrupted. On resume:
+  pull results first, then `python scripts/forge_memory_eval.py --resume` (records that pair as excluded; never reruns).
+- VM RUNNING (deadline ~302 min left at this write);
+  the orchestrator stops it through the API after the evaluation. If the session died first, the deadman powers the guest
+  off at the deadline and the Windows watchdog stops it via the API when the PC is on — run `forge_cloud.py status` and
+  `stop` on resume (INCIDENTS 2026-10-15: a powered-off guest may still show RUNNING).
