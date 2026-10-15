@@ -356,7 +356,8 @@ class ReplayTests(ApiCase):
 class StatusAndStubTests(ApiCase):
     def test_status_shape_and_the_key_is_never_returned(self):
         env = {k: v for k, v in os.environ.items() if k not in ("CREATURE_FORGE_ENABLE_LIVE", "NEBIUS_API_KEY", "CF_WORKERS", "CF_INFERENCE_LEDGER")}
-        with mock.patch.dict(os.environ, env, clear=True):
+        # isolate from any real .env on this machine: status loads it (like the live gate does), so stub the loader
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch("creature_forge.config.load_env", return_value=False):
             s = self.c.get("/api/forge/status").json()
             self.assertEqual((s["live_available"], s["workers"], s["version"]), (False, 6, "forge-v1"))
             self.assertEqual(s["model"]["model"], "nvidia/nemotron-3-super-120b-a12b")

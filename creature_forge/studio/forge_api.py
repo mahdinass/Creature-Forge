@@ -237,7 +237,8 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
             workers = int(os.environ.get("CF_WORKERS") or 6)
         except ValueError:
             workers = 6
-        live = os.environ.get("CREATURE_FORGE_ENABLE_LIVE") == "1" and bool(os.environ.get("NEBIUS_API_KEY"))
+        from ..investigation import api_key_present   # loads .env like the live gate does; never returns the key
+        live = os.environ.get("CREATURE_FORGE_ENABLE_LIVE") == "1" and api_key_present()
         try:
             led = get_ledger().status()
         except Exception as exc:  # noqa: BLE001 - status must never fail because of the ledger

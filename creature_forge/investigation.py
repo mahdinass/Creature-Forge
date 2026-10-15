@@ -553,6 +553,7 @@ class LoopLimits:
     max_rollouts: int = 3000
     max_calls: int = 4
     wall_s: float = 600.0
+    patience: int = 2   # stop after this many CONSECUTIVE rounds without a verified AI arm (failures feed the next round)
 
 
 def default_challenge_runner(pool=None) -> Callable:
@@ -570,9 +571,11 @@ def run_loop(store, cid: str, n: int, run_id: str, *, mode: str, forge_dir, limi
              challenge_runner: Callable | None = None, investigation_id: str | None = None, clock: Callable[[], float] = time.monotonic,
              emit: Callable | None = None, progress: Callable | None = None, cancelled: Callable[[], bool] | None = None, pool=None,
              **kw) -> dict:
-    """Up to `limits.max_rounds` investigations; round k+1 evaluates the PROPOSED body of round k's best verified AI arm as a hypothetical
-    parent, with the earlier rounds as evidence history. Stops when a round has no VERIFIED AI arm, or on the rollout / model-call / wall-clock
-    limits, a round that did not finish `done`, or cancellation. NEVER accepts anything: the user accepts explicitly."""
+    """Up to `limits.max_rounds` investigations with the earlier rounds as evidence history. After a round with a verified AI arm, round
+    k+1 evaluates that PROPOSED body as a hypothetical parent. After a round without one, the falsified AI proposals and their measured
+    verdicts are added to the history and the same design is investigated again, until `limits.patience` consecutive rounds failed.
+    Also stops on the rollout / model-call / wall-clock limits, a round that did not finish `done`, or cancellation. NEVER accepts
+    anything: the user accepts explicitly."""
     lim = limits or LoopLimits()
     forge_dir = Path(forge_dir)
     loop_id = "l-" + secrets.token_hex(4)
@@ -581,7 +584,7 @@ def run_loop(store, cid: str, n: int, run_id: str, *, mode: str, forge_dir, limi
     rounds: list[dict] = []
     history: list[dict] = []
     totals = {"rollouts": 0, "calls": 0}
-    cur_run, parent, stop = run_id, None, None
+    cur_run, parent, stop, misses = run_id, None, None, 0
     for r in range(1, lim.max_rounds + 1):
         if cancelled and cancelled():
             stop = "cancelled"
@@ -609,11 +612,22 @@ def run_loop(store, cid: str, n: int, run_id: str, *, mode: str, forge_dir, limi
         elif rec["status"] != "done":
             stop = f"round_status:{rec['status']}"
         elif best is None:
-            stop = "no_verified_arm"
+            misses += 1
+            if misses >= lim.patience:
+                stop = "no_verified_arm"
         elif r == lim.max_rounds:
+            stop = "max_rounds"
+        if not stop and r == lim.max_rounds:
             stop = "max_rounds"
         if stop:
             break
+        if best is None:
+            # Learn from the falsified proposals: same design, same challenge run, fresh arena seeds (round-salted) next round.
+            for arm in rec["arms"]:
+                if arm.get("source") in ("nemotron", "scripted_mock") and not arm.get("unavailable"):
+                    history.append(history_entry(r, arm, rec["verdicts"].get(arm["arm_id"])))
+            continue
+        misses = 0
         history.append(history_entry(r, best, rec["verdicts"].get(best["arm_id"])))
         base = (parent or {}).get("version") or store.version(cid, n)
         body, ctrl = materialize_arm(base, best)

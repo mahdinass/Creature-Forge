@@ -114,7 +114,9 @@ def build_system_prompt(kind: str, mode: str, allowed: dict, max_proposals: int 
         "",
         "EVIDENCE. The user message lists every measurement as one `path=value` line; these paths are the ONLY citable ones. Seeds are ordered "
         "worst to best by score (seeds[0] is the worst). Derived: leg_length = thigh + shank; foot_to_leg = mean foot length / mean leg length; "
-        "weight_n = mass_total * 9.81; torque_to_weight = torque_limit / (weight_n * mean leg length). A second section, EDIT BOUNDS, gives each "
+        "weight_n = mass_total * 9.81; torque_to_weight = torque_limit / (weight_n * mean leg length); heel_behind_ankle_* and "
+        "toe_ahead_of_ankle_* = how far each sole reaches behind / in front of its ankle in the compiled model (both scale with foot_length). "
+        "A second section, EDIT BOUNDS, gives each "
         "editable parameter's current value and range.",
         "",
         f"EDITABLE PARAMETERS (mode: {mode}):",

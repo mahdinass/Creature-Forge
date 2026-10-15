@@ -301,10 +301,22 @@ def _derived(version: dict) -> dict:
     d = {"leg_length_rear": _r(rear), "leg_length_front": _r(front),
          "foot_to_leg": _r((b["foot_length"] + b["foot_length_r"]) / 2 / mean_leg)}
     try:
-        mass = float(sum(sandbox_model(iv.sandbox_body(version)).body_mass))
+        model = sandbox_model(iv.sandbox_body(version))
+        mass = float(sum(model.body_mass))
     except Exception:  # the body cannot be compiled: leave the mass-derived fields out rather than invent them
         return d
     d.update(mass_total=_r(mass), weight_n=_r(mass * G), torque_to_weight=_r(b["torque_limit"] / (mass * G * mean_leg)))
+    # Foot support geometry relative to the ankle, read from the compiled MuJoCo model (foot box centre and half-length along x):
+    # how far the sole reaches behind the ankle (heel) and in front of it (toe), per leg.
+    for side, name in (("l", "rear"), ("r", "front")):
+        try:
+            import mujoco
+            gid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, f"foot_{side}")
+            cx, half = float(model.geom_pos[gid][0]), float(model.geom_size[gid][0])
+        except Exception:  # noqa: BLE001 - geometry unavailable: omit rather than guess
+            continue
+        d[f"heel_behind_ankle_{name}_m"] = _r(half - cx)
+        d[f"toe_ahead_of_ankle_{name}_m"] = _r(half + cx)
     return d
 
 

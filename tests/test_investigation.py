@@ -398,11 +398,20 @@ class LoopTests(Base):
         base.update(kw)
         return inv.run_loop(self.store, self.cid, 1, self.run_id, **base)
 
-    def test_stops_after_a_round_without_a_verified_ai_arm(self):
-        self.arena.plan = [{"ai:P1": NOT_VERIFIED, "ai:P2": NOT_VERIFIED, "heuristic": VERIFIED}]
-        out = self.loop()
-        self.assertEqual((len(out["rounds"]), out["stop_reason"]), (1, "no_verified_arm"))  # a verified baseline does not continue the AI loop
+    def test_stops_after_patience_rounds_without_a_verified_ai_arm(self):
+        failed = {"ai:P1": NOT_VERIFIED, "ai:P2": NOT_VERIFIED, "heuristic": VERIFIED}
+        self.arena.plan = [failed, failed, failed]
+        out = self.loop()   # default patience 2: the falsified round-1 proposals become history for a second try
+        self.assertEqual((len(out["rounds"]), out["stop_reason"]), (2, "no_verified_arm"))  # a verified baseline does not continue the AI loop
         self.assertIsNone(out["best"])
+        self.assertEqual(out["rounds"][0]["run_id"], out["rounds"][1]["run_id"])   # same design and challenge run, retried
+        r2 = inv.load_investigation(self.dir, out["rounds"][1]["investigation_id"])
+        self.assertTrue(r2["evidence"].get("history"), "round 2 must see the falsified round-1 proposals")
+
+    def test_patience_one_stops_after_the_first_failed_round(self):
+        self.arena.plan = [{"ai:P1": NOT_VERIFIED, "ai:P2": NOT_VERIFIED}]
+        out = self.loop(limits=inv.LoopLimits(patience=1))
+        self.assertEqual((len(out["rounds"]), out["stop_reason"]), (1, "no_verified_arm"))
 
     def test_three_rounds_history_hypothetical_parent_and_no_auto_accept(self):
         out = self.loop()
