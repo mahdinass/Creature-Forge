@@ -151,3 +151,11 @@ Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|f
   0/12 (delivered and citable; checked); twins 0/24 verified. `experiments/forge_loop/memory_eval/REPORT.md`.
 - Inference ledger after the run: 140 requests, $0.5412 (backup `artifacts/vm/ledger_backup/inference_ledger_20261016.jsonl`).
 - Do NOT repeat: the memory evaluation (any part), its analysis, or the delivery/citability audit.
+- **Fresh-clone test PASSED (2026-10-15 22:40-22:47 UTC):** `git clone` of `feature/forge-loop` @ `ce48810` from GitHub ->
+  new VM slot `fresh` (new venv, `pip install -e .[studio]`, `npm ci`) -> py 894 OK (1 skipped), vitest 137/137 + build,
+  browser 237 checks PASS, smoke + demo-trial verification PASS; slot tree clean afterwards. Do not repeat unless code changes.
+- Also done this block: `webgl-constants` confirmed MIT; capture plan and feedback docs rewritten (`4a43440`).
+- VM STOPPED through the API after the test; infra $4.44 of $10.
+- **Remaining D items:** scripted demo capture (owner records voice-over), publication audit owner decisions (history
+  emails, Nebius §4.1.10(c)/§18.7, Super/Ultra licence texts), final secret scan on the final refs. PR #16 merge awaits the
+  owner's explicit yes (merge commit, no squash).

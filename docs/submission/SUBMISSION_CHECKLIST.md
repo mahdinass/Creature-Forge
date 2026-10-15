@@ -37,6 +37,7 @@ Official deadline **Fri 2026-10-30, 18:00 Europe/Oslo**; internal deadline **Thu
 - [x] Local Windows paths removed from `docs/PROJECT_STATE.md` (2026-10-15); re-grep for the Windows username before publishing (0 tracked hits on 2026-10-15 after the audit docs stopped quoting it).
 - [ ] No third-party binary assets tracked; screenshots/video in the repo are original.
 - [ ] README renders correctly; no private paths; CI green on the final head.
+- [x] Fresh-clone test (2026-10-15/16): clean GitHub clone of `feature/forge-loop` @ `ce48810` on a new VM slot, installed from scratch; Python 894 OK, vitest 137 + build, 237 browser checks, smoke and demo-trial verification all pass. Repeat on the final head only if code changes.
 - [x] Memory evaluation (`experiments/forge_loop/memory_eval/`) finished and written up honestly (2026-10-16: no evidence of a benefit, p = 0.773; the model never cited a lesson). Submission text may mention it only as tried with a null result.
 
 ## Unresolved questions (record, do not guess)
