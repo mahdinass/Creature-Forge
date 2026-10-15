@@ -248,3 +248,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Frontend (M5) done:** investigation workspace on real records (probes, twin beside AI, three-way replay, accept-if-verified, lineage, loop/probe controls); 137 vitest, 237 browser checks.
 - **Scoreboard v1 (registered `e12dd0e` before running):** 12 live investigations on fresh starter creatures; AI verified 6/12, matched twin 1/12, discordant 5 vs 0, exact one-sided McNemar p = 0.031; heuristic 0/12; $0.05, 24 calls, 8,870 rollouts. Effect concentrated in push. Post-hoc best-of-k baseline check also 5 vs 0. Report: `experiments/forge_loop/scoreboard/REPORT.md`.
 - **Remaining:** walk-challenge investigations not yet tried live; engineering memory (post-MVP); submission video/screens; owner decisions on PR #16 and repo visibility.
+
+## Session paused (2026-10-15) — see `docs/RESUME_CHECKPOINT.md`
+- `feature/forge-loop` @ d60b155, CI green, Draft PR #16 not merged; repo private; VM STOPPED (infra $3.86 / $10; inference 86 requests, $0.42 / $15).
+- Live walking investigations done and archived (nothing verified; model never chose controller co-design).
+- Unfinished, preserved as UNVERIFIED branches: `wip/s9-security-hardening-UNVERIFIED` (20224db), `wip/s8-engineering-memory-UNVERIFIED` (54aec28).
+- Next: finish/verify S9 -> live end-to-end UI test -> ask owner to merge PR #16 -> memory (pre-registered eval) -> submission assets.
