@@ -25,9 +25,23 @@ def load_env(path: Path | str | None = None) -> bool:
     return True
 
 
+def validate_base_url(url: str) -> str:
+    """The API key is sent to this URL, so it must be `https://`. The only exception is the explicit scripted placeholder
+    host (`*.invalid`, never resolvable), used by the offline scripted mode. Raises ValueError otherwise."""
+    from urllib.parse import urlsplit
+    u = (url or "").strip().rstrip("/")
+    parts = urlsplit(u)
+    host = (parts.hostname or "")
+    if parts.scheme == "https" and host:
+        return u
+    if parts.scheme == "http" and host.endswith(".invalid"):
+        return u
+    raise ValueError("the Nebius base URL must start with https:// (got a non-https or malformed URL)")
+
+
 def nebius_base_url(default: str) -> str:
-    """NEBIUS_BASE_URL from the (already loaded) environment; empty/unset falls back to `default`."""
-    return (os.environ.get("NEBIUS_BASE_URL") or default).strip().rstrip("/")
+    """NEBIUS_BASE_URL from the (already loaded) environment; empty/unset falls back to `default`. Must be https."""
+    return validate_base_url(os.environ.get("NEBIUS_BASE_URL") or default)
 
 
 def nebius_api_key() -> str | None:

@@ -218,14 +218,20 @@ class InferenceLedger:
         return Reservation(rid, model, int(est_prompt_tokens), int(max_tokens), investigation_id, purpose, worst)
 
     def settle(self, res: Reservation, *, request_id: str | None, prompt_tokens: int | None, completion_tokens: int | None,
-               status: str = "ok") -> dict:
-        """Record the real usage of a reserved request (None tokens = unknown/failed request: cost 0, the request still counts). Returns the
-        ledger line, including `cost_usd`."""
+               status: str = "ok", usage_estimated: bool = False) -> dict:
+        """Record the real usage of a reserved request. With `usage_estimated` (the request was sent but its usage is unknown) the line is
+        settled at the reservation's worst case (prompt estimate + max_tokens at the model prices) and flagged; never an undercount.
+        Returns the ledger line, including `cost_usd`."""
         pp, pc = self.price_for(res.model)
-        pt, ct = int(prompt_tokens or 0), int(completion_tokens or 0)
+        if usage_estimated:
+            pt, ct = int(res.est_prompt_tokens), int(res.max_tokens)
+        else:
+            pt, ct = int(prompt_tokens or 0), int(completion_tokens or 0)
         row = {"ts": _now(), "request_id": request_id, "model": res.model, "prompt_tokens": pt, "completion_tokens": ct,
                "cost_usd": pt * pp + ct * pc, "purpose": res.purpose, "investigation_id": res.investigation_id,
                "reservation_id": res.id, "status": status}
+        if usage_estimated:
+            row["usage_estimated"] = True
         with self._locked():
             self._append(row)
         return row

@@ -1,4 +1,8 @@
 """The Forge router is mounted in the real Studio app, before the /api catch-all, and creates nothing until used."""
+import os
+
+os.environ.setdefault("CF_ALLOW_TESTSERVER", "1")  # Starlette TestClient sends Host: testserver (see studio/security.py)
+
 import tempfile
 import unittest
 from pathlib import Path

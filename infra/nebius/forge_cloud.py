@@ -14,6 +14,7 @@ import json
 import shlex
 import subprocess
 import sys
+import tarfile
 import time
 from pathlib import Path
 
@@ -256,7 +257,8 @@ def cmd_sync_down(_a=None) -> Path:
     want = (dest / "forge_results.sha").read_text().split()[0]
     if got != want:
         raise SystemExit("checksum mismatch on retrieved results")
-    subprocess.check_call(["tar", "xzf", str(dest / "forge_results.tgz"), "-C", str(dest)])
+    with tarfile.open(dest / "forge_results.tgz", "r:gz") as tf:  # the checksum only proves integrity, not safety: filter="data" refuses
+        tf.extractall(dest, filter="data")                        # absolute paths, "..", links outside dest and special files
     st = load()
     st["last_sync"] = {"dir": str(dest), "sha256": got, "epoch": int(time.time())}
     save(st)

@@ -1,6 +1,10 @@
 """Cross-module contract test: a REAL MuJoCo challenge result (challenges) feeds the REAL evidence pack, reply schema,
 prompt and validator (evidence, forge_ai, interventions), and an accepted edit produces a body MuJoCo can run.
 No model call: the reply is written here from paths the schema actually enumerates."""
+import os
+
+os.environ.setdefault("CF_ALLOW_TESTSERVER", "1")  # Starlette TestClient sends Host: testserver (see studio/security.py)
+
 import dataclasses
 import tempfile
 import unittest

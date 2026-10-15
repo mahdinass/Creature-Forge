@@ -9,6 +9,7 @@ baselines, the model client and the ledger are injectable (`ledger`, `client_fac
 from __future__ import annotations
 
 import json
+import logging
 import math
 import os
 import re
@@ -23,13 +24,17 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
 from .. import investigation as inv
-from ..creatures import CreatureStore, atomic_write_json, now_iso, seed_block
+from ..creatures import CreatureStore, StoreFull, atomic_write_json, now_iso, seed_block
 from ..inference_ledger import InferenceLedger
-from ..jobs import JobCancelled, JobContext, JobManager, jsonable
+from ..jobs import JobCancelled, JobContext, JobManager, QueueFull, jsonable, public_error
 from ..sandbox import SandboxBody
 
+log = logging.getLogger(__name__)
+
 API_VERSION = "forge-v1"
-RUN_ID_RE = re.compile(r"^r-[0-9a-f]{8}$")
+RUN_ID_RE = re.compile(r"r-[0-9a-f]{8}")  # always used with fullmatch
+MAX_CONCURRENT_REPLAYS = 2   # uncached replay simulations running at once; more are answered 429
+FORCE_STEP = 0.5             # replay force is quantised to 0.5 N so the cache and the simulator cannot be flooded with distinct values
 REPLAY_CACHE_SIZE = 16
 DEFAULT_SEED_COUNT = 8
 MAX_SEED_COUNT = 64
@@ -189,6 +194,7 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
     router = APIRouter(prefix="/api/forge", tags=["forge"])
 
     lock = threading.RLock()
+    replay_slots = threading.BoundedSemaphore(MAX_CONCURRENT_REPLAYS)
     services: dict = {}
     replay_cache: OrderedDict = OrderedDict()
 
@@ -244,7 +250,7 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         try:
             led = get_ledger().status()
         except Exception as exc:  # noqa: BLE001 - status must never fail because of the ledger
-            led = {"error": f"{type(exc).__name__}: {exc}"}
+            led = {"error": public_error(exc)}
         return {"live_available": live, "model": inv.model_summary(model_config_path), "ledger": led,
                 "workers": max(1, min(7, workers)), "version": API_VERSION}
 
@@ -257,6 +263,8 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
     def create_creature(req: CreateCreatureIn):
         try:
             return store().create(name=req.name, body=req.body, mode=req.mode, drawing=req.drawing)
+        except StoreFull as exc:
+            raise HTTPException(429, str(exc)) from exc
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
 
@@ -296,16 +304,18 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         try:
             job_id = jobs().submit("challenge", _challenge_job, runner=runner, runs_dir=runs_dir, run_id=run_id,
                                    creature=creature, body=version["body"], controllers=version["controllers"], spec=spec)
+        except QueueFull as exc:
+            raise HTTPException(429, str(exc)) from exc
         except RuntimeError as exc:
             raise HTTPException(503, str(exc)) from exc
         return {"job_id": job_id, "run_id": run_id}
 
     def load_run(run_id: str) -> dict:
-        if not RUN_ID_RE.match(run_id or ""):
+        if not RUN_ID_RE.fullmatch(run_id or ""):
             raise HTTPException(404, f"No such run: {run_id}")
         try:
             return json.loads((runs_dir / f"{run_id}.json").read_text(encoding="utf-8"))
-        except FileNotFoundError:
+        except OSError:
             raise HTTPException(404, f"No such run: {run_id} (it may still be running, or it failed)") from None
 
     @router.get("/runs/{run_id}")
@@ -330,6 +340,25 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
             raise HTTPException(404, f"No such job: {job_id}") from None
 
     # ---- replay
+    def clean_force(force, spec: dict):
+        """Quantise to 0.5 N and bound to [0, spec.max_force] (a bounded set of cache keys); None stays None."""
+        if force is None:
+            return None
+        try:
+            top = float(spec.get("max_force", _COMMON_DEFAULTS["max_force"]))
+        except (TypeError, ValueError):
+            top = _COMMON_DEFAULTS["max_force"]
+        return min(max(round(force / FORCE_STEP) * FORCE_STEP, 0.0), top)
+
+    def run_replay(call: Callable):
+        """Run an uncached replay simulation if one of the 2 slots is free, else 429."""
+        if not replay_slots.acquire(blocking=False):
+            raise HTTPException(429, "too many replays are running; try again in a moment")
+        try:
+            return call()
+        finally:
+            replay_slots.release()
+
     @router.get("/replay")
     def replay(run_id: str | None = None, investigation_id: str | None = None, arm: str | None = None,
                seed: int | None = None, direction: int = 1, force: float | None = None):
@@ -347,18 +376,23 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         spec = run.get("spec") or {}
         if seed not in (spec.get("seeds") or []):
             raise HTTPException(404, f"Run {run_id} has no seed {seed}")
+        force = clean_force(force, spec)
         key = (run_id, seed, direction, force)
         with lock:
             if key in replay_cache:
                 replay_cache.move_to_end(key)
                 return replay_cache[key]
         try:
-            payload = replayer(run.get("body") or store().version(run["creature"]["cid"], run["creature"]["n"])["body"],
-                               run["controllers"], spec, seed, force=force, direction=direction)
+            payload = run_replay(lambda: replayer(
+                run.get("body") or store().version(run["creature"]["cid"], run["creature"]["n"])["body"],
+                run["controllers"], spec, seed, force=force, direction=direction))
+        except HTTPException:
+            raise
         except (ValueError, KeyError) as exc:
-            raise HTTPException(422, f"replay failed: {exc}") from exc
+            raise HTTPException(422, f"replay failed: {public_error(exc)}") from exc
         except Exception as exc:  # noqa: BLE001 - report instead of an opaque 500
-            raise HTTPException(500, f"replay failed: {type(exc).__name__}: {exc}") from exc
+            log.exception("replay of run %s failed", run_id)
+            raise HTTPException(500, f"replay failed: {public_error(exc)}") from exc
         with lock:
             replay_cache[key] = payload
             while len(replay_cache) > REPLAY_CACHE_SIZE:
@@ -387,6 +421,7 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         allowed |= set((rec.get("spec") or {}).get("seeds") or [])
         if seed not in allowed:
             raise HTTPException(404, f"Investigation {iid} used no seed {seed}")
+        force = clean_force(force, rec.get("spec") or {})
         key = ("arm", iid, arm_id, seed, direction, force)
         with lock:
             if key in replay_cache:
@@ -399,13 +434,14 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
                 run = load_run(rec["challenge_run_id"])
                 parent = {**parent, "body": run["body"], "controllers": run["controllers"]}
             body, controllers = inv.materialize_arm(parent, arm)
-            payload = replayer(body, controllers, {**rec["spec"], "seeds": [seed]}, seed, force=force, direction=direction)
+            payload = run_replay(lambda: replayer(body, controllers, {**rec["spec"], "seeds": [seed]}, seed, force=force, direction=direction))
         except HTTPException:
             raise
         except (ValueError, KeyError) as exc:
-            raise HTTPException(422, f"replay failed: {exc}") from exc
+            raise HTTPException(422, f"replay failed: {public_error(exc)}") from exc
         except Exception as exc:  # noqa: BLE001
-            raise HTTPException(500, f"replay failed: {type(exc).__name__}: {exc}") from exc
+            log.exception("replay of investigation %s arm %s failed", iid, arm_id)
+            raise HTTPException(500, f"replay failed: {public_error(exc)}") from exc
         with lock:
             replay_cache[key] = payload
             while len(replay_cache) > REPLAY_CACHE_SIZE:
@@ -442,6 +478,8 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
             job_id = jobs().submit("loop" if req.loop else "investigation", _investigation_job, loop=req.loop, store=store(), cid=cid,
                                    n=n, run_id=req.run_id, iid=iid, mode=req.mode, profile=req.profile, forge_dir=forge_dir,
                                    ledger=get_ledger(), options=options, model_config_path=model_config_path)
+        except QueueFull as exc:
+            raise HTTPException(429, str(exc)) from exc
         except RuntimeError as exc:
             raise HTTPException(503, str(exc)) from exc
         return {"job_id": job_id, "investigation_id": iid}
