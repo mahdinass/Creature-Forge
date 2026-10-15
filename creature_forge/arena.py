@@ -40,7 +40,8 @@ BASELINE_SOURCES = ("random_baseline", "heuristic")
 SOURCES = ("original",) + AI_SOURCES + BASELINE_SOURCES
 SELECTION_RULE = ("Screening only selects. Best AI arm = highest MEDIAN screening score among AI arms (ties: higher mean, then arm order); "
                   "best baseline = the same rule among random_baseline + heuristic arms. Arms with any ERROR seed are excluded and listed. "
-                  "Validation (held-out seeds, original + selected arms) decides via verdict_v1. Model confidence is never read.")
+                  "Validation (held-out seeds, original + selected arms + the selected AI arm's own matched-random twin, so every AI "
+                  "verdict has a like-for-like control on the same seeds) decides via verdict_v1. Model confidence is never read.")
 VARIATION_PRESET = {"perturb_mult": 2.0, "push_time_jitter_s": 0.15, "friction_pct": 0.10}   # proposed, off by default
 _KEEP = {
     "stand": ("survival_s", "fell", "fall_time", "max_abs_pitch_after_settle", "min_height_ratio", "saturation_frac", "slip_frac"),
@@ -353,6 +354,14 @@ def run_arena(version: dict, kind: str, arms: Sequence[dict], cfg: ArenaConfig, 
         ev("arm_result", {"phase": "screen", "arm_id": a, "summary": _summ(per)})
     selection = select_arms(built, scr)
     chosen = [a for a in (selection["ai"], selection["baseline"]) if a][:cfg.n_validate_arms]
+    twin = None
+    if selection["ai"] and selection["ai"] in chosen:
+        pid = next((r.get("proposal_id") for r in built if r["arm_id"] == selection["ai"]), None)
+        twin = next((r["arm_id"] for r in built if r["source"] == "random_baseline" and pid is not None
+                     and r.get("proposal_id") == pid and not r["error"]), None)
+        if twin and twin not in chosen:
+            chosen.append(twin)
+    selection["matched_twin"] = twin
     selection["validated"] = chosen
     val_spec = make_spec(kind, cfg.validate_seeds, spec_overrides)
     validation: dict = {}
