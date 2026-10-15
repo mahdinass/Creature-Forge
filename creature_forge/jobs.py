@@ -32,9 +32,32 @@ STATUSES = ("queued", "running", "done", "failed", "cancelled")
 TERMINAL = ("done", "failed", "cancelled")
 EVENT_TYPES = ("phase", "progress", "model_request", "model_response", "validation", "arm_result", "verdict",
                "error", "note", "probe_request", "probe_result")
-JOB_ID_RE = re.compile(r"^j-[0-9a-f]{8}$")
+JOB_ID_RE = re.compile(r"j-[0-9a-f]{8}")  # always used with fullmatch (`$` would accept a trailing newline)
+DEFAULT_MAX_QUEUED_JOBS = 8
+_MAX_PUBLIC_ERROR = 300
+_PATH_RES = (re.compile(r"[A-Za-z]:[\\/][^\s'\"<>|]*"), re.compile(r"(?<![\w.:])/(?:[\w.\-~ ]+/)+[\w.\-~]*"))
 RESTART_ERROR = "server restarted"
-_TRACE_TAIL = 2000
+
+
+class QueueFull(RuntimeError):
+    """Too many queued + running jobs (env CF_MAX_QUEUED_JOBS, default 8); the API answers 429."""
+
+
+def max_queued_jobs() -> int:
+    try:
+        return max(1, int(os.environ.get("CF_MAX_QUEUED_JOBS") or DEFAULT_MAX_QUEUED_JOBS))
+    except ValueError:
+        return DEFAULT_MAX_QUEUED_JOBS
+
+
+def public_error(exc: BaseException) -> str:
+    """What the API may show about a failure: `ExceptionType: short message`, absolute paths removed, at most 300 characters.
+    The full traceback stays in the server log and in `<forge_dir>/jobs/<job_id>.trace.txt` (never served)."""
+    text = f"{type(exc).__name__}: {exc}"
+    for rx in _PATH_RES:
+        text = rx.sub("<path>", text)
+    text = " ".join(text.split())
+    return text if len(text) <= _MAX_PUBLIC_ERROR else text[:_MAX_PUBLIC_ERROR - 3] + "..."
 
 
 class JobCancelled(Exception):
@@ -103,7 +126,7 @@ class JobManager:
 
     # ---- paths and persistence
     def _job_path(self, job_id: str) -> Path:
-        if not isinstance(job_id, str) or not JOB_ID_RE.match(job_id):
+        if not isinstance(job_id, str) or not JOB_ID_RE.fullmatch(job_id):
             raise KeyError(job_id)
         return self.dir / f"{job_id}.json"
 
@@ -116,7 +139,7 @@ class JobManager:
     def _read_job(self, job_id: str) -> dict:
         try:
             return json.loads(self._job_path(job_id).read_text(encoding="utf-8"))
-        except FileNotFoundError:
+        except OSError:  # missing, a directory, an invalid name for the OS: all "no such job"
             raise KeyError(job_id) from None
 
     def _append_event(self, job_id: str, type: str, data: dict) -> dict:
@@ -163,6 +186,9 @@ class JobManager:
         with self._lock:
             if self._closed:
                 raise RuntimeError("job manager is closed")
+            active = sum(1 for j in self._live.values() if j["status"] in ("queued", "running"))
+            if active >= max_queued_jobs():
+                raise QueueFull(f"too many jobs queued or running ({active}); wait for one to finish or cancel one")
             while True:
                 job_id = "j-" + secrets.token_hex(4)
                 if job_id not in self._live and not self._job_path(job_id).exists():
@@ -298,11 +324,15 @@ class JobManager:
                 self._append_event(job_id, "note", {"message": "cancelled"})
                 self._finish(job, "cancelled")
         except Exception as exc:  # a failing job must never kill the worker thread
-            tb = traceback.format_exc()
-            msg = f"{type(exc).__name__}: {exc}"
-            log.warning("job %s failed: %s", job_id, msg)
+            msg = public_error(exc)
+            log.warning("job %s failed: %s\n%s", job_id, msg, traceback.format_exc())
+            try:  # the full traceback goes to a file nothing serves
+                self.dir.mkdir(parents=True, exist_ok=True)
+                (self.dir / f"{job_id}.trace.txt").write_text(traceback.format_exc(), encoding="utf-8")
+            except OSError:
+                pass
             with self._lock:
-                self._append_event(job_id, "error", {"message": msg, "traceback_tail": tb[-_TRACE_TAIL:]})
+                self._append_event(job_id, "error", {"message": msg})
                 self._finish(job, "failed", error=msg)
         else:
             with self._lock:

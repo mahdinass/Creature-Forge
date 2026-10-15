@@ -12,7 +12,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -33,6 +33,7 @@ from ..sandbox import POSE_RANGES, SANDBOX_BOUNDS, SandboxBody, SandboxError, bu
 from ..sketch import SketchError, compile_sketch, default_sketch, normalize_sketch, support_info
 from ..trial_view import trial_view
 from .forge_api import create_forge_router
+from .security import RequestGuard
 
 FORGE_DIR = Path(__file__).resolve().parents[2] / "artifacts" / "forge"  # git-ignored user creatures, runs, jobs
 
@@ -156,8 +157,14 @@ def _route_paths(routes) -> list[str]:
 
 
 def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = DIST,
-               demo_dir: Path = DEMO_DIR, locomotion_dir: Path = LOCOMOTION_DIR, forge_dir: Path = FORGE_DIR) -> FastAPI:
+               demo_dir: Path = DEMO_DIR, locomotion_dir: Path = LOCOMOTION_DIR, forge_dir: Path = FORGE_DIR,
+               allowed_hosts: tuple = ()) -> FastAPI:
     app = FastAPI(title="Creature Forge Studio", lifespan=_warm)
+    @app.exception_handler(RecursionError)
+    async def _too_deep(_request, _exc):
+        return JSONResponse({"detail": "JSON is nested too deeply"}, status_code=422)
+
+    app.add_middleware(RequestGuard, allowed_hosts=allowed_hosts)  # Host allow-list, same-origin writes, 4 MB body cap
 
     @app.get("/api/schema")
     def schema():
@@ -398,7 +405,7 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
         index = dist_dir / "index.html"
         built = (datetime.fromtimestamp(index.stat().st_mtime, timezone.utc).isoformat(timespec="seconds")
                  if index.is_file() else None)
-        return {**git_info, "started_at": started_at, "dist_built": built, "repo_root": str(repo),
+        return {**git_info, "started_at": started_at, "dist_built": built,
                 "api_routes": sorted(p for p in _route_paths(app.routes) if p.startswith("/api/"))}
 
     # Forge Loop (/api/forge/*): creature versions, challenges, jobs. Nothing is created until first use.

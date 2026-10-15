@@ -26,7 +26,19 @@ log = logging.getLogger(__name__)
 
 MODES = ("guided", "experimental")
 ORIGINS = ("user", "ai_accepted")
-CID_RE = re.compile(r"^c-[0-9a-f]{8}$")
+CID_RE = re.compile(r"c-[0-9a-f]{8}")  # always used with fullmatch
+DEFAULT_MAX_CREATURES = 500
+
+
+class StoreFull(ValueError):
+    """The creature cap (env CF_MAX_CREATURES, default 500) is reached; the API answers 429."""
+
+
+def max_creatures() -> int:
+    try:
+        return max(1, int(os.environ.get("CF_MAX_CREATURES") or DEFAULT_MAX_CREATURES))
+    except ValueError:
+        return DEFAULT_MAX_CREATURES
 WALK_VECTOR_LEN = 15  # r3.PARAM_NAMES order (contracts section 2)
 VERIFIED = "VERIFIED_IMPROVEMENT"
 _LEG_KEYS = ("thigh_length", "shank_length", "foot_length")
@@ -43,7 +55,10 @@ def now_iso() -> str:
 
 def canonical_json(obj) -> str:
     """Canonical JSON: sorted keys, no whitespace, floats as Python repr; NaN/inf are rejected."""
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False)
+    try:
+        return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False)
+    except RecursionError:
+        raise ValueError("JSON is nested too deeply") from None
 
 
 def content_hash(body: dict, controllers: dict) -> str:
@@ -166,7 +181,7 @@ class CreatureStore:
 
     # ---- file helpers
     def _path(self, cid: str) -> Path:
-        if not isinstance(cid, str) or not CID_RE.match(cid):
+        if not isinstance(cid, str) or not CID_RE.fullmatch(cid):
             raise KeyError(cid)
         return self.dir / f"{cid}.json"
 
@@ -174,7 +189,7 @@ class CreatureStore:
         path = self._path(cid)
         try:
             return json.loads(path.read_text(encoding="utf-8"))
-        except FileNotFoundError:
+        except OSError:
             raise KeyError(cid) from None
 
     def _write(self, rec: dict) -> None:
@@ -203,6 +218,8 @@ class CreatureStore:
             raise ValueError(f"drawing must be plain JSON: {exc}") from exc
         controllers = default_controllers()
         with self._lock:
+            if self.dir.is_dir() and sum(1 for _ in self.dir.glob("c-*.json")) >= max_creatures():
+                raise StoreFull(f"creature limit reached ({max_creatures()}); delete files under artifacts/forge/creatures or raise CF_MAX_CREATURES")
             while True:
                 cid = "c-" + secrets.token_hex(4)
                 if not self._path(cid).exists():
@@ -248,6 +265,10 @@ class CreatureStore:
             parent = next((v for v in rec["versions"] if v["n"] == parent_n), None)
             if parent is None:
                 raise KeyError(f"{cid} has no version {parent_n}")
+            iid, arm = change.get("investigation_id"), change.get("arm_id")
+            if iid is not None and any(isinstance(v.get("change"), dict) and v["change"].get("investigation_id") == iid
+                                       and v["change"].get("arm_id") == arm for v in rec["versions"]):
+                raise ValueError(f"investigation {iid} arm {arm} was already accepted into this creature")
             mode = parent["mode"]
             norm_body = normalize_body(body, mode)
             norm_ctrl = normalize_controllers(controllers)

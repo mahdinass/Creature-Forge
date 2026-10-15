@@ -1,3 +1,7 @@
+import os
+
+os.environ.setdefault("CF_ALLOW_TESTSERVER", "1")  # Starlette TestClient sends Host: testserver (see studio/security.py)
+
 import hashlib
 import json
 import re

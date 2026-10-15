@@ -43,6 +43,27 @@ TESTS = {
 }
 
 
+SLOT_RE = re.compile(r"[A-Za-z0-9_.-]{1,40}")
+
+
+def slot_arg(value: str) -> str:
+    """argparse type: a slot name ends up inside remote shell text and paths, so it is restricted to a safe alphabet."""
+    if not SLOT_RE.fullmatch(value) or value in (".", ".."):
+        raise argparse.ArgumentTypeError("--slot must match [A-Za-z0-9_.-]{1,40}")
+    return value
+
+
+def safe_pull_path(raw: str) -> str:
+    """A VM-relative path for `pull`: no absolute paths, no drive letters, no `..` components."""
+    rel = raw.replace("\\", "/")
+    if rel.startswith("/") or re.match(r"^[A-Za-z]:", rel) or ".." in rel.split("/"):
+        raise SystemExit("pull: PATH must be relative to the slot and may not contain '..'")
+    rel = rel.strip("/")
+    if not rel:
+        raise SystemExit("pull: PATH is empty")
+    return rel
+
+
 def git(tree: Path, *args: str, env: dict | None = None) -> str:
     return subprocess.run(["git", "-C", str(tree), *args], check=True, capture_output=True, text=True,
                           env={**os.environ, **(env or {})}).stdout.strip()
@@ -178,7 +199,7 @@ def cmd_tunnel(a) -> None:
 
 def cmd_pull(a) -> None:
     slot = a.slot or default_slot(Path(a.tree).resolve())
-    rel = a.path.strip("/")
+    rel = safe_pull_path(a.path)
     dest = ROOT / "artifacts" / "vm" / slot
     dest.mkdir(parents=True, exist_ok=True)
     r = subprocess.run(["ssh", "-F", SSH_CFG, fc.HOST, f"cd $HOME/dev/{slot} && tar czf - {shlex.quote(rel)}"],
@@ -209,7 +230,7 @@ def main() -> None:
     sp = ap.add_subparsers(dest="cmd", required=True)
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--tree", default=str(ROOT))
-    common.add_argument("--slot")
+    common.add_argument("--slot", type=slot_arg)
     sp.add_parser("bootstrap")
     sp.add_parser("sync", parents=[common])
     e = sp.add_parser("exec", parents=[common]); e.add_argument("command"); e.add_argument("--heavy", action="store_true")

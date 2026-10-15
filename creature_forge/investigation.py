@@ -45,7 +45,7 @@ PROFILES = ("default", "deep")
 MODES = ("live", "scripted")
 PROVENANCE = {"live": "LIVE", "scripted": "SCRIPTED_MOCK"}
 SCRIPTED_MODEL = "scripted-fixture"
-INVESTIGATION_ID_RE = re.compile(r"^i-[0-9a-f]{6,16}$")
+INVESTIGATION_ID_RE = re.compile(r"i-[0-9a-f]{6,16}")  # always used with fullmatch
 DEFAULT_SIZES = {"train": 3, "screen": 12, "validate": 24}
 # Null pilot (experiments/forge_loop/null_pilot): stand needs 16 validation seeds to leave INCONCLUSIVE; push is near-deterministic
 # per seed, 12 suffice; walk varies most. Validation conditions are varied for push/walk (arena.VARIATION_PRESET).
@@ -267,7 +267,7 @@ def _load_run(forge_dir: Path, run_id: str) -> dict:
 
 
 def investigation_path(forge_dir: Path, iid: str) -> Path:
-    if not INVESTIGATION_ID_RE.match(iid or ""):
+    if not INVESTIGATION_ID_RE.fullmatch(iid or ""):
         raise KeyError(iid)
     return Path(forge_dir) / "investigations" / f"{iid}.json"
 
@@ -275,7 +275,7 @@ def investigation_path(forge_dir: Path, iid: str) -> Path:
 def load_investigation(forge_dir: Path, iid: str) -> dict:
     try:
         return json.loads(investigation_path(forge_dir, iid).read_text(encoding="utf-8"))
-    except FileNotFoundError:
+    except OSError:
         raise KeyError(iid) from None
 
 

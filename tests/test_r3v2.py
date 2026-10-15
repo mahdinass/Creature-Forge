@@ -43,7 +43,7 @@ class Capture:
 
 def client(replies, **kw):
     cap = Capture(replies, **kw)
-    c = r3v2.make_client(api_key="test-key", base_url="http://invalid.example", transport=cap)
+    c = r3v2.make_client(api_key="test-key", base_url="https://invalid.example", transport=cap)
     c.cap = cap
     return c
 

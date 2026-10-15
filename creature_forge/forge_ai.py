@@ -300,6 +300,16 @@ def call_model(client, cfg: ModelConfig, messages: list[dict], ledger: Inference
     except NebiusError as e:
         call.error = f"{type(e).__name__}: {str(e)[:400]}"
         call.http_status = _http_status(str(e))
+    except BaseException:  # noqa: BLE001 - account for the reservation, then let the caller see the real exception
+        client.transport = rec.inner
+        try:
+            if rec.calls > 0:  # possibly sent: never undercount, settle at the worst case
+                ledger.settle(res, request_id=None, prompt_tokens=None, completion_tokens=None, status="error", usage_estimated=True)
+            else:
+                ledger.release(res)
+        except Exception:  # noqa: BLE001 - a ledger failure must not mask the original exception
+            pass
+        raise
     finally:
         client.transport = rec.inner
     call.sent = rec.calls > 0
@@ -320,9 +330,13 @@ def call_model(client, cfg: ModelConfig, messages: list[dict], ledger: Inference
     if not call.sent:
         ledger.release(res)  # refused locally (client limits): no request happened
     else:
-        row = ledger.settle(res, request_id=call.request_id, prompt_tokens=pt, completion_tokens=ct, status="ok" if call.error is None else "error")
+        # Sent but usage unknown (timeout, HTTP error, malformed response): settle at the reservation's worst case, flagged.
+        row = ledger.settle(res, request_id=call.request_id, prompt_tokens=pt, completion_tokens=ct, status="ok" if call.error is None else "error",
+                            usage_estimated=(pt is None or ct is None))
         call.cost_usd = row["cost_usd"]
-        if call.usage == {} and (pt is not None or ct is not None):
+        if row.get("usage_estimated"):
+            call.usage = {"prompt_tokens": row["prompt_tokens"], "completion_tokens": row["completion_tokens"], "usage_estimated": True}
+        elif call.usage == {} and (pt is not None or ct is not None):
             call.usage = {"prompt_tokens": pt, "completion_tokens": ct}
     return call
 

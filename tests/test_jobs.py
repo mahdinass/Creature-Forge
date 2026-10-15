@@ -98,7 +98,7 @@ class LifecycleTests(JobCase):
             self.wait_status(i, "done")
         self.assertEqual(order, ["a", "b", "c"])
 
-    def test_exception_marks_failed_with_message_and_traceback_tail(self):
+    def test_exception_marks_failed_with_message_and_no_traceback_in_the_api_data(self):
         def boom(ctx):
             raise RuntimeError("kaboom")
         jid = self.jm.submit("challenge", boom)
@@ -106,8 +106,8 @@ class LifecycleTests(JobCase):
         self.assertEqual(job["error"], "RuntimeError: kaboom")
         err = [e for e in self.jm.events(jid) if e["type"] == "error"][0]
         self.assertEqual(err["data"]["message"], "RuntimeError: kaboom")
-        self.assertIn("boom", err["data"]["traceback_tail"])
-        self.assertLessEqual(len(err["data"]["traceback_tail"]), 2000)
+        self.assertNotIn("traceback_tail", err["data"])  # the traceback lives in <jobs>/<id>.trace.txt only (security review L1)
+        self.assertIn("boom", (self.root / "jobs" / f"{jid}.trace.txt").read_text(encoding="utf-8"))
         ok = self.jm.submit("challenge", lambda ctx: "still alive")  # the worker survived
         self.assertEqual(self.wait_status(ok, "done")["result_ref"], "still alive")
 

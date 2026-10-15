@@ -672,7 +672,10 @@ class CallModelTests(Case):
         self.assertEqual(c.http_status, 503)
         self.assertIsNone(c.raw_response)
         self.assertEqual(len(t.calls), 1)
-        self.assertEqual((led.status()["requests"], led.status()["usd"]), (1, 0.0))
+        s = led.status()  # a sent request with unknown usage is settled at the reservation's worst case, never at 0 (security review M2)
+        self.assertEqual(s["requests"], 1)
+        self.assertGreater(s["usd"], 0)
+        self.assertTrue(c.usage.get("usage_estimated"))
 
     def test_timeout_recorded(self):
         c, t, _ = self.call([NebiusError("TimeoutError: timed out")])
