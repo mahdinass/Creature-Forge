@@ -57,6 +57,7 @@ class Probe:
     spec_patch: dict = field(default_factory=dict)     # challenge-spec fields changed for this probe
     measurement: str = "paired"                        # "paired": delta vs the original on the same seeds | "static": measurement only
     transformation: str = ""                           # human-readable exact transformation
+    adapt_budget: int = 0                              # walk: re-adapt the walking controller with this many rollouts on TRAIN seeds
 
 
 def _e(param: str, value: float) -> "iv.Edit":
@@ -78,6 +79,9 @@ PROBES: dict[str, Probe] = {p.id: p for p in (
           (_e("stand.kp", 1.5), _e("stand.kd", 1.5)), transformation="stand.kp x 1.5 and stand.kd x 1.5"),
     Probe("neutral_start", "Start from the neutral pose instead of the drawn pose: tests whether the drawn start pose causes the failure.", _ALL,
           spec_patch={"start": "neutral"}, transformation="challenge start = neutral"),
+    Probe("retune_controller", "Walking controller re-adapted to this body (the arena's 48-rollout (1+8)-ES on separate training seeds, "
+          "body unchanged): tests whether the controller, rather than the body, limits walking.", ("walk",), adapt_budget=48,
+          transformation="walk controller adapted to this body, budget 48 rollouts, training seeds disjoint from the probe seeds"),
     Probe("no_push", "Same creature, no shove at all: tests whether it is already unstable without the disturbance.", ("push",),
           spec_patch={"kind": "stand"}, measurement="static", transformation="stand rollout of the push duration, no push"),
 )}
@@ -142,7 +146,11 @@ def _num(x):
     return None if x is None else round(float(x), 6)
 
 
-def run_probes(version: dict, kind: str, spec_dict: dict, probe_ids, seeds, pool=None, *, job_fn=None) -> dict:
+RETUNE_NOISE_SEED = 0   # identical to arena.ArenaConfig.noise_seed default, so a probe and a later retune arm adapt alike
+
+
+def run_probes(version: dict, kind: str, spec_dict: dict, probe_ids, seeds, pool=None, *, job_fn=None, train_seeds=None,
+               adapt_fn=None) -> dict:
     """Run the original and each probe on the SAME `seeds` and summarise. Deterministic for identical inputs.
     `spec_dict`: the challenge spec (its own seeds are ignored; push uses its `bisection_steps`). `pool`: anything with `imap(fn, jobs)`
     (default: in-process). `job_fn` (tests): replaces `challenges.seed_job`. Raises ValueError for unknown/duplicate/too many probes or
@@ -166,8 +174,25 @@ def run_probes(version: dict, kind: str, spec_dict: dict, probe_ids, seeds, pool
     if any(PROBES[i].measurement == "paired" for i in ids if i in PROBES):
         arms["original"] = {"body": iv.full_body(version), "controllers": {"stand": iv.stand_params(version), "walk": (version.get("controllers") or {}).get("walk")},
                             "spec": base_spec}
+    adapt_rollouts, adapted = 0, {}
     for pid in ids:
         t = transformation(version, kind, spec_dict, pid)
+        if PROBES[pid].adapt_budget:
+            # Controller-adaptation probe: adapt on TRAIN seeds (never the probe seeds it is measured on), then measure on the probe seeds.
+            train = [int(x) for x in (train_seeds or [])]
+            if not train or set(train) & set(seeds):
+                raise ValueError(f"{pid} needs training seeds disjoint from the probe seeds")
+            if adapt_fn is None:
+                from . import creature_walk as cw
+                adapt_fn = cw.adapt_controller
+            init = iv.walk_vector({"controllers": t["controllers"]})
+            res = adapt_fn(iv.sandbox_body({"body": t["body"]}), init, budget=PROBES[pid].adapt_budget, train_seeds=train,
+                           noise_seed=RETUNE_NOISE_SEED, pool=pool)
+            adapt_rollouts += int(res["rollouts_used"])
+            adapted[pid] = {"budget": PROBES[pid].adapt_budget, "rollouts_used": int(res["rollouts_used"]), "train_seeds": train,
+                            "improved_on_train": res.get("improved")}
+            t["controllers"] = {**t["controllers"], "walk": {"vector": [float(x) for x in res["vector"]],
+                                                             "provenance": {"kind": "adapted", "probe": pid, "adaptation": adapted[pid]}}}
         arms[pid] = {"body": t["body"], "controllers": t["controllers"], "spec": spec_json(t["spec"])}
     jobs, index = [], []
     for name, a in arms.items():
@@ -180,7 +205,7 @@ def run_probes(version: dict, kind: str, spec_dict: dict, probe_ids, seeds, pool
         if isinstance(res, tuple) and len(res) == 2 and res[0] == "error":
             res = {"seed": seeds[k], "outcome": "ERROR", "score": 0.0, "metrics": {"error": res[1]}, "rollouts": 0, "error": res[1]}
         raw[name][k] = res
-    rollouts = sum(int((r or {}).get("rollouts") or 0) for rs in raw.values() for r in rs)
+    rollouts = sum(int((r or {}).get("rollouts") or 0) for rs in raw.values() for r in rs) + adapt_rollouts
     tol = resolution_for(kind, spec_dict)
 
     def scores(name: str):
@@ -200,6 +225,8 @@ def run_probes(version: dict, kind: str, spec_dict: dict, probe_ids, seeds, pool
         sc = scores(pid)
         res: dict = {"probe_id": pid, "measurement": p.measurement, "transformation": p.transformation, "status": "ok",
                      "scores": None if sc is None else [_num(x) for x in sc]}
+        if pid in adapted:
+            res["adaptation"] = adapted[pid]
         if sc is None:
             res["status"] = "error"
             res["error"] = next((r.get("error") for r in raw[pid] if r and r.get("error")), "a probe rollout could not run")

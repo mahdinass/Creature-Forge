@@ -51,7 +51,7 @@ class Base(unittest.TestCase):
 class CatalogueTests(Base):
     def test_fixed_whitelist_without_invented_parameters(self):
         self.assertEqual(set(pb.PROBE_IDS), {"friction_x2", "torque_x1_5", "foot_x1_5", "torso_mass_x0_7", "balance_gain_x1_5", "stiffer_pd",
-                                             "neutral_start", "no_push"})
+                                             "neutral_start", "no_push", "retune_controller"})
         self.assertFalse([i for i in pb.PROBE_IDS if i.startswith("heel")], "no heel parameter exists, so no heel probe")
         for p in pb.PROBES.values():
             for e in p.edits:

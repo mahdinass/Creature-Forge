@@ -487,7 +487,8 @@ def run_investigation(store, cid: str, n: int, run_id: str, *, mode: str, forge_
             def probe_runner(requests: list[dict], ids: list[str]) -> dict:
                 check()
                 ev_probe("probe_request", {"probes": requests, "seeds": list(probe_seeds)})
-                ran = pb.run_probes(version, kind, probe_spec, ids, list(probe_seeds)[:pb.MAX_PROBE_SEEDS], pool)
+                ran = pb.run_probes(version, kind, probe_spec, ids, list(probe_seeds)[:pb.MAX_PROBE_SEEDS], pool,
+                                    train_seeds=list(sets.get("train") or []))
                 for r in pb.evaluate_expectations(requests, ran):
                     pr = ran["results"][r["probe_id"]]
                     ev_probe("probe_result", {**r, "status": pr.get("status"), "median": pr.get("median"),
