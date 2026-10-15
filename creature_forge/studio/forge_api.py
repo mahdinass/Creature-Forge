@@ -75,6 +75,7 @@ class InvestigationIn(BaseModel):
     profile: Literal["default", "deep"] = "default"
     loop: bool = False
     probes: bool = False   # diagnostic-probe protocol (2 model calls + MuJoCo probes before the proposals)
+    memory: bool = False   # engineering memory: lessons from other creatures' past investigations enter the evidence
 
 
 class AcceptIn(BaseModel):
@@ -433,6 +434,8 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         options = dict(investigation_options or {})
         if req.probes:
             options["probes"] = True
+        if req.memory:
+            options["memory"] = True
         if req.loop and challenge_runner is not None:
             options.setdefault("challenge_runner", challenge_runner)
         try:
@@ -442,6 +445,12 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
         except RuntimeError as exc:
             raise HTTPException(503, str(exc)) from exc
         return {"job_id": job_id, "investigation_id": iid}
+
+    @router.get("/memory")
+    def get_memory():
+        from ..memory import MemoryBank
+        lessons = MemoryBank.for_forge_dir(forge_dir).summaries()
+        return {"bank_size": len(lessons), "lessons": lessons}
 
     @router.get("/investigations")
     def list_investigations(cid: str | None = None):

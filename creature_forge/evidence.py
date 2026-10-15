@@ -121,6 +121,8 @@ def leaf_items(evidence: dict, limit: int = 400, exclude: tuple = CITABLE_EXCLUD
     """(path, scalar) for every citable scalar leaf of the pack, in pack order; each path round-trips through `resolve`. Top-level keys in
     `exclude` are skipped, as are keys that cannot be written as a path segment."""
     out: list[tuple[str, object]] = []
+    if isinstance(evidence, dict) and "memory" in evidence:
+        limit += 120   # the engineering-memory block (<= MEMORY_LIMIT_BYTES) must not crowd out the measurements that follow it
 
     def walk(obj, prefix: str) -> None:
         if len(out) >= limit:
@@ -382,8 +384,54 @@ def _history_block(history: list | None, lv: Level) -> list:
     return out
 
 
+# ------------------------------------------------------------------------------------------------------------------ engineering memory
+MEMORY_LIMIT_BYTES = 2000
+_MEMORY_FEATURES = ("leg_length_rear", "leg_length_front", "foot_to_leg", "torque_to_weight", "mass_total", "foot_friction", "torque_limit")
+_VERDICT_RANK = {"VERIFIED_IMPROVEMENT": 0, "WORSE": 1}
+
+
+def _memory_entry(sim: float, les: dict, max_tried: int, max_probes: int) -> dict:
+    feats = les.get("features") or {}
+    tried = sorted(les.get("tried") or [], key=lambda t: (_VERDICT_RANK.get(t.get("verdict"), 2), -abs(t.get("median_diff") or 0.0)))
+    e: dict = {"similarity": _r(float(sim)), "creature": {k: _r(feats[k]) for k in _MEMORY_FEATURES if k in feats},
+               "challenge": les.get("kind")}
+    if feats.get("mode"):
+        e["creature"]["mode"] = feats["mode"]
+    orig = les.get("original") or {}
+    if orig.get("score_median") is not None:
+        e["original_score"] = _r(orig["score_median"])
+    fail = {k: _r(v) for k, v in (les.get("failure") or {}).items() if isinstance(v, (str, bool, int, float))}
+    if fail:
+        e["failure"] = fail
+    e["tried"] = []
+    for t in tried[:max_tried]:
+        edit = "; ".join(f"{x.get('param')} {x.get('op')} {_r(x.get('value'))} {x.get('target')}" for x in (t.get("edits") or [])[:2])
+        row = {"edit": _clip(edit, 80), "source": t.get("source"), "verdict": t.get("verdict")}
+        if isinstance(t.get("median_diff"), (int, float)):
+            row["median_diff"] = _r(float(t["median_diff"]))
+        e["tried"].append(row)
+    probes = [p for p in les.get("probes") or [] if p.get("observed")]
+    e["probes"] = [{"probe_id": p["probe_id"], "observed": p["observed"]} for p in probes[:max_probes]]
+    return {k: v for k, v in e.items() if v not in ([], {}, None)}
+
+
+def memory_block(retrieved) -> list[dict]:
+    """Compact, scalar-only evidence entries for past cases `[(similarity, lesson), ...]` (see `memory.MemoryBank.retrieve`):
+    memory[i].{similarity, creature.{...}, challenge, original_score, failure.{...}, tried[j].{edit, source, verdict, median_diff},
+    probes[k].{probe_id, observed}}. At most `MEMORY_LIMIT_BYTES` of compact JSON: tried arms are ordered verified first, then WORSE, then
+    the rest, and the least informative parts are dropped first (fewer arms/probes per case, then fewer cases)."""
+    items = list(retrieved or [])
+    for floor in (min(len(items), 2), 1):   # keep at least two cases while detail is trimmed, then fall back to one
+        for mt, mp in ((4, 3), (3, 2), (2, 2), (2, 1), (1, 1), (1, 0), (0, 0)):
+            for n_cases in range(len(items), floor - 1, -1):
+                blk = [_memory_entry(s, les, mt, mp) for s, les in items[:n_cases]]
+                if blk and _sz(blk) <= MEMORY_LIMIT_BYTES:
+                    return blk
+    return []
+
+
 # ------------------------------------------------------------------------------------------------------------------ public API
-def build_evidence(version: dict, challenge_result: dict, history: list[dict] | None = None) -> dict:
+def build_evidence(version: dict, challenge_result: dict, history: list[dict] | None = None, memory: list | None = None) -> dict:
     """Compact evidence pack for one creature version and one ChallengeResult dict (contracts section 3). Deterministic; inputs are not
     mutated. Tries `LEVELS` in order and returns the first pack of at most PACK_LIMIT_BYTES (the leanest level otherwise, with
     `truncated` listing what was cut)."""
@@ -410,6 +458,17 @@ def build_evidence(version: dict, challenge_result: dict, history: list[dict] | 
         if n:
             pack["detail_level"] = n
         if pack_size(pack) <= PACK_LIMIT_BYTES:
-            return pack
+            return _with_memory(pack, memory)
     pack["truncated"] = True
+    return _with_memory(pack, memory)
+
+
+def _with_memory(pack: dict, memory: list | None) -> dict:
+    """Adds `memory` (already a `memory_block`; a list of (similarity, lesson) pairs is converted) after the size-fitted pack, only when
+    given and non-empty, so a pack without memory is byte-identical to before."""
+    if memory:
+        if isinstance(memory[0], (tuple, list)):
+            memory = memory_block(memory)
+        if memory:
+            pack["memory"] = memory
     return pack
