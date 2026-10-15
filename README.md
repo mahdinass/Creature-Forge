@@ -31,8 +31,10 @@ Full guide for judges and developers: [`docs/FORGE_LOOP.md`](docs/FORGE_LOOP.md)
   (+4.375 N). These are worked cases on one creature and one challenge, not statistics.
 - A null pilot found that about 15% of random push edits on standing creatures also verify. A single VERIFIED arm is
   therefore not evidence of model skill, and every AI verdict is shown beside its matched-random twin.
-- The pre-registered comparison of AI-selected edits against their matched-random twins is in progress.
-  Results: see `experiments/forge_loop/scoreboard/` (pending at the time of writing).
+- Pre-registered scoreboard (12 fresh drawn creatures, 6 starters x 2): the AI's selected redesign verified in 6/12
+  investigations, its own size-matched random twin in 1/12 (discordant 5 vs 0, exact one-sided McNemar p = 0.031). The
+  effect is concentrated in the push challenge; on creatures that cannot stand the AI verified once and its twin did
+  better. Small study, one zoo; see [`experiments/forge_loop/scoreboard/REPORT.md`](experiments/forge_loop/scoreboard/REPORT.md).
 - The R2 result (150/150 vs 91/150) is classical optimisation, not Nemotron. The earlier recorded Nemotron demo did not
   beat matched random edits. R3 produced no statistical result.
 

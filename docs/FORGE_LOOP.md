@@ -1,7 +1,7 @@
 # Forge Loop
 
 Status as of 2026-10-15, branch `feature/forge-loop`. Implemented and tested on the Nebius VM. Live Nemotron calls have
-run on development records. A pre-registered scoreboard is pending. Contracts: `docs/FORGE_LOOP_CONTRACTS.md`.
+run on development records. A small pre-registered scoreboard found AI-selected edits verified more often than matched random edits (6/12 vs 1/12, p = 0.031), mostly on the push challenge. Contracts: `docs/FORGE_LOOP_CONTRACTS.md`.
 
 ## What it is
 
@@ -183,8 +183,10 @@ ledger caps; the scripted mock; the VM workflow.
   creature (push) reached VERIFIED_IMPROVEMENT on 12 held-out seeds each: `i-f9873480e42a` (before probes), and
   `i-47bc91e407c2` and `i-172b6a48a0ad` (with probes, rounds 1 and 3 of one loop). Those are worked cases on one creature and one
   challenge. They are not statistics, and they are not a claim that the model is better than random edits.
-- The pre-registered scoreboard (`experiments/forge_loop/scoreboard/`) is pending. It compares AI-selected edits with their
-  matched-random twins across 6 starter and challenge cells, 2 replicates each, with an exact one-sided McNemar test.
+- Pre-registered scoreboard (`experiments/forge_loop/scoreboard/REPORT.md`): 6 starter and challenge cells, 2 replicates each.
+  AI arm verified 6/12, its matched-random twin 1/12, discordant 5 vs 0, exact one-sided McNemar p = 0.031. Five of the six AI
+  verifications were push; on creatures that cannot stand the AI verified once and its twin did better. Small study, one zoo,
+  and the push cells share a creature family with development; read the report's limits before quoting it.
 
 **Limitations:**
 

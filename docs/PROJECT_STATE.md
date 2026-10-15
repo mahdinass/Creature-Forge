@@ -242,3 +242,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Protocol fixes driven by live evidence:** foot heel/toe geometry in the evidence (from the compiled model); push measured at 0.625 N in investigations; the prompt states the acceptance rule; twin validation.
 - **Budgets at 08:20:** Forge inference ledger 40 requests, $0.33 (cap $15 / 1,500); infra $2.95 of $10 (conservative, incl. the overnight deadman incident).
 - **In progress:** frontend investigation views wired to real records (S5 phase 2); diagnostic probes / active experimentation (S7, M6).
+
+## Diagnostic probes live + pre-registered scoreboard (2026-10-15, `feature/forge-loop`, Draft PR #16)
+- **Probes (M6) live:** the model plans up to 3 counterfactual experiments, MuJoCo runs them, expectations are checked deterministically, step B states CONFIRMED/REFUTED. First live probe run ignored its own refuted probes; after the step-B fix, a 3-round loop verified rear-foot redesigns twice beside inconclusive twins (`experiments/forge_loop/dev_live_records/`).
+- **Frontend (M5) done:** investigation workspace on real records (probes, twin beside AI, three-way replay, accept-if-verified, lineage, loop/probe controls); 137 vitest, 237 browser checks.
+- **Scoreboard v1 (registered `e12dd0e` before running):** 12 live investigations on fresh starter creatures; AI verified 6/12, matched twin 1/12, discordant 5 vs 0, exact one-sided McNemar p = 0.031; heuristic 0/12; $0.05, 24 calls, 8,870 rollouts. Effect concentrated in push. Post-hoc best-of-k baseline check also 5 vs 0. Report: `experiments/forge_loop/scoreboard/REPORT.md`.
+- **Remaining:** walk-challenge investigations not yet tried live; engineering memory (post-MVP); submission video/screens; owner decisions on PR #16 and repo visibility.
