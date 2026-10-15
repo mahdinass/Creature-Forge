@@ -41,7 +41,7 @@ Direct import not declared in `pyproject.toml`: **pydantic** (`creature_forge/st
 | vite | `^8.3.4` (dev) | 8.3.4 | MIT | yes | |
 | vitest | `^5.0.4` (dev) | 5.0.4 | MIT | yes | |
 
-Lock file: `lockfileVersion` 3, 152 package entries (68 non-dev, 84 dev). One entry has no `license` field in the lock: **webgl-constants 1.1.1** (a transitive dependency of drei/three tooling). The notice records it as MIT "per LICENSE file"; the installed `node_modules/webgl-constants/LICENSE` reads "MIT License, Copyright (c) 2019 Tim van Scherpenzeel". Verified against the local file only.
+Lock file: `lockfileVersion` 3, 152 package entries (68 non-dev, 84 dev). One entry has no `license` field in the lock: **webgl-constants 1.1.1** (a transitive dependency of drei/three tooling). The notice records it as MIT "per LICENSE file"; the installed `node_modules/webgl-constants/LICENSE` reads "MIT License, Copyright (c) 2019 Tim van Scherpenzeel". **Resolved 2026-10-15:** the copy installed on the VM by `npm ci` (registry tarball pinned by the lock's `integrity` hash, so byte-identical to what any fresh install receives) has the same MIT `LICENSE` file, and its `README.md` states "released under the MIT license"; only `package.json` lacks a `license` field. MIT is correct.
 
 Every other lock entry's notice row matches the lock's name and version (checked by script against the notice table, 0 mismatches apart from the two fonts).
 
@@ -110,8 +110,8 @@ Question for the owner: **does comparing a hosted model's proposals with random 
 
 | pattern | result |
 |---|---|
-| `C:\Users` / `C:/Users` | 1 line in `docs/PROJECT_STATE.md` (line 14: `C:/Users/mbnas/basic-memory/...`); 2 more lines in the same file use `C:\\Users\\mbnas\\...` (lines 48, 50), which the fixed-string search did not match because of the doubled backslashes |
-| `mbnas` (Windows username) | `docs/PROJECT_STATE.md`: 3 lines (14, 48, 50) |
+| `C:\Users` / `C:/Users` | 1 line in `docs/PROJECT_STATE.md` (line 14: `C:/Users/<user>/basic-memory/...`); 2 more lines in the same file use `C:\\Users\\<user>\\...` (lines 48, 50), which the fixed-string search did not match because of the doubled backslashes. **Fixed 2026-10-15** (paths scrubbed; 0 hits) |
+| Windows username | `docs/PROJECT_STATE.md`: 3 lines (14, 48, 50). **Fixed 2026-10-15**; this table no longer quotes it |
 | `@gmail` in tracked files | 0 |
 | email-shaped strings in tracked files | 0 |
 | `forge@` | 0 |
@@ -123,7 +123,7 @@ Question for the owner: **does comparing a hosted model's proposals with random 
 
 ### 4c. Git history metadata (not in tracked files)
 
-- `git log --all` shows **198 commit author/committer entries with `@gmail.com` addresses** and 66 with `@users.noreply.github.com`, plus 14 with `@github.com`. There are 2 distinct author/committer addresses in total (local parts not printed here). Making the repository public exposes these addresses in history. The checklist does not mention this. **Owner decision:** accept, or rewrite history (which the 10-14 notes say was already done once for co-author trailers; no further rewrite was requested).
+- `git log --all` shows **198 commit author/committer entries with `@gmail.com` addresses** (238 on 2026-10-15 as commits accumulate; same single address; 0 AI co-author trailers on any ref) and 66 with `@users.noreply.github.com`, plus 14 with `@github.com`. There are 2 distinct author/committer addresses in total (local parts not printed here). Making the repository public exposes these addresses in history. The checklist does not mention this. **Owner decision:** accept, or rewrite history (which the 10-14 notes say was already done once for co-author trailers; no further rewrite was requested).
 
 ### 4d. `.env` and ignored local state
 
@@ -148,15 +148,15 @@ Question for the owner: **does comparing a hosted model's proposals with random 
 
 ### 5b. Owner decisions or actions before publication
 
-- [ ] Add `@fontsource-variable/bricolage-grotesque` and `@fontsource-variable/instrument-sans` (OFL-1.1) to `THIRD_PARTY_NOTICES.md` by re-running `scripts/generate_third_party_notices.py` (not run here), and extend `tests/test_license.py` if wanted. Check the OFL Reserved Font Name clause.
-- [ ] Decide whether `pydantic` should be declared directly in `pyproject.toml` (it is imported by `studio/app.py` and `studio/forge_api.py`).
-- [ ] Confirm the licence statement for `webgl-constants` (the lock has no licence field; the local LICENSE says MIT).
+- [x] Add `@fontsource-variable/bricolage-grotesque` and `@fontsource-variable/instrument-sans` (OFL-1.1) to `THIRD_PARTY_NOTICES.md` (done 2026-10-15; both rows present). Still open: check the OFL Reserved Font Name clause; optionally extend `tests/test_license.py`.
+- [x] `pydantic>=2` declared in the `studio` extra of `pyproject.toml` (2026-10-15).
+- [x] Licence statement for `webgl-constants`: MIT, confirmed from the integrity-pinned registry tarball (section 1, 2026-10-15).
 - [ ] Decide which Nemotron models to name publicly (Nano only in current docs; Super is the Forge Loop default; Ultra is optional). Read the NVIDIA licence for Super and Ultra if their model cards carry a different licence.
 - [ ] Owner read of the original Nebius Services Agreement §4.1.10(c) against the scoreboard comparison (section 3c).
 - [ ] Owner read of the NVIDIA Nemotron licence appendix and of the Nebius AUP and Service-Specific Terms (still open from `MODEL_AND_SERVICE_TERMS.md` section 4).
 - [ ] Send the Nebius / organiser clarification on §18.7 public references, or accept the risk with the public text kept factual (no logos, no endorsement wording).
 - [ ] Decide whether the 20 raw-record `.jsonl`/`.json` files stay public (recommended by the checklist as the evidence; the terms reading above does not restrict output publication, but the AUP is unread).
-- [ ] Redact or keep `docs/PROJECT_STATE.md` lines 14, 48, 50 (`mbnas` and local paths).
+- [x] Redact `docs/PROJECT_STATE.md` lines 14, 48, 50 (Windows username and local paths): done 2026-10-15; `git grep` for the username returns 0 tracked hits.
 - [ ] Decide on the commit author email addresses in history (section 4c).
 - [ ] Commit or discard the three working-tree changes (section 4e) and re-run the secret scan and CI on the final committed refs.
 - [ ] Confirm that `studio/dist` will not be published, or include the OFL notices with any published build.
