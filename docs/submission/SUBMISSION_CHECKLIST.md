@@ -5,14 +5,14 @@ Official deadline **Fri 2026-10-30, 18:00 Europe/Oslo**; internal deadline **Thu
 ## Hackathon deliverables (docs/PROJECT_SPEC.md §1.2)
 | item | status | notes |
 |---|---|---|
-| Functional application matching what is filmed | done (branch) / OWNER | Forge Loop on `feature/forge-loop`; live end-to-end browser test 15/15 archived (`dev_live_records/README.md`); **PR #16 is not merged** (owner decides) |
+| Functional application matching what is filmed | done (branch) / OWNER | Forge Loop on `feature/forge-loop`; live end-to-end browser test 15/15 archived (`dev_live_records/README.md`); PR #16 merged to `main` 2026-10-16 (`e58dbdf`, owner-approved merge commit) |
 | Uses an NVIDIA open model at runtime | done | Nemotron-3-Super-120B (default) via Token Factory; scoreboard 24 calls, $0.05; earlier Nano demo recorded |
 | Runs on Nebius Token Factory / AI Cloud | done | live inference on Token Factory; all simulation and tests on a Nebius CPU VM |
 | Public source repository | OWNER | stays private until the publication audit below is complete |
 | Open-source licence visible | done | Apache-2.0 `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md` (OFL fonts added 2026-10-15, hand-edited) |
 | README: install, prerequisites, env vars, run, demo scenario, evaluation reproduction | draft updated | `README.md`, `docs/submission/SETUP_AND_REPRODUCTION.md` (rewritten 2026-10-15, commands not re-run) |
 | Where NVIDIA / Nebius are used | done | README table; `docs/submission/DEVPOST.md` |
-| YouTube video < 3 min, >= 1 min of modules operating | open / OWNER | storyboard rewritten; capture plan `SCREEN_CAPTURE_PLAN.md` may need aligning with the new storyboard; recording and voice-over are owner tasks |
+| YouTube video < 3 min, >= 1 min of modules operating | footage done / OWNER | live takes recorded 2026-10-16 (full arc to a verified v2, plus a walking honest negative), provenance and shot-by-shot edit guide in `experiments/forge_loop/demo_capture/README.md`; voice-over, edit and upload are owner tasks |
 | Text description, track, feedback on Nebius/NVIDIA technologies | draft | `DEVPOST.md` (rewritten), `FEEDBACK.md` (review, update for Super/Forge Loop, paste) |
 | Judging access | open / OWNER | local reproduction needs no key; hosting decision below |
 | English material | done | |
@@ -24,7 +24,7 @@ Official deadline **Fri 2026-10-30, 18:00 Europe/Oslo**; internal deadline **Thu
 2. **Publication audit**: re-run the full reachable-history secret scan and trailer check on the final refs (last recorded 2026-10-14; not re-run since).
 3. **Benchmarking-clause question**: does publishing the Nemotron-vs-random-twin comparison fall under Nebius §4.1.10(c)? (`MODEL_AND_SERVICE_TERMS.md` §1b, `LICENSE_REVIEW.md` §3c). Also send or waive the §18.7 clarification (`NEBIUS_CLARIFICATION_REQUEST.md`, drafted, not sent).
 4. **Git-history email exposure**: history contains author/committer `@gmail.com` addresses (`LICENSE_REVIEW.md` §4c); accept or rewrite.
-5. **PR #16 merge**: approved in principle; the owner wants to be asked before merging.
+5. ~~PR #16 merge~~: done 2026-10-16 with the owner's approval (merge commit, no history rewrite).
 6. **Video recording and voice-over**, and the final choice of honest-negative clip.
 7. Read the NVIDIA licences for Super and Ultra (not verified offline), the Nemotron appendix, and the Nebius AUP and Service-Specific Terms.
 8. Keep the immutable preregistered records in the public repository (recommended) and decide whether the raw model-reply files stay.

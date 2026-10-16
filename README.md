@@ -65,7 +65,9 @@ Old `?tab=` links (`overview`, `studio`, `compare`, `lab`, `locomotion`, `demo`,
 
 | Component | How |
 |---|---|
-| **NVIDIA Nemotron** `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | Runtime calls from `creature_forge/demo.py` (and the R3 tooling) through **Nebius Token Factory**'s OpenAI-compatible API (`creature_forge/nebius.py`: no retries, hard request/token caps, key never logged). It receives measured evidence and proposes bounded parameter edits under a strict JSON schema; invalid output is shown as invalid, never repaired. |
+| **NVIDIA Nemotron-3-Super-120B-A12B** `nvidia/nemotron-3-super-120b-a12b` | The Forge Loop's model (default): *Investigate with AI* calls it through **Nebius Token Factory** with thinking off and a strict JSON schema, behind the dev live records, the pre-registered scoreboard and the memory evaluation. Licence: NVIDIA Nemotron Open Model License; no weights distributed. |
+| **NVIDIA Nemotron-3-Nano-30B-A3B** `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` (earlier demo; same licence) | Runtime calls from `creature_forge/demo.py` (and the R3 tooling) through **Nebius Token Factory**'s OpenAI-compatible API (`creature_forge/nebius.py`: no retries, hard request/token caps, key never logged). It receives measured evidence and proposes bounded parameter edits under a strict JSON schema; invalid output is shown as invalid, never repaired. |
+| Model calibration only | `nvidia/Nemotron-3-Ultra-550b-a55b` (OpenMDW-1.1) and `nvidia/Nemotron-3_5-Lightning` were called only while choosing the model configuration (`experiments/forge_loop/calibration/`), not in any published result. |
 | **Nebius AI Cloud** | All heavy MuJoCo experiments (R1 and R2, about 15,000 rollouts) ran on a Nebius CPU VM (`cpu-d3`, 8 vCPU / 32 GiB, Ubuntu) controlled by `infra/nebius/forge_cloud.py` (CLI in WSL, SSH, deadline watchdog, stop/delete safeguards). No GPU was needed. |
 | **MuJoCo** | Authoritative physics for every measurement and replay. |
 

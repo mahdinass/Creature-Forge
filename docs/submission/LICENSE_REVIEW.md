@@ -85,11 +85,12 @@ I did not re-read the external pages (no network use in this review).
 
 | model | where | terms doc covers it? |
 |---|---|---|
-| `nvidia/nemotron-3-super-120b-a12b` | default in `experiments/forge_loop/model_config.json` (`"default"`); `docs/FORGE_LOOP.md` line 59; pricing in `creature_forge/inference_ledger.py` line 33 | **No.** Not named anywhere in the terms doc |
-| `nvidia/Nemotron-3-Ultra-550b-a55b` | `"deep"` option in `model_config.json`; `docs/FORGE_LOOP.md` line 61 (documented, not default); pricing in `inference_ledger.py` line 34 | **No** |
-| `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | earlier demo (`creature_forge/demo.py`, R3 tooling) | Yes (section 1) |
+| `nvidia/nemotron-3-super-120b-a12b` | default in `experiments/forge_loop/model_config.json` (`"default"`); behind all scoreboard, memory-evaluation and dev live records (237 recorded calls) | **Yes (updated 2026-10-16):** `MODEL_AND_SERVICE_TERMS.md` section 1c. Licence per the official Hugging Face model card: NVIDIA Nemotron Open Model License (same as Nano) |
+| `nvidia/Nemotron-3-Ultra-550b-a55b` | `"deep"` option in `model_config.json`; called only in `experiments/forge_loop/calibration/` (19 calls), not in the scoreboard or memory evaluation | **Yes:** section 1d. Licence per the official model card: OpenMDW-1.1 (a different licence; no section numbers; outputs unrestricted) |
+| `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | earlier demo and R3 tooling (41 recorded calls) | Yes (section 1) |
+| `nvidia/Nemotron-3_5-Lightning` | calibration only (12 calls); not named in earlier versions of this review | **No.** Licence not reviewed (section 1e) |
 
-**Flag:** the terms doc, `THIRD_PARTY_NOTICES.md` (section "External services and models"), the README model table and `docs/submission/DEVPOST.md` name **only the Nano model**. The live Forge Loop default is Nemotron-3-Super. The licence text summarised for Nano (the model card's "NVIDIA Nemotron Open Model License") may or may not apply identically to Super and Ultra; **not verified** (the model cards for those two were not read). Any public text should either name all three models or state explicitly which one the scoreboard used.
+**Flag (updated 2026-10-16):** the Super and Ultra model cards were read on 2026-10-16 (see `MODEL_AND_SERVICE_TERMS.md` 1c, 1d): Super is under the NVIDIA Nemotron Open Model License, Ultra under OpenMDW-1.1. The two licences differ, so public text must not say "all Nemotron models use the same licence". `THIRD_PARTY_NOTICES.md` (section "External services and models"), the README model table and `docs/submission/DEVPOST.md` were still **not updated** by this change (README and notices name only Nano; DEVPOST names Super without a licence). Verification limits: the licence pages were read through a summarising fetch, not as a PDF or raw text for the Nemotron licence; the OpenMDW text was likewise summarised; Lightning was not reviewed. Neither licence, as read, restricts publishing outputs or evaluation results, and neither is triggered by API-only use (no redistribution).
 
 ### 3c. OPEN QUESTION for the owner (not a conclusion)
 
@@ -151,9 +152,9 @@ Question for the owner: **does comparing a hosted model's proposals with random 
 - [x] Add `@fontsource-variable/bricolage-grotesque` and `@fontsource-variable/instrument-sans` (OFL-1.1) to `THIRD_PARTY_NOTICES.md` (done 2026-10-15; both rows present). Still open: check the OFL Reserved Font Name clause; optionally extend `tests/test_license.py`.
 - [x] `pydantic>=2` declared in the `studio` extra of `pyproject.toml` (2026-10-15).
 - [x] Licence statement for `webgl-constants`: MIT, confirmed from the integrity-pinned registry tarball (section 1, 2026-10-15).
-- [ ] Decide which Nemotron models to name publicly (Nano only in current docs; Super is the Forge Loop default; Ultra is optional). Read the NVIDIA licence for Super and Ultra if their model cards carry a different licence.
+- [ ] Decide which Nemotron models to name publicly. Super is the Forge Loop default and the only model behind the published results; Ultra and Lightning appear only in calibration. Licences verified from the model cards 2026-10-16 (Super: NVIDIA Nemotron Open Model License; Ultra: OpenMDW-1.1; section 3b). Still to do: apply the wording changes to README, `THIRD_PARTY_NOTICES.md` and `DEVPOST.md`.
 - [ ] Owner read of the original Nebius Services Agreement §4.1.10(c) against the scoreboard comparison (section 3c).
-- [ ] Owner read of the NVIDIA Nemotron licence appendix and of the Nebius AUP and Service-Specific Terms (still open from `MODEL_AND_SERVICE_TERMS.md` section 4).
+- [ ] Owner read of the full NVIDIA Nemotron Open Model License PDF and the OpenMDW-1.1 text (read only through summaries on 2026-10-16), and of the Nebius AUP and Service-Specific Terms (still open from `MODEL_AND_SERVICE_TERMS.md` section 4).
 - [ ] Send the Nebius / organiser clarification on §18.7 public references, or accept the risk with the public text kept factual (no logos, no endorsement wording).
 - [ ] Decide whether the 20 raw-record `.jsonl`/`.json` files stay public (recommended by the checklist as the evidence; the terms reading above does not restrict output publication, but the AUP is unread).
 - [x] Redact `docs/PROJECT_STATE.md` lines 14, 48, 50 (Windows username and local paths): done 2026-10-15; `git grep` for the username returns 0 tracked hits.
@@ -165,7 +166,7 @@ Question for the owner: **does comparing a hosted model's proposals with random 
 
 - Any statement about licence terms beyond the text already in the repository (no network, no external pages read).
 - Licences of `setuptools` and of the Python packages' own transitive dependencies beyond the notice table.
-- Whether the Nemotron Super and Ultra model cards name a different licence.
+- (Changed 2026-10-16) The Super and Ultra model cards were read and name different licences (see section 3b). Still unverified: the full verbatim licence texts, and the licence of `nvidia/Nemotron-3_5-Lightning` (calibration only).
 - Whether any font has a Reserved Font Name.
 - Contents of `.env`, `infra/nebius/state.json`, `infra/nebius/spend_ledger.jsonl`, `infra/nebius/watchdog.log`, `.claude/settings.json`, `.claude/skills/*`; contents of the `experiments/**` raw files beyond their field names and sizes.
 - Whether the 10-14 secret scan still holds on the current refs (it was not re-run).
