@@ -104,6 +104,7 @@
  "experiments/phase2a_r3/results_v2/calibration_pool.json": "50ade605545958ffe2e4b88a74fbf9e67bd65583",
  "experiments/phase2a_r3/results_v2/calibration_result.json": "2b7da5ddce8f825dc02fbd38f82f47e54b20889a",
  "experiments/phase2a_r3/results_v2/demo_requests.jsonl": "967999756aec39874e1257b16d8d672fc03f6d75",
+ "experiments/walk_recovery/dev_pilot/protocol_s2.json": "7bf4f66d7ed3cf18fb9a6d70d89a3bf2c606eb53",
  "experiments/walk_recovery/oracle/REPORT_M1.md": "f05bd518f97056668c4b55a070c22465a3cd3ee3",
  "experiments/walk_recovery/oracle/REPORT_M1A.md": "84ffc692892a1c010dfa635c7a14132fd2fc716d",
  "experiments/walk_recovery/oracle/protocol_m1.json": "03fa55a3620b8c1eb9401a3a56f06a5b3819ffb3",
