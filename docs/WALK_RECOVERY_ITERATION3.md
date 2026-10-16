@@ -100,3 +100,29 @@ mechanism invention is reported as a negative result.
 - Time: if S4a slips past 10-19, S3 runs as drafted.
 - Leakage: Nemotron knows the robotics literature (for example Raibert foot placement). That is legitimate engineering
   knowledge, and the prompt never names a mechanism.
+
+## 8. Owner clarification (2026-10-17) and resulting design
+The owner asked for genuine **closed-loop investigation**: when a proposed law fails in MuJoCo, Nemotron must receive the
+physical evidence, reconsider and decide what to do next, within the same investigation and budget, without being forced
+to continue. The design now separates three capabilities and evaluates each on its own:
+
+| # | Capability | Mechanism | How it is measured (development) |
+|---|---|---|---|
+| 1 | **Within-investigation adaptation** | director v3 `iterative`: up to 4 rounds. After every mechanism probe it gets delta walking/fitness on the train seeds, the fitted gains (≈ 0 or at a bound = evidence against), and post-probe gait features on the diag seeds next to the baseline. It may revise a law (`revises`, with a reason tied to the measurement), switch cause, request standard probes, or stop. | (a) AI-ITER vs AI-1SHOT (same director, one round, no feedback) at equal total budget; (b) process metric: how often a revision improves on the version it replaces, against the base rate of new proposals |
+| 2 | **Cross-investigation experience reuse** | verified mechanism library (S4b) | AI with vs without the library on a held-out family; AI choosing library entries vs non-AI "probe every entry" |
+| 3 | **Trainable learning across experiences** | staged: a mechanism critic trained on S4a's (failure signature, mechanism structure, measured probe outcome) tuples from AI, random and generic proposals, successes and failures, used to rank which proposed or library mechanisms to probe first | only if S4a yields enough tuples (about 300 expected); held-out-family evaluation against an unranked order and an LLM-only order; reported as exploratory |
+
+**Data separation.** Feedback uses only the train seeds (optimisation) and diag seeds (post-probe diagnostics). Screening
+seeds are used once, for the final selection. Validation and confirmation seeds are never seen by any method. All
+feedback rollouts are charged to the method's total budget, the same for every arm.
+
+**Arms (S4a, 24 fresh dev creatures, 15-D start, equal total budget 3,000):**
+- FIX15
+- GENERIC
+- RANDMECH
+- AI-1SHOT
+- **AI-ITER**
+- EXPERT (FIX17 reference)
+
+Go/no-go G4: AI-ITER exceeds the best non-AI structure arm (FIX15, GENERIC, RANDMECH) by at least 3/24 full recoveries.
+Capability 1 is reported from AI-ITER vs AI-1SHOT and from the revision metric, whatever G4's outcome.
