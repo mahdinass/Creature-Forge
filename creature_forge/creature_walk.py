@@ -199,7 +199,7 @@ def eval_vector(vector, body, seeds, duration: float, *, start: str = "neutral",
     """Walk one vector on one creature for each seed; compact per-seed outcomes (creature criteria)."""
     b = _body(body)
     crit = creature_criteria(b)
-    ctrl = controller_from_vector(vector)
+    ctrl = controller_from_vector(vector, body=b)
     per = []
     for s in seeds:
         m = loc.compute_metrics(rollout(ctrl, b, s, duration, start=start, perturb=perturb), crit)

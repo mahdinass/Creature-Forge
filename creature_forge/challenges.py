@@ -217,8 +217,8 @@ def walk_vector(controllers: dict | None) -> list[float]:
         if w is None:
             return list(cw.R2_WINNER)
     vec = [float(x) for x in w]
-    if len(vec) != cw.N_PARAMS:
-        raise ChallengeError(f"the walking controller needs {cw.N_PARAMS} numbers, got {len(vec)}")
+    if len(vec) not in (cw.N_PARAMS, cw.N_PARAMS + 2):
+        raise ChallengeError(f"the walking controller needs {cw.N_PARAMS} numbers (or {cw.N_PARAMS + 2} with the foot-placement gains fp_kd, fp_kv), got {len(vec)}")
     return vec
 
 
@@ -438,7 +438,7 @@ WALK_KEEP = ("label", "walking", "violations", "fell", "fall_time", "fall_pitch"
 def _run_walk(body, controllers, spec, seed) -> SeedResult:
     vec = walk_vector(controllers)
     crit = cw.creature_criteria(body)
-    ctrl = controller_from_vector(vec)
+    ctrl = controller_from_vector(vec, body=body)
     tr = cw.rollout(ctrl, body, seed, spec.duration, start=spec.start, perturb=spec.perturb, settle_s=spec.settle_s)
     for k in ("x", "z", "pitch", "tau"):
         if not np.all(np.isfinite(tr[k])):
@@ -616,7 +616,7 @@ def replay_payload(body, controllers: dict | None, spec: ChallengeSpec, seed: in
 def _walk_payload(body: SandboxBody, controllers: dict | None, spec: ChallengeSpec, seed: int, max_hz: int,
                   ndigits: int = 5) -> dict:
     vec = walk_vector(controllers)
-    ctrl = controller_from_vector(vec)
+    ctrl = controller_from_vector(vec, body=body)
     tr = cw.rollout(ctrl, body, seed, spec.duration, start=spec.start, perturb=spec.perturb, record_poses=True,
                     settle_s=spec.settle_s)
     m = compute_metrics(tr, cw.creature_criteria(body))

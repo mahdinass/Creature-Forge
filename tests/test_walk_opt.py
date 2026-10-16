@@ -36,8 +36,49 @@ def synthetic(space, target_x, base=BASE, vec=VEC, log=None):
 class SpaceTests(unittest.TestCase):
     def test_subspaces_partition_param_names(self):
         names = [p for v in wo.SUBSPACES.values() for p in v]
-        self.assertEqual(sorted(names), sorted(r3.PARAM_NAMES))
+        self.assertEqual(sorted(names), sorted(wo.ALL_NAMES))
+        self.assertEqual(len(wo.ALL_NAMES), 17)
         self.assertEqual(len(names), len(set(names)))
+        self.assertEqual(wo.SUBSPACES["placement"], ("fp_kd", "fp_kv"))
+        self.assertEqual(wo.SearchSpace.full_ctrl().ctrl_params, tuple(r3.PARAM_NAMES))     # still the original 15
+        self.assertEqual(wo.SearchSpace.full_ctrl_fp().dim, 17)
+
+    def test_placement_space_encoding(self):
+        sp = wo.SearchSpace.from_subspaces(["placement"])
+        self.assertEqual(sp.ctrl_params, ("fp_kd", "fp_kv"))
+        self.assertTrue(sp.uses_fp)
+        self.assertFalse(wo.SearchSpace.full_ctrl().uses_fp)
+        self.assertEqual(wo.pad_to_17(VEC), VEC + [0.0, 0.0])
+        self.assertEqual(wo.pad_to_17(VEC + [0.3, 0.4]), VEC + [0.3, 0.4])
+        x = np.array([0.2, 0.8])
+        body, vec = wo.decode(sp, BASE, VEC, x)               # a 15-D base is padded to 17-D
+        self.assertEqual(len(vec), 17)
+        self.assertEqual(vec[:15], VEC)
+        self.assertAlmostEqual(vec[15], 0.3)
+        self.assertAlmostEqual(vec[16], 1.2)
+        np.testing.assert_allclose(wo.encode(sp, BASE, VEC, body, vec), x, atol=1e-12)
+        # the original 15-D spaces still refuse a 17-D base vector
+        with self.assertRaises(ValueError):
+            wo.decode(TIMING, BASE, VEC + [0.0, 0.0], np.zeros(3))
+        full = wo.SearchSpace.full_ctrl_fp(("torso_mass",))
+        xr = np.random.default_rng(4).uniform(0, 1, full.dim)
+        b2, v2 = wo.decode(full, BASE, VEC + [0.1, 0.2], xr)
+        np.testing.assert_allclose(wo.encode(full, BASE, VEC, b2, v2), xr, atol=1e-9)
+        sub, vs = wo.decode(wo.SearchSpace.from_subspaces(["timing"]), BASE, VEC, np.full(3, 0.5))
+        self.assertEqual(len(vs), 15)
+
+    def test_similarity_leaves_fp_unchanged(self):
+        vec, _ = wo.similarity_init(SandboxBody(thigh_length=0.55, shank_length=0.55), VEC + [0.3, 0.6])
+        self.assertEqual(len(vec), 17)
+        self.assertEqual(vec[15:], [0.3, 0.6])
+        self.assertEqual(wo.similarity_init(SandboxBody(thigh_length=0.55, shank_length=0.55), VEC)[0], vec[:15])
+
+    def test_cma_over_placement_space(self):
+        sp = wo.SearchSpace.from_subspaces(["placement"])
+        res = wo.cma_search(BASE, VEC, sp, budget=3 * 40, train_seeds=[1, 2, 3], noise_seed=5,
+                            eval_fn=synthetic(sp, np.array([0.7, 0.2])))
+        self.assertEqual(len(res["best"]["vector"]), 17)
+        self.assertEqual(res["best"]["vector"][:15], VEC)
 
     def test_validation_errors(self):
         S = wo.SearchSpace

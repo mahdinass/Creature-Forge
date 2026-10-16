@@ -59,6 +59,7 @@ from . import interventions as iv
 from .forge_pool import InlinePool, is_error
 from .morphology import build_model
 from .optimize import jsonable
+from .phasegait_fp import FP_NAMES, LOWER17, UPPER17
 from .phasegait_init import LOWER15, UPPER15
 from .sandbox import SandboxBody
 
@@ -68,7 +69,9 @@ SUBSPACES = {
     "posture": ("hip_bias", "pitch_ref", "stance_knee", "start_lean"),
     "feedback": ("kp", "kd", "balance_gain", "pitch_kp", "sync_gain"),
     "stride": ("hip_amp", "knee_amp", "ramp_s"),
+    "placement": FP_NAMES,
 }
+ALL_NAMES = tuple(r3.PARAM_NAMES) + FP_NAMES        # the 17-D family: the 15 original names, then fp_kd, fp_kv
 BODY_PARAMS = ("torso_mass", "thigh_length", "shank_length", "foot_length", "leg_density", "foot_friction", "torque_limit")
 MAX_BODY_PARAMS = 4
 _LEG = ("thigh_length", "shank_length", "foot_length")
@@ -92,9 +95,9 @@ class SearchSpace:
         object.__setattr__(self, "ctrl_params", tuple(self.ctrl_params))
         object.__setattr__(self, "body_params", tuple(self.body_params))
         object.__setattr__(self, "body_ratio", tuple(float(x) for x in self.body_ratio))
-        bad = [p for p in self.ctrl_params if p not in r3.PARAM_NAMES]
+        bad = [p for p in self.ctrl_params if p not in ALL_NAMES]
         if bad:
-            raise ValueError(f"unknown control parameter(s) {bad}; known: {list(r3.PARAM_NAMES)}")
+            raise ValueError(f"unknown control parameter(s) {bad}; known: {list(ALL_NAMES)}")
         bad = [p for p in self.body_params if p not in BODY_PARAMS]
         if bad:
             raise ValueError(f"unknown body parameter(s) {bad}; known: {list(BODY_PARAMS)}")
@@ -113,12 +116,22 @@ class SearchSpace:
             raise ValueError(f"body_ratio must be (r_lo, r_hi) with 0 < r_lo <= 1 <= r_hi, got {self.body_ratio}")
 
     @property
+    def uses_fp(self) -> bool:
+        """True when the space searches a foot-placement gain (the vectors are then 17-D)."""
+        return any(p in FP_NAMES for p in self.ctrl_params)
+
+    @property
     def dim(self) -> int:
         return len(self.ctrl_params) + len(self.body_params)
 
     @staticmethod
     def full_ctrl(body_params=(), **kw) -> "SearchSpace":
         return SearchSpace(tuple(r3.PARAM_NAMES), tuple(body_params), **kw)
+
+    @staticmethod
+    def full_ctrl_fp(body_params=(), **kw) -> "SearchSpace":
+        """All 17 controller names (15 original + fp_kd, fp_kv)."""
+        return SearchSpace(ALL_NAMES, tuple(body_params), **kw)
 
     @staticmethod
     def from_subspaces(names: Sequence[str], body_params=(), **kw) -> "SearchSpace":
@@ -128,7 +141,7 @@ class SearchSpace:
         if len(set(names)) != len(names):
             raise ValueError("duplicate subspaces")
         chosen = {p for n in names for p in SUBSPACES[n]}
-        return SearchSpace(tuple(p for p in r3.PARAM_NAMES if p in chosen), tuple(body_params), **kw)
+        return SearchSpace(tuple(p for p in ALL_NAMES if p in chosen), tuple(body_params), **kw)
 
     def to_dict(self) -> dict:
         return {"ctrl_params": list(self.ctrl_params), "body_params": list(self.body_params),
@@ -161,11 +174,24 @@ def _log_interval(space: SearchSpace, base: dict, param: str) -> tuple[float, fl
     return lo, hi
 
 
-def _base_vector(v) -> np.ndarray:
-    a = np.asarray(v, dtype=float)
-    if a.shape != (15,) or not np.all(np.isfinite(a)):
-        raise ValueError("vector must be 15 finite numbers")
-    bad = [i for i in range(15) if not (LOWER15[i] <= a[i] <= UPPER15[i])]
+def pad_to_17(vector) -> list:
+    """A 15-D base vector padded with fp_kd = fp_kv = 0 (a 17-D vector is returned unchanged)."""
+    v = [float(x) for x in vector]
+    if len(v) == 15:
+        return v + [0.0] * len(FP_NAMES)
+    if len(v) == 17:
+        return v
+    raise ValueError(f"vector must be 15 or 17 numbers, got {len(v)}")
+
+
+def _base_vector(v, fp: bool = False) -> np.ndarray:
+    """Validated base vector: 15-D normally; with `fp` a 15-D vector is zero-padded and a 17-D one accepted (always 17-D out)."""
+    n = 17 if fp else 15
+    lo, hi = (LOWER17, UPPER17) if fp else (LOWER15, UPPER15)
+    a = np.asarray(pad_to_17(v) if fp and np.ndim(v) == 1 and len(v) in (15, 17) else v, dtype=float)
+    if a.shape != (n,) or not np.all(np.isfinite(a)):
+        raise ValueError(f"vector must be {n} finite numbers" + (" (or 15, padded with fp_kd = fp_kv = 0)" if fp else ""))
+    bad = [i for i in range(n) if not (lo[i] <= a[i] <= hi[i])]
     if bad:
         raise ValueError(f"vector entries {bad} are outside the controller bounds (not clipped)")
     return a
@@ -174,11 +200,12 @@ def _base_vector(v) -> np.ndarray:
 def encode(space: SearchSpace, base_body, base_vector, body, vector) -> np.ndarray:
     """[0,1]^n point of (body, vector). Dims not searched are ignored. Raises ValueError if a body value is outside its interval."""
     base, body = _base_dict(base_body), _base_dict(body)
-    vec = np.asarray(vector, dtype=float)
+    vec = np.asarray(pad_to_17(vector) if space.uses_fp else vector, dtype=float)
+    lo_v, hi_v = (LOWER17, UPPER17) if space.uses_fp else (LOWER15, UPPER15)
     x = []
     for p in space.ctrl_params:
-        i = r3.PARAM_NAMES.index(p)
-        x.append((vec[i] - LOWER15[i]) / (UPPER15[i] - LOWER15[i]))
+        i = ALL_NAMES.index(p)
+        x.append((vec[i] - lo_v[i]) / (hi_v[i] - lo_v[i]))
     for p in space.body_params:
         lo, hi = _log_interval(space, base, p)
         z = (math.log(float(body[p]) / float(base[p])) - lo) / (hi - lo)
@@ -192,14 +219,15 @@ def encode(space: SearchSpace, base_body, base_vector, body, vector) -> np.ndarr
 def decode(space: SearchSpace, base_body, base_vector, x) -> tuple[dict, list]:
     """(body_dict, vector_list) of a [0,1]^n point (folded with r2.reflect first). Non-searched parts come from the base."""
     base = _base_dict(base_body)
-    vec = _base_vector(base_vector).copy()
+    vec = _base_vector(base_vector, space.uses_fp).copy()
+    lo_v, hi_v = (LOWER17, UPPER17) if space.uses_fp else (LOWER15, UPPER15)
     u = r2.reflect(np.asarray(x, dtype=float))
     if u.shape != (space.dim,):
         raise ValueError(f"x must have {space.dim} entries")
     k = len(space.ctrl_params)
     for j, p in enumerate(space.ctrl_params):
-        i = r3.PARAM_NAMES.index(p)
-        vec[i] = min(UPPER15[i], max(LOWER15[i], LOWER15[i] + (UPPER15[i] - LOWER15[i]) * u[j]))
+        i = ALL_NAMES.index(p)
+        vec[i] = min(hi_v[i], max(lo_v[i], lo_v[i] + (hi_v[i] - lo_v[i]) * u[j]))
     body = dict(base)
     for j, p in enumerate(space.body_params):
         lo, hi = _log_interval(space, base, p)
@@ -230,7 +258,7 @@ def _size(body) -> tuple[float, float]:
 
 def similarity_init(body, vector, ref_body=None) -> tuple[list, dict]:
     """Transfer `vector` (tuned on ref_body, default SandboxBody()) to `body` by dynamic similarity. -> (vector, report)."""
-    vec = _base_vector(vector)
+    vec = _base_vector(vector, fp=len(vector) == 17)     # fp_kd, fp_kv are dimensionless and pass through unchanged
     ref = SandboxBody() if ref_body is None else ref_body
     L, M = _size(body)
     L0, M0 = _size(ref)
@@ -342,7 +370,7 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
         raise ValueError("space must be a SearchSpace")
     var = None if variation is None else arena._check_variation(dict(variation))
     base = _base_dict(body)
-    vec0 = _base_vector(init_vector)
+    vec0 = _base_vector(init_vector, space.uses_fp)
     S, n = len(seeds), space.dim
     if budget < S:
         raise ValueError(f"budget {budget} cannot pay for the initial evaluation ({S} rollouts)")

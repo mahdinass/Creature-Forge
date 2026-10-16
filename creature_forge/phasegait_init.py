@@ -54,15 +54,24 @@ class PhaseGaitInitController(PhaseGaitController):
         return self.p.pitch_ref + self.init.start_lean * (1.0 - _smoothstep(t / LEAN_DECAY_S))
 
 
-def controller_from_vector(vector):
-    """13-D -> PhaseGaitController (Phase 2A family); 15-D -> PhaseGaitInitController (arm C)."""
+def controller_from_vector(vector, body=None):
+    """13-D -> PhaseGaitController (Phase 2A family); 15-D -> PhaseGaitInitController (arm C);
+    17-D -> PhaseGaitFPController (15 + fp_kd, fp_kv; needs `body` for the leg geometry). `body` is ignored for 13/15-D."""
     v = np.asarray(vector, dtype=float)
+    n15 = len(BOUNDS) + len(INIT_BOUNDS)
+    if len(v) == n15 + 2:
+        if body is None:
+            raise ValueError("a 17-parameter controller needs the body (leg geometry)")
+        from .phasegait_fp import FPParams, PhaseGaitFPController  # local import: phasegait_fp imports this module
+        n = len(BOUNDS)
+        return PhaseGaitFPController(PhaseGaitParams.from_vector(v[:n]), InitParams(*[float(x) for x in v[n:n15]]),
+                                     FPParams(*[float(x) for x in v[n15:]]), body=body)
     base = PhaseGaitParams.from_vector(v[:len(BOUNDS)])
     if len(v) == len(BOUNDS):
         return PhaseGaitController(base)
     if len(v) == len(BOUNDS) + len(INIT_BOUNDS):
         return PhaseGaitInitController(base, InitParams(*[float(x) for x in v[len(BOUNDS):]]))
-    raise ValueError(f"expected 13 or 15 parameters, got {len(v)}")
+    raise ValueError(f"expected 13, 15 or 17 parameters, got {len(v)}")
 
 
 def controller_from_export(d: dict):
