@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shlex
 import subprocess
 import sys
@@ -20,19 +21,32 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-STATE = HERE / "state.json"
-SPEND = HERE / "spend_ledger.jsonl"       # git-ignored; infra spend for the Forge Loop effort (from 2026-10-14)
-SPEND_CAP_USD = 10.0                       # owner-approved additional infra cap; start/extend refuse beyond it
+# Infra cap across ALL VM profiles (combined): $10 (2026-10-14), raised to $20 by the owner on 2026-10-16 for the
+# walking-recovery S1 stage (temporary 64-vCPU batch VM). create/start/extend refuse beyond it.
+SPEND_CAP_USD = 20.0
 SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
-HOST = "creature-forge-nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
-CFG = {
+_BASE = {
     "project_id": "project-e01jjnn2pa00wm820bree9", "region": "eu-west1", "subnet_id": "vpcsubnet-e01bb10pt7n200dkqh",
-    "name": "creature-forge-r1-cpu", "platform": "cpu-d3", "preset": "8vcpu-32gb", "image_family": "ubuntu24.04-driverless",
-    "disk_type": "network_ssd", "disk_gib": 50, "default_deadline_h": 6.0,
+    "platform": "cpu-d3", "image_family": "ubuntu24.04-driverless", "disk_type": "network_ssd", "disk_gib": 50,
     # rates quoted on docs.nebius.com/compute/resources/pricing (from 2026-10-01); verify with `plan` before creating
-    "usd_per_vcpu_h": 0.015, "usd_per_gib_ram_h": 0.0045, "usd_per_gib_disk_month": 0.071, "max_usd_per_h": 0.30,
+    "usd_per_vcpu_h": 0.015, "usd_per_gib_ram_h": 0.0045, "usd_per_gib_disk_month": 0.071,
 }
+# VM profiles, selected with the environment variable CF_VM (default "main"; forge_dev.py inherits it). "main" is the
+# long-lived dev VM (paths unchanged); "batch" is a temporary large VM for heavy MuJoCo batches, deleted after use.
+PROFILES = {
+    "main": {**_BASE, "name": "creature-forge-r1-cpu", "preset": "8vcpu-32gb", "default_deadline_h": 6.0, "max_usd_per_h": 0.30,
+             "state": "state.json", "spend": "spend_ledger.jsonl", "host": "creature-forge-nebius"},
+    "batch": {**_BASE, "name": "creature-forge-batch", "preset": "64vcpu-256gb", "default_deadline_h": 3.0, "max_usd_per_h": 2.30,
+              "state": "state_batch.json", "spend": "spend_ledger_batch.jsonl", "host": "creature-forge-batch"},
+}
+VM = os.environ.get("CF_VM", "main")
+if VM not in PROFILES:
+    raise SystemExit(f"CF_VM must be one of {sorted(PROFILES)}, got {VM!r}")
+CFG = PROFILES[VM]
+STATE = HERE / CFG["state"]                 # git-ignored
+SPEND = HERE / CFG["spend"]                 # git-ignored; infra spend ledger of this profile (main: from 2026-10-14)
+HOST = CFG["host"]
 WSL = ["wsl.exe", "-d", "Ubuntu", "-u", "mahdi", "--", "bash", "-s"]
 
 
@@ -53,8 +67,8 @@ def save(st: dict) -> None:
     STATE.write_text(json.dumps(st, indent=1), "utf-8")
 
 
-def costs() -> dict:
-    c = CFG
+def costs(c: dict | None = None) -> dict:
+    c = c or CFG
     vcpu, ram = (int(c["preset"].split("vcpu")[0]), int(c["preset"].split("-")[1].rstrip("gb")))
     compute = vcpu * c["usd_per_vcpu_h"] + ram * c["usd_per_gib_ram_h"]
     disk_h = c["disk_gib"] * c["usd_per_gib_disk_month"] / 730
@@ -63,8 +77,9 @@ def costs() -> dict:
             "disk_usd_per_day_when_stopped": round(disk_h * 24, 3)}
 
 
-def spend_events() -> list[dict]:
-    return [json.loads(l) for l in SPEND.read_text("utf-8").splitlines() if l.strip()] if SPEND.exists() else []
+def spend_events(path: Path | None = None) -> list[dict]:
+    path = path or SPEND
+    return [json.loads(l) for l in path.read_text("utf-8").splitlines() if l.strip()] if path.exists() else []
 
 
 def spend_record(event: str, **kw) -> None:
@@ -72,16 +87,17 @@ def spend_record(event: str, **kw) -> None:
         f.write(json.dumps({"event": event, "epoch": int(time.time()), **kw}) + "\n")
 
 
-def spend_total(now: float | None = None) -> dict:
+def spend_total(now: float | None = None, profile: str | None = None) -> dict:
     """Conservative spend since the ledger started: every run interval is charged from its start until the next recorded
     API stop (or `now` if none). The deadman timer powers the GUEST off at the deadline, but on 2026-10-15 the instance
     still reported RUNNING 3.75 h later, so a guest poweroff is not assumed to end compute billing. Disk is charged
     continuously from the first event. Rates are the quoted ones in CFG, not a billing statement."""
     now = time.time() if now is None else now
-    ev = spend_events()
+    prof = PROFILES[profile or VM]
+    ev = spend_events(HERE / prof["spend"])
     if not ev:
         return {"compute_h": 0.0, "usd": 0.0, "cap_usd": SPEND_CAP_USD}
-    c = costs()
+    c = costs(prof)
     hours, run_start, deadline = 0.0, None, 0.0
     for e in ev:
         if e["event"] == "start":
@@ -95,13 +111,21 @@ def spend_total(now: float | None = None) -> dict:
             run_start = None
     if run_start is not None:
         hours += max(0.0, now - run_start) / 3600
-    disk_h = max(0.0, now - ev[0]["epoch"]) / 3600
+    end = now
+    if any(e["event"] == "deleted" for e in ev):        # a deleted profile's disk stops billing at deletion
+        end = max(e["epoch"] for e in ev if e["event"] == "deleted")
+    disk_h = max(0.0, end - ev[0]["epoch"]) / 3600
     usd = hours * c["compute_usd_per_h"] + disk_h * c["disk_usd_per_h"]
     return {"compute_h": round(hours, 3), "usd": round(usd, 3), "cap_usd": SPEND_CAP_USD}
 
 
+def spend_all(now: float | None = None) -> dict:
+    per = {name: spend_total(now, name) for name in PROFILES}
+    return {"usd": round(sum(v["usd"] for v in per.values()), 3), "cap_usd": SPEND_CAP_USD, "profiles": per}
+
+
 def spend_guard(extra_hours: float) -> None:
-    t = spend_total()
+    t = spend_all()
     projected = t["usd"] + extra_hours * costs()["total_usd_per_h"]
     if projected > SPEND_CAP_USD:
         raise SystemExit(f"refusing: projected infra spend ${projected:.2f} exceeds the approved ${SPEND_CAP_USD:.2f} cap "
@@ -126,7 +150,8 @@ def cmd_plan(_a=None) -> None:
     c = costs()
     print(json.dumps({"config": CFG, "cost": c}, indent=1))
     ok = c["total_usd_per_h"] <= CFG["max_usd_per_h"]
-    print("WITHIN the $0.30/h ceiling" if ok else "EXCEEDS the $0.30/h ceiling - will not create")
+    print(f"profile {VM}: " + (f"WITHIN the ${CFG['max_usd_per_h']:.2f}/h ceiling" if ok
+                               else f"EXCEEDS the ${CFG['max_usd_per_h']:.2f}/h ceiling - will not create"))
     if not ok:
         raise SystemExit(1)
 
@@ -136,7 +161,8 @@ def cmd_create(a) -> None:
     if c["total_usd_per_h"] > CFG["max_usd_per_h"]:
         raise SystemExit("quoted rate exceeds ceiling")
     if load().get("instance_id"):
-        raise SystemExit("an instance is already recorded in state.json; refusing to create a second one")
+        raise SystemExit(f"an instance is already recorded in {STATE.name}; refusing to create a second one")
+    spend_guard(CFG["default_deadline_h"])
     pub = SSH_KEY.with_suffix(".pub").read_text().strip()
     ci = (HERE / "cloud-init.yaml.tmpl").read_text("utf-8").replace("@@SSH_PUBKEY@@", pub)
     ci = ci.replace("@@DEADLINE_S@@", str(int(CFG["default_deadline_h"] * 3600)))
@@ -157,6 +183,7 @@ def cmd_create(a) -> None:
     if not iid:
         raise SystemExit("created, but could not find instance id in output; inspect `nebius compute instance list` NOW to avoid orphaned billing")
     save({"instance_id": iid, "created_epoch": int(time.time()), "deadline_epoch": int(time.time() + CFG["default_deadline_h"] * 3600)})
+    spend_record("start", deadline=int(time.time() + CFG["default_deadline_h"] * 3600) + 900, by="create")
     print("created", iid, "- run `status` until RUNNING, then `ssh-config`")
 
 
@@ -321,7 +348,7 @@ def cmd_start(_a=None) -> None:
 
 
 def cmd_spend(_a=None) -> None:
-    print(json.dumps(spend_total()))
+    print(json.dumps(spend_all()))
 
 
 def cmd_verify_deadline(_a=None) -> None:
@@ -351,26 +378,32 @@ def cmd_delete(a) -> None:
     st.pop("instance_id", None)
     st["deleted_epoch"] = int(time.time())
     save(st)
+    spend_record("stop", by="delete")
+    spend_record("deleted")
 
 
 def cmd_watchdog(_a=None) -> None:
-    """Run from Task Scheduler every 15 min: stops the VM if its deadline passed (independent of any Claude/Codex session)."""
-    st = load()
-    if not st.get("instance_id"):
-        return
+    """Run from Task Scheduler every 15 min: stops EVERY profile's VM whose deadline passed (independent of any session)."""
     log = HERE / "watchdog.log"
-    try:
-        state = instance().get("status", {}).get("state")
-        if time.time() > st.get("deadline_epoch", 0) and state in ("RUNNING", "STARTING"):
-            nebius("compute", "instance", "stop", "--id", st["instance_id"])
-            spend_record("stop", by="watchdog")
-            msg = "deadline passed: stop requested"
-        else:
-            msg = f"ok state={state}"
-    except SystemExit as e:
-        msg = f"error {e}"
-    with log.open("a") as f:
-        f.write(f"{time.strftime('%FT%T')} {msg}\n")
+    for name, prof in PROFILES.items():
+        path = HERE / prof["state"]
+        st = json.loads(path.read_text("utf-8")) if path.exists() else {}
+        if not st.get("instance_id"):
+            continue
+        try:
+            got = json.loads(nebius("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
+            state = got.get("status", {}).get("state")
+            if time.time() > st.get("deadline_epoch", 0) and state in ("RUNNING", "STARTING"):
+                nebius("compute", "instance", "stop", "--id", st["instance_id"])
+                with (HERE / prof["spend"]).open("a", encoding="utf-8") as f:
+                    f.write(json.dumps({"event": "stop", "epoch": int(time.time()), "by": "watchdog"}) + "\n")
+                msg = "deadline passed: stop requested"
+            else:
+                msg = f"ok state={state}"
+        except SystemExit as e:
+            msg = f"error {e}"
+        with log.open("a") as f:
+            f.write(f"{time.strftime('%FT%T')} [{name}] {msg}\n")
 
 
 def main() -> None:

@@ -36,4 +36,6 @@ infra/nebius/state.json
 infra/nebius/repo.bundle
 infra/nebius/watchdog.log
 infra/nebius/spend_ledger.jsonl
+infra/nebius/state_batch.json
+infra/nebius/spend_ledger_batch.jsonl
 infra/nebius/tunnel.pid
