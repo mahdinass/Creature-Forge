@@ -55,11 +55,24 @@ def git_commit() -> str:
         return os.environ.get("CF_SNAPSHOT", "unknown")
 
 
-def load_creatures(proto: dict) -> dict[str, dict]:
+def load_creatures(proto: dict, panel_path: Path | None = None) -> tuple[dict[str, dict], str | None]:
+    """{name: body} in protocol order, and the sha256 of the panel file used (if any). Generated creatures come from a panel
+    file written once by --make-panel (a deterministic function of the campaign and the generator code) so that every shard
+    uses the identical, recorded panel."""
     named = cg.dev_named_bodies()
     out: dict[str, dict] = {}
+    panel_sha = None
     for c in proto["creatures"]:
-        if c.get("generated"):
+        if c.get("panel"):
+            if panel_path is None:
+                raise SystemExit("protocol lists a generated panel: pass --panel <file written by --make-panel>")
+            panel = json.loads(panel_path.read_text(encoding="utf-8"))
+            if panel["campaign"] != c["panel"]["campaign"] or panel["n_requested"] != int(c["panel"]["n"]):
+                raise SystemExit("panel file does not match the protocol's panel campaign / size")
+            panel_sha = sha256_file(panel_path)
+            for a in panel["accepted"]:
+                out[a["id"]] = a["body"]
+        elif c.get("generated"):
             g = c["generated"]
             panel = cg.generate_panel(g["campaign"], int(g["n"]), min_dist=float(g.get("min_dist", 0.15)),
                                       max_draws=int(g.get("max_draws", 2000)))
@@ -67,7 +80,7 @@ def load_creatures(proto: dict) -> dict[str, dict]:
                 out[a["id"]] = a["body"]
         else:
             out[c["name"]] = named[c["name"]]
-    return out
+    return out, panel_sha
 
 
 def start_vector(init: str, body: dict) -> tuple[list[float], dict | None]:
@@ -86,6 +99,8 @@ def space_of(cond: dict) -> "wo.SearchSpace":
     body = tuple(s.get("body", ()))
     if ctrl == "all":
         return wo.SearchSpace.full_ctrl(body_params=body)
+    if ctrl == "all_fp":
+        return wo.SearchSpace.full_ctrl_fp(body_params=body)
     if ctrl == "none":
         return wo.SearchSpace(ctrl_params=(), body_params=body)
     return wo.SearchSpace.from_subspaces(tuple(ctrl), body_params=body)
@@ -135,12 +150,27 @@ def main() -> int:
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--only")
+    ap.add_argument("--shard", help="i/k: run only the creatures whose protocol index % k == i")
+    ap.add_argument("--panel", help="panel file written by --make-panel (needed when the protocol lists a generated panel)")
+    ap.add_argument("--make-panel", action="store_true", help="generate the protocol's panel once, write it to --out, and exit")
     a = ap.parse_args()
     ppath = Path(a.protocol)
     proto = json.loads(ppath.read_text(encoding="utf-8"))
     psha = sha256_file(ppath)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
+    if a.make_panel:
+        spec = next(c["panel"] for c in proto["creatures"] if c.get("panel"))
+        if out.exists():
+            raise SystemExit(f"{out} exists; a panel is written once")
+        with ForgePool(max_workers=a.workers) as pool:
+            panel = cg.generate_panel(spec["campaign"], int(spec["n"]), min_dist=float(spec.get("min_dist", 0.15)),
+                                      max_draws=int(spec.get("max_draws", 2000)), pool=pool)
+        panel.update({"protocol_id": proto["id"], "protocol_sha256": psha, "code_commit": git_commit()})
+        out.write_text(json.dumps(jsonable(panel), indent=1), encoding="utf-8")
+        print(json.dumps({"panel": str(out), "accepted": [x["id"] for x in panel["accepted"]], "draws": panel["draws"],
+                          "rollouts": panel["rollouts"]}))
+        return 0
     done: set[str] = set()
     used = 0.0
     if out.exists():
@@ -153,14 +183,20 @@ def main() -> int:
             done.add(r["unit"])
             used += r["rollouts"]["search"] + r["rollouts"]["assessment"]
     cap = float(proto["rollout_cap"])
-    creatures = load_creatures(proto)
+    creatures, panel_sha = load_creatures(proto, Path(a.panel) if a.panel else None)
     commit = git_commit()
+    shard = tuple(int(x) for x in a.shard.split("/")) if a.shard else None
+    if shard:   # each shard writes its own file; it gets the protocol cap pro rata to its share of creatures
+        mine = sum(1 for i in range(len(creatures)) if i % shard[1] == shard[0])
+        cap = cap * mine / max(1, len(creatures))
     with ForgePool(max_workers=a.workers) as pool:
-        for name, body in creatures.items():
+        for idx, (name, body) in enumerate(creatures.items()):
             if a.only and name != a.only:
                 continue
+            if shard and idx % shard[1] != shard[0]:
+                continue
             for cond in proto["conditions"]:
-                for ns in proto["replicates"]:
+                for ns in cond.get("replicates", proto["replicates"]):
                     unit = f"{name}|{cond['id']}|{ns}"
                     if unit in done:
                         continue
@@ -170,7 +206,7 @@ def main() -> int:
                         print(json.dumps({"stop": "rollout cap", "used": used, "next_worst": worst, "cap": cap}), flush=True)
                         return 2
                     rec = run_unit(proto, name, body, cond, int(ns), pool)
-                    rec.update({"protocol_id": proto["id"], "protocol_sha256": psha, "code_commit": commit,
+                    rec.update({"protocol_id": proto["id"], "protocol_sha256": psha, "code_commit": commit, "panel_sha256": panel_sha,
                                 "finished_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")})
                     with out.open("a", encoding="utf-8") as f:
                         f.write(json.dumps(rec, separators=(",", ":")) + "\n")
