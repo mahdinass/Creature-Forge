@@ -24,6 +24,7 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
 from .. import investigation as inv
+from .. import recoveries as rec_mod
 from ..creatures import CreatureStore, StoreFull, atomic_write_json, now_iso, seed_block
 from ..inference_ledger import InferenceLedger
 from ..jobs import JobCancelled, JobContext, JobManager, QueueFull, jsonable, public_error
@@ -81,6 +82,18 @@ class InvestigationIn(BaseModel):
     loop: bool = False
     probes: bool = False   # diagnostic-probe protocol (2 model calls + MuJoCo probes before the proposals)
     memory: bool = False   # engineering memory: lessons from other creatures' past investigations enter the evidence
+
+
+class RecoveryIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    director: Literal["ai", "fix"]
+    mode: Literal["live", "scripted"] | None = None   # ai only; defaults to scripted
+    budget: int = Field(default=rec_mod.DEFAULT_BUDGET, ge=rec_mod.MIN_BUDGET, le=rec_mod.MAX_BUDGET)
+
+
+class AcceptRecoveryIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    recovery_id: str
 
 
 class AcceptIn(BaseModel):
@@ -183,8 +196,9 @@ def _investigation_job(ctx: JobContext, *, loop: bool, store, cid: str, n: int, 
 def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = None,
                         replay_builder: Callable | None = None, pool_factory: Callable | None = None,
                         ledger: InferenceLedger | None = None, investigation_options: dict | None = None,
-                        model_config_path: Path | str | None = None) -> APIRouter:
-    """`investigation_options`: extra keyword arguments for `run_investigation` / `run_loop` (arena_runner, baseline_fns,
+                        model_config_path: Path | str | None = None, recovery_options: dict | None = None) -> APIRouter:
+    """`recovery_options`: test hooks for `recoveries.run_recovery` (pipeline_fn, assess_fn, code_fn, director_factory).
+    `investigation_options`: extra keyword arguments for `run_investigation` / `run_loop` (arena_runner, baseline_fns,
     client_factory, code_fn, challenge_runner, ...). `ledger` defaults to `InferenceLedger(default_path=<forge_dir>/inference_ledger.jsonl)`."""
     forge_dir = Path(forge_dir)
     runs_dir = forge_dir / "runs"
@@ -512,5 +526,88 @@ def create_forge_router(forge_dir: Path, *, challenge_runner: Callable | None = 
             raise HTTPException(409, str(exc)) from exc
         except ValueError as exc:  # store-level refusal
             raise HTTPException(409, str(exc)) from exc
+
+    # ---- walking recoveries ("Recover walking")
+    def load_recovery(rid: str) -> dict:
+        try:
+            return rec_mod.load_recovery(forge_dir, rid)
+        except KeyError:
+            raise HTTPException(404, f"No such recovery: {rid} (it may still be running, or it failed)") from None
+
+    @router.post("/creatures/{cid}/versions/{n}/recoveries")
+    def start_recovery(cid: str, n: int, req: RecoveryIn):
+        mode = (req.mode or "scripted") if req.director == "ai" else None
+        if req.director == "fix" and req.mode is not None:
+            raise HTTPException(422, "mode applies to the ai director only")
+        try:
+            job_id, rid = rec_mod.start_recovery(jobs(), store(), forge_dir, cid, n, director=req.director, mode=mode, budget=req.budget,
+                                                 ledger=get_ledger(), model_config_path=model_config_path, options=recovery_options)
+        except KeyError:
+            raise HTTPException(404, f"No such creature or version: {cid} v{n}") from None
+        except inv.LiveRefused as exc:
+            raise HTTPException(503, str(exc)) from exc
+        except QueueFull as exc:
+            raise HTTPException(429, str(exc)) from exc
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        except (OSError, RuntimeError) as exc:
+            raise HTTPException(503, public_error(exc)) from exc
+        return {"job_id": job_id, "recovery_id": rid}
+
+    @router.get("/recoveries")
+    def list_recoveries(cid: str | None = None):
+        return rec_mod.list_recoveries(forge_dir, cid)
+
+    @router.get("/recoveries/{rid}")
+    def get_recovery(rid: str):
+        return load_recovery(rid)
+
+    @router.get("/recoveries/{rid}/replay")
+    def replay_recovery(rid: str, arm: str, seed: int):
+        if arm not in ("original", "candidate"):
+            raise HTTPException(422, "arm must be 'original' or 'candidate'")
+        rec = load_recovery(rid)
+        cr = rec["creature"]
+        key = ("recovery", rid, arm, seed)
+        with lock:
+            if key in replay_cache:
+                replay_cache.move_to_end(key)
+                return replay_cache[key]
+        try:
+            version = store().version(cr["cid"], cr["n"])
+            body, controllers, spec = rec_mod.replay_inputs(rec, version, arm, seed)
+        except KeyError:
+            raise HTTPException(404, f"Recovery {rid} has no replayable {arm} run on seed {seed}") from None
+        except ValueError as exc:
+            raise HTTPException(422, f"replay failed: {public_error(exc)}") from exc
+        try:
+            payload = run_replay(lambda: replayer(body, controllers, spec, seed, force=None, direction=1))
+        except HTTPException:
+            raise
+        except (ValueError, KeyError) as exc:
+            raise HTTPException(422, f"replay failed: {public_error(exc)}") from exc
+        except Exception as exc:  # noqa: BLE001
+            log.exception("replay of recovery %s %s failed", rid, arm)
+            raise HTTPException(500, f"replay failed: {public_error(exc)}") from exc
+        with lock:
+            replay_cache[key] = payload
+            while len(replay_cache) > REPLAY_CACHE_SIZE:
+                replay_cache.popitem(last=False)
+        return payload
+
+    @router.post("/creatures/{cid}/accept-recovery")
+    def accept_recovery(cid: str, req: AcceptRecoveryIn):
+        try:
+            store().get(cid)
+        except KeyError:
+            raise HTTPException(404, f"No such creature: {cid}") from None
+        rec = load_recovery(req.recovery_id)
+        try:
+            parent_n, body, vector, change, origin = rec_mod.build_accept(store(), cid, rec)
+            return store().accept_recovery(cid, parent_n=parent_n, body=body, vector=vector, change=change, origin=origin)
+        except ValueError as exc:   # RecoveryRefused is a ValueError; so are store-level refusals (not FULL_RECOVERY, already accepted, body invalid)
+            raise HTTPException(409, str(exc)) from exc
+        except KeyError as exc:
+            raise HTTPException(409, f"the evaluated version is missing: {exc}") from exc
 
     return router
