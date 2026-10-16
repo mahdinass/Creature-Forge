@@ -486,3 +486,22 @@ class LedgerAndProvenance(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PromptV2Tests(unittest.TestCase):
+    def test_v1_unchanged_and_v2_deterministic_and_shuffled(self):
+        from creature_forge import director as dr
+        self.assertEqual(dr.build_system_prompt(), dr.build_system_prompt("v1", 7))   # v1 ignores the order seed
+        a, b, c = dr.build_system_prompt("v2", 1), dr.build_system_prompt("v2", 1), dr.build_system_prompt("v2", 2)
+        self.assertEqual(a, b)
+        self.assertNotEqual(a, c)
+        self.assertEqual(sorted(a.splitlines()), sorted(c.splitlines()))     # same content, different order
+        self.assertIn("wasted", a)
+        self.assertIn("BODY", a)
+        for w in ("usually works", "most often", "best subspace"):
+            self.assertNotIn(w, a)
+
+    def test_v2_requires_known_version(self):
+        from creature_forge import director as dr
+        with self.assertRaises(ValueError):
+            dr.NemotronDirector(mode="scripted", fixture=[], prompt_version="v3")

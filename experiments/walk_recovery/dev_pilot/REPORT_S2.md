@@ -32,7 +32,7 @@ This is development data. It fixes R\* and the comparator by pre-declared rules,
 | fix (fixed rule: probe placement / body / posture, then search the union of the best two plus body) | 4 | **8** |
 | rand (same pipeline, random decisions) | **7** | 5 |
 | **ai (Nemotron director, full evidence)** | **2** | **1** |
-| ai_nogait (Nemotron without gait features) | 2 | — |
+| ai_nogait (Nemotron without gait features) — **confounded, see below** | 2 | — |
 
 ## Pre-declared decisions
 - **R\* = 2,000.** The best non-AI method (fix) recovers 4/12 = 33%, inside the 25–60% band.
@@ -51,9 +51,14 @@ This is development data. It fixes R\* and the comparator by pre-declared rules,
 3. **It leaves budget unused.** It spent 86–88% of the budget, against 96–99% for every other method. It splits
    0.5/0.5 per round and never spends the remainder in the last round.
 4. **Narrow plans.** Its plans cover 1–2 control subspaces.
+**Correction (2026-10-17, found during the post-S2 review):** the `ai_nogait` arm shared the `ai@2000` arm's ledger investigation id
+and thus its 8-request cap. 12 of its calls were refused before sending (no cost), so its pipelines lacked decisions. The
+`ai_nogait` numbers are confounded and are not evidence about gait features (`docs/memory/INCIDENTS.md` 2026-10-17). The
+`ai` arms are unaffected.
+
 5. **Diagnosis (H6), descriptive and small n.** With full evidence its round-1 probes included a census top-2 probe in
-   11/24 pipelines, against 8.0 expected by random choice. Without gait features it managed 2/12, against 4.0 expected.
-   So the gait features carry some diagnostic signal the model uses, but its choices are dominated by priors.
+   11/24 pipelines, against 8.0 expected by random choice. (The no-gait figure, 2/12 against 4.0 expected, comes from the confounded arm and is not interpretable.) Its choices are
+   dominated by priors.
 
 ## Other observations
 - **Random decisions are surprisingly strong** (7/12 at 2k, 5/12 at 4k).

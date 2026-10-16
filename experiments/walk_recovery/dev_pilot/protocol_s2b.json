@@ -1,0 +1,23 @@
+{
+  "id": "walkrec-s2b-director-v2-v1",
+  "stage": "S2b: one development-tuning iteration of the AI director after S2 (development data; never confirmatory)",
+  "registered_before_run": true,
+  "why": "S2 (REPORT_S2.md) measured the v1 director's failure modes: body co-design almost never chosen (56/62 plans), a fixed list-position/timing prior (opt_timing first in the list, chosen in 22/24 pipelines), 12-14% of the budget unspent. Prompt v2 (creature_forge/director.py PROMPT_VERSIONS) addresses these neutrally; it adds no statement about which subsystem usually works.",
+  "tuning_parity": "the FIX rule was designed with M1 knowledge; this is the AI's one prompt revision on development data; the confirmatory study on fresh creatures decides. Tuning history: v1 (S2), v2 (this run). No further prompt iteration is planned before the freeze unless this run reveals a defect (recorded if so).",
+  "campaign": "walkrec-dev-s2",
+  "pairing": "same creatures, same campaign seeds and noise seed as S2, so ai_v2 is paired with the S2 arms (cma_joint, cma_ctrl, fix, rand, ai v1) creature by creature",
+  "creatures": [{"name": "stilts-drawn"}, {"name": "tiny-feet"}, {"name": "top-heavy"}, {"name": "weak-slippery"},
+                {"panel": {"campaign": "walkrec-dev-m1-gen", "n": 8}}],
+  "family": 17,
+  "seeds": {"diag": 4, "train": 8, "screen": 12, "validate": 24, "confirm": 24},
+  "settings": {"probe_budget_frac": 0.1, "rounds": 2, "screen_top_k": 3, "screen_n": 12},
+  "methods": [
+    {"id": "ai_v2", "budgets": [2000, 4000], "what": "NemotronDirector prompt v2, nvidia/nemotron-3-super-120b-a12b production config (thinking off), probe/subspace order shuffled per pipeline (recorded seed)"},
+    {"id": "ai_v2_ultra", "budgets": [2000], "what": "exploratory capacity check: the same director v2 with the 'deep' profile (nvidia/Nemotron-3-Ultra-550b-a55b, reasoning_effort low)"}
+  ],
+  "replicates": [1],
+  "recovery_rule": "recovery.full_recovery_v1 (unchanged)",
+  "analysis": "descriptive, with scripts/walk_s2_analysis.py over S2 + S2b shard files together: FULL counts per method x budget; AI decision patterns (body co-design rate, first-probe distribution, budget used); H6 top-2 hit rate vs the S2 census. Decision rule for the confirmatory AI arm: the director version/model with the most dev full recoveries at R* = 2000 among {ai v1, ai_v2, ai_v2_ultra} (ties: the cheaper model, then the later version); recorded before the freeze.",
+  "rollout_cap": 90000,
+  "inference": "<= 8 requests per pipeline; every pipeline has its own ledger investigation id (fix of the S2 shared-id incident)"
+}

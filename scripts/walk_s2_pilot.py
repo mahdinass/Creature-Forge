@@ -63,13 +63,17 @@ def make_director(method: str, *, creature: str, budget: int, family: int, ledge
         return wp.RandomDirector(seed=int(hashlib.sha256(f"{creature}:{budget}:{noise_seed}".encode()).hexdigest()[:8], 16))
     if method == "census":
         return wp.ScriptedDirector(census_decisions(family))
-    if method in ("ai", "ai_nogait"):
+    if method in ("ai", "ai_nogait", "ai_v2", "ai_v2_ultra"):
         evidence_mode = "no_gait" if method == "ai_nogait" else "full"
+        prompt_version = "v2" if method in ("ai_v2", "ai_v2_ultra") else "v1"
+        profile = "deep" if method == "ai_v2_ultra" else "default"
+        order_seed = int(hashlib.sha256(f"order:{creature}:{budget}:{noise_seed}".encode()).hexdigest()[:8], 16)
         from creature_forge import director as dr
         from creature_forge.inference_ledger import Caps, InferenceLedger
         led = InferenceLedger(ledger_path, caps=Caps(inv_max_requests=8, inv_max_tokens=160_000)) if ledger_path else None
-        return dr.NemotronDirector(mode="live", ledger=led, evidence_mode=evidence_mode,
-                                   investigation_id=f"wr-{hashlib.sha256(f'{creature}:{budget}:{noise_seed}'.encode()).hexdigest()[:10]}")
+        return dr.NemotronDirector(mode="live", profile=profile, ledger=led, evidence_mode=evidence_mode, prompt_version=prompt_version,
+                                   order_seed=order_seed if prompt_version == "v2" else None,
+                                   investigation_id=f"wr-{hashlib.sha256((f'{creature}:{budget}:{noise_seed}' if method == 'ai' else f'{method}:{creature}:{budget}:{noise_seed}').encode()).hexdigest()[:10]}")  # 'ai' ids as in S2; every other method has its own id (S2 incident: ai_nogait shared ai's id and cap)
     raise ValueError(f"unknown method {method!r}")
 
 

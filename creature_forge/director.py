@@ -46,6 +46,13 @@ from .investigation import (PROVENANCE, SCRIPTED_MODEL, LiveRefused, live_refusa
 from .nebius import estimate_prompt_tokens, redact_secret
 
 VERSION = "nemotron_director_v1"
+PROMPT_VERSIONS = ("v1", "v2")
+# v2 (2026-10-17, development tuning after S2 - experiments/walk_recovery/dev_pilot/REPORT_S2.md): (a) the body is presented as a
+# subsystem on a par with the control subspaces, (b) budget left after the last round is stated to be wasted, (c) the order in
+# which probes and subspaces are listed (prompt text and schema enums) is shuffled per pipeline with a recorded seed, removing a
+# fixed list-position bias (v1 listed opt_timing first and the model chose it in 22/24 pipelines), (d) the reference body's
+# features (the body the transferred controller was tuned for) are part of the evidence. No statement about which subsystem
+# usually works is added.
 MAX_HYPOTHESES_PER_CALL = 3
 MAX_CITATIONS = 6
 MAX_PLAN_CITATIONS = 4
@@ -124,15 +131,27 @@ def _guided_bounds(p: str) -> str:
     return f"guided bounds [{lo:g}, {hi:g}]"
 
 
-def build_system_prompt() -> str:
-    """The director's system prompt (deterministic; generated from the live probe catalogue, subspaces and parameter descriptions)."""
+def _order(items, seed):
+    items = list(items)
+    if seed is None:
+        return items
+    import numpy as np
+    perm = np.random.default_rng(np.random.SeedSequence([int(seed), 0x0D1E])).permutation(len(items))
+    return [items[i] for i in perm]
+
+
+def build_system_prompt(prompt_version: str = "v1", order_seed: int | None = None) -> str:
+    """The director's system prompt (deterministic for (version, order_seed); generated from the live probe catalogue, subspaces and
+    parameter descriptions). v1 is the S2 prompt, byte-identical; v2 adds the statements listed at PROMPT_VERSIONS and lists probes and
+    subspaces in an order shuffled by `order_seed`."""
+    v2 = prompt_version == "v2"
     probes = []
-    for pid, spec in wp.PROBES.items():
+    for pid, spec in (_order(wp.PROBES.items(), order_seed) if v2 else wp.PROBES.items()):
         txt = _PROBE_TEXT[spec["kind"]].format(subspace=spec.get("subspace", ""),
                                                bp=", ".join(spec.get("body_params", ())), description=spec.get("description", ""))
         probes.append(f"- {pid}: {txt}." + (" Family 17 only." if pid == "opt_placement" else ""))
     subs = []
-    for name, params in wo.SUBSPACES.items():
+    for name, params in (_order(wo.SUBSPACES.items(), order_seed) if v2 else wo.SUBSPACES.items()):
         if name == "placement":
             subs.append(f"- placement (family 17 only): {_PLACEMENT_DOC}.")
         else:
@@ -141,6 +160,11 @@ def build_system_prompt() -> str:
     docs = [f"- {k}: {v}" for k, v in _STATIC_DOCS.items()]
     docs.append("- baseline.<k>: median over the diagnostic seeds of gait feature k (listed below); None values are omitted.")
     docs += [f"  - baseline.{k}: {v}" for k, v in gf.SUMMARY_DOCS.items()]
+    if v2:
+        docs.append("- creature.reference.features.<k>: the same feature for the REFERENCE body, the body for which the transferred "
+                    "start controller was tuned (it walks there); compare with creature.features.<k>.")
+    if v2:
+        return "\n".join(_v2_sections(probes, subs, bodies, docs))
     return "\n".join([
         "You are the engineering director of a walking-recovery study. A planar (side-view, 2-D) two-legged creature with a phase-based "
         "gait controller (15 parameters; 17 in family 17) does not walk. You decide WHICH diagnostic experiments to run and WHICH subsystem "
@@ -186,6 +210,73 @@ def build_system_prompt() -> str:
         "EVIDENCE: the user message lists `path = value` lines. Citations must be copied exactly from them. Documentation of the paths:",
         *docs,
     ])
+
+
+def _v2_sections(probes, subs, bodies, docs) -> list[str]:
+    return [
+        "You are the engineering director of a walking-recovery study. A planar (side-view, 2-D) two-legged creature with a phase-based "
+        "gait controller (15 parameters; 17 in family 17) does not walk. You decide WHICH diagnostic experiments to run and WHICH subsystems "
+        "of the creature to change, with what share of the remaining budget. The creature has two kinds of changeable subsystems: its "
+        "CONTROLLER (the control subspaces below) and its BODY (the body parameters below); a plan may search any control subspaces, any "
+        "body parameters, or both together. A numeric optimiser (CMA-ES) then fits the chosen parameters jointly and MuJoCo measures the "
+        "result. You never choose numeric parameter values and you never decide whether the creature has recovered.",
+        "",
+        "GOAL: the creature must genuinely walk: >= 80% of 24 held-out seeds under perturbation and friction variation, confirmed for 20 s. "
+        "Small distance gains do not count. A final screening and a held-out validation, both outside your control, decide.",
+        "",
+        "BUDGET: one total rollout budget pays for everything: the start evaluation, every probe, every plan (also a failed or discarded one) "
+        "and the final screening. A probe or plan is charged in full before it runs and unused rollouts are refunded. One candidate "
+        "evaluation costs n_train rollouts (one per training seed). Plans must not exceed the remaining budget; a plan whose budget cannot "
+        "pay one evaluation is rejected, and a rejected plan forfeits its share. Rollouts still unspent after the plans of the LAST round "
+        "are wasted: they are not used for anything. Methods without a model get the same budget and the same information as you.",
+        "",
+        "ROUNDS: each round has a probe step and a plan step. Probes of a round run before its plans. budget_share is a fraction of the "
+        "rollouts remaining when plans are decided (after that round's probes); shares of one round sum to at most 1; budget you do not spend "
+        "in an earlier round stays available for later rounds. At most 3 probes and 2 plans per round, no repeated probe. The lists below "
+        "are in no particular order.",
+        "",
+        "PROBES (diagnostic experiments; the measured delta is relative to the unchanged creature on the training seeds):",
+        *probes,
+        "",
+        "CONTROL SUBSPACES (a plan's ctrl_subspaces; the optimiser searches only these dimensions and keeps the others at the init's values):",
+        *subs,
+        "",
+        "BODY PARAMETERS (a plan's body_params, at most 4; the leg ones change both legs by one ratio; searched jointly with the plan's "
+        "control subspaces):",
+        *bodies,
+        "",
+        "SEARCH SPACE TRADE-OFF: a smaller, well-chosen search space converges faster for the same budget but excludes everything outside it; "
+        "a larger one includes more but needs more rollouts for the same progress. A plan's init is \"start\", or the id of a probe or plan "
+        "that already ran with status ok; the search starts from that run's best candidate (its body and controller).",
+        "",
+        "HYPOTHESES: state hypotheses about WHY the creature does not walk. Ground each in evidence by citing evidence paths (copied exactly "
+        "from the EVIDENCE lines) and give at least one competing explanation. A probe is a test of a hypothesis with an expected outcome: "
+        "\"improves\" (best candidate beats the start) or \"no_change\". After the measurements, list in `refuted` the hypotheses the "
+        "measurements contradict; a refuted hypothesis must not be pursued again without new evidence. Measurements, not hypotheses, count.",
+        "",
+        "PROCEDURE: you are called twice per round. Probe call: reply with `hypotheses` (1-3; ids as listed) and `probes` (0-3, each tied to a "
+        "hypothesis with an expected outcome). Plan call: reply with `refuted`, a short updated `diagnosis` and `plans` (1-2: init, "
+        "ctrl_subspaces, body_params, budget_share, hypothesis, prediction, evidence). A plan's hypothesis is a hypothesis that is not "
+        "refuted, or \"none\" with its own evidence. Reply with ONE JSON object in the required format and nothing else.",
+        "",
+        "EVIDENCE: the user message lists `path = value` lines. Citations must be copied exactly from them. Documentation of the paths:",
+        *docs,
+    ]
+
+
+_REFERENCE_FEATURES: dict | None = None
+
+
+def reference_features() -> dict:
+    """creature_gen.features of the default SandboxBody (the body the R2 start controller was tuned on); cached."""
+    global _REFERENCE_FEATURES
+    if _REFERENCE_FEATURES is None:
+        from . import creature_gen as cg
+        from .sandbox import SandboxBody
+        b = SandboxBody().as_dict()
+        b["pose"] = list(b["pose"])
+        _REFERENCE_FEATURES = _scalars(cg.features(b))
+    return dict(_REFERENCE_FEATURES)
 
 
 # ------------------------------------------------------------------------------------------------------------------ evidence
@@ -460,7 +551,12 @@ class NemotronDirector:
 
     def __init__(self, mode: str = "live", profile: str = "default", ledger: InferenceLedger | None = None,
                  investigation_id: str | None = None, transport=None, fixture: Sequence | None = None, max_requests: int = 8,
-                 max_total_tokens: int = 160_000, config: ModelConfig | None = None, evidence_mode: str = "full"):
+                 max_total_tokens: int = 160_000, config: ModelConfig | None = None, evidence_mode: str = "full",
+                 prompt_version: str = "v1", order_seed: int | None = None):
+        if prompt_version not in PROMPT_VERSIONS:
+            raise ValueError(f"prompt_version must be one of {PROMPT_VERSIONS}, got {prompt_version!r}")
+        self.prompt_version = prompt_version
+        self.order_seed = order_seed if prompt_version == "v2" else None
         if evidence_mode not in EVIDENCE_MODES:
             raise ValueError(f"evidence_mode must be one of {EVIDENCE_MODES}, got {evidence_mode!r}")
         self.evidence_mode = evidence_mode
@@ -494,7 +590,7 @@ class NemotronDirector:
         self.max_requests, self.max_total_tokens = max_requests, max_total_tokens
         self.fixture_used = isinstance(transport, FixtureTransport)
         self._transport = transport
-        self.system = build_system_prompt()
+        self.system = build_system_prompt(prompt_version, self.order_seed)
         self.calls: list[dict] = []
         self.decisions: list[dict] = []
         self.hypotheses: dict[str, dict] = {}
@@ -507,6 +603,10 @@ class NemotronDirector:
         """The evidence pack; evidence_mode "no_gait" (an information ablation, H6) removes the baseline gait-feature
         summary and keeps only the baseline outcome / label counts."""
         ev = build_evidence(state)
+        if self.prompt_version == "v2":
+            ev["creature"]["reference"] = {"features": reference_features()}
+            pc = ev["budget"]["probe_cost"]
+            ev["budget"]["probe_cost"] = {k: pc[k] for k in _order(list(pc), self.order_seed)}
         if self.evidence_mode == "no_gait":
             ev["baseline"] = {k: v for k, v in ev["baseline"].items() if k.startswith(("outcome_", "label_"))}
         return ev
@@ -626,6 +726,8 @@ class NemotronDirector:
         new_ids = [f"H{n + i}" for i in range(1, MAX_HYPOTHESES_PER_CALL + 1)]
         live = self._live_ids()
         avail = list(state["available_probes"])
+        if self.prompt_version == "v2":
+            avail = _order(avail, self.order_seed)
         schema = probe_schema(paths, new_ids, live + new_ids, avail or ["(none available)"])
         messages = [{"role": "system", "content": self.system}, {"role": "user", "content": self._user(state, evidence, "probes")}]
         pset = set(paths)
@@ -656,6 +758,8 @@ class NemotronDirector:
         runs = {p["probe_id"]: 1 for p in state["probes_run"] if p["status"] == "ok"}
         runs.update({p["plan_id"]: 1 for p in state["plans_run"] if p["status"] == "ok"})
         subs = [s for s in wo.SUBSPACES if s != "placement" or state["family"] == 17]
+        if self.prompt_version == "v2":
+            subs = _order(subs, self.order_seed)
         schema = plan_schema(paths, live, live, ["start"] + sorted(runs), subs)
         messages = [{"role": "system", "content": self.system}, {"role": "user", "content": self._user(state, evidence, "plans")}]
         pset = set(paths)
@@ -686,6 +790,7 @@ class NemotronDirector:
             tok["completion"] += int(u.get("completion_tokens") or 0)
         rec = {"version": VERSION, "provenance": self.provenance, "model": self.cfg.model, "profile": self.profile,
                "investigation_id": self.investigation_id, "evidence_mode": self.evidence_mode,
+               "prompt_version": self.prompt_version, "order_seed": self.order_seed,
                "settings": {"temperature": self.cfg.temperature, "max_tokens": self.cfg.max_tokens,
                             "reasoning_effort": self.cfg.reasoning_effort, "json_schema": self.cfg.json_schema,
                             "extra_body": copy.deepcopy(self.cfg.extra_body), "timeout_s": self.cfg.timeout_s,
