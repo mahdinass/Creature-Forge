@@ -6,3 +6,5 @@ experiments/forge_loop/dev_live_records/*.json -text
 experiments/forge_loop/scoreboard/results/records/*.json -text
 experiments/forge_loop/memory_eval/bank.jsonl -text
 experiments/forge_loop/memory_eval/results/records/*.json -text
+experiments/walk_recovery/**/results/*.jsonl -text
+experiments/walk_recovery/**/results/*.json -text

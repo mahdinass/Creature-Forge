@@ -1,0 +1,127 @@
+{
+  "host": "computeinstance-e01g6rhpgcpnf1bfbr",
+  "cpus": 8,
+  "python": "3.12.3",
+  "results": [
+    {
+      "workers": 1,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 17.59,
+      "rollouts_per_s": 2.73,
+      "mean_job_wall_s": 0.3664,
+      "fell_frac": 0.0,
+      "walking_frac": 1.0,
+      "peak_worker_rss_mb": 64.9,
+      "body": "default_walks"
+    },
+    {
+      "workers": 2,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 8.687,
+      "rollouts_per_s": 5.53,
+      "mean_job_wall_s": 0.3559,
+      "fell_frac": 0.042,
+      "walking_frac": 0.958,
+      "peak_worker_rss_mb": 65.0,
+      "body": "default_walks"
+    },
+    {
+      "workers": 4,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 4.394,
+      "rollouts_per_s": 10.92,
+      "mean_job_wall_s": 0.3645,
+      "fell_frac": 0.0,
+      "walking_frac": 1.0,
+      "peak_worker_rss_mb": 65.2,
+      "body": "default_walks"
+    },
+    {
+      "workers": 6,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 4.465,
+      "rollouts_per_s": 10.75,
+      "mean_job_wall_s": 0.5558,
+      "fell_frac": 0.0,
+      "walking_frac": 1.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "default_walks"
+    },
+    {
+      "workers": 8,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 4.56,
+      "rollouts_per_s": 10.53,
+      "mean_job_wall_s": 0.6376,
+      "fell_frac": 0.0,
+      "walking_frac": 1.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "default_walks"
+    },
+    {
+      "workers": 1,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 5.027,
+      "rollouts_per_s": 9.55,
+      "mean_job_wall_s": 0.1047,
+      "fell_frac": 1.0,
+      "walking_frac": 0.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "stilts_falls"
+    },
+    {
+      "workers": 2,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 2.494,
+      "rollouts_per_s": 19.24,
+      "mean_job_wall_s": 0.1032,
+      "fell_frac": 1.0,
+      "walking_frac": 0.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "stilts_falls"
+    },
+    {
+      "workers": 4,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 1.286,
+      "rollouts_per_s": 37.33,
+      "mean_job_wall_s": 0.1009,
+      "fell_frac": 1.0,
+      "walking_frac": 0.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "stilts_falls"
+    },
+    {
+      "workers": 6,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 1.243,
+      "rollouts_per_s": 38.63,
+      "mean_job_wall_s": 0.1511,
+      "fell_frac": 1.0,
+      "walking_frac": 0.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "stilts_falls"
+    },
+    {
+      "workers": 8,
+      "jobs": 48,
+      "ok": 48,
+      "wall_s": 1.387,
+      "rollouts_per_s": 34.61,
+      "mean_job_wall_s": 0.1932,
+      "fell_frac": 1.0,
+      "walking_frac": 0.0,
+      "peak_worker_rss_mb": 65.3,
+      "body": "stilts_falls"
+    }
+  ]
+}

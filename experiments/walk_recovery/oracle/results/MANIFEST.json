@@ -1,0 +1,7 @@
+{
+  "sha256": {
+    "m1a.jsonl": "ed058137b56b7c32d2a392e7fde82e9a85633a60e9f17962adbe69cedabc8ab9",
+    "s0_profile.json": "facb06a6a58d4b4c2210478b0a4291d4d07ecfda21138efe8fb50b4ad5e1cfb9"
+  },
+  "note": "byte-for-byte records (-text); produced on the Nebius VM, pulled with forge_dev.py pull"
+}
