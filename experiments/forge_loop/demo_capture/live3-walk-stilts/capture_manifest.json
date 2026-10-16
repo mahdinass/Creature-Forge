@@ -1,0 +1,1187 @@
+{
+ "kind": "walk",
+ "mode": "live",
+ "attempt": "live3-walk-stilts",
+ "base": "http://127.0.0.1:8000",
+ "started_utc": "2026-10-16T13:20:12.978Z",
+ "overlay": "cursor dot drawn by the capture script (headless Chrome renders no cursor); nothing else is added to the page",
+ "chapters": [
+  {
+   "t": 2.05,
+   "name": "sketch: empty canvas"
+  },
+  {
+   "t": 25.29,
+   "name": "sketch: drawing interpreted as a valid creature"
+  },
+  {
+   "t": 33.6,
+   "name": "creature on the bench as v1",
+   "version": "v1"
+  },
+  {
+   "t": 47.12,
+   "name": "walk challenge started (MuJoCo)"
+  },
+  {
+   "t": 49.82,
+   "name": "walk challenge result",
+   "outcome": "FAIL",
+   "headline": "0 of 8 seeds passed, 8 failed. Median score 2.15 m."
+  },
+  {
+   "t": 60.06,
+   "name": "replay of the failure"
+  },
+  {
+   "t": 80.52,
+   "name": "investigate with AI clicked (LIVE Nemotron)"
+  },
+  {
+   "t": 84.7,
+   "name": "investigation progress",
+   "stages": "EvidenceModelBuild armsScreenValidateVerdict"
+  },
+  {
+   "t": 108.95,
+   "name": "investigation record shown",
+   "status": "done",
+   "provenance": "LIVE"
+  },
+  {
+   "t": 127.15,
+   "name": "probe results"
+  },
+  {
+   "t": 139.3,
+   "name": "arms screened"
+  },
+  {
+   "t": 158.01,
+   "name": "held-out validation: AI vs matched twin vs baseline"
+  },
+  {
+   "t": 179.5,
+   "name": "side-by-side replay on a held-out seed"
+  },
+  {
+   "t": 200.5,
+   "name": "accept stays disabled: nothing verified",
+   "verdict": "NOT_VERIFIED",
+   "status": "done"
+  },
+  {
+   "t": 210.35,
+   "name": "end of take"
+  }
+ ],
+ "checks": [
+  {
+   "ok": true,
+   "m": "server live mode on (model nvidia/nemotron-3-super-120b-a12b)"
+  },
+  {
+   "ok": true,
+   "m": "investigation finished and its record is shown"
+  },
+  {
+   "ok": true,
+   "m": "record is LIVE with real request ids"
+  }
+ ],
+ "errors": [],
+ "figure": {
+  "torso": [
+   [
+    476,
+    44
+   ],
+   [
+    524,
+    44
+   ],
+   [
+    524,
+    164
+   ],
+   [
+    476,
+    164
+   ],
+   [
+    476,
+    44
+   ]
+  ],
+  "leg": [
+   [
+    500,
+    164
+   ],
+   [
+    500,
+    384
+   ],
+   [
+    500,
+    604
+   ]
+  ],
+  "foot": [
+   [
+    493,
+    604
+   ],
+   [
+    521,
+    604
+   ]
+  ]
+ },
+ "server": {
+  "live_available": true,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "settings": {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "selected": "2026-10-14 calibration v2 (experiments/forge_loop/calibration/REPORT.md)",
+   "profiles": {
+    "default": {
+     "model": "nvidia/nemotron-3-super-120b-a12b",
+     "max_tokens": 8000,
+     "temperature": 0.6,
+     "reasoning_effort": null,
+     "json_schema": true
+    },
+    "deep": {
+     "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+     "max_tokens": 24000,
+     "temperature": 0.6,
+     "reasoning_effort": "low",
+     "json_schema": true
+    }
+   }
+  },
+  "version": {
+   "git_commit": "2235243",
+   "git_branch": "HEAD",
+   "started_at": "2026-10-16T13:20:06+00:00",
+   "dist_built": "2026-10-15T22:42:43+00:00",
+   "api_routes": [
+    "/api/demo/run",
+    "/api/demo/runs",
+    "/api/demo/runs/{run_id}",
+    "/api/demo/runs/{run_id}/replay",
+    "/api/demo/status",
+    "/api/experiments/phase0",
+    "/api/forge/creatures",
+    "/api/forge/creatures",
+    "/api/forge/creatures/{cid}",
+    "/api/forge/creatures/{cid}/accept",
+    "/api/forge/creatures/{cid}/current",
+    "/api/forge/creatures/{cid}/versions/{n}/challenges",
+    "/api/forge/creatures/{cid}/versions/{n}/investigations",
+    "/api/forge/investigations",
+    "/api/forge/investigations/{iid}",
+    "/api/forge/jobs/{job_id}",
+    "/api/forge/jobs/{job_id}/cancel",
+    "/api/forge/memory",
+    "/api/forge/replay",
+    "/api/forge/runs/{run_id}",
+    "/api/forge/status",
+    "/api/freehand/interpret",
+    "/api/investigations",
+    "/api/investigations/{trial_id}",
+    "/api/investigations/{trial_id}/view",
+    "/api/lab/trials",
+    "/api/lab/trials/{trial_id}",
+    "/api/lab/trials/{trial_id}/replay",
+    "/api/locomotion/replay",
+    "/api/locomotion/summary",
+    "/api/overview",
+    "/api/sandbox/schema",
+    "/api/sandbox/simulate",
+    "/api/schema",
+    "/api/simulate",
+    "/api/sketch/compile",
+    "/api/sketch/default",
+    "/api/sketch/normalize",
+    "/api/sketch/support",
+    "/api/version",
+    "/api/walking/replay",
+    "/api/walking/summary",
+    "/api/{rest:path}"
+   ]
+  }
+ },
+ "ledger_before": {
+  "requests": 144,
+  "usd": 0.549071,
+  "tokens": 976807,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "creature_url": "http://127.0.0.1:8000/?tab=forge&creature=c-0c0a9c07&v=1",
+ "v1_run": {
+  "outcome": "FAIL",
+  "headline": "0 of 8 seeds passed, 8 failed. Median score 2.15 m.",
+  "run_id": "r-cd859e77",
+  "outcome_overall": "FAIL",
+  "spec": {
+   "kind": "walk",
+   "seeds": [
+    141754,
+    141755,
+    141756,
+    141757,
+    141758,
+    141759,
+    141760,
+    141761
+   ],
+   "duration": 10,
+   "perturb": 0.03,
+   "target_force": 10,
+   "push_time": 1,
+   "push_duration": 0.15,
+   "max_force": 80,
+   "start": "neutral",
+   "settle_s": 0.3,
+   "bisection_steps": 5
+  },
+  "per_seed": [
+   {
+    "seed": 141754,
+    "outcome": "FAIL",
+    "score": 2.157792425363839,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141755,
+    "outcome": "FAIL",
+    "score": 2.1500850278608983,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141756,
+    "outcome": "FAIL",
+    "score": 2.1527364902099655,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141757,
+    "outcome": "FAIL",
+    "score": 2.237294120683787,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141758,
+    "outcome": "FAIL",
+    "score": 2.0522679079125443,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141759,
+    "outcome": "FAIL",
+    "score": 2.2169830429761133,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141760,
+    "outcome": "FAIL",
+    "score": 2.045649016800077,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 141761,
+    "outcome": "FAIL",
+    "score": 1.772387530089195,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   }
+  ]
+ },
+ "creature": {
+  "id": "c-0c0a9c07",
+  "v1": {
+   "n": 1,
+   "parent": null,
+   "created": "2026-10-16T13:20:45Z",
+   "content_hash": "69b5f560938e0dd1d9bed41c7b35e2d4934774c52d95e51e2aaad5ee04db56b1",
+   "mode": "guided",
+   "body": {
+    "torso_mass": 4.7917,
+    "thigh_length": 0.55,
+    "shank_length": 0.55,
+    "foot_length": 0.07,
+    "foot_friction": 1,
+    "torque_limit": 60,
+    "leg_density": 1000,
+    "thigh_length_r": 0.55,
+    "shank_length_r": 0.55,
+    "foot_length_r": 0.07,
+    "pose": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "controllers": {
+    "stand": {
+     "kp": 150,
+     "kd": 8,
+     "gait_freq": 0,
+     "hip_amp": 0,
+     "knee_amp": 0,
+     "balance_gain": 80,
+     "stand_hip": 0,
+     "stand_knee": 0
+    },
+    "walk": null
+   },
+   "origin": "user",
+   "drawing": {
+    "strokes": [
+     {
+      "id": "s1",
+      "role": "torso",
+      "points": [
+       [
+        476,
+        44
+       ],
+       [
+        478.2,
+        44
+       ],
+       [
+        480.4,
+        44
+       ],
+       [
+        482.5,
+        44
+       ],
+       [
+        484.7,
+        44
+       ],
+       [
+        486.9,
+        44
+       ],
+       [
+        489.1,
+        44
+       ],
+       [
+        491.3,
+        44
+       ],
+       [
+        493.5,
+        44
+       ],
+       [
+        495.6,
+        44
+       ],
+       [
+        497.8,
+        44
+       ],
+       [
+        500,
+        44
+       ],
+       [
+        502.2,
+        44
+       ],
+       [
+        504.4,
+        44
+       ],
+       [
+        506.5,
+        44
+       ],
+       [
+        508.7,
+        44
+       ],
+       [
+        510.9,
+        44
+       ],
+       [
+        513.1,
+        44
+       ],
+       [
+        515.3,
+        44
+       ],
+       [
+        517.5,
+        44
+       ],
+       [
+        519.6,
+        44
+       ],
+       [
+        521.8,
+        44
+       ],
+       [
+        524,
+        44
+       ],
+       [
+        524,
+        49.5
+       ],
+       [
+        524,
+        54.9
+       ],
+       [
+        524,
+        60.4
+       ],
+       [
+        524,
+        65.8
+       ],
+       [
+        524,
+        71.3
+       ],
+       [
+        524,
+        76.7
+       ],
+       [
+        524,
+        82.2
+       ],
+       [
+        524,
+        87.6
+       ],
+       [
+        524,
+        93.1
+       ],
+       [
+        524,
+        98.5
+       ],
+       [
+        524,
+        104
+       ],
+       [
+        524,
+        109.5
+       ],
+       [
+        524,
+        114.9
+       ],
+       [
+        524,
+        120.4
+       ],
+       [
+        524,
+        125.8
+       ],
+       [
+        524,
+        131.3
+       ],
+       [
+        524,
+        136.7
+       ],
+       [
+        524,
+        142.2
+       ],
+       [
+        524,
+        147.6
+       ],
+       [
+        524,
+        153.1
+       ],
+       [
+        524,
+        158.5
+       ],
+       [
+        524,
+        164
+       ],
+       [
+        521.8,
+        164
+       ],
+       [
+        519.6,
+        164
+       ],
+       [
+        517.5,
+        164
+       ],
+       [
+        515.3,
+        164
+       ],
+       [
+        513.1,
+        164
+       ],
+       [
+        510.9,
+        164
+       ],
+       [
+        508.7,
+        164
+       ],
+       [
+        506.5,
+        164
+       ],
+       [
+        504.4,
+        164
+       ],
+       [
+        502.2,
+        164
+       ],
+       [
+        500,
+        164
+       ],
+       [
+        497.8,
+        164
+       ],
+       [
+        495.6,
+        164
+       ],
+       [
+        493.5,
+        164
+       ],
+       [
+        491.3,
+        164
+       ],
+       [
+        489.1,
+        164
+       ],
+       [
+        486.9,
+        164
+       ],
+       [
+        484.7,
+        164
+       ],
+       [
+        482.5,
+        164
+       ],
+       [
+        480.4,
+        164
+       ],
+       [
+        478.2,
+        164
+       ],
+       [
+        476,
+        164
+       ],
+       [
+        476,
+        158.5
+       ],
+       [
+        476,
+        153.1
+       ],
+       [
+        476,
+        147.6
+       ],
+       [
+        476,
+        142.2
+       ],
+       [
+        476,
+        136.7
+       ],
+       [
+        476,
+        131.3
+       ],
+       [
+        476,
+        125.8
+       ],
+       [
+        476,
+        120.4
+       ],
+       [
+        476,
+        114.9
+       ],
+       [
+        476,
+        109.5
+       ],
+       [
+        476,
+        104
+       ],
+       [
+        476,
+        98.5
+       ],
+       [
+        476,
+        93.1
+       ],
+       [
+        476,
+        87.6
+       ],
+       [
+        476,
+        82.2
+       ],
+       [
+        476,
+        76.7
+       ],
+       [
+        476,
+        71.3
+       ],
+       [
+        476,
+        65.8
+       ],
+       [
+        476,
+        60.4
+       ],
+       [
+        476,
+        54.9
+       ],
+       [
+        476,
+        49.5
+       ],
+       [
+        476,
+        44
+       ]
+      ]
+     },
+     {
+      "id": "s2",
+      "role": "leg",
+      "points": [
+       [
+        500,
+        164
+       ],
+       [
+        500,
+        174
+       ],
+       [
+        500,
+        184
+       ],
+       [
+        500,
+        194
+       ],
+       [
+        500,
+        204
+       ],
+       [
+        500,
+        214
+       ],
+       [
+        500,
+        224
+       ],
+       [
+        500,
+        234
+       ],
+       [
+        500,
+        244
+       ],
+       [
+        500,
+        254
+       ],
+       [
+        500,
+        264
+       ],
+       [
+        500,
+        274
+       ],
+       [
+        500,
+        284
+       ],
+       [
+        500,
+        294
+       ],
+       [
+        500,
+        304
+       ],
+       [
+        500,
+        314
+       ],
+       [
+        500,
+        324
+       ],
+       [
+        500,
+        334
+       ],
+       [
+        500,
+        344
+       ],
+       [
+        500,
+        354
+       ],
+       [
+        500,
+        364
+       ],
+       [
+        500,
+        374
+       ],
+       [
+        500,
+        384
+       ],
+       [
+        500,
+        394
+       ],
+       [
+        500,
+        404
+       ],
+       [
+        500,
+        414
+       ],
+       [
+        500,
+        424
+       ],
+       [
+        500,
+        434
+       ],
+       [
+        500,
+        444
+       ],
+       [
+        500,
+        454
+       ],
+       [
+        500,
+        464
+       ],
+       [
+        500,
+        474
+       ],
+       [
+        500,
+        484
+       ],
+       [
+        500,
+        494
+       ],
+       [
+        500,
+        504
+       ],
+       [
+        500,
+        514
+       ],
+       [
+        500,
+        524
+       ],
+       [
+        500,
+        534
+       ],
+       [
+        500,
+        544
+       ],
+       [
+        500,
+        554
+       ],
+       [
+        500,
+        564
+       ],
+       [
+        500,
+        574
+       ],
+       [
+        500,
+        584
+       ],
+       [
+        500,
+        594
+       ],
+       [
+        500,
+        604
+       ]
+      ]
+     },
+     {
+      "id": "s3",
+      "role": "foot",
+      "points": [
+       [
+        493,
+        604
+       ],
+       [
+        495.5,
+        604
+       ],
+       [
+        498.1,
+        604
+       ],
+       [
+        500.6,
+        604
+       ],
+       [
+        503.2,
+        604
+       ],
+       [
+        505.7,
+        604
+       ],
+       [
+        508.3,
+        604
+       ],
+       [
+        510.8,
+        604
+       ],
+       [
+        513.4,
+        604
+       ],
+       [
+        515.9,
+        604
+       ],
+       [
+        518.5,
+        604
+       ],
+       [
+        521,
+        604
+       ]
+      ]
+     }
+    ],
+    "interpretation": {
+     "status": "ok",
+     "outcome": "valid_with_snaps",
+     "roles": {
+      "s1": {
+       "role": "torso",
+       "source": "pen",
+       "reason": "drawn with the torso pen"
+      },
+      "s2": {
+       "role": "leg",
+       "source": "pen",
+       "reason": "drawn with the leg pen"
+      },
+      "s3": {
+       "role": "foot",
+       "source": "pen",
+       "reason": "drawn with the foot pen"
+      }
+     },
+     "notes": [],
+     "assumptions": [
+      "A straight leg stroke has no visible knee: the knee was placed halfway along it. Use Refine to move it.",
+      "Only one leg was drawn: the second leg mirrors it exactly (same lengths and pose).",
+      "Only one foot was drawn: the other foot copies it."
+     ],
+     "adjustments": [
+      {
+       "kind": "straighten",
+       "what": "torso",
+       "message": "Stood the torso upright (it leaned -0.0°)."
+      }
+     ],
+     "skeleton": {
+      "torso": {
+       "base": [
+        498.51,
+        164.01
+       ],
+       "top": [
+        498.51,
+        44.01
+       ],
+       "half_width": 24
+      },
+      "legs": [
+       {
+        "hip": [
+         498.51,
+         164.01
+        ],
+        "knee": [
+         498.51,
+         384.01
+        ],
+        "ankle": [
+         498.51,
+         604.01
+        ],
+        "toe": [
+         519.51,
+         604.01
+        ],
+        "heel": [
+         491.51,
+         604.01
+        ]
+       },
+       {
+        "hip": [
+         498.51,
+         164.01
+        ],
+        "knee": [
+         498.51,
+         384.01
+        ],
+        "ankle": [
+         498.51,
+         604.01
+        ],
+        "toe": [
+         519.51,
+         604.01
+        ],
+        "heel": [
+         491.51,
+         604.01
+        ]
+       }
+      ],
+      "ground_y": 604.01
+     },
+     "guided": true
+    },
+    "approximation": null
+   },
+   "change": null
+  }
+ },
+ "investigation": {
+  "id": "i-2ed39b130df0",
+  "status": "done",
+  "provenance": "LIVE",
+  "model_calls": [
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "request_id": "35a1710097c07970c2ab68c11dd307b7",
+    "latency_s": 2.073515556000018,
+    "usage": {
+     "prompt_tokens": 4534,
+     "completion_tokens": 318,
+     "total_tokens": 4852,
+     "reasoning_tokens": 0
+    },
+    "cost_usd": 0.0016464,
+    "ok": true
+   },
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "request_id": "03141931789c1b93398e0186aa87a820",
+    "latency_s": 3.8655936440000005,
+    "usage": {
+     "prompt_tokens": 4893,
+     "completion_tokens": 590,
+     "total_tokens": 5483,
+     "reasoning_tokens": 0
+    },
+    "cost_usd": 0.0019988999999999996,
+    "ok": true
+   }
+  ],
+  "selection": {
+   "ai": "ai:P1",
+   "matched_twin": "random:P1",
+   "baseline": "random:P1"
+  },
+  "verdicts": {
+   "ai:P1": {
+    "status": "NOT_VERIFIED",
+    "median_diff": 0.04194006678014783,
+    "n": 24
+   },
+   "random:P1": {
+    "status": "NOT_VERIFIED",
+    "median_diff": 0.26464922398395174,
+    "n": 24
+   }
+  },
+  "ai_edits": [
+   {
+    "param": "walk.pitch_kp",
+    "op": "scale",
+    "value": 0.7,
+    "target": "both"
+   }
+  ],
+  "probes": null,
+  "code": {
+   "commit": "2235243211c3d32a074a4959c25395912403c9c7",
+   "dirty": false
+  }
+ },
+ "ai_verdict": "NOT_VERIFIED",
+ "accepted": false,
+ "finished_utc": "2026-10-16T13:23:43.835Z",
+ "duration_s": 210.86,
+ "ledger_after": {
+  "requests": 146,
+  "usd": 0.552716,
+  "tokens": 987142,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "frames": {
+  "count": 3315,
+  "mean_fps": 15.92
+ },
+ "video": {
+  "file": "take.mp4",
+  "fps": 30,
+  "codec": "h264",
+  "crf": 16
+ },
+ "stills": [
+  "02-drawing.png",
+  "05-v1-result.png",
+  "06-v1-replay.png",
+  "09-model-call.png",
+  "09-provenance.png",
+  "10-probes.png",
+  "12-verdicts.png",
+  "13-arena-replay.png",
+  "14-not-verified.png"
+ ]
+}

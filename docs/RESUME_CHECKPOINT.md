@@ -166,6 +166,12 @@ Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|f
   (target 15 N, v1 POOR -> Nemotron foot x1.35 VERIFIED 12/0/0 -> v2 -> v2 PASS 8/8), `live2-walk` honest negative
   (NOT_VERIFIED), `dry1` scripted pacing test. Videos only in local `artifacts/vm/capture/<take>/take.mp4` (git-ignored) and
   on the VM `~/dev/capture/`. Do not re-record unless the owner asks. Inference 144 requests, $0.549; infra $4.72 of $10.
+- **Walking take replaced (owner request):** pre-declared screening of 4 hand-drawn candidates without model calls
+  (`demo_capture/walk_screening/`): C1/C2/C4 invalid under Guided constraints (torso mass > 15 kg), C3 stilts FAIL 8/8 ->
+  selected. One live take `live3-walk-stilts`: v1 falls 8/8; Nemotron `walk.pitch_kp x0.7` NOT_VERIFIED (+0.04 m, p = 0.006,
+  bar 0.5 m), P2 rejected out of bounds, no retune chosen. Not repeated (no re-rolling). `live1` unchanged; `live2-walk`
+  kept as archived negative. Inference 146 requests, $0.553; infra $4.79; VM stopped. Asking the owner before any further
+  walking attempt.
 - **Remaining D items:** owner voice-over/edit from the takes, publication audit owner decisions (history
   emails, Nebius §4.1.10(c)/§18.7, Super/Ultra licence texts), final secret scan on the final refs. PR #16 merge awaits the
   owner's explicit yes (merge commit, no squash).

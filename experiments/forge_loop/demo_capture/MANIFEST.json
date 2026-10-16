@@ -4,5 +4,13 @@
  "live1/i-957877ed1690.json": "a917414ccf97956f7458478d991567c79fd1124b6b81815ba6997140eab5d36c",
  "live2-walk/capture.log": "7b0971c040f82bf56e59872a814348dade513b6eece8ff7c40d6eac5df460518",
  "live2-walk/capture_manifest.json": "c0c16d17cd651a77d0243a41068b7fb96db959217570a3e522a6a804ee909d53",
- "live2-walk/i-6628ccc1705c.json": "5bd4673a548aa493fe0282a655140c11e075c5426e8ba439467e14bb71efa465"
+ "live2-walk/i-6628ccc1705c.json": "5bd4673a548aa493fe0282a655140c11e075c5426e8ba439467e14bb71efa465",
+ "live3-walk-stilts/capture.log": "588224d33da599a01b6bfc3e8cf88eefaa3f9b6e2bae50e441ba56b0f818b52f",
+ "live3-walk-stilts/capture_manifest.json": "a1a9ccced467384a9040eac8981adc3cb2a80dcc8f18f4298577af22f2a183e7",
+ "live3-walk-stilts/i-2ed39b130df0.json": "4ce41256dbd433983a89214f216365640b616b87f63be81e07177d56665d4609",
+ "walk_screening/C1-top-heavy.manifest.json": "8d7b513798f9a5a8e82b1167760f859e9bdfed1a925342d6f50f438d17bd831f",
+ "walk_screening/C2-short-legs-big-torso.manifest.json": "51d4bf777ba6aeac54aceb2b4a134300a80d16804da99dbd3c08a4607495e6d9",
+ "walk_screening/C3-stilts.manifest.json": "31aa9ddbcd445d4ee978a423d78b7911b1e2348c59f8a7459c53cf4a77431a19",
+ "walk_screening/C4-tall-top-heavy.manifest.json": "526f2b25641fed2f75fb9888ffaaffdf6c1797e34c06172458447df7fec37794",
+ "walk_screening/candidates.json": "24f4cc2627d1617d2d0e4b370e2f55ae966b520c5435623a351e85ac4c7725f6"
 }

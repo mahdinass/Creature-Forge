@@ -1,0 +1,186 @@
+{
+ "kind": "forge-demo-capture",
+ "mode": "scripted",
+ "attempt": "screen-C2-short-legs-big-torso",
+ "base": "http://127.0.0.1:8000",
+ "started_utc": "2026-10-16T13:15:20.472Z",
+ "overlay": "cursor dot drawn by the capture script (headless Chrome renders no cursor); nothing else is added to the page",
+ "chapters": [
+  {
+   "t": 2.03,
+   "name": "sketch: empty canvas"
+  }
+ ],
+ "checks": [],
+ "errors": [
+  "flow threw: page.waitForFunction: Timeout 30000ms exceeded."
+ ],
+ "figure": {
+  "torso": [
+   [
+    440,
+    284
+   ],
+   [
+    560,
+    284
+   ],
+   [
+    560,
+    484
+   ],
+   [
+    440,
+    484
+   ],
+   [
+    440,
+    284
+   ]
+  ],
+  "leg": [
+   [
+    500,
+    484
+   ],
+   [
+    500,
+    544
+   ],
+   [
+    500,
+    604
+   ]
+  ],
+  "foot": [
+   [
+    492,
+    604
+   ],
+   [
+    524,
+    604
+   ]
+  ]
+ },
+ "server": {
+  "live_available": false,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "settings": {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "selected": "2026-10-14 calibration v2 (experiments/forge_loop/calibration/REPORT.md)",
+   "profiles": {
+    "default": {
+     "model": "nvidia/nemotron-3-super-120b-a12b",
+     "max_tokens": 8000,
+     "temperature": 0.6,
+     "reasoning_effort": null,
+     "json_schema": true
+    },
+    "deep": {
+     "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+     "max_tokens": 24000,
+     "temperature": 0.6,
+     "reasoning_effort": "low",
+     "json_schema": true
+    }
+   }
+  },
+  "version": {
+   "git_commit": "2235243",
+   "git_branch": "HEAD",
+   "started_at": "2026-10-16T13:14:03+00:00",
+   "dist_built": "2026-10-15T22:42:43+00:00",
+   "api_routes": [
+    "/api/demo/run",
+    "/api/demo/runs",
+    "/api/demo/runs/{run_id}",
+    "/api/demo/runs/{run_id}/replay",
+    "/api/demo/status",
+    "/api/experiments/phase0",
+    "/api/forge/creatures",
+    "/api/forge/creatures",
+    "/api/forge/creatures/{cid}",
+    "/api/forge/creatures/{cid}/accept",
+    "/api/forge/creatures/{cid}/current",
+    "/api/forge/creatures/{cid}/versions/{n}/challenges",
+    "/api/forge/creatures/{cid}/versions/{n}/investigations",
+    "/api/forge/investigations",
+    "/api/forge/investigations/{iid}",
+    "/api/forge/jobs/{job_id}",
+    "/api/forge/jobs/{job_id}/cancel",
+    "/api/forge/memory",
+    "/api/forge/replay",
+    "/api/forge/runs/{run_id}",
+    "/api/forge/status",
+    "/api/freehand/interpret",
+    "/api/investigations",
+    "/api/investigations/{trial_id}",
+    "/api/investigations/{trial_id}/view",
+    "/api/lab/trials",
+    "/api/lab/trials/{trial_id}",
+    "/api/lab/trials/{trial_id}/replay",
+    "/api/locomotion/replay",
+    "/api/locomotion/summary",
+    "/api/overview",
+    "/api/sandbox/schema",
+    "/api/sandbox/simulate",
+    "/api/schema",
+    "/api/simulate",
+    "/api/sketch/compile",
+    "/api/sketch/default",
+    "/api/sketch/normalize",
+    "/api/sketch/support",
+    "/api/version",
+    "/api/walking/replay",
+    "/api/walking/summary",
+    "/api/{rest:path}"
+   ]
+  }
+ },
+ "ledger_before": {
+  "requests": 144,
+  "usd": 0.549071,
+  "tokens": 976807,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "finished_utc": "2026-10-16T13:16:15.801Z",
+ "duration_s": 55.33,
+ "ledger_after": {
+  "requests": 144,
+  "usd": 0.549071,
+  "tokens": 976807,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "frames": {
+  "count": 526,
+  "mean_fps": 23.28
+ },
+ "video": {
+  "file": "take.mp4",
+  "fps": 30,
+  "codec": "h264",
+  "crf": 16
+ },
+ "stills": []
+}

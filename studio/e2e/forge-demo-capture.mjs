@@ -94,7 +94,19 @@ const vis = (sel) => page.isVisible(sel).catch(() => false)
 
 // The drawing: a biped with a short foot (the stubby figure used by the live end-to-end test). Coordinates in canvas units.
 const G = 620
-const figure = { torso: [[480, G - 376], [520, G - 376], [520, G - 256], [480, G - 256], [480, G - 376]], leg: [[500, G - 256], [500, G - 136], [500, G - 16]], foot: [[490, G - 16], [564, G - 16]] }
+// FIGURE (JSON, canvas units {torso, leg, foot} polylines) replaces the default stubby drawing; it is stored in the manifest.
+const figure = process.env.FIGURE ? JSON.parse(process.env.FIGURE)
+  : { torso: [[480, G - 376], [520, G - 376], [520, G - 256], [480, G - 256], [480, G - 376]], leg: [[500, G - 256], [500, G - 136], [500, G - 16]], foot: [[490, G - 16], [564, G - 16]] }
+manifest.figure = figure
+const STOP_AFTER = process.env.STOP_AFTER || ''   // 'challenge': screening take, ends after the v1 result and replay (no model call)
+const runIds = []
+page.on('response', (r) => { const m = r.url().match(/\/api\/forge\/runs\/(r-[0-9a-f]+)/); if (m && !runIds.includes(m[1])) runIds.push(m[1]) })
+async function runDetails() {
+  const id = runIds[runIds.length - 1]
+  const run = id ? await (await fetch(`${BASE}/api/forge/runs/${id}`)).json().catch(() => null) : null
+  return { run_id: id ?? null, outcome_overall: run?.outcome ?? null, spec: run?.spec ?? null,
+    per_seed: (run?.per_seed || []).map((s) => ({ seed: s.seed, outcome: s.outcome, score: s.score, error: s.error ?? null, events: (s.events || []).map((e) => e.kind ?? e) })) }
+}
 async function drawStroke(pts) {
   const b = await page.locator(T('draw-canvas')).boundingBox()
   const cs = pts.map(([x, y]) => [b.x + (x / 1000) * b.width, b.y + (y / 700) * b.height])
@@ -158,6 +170,10 @@ try {
   await page.waitForSelector(`${T('run-result')}, ${T('run-failed')}`, { timeout: 420000 })
   manifest.v1_run = { outcome: await runOutcome(), headline: await text(T('run-headline')) }
   chapter(`${KIND} challenge result`, manifest.v1_run)
+  Object.assign(manifest.v1_run, await runDetails())
+  const cid = new URL(page.url()).searchParams.get('creature')
+  const cr = cid ? await (await fetch(`${BASE}/api/forge/creatures/${cid}`)).json().catch(() => null) : null
+  manifest.creature = { id: cid, v1: (cr?.versions || []).find((v) => v.n === 1) ?? null }
   await show(T('run-headline'), 3000); await still('v1-result')
   if (await vis(T('score-bars'))) await show(T('score-bars'), 2500)
   if (await vis(T('seed-strip'))) await show(T('seed-strip'), 1500)
@@ -165,6 +181,8 @@ try {
   chapter('replay of the failure')
   await playReplayFromStart(T('replay'), 7); await still('v1-replay')
 
+  flow: {
+  if (STOP_AFTER === 'challenge') { chapter('end of screening take (no investigation, no model call)'); break flow }
   await show(T('probes-option'), 800)
   await page.check(T('probes-checkbox')); await sleep(900)
   await click(MODE === 'live' ? T('investigate-btn') : T('investigate-mock-btn'))
@@ -214,6 +232,7 @@ try {
     await page.waitForSelector(`${T('run-result')}, ${T('run-failed')}`, { timeout: 420000 })
     manifest.v2_run = { outcome: await runOutcome(), headline: await text(T('run-headline')) }
     chapter(`v2 ${KIND} challenge result`, manifest.v2_run)
+    Object.assign(manifest.v2_run, await runDetails())
     await show(T('run-headline'), 3500); await still('v2-result')
     await page.waitForSelector(`${T('replay')} canvas`, { timeout: 120000 }).catch(() => {})
     await playReplayFromStart(T('replay'), 7); await still('v2-replay')
@@ -224,6 +243,7 @@ try {
     await still('not-verified')
     manifest.accepted = false
   }
+  }   // flow
   await sleep(2000)
   chapter('end of take')
 } catch (e) { manifest.errors.push(`flow threw: ${e.message}`); exitCode = 1; console.log('FAIL flow threw:', e.message) }
