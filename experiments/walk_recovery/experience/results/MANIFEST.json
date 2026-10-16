@@ -1,0 +1,24 @@
+{
+  "sha256": {
+    "analysis_output.txt": "8521a2af5066f0ce182f08f3d0969001be600e3b522b9c6004f9e42d984c3e37",
+    "collect0.jsonl": "436bc19cf362deff9d95d050bfdabb45700cbf58e52d9c48bb8534fa9a08eb7f",
+    "collect1.jsonl": "03e6714a6310c229d3026560ec292683f39e7ce75d30887e5bad54a450f3f38b",
+    "collect2.jsonl": "97faaedd272c8eff83bd86c12c830041945d704d430ab332d1a70757e0bcada2",
+    "collect3.jsonl": "95722a961681e99d8080e38bd762b7ea54d90096946c6c0e22cd18200df7b33b",
+    "collect4.jsonl": "b510860b538dae9fe9312d0ee0c94f01d6a1609aa5e0df6a8b06e11999469d26",
+    "collect5.jsonl": "35407b8c8150411e664eb2337df55e897750fe8513034275e0f6b08132a807ba",
+    "collect6.jsonl": "b422c9220bd6e3fcfe0b3656474d6cbeeecf0b12c95b40c95b6bf892018ca5d9",
+    "collect7.jsonl": "b2c7bc73b145105c885f3154fad3df2ab5653401fa0b691adf5e7c6fb6d29344",
+    "eval0.jsonl": "336ff44b828a8c75dd2985a581dbdbd880d0bc9d71254b4e3b019359fbaaffbf",
+    "eval1.jsonl": "2caba55ddbc44b15972293ddf3d167662d8884d37a976324f10b7b2ac616def8",
+    "eval2.jsonl": "db6fa027c444a7f4d6d3afba6508980ca29bce3b5a67819c8d00642348cbc31b",
+    "eval3.jsonl": "af0441fd1fbcd5d765ed44b9764d6ee93c9781002500dfbc99df1d3ce5c16b89",
+    "eval4.jsonl": "68d26af357cc3d5592938710e36ef55b71e1094e0c8166d37c18d674a499b2db",
+    "eval5.jsonl": "bf2655c87e9dd2e1eb2f28118a5b0913de3d60cd337743589ba97bc4f7d41cab",
+    "panel_test.json": "174f3e6d3e2c0deffb92140e65197691d3c87727de9374452554bb6e6983429f",
+    "panel_train.json": "6426d51852d2d659fc68f80e544da5b760105b27d07acb2865647d269a31c2e2",
+    "summary.json": "de0ed412c920e58f40420d3ccf5670d31fa195ff7314ea290255c0fde859707d"
+  },
+  "collect_all_sha256_used_by_evaluate": "2bceab3a234b4b13443a48baa57113988c6623b6673077f52ade622034011b56",
+  "note": "collect_all.jsonl (not stored) = the lines of collect0-7.jsonl sorted by the creature's index in panel_train.json; produced on the batch VM (slot l2, snapshot = 8c57b36); analysis_output.txt = scripts/walk_l2_analysis.py (9cb5fbe + field-path fix)"
+}

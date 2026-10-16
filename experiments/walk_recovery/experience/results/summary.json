@@ -1,0 +1,21 @@
+{
+ "full": {
+  "knn@10": 4,
+  "knn@20": 2,
+  "knn@40": 1,
+  "learned@10": 2,
+  "learned@20": 2,
+  "learned@40": 2,
+  "mean_best@10": 2,
+  "mean_best@20": 2,
+  "mean_best@40": 3,
+  "r2@0": 2
+ },
+ "g3": false,
+ "conditions": {
+  "learned@40 > knn@40": true,
+  "learned@40 > mean_best@40": false,
+  "learned > r2": false,
+  "learned@40 > learned@10": false
+ }
+}
