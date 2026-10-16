@@ -1,0 +1,34 @@
+{
+  "id": "walkrec-s2-dev-pilot-v1",
+  "stage": "S2 method dev pilot (development data only; never confirmatory). Decides R*, the primary comparator, FIX/prompt adequacy (G2) and supplies the H6 ground truth.",
+  "registered_before_run": true,
+  "campaign": "walkrec-dev-s2",
+  "creatures": [{"name": "stilts-drawn"}, {"name": "tiny-feet"}, {"name": "top-heavy"}, {"name": "weak-slippery"},
+                {"panel": {"campaign": "walkrec-dev-m1-gen", "n": 8}}],
+  "panel_note": "the same 12 development creatures as M1 (panel file experiments/walk_recovery/oracle/results/m1/panel.json); fresh seeds (campaign walkrec-dev-s2)",
+  "family": 17,
+  "seeds": {"diag": 4, "train": 8, "screen": 12, "validate": 24, "confirm": 24},
+  "settings": {"probe_budget_frac": 0.1, "rounds": 2, "screen_top_k": 3, "screen_n": 12},
+  "methods": [
+    {"id": "cma_joint", "budgets": [2000, 4000], "what": "FullSpaceDirector: one plan over all 17 control dims + 4 body params (edit-rule box), share 1.0"},
+    {"id": "cma_ctrl", "budgets": [2000, 4000], "what": "FullSpaceDirector: one plan over all 17 control dims"},
+    {"id": "fix", "budgets": [2000, 4000], "what": "FixedDirector(probes=(opt_placement, opt_body, opt_posture)): fixed engineering rule, same probes/plans/budget as AI"},
+    {"id": "rand", "budgets": [2000, 4000], "what": "RandomDirector: same structure, random decisions"},
+    {"id": "ai", "budgets": [2000, 4000], "what": "NemotronDirector LIVE (nvidia/nemotron-3-super-120b-a12b, production config, thinking off), full evidence"},
+    {"id": "ai_nogait", "budgets": [2000], "what": "NemotronDirector LIVE without the baseline gait features (information ablation, H6)"},
+    {"id": "census", "budgets": [4000], "what": "H6 ground truth: every subspace probe (incl. opt_placement, opt_body) and every morphology probe on the unchanged creature, no plans; not assessed"}
+  ],
+  "replicates": [1],
+  "accounting": "equal TOTAL budget per method: start evaluation, every probe, every plan (incl. rejected/discarded), screening and every round are charged (walk_pipelines.Budget); final validation/confirmation (recovery.assess) is not charged and identical for every method",
+  "itt": "an AI pipeline whose director returns nothing valid keeps the unchanged start candidate (counted as not recovered); no non-AI fallback",
+  "recovery_rule": "recovery.full_recovery_v1 (unchanged)",
+  "analysis": {
+    "descriptive": "per method x budget: FULL / PARTIAL / NOT counts over the 12 creatures; per creature table; AI valid-decision rate; AI probe choices vs census-best probes (H6) for ai and ai_nogait",
+    "R_star_rule": "R* = the smallest tested budget at which the best non-AI method (cma_joint, cma_ctrl, fix) fully recovers 25-60% of the 12 dev creatures; if none qualifies, the budget closest to the range, recorded with the reason",
+    "primary_comparator_rule": "whichever of cma_joint and fix has the higher dev full-recovery count at R* (ties: cma_joint, the simpler baseline)",
+    "G2": "pipelines run end to end with ledger total == sum of lines and <= budget for every unit; AI valid-plan rate >= 80% of AI pipelines (after repair)",
+    "no_tests": "development pilot: counts only; nothing here is confirmatory"
+  },
+  "rollout_cap": 550000,
+  "inference": "<= 8 requests per AI pipeline (global ledger caps $15 / 1,500 requests apply; authoritative ledger copied from the main VM before the run and returned after it)"
+}

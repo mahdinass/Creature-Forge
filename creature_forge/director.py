@@ -205,6 +205,9 @@ def _scalars(d: dict, skip: Sequence[str] = ()) -> dict:
     return {k: _r(v) for k, v in d.items() if k not in skip and isinstance(k, str) and _scalar(v)}
 
 
+EVIDENCE_MODES = ("full", "no_gait")
+
+
 def build_evidence(state: dict) -> dict:
     """Flattened scalar evidence pack from a pipeline state (see module docstring for the layout)."""
     body = state["creature"]["body"]
@@ -457,7 +460,10 @@ class NemotronDirector:
 
     def __init__(self, mode: str = "live", profile: str = "default", ledger: InferenceLedger | None = None,
                  investigation_id: str | None = None, transport=None, fixture: Sequence | None = None, max_requests: int = 8,
-                 max_total_tokens: int = 160_000, config: ModelConfig | None = None):
+                 max_total_tokens: int = 160_000, config: ModelConfig | None = None, evidence_mode: str = "full"):
+        if evidence_mode not in EVIDENCE_MODES:
+            raise ValueError(f"evidence_mode must be one of {EVIDENCE_MODES}, got {evidence_mode!r}")
+        self.evidence_mode = evidence_mode
         if mode not in PROVENANCE:
             raise ValueError(f"mode must be one of {list(PROVENANCE)}, got {mode!r}")
         self.mode, self.profile = mode, profile
@@ -497,6 +503,14 @@ class NemotronDirector:
         self.refuted_by_round: dict[str, list[str]] = {}
 
     # ---------------------------------------------------------------------------------------------- shared machinery
+    def _evidence(self, state: dict) -> dict:
+        """The evidence pack; evidence_mode "no_gait" (an information ablation, H6) removes the baseline gait-feature
+        summary and keeps only the baseline outcome / label counts."""
+        ev = build_evidence(state)
+        if self.evidence_mode == "no_gait":
+            ev["baseline"] = {k: v for k, v in ev["baseline"].items() if k.startswith(("outcome_", "label_"))}
+        return ev
+
     def _clean(self, text) -> str:
         return redact_secret(str(text), self.api_key)
 
@@ -606,7 +620,7 @@ class NemotronDirector:
                                  "status": "director_error", "validation_errors": [self._clean(f"{type(e).__name__}: {e}")]}, [])
 
     def _choose_probes(self, state: dict, rnd: int) -> list:
-        evidence = build_evidence(state)
+        evidence = self._evidence(state)
         paths = leaf_paths(evidence, limit=10_000)
         n = max([int(h[1:]) for h in self.hypotheses] or [0])
         new_ids = [f"H{n + i}" for i in range(1, MAX_HYPOTHESES_PER_CALL + 1)]
@@ -636,7 +650,7 @@ class NemotronDirector:
                                  "status": "director_error", "validation_errors": [self._clean(f"{type(e).__name__}: {e}")]}, [])
 
     def _choose_plans(self, state: dict, rnd: int) -> list:
-        evidence = build_evidence(state)
+        evidence = self._evidence(state)
         paths = leaf_paths(evidence, limit=10_000)
         live = self._live_ids()
         runs = {p["probe_id"]: 1 for p in state["probes_run"] if p["status"] == "ok"}
@@ -671,7 +685,7 @@ class NemotronDirector:
             tok["prompt"] += int(u.get("prompt_tokens") or 0)
             tok["completion"] += int(u.get("completion_tokens") or 0)
         rec = {"version": VERSION, "provenance": self.provenance, "model": self.cfg.model, "profile": self.profile,
-               "investigation_id": self.investigation_id,
+               "investigation_id": self.investigation_id, "evidence_mode": self.evidence_mode,
                "settings": {"temperature": self.cfg.temperature, "max_tokens": self.cfg.max_tokens,
                             "reasoning_effort": self.cfg.reasoning_effort, "json_schema": self.cfg.json_schema,
                             "extra_body": copy.deepcopy(self.cfg.extra_body), "timeout_s": self.cfg.timeout_s,
