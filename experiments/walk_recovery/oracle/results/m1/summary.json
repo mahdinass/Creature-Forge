@@ -1,0 +1,872 @@
+{
+ "recovered_by": {
+  "joint17": [
+   "stilts-drawn",
+   "walkrec-dev-m1-gen-0000",
+   "walkrec-dev-m1-gen-0002",
+   "walkrec-dev-m1-gen-0003",
+   "walkrec-dev-m1-gen-0007",
+   "weak-slippery"
+  ],
+  "joint15": [
+   "stilts-drawn",
+   "walkrec-dev-m1-gen-0002",
+   "walkrec-dev-m1-gen-0003",
+   "walkrec-dev-m1-gen-0007"
+  ],
+  "ctrl17": [
+   "top-heavy",
+   "walkrec-dev-m1-gen-0000",
+   "walkrec-dev-m1-gen-0002",
+   "walkrec-dev-m1-gen-0004",
+   "walkrec-dev-m1-gen-0007"
+  ],
+  "ctrl15": [
+   "walkrec-dev-m1-gen-0002"
+  ],
+  "c0_r2": [],
+  "h7_ctrl15_3nominal": []
+ },
+ "union_final": [
+  "stilts-drawn",
+  "top-heavy",
+  "walkrec-dev-m1-gen-0000",
+  "walkrec-dev-m1-gen-0002",
+  "walkrec-dev-m1-gen-0003",
+  "walkrec-dev-m1-gen-0004",
+  "walkrec-dev-m1-gen-0007",
+  "weak-slippery"
+ ],
+ "any_checkpoint": [
+  "stilts-drawn",
+  "top-heavy",
+  "walkrec-dev-m1-gen-0000",
+  "walkrec-dev-m1-gen-0001",
+  "walkrec-dev-m1-gen-0002",
+  "walkrec-dev-m1-gen-0003",
+  "walkrec-dev-m1-gen-0004",
+  "walkrec-dev-m1-gen-0006",
+  "walkrec-dev-m1-gen-0007",
+  "weak-slippery"
+ ],
+ "best_condition": "joint17",
+ "n_creatures": 12,
+ "table": {
+  "stilts-drawn": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7083333333333334,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.5,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.6666666666666666,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "FULL_RECOVERY",
+     1.0,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.8333333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "FULL_RECOVERY",
+     0.8333333333333334,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.4166666666666667,
+     4000
+    ]
+   ]
+  },
+  "tiny-feet": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.4583333333333333,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.375,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.4166666666666667,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.5,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.625,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.625,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7083333333333334,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.4166666666666667,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0006": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.7916666666666666,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.625,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.5833333333333334,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.8333333333333334,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.8333333333333334,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.875,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.625,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0007": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.5,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7916666666666666,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.875,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "FULL_RECOVERY",
+     1.0,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.2916666666666667,
+     4000
+    ]
+   ]
+  },
+  "top-heavy": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.625,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5416666666666666,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.625,
+     4000
+    ]
+   ]
+  },
+  "weak-slippery": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.5416666666666666,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.4583333333333333,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.6666666666666666,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.9166666666666666,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.25,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0000": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7916666666666666,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.5,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.8333333333333334,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9166666666666666,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.875,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7916666666666666,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.375,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0001": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.6666666666666666,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.9166666666666666,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.7916666666666666,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.8333333333333334,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.7916666666666666,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7916666666666666,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.5,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0002": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "FULL_RECOVERY",
+     0.9166666666666666,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9166666666666666,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "FULL_RECOVERY",
+     0.9166666666666666,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "FULL_RECOVERY",
+     1.0,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "FULL_RECOVERY",
+     0.9166666666666666,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0003": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.3333333333333333,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.4166666666666667,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "FULL_RECOVERY",
+     1.0,
+     8000
+    ],
+    [
+     2,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "FULL_RECOVERY",
+     1.0,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0004": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7083333333333334,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.6666666666666666,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "FULL_RECOVERY",
+     0.9583333333333334,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.8333333333333334,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.5416666666666666,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.75,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7083333333333334,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.3333333333333333,
+     4000
+    ]
+   ]
+  },
+  "walkrec-dev-m1-gen-0005": {
+   "c0_r2": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.0,
+     0
+    ]
+   ],
+   "ctrl15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.2916666666666667,
+     8000
+    ]
+   ],
+   "ctrl17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.7083333333333334,
+     8000
+    ],
+    [
+     2,
+     "NOT_RECOVERED",
+     0.4583333333333333,
+     8000
+    ]
+   ],
+   "joint17": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.6666666666666666,
+     8000
+    ],
+    [
+     2,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     8000
+    ]
+   ],
+   "joint15": [
+    [
+     1,
+     "PARTIAL_IMPROVEMENT",
+     0.5833333333333334,
+     8000
+    ]
+   ],
+   "h7_ctrl15_3nominal": [
+    [
+     1,
+     "NOT_RECOVERED",
+     0.25,
+     4000
+    ]
+   ]
+  }
+ }
+}

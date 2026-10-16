@@ -105,3 +105,8 @@ This is the Git-visible decision index. Add one dated section per consequential 
   new registration; the v1 protocol, bank and records are frozen.
 - Interrupted evaluations are paused only at pair boundaries and resumed with `--resume` (never rerun a recorded pair); the
   driver for long runs is launched in a remote `tmux` session so it survives the local machine disconnecting.
+
+## 2026-10-16 Walking recovery: G1 = PROCEED (M1, development data)
+- M1 (`experiments/walk_recovery/oracle/REPORT_M1.md`): joint body+controller CMA with the new foot-placement controller (17-D, `phasegait_fp.py`) fully recovers 6/12 dev creatures at 8k rollouts (ctrl15 1/12, ctrl17 5/12, joint15 4/12); union 8/12. Pre-declared G1 rule (>= 50%) met exactly -> proceed to the AI-director stage.
+- Decisions for M2: every method uses the 17-D family with optional 4-parameter body co-design; final candidates are selected on held-out screening seeds (train-validation gap +0.21 median; 8k worse than 4k); training on 8 seeds under the validation-variation preset (H7: 3 nominal seeds generalise worse); similarity transfer dropped as a fix (never helped). R* chosen on the method pilot by the plan's 25-60% rule.
+- Not claimed: impossibility for the 4 unrecovered creatures (walking 0.62-0.96, "not within 8k"); anything about Nemotron (no model calls in M1).
