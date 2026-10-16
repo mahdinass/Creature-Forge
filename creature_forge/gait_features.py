@@ -231,6 +231,7 @@ SUMMARY_DOCS: dict[str, str] = {
 def features_for(body, vector, seed: int, *, duration: float = 10.0, perturb=None) -> dict:
     """Roll out `vector` on `body` (start "neutral") and return `gait_features`."""
     from .phasegait_init import controller_from_vector
+    body = cw._body(body)          # accepts a SandboxBody or a body dict
     kw = {} if perturb is None else {"perturb": perturb}
-    tr = cw.rollout(controller_from_vector(vector), body, seed, duration, start="neutral", **kw)
+    tr = cw.rollout(controller_from_vector(vector, body=body), body, seed, duration, start="neutral", **kw)
     return gait_features(tr, body, vector)
