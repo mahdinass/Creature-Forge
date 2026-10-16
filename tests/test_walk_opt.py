@@ -323,3 +323,33 @@ class BaseOnBoundTests(unittest.TestCase):
         space = wo.SearchSpace.full_ctrl(body_params=("foot_length", "torso_mass"))
         x = wo.encode(space, body, list(cw.R2_WINNER), body, list(cw.R2_WINNER))
         self.assertTrue(all(0.0 <= v <= 1.0 for v in x))
+
+
+class LogCandidatesTests(unittest.TestCase):
+    def _run(self, **kw):
+        sp = wo.SearchSpace.from_subspaces(["timing"], ("thigh_length", "torso_mass"))
+        res = wo.cma_search(BASE, VEC, sp, budget=3 * 40, train_seeds=[1, 2, 3], noise_seed=5,
+                            eval_fn=synthetic(sp, np.full(5, 0.6)), ipop=False, **kw)
+        res.pop("wall_s")
+        return sp, res
+
+    def test_default_off_is_identical(self):
+        _, a = self._run()
+        _, b = self._run(log_candidates=False)
+        self.assertEqual(json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True))
+        self.assertNotIn("candidates", a)
+        self.assertNotIn("space_names", a)
+
+    def test_on_content(self):
+        sp, off = self._run()
+        _, on = self._run(log_candidates=True)
+        cands, names = on.pop("candidates"), on.pop("space_names")
+        self.assertEqual(json.dumps(on, sort_keys=True), json.dumps(off, sort_keys=True))     # nothing else changes
+        self.assertEqual(names, ["freq", "duty", "knee_shift", "thigh_length", "torso_mass"])
+        self.assertEqual(len(cands), on["rollouts_used"] // 3)
+        np.testing.assert_allclose(cands[0]["x"], wo.encode(sp, BASE, VEC, BASE, VEC))
+        self.assertEqual(cands[0]["rollouts_cumulative"], 3)
+        self.assertEqual([c["rollouts_cumulative"] for c in cands], sorted(c["rollouts_cumulative"] for c in cands))
+        self.assertTrue(all(len(c["x"]) == 5 and all(0.0 <= v <= 1.0 for v in c["x"]) for c in cands))
+        best = max(cands, key=lambda c: (c["walking_count"], c["survival_count"], c["mean_fitness"]))
+        self.assertEqual(best["mean_fitness"], on["best"]["mean_fitness"])

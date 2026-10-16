@@ -43,6 +43,10 @@ weights, cs, damps, cc, c1, cmu, eigendecomposition every generation) in the [0,
   * Anytime checkpoints: for each c in `checkpoints` with c <= budget, the best-so-far candidate among evaluations completed with
     cumulative rollouts <= c, with its body, vector, edits, score and `found_at_rollouts`.
 
+`log_candidates=True` adds `candidates` (every evaluated point incl. the initial one, in evaluation order: encoded `x` in [0,1]^n,
+walking_count, survival_count, mean_fitness, rollouts_cumulative) and `space_names` (the order of x); default False leaves the
+result unchanged.
+
 Training seeds select; they never validate. Held-out validation must use seeds that were not passed here (docs: physics-integrity).
 """
 from __future__ import annotations
@@ -354,7 +358,7 @@ def _check_int(name: str, v, minimum: int = 0) -> int:
 def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seeds, noise_seed: int, pool=None,
                variation=arena.VARIATION_PRESET, popsize: int | None = None, sigma0: float = 0.2, ipop: bool = True,
                checkpoints: Sequence[int] = DEFAULT_CHECKPOINTS, duration: float = 10.0, progress: Callable | None = None,
-               eval_fn: Callable | None = None) -> dict:
+               eval_fn: Callable | None = None, log_candidates: bool = False) -> dict:
     """CMA-ES over `space` for `body` starting at `init_vector`; budget counted in rollouts (one per candidate and seed)."""
     t0 = time.perf_counter()
     seeds = [int(s) for s in train_seeds]
@@ -443,8 +447,14 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
     improvements: list[dict] = []          # strictly improving best-so-far candidates, in completion order
     best: dict | None = None
 
-    def consider(rec: dict, b: dict, v: list, cum: int) -> None:
+    cand_log: list[dict] = []
+
+    def consider(rec: dict, b: dict, v: list, cum: int, x_enc=None) -> None:
         nonlocal best
+        if log_candidates:
+            cand_log.append({"x": [float(a) for a in x_enc], "walking_count": rec["walking_count"],
+                             "survival_count": rec["survival_count"], "mean_fitness": rec["mean_fitness"],
+                             "rollouts_cumulative": cum})
         if best is None or _score(rec) > _score(best):
             best = {"body": b, "vector": v, "walking_count": rec["walking_count"], "survival_count": rec["survival_count"],
                     "mean_fitness": rec["mean_fitness"], "found_at_rollouts": cum}
@@ -452,7 +462,7 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
 
     init_rec = evaluate([(base, [float(a) for a in vec0])], 0)[0]
     used = S
-    consider(init_rec, dict(base), [float(a) for a in vec0], used)
+    consider(init_rec, dict(base), [float(a) for a in vec0], used, x0)
     init_info = {"body": dict(base), "vector": [float(a) for a in vec0], "walking_count": init_rec["walking_count"],
                  "survival_count": init_rec["survival_count"], "mean_fitness": init_rec["mean_fitness"],
                  "error": init_rec["error"], "rollouts": S}
@@ -472,7 +482,7 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
         fit = np.array([r["mean_fitness"] for r in recs], dtype=float)
         gen_best = max(range(len(recs)), key=lambda j: (_score(recs[j]), -j))
         for j, r in enumerate(recs):
-            consider(r, decoded[j][0], decoded[j][1], used + (j + 1) * S)
+            consider(r, decoded[j][0], decoded[j][1], used + (j + 1) * S, x[j])
         used += cma.lam * S
         gens_in_run += 1
         history.append({"restart": restart_idx, "lambda": cma.lam, "sigma": float(sigma_used),
@@ -516,7 +526,10 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
         if c <= budget:
             eligible = [b for b in improvements if b["found_at_rollouts"] <= c]
             cps[str(c)] = pack(eligible[-1]) if eligible else None
+    extra = ({"candidates": cand_log, "space_names": list(space.ctrl_params) + list(space.body_params)}
+             if log_candidates else {})
     return jsonable({
+        **extra,
         "version": VERSION, "best": pack(best), "checkpoints": cps, "history": history, "rollouts_used": used,
         "budget": budget, "space": space.to_dict(), "noise_seed": noise_seed, "train_seeds": seeds, "variation": var,
         "restarts": restarts, "errors": errors,
