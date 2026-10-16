@@ -156,6 +156,16 @@ Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|f
   browser 237 checks PASS, smoke + demo-trial verification PASS; slot tree clean afterwards. Do not repeat unless code changes.
 - Also done this block: `webgl-constants` confirmed MIT; capture plan and feedback docs rewritten (`4a43440`).
 - VM STOPPED through the API after the test; infra $4.44 of $10.
-- **Remaining D items:** scripted demo capture (owner records voice-over), publication audit owner decisions (history
+### 2026-10-16 - PR #16 merged; licences; demo footage recorded
+- **PR #16 merged** by owner approval (merge commit `e58dbdf` on `main`, no squash, no history rewrite; GitHub noreply
+  identity on the merge commit). Work continues on `feature/demo-capture` (Draft PR to `main`).
+- Licences from NVIDIA's official cards: Super = NVIDIA Nemotron Open Model License; Ultra = OpenMDW-1.1 (calibration only);
+  Lightning called in calibration only (not reviewed). README / notices / Devpost updated. Nebius §18.7 + §4.1.10(c)
+  clarification drafted in `docs/submission/NEBIUS_CLARIFICATION_REQUEST.md` — **NOT sent; owner reviews and sends**.
+- **Demo footage recorded** (`experiments/forge_loop/demo_capture/README.md` = provenance + edit guide): `live1` full arc
+  (target 15 N, v1 POOR -> Nemotron foot x1.35 VERIFIED 12/0/0 -> v2 -> v2 PASS 8/8), `live2-walk` honest negative
+  (NOT_VERIFIED), `dry1` scripted pacing test. Videos only in local `artifacts/vm/capture/<take>/take.mp4` (git-ignored) and
+  on the VM `~/dev/capture/`. Do not re-record unless the owner asks. Inference 144 requests, $0.549; infra $4.72 of $10.
+- **Remaining D items:** owner voice-over/edit from the takes, publication audit owner decisions (history
   emails, Nebius §4.1.10(c)/§18.7, Super/Ultra licence texts), final secret scan on the final refs. PR #16 merge awaits the
   owner's explicit yes (merge commit, no squash).

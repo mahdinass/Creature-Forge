@@ -270,3 +270,11 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Budgets after the evaluation: inference 140 requests, $0.54 of $15; infra ledger in `forge_cloud.py spend`.
 - Submission docs: capture plan rewritten for the Forge Loop, feedback updated for Nemotron-3-Super, `webgl-constants`
   confirmed MIT (`4a43440`).
+
+## 2026-10-16 - PR #16 merged; demo footage recorded (branch `feature/demo-capture`)
+- PR #16 merged to `main` with the owner's approval (`e58dbdf`, merge commit). Repository stays private.
+- Fresh-clone test passed before the merge (894 Python, 137 vitest + build, 237 browser checks, smoke).
+- Model licences recorded from NVIDIA's official cards (Super: NVIDIA Nemotron Open Model License; Ultra: OpenMDW-1.1);
+  Nebius clarification request drafted for the owner (not sent).
+- Demo takes recorded live on the VM with `studio/e2e/forge-demo-capture.mjs`: full arc to a verified v2 and a walking
+  honest negative; provenance and edit guide in `experiments/forge_loop/demo_capture/README.md`. VM stopped.

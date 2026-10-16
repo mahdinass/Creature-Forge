@@ -52,6 +52,18 @@ Pick one, whichever you can show with its verdict label visible:
 - The reference result for this flow is `experiments/forge_loop/dev_live_records/ui_live/` (investigation `i-140b1435cb84`, 15/15 checks passing). That is a functional acceptance test of the development creature, not new evidence.
 - Because the script follows the verdict, a run can end without a verified redesign; it then keeps "Accept" disabled and says so. Treat that run as a legitimate honest-negative source.
 
+## Recorded demo takes (`studio/e2e/forge-demo-capture.mjs`, 2026-10-16)
+
+The demo footage is now recorded by `forge-demo-capture.mjs`: one continuous 1920x1080 take of the real app driven at a human pace (slow strokes, smooth scrolling, pauses on each result), recorded with the Chrome DevTools screencast and encoded to 30 fps H.264 (`take.mp4`), plus PNG stills and a `manifest.json` with chapter timestamps, model/request ids, verdicts and ledger before/after. The only overlay is a cursor dot (headless Chrome draws no cursor). `MODE=scripted` is a free pacing dry run with the labelled SCRIPTED MOCK fixture and is never used as model footage.
+
+```
+# on the VM, Studio started with `forge_dev.py serve --slot <slot> --live`, inside tmux:
+cd ~/dev/<slot>/studio && LIVE_OK=1 KIND=push TARGET_FORCE=15 BASE_URL=http://127.0.0.1:8000 \
+  OUT_DIR=$HOME/dev/capture/<take> ATTEMPT=<take> FFMPEG=$HOME/dev/tools/ffmpeg node e2e/forge-demo-capture.mjs
+```
+
+Takes, provenance and the edit guide (chapter times for each storyboard shot) are in `experiments/forge_loop/demo_capture/README.md`. Videos are not committed (size); they are kept outside Git and handed to the owner.
+
 ## Safety checklist before publishing the video
 
 - [ ] No API key, token, account id, balance, SSH detail or request header visible at any frame (scrub the exported file).
