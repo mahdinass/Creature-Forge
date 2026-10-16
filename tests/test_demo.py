@@ -1,3 +1,7 @@
+import os
+
+os.environ.setdefault("CF_ALLOW_TESTSERVER", "1")  # Starlette TestClient sends Host: testserver (see studio/security.py)
+
 import json
 import tempfile
 import unittest
@@ -33,7 +37,7 @@ def good(parameter="pitch_ref", delta=0.1, cites=("controller.pitch_ref.u", "fai
 
 
 def live_client(replies, usage=(1900, 3000), tokens=300_000):
-    return NebiusClient(api_key="test-key", base_url="http://invalid.example", transport=r3.scripted_transport(replies, usage),
+    return NebiusClient(api_key="test-key", base_url="https://invalid.example", transport=r3.scripted_transport(replies, usage),
                         limits=Limits(max_requests=41, max_total_tokens=tokens, max_tokens_per_request=8000))
 
 

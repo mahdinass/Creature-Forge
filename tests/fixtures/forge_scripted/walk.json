@@ -1,0 +1,26 @@
+{
+ "fixture_version": 1,
+ "note": "SCRIPTED MOCK: text written by this repository to exercise the pipeline. It is not a model.",
+ "summary": "SCRIPTED MOCK: the gait does not produce valid forward travel.",
+ "hypotheses": [
+  {"id": "H1", "mechanism": "SCRIPTED MOCK hypothesis: too little ankle balance feedback while walking.",
+   "evidence_hints": ["outcome.score.median", "seeds[0].score"], "competing": []},
+  {"id": "H2", "mechanism": "SCRIPTED MOCK hypothesis: the feet are too short for the stride.",
+   "evidence_hints": ["outcome.score.min"], "competing": []}
+ ],
+ "probe_plan_note": "SCRIPTED MOCK: probe requests used only when the investigation runs with probes=True.",
+ "probe_plan": [{"probe_id": "foot_x1_5", "hypothesis": "H2", "expect": "increase"}, {"probe_id": "friction_x2", "hypothesis": "H1", "expect": "no_change"}],
+ "proposals": [
+  {"id": "P1", "hypothesis": "H1",
+   "edits_candidates": [[{"param": "walk.balance_gain", "op": "scale", "value": 1.1, "target": "both"}],
+                        [{"param": "walk.pitch_kp", "op": "scale", "value": 1.1, "target": "both"}],
+                        [{"param": "walk.kp", "op": "scale", "value": 1.1, "target": "both"}]],
+   "prediction": {"metric": "score", "direction": "increase", "expected_change": "SCRIPTED MOCK: expected to raise walking distance a little."},
+   "tradeoffs": "SCRIPTED MOCK tradeoff text.", "confidence": 0.5, "verification": "Compare against the original on held-out seeds."},
+  {"id": "P2", "hypothesis": "H2",
+   "edits_candidates": [[{"param": "foot_length", "op": "scale", "value": 1.2, "target": "both"}],
+                        [{"param": "foot_friction", "op": "scale", "value": 1.2, "target": "both"}]],
+   "prediction": {"metric": "score", "direction": "increase", "expected_change": "SCRIPTED MOCK: expected to raise walking distance a little."},
+   "tradeoffs": "SCRIPTED MOCK tradeoff text.", "confidence": 0.5, "verification": "Compare against the original on held-out seeds."}
+ ]
+}

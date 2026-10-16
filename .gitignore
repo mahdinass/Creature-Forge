@@ -35,3 +35,5 @@ Thumbs.db
 infra/nebius/state.json
 infra/nebius/repo.bundle
 infra/nebius/watchdog.log
+infra/nebius/spend_ledger.jsonl
+infra/nebius/tunnel.pid

@@ -11,7 +11,7 @@ Updated: 2026-10-13. Local environment audit **reported by Claude Code and relay
 
 ## Local toolchain — Claude-reported audit
 
-- Windows local memory: Basic Memory `0.23.2`, local SQLite, `creature-forge` default project at `C:/Users/mbnas/basic-memory/creature-forge`.
+- Windows local memory: Basic Memory `0.23.2`, local SQLite, `creature-forge` default project at `<user home>/basic-memory/creature-forge`.
 - Basic Memory operations: **write, read-by-permalink, text search and recent-activity confirmed by Claude**; hybrid/semantic query took ~2 minutes and missed a known note. Use `search_type="text"` until proven otherwise.
 - Python reported as system `3.11.9`. The Basic Memory installed tool may use a separate uv-managed interpreter; do not infer the project has Python 3.12. No venv was detected within the scanned repository depth, **not proof no environment exists elsewhere**.
 - `uv`, `node`, `npm`, `git`, `basic-memory` were reported on PATH. `conda`, `nvidia-smi` were not; this alone is not a complete GPU availability test.
@@ -45,9 +45,9 @@ Update with date, exact commands/tests, linked log or commit, scope, unresolved 
 
 ## Windows PowerShell verification — 2026-10-13 (user-provided execution results)
 
-- Working directory: `C:\\Users\\mbnas\\.vscode\\Creature-Forge`.
+- Working directory: `<repository root>`.
 - `git status`: clean `main`, tracking `origin/main`; `git pull --ff-only` succeeded and advanced local HEAD from `24a9008` to `488cc05` at time of audit. Later documentation commits still require a new pull.
-- `python scripts/context_preflight.py`: successful; current interpreter `C:\\Users\\mbnas\\AppData\\Local\\Programs\\Python\\Python311\\python.exe`, Python `3.11.9`, `VIRTUAL_ENV=False`, no known project venv directories reported; no `pyproject.toml`, `requirements.txt`, `package.json` or lockfile yet. These are observed at audit time, not permanent declarations.
+- `python scripts/context_preflight.py`: successful; current interpreter `<user home>\\AppData\\Local\\Programs\\Python\\Python311\\python.exe`, Python `3.11.9`, `VIRTUAL_ENV=False`, no known project venv directories reported; no `pyproject.toml`, `requirements.txt`, `package.json` or lockfile yet. These are observed at audit time, not permanent declarations.
 - `python -m unittest discover -s tests -v`: **4 tests passed**, including duplicate-venv guard behavior and hook JSON parsing. This verifies the tested Python logic but does not alone prove Claude Code actually invoked its hooks.
 - Codex separately attempted `Get-Location` but every sandbox shell command still failed before launch with `helper_unknown_error: setup refresh had errors`. Standalone PowerShell is healthy; Codex sandbox diagnostics/log inspection remains to be done. Do not alter Windows ACLs or disable security without identifying the log's specific cause.
 
@@ -221,3 +221,52 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Checks (Windows):** 361 Python tests, 67 frontend tests, strict `tsc`, production build, `smoke_test.py`, `studio_e2e_check.py --browser`, `verify_demo_trials.py`, and `lab_browser_check.py` (tabs, history, walking lab, AI investigation, Home, handle editor, freehand) with 0 FAIL, at 1920 px and 390/360/320 px. Screenshots: `artifacts/screenshots-redesign/` (git-ignored).
 - **Acceptance:** `tests/test_sandbox_api.py` and `studio/e2e/freehand-flow.mjs` draw a terrible creature (3 cm feet, huge torso / weak motors), run it in MuJoCo with Guided constraints OFF and watch it fall; the same drawing with Guided ON is refused with the exact reason and a consent-gated approximation.
 - **Not done / limits:** torso shape is fixed (mass follows drawn area); two legs only; planar; knee bends backward only; arms/tails/heads refused; no investigation on a drawn creature (recorded investigation is a different robot); freehand tested with mouse events (touch/pen use the same pointer-event path, not device-tested); only headless Edge; the stroke interpreter assumes one creature facing left or right.
+
+## Forge Loop M0 (2026-10-14, branch `feature/forge-loop`, plan approved by the owner)
+- **Goal:** Draw -> Challenge -> AI Redesign -> Verify -> Evolve on the user's own drawn creature. Contracts: `docs/FORGE_LOOP_CONTRACTS.md`. Internal deadline 2026-10-29.
+- **Merged:** PR #14 (`42e4680`) and PR #15 (`e3cbe2b`) into main with merge commits, after a full regression on the Nebius VM (361 Python, vitest + build, all browser flows, smoke, demo-trial reproduction) and green CI (one CI-only race in `freehand-flow.mjs` fixed in `9bc30d2`).
+- **Infra (verified):** VM `creature-forge-r1-cpu` started 2026-10-14 (new IP recorded by `forge_cloud.py`), Node 22.23.3 + Chrome 155 installed via `infra/nebius/remote/dev_bootstrap.sh` (official tarball/deb, SHA-checked Node). `infra/nebius/forge_dev.py` = sync/exec/test/serve/tunnel/pull. Spend ledger + $10 cap in `forge_cloud.py` (`spend`).
+- **Implemented and tested on the VM:** `creatures.py` (versions, lineage, accept only with VERIFIED verdict, revert), `jobs.py` (background jobs, persisted events, restart -> failed), `studio/forge_api.py` mounted at `/api/forge/*`; `tests/test_frozen_records.py`. Full suite 420 tests OK (+ wiring tests).
+- **Calibration (real Nebius calls, 30 requests, $0.31):** Super-120B thinking-off + strict per-evidence JSON schema selected; see `experiments/forge_loop/calibration/REPORT.md`. No redesign was simulated; this is not a quality claim.
+- **In progress:** challenges/walk adaptation/pool (S1), evidence/interventions/forge_ai/ledger (S2), frontend workspace (S5). Not started: arena/verdict/baselines (S3), investigation orchestration, evolve UI.
+
+## Forge Loop M1/M2 core (2026-10-15, `feature/forge-loop` @ eec425f)
+- **Implemented, VM-tested (664 Python tests OK):** `challenges.py` (stand/push/walk, settle window, critical-force bisection, FAIL/POOR/PASS/ERROR), `creature_walk.py` (sandbox walking, body-scaled gates, (1+8)-ES adaptation), `forge_pool.py`; `evidence.py`, `interventions.py`, `forge_ai.py`, `inference_ledger.py`, `nebius.py` `extra_body`; cross-module test `tests/test_forge_integration.py` (real MuJoCo challenge -> evidence -> schema -> validator -> edited body runs).
+- **Zoo pilot (4,080 rollouts):** default/balanced/bird-knees stand and walk; tiny-feet/top-heavy/stilts/doomed fall without a push; push critical force default 32.5 N forward vs 10 N backward (weak direction everywhere) -> default target 10 N; stand/push near-deterministic across seeds (spread ~one 2.5 N bisection step); walk adaptation helps only tiny-feet (0 -> 3-4/8 at K=48) and overfits elsewhere. `experiments/forge_loop/pilot/README.md`.
+- **Fixed:** freehand refused the Top-heavy and Stilts starters ("feet point in opposite directions"); feet are now matched to legs jointly (`tests/test_freehand_starters.py`).
+- **In progress:** arena/baselines/verdict + A/A null pilot (S3), investigation orchestration + API (S6), frontend workspace (S5).
+
+## Forge Loop end to end, live (2026-10-15, `feature/forge-loop` @ 7d45008)
+- **Integrated and VM-tested (777 Python tests OK; frontend 117 vitest + build; 214 browser checks):** arena (original, AI arms, matched-random twins, heuristic; screening then held-out validation; the selected AI arm is always validated with its own twin), `verdict_v1` (frozen after an A/A null pilot: 0 false alarms in 48 A/A comparisons; ~15 % of random push edits verify, so AI verdicts are always shown beside their twin's), investigation orchestration + bounded loop (patience 2, never auto-accepts), accept/revert API, `scripts/forge_acceptance.py` (draw -> challenge -> investigate -> verdict -> accept-if-verified over real HTTP).
+- **Live runs (Nemotron-3-Super via Nebius):** 9 investigations of drawn creatures, archived unedited in `experiments/forge_loop/dev_live_records/` with protocol-state notes. Mostly honest negatives (NOT_VERIFIED / INCONCLUSIVE). First VERIFIED redesign: `i-f9873480e42a` (balanced creature, push; rear foot x1.25 after a falsified friction proposal; +3.125 N, 12/0/0 on 12 held-out seeds). Anecdotal; no superiority claim.
+- **Protocol fixes driven by live evidence:** foot heel/toe geometry in the evidence (from the compiled model); push measured at 0.625 N in investigations; the prompt states the acceptance rule; twin validation.
+- **Budgets at 08:20:** Forge inference ledger 40 requests, $0.33 (cap $15 / 1,500); infra $2.95 of $10 (conservative, incl. the overnight deadman incident).
+- **In progress:** frontend investigation views wired to real records (S5 phase 2); diagnostic probes / active experimentation (S7, M6).
+
+## Diagnostic probes live + pre-registered scoreboard (2026-10-15, `feature/forge-loop`, Draft PR #16)
+- **Probes (M6) live:** the model plans up to 3 counterfactual experiments, MuJoCo runs them, expectations are checked deterministically, step B states CONFIRMED/REFUTED. First live probe run ignored its own refuted probes; after the step-B fix, a 3-round loop verified rear-foot redesigns twice beside inconclusive twins (`experiments/forge_loop/dev_live_records/`).
+- **Frontend (M5) done:** investigation workspace on real records (probes, twin beside AI, three-way replay, accept-if-verified, lineage, loop/probe controls); 137 vitest, 237 browser checks.
+- **Scoreboard v1 (registered `e12dd0e` before running):** 12 live investigations on fresh starter creatures; AI verified 6/12, matched twin 1/12, discordant 5 vs 0, exact one-sided McNemar p = 0.031; heuristic 0/12; $0.05, 24 calls, 8,870 rollouts. Effect concentrated in push. Post-hoc best-of-k baseline check also 5 vs 0. Report: `experiments/forge_loop/scoreboard/REPORT.md`.
+- **Remaining:** walk-challenge investigations not yet tried live; engineering memory (post-MVP); submission video/screens; owner decisions on PR #16 and repo visibility.
+
+## Session paused (2026-10-15) — see `docs/RESUME_CHECKPOINT.md`
+- `feature/forge-loop` @ d60b155, CI green, Draft PR #16 not merged; repo private; VM STOPPED (infra $3.86 / $10; inference 86 requests, $0.42 / $15).
+- Live walking investigations done and archived (nothing verified; model never chose controller co-design).
+- Unfinished, preserved as UNVERIFIED branches: `wip/s9-security-hardening-UNVERIFIED` (20224db), `wip/s8-engineering-memory-UNVERIFIED` (54aec28).
+- Next: finish/verify S9 -> live end-to-end UI test -> ask owner to merge PR #16 -> memory (pre-registered eval) -> submission assets.
+
+## 2026-10-15 evening — integration complete, memory evaluation running; see `docs/RESUME_CHECKPOINT.md`
+- Integrated and verified on the VM: engineering memory (`d3cda1f`) and all security-review fixes (`269ec90`); 894 Python tests, frontend, 237 browser checks; CI green; frozen records 105/105; secret scan 0 hits.
+- Owner merge conditions for PR #16 met (CI green; live end-to-end UI test 15/15 with a verified redesign accepted as v2 in the browser, `i-140b1435cb84`; security fixes) — merge still awaits the owner's explicit approval.
+- Live walking investigations done (nothing verified). Submission docs updated; repo private.
+- Memory evaluation `forge-memory-eval-v1` registered before running (frozen 34-lesson bank) and in progress; resume/analysis procedure and "do not repeat" list in the checkpoint; copy-paste prompt in `docs/RESUME_PROMPT.md`.
+
+## 2026-10-16 - memory evaluation complete: no evidence of a benefit
+- `forge-memory-eval-v1` finished: 12/12 pairs (5 before the pause, 7 via `--resume` in remote tmux; no reruns, 0 exclusions,
+  all 24 investigations `done`; investigation code identical across both runs). Pre-registered result: AI verified 6/12 with
+  memory vs 7/12 without, discordant 3 vs 4, exact one-sided McNemar p = 0.773 -> **no evidence of a benefit**. The model
+  cited a memory lesson in 0/12 memory-on investigations although lessons were delivered and citable. Twins 0/24 verified.
+  Report: `experiments/forge_loop/memory_eval/REPORT.md`. Memory stays off by default; no benefit claimed.
+- Budgets after the evaluation: inference 140 requests, $0.54 of $15; infra ledger in `forge_cloud.py spend`.
+- Submission docs: capture plan rewritten for the Forge Loop, feedback updated for Nemotron-3-Super, `webgl-constants`
+  confirmed MIT (`4a43440`).

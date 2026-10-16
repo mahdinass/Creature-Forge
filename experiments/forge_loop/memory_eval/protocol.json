@@ -1,0 +1,86 @@
+{
+ "id": "forge-memory-eval-v1",
+ "question": "Does engineering memory (measured lessons from OTHER creatures) increase how often the AI's selected redesign is verified?",
+ "creatures": {
+  "short-legs": {
+   "figure": {
+    "thigh": 0.22,
+    "shank": 0.22,
+    "foot": 0.12
+   },
+   "materials": null
+  },
+  "long-legs": {
+   "figure": {
+    "thigh": 0.38,
+    "shank": 0.38,
+    "foot": 0.14
+   },
+   "materials": null
+  },
+  "big-torso": {
+   "figure": {
+    "torsoW": 0.2,
+    "torsoH": 0.45,
+    "foot": 0.14
+   },
+   "materials": null
+  },
+  "small-feet": {
+   "figure": {
+    "foot": 0.1
+   },
+   "materials": null
+  },
+  "heavy-legs": {
+   "figure": {},
+   "materials": {
+    "leg_density": 2500.0
+   }
+  },
+  "soft-motors": {
+   "figure": {},
+   "materials": {
+    "torque_limit": 25.0
+   }
+  }
+ },
+ "challenge": "push",
+ "replicates": 2,
+ "n_pairs": 12,
+ "pairing": "one fresh challenge run per creature/replicate; two live investigations on it: memory on and memory off; order memory-first on replicate 1, no-memory-first on replicate 2; identical arena seeds within a pair",
+ "investigation": {
+  "mode": "live",
+  "profile": "default",
+  "probes": true,
+  "loop": false,
+  "memory_k": 3
+ },
+ "bank": {
+  "path": "experiments/forge_loop/memory_eval/bank.jsonl",
+  "sha256_lf": "05ab34eafebafb2305337f1f0254fa208e2ab8222248733ced8e0c1eff52ca54",
+  "lessons": 34,
+  "sources": [
+   "experiments/forge_loop/scoreboard/results/records",
+   "experiments/forge_loop/dev_live_records"
+  ],
+  "frozen": "the evaluation server runs WITHOUT CF_MEMORY, so no lesson is added during the run"
+ },
+ "primary_outcome": "per investigation: the arena's selected AI arm has verdict VERIFIED_IMPROVEMENT (no AI arm counts as not verified)",
+ "primary_analysis": "exact one-sided McNemar on discordant pairs (H1: memory-only > no-memory-only), alpha 0.05. Claim 'memory increased verified redesigns on these creatures' ONLY if p < 0.05; otherwise 'no evidence of a benefit'.",
+ "power_note": "12 pairs: low power; a null result is the expected outcome unless the effect is large. Stated before running.",
+ "secondary": [
+  "AI verified rate per arm (Wilson 95% CI)",
+  "paired median diff of the AI arm (memory - no memory)",
+  "memory cited in hypotheses",
+  "matched-twin verdicts",
+  "calls, tokens, USD, rollouts"
+ ],
+ "caps": {
+  "model_requests": 72,
+  "usd": 1.0,
+  "wall_hours": 2.5
+ },
+ "no_retries": "a failed investigation is recorded as not verified, never rerun",
+ "registered_utc": "2026-10-15T18:35:27Z"
+}

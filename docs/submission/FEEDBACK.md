@@ -1,39 +1,44 @@
-# Feedback on Nebius and NVIDIA technologies (from actual use, 2026-10-13 → 2026-10-14)
+# Feedback on Nebius and NVIDIA technologies (from actual use, 2026-10-13 -> 2026-10-15)
 
-Required by the hackathon submission. Everything below was observed during this project; where we could not verify something we say so.
+Required by the hackathon submission. Everything below was observed during this project and is backed by a record in the repository (named in each section); where we could not verify something we say so or leave it out. These are engineering observations from one account, not benchmarks of the platform or the models.
+
+## What we use
+
+Creature Forge's Forge Loop calls **`nvidia/nemotron-3-super-120b-a12b` on Nebius Token Factory** with thinking disabled (`chat_template_kwargs.enable_thinking=false`) and strict `json_schema` guided decoding, `max_tokens` 8,000, temperature 0.6. The model reads measured physics evidence about a failing creature, optionally requests diagnostic probes, and proposes bounded edits; MuJoCo and a fixed rule decide whether an edit is a verified improvement. The calibration that led to this default is in `experiments/forge_loop/calibration/REPORT.md`. The earlier phases of the project used `NVIDIA-Nemotron-3-Nano-30B-A3B`; observations about that phase are marked "earlier phase".
 
 ## Nebius Token Factory (inference)
+
 **Worked well**
-- OpenAI-compatible chat API worked on the first call; `usage` and request ids make auditing easy; total latency of 0.4–1.2 s for short prompts and 16–80 s for long reasoning replies.
-- `llms.txt` and `.md` doc pages are a good idea for tooling.
+- The OpenAI-compatible chat API accepted a strict `json_schema` response format on all four models we calibrated (12/12 requests in the first round returned HTTP 200, `finish_reason=stop` and non-empty content). That made structured output practical to build on.
+- The schema constraint is genuinely useful for identifiers. Our first contract left hypothesis ids and evidence citations to the prompt and 0/12 replies were machine-valid; after we enumerated the hypothesis ids, the editable parameter names and every citable evidence path in the JSON schema, 9/12 and then 6/6 of the chosen configurations were valid. Our lesson was to constrain identifiers by construction, not by instruction (calibration v1 and v2; `docs/memory/INCIDENTS.md`).
+- Latency and cost for the production configuration are low: 4.0-4.8 s per call, about 770-930 completion tokens, about $0.002 per call in our ledger (cost is our own computation from recorded usage). The 12-investigation scoreboard used 24 model calls, 146,901 tokens and $0.050.
+- Responses carry request ids and `usage`, which we store in every investigation record, so each result can be traced to a specific call.
 
 **Friction / requests**
-1. **Reasoning models and token budgets.** For `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, hidden reasoning consumed 3.4k–6.7k completion tokens for a short JSON task. When `max_tokens` was exhausted the API returned HTTP 200, `finish_reason=length` and **`content: null`** with no partial answer. A dedicated `reasoning_budget`, or returning partial visible content, or an explicit error code would avoid silent empty answers.
-2. **`reasoning_effort`.** The docs list `none|minimal|low|medium|high|xhigh|max` but not per-model behaviour. For this model `none` was accepted yet reasoning was still present and content was null; `low`/`medium` gave similar token counts. Please document which values each model honours and what they do.
-3. **`usage.completion_tokens_details.reasoning_tokens`** exists in the spec but was not returned for this model, so we could not verify the effect of the effort setting.
-4. **Prices.** We could not find the per-token price of this model in the public docs, so cost estimates are bracketed assumptions. A price column on each model's page would help budget caps.
-5. **Structured output** is documented as model-dependent; a machine-readable capability flag per model would help (we did not use it).
+1. **Which reasoning controls work on which model.** We found the working combination by experiment. For Super, `enable_thinking=false` through `chat_template_kwargs` gave short, valid replies (4/4). For Ultra, `reasoning_effort=low` was valid 4/4 but took 28-61 s and 7.8k-14.5k completion tokens, close to our 16k cap. A per-model table of which of `reasoning_effort` and `chat_template_kwargs.enable_thinking` is honoured, and what each does to latency and token use, would have saved calibration requests.
+2. **Reasoning budget and empty content (earlier phase and calibration).** With Nano, hidden reasoning consumed the completion budget on a short JSON task and the API returned HTTP 200 with `finish_reason=length` and **`content: null`**. In calibration, Nano with `reasoning_effort=low` hit the 16,000-token cap after 96 s with empty content. An earlier-phase test with `reasoning_effort="none"` on Nano also returned null content (`docs/memory/INCIDENTS.md`). Returning partial visible content, a dedicated reasoning budget, or an explicit error status would avoid silent empty answers. In that phase `usage` also did not report a `reasoning_tokens` figure, so the hidden spend could not be seen per call (`docs/PROJECT_STATE.md`, R3 notes). (In calibration, Nano with `enable_thinking=false` was valid under the production edit rule; we did not choose it.)
+3. **Bounds are not enforced by guided decoding.** Strict `json_schema` enforced the format and the enums, but two of the twelve second-round calibration requests (Super with `reasoning_effort=low`, Ultra with thinking off) still proposed edits outside the numeric bounds stated in the prompt, for example `foot_length` x2.0 where the limit was 1.5. This is not a platform defect: our server-side validator re-checks every edit and rejects it. We mention it because numeric range constraints in the guided-decoding schema, if supported, would reduce rejected replies.
 
 ## Nebius AI Cloud (compute)
+
 **Worked well**
-- VM creation with the CLI is simple; a `cpu-d3` 8 vCPU / 32 GiB machine (≈ $0.264/h compute + disk) booted in about a minute; stop/start preserved the disk and the public IP. cloud-init user data made the SSH-key-only setup reproducible.
-- Quota errors name the quota and region exactly.
+- The Studio, MuJoCo batches, the scoreboard (8,870 rollouts in 21.5 minutes) and the live browser flow all ran on one Nebius VM; code was synced over SSH and the Studio was reached through an SSH tunnel. The VM could be stopped and started through the API.
 
 **Friction / requests**
-1. **No native Windows CLI.** We installed Ubuntu in WSL just to run `nebius`; a Windows build (or documented PowerShell route) would help many hackathon users.
-2. **New-account non-GPU vCPU quota was 0 in `eu-north1` and `us-central1`** (the regions the docs lead with) but 200 elsewhere; discovering this took a failed create. Showing quotas in the create docs/quickstart would save time.
-3. **Credit balance** could not be read from the CLI; the pricing page did not list the public-IPv4 price.
-4. Stopped VMs still bill for disks (documented); an explicit "estimated cost while stopped" in `instance get` would help.
+1. **A guest-initiated power-off did not stop the billing state.** Our 6-hour in-guest deadman (`poweroff` inside the VM) fired, SSH stopped answering, yet the instance still reported `RUNNING` 3.75 hours later; an API `stop` brought it to `STOPPED` immediately (`docs/memory/INCIDENTS.md`, 2026-10-15). We could not verify whether that period was billed, so we assumed it was. Having an instance whose guest powered itself off transition to a stopped state, or documenting how it is billed, would help.
+2. **Regional CPU quota.** On this tenant `eu-north1` and `us-central1` showed a 0 vCPU quota (`nebius quotas quota-allowance list`), so the VM was created in `eu-west1` (`docs/NEBIUS_CLOUD_R1.md`). A clearer first-run message about where quota exists would have saved a step.
+3. **Stopped VMs still bill for disk.** The 50 GiB boot disk costs about $0.12/day while the VM is stopped (docs.nebius.com pricing as recorded in `docs/NEBIUS_CLOUD_R1.md`). This is documented and reasonable; we mention it because our spend ledger has to account for it explicitly.
 
 ## NVIDIA Nemotron
+
 **Worked well**
-- When Nemotron 3 Nano produced content it followed a strict JSON schema, cited values that resolved correctly in the evidence, and proposed bounded, falsifiable edits.
-- The model card states commercial use is allowed.
+- With the strict schema, Nemotron 3 Super (thinking off) returned valid, grounded proposals: every citation resolved to a real value in the evidence, edits stayed inside the allowed parameters (4/4 in the chosen configuration), and the diagnoses were physically sensible (foot length, ankle balance gain, standing posture, leg proportions). In calibration, Ultra with `reasoning_effort=low` produced the most diverse hypotheses (an informal reading).
+- In the end-to-end run `i-140b1435cb84` (live browser flow, 15/15 checks), Nemotron proposed `foot_length` x1.35 after seeing the probe results, and MuJoCo verified it on 12 held-out seeds (+6.25 N median critical push force) while the matched random edit was inconclusive. That is one worked case, not a statistic.
+- Pre-registered scoreboard, exactly as `experiments/forge_loop/scoreboard/REPORT.md` frames it: across 12 investigations of drawn creatures, the Nemotron-selected redesign verified in 6/12 and its matched random twin in 1/12 (exact one-sided McNemar on the discordant pairs 5 vs 0, p = 0.031). The sample is small (six starter creatures, two replicates, one model, one physics model), 5 of the 6 AI successes were on the push challenge, the AI picked the best of up to three proposals, and no walking redesign was verified. We read it as encouraging for the tested creatures and challenges, and make no claim of general superiority.
 
 **Friction / requests**
-1. Hidden reasoning cannot be turned off in the hosted setting we used (no documented `enable_thinking` / `chat_template_kwargs` equivalent); for short structured tasks a non-reasoning mode would be more economical and more reliable.
-2. The Nemotron Open Model License does not say how hosted/API-only use is treated; a short FAQ would remove doubt for projects that never redistribute weights.
-3. Guidance on reasoning-token budgets per task type would help users size `max_tokens`.
+1. **Plausible but inconsistent diagnoses.** Across repeated development runs on one creature the model's hypotheses were physically plausible but varied between runs (torque, friction, heel geometry), and on the walking challenge it repeatedly identified the support base (the probes confirmed it) but chose edits too small to pass our 0.5 m bar (`experiments/forge_loop/dev_live_records/README.md`). We handle both with probes and an independent verifier; model-side guidance on keeping a diagnosis consistent across samples would help.
+2. **Earlier phase (Nano):** the first live investigation, with Nano, blamed torso inertia, which MuJoCo falsified (`docs/memory/INCIDENTS.md`); we kept it as a recorded failed trial, which is the intended behaviour of the verifier. We moved the default to Super after the calibration above.
 
 ## Honest note
-These observations come from one account and one model over two days; some may reflect our prompts (for example the 2.7k-token evidence prompt) rather than the platform.
+These observations come from one account, a small number of calibration requests (30 requests, $0.31 in total, including n = 1 per model-setting pair outside the chosen ones) and two days of development. Some may reflect our prompts or contract (the first calibration round failed because of our schema, not the models) rather than the platform. "Valid" in the calibration means machine-checkable and grounded in real evidence paths, not physically correct.

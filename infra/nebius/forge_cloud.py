@@ -5,7 +5,7 @@ stored by the CLI itself, not by this repo). The VM is reached over SSH with a d
 not the user's other keys). State (instance id, IP, deadline) lives in the git-ignored infra/nebius/state.json.
 
     python infra/nebius/forge_cloud.py plan | create | status | ssh-config | bootstrap | check | exec "<cmd>" |
-        run-stage <stage> [--rep N] | monitor | sync-down | extend --hours H | stop | start | delete --yes | watchdog
+        run-stage <stage> [--rep N] | monitor | sync-down | extend --hours H | stop | start | delete --yes | watchdog | spend
 """
 from __future__ import annotations
 
@@ -14,12 +14,15 @@ import json
 import shlex
 import subprocess
 import sys
+import tarfile
 import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 STATE = HERE / "state.json"
+SPEND = HERE / "spend_ledger.jsonl"       # git-ignored; infra spend for the Forge Loop effort (from 2026-10-14)
+SPEND_CAP_USD = 10.0                       # owner-approved additional infra cap; start/extend refuse beyond it
 SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
 HOST = "creature-forge-nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
@@ -58,6 +61,51 @@ def costs() -> dict:
     return {"compute_usd_per_h": round(compute, 4), "disk_usd_per_h": round(disk_h, 5), "total_usd_per_h": round(compute + disk_h, 4),
             "run_90min_usd": round(1.5 * (compute + disk_h), 2), "deadline_cap_usd": round(c["default_deadline_h"] * (compute + disk_h), 2),
             "disk_usd_per_day_when_stopped": round(disk_h * 24, 3)}
+
+
+def spend_events() -> list[dict]:
+    return [json.loads(l) for l in SPEND.read_text("utf-8").splitlines() if l.strip()] if SPEND.exists() else []
+
+
+def spend_record(event: str, **kw) -> None:
+    with SPEND.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"event": event, "epoch": int(time.time()), **kw}) + "\n")
+
+
+def spend_total(now: float | None = None) -> dict:
+    """Conservative spend since the ledger started: every run interval is charged from its start until the next recorded
+    API stop (or `now` if none). The deadman timer powers the GUEST off at the deadline, but on 2026-10-15 the instance
+    still reported RUNNING 3.75 h later, so a guest poweroff is not assumed to end compute billing. Disk is charged
+    continuously from the first event. Rates are the quoted ones in CFG, not a billing statement."""
+    now = time.time() if now is None else now
+    ev = spend_events()
+    if not ev:
+        return {"compute_h": 0.0, "usd": 0.0, "cap_usd": SPEND_CAP_USD}
+    c = costs()
+    hours, run_start, deadline = 0.0, None, 0.0
+    for e in ev:
+        if e["event"] == "start":
+            if run_start is not None:
+                hours += max(0.0, e["epoch"] - run_start) / 3600
+            run_start, deadline = e["epoch"], e["deadline"]
+        elif e["event"] == "extend" and run_start is not None:
+            deadline = e["deadline"]
+        elif e["event"] == "stop" and run_start is not None:
+            hours += max(0.0, e["epoch"] - run_start) / 3600
+            run_start = None
+    if run_start is not None:
+        hours += max(0.0, now - run_start) / 3600
+    disk_h = max(0.0, now - ev[0]["epoch"]) / 3600
+    usd = hours * c["compute_usd_per_h"] + disk_h * c["disk_usd_per_h"]
+    return {"compute_h": round(hours, 3), "usd": round(usd, 3), "cap_usd": SPEND_CAP_USD}
+
+
+def spend_guard(extra_hours: float) -> None:
+    t = spend_total()
+    projected = t["usd"] + extra_hours * costs()["total_usd_per_h"]
+    if projected > SPEND_CAP_USD:
+        raise SystemExit(f"refusing: projected infra spend ${projected:.2f} exceeds the approved ${SPEND_CAP_USD:.2f} cap "
+                         f"(spent ~${t['usd']:.2f}); ask the owner to raise it")
 
 
 def ssh(cmd: str, timeout: int = 600, check: bool = True) -> subprocess.CompletedProcess:
@@ -209,7 +257,8 @@ def cmd_sync_down(_a=None) -> Path:
     want = (dest / "forge_results.sha").read_text().split()[0]
     if got != want:
         raise SystemExit("checksum mismatch on retrieved results")
-    subprocess.check_call(["tar", "xzf", str(dest / "forge_results.tgz"), "-C", str(dest)])
+    with tarfile.open(dest / "forge_results.tgz", "r:gz") as tf:  # the checksum only proves integrity, not safety: filter="data" refuses
+        tf.extractall(dest, filter="data")                        # absolute paths, "..", links outside dest and special files
     st = load()
     st["last_sync"] = {"dir": str(dest), "sha256": got, "epoch": int(time.time())}
     save(st)
@@ -218,12 +267,16 @@ def cmd_sync_down(_a=None) -> Path:
 
 
 def cmd_extend(a) -> None:
+    left = max(0.0, (load().get("deadline_epoch", 0) - time.time()) / 3600)
+    spend_guard(max(0.0, a.hours - left))
     dl = set_deadline(a.hours)
+    spend_record("extend", deadline=dl)
     print(f"deadline now {a.hours} h from now ({dl}), local and VM verified equal (est. cap ${a.hours * costs()['total_usd_per_h']:.2f})")
 
 
 def cmd_stop(_a=None) -> None:
     nebius("compute", "instance", "stop", "--id", load()["instance_id"])
+    spend_record("stop")
     print("stop requested (compute billing ends when STOPPED; the boot disk keeps billing ~$%s/day)" % costs()["disk_usd_per_day_when_stopped"])
 
 
@@ -245,7 +298,9 @@ def set_deadline(hours: float) -> int:
 
 
 def cmd_start(_a=None) -> None:
+    spend_guard(CFG["default_deadline_h"])
     nebius("compute", "instance", "start", "--id", load()["instance_id"])
+    spend_record("start", deadline=int(time.time() + CFG["default_deadline_h"] * 3600) + 900)  # +15 min: boot/sync slack
     for _ in range(30):
         time.sleep(10)
         s = cmd_status()
@@ -261,7 +316,12 @@ def cmd_start(_a=None) -> None:
     else:
         raise SystemExit("SSH not reachable after start")
     dl = set_deadline(CFG["default_deadline_h"])
+    spend_record("extend", deadline=dl)
     print(f"started; local and VM-side deadline verified equal ({dl}, {CFG['default_deadline_h']} h from now)")
+
+
+def cmd_spend(_a=None) -> None:
+    print(json.dumps(spend_total()))
 
 
 def cmd_verify_deadline(_a=None) -> None:
@@ -303,6 +363,7 @@ def cmd_watchdog(_a=None) -> None:
         state = instance().get("status", {}).get("state")
         if time.time() > st.get("deadline_epoch", 0) and state in ("RUNNING", "STARTING"):
             nebius("compute", "instance", "stop", "--id", st["instance_id"])
+            spend_record("stop", by="watchdog")
             msg = "deadline passed: stop requested"
         else:
             msg = f"ok state={state}"
@@ -315,7 +376,7 @@ def cmd_watchdog(_a=None) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
-    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline"):
+    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend"):
         sp.add_parser(n)
     e = sp.add_parser("exec"); e.add_argument("command"); e.add_argument("--timeout", type=int, default=600)
     r = sp.add_parser("run-stage"); r.add_argument("stage", choices=["pilot", "train", "validate", "gate", "select"]); r.add_argument("--rep", type=int, default=1)
@@ -326,7 +387,7 @@ def main() -> None:
     a = ap.parse_args()
     {"plan": cmd_plan, "create": cmd_create, "status": cmd_status, "ssh-config": cmd_ssh_config, "bootstrap": cmd_bootstrap,
      "check": cmd_check, "exec": cmd_exec, "run-stage": cmd_run_stage, "monitor": cmd_monitor, "sync-down": cmd_sync_down,
-     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog}[a.cmd](a)
+     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend}[a.cmd](a)
 
 
 if __name__ == "__main__":

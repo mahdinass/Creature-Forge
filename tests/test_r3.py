@@ -47,7 +47,7 @@ def reply(*items):
 
 
 def client(replies, max_requests=30, tokens=130_000, usage=(900, 400)):
-    return NebiusClient(api_key="test-key", base_url="http://invalid.example", transport=r3.scripted_transport(replies, usage),
+    return NebiusClient(api_key="test-key", base_url="https://invalid.example", transport=r3.scripted_transport(replies, usage),
                         limits=Limits(max_requests=max_requests, max_total_tokens=tokens, max_tokens_per_request=r3.MAX_TOKENS))
 
 

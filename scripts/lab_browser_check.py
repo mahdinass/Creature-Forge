@@ -28,6 +28,8 @@ from creature_forge.studio.app import create_app  # noqa: E402
 
 
 def main() -> int:
+    # Browser flows run SCRIPTED investigations only; smoke scale keeps them inside CI time (refused for live mode, recorded).
+    os.environ.setdefault("CF_INVESTIGATION_SCALE", "smoke")
     if not (ROOT / "studio" / "dist" / "index.html").exists():
         print("FAIL studio/dist missing: run `npm --prefix studio run build`")
         return 1
@@ -39,7 +41,8 @@ def main() -> int:
         s.bind(("127.0.0.1", 0))
         port = s.getsockname()[1]
     with tempfile.TemporaryDirectory() as empty_local:
-        server = uvicorn.Server(uvicorn.Config(create_app(investigations_dir=Path(empty_local) / "none"),
+        server = uvicorn.Server(uvicorn.Config(create_app(investigations_dir=Path(empty_local) / "none",
+                                                          forge_dir=Path(empty_local) / "forge"),
                                                host="127.0.0.1", port=port, log_level="warning"))
         threading.Thread(target=server.run, daemon=True).start()
         base = f"http://127.0.0.1:{port}"
@@ -53,7 +56,7 @@ def main() -> int:
             print("FAIL server did not start")
             return 1
         rc = 0
-        for flow in ("e2e/tabs-smoke.mjs", "e2e/investigation-flow.mjs", "e2e/locomotion-flow.mjs", "e2e/demo-flow.mjs", "e2e/overview-flow.mjs", "e2e/sketch-flow.mjs", "e2e/freehand-flow.mjs"):
+        for flow in ("e2e/tabs-smoke.mjs", "e2e/investigation-flow.mjs", "e2e/locomotion-flow.mjs", "e2e/demo-flow.mjs", "e2e/overview-flow.mjs", "e2e/sketch-flow.mjs", "e2e/freehand-flow.mjs", "e2e/forge-flow.mjs"):
             rc |= subprocess.run([node, flow], cwd=ROOT / "studio", env={**os.environ, "BASE_URL": base},
                                  timeout=600).returncode
         server.should_exit = True

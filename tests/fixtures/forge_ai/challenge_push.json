@@ -1,0 +1,913 @@
+{
+ "spec": {
+  "kind": "push",
+  "seeds": [
+   100000,
+   100001,
+   100002,
+   100003,
+   100004,
+   100005,
+   100006,
+   100007
+  ],
+  "duration": 5.0,
+  "perturb": 0.02,
+  "settle_s": 0.3,
+  "start": "drawn",
+  "target_force": 25.0,
+  "push_time": 1.0,
+  "push_duration": 0.15,
+  "max_force": 80.0
+ },
+ "body": {
+  "torso_mass": 5.0,
+  "thigh_length": 0.3,
+  "shank_length": 0.3,
+  "foot_length": 0.16,
+  "foot_friction": 1.0,
+  "torque_limit": 60.0,
+  "leg_density": 1000.0,
+  "thigh_length_r": 0.3,
+  "shank_length_r": 0.3,
+  "foot_length_r": 0.16,
+  "pose": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "controller": {
+  "stand": {
+   "kind": "stand-pd",
+   "params": {
+    "kp": 150.0,
+    "kd": 8.0,
+    "gait_freq": 0.0,
+    "hip_amp": 0.0,
+    "knee_amp": 0.0,
+    "balance_gain": 80.0,
+    "stand_hip": 0.0,
+    "stand_knee": 0.0
+   },
+   "edited": false
+  },
+  "walk": {
+   "kind": "none",
+   "vector": null,
+   "adaptation": null
+  }
+ },
+ "per_seed": [
+  {
+   "seed": 100000,
+   "outcome": "FAIL",
+   "score": 8.168,
+   "metrics": {
+    "critical_force_fwd": 15.124,
+    "critical_force_bwd": 8.168,
+    "weak_direction": "bwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": true,
+    "saturation_frac": 0.325,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.072,
+    "min_height_ratio": 0.668,
+    "fall_time_fwd": 1.366,
+    "fall_time_bwd": 1.058,
+    "peak_ankle_demand_ratio": 1.507
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100001,
+   "outcome": "FAIL",
+   "score": 8.825,
+   "metrics": {
+    "critical_force_fwd": 8.825,
+    "critical_force_bwd": 14.107,
+    "weak_direction": "fwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": false,
+    "saturation_frac": 0.035,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.091,
+    "min_height_ratio": 0.612,
+    "fall_time_fwd": 1.827,
+    "fall_time_bwd": 1.124,
+    "peak_ankle_demand_ratio": 1.223
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100002,
+   "outcome": "POOR",
+   "score": 21.804,
+   "metrics": {
+    "critical_force_fwd": 21.804,
+    "critical_force_bwd": 24.902,
+    "weak_direction": "fwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": false,
+    "saturation_frac": 0.289,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.397,
+    "min_height_ratio": 0.888,
+    "fall_time_fwd": 1.047,
+    "fall_time_bwd": 1.858,
+    "peak_ankle_demand_ratio": 1.29
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100003,
+   "outcome": "FAIL",
+   "score": 7.474,
+   "metrics": {
+    "critical_force_fwd": 11.174,
+    "critical_force_bwd": 7.474,
+    "weak_direction": "bwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": true,
+    "saturation_frac": 0.154,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.816,
+    "min_height_ratio": 0.49,
+    "fall_time_fwd": 1.582,
+    "fall_time_bwd": 1.639,
+    "peak_ankle_demand_ratio": 1.372
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100004,
+   "outcome": "FAIL",
+   "score": 6.319,
+   "metrics": {
+    "critical_force_fwd": 20.05,
+    "critical_force_bwd": 6.319,
+    "weak_direction": "bwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": true,
+    "saturation_frac": 0.03,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.206,
+    "min_height_ratio": 0.74,
+    "fall_time_fwd": 1.428,
+    "fall_time_bwd": 1.314,
+    "peak_ankle_demand_ratio": 1.586
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100005,
+   "outcome": "FAIL",
+   "score": 11.295,
+   "metrics": {
+    "critical_force_fwd": 17.97,
+    "critical_force_bwd": 11.295,
+    "weak_direction": "bwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": true,
+    "saturation_frac": 0.397,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.699,
+    "min_height_ratio": 0.522,
+    "fall_time_fwd": 1.574,
+    "fall_time_bwd": 1.525,
+    "peak_ankle_demand_ratio": 1.875
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100006,
+   "outcome": "FAIL",
+   "score": 11.047,
+   "metrics": {
+    "critical_force_fwd": 24.048,
+    "critical_force_bwd": 11.047,
+    "weak_direction": "bwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": true,
+    "saturation_frac": 0.49,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.118,
+    "min_height_ratio": 0.609,
+    "fall_time_fwd": 1.757,
+    "fall_time_bwd": 1.152,
+    "peak_ankle_demand_ratio": 1.489
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  },
+  {
+   "seed": 100007,
+   "outcome": "FAIL",
+   "score": 8.863,
+   "metrics": {
+    "critical_force_fwd": 8.863,
+    "critical_force_bwd": 19.033,
+    "weak_direction": "fwd",
+    "censored": false,
+    "settle_s": 0.3,
+    "z_ref": 0.74,
+    "bisection_trace": [
+     [
+      40.0,
+      false
+     ],
+     [
+      20.0,
+      true
+     ],
+     [
+      30.0,
+      false
+     ],
+     [
+      25.0,
+      false
+     ],
+     [
+      22.5,
+      true
+     ]
+    ],
+    "mirrored": false,
+    "saturation_frac": 0.382,
+    "slip_frac": 0.0,
+    "max_abs_pitch": 0.573,
+    "min_height_ratio": 0.838,
+    "fall_time_fwd": 1.314,
+    "fall_time_bwd": 1.695,
+    "peak_ankle_demand_ratio": 1.594
+   },
+   "events": [
+    {
+     "kind": "fall",
+     "time": 1.52,
+     "evidence": {
+      "torso_height": 0.3,
+      "initial_torso_height": 0.74,
+      "torso_pitch": 1.05,
+      "min_torso_height": 0.28
+     }
+    },
+    {
+     "kind": "actuator_saturation",
+     "time": 1.12,
+     "evidence": {
+      "torque_limit": 60.0,
+      "overall_fraction_saturated": 0.2,
+      "peak_demand": 71.0,
+      "fraction_saturated_by_joint": {
+       "hip_l": 0.1,
+       "knee_l": 0.0,
+       "ankle_l": 0.9
+      }
+     }
+    }
+   ],
+   "rollouts": 14
+  }
+ ],
+ "outcome": "FAIL",
+ "summary": {
+  "counts": {
+   "FAIL": 7,
+   "POOR": 1,
+   "PASS": 0
+  },
+  "score_median": 8.863,
+  "score_mean": 10.474375,
+  "score_min": 6.319,
+  "score_max": 21.804,
+  "pass_wilson": [
+   0.1,
+   0.6
+  ]
+ },
+ "forensics": {
+  "definitions": {
+   "com_margin_m": "distance from whole-body COM x to nearest support edge; negative = COM outside support",
+   "xcom_margin_m": "same for extrapolated COM x + vx*sqrt(h/g) (LIP approximation); negative = momentum carries COM past support",
+   "support": "interval between min and max x of loaded foot-floor contact points (MuJoCo contacts)",
+   "instability_onset_s": "first time the extrapolated-COM margin stays negative for 0.05 s after the push starts",
+   "xcom_margin_recovered_s": "first time after onset the extrapolated-COM margin stays positive for 0.05 s (null = never)",
+   "ankle_demand_over_limit": "|demanded ankle torque| / actuator torque limit; >1 means the actuator clipped the demand"
+  },
+  "disturbance": {
+   "push_time_s": 1.0,
+   "push_force_N": 18.0,
+   "push_duration_s": 0.15,
+   "impulse_Ns": 2.7,
+   "pitch_before_push_rad": 0.0012,
+   "com_vx_before_push_mps": 0.0,
+   "com_vx_at_push_end_mps": 0.31,
+   "com_x_shift_during_push_m": 0.021,
+   "peak_abs_pitch_within_1s_rad": 0.62,
+   "time_of_peak_pitch_s": 1.4,
+   "peak_pitch_rate_within_1s_rad_s": 1.9
+  },
+  "failure": {
+   "fell": true,
+   "fall_time_s": 1.52,
+   "fall_after_push_end_s": 0.37,
+   "instability_onset_s": 1.12,
+   "onset_after_push_start_s": 0.12,
+   "xcom_margin_recovered_s": null,
+   "com_left_support_s": 1.2,
+   "pitch_at_fall_rad": 1.05,
+   "min_torso_height_m": 0.31
+  },
+  "support": {
+   "support_length_before_push_m": 0.14,
+   "com_margin_before_push_m": 0.07,
+   "xcom_margin_before_push_m": 0.07,
+   "min_com_margin_after_push_m": -0.21,
+   "min_xcom_margin_after_push_m": -0.33,
+   "time_of_min_xcom_margin_s": 1.4,
+   "cop_minus_com_x_at_push_end_m": -0.02,
+   "feet_unloaded_fraction_after_push": 0.0
+  },
+  "actuation": {
+   "torque_limit_Nm": 60.0,
+   "ankle_peak_demand_Nm": 71.4,
+   "ankle_peak_applied_Nm": 60.0,
+   "ankle_demand_over_limit_peak": 1.19,
+   "any_joint_demand_over_limit_peak": 1.19,
+   "fraction_samples_saturated_push_to_fall": 0.41
+  },
+  "contacts": {
+   "transitions": [
+    {
+     "foot": "left",
+     "t_s": 1.31,
+     "event": "liftoff"
+    },
+    {
+     "foot": "right",
+     "t_s": 1.34,
+     "event": "liftoff"
+    },
+    {
+     "foot": "left",
+     "t_s": 1.31,
+     "event": "liftoff"
+    },
+    {
+     "foot": "right",
+     "t_s": 1.34,
+     "event": "liftoff"
+    },
+    {
+     "foot": "left",
+     "t_s": 1.31,
+     "event": "liftoff"
+    },
+    {
+     "foot": "right",
+     "t_s": 1.34,
+     "event": "liftoff"
+    },
+    {
+     "foot": "left",
+     "t_s": 1.31,
+     "event": "liftoff"
+    },
+    {
+     "foot": "right",
+     "t_s": 1.34,
+     "event": "liftoff"
+    }
+   ],
+   "peak_slip_speed_mps": 0.02,
+   "fraction_samples_slipping_push_to_fall": 0.0,
+   "foot_friction": 1.0
+  },
+  "timeline": {
+   "columns": [
+    "t_s",
+    "pitch_rad",
+    "pitch_rate_rad_s",
+    "com_vx_mps",
+    "com_margin_m",
+    "xcom_margin_m",
+    "feet_loaded",
+    "ankle_demand_over_limit",
+    "max_slip_speed_mps"
+   ],
+   "rows": [
+    [
+     0.9,
+     0.0,
+     0.0,
+     0.0,
+     0.07,
+     0.07,
+     2,
+     0.0,
+     0.01
+    ],
+    [
+     1.0,
+     0.02,
+     0.3,
+     0.05,
+     0.04,
+     0.02,
+     2,
+     0.2,
+     0.01
+    ],
+    [
+     1.1,
+     0.04,
+     0.6,
+     0.1,
+     0.01,
+     -0.03,
+     2,
+     0.4,
+     0.01
+    ],
+    [
+     1.2,
+     0.06,
+     0.9,
+     0.15,
+     -0.02,
+     -0.08,
+     2,
+     0.6,
+     0.01
+    ],
+    [
+     1.3,
+     0.08,
+     1.2,
+     0.2,
+     -0.05,
+     -0.13,
+     2,
+     0.8,
+     0.01
+    ],
+    [
+     1.4,
+     0.1,
+     1.5,
+     0.25,
+     -0.08,
+     -0.18,
+     2,
+     1.0,
+     0.01
+    ],
+    [
+     1.5,
+     0.12,
+     1.8,
+     0.3,
+     -0.11,
+     -0.23,
+     2,
+     1.2,
+     0.01
+    ],
+    [
+     1.6,
+     0.14,
+     2.1,
+     0.35,
+     -0.14,
+     -0.28,
+     2,
+     1.4,
+     0.01
+    ],
+    [
+     1.7,
+     0.16,
+     2.4,
+     0.4,
+     -0.17,
+     -0.33,
+     2,
+     1.6,
+     0.01
+    ],
+    [
+     1.8,
+     0.18,
+     2.7,
+     0.45,
+     -0.2,
+     -0.38,
+     2,
+     1.8,
+     0.01
+    ],
+    [
+     1.9,
+     0.2,
+     3.0,
+     0.5,
+     -0.23,
+     -0.43,
+     2,
+     2.0,
+     0.01
+    ],
+    [
+     2.0,
+     0.22,
+     3.3,
+     0.55,
+     -0.26,
+     -0.48,
+     2,
+     2.2,
+     0.01
+    ],
+    [
+     2.1,
+     0.24,
+     3.6,
+     0.6,
+     -0.29,
+     -0.53,
+     2,
+     2.4,
+     0.01
+    ],
+    [
+     2.2,
+     0.26,
+     3.9,
+     0.65,
+     -0.32,
+     -0.58,
+     2,
+     2.6,
+     0.01
+    ]
+   ]
+  }
+ },
+ "rollouts": 112,
+ "wall_s": 12.3
+}

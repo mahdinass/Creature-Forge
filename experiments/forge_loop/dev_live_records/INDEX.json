@@ -1,0 +1,685 @@
+[
+ {
+  "id": "i-d62a72f585fb",
+  "created": "2026-10-15T07:50:44Z",
+  "creature": {
+   "cid": "c-b2d7ac67",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "stand",
+  "status": "done",
+  "model_requests": [
+   "942f5765b223b8cb2906a87f7718b7ca"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "heuristic": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 96,
+   "wall_s": 20.976,
+   "calls": 1,
+   "tokens": 5503,
+   "usd": 0.001961
+  },
+  "sha256": "9a7a24fbb9d5b0b11e7e48073f4d4cb6c6b0c905713bb8cdf22eaf84ac016035"
+ },
+ {
+  "id": "i-6a16174a72ae",
+  "created": "2026-10-15T07:51:35Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "16a661e3535e2cf2468ec4180bbba18b"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 744,
+   "wall_s": 101.752,
+   "calls": 1,
+   "tokens": 5387,
+   "usd": 0.001857
+  },
+  "sha256": "d9f5ffe2977a9af6400a85cefab6d6f3a05f9964e62eaaf83ad4d5e81e8904f9"
+ },
+ {
+  "id": "i-8cd662cb2a51",
+  "created": "2026-10-15T07:57:31Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-3280704f"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "641cf93b0843eac509961366e1468a7c"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "heuristic": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 756,
+   "wall_s": 101.387,
+   "calls": 1,
+   "tokens": 5475,
+   "usd": 0.001858
+  },
+  "sha256": "21efccf690a900b96dafffbc8e9ad0414d345c257c14a047de77b2ee3efa1eb4"
+ },
+ {
+  "id": "i-9d734f7a54a5",
+  "created": "2026-10-15T07:59:13Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 2,
+   "hypothetical_parent": null,
+   "loop_id": "l-3280704f"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "5fc66e0f0005333e5ccfa783a165df50"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 732,
+   "wall_s": 99.181,
+   "calls": 1,
+   "tokens": 5541,
+   "usd": 0.001886
+  },
+  "sha256": "3edc382188a4a9670a4f77caf7d719a12a1f140496879cf2600bb4bb7b5861ef"
+ },
+ {
+  "id": "i-7dbe0c20b190",
+  "created": "2026-10-15T08:03:59Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-ce4ae143"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "1ae670ce80951a55aa7e572cb0abddac"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 972,
+   "wall_s": 130.893,
+   "calls": 1,
+   "tokens": 5414,
+   "usd": 0.001804
+  },
+  "sha256": "9679d355a25b1aab7852722e3718c63a4acfa4a593bc780a5790561d92870436"
+ },
+ {
+  "id": "i-8b8dfc87d27d",
+  "created": "2026-10-15T08:06:10Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 2,
+   "hypothetical_parent": null,
+   "loop_id": "l-ce4ae143"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "9058671af65e948f39889ffe2cd69980",
+   "fd1197356e074e45aee2813c0936d298"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 972,
+   "wall_s": 134.34,
+   "calls": 2,
+   "tokens": 11694,
+   "usd": 0.004014
+  },
+  "sha256": "d854ea4326ba26eeeba0c0e57b3259b1c9ceab9c722a9cbf4a14d1562c6c9119"
+ },
+ {
+  "id": "i-eb2d953f2c8e",
+  "created": "2026-10-15T08:09:54Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-47e9b792"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "183b4d0c9fccc44926e85fa2c0d97145"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "heuristic": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 972,
+   "wall_s": 131.464,
+   "calls": 1,
+   "tokens": 5570,
+   "usd": 0.001873
+  },
+  "sha256": "cb8398822b4d35a50a71834213c5e108f1dd6e9024bf61420d6983de540173d4"
+ },
+ {
+  "id": "i-f9873480e42a",
+  "created": "2026-10-15T08:12:05Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 2,
+   "hypothetical_parent": null,
+   "loop_id": "l-47e9b792"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "094f7fc829906d21d023e25a866a65b1"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P2": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 1208,
+   "wall_s": 163.469,
+   "calls": 1,
+   "tokens": 5760,
+   "usd": 0.002011
+  },
+  "sha256": "b4cd8e1bac47e4633ec6a22a4de32ca1baa3436cfa14192817325205bcd8c57c"
+ },
+ {
+  "id": "i-50af182da352",
+  "created": "2026-10-15T08:15:02Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "5dedb26e3d488f2ef8e9947e092dd50506f0aca2942407b3e09339a2b1e2b14f",
+   "round": 3,
+   "hypothetical_parent": {
+    "investigation_id": "i-f9873480e42a",
+    "arm_id": "ai:P1"
+   },
+   "loop_id": "l-47e9b792"
+  },
+  "kind": "push",
+  "status": "done",
+  "model_requests": [
+   "c19834279d60f5da68d5b47aabf42ab3"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 918,
+   "wall_s": 123.603,
+   "calls": 1,
+   "tokens": 5665,
+   "usd": 0.001892
+  },
+  "sha256": "24f078c539ce563cb7a954e81b7dd33e43e34207a5ee8e205d08c1dce3c89ef2"
+ },
+ {
+  "id": "i-c2c4c48729d3",
+  "created": "2026-10-15T12:28:19Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "4c8471557036262ef0472f200cc50e8d",
+   "67e5856168bd381896089e5de60b6886"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1176,
+   "wall_s": 182.983,
+   "calls": 2,
+   "tokens": 12113,
+   "usd": 0.004137
+  },
+  "sha256": "4560d82d77cbe392ae1a893fd37b75e359f29bfd00e2e17126ce8e77e2eec5da"
+ },
+ {
+  "id": "i-47bc91e407c2",
+  "created": "2026-10-15T12:32:58Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-5879b72f"
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "aca24bffc1d8f1cbde84edd9e98964cf",
+   "b71f2c9e8c9afef425c5f1cf0b00df92"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1192,
+   "wall_s": 267.533,
+   "calls": 2,
+   "tokens": 12119,
+   "usd": 0.004068
+  },
+  "sha256": "81161ad0ae462a638d60ab90918b960bc9215df0ad20dc90e7811211432ac8c5"
+ },
+ {
+  "id": "i-f2ac2a96792d",
+  "created": "2026-10-15T12:37:48Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "5dedb26e3d488f2ef8e9947e092dd50506f0aca2942407b3e09339a2b1e2b14f",
+   "round": 2,
+   "hypothetical_parent": {
+    "investigation_id": "i-47bc91e407c2",
+    "arm_id": "ai:P1"
+   },
+   "loop_id": "l-5879b72f"
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "73cdc2b945c41b2d04a143e7e020ade1",
+   "b487b6e1ca07b9aa5bc3cf6d9d6b7f15"
+  ],
+  "verdicts": {
+   "ai:P1": "INCONCLUSIVE",
+   "heuristic": "INCONCLUSIVE",
+   "random:P1": "WORSE"
+  },
+  "budget": {
+   "rollouts": 1412,
+   "wall_s": 218.352,
+   "calls": 2,
+   "tokens": 12313,
+   "usd": 0.004187
+  },
+  "sha256": "05f02f490f431d6c91a1873391e94bec9f44855b75b0eef4f72aca7ab6edcd5a"
+ },
+ {
+  "id": "i-172b6a48a0ad",
+  "created": "2026-10-15T12:41:26Z",
+  "creature": {
+   "cid": "c-13d00809",
+   "n": 1,
+   "content_hash": "5dedb26e3d488f2ef8e9947e092dd50506f0aca2942407b3e09339a2b1e2b14f",
+   "round": 3,
+   "hypothetical_parent": {
+    "investigation_id": "i-47bc91e407c2",
+    "arm_id": "ai:P1"
+   },
+   "loop_id": "l-5879b72f"
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "aa2c82869b371b5c43221daf3666b02d",
+   "0e25075908798bfbb50fc05d0790109b"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1292,
+   "wall_s": 188.428,
+   "calls": 2,
+   "tokens": 12873,
+   "usd": 0.004484
+  },
+  "sha256": "fad5e19ffc63a465eb556816e8df59e2836e41d62e705912adc552730d7769c7"
+ },
+ {
+  "id": "i-80d07dde758e",
+  "created": "2026-10-15T15:15:48Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": false,
+  "model_requests": [
+   "41ff507bde4bb8939051c8648a7db901"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "heuristic": "NOT_VERIFIED",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 144,
+   "wall_s": 12.124,
+   "calls": 1,
+   "tokens": 4692,
+   "usd": 0.001629
+  },
+  "sha256": "2d1421f00db443a729e94936be32644b0524956ece6083989459257a8a6665e1"
+ },
+ {
+  "id": "i-b9adf9d9a843",
+  "created": "2026-10-15T15:16:27Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-45bca49d"
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "0b0e1895ca3a6fd30bd0ae5d08f4303f",
+   "5afbedd6e8b3309758eb682ddd632597"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "heuristic": "NOT_VERIFIED",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 156,
+   "wall_s": 15.571,
+   "calls": 2,
+   "tokens": 10087,
+   "usd": 0.003418
+  },
+  "sha256": "ef878cde8f73aa4f3e63b5eece141b9b92662f18372a1fbbfbf9be21766d49ed"
+ },
+ {
+  "id": "i-7ef344a03dd2",
+  "created": "2026-10-15T15:16:43Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 2,
+   "hypothetical_parent": null,
+   "loop_id": "l-45bca49d"
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "42deb8a9c2c131f428e7c6ae61b23639",
+   "7522c8adc2ab5b850171d876c9f0f7ae",
+   "278f1738a892064367bf07c8ecb5bd29"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 136,
+   "wall_s": 18.093,
+   "calls": 3,
+   "tokens": 17367,
+   "usd": 0.006165
+  },
+  "sha256": "33dd9dd3ebad041be881f159a319756a57940112496991bf18addb1b0d06a76b"
+ },
+ {
+  "id": "i-105c4c50be98",
+  "created": "2026-10-15T15:23:08Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-4a613f7a"
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "9a5b5aee277c692298d86bde7bb0c620",
+   "91d8a812337f7163c1f9fc4a130f4f75"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "heuristic": "NOT_VERIFIED",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 211,
+   "wall_s": 20.971,
+   "calls": 2,
+   "tokens": 10494,
+   "usd": 0.003681
+  },
+  "sha256": "0faf2bd6ff0c1c60d10b4124082303521bee56538b9ededa7de794ad58d64a49"
+ },
+ {
+  "id": "i-fd78f195f334",
+  "created": "2026-10-15T15:23:29Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 2,
+   "hypothetical_parent": null,
+   "loop_id": "l-4a613f7a"
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "a8048487a74abc14ef225f86ddfca459",
+   "93a4c6912e05ad04bf80da56ab7dd420"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "random:P2": "NOT_VERIFIED",
+   "random:P1": "WORSE"
+  },
+  "budget": {
+   "rollouts": 231,
+   "wall_s": 22.068,
+   "calls": 2,
+   "tokens": 10440,
+   "usd": 0.003627
+  },
+  "sha256": "7e007749f5a97b2b7b3834731bae83d5ad0bf37546ae80ff3c18dda09c8a5943"
+ },
+ {
+  "id": "i-26f00f643708",
+  "created": "2026-10-15T15:25:33Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": "l-6b53028a"
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "cf1886ad785dabd2371654db7b8049c1",
+   "11e73682b5f14a772b9a1f4d69dcdf3a"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "heuristic": "NOT_VERIFIED",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 211,
+   "wall_s": 21.916,
+   "calls": 2,
+   "tokens": 10457,
+   "usd": 0.00359
+  },
+  "sha256": "5f5f3bc1a687747b95c66cb1983857ed89d628046ebb325cafb59b89a581f3a7"
+ },
+ {
+  "id": "i-0a274446ce1a",
+  "created": "2026-10-15T15:25:55Z",
+  "creature": {
+   "cid": "c-996ed0ee",
+   "n": 1,
+   "content_hash": "c03581fcef00593a260b7e1a50bbd1d36c7967a2a1bb3fbbdbe722cbc3866390",
+   "round": 2,
+   "hypothetical_parent": null,
+   "loop_id": "l-6b53028a"
+  },
+  "kind": "walk",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "e68b87c7b6e757b2738adabbcd8e2782",
+   "a917433fbdd6d4b1d34d34a35d09ae94"
+  ],
+  "verdicts": {
+   "ai:P1": "NOT_VERIFIED",
+   "random:P2": "NOT_VERIFIED",
+   "random:P1": "NOT_VERIFIED"
+  },
+  "budget": {
+   "rollouts": 235,
+   "wall_s": 25.753,
+   "calls": 2,
+   "tokens": 10679,
+   "usd": 0.003738
+  },
+  "sha256": "8a4957812816ac66b904f8510bf5b4f1f91fa3d6c757e7358bb151ec49e74566"
+ },
+ {
+  "id": "i-b3c9a249933a",
+  "created": "2026-10-15T18:11:10Z",
+  "creature": {
+   "cid": "c-832a9f27",
+   "n": 1,
+   "content_hash": "b6df4d3cc7274bdc8835e01e4c00c79ca69bb04c1447a6c9ca2ccaf57455d768",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "780ab2c31cf21ab54ca4d65075c29336",
+   "48d9da77e2b27f3e407ec651ffc4127a"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1224,
+   "wall_s": 319.25,
+   "calls": 2,
+   "tokens": 11850,
+   "usd": 0.004016
+  },
+  "via": "live browser flow (studio/e2e/forge-live-flow.mjs)",
+  "sha256": "23abed4daeb8c4ac0a84221176e02d5ca79796c8f8eb5011fc37d47677519ae5"
+ },
+ {
+  "id": "i-140b1435cb84",
+  "created": "2026-10-15T18:26:34Z",
+  "creature": {
+   "cid": "c-95b0ef4f",
+   "n": 1,
+   "content_hash": "9cd0e3eedd102800e1cef79a16fcfa4bb9548d5a3bba0c87abd40ed8123d629e",
+   "round": 1,
+   "hypothetical_parent": null,
+   "loop_id": null
+  },
+  "kind": "push",
+  "status": "done",
+  "probes": true,
+  "model_requests": [
+   "bdc6f816bf58544ff0b1614a9ee08b35",
+   "43eccb20e4b1971f27fa2e038aa84e03"
+  ],
+  "verdicts": {
+   "ai:P1": "VERIFIED_IMPROVEMENT",
+   "random:P1": "INCONCLUSIVE"
+  },
+  "budget": {
+   "rollouts": 1394,
+   "wall_s": 331.587,
+   "calls": 2,
+   "tokens": 12328,
+   "usd": 0.004319
+  },
+  "via": "live browser flow (studio/e2e/forge-live-flow.mjs)",
+  "sha256": "1bf42aeaa019029a939d0b99f51abdb58f9fefb70bd7334d914d97aa9155ec79"
+ }
+]

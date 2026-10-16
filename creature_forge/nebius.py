@@ -12,11 +12,14 @@ import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from .config import load_env, nebius_api_key, nebius_base_url
+from .config import load_env, nebius_api_key, nebius_base_url, validate_base_url
 
 DEFAULT_BASE_URL = "https://api.tokenfactory.nebius.com/v1"
 DEFAULT_MODEL = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
 REASONING_EFFORTS = ("none", "low", "medium", "high")  # per Nebius docs; model support must be verified
+# Request-body keys that `extra_body` may never set: the client owns them (model, messages, max_tokens, temperature) or they
+# have a dedicated, validated argument (reasoning_effort, response_format).
+RESERVED_BODY_KEYS = frozenset({"model", "messages", "max_tokens", "temperature", "reasoning_effort", "response_format"})
 
 
 class NebiusError(RuntimeError):
@@ -66,16 +69,40 @@ def estimate_prompt_tokens(messages: list[dict]) -> int:
     return len(json.dumps(messages, ensure_ascii=False).encode("utf-8")) // 3 + 64
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    """A redirect would re-send the Authorization header to another host: never follow one (it surfaces as an HTTPError)."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_OPENER = urllib.request.build_opener(_NoRedirect)
+
+
+def redact_secret(text: str, secret: str | None) -> str:
+    """Remove every occurrence of the API key (and its Bearer form) from provider-supplied text."""
+    text = str(text)
+    if secret and len(secret) >= 4:
+        text = text.replace(secret, "[redacted]")
+    return text
+
+
+def _key_from_headers(headers: dict) -> str | None:
+    auth = (headers or {}).get("Authorization") or ""
+    return auth[7:] if auth.startswith("Bearer ") else (auth or None)
+
+
 def _urllib_transport(url: str, headers: dict, body: dict, timeout: float):
     req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers, method="POST")
+    key = _key_from_headers(headers)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
+        with _OPENER.open(req, timeout=timeout) as r:
             return r.status, dict(r.headers), json.load(r)
     except urllib.error.HTTPError as e:
-        # error bodies from the API do not echo credentials; truncate defensively anyway
-        raise NebiusError(f"HTTP {e.code}: {e.read(500).decode('utf-8', 'replace')}") from None
+        # provider error text may echo a credential: redact the key before it is stored or raised
+        raise NebiusError(redact_secret(f"HTTP {e.code}: {e.read(500).decode('utf-8', 'replace')}", key)) from None
     except (urllib.error.URLError, TimeoutError, OSError, ValueError) as e:
-        raise NebiusError(f"{type(e).__name__}: {e}") from None
+        raise NebiusError(redact_secret(f"{type(e).__name__}: {e}", key)) from None
 
 
 @dataclass
@@ -95,12 +122,21 @@ class NebiusClient:
             load_env()  # repo-root .env; real environment variables take precedence
         if self.api_key is None:
             self.api_key = nebius_api_key()
-        self.base_url = (self.base_url or nebius_base_url(DEFAULT_BASE_URL)).rstrip("/")
+        self.base_url = validate_base_url(self.base_url) if self.base_url else nebius_base_url(DEFAULT_BASE_URL)
 
     def chat(self, messages: list[dict], *, max_tokens: int = 1024, temperature: float = 0.0,
-             reasoning_effort: str | None = None, response_format: dict | None = None) -> ChatResult:
+             reasoning_effort: str | None = None, response_format: dict | None = None,
+             extra_body: dict | None = None) -> ChatResult:
         if reasoning_effort is not None and reasoning_effort not in REASONING_EFFORTS:
             raise ValueError(f"reasoning_effort must be one of {REASONING_EFFORTS}")
+        if extra_body is not None:
+            # Additive provider-specific fields (e.g. {"chat_template_kwargs": {"enable_thinking": False}}). Validated BEFORE any
+            # budget is touched; it can never override what the client itself controls.
+            if not isinstance(extra_body, dict):
+                raise ValueError("extra_body must be a dict")
+            clash = sorted(set(extra_body) & RESERVED_BODY_KEYS)
+            if clash:
+                raise ValueError(f"extra_body may not override {clash}")
         if not (1 <= max_tokens <= self.limits.max_tokens_per_request):
             raise BudgetExceeded(f"max_tokens={max_tokens} outside 1..{self.limits.max_tokens_per_request}")
         if self.requests_made >= self.limits.max_requests:
@@ -121,6 +157,8 @@ class NebiusClient:
             body["reasoning_effort"] = reasoning_effort
         if response_format is not None:
             body["response_format"] = response_format
+        if extra_body:
+            body.update(extra_body)
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
         self.requests_made += 1  # counted before the call: a failed/timed-out request still costs budget
@@ -129,9 +167,11 @@ class NebiusClient:
             status, resp_headers, raw = self.transport(f"{self.base_url}/chat/completions", headers, body,
                                                       self.limits.timeout_s)
         except NebiusError as e:
+            if self.api_key and self.api_key in str(e):  # custom transports too: never store or re-raise the key
+                e = NebiusError(redact_secret(str(e), self.api_key))
             self.calls.append({"ok": False, "error": str(e)[:300], "latency_s": round(time.perf_counter() - t0, 3),
                                "requested_model": self.model, "reasoning_effort": reasoning_effort})
-            raise
+            raise e from None
         latency = time.perf_counter() - t0
         try:
             choice = raw["choices"][0]

@@ -1,0 +1,2186 @@
+{
+ "id": "i-eb2d953f2c8e",
+ "created": "2026-10-15T08:09:54Z",
+ "mode": "live",
+ "provenance": "LIVE",
+ "creature": {
+  "cid": "c-13d00809",
+  "n": 1,
+  "content_hash": "47687382762d66ce94fad4042194a5361192ee0fcf215dbe4f8960aa51418425",
+  "round": 1,
+  "hypothetical_parent": null,
+  "loop_id": "l-47e9b792"
+ },
+ "challenge_run_id": "r-82936044",
+ "spec": {
+  "kind": "push",
+  "seeds": [
+   506765,
+   506766,
+   506767,
+   506768,
+   506769,
+   506770,
+   506771,
+   506772
+  ],
+  "duration": 5.0,
+  "perturb": 0.02,
+  "target_force": 10.0,
+  "push_time": 1.0,
+  "push_duration": 0.15,
+  "max_force": 80.0,
+  "start": "drawn",
+  "settle_s": 0.3
+ },
+ "evidence": {
+  "creature": {
+   "mode": "experimental",
+   "body": {
+    "torso_mass": 5.0071,
+    "leg_density": 1000.0,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0,
+    "rear": {
+     "thigh_length": 0.3016,
+     "shank_length": 0.3016,
+     "foot_length": 0.1608
+    },
+    "front": {
+     "thigh_length": 0.2999,
+     "shank_length": 0.2999,
+     "foot_length": 0.1608
+    }
+   },
+   "start": {
+    "torso_pitch": 0.0153,
+    "rear_hip": -0.0178,
+    "rear_knee": 0.0,
+    "rear_ankle": -0.0193,
+    "front_hip": -0.0182,
+    "front_knee": -0.0,
+    "front_ankle": -0.0189
+   },
+   "derived": {
+    "leg_length_rear": 0.6033,
+    "leg_length_front": 0.5998,
+    "foot_to_leg": 0.2673,
+    "mass_total": 10.267,
+    "weight_n": 100.7191,
+    "torque_to_weight": 0.9904,
+    "heel_behind_ankle_rear_m": 0.0402,
+    "toe_ahead_of_ankle_rear_m": 0.1206,
+    "heel_behind_ankle_front_m": 0.0402,
+    "toe_ahead_of_ankle_front_m": 0.1206
+   }
+  },
+  "challenge": {
+   "kind": "push",
+   "seeds_n": 8,
+   "duration": 5.0,
+   "settle_s": 0.3,
+   "start": "drawn",
+   "target_force": 10.0
+  },
+  "controller": {
+   "stand": {
+    "kind": "stand-pd",
+    "edited": false,
+    "kp": 150.0,
+    "kd": 8.0,
+    "gait_freq": 0.0,
+    "hip_amp": 0.0,
+    "knee_amp": 0.0,
+    "balance_gain": 80.0,
+    "stand_hip": 0.0,
+    "stand_knee": 0.0
+   }
+  },
+  "outcome": {
+   "aggregate": "PASS",
+   "counts": {
+    "FAIL": 0,
+    "POOR": 0,
+    "PASS": 8,
+    "ERROR": 0
+   },
+   "seeds_n": 8,
+   "score": {
+    "median": 12.5,
+    "mean": 11.875,
+    "min": 10.0,
+    "max": 12.5
+   }
+  },
+  "seeds": [
+   {
+    "seed": 506769,
+    "outcome": "PASS",
+    "score": 10.0,
+    "metrics": {
+     "critical_force_fwd": 30.0,
+     "critical_force_bwd": 10.0,
+     "weak_direction": "backward",
+     "censored": false,
+     "settle_s": 0.3,
+     "z_ref": 0.7662,
+     "censored_bwd": false,
+     "censored_fwd": false
+    },
+    "events": [
+     {
+      "kind": "foot_slip",
+      "time": 2.516
+     }
+    ]
+   },
+   {
+    "seed": 506772,
+    "outcome": "PASS",
+    "score": 10.0,
+    "metrics": {
+     "critical_force_fwd": 30.0,
+     "critical_force_bwd": 10.0,
+     "weak_direction": "backward",
+     "censored": false,
+     "settle_s": 0.3,
+     "z_ref": 0.7671,
+     "censored_bwd": false,
+     "censored_fwd": false
+    },
+    "events": [
+     {
+      "kind": "fall",
+      "time": 2.371
+     }
+    ]
+   },
+   {
+    "seed": 506766,
+    "outcome": "PASS",
+    "score": 12.5,
+    "metrics": {
+     "critical_force_fwd": 27.5,
+     "critical_force_bwd": 12.5,
+     "weak_direction": "backward",
+     "censored": false,
+     "settle_s": 0.3,
+     "z_ref": 0.7689,
+     "censored_bwd": false,
+     "censored_fwd": false
+    },
+    "events": [
+     {
+      "kind": "foot_slip",
+      "time": 2.406
+     }
+    ]
+   },
+   {
+    "seed": 506767,
+    "outcome": "PASS",
+    "score": 12.5,
+    "metrics": {
+     "critical_force_fwd": 27.5,
+     "critical_force_bwd": 12.5,
+     "weak_direction": "backward",
+     "censored": false,
+     "settle_s": 0.3,
+     "z_ref": 0.7656,
+     "censored_bwd": false,
+     "censored_fwd": false
+    },
+    "events": [
+     {
+      "kind": "fall",
+      "time": 2.421
+     }
+    ]
+   },
+   {
+    "seed": 506770,
+    "outcome": "PASS",
+    "score": 12.5,
+    "metrics": {
+     "critical_force_fwd": 27.5,
+     "critical_force_bwd": 12.5,
+     "weak_direction": "backward",
+     "censored": false,
+     "settle_s": 0.3,
+     "z_ref": 0.7652,
+     "censored_bwd": false,
+     "censored_fwd": false
+    },
+    "events": [
+     {
+      "kind": "foot_slip",
+      "time": 2.261
+     }
+    ]
+   },
+   {
+    "seed": 506771,
+    "outcome": "PASS",
+    "score": 12.5,
+    "metrics": {
+     "critical_force_fwd": 27.5,
+     "critical_force_bwd": 12.5,
+     "weak_direction": "backward",
+     "censored": false,
+     "settle_s": 0.3,
+     "z_ref": 0.7675,
+     "censored_bwd": false,
+     "censored_fwd": false
+    },
+    "events": [
+     {
+      "kind": "fall",
+      "time": 2.381
+     }
+    ]
+   }
+  ],
+  "forensics": {
+   "disturbance": {
+    "push_time_s": 1.0083,
+    "push_force_N": 12.5,
+    "push_duration_s": 0.15,
+    "impulse_Ns": 1.875,
+    "pitch_before_push_rad": -0.003,
+    "com_vx_before_push_mps": -0.0019,
+    "com_vx_at_push_end_mps": 0.1344,
+    "com_x_shift_during_push_m": 0.01,
+    "peak_abs_pitch_within_1s_rad": 0.1583,
+    "time_of_peak_pitch_s": 2.006,
+    "peak_pitch_rate_within_1s_rad_s": 0.3501
+   },
+   "failure": {
+    "fell": true,
+    "fall_time_s": 2.681,
+    "fall_after_push_end_s": 1.523,
+    "instability_onset_s": 1.056,
+    "onset_after_push_start_s": 0.048,
+    "com_left_support_s": 1.056,
+    "pitch_at_fall_rad": 1.0108,
+    "min_torso_height_m": 0.0338
+   },
+   "support": {
+    "support_length_before_push_m": 0.1608,
+    "com_margin_before_push_m": 0.0443,
+    "xcom_margin_before_push_m": 0.0447,
+    "min_com_margin_after_push_m": -0.3619,
+    "min_xcom_margin_after_push_m": -0.5385,
+    "time_of_min_xcom_margin_s": 2.676,
+    "cop_minus_com_x_at_push_end_m": 0.0345,
+    "feet_unloaded_fraction_after_push": 0.0
+   },
+   "actuation": {
+    "torque_limit_Nm": 60.0,
+    "ankle_peak_demand_Nm": 4.2,
+    "ankle_peak_applied_Nm": 4.2,
+    "ankle_demand_over_limit_peak": 0.07,
+    "any_joint_demand_over_limit_peak": 0.07,
+    "fraction_samples_saturated_push_to_fall": 0.0
+   },
+   "contacts": {
+    "transitions": [
+     {
+      "foot": "left",
+      "t_s": 0.021,
+      "event": "touchdown"
+     },
+     {
+      "foot": "right",
+      "t_s": 2.146,
+      "event": "touchdown"
+     },
+     {
+      "foot": "left",
+      "t_s": 2.366,
+      "event": "liftoff"
+     },
+     {
+      "foot": "left",
+      "t_s": 2.371,
+      "event": "touchdown"
+     },
+     {
+      "foot": "left",
+      "t_s": 2.386,
+      "event": "liftoff"
+     }
+    ],
+    "peak_slip_speed_mps": 0.39,
+    "fraction_samples_slipping_push_to_fall": 0.107,
+    "foot_friction": 1.0
+   },
+   "timeline": {
+    "columns": [
+     "t_s",
+     "pitch_rad",
+     "pitch_rate_rad_s",
+     "com_vx_mps",
+     "com_margin_m",
+     "xcom_margin_m",
+     "feet_loaded",
+     "ankle_demand_over_limit",
+     "max_slip_speed_mps"
+    ],
+    "rows": [
+     [
+      0.911,
+      -0.003,
+      -0.006,
+      -0.002,
+      0.044,
+      0.045,
+      1,
+      0.0,
+      0.0
+     ],
+     [
+      1.311,
+      0.062,
+      0.114,
+      0.094,
+      -0.018,
+      -0.003,
+      1,
+      0.06,
+      0.0
+     ],
+     [
+      1.811,
+      0.121,
+      0.138,
+      0.069,
+      -0.012,
+      -0.027,
+      1,
+      0.07,
+      0.002
+     ],
+     [
+      2.211,
+      0.244,
+      0.615,
+      0.279,
+      -0.057,
+      -0.117,
+      2,
+      0.04,
+      0.026
+     ]
+    ]
+   },
+   "direction": "backward",
+   "force_N": -12.5,
+   "mirrored": true,
+   "first_failing_force_N": 12.5,
+   "seed": 506769,
+   "seed_outcome": "PASS",
+   "seed_score": 10.0
+  },
+  "bounds": {
+   "torso_mass": {
+    "lo": 0.2,
+    "hi": 80.0,
+    "current": 5.0071
+   },
+   "thigh_length": {
+    "lo": 0.05,
+    "hi": 1.2,
+    "rear": 0.3016,
+    "front": 0.2999
+   },
+   "shank_length": {
+    "lo": 0.05,
+    "hi": 1.2,
+    "rear": 0.3016,
+    "front": 0.2999
+   },
+   "foot_length": {
+    "lo": 0.02,
+    "hi": 0.6,
+    "rear": 0.1608,
+    "front": 0.1608
+   },
+   "leg_density": {
+    "lo": 50.0,
+    "hi": 8000.0,
+    "current": 1000.0
+   },
+   "foot_friction": {
+    "lo": 0.01,
+    "hi": 3.0,
+    "current": 1.0
+   },
+   "torque_limit": {
+    "lo": 0.5,
+    "hi": 500.0,
+    "current": 60.0
+   },
+   "stand": {
+    "kp": {
+     "lo": 0.0,
+     "hi": 500.0,
+     "current": 150.0,
+     "u": 0.3
+    },
+    "kd": {
+     "lo": 0.0,
+     "hi": 50.0,
+     "current": 8.0,
+     "u": 0.16
+    },
+    "balance_gain": {
+     "lo": 0.0,
+     "hi": 200.0,
+     "current": 80.0,
+     "u": 0.4
+    },
+    "stand_hip": {
+     "lo": -0.3,
+     "hi": 0.3,
+     "current": 0.0,
+     "u": 0.5
+    },
+    "stand_knee": {
+     "lo": -0.8,
+     "hi": 0.0,
+     "current": 0.0,
+     "u": 1.0
+    }
+   }
+  }
+ },
+ "model_calls": [
+  {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "settings": {
+    "temperature": 0.6,
+    "max_tokens": 8000,
+    "reasoning_effort": null,
+    "json_schema": true,
+    "schema_name": "forge_reply",
+    "extra_body": {
+     "chat_template_kwargs": {
+      "enable_thinking": false
+     }
+    },
+    "timeout_s": 180.0,
+    "purpose": "investigation",
+    "investigation_id": "i-eb2d953f2c8e"
+   },
+   "prompt_sha256": "a2ff3a217d325830f30daddf5c22d79d195417732394da9f6e2bb92eeb7bf166",
+   "messages": [
+    {
+     "role": "system",
+     "content": "You are the Physics Investigator of Creature Forge. A person drew a planar (side-view, 2-D) two-legged creature: a torso with a REAR leg and a FRONT leg, each with thigh, shank, foot and hip, knee, ankle motors. MuJoCo simulates it under gravity 9.81 m/s^2.\n\nCHALLENGE. PUSH: the creature stands, then a horizontal shove of 0.15 s is applied to the torso. For each seed the largest survivable shove is searched forwards and backwards (up to a ceiling). Score = the smaller of the two critical forces in newtons (higher is better); PASS needs score >= challenge.target_force.\nOutcome per seed: PASS, POOR (did it, but with a small margin) or FAIL (fell / cannot do it); ERROR means the run itself failed.\n\nHOW YOU ARE JUDGED. Your proposals are untrusted. MuJoCo will independently re-run the original creature and each valid proposal on fresh random seeds, and ALSO a matched-random edit of the same size and a simple rule-based heuristic. A change is adopted only if it beats the original significantly; your confidence is never used. So diagnose carefully and honestly. If no change is likely to help, say so: give low confidence (<= 0.2) on your best small proposal instead of guessing.\nACCEPTANCE RULE (verdict_v1): on held-out seeds, paired with the unchanged creature, the median per-seed gain in critical push force must be at least 3 N and at least 10% of the original's median; forces are measured to 0.625 N, and the gains must be consistent across seeds (one-sided sign test, p < 0.05). A change smaller than this is recorded as not verified even if it helps a little, so size each edit to the effect you predict (within the edit rules below).\n\nEVIDENCE. The user message lists every measurement as one `path=value` line; these paths are the ONLY citable ones. Seeds are ordered worst to best by score (seeds[0] is the worst). Derived: leg_length = thigh + shank; foot_to_leg = mean foot length / mean leg length; weight_n = mass_total * 9.81; torque_to_weight = torque_limit / (weight_n * mean leg length); heel_behind_ankle_* and toe_ahead_of_ankle_* = how far each sole reaches behind / in front of its ankle in the compiled model (both scale with foot_length). A second section, EDIT BOUNDS, gives each editable parameter's current value and range.\n\nEDITABLE PARAMETERS (mode: experimental):\n- torso_mass [morphology; targets both] torso mass parameter (kg); sets the torso box density\n- thigh_length [morphology; targets both|rear|front] thigh length, hip to knee (m)\n- shank_length [morphology; targets both|rear|front] shank length, knee to ankle (m)\n- foot_length [morphology; targets both|rear|front] foot length (m); the foot extends mostly forward of the ankle\n- leg_density [morphology; targets both] density of every leg segment incl. feet (kg/m^3)\n- foot_friction [morphology; targets both] foot-floor Coulomb friction coefficient\n- torque_limit [actuation; targets both] motor torque limit of every joint (N*m)\n- stand.kp [control; targets both] joint position-gain (N*m/rad) of the standing PD controller\n- stand.kd [control; targets both] joint damping gain (N*m*s/rad) of the standing PD controller\n- stand.balance_gain [control; targets both] ankle torque feedback on torso pitch and pitch rate\n- stand.stand_hip [control; targets both] hip angle the standing controller holds (rad)\n- stand.stand_knee [control; targets both] knee angle the standing controller holds (rad, negative = flexed)\n\nEDIT RULES. Each edit = {param, op, value, target}. op 'scale': new = old * value. op 'set': new = value. At most 4 edits, no two on the same field. Morphology/actuation: new/old ratio in [0.5, 1.5]; control parameters (stand.*, walk.*): the change in u = (value - lo) / (hi - lo) must satisfy |delta u| <= 0.25 (lo, hi and u are in EDIT BOUNDS). The result must stay inside the bounds: out-of-range edits are REJECTED, never clipped. target 'rear'/'front' applies to leg lengths only; every other parameter uses 'both'. The pose cannot be edited. A proposal's category must equal the kinds of its edits: 'morphology' (morphology and torque_limit), 'control' (stand.* or walk.*) or 'combined'. retune_controller must be false. \n\nREPLY: ONE JSON object, nothing else (no prose, no code fence):\n{\"diagnosis\":{\"summary\":\"<=400 chars\",\"hypotheses\":[{\"id\":\"H1\",\"mechanism\":\"what physically happens and why\",\"evidence\":[\"<path copied from the EVIDENCE lines>\"],\"competing\":[\"an alternative explanation\"]}]},\"proposals\":[{\"id\":\"P1\",\"hypothesis\":\"H1\",\"category\":\"morphology|control|combined\",\"edits\":[{\"param\":\"<editable id>\",\"op\":\"scale|set\",\"value\":0.0,\"target\":\"both\"}],\"retune_controller\":false,\"prediction\":{\"metric\":\"score\",\"direction\":\"increase\",\"expected_change\":\"...\"},\"tradeoffs\":\"...\",\"confidence\":0.0,\"verification\":\"...\"}]}\nRules: 1-3 hypotheses with ids exactly H1, H2, H3 (upper case); 1-3 proposals with ids P1, P2, P3. proposals[].hypothesis is the hypothesis ID (e.g. \"H1\"), never its text. Each hypothesis cites 1-6 paths copied EXACTLY from the EVIDENCE lines (the path only, left of '=', no value appended); prefer numeric measurements. confidence is a number in [0, 1]. Keep every text field short."
+    },
+    {
+     "role": "user",
+     "content": "EVIDENCE (path=value):\ncreature.mode=\"experimental\"\ncreature.body.torso_mass=5.0071\ncreature.body.leg_density=1000.0\ncreature.body.foot_friction=1.0\ncreature.body.torque_limit=60.0\ncreature.body.rear.thigh_length=0.3016\ncreature.body.rear.shank_length=0.3016\ncreature.body.rear.foot_length=0.1608\ncreature.body.front.thigh_length=0.2999\ncreature.body.front.shank_length=0.2999\ncreature.body.front.foot_length=0.1608\ncreature.start.torso_pitch=0.0153\ncreature.start.rear_hip=-0.0178\ncreature.start.rear_knee=0.0\ncreature.start.rear_ankle=-0.0193\ncreature.start.front_hip=-0.0182\ncreature.start.front_knee=-0.0\ncreature.start.front_ankle=-0.0189\ncreature.derived.leg_length_rear=0.6033\ncreature.derived.leg_length_front=0.5998\ncreature.derived.foot_to_leg=0.2673\ncreature.derived.mass_total=10.267\ncreature.derived.weight_n=100.7191\ncreature.derived.torque_to_weight=0.9904\ncreature.derived.heel_behind_ankle_rear_m=0.0402\ncreature.derived.toe_ahead_of_ankle_rear_m=0.1206\ncreature.derived.heel_behind_ankle_front_m=0.0402\ncreature.derived.toe_ahead_of_ankle_front_m=0.1206\nchallenge.kind=\"push\"\nchallenge.seeds_n=8\nchallenge.duration=5.0\nchallenge.settle_s=0.3\nchallenge.start=\"drawn\"\nchallenge.target_force=10.0\ncontroller.stand.kind=\"stand-pd\"\ncontroller.stand.edited=false\ncontroller.stand.kp=150.0\ncontroller.stand.kd=8.0\ncontroller.stand.gait_freq=0.0\ncontroller.stand.hip_amp=0.0\ncontroller.stand.knee_amp=0.0\ncontroller.stand.balance_gain=80.0\ncontroller.stand.stand_hip=0.0\ncontroller.stand.stand_knee=0.0\noutcome.aggregate=\"PASS\"\noutcome.counts.FAIL=0\noutcome.counts.POOR=0\noutcome.counts.PASS=8\noutcome.counts.ERROR=0\noutcome.seeds_n=8\noutcome.score.median=12.5\noutcome.score.mean=11.875\noutcome.score.min=10.0\noutcome.score.max=12.5\nseeds[0].seed=506769\nseeds[0].outcome=\"PASS\"\nseeds[0].score=10.0\nseeds[0].metrics.critical_force_fwd=30.0\nseeds[0].metrics.critical_force_bwd=10.0\nseeds[0].metrics.weak_direction=\"backward\"\nseeds[0].metrics.censored=false\nseeds[0].metrics.settle_s=0.3\nseeds[0].metrics.z_ref=0.7662\nseeds[0].metrics.censored_bwd=false\nseeds[0].metrics.censored_fwd=false\nseeds[0].events[0].kind=\"foot_slip\"\nseeds[0].events[0].time=2.516\nseeds[1].seed=506772\nseeds[1].outcome=\"PASS\"\nseeds[1].score=10.0\nseeds[1].metrics.critical_force_fwd=30.0\nseeds[1].metrics.critical_force_bwd=10.0\nseeds[1].metrics.weak_direction=\"backward\"\nseeds[1].metrics.censored=false\nseeds[1].metrics.settle_s=0.3\nseeds[1].metrics.z_ref=0.7671\nseeds[1].metrics.censored_bwd=false\nseeds[1].metrics.censored_fwd=false\nseeds[1].events[0].kind=\"fall\"\nseeds[1].events[0].time=2.371\nseeds[2].seed=506766\nseeds[2].outcome=\"PASS\"\nseeds[2].score=12.5\nseeds[2].metrics.critical_force_fwd=27.5\nseeds[2].metrics.critical_force_bwd=12.5\nseeds[2].metrics.weak_direction=\"backward\"\nseeds[2].metrics.censored=false\nseeds[2].metrics.settle_s=0.3\nseeds[2].metrics.z_ref=0.7689\nseeds[2].metrics.censored_bwd=false\nseeds[2].metrics.censored_fwd=false\nseeds[2].events[0].kind=\"foot_slip\"\nseeds[2].events[0].time=2.406\nseeds[3].seed=506767\nseeds[3].outcome=\"PASS\"\nseeds[3].score=12.5\nseeds[3].metrics.critical_force_fwd=27.5\nseeds[3].metrics.critical_force_bwd=12.5\nseeds[3].metrics.weak_direction=\"backward\"\nseeds[3].metrics.censored=false\nseeds[3].metrics.settle_s=0.3\nseeds[3].metrics.z_ref=0.7656\nseeds[3].metrics.censored_bwd=false\nseeds[3].metrics.censored_fwd=false\nseeds[3].events[0].kind=\"fall\"\nseeds[3].events[0].time=2.421\nseeds[4].seed=506770\nseeds[4].outcome=\"PASS\"\nseeds[4].score=12.5\nseeds[4].metrics.critical_force_fwd=27.5\nseeds[4].metrics.critical_force_bwd=12.5\nseeds[4].metrics.weak_direction=\"backward\"\nseeds[4].metrics.censored=false\nseeds[4].metrics.settle_s=0.3\nseeds[4].metrics.z_ref=0.7652\nseeds[4].metrics.censored_bwd=false\nseeds[4].metrics.censored_fwd=false\nseeds[4].events[0].kind=\"foot_slip\"\nseeds[4].events[0].time=2.261\nseeds[5].seed=506771\nseeds[5].outcome=\"PASS\"\nseeds[5].score=12.5\nseeds[5].metrics.critical_force_fwd=27.5\nseeds[5].metrics.critical_force_bwd=12.5\nseeds[5].metrics.weak_direction=\"backward\"\nseeds[5].metrics.censored=false\nseeds[5].metrics.settle_s=0.3\nseeds[5].metrics.z_ref=0.7675\nseeds[5].metrics.censored_bwd=false\nseeds[5].metrics.censored_fwd=false\nseeds[5].events[0].kind=\"fall\"\nseeds[5].events[0].time=2.381\nforensics.disturbance.push_time_s=1.0083\nforensics.disturbance.push_force_N=12.5\nforensics.disturbance.push_duration_s=0.15\nforensics.disturbance.impulse_Ns=1.875\nforensics.disturbance.pitch_before_push_rad=-0.003\nforensics.disturbance.com_vx_before_push_mps=-0.0019\nforensics.disturbance.com_vx_at_push_end_mps=0.1344\nforensics.disturbance.com_x_shift_during_push_m=0.01\nforensics.disturbance.peak_abs_pitch_within_1s_rad=0.1583\nforensics.disturbance.time_of_peak_pitch_s=2.006\nforensics.disturbance.peak_pitch_rate_within_1s_rad_s=0.3501\nforensics.failure.fell=true\nforensics.failure.fall_time_s=2.681\nforensics.failure.fall_after_push_end_s=1.523\nforensics.failure.instability_onset_s=1.056\nforensics.failure.onset_after_push_start_s=0.048\nforensics.failure.com_left_support_s=1.056\nforensics.failure.pitch_at_fall_rad=1.0108\nforensics.failure.min_torso_height_m=0.0338\nforensics.support.support_length_before_push_m=0.1608\nforensics.support.com_margin_before_push_m=0.0443\nforensics.support.xcom_margin_before_push_m=0.0447\nforensics.support.min_com_margin_after_push_m=-0.3619\nforensics.support.min_xcom_margin_after_push_m=-0.5385\nforensics.support.time_of_min_xcom_margin_s=2.676\nforensics.support.cop_minus_com_x_at_push_end_m=0.0345\nforensics.support.feet_unloaded_fraction_after_push=0.0\nforensics.actuation.torque_limit_Nm=60.0\nforensics.actuation.ankle_peak_demand_Nm=4.2\nforensics.actuation.ankle_peak_applied_Nm=4.2\nforensics.actuation.ankle_demand_over_limit_peak=0.07\nforensics.actuation.any_joint_demand_over_limit_peak=0.07\nforensics.actuation.fraction_samples_saturated_push_to_fall=0.0\nforensics.contacts.transitions[0].foot=\"left\"\nforensics.contacts.transitions[0].t_s=0.021\nforensics.contacts.transitions[0].event=\"touchdown\"\nforensics.contacts.transitions[1].foot=\"right\"\nforensics.contacts.transitions[1].t_s=2.146\nforensics.contacts.transitions[1].event=\"touchdown\"\nforensics.contacts.transitions[2].foot=\"left\"\nforensics.contacts.transitions[2].t_s=2.366\nforensics.contacts.transitions[2].event=\"liftoff\"\nforensics.contacts.transitions[3].foot=\"left\"\nforensics.contacts.transitions[3].t_s=2.371\nforensics.contacts.transitions[3].event=\"touchdown\"\nforensics.contacts.transitions[4].foot=\"left\"\nforensics.contacts.transitions[4].t_s=2.386\nforensics.contacts.transitions[4].event=\"liftoff\"\nforensics.contacts.peak_slip_speed_mps=0.39\nforensics.contacts.fraction_samples_slipping_push_to_fall=0.107\nforensics.contacts.foot_friction=1.0\nforensics.timeline.columns[0]=\"t_s\"\nforensics.timeline.columns[1]=\"pitch_rad\"\nforensics.timeline.columns[2]=\"pitch_rate_rad_s\"\nforensics.timeline.columns[3]=\"com_vx_mps\"\nforensics.timeline.columns[4]=\"com_margin_m\"\nforensics.timeline.columns[5]=\"xcom_margin_m\"\nforensics.timeline.columns[6]=\"feet_loaded\"\nforensics.timeline.columns[7]=\"ankle_demand_over_limit\"\nforensics.timeline.columns[8]=\"max_slip_speed_mps\"\nforensics.timeline.rows[0][0]=0.911\nforensics.timeline.rows[0][1]=-0.003\nforensics.timeline.rows[0][2]=-0.006\nforensics.timeline.rows[0][3]=-0.002\nforensics.timeline.rows[0][4]=0.044\nforensics.timeline.rows[0][5]=0.045\nforensics.timeline.rows[0][6]=1\nforensics.timeline.rows[0][7]=0.0\nforensics.timeline.rows[0][8]=0.0\nforensics.timeline.rows[1][0]=1.311\nforensics.timeline.rows[1][1]=0.062\nforensics.timeline.rows[1][2]=0.114\nforensics.timeline.rows[1][3]=0.094\nforensics.timeline.rows[1][4]=-0.018\nforensics.timeline.rows[1][5]=-0.003\nforensics.timeline.rows[1][6]=1\nforensics.timeline.rows[1][7]=0.06\nforensics.timeline.rows[1][8]=0.0\nforensics.timeline.rows[2][0]=1.811\nforensics.timeline.rows[2][1]=0.121\nforensics.timeline.rows[2][2]=0.138\nforensics.timeline.rows[2][3]=0.069\nforensics.timeline.rows[2][4]=-0.012\nforensics.timeline.rows[2][5]=-0.027\nforensics.timeline.rows[2][6]=1\nforensics.timeline.rows[2][7]=0.07\nforensics.timeline.rows[2][8]=0.002\nforensics.timeline.rows[3][0]=2.211\nforensics.timeline.rows[3][1]=0.244\nforensics.timeline.rows[3][2]=0.615\nforensics.timeline.rows[3][3]=0.279\nforensics.timeline.rows[3][4]=-0.057\nforensics.timeline.rows[3][5]=-0.117\nforensics.timeline.rows[3][6]=2\nforensics.timeline.rows[3][7]=0.04\nforensics.timeline.rows[3][8]=0.026\nforensics.direction=\"backward\"\nforensics.force_N=-12.5\nforensics.mirrored=true\nforensics.first_failing_force_N=12.5\nforensics.seed=506769\nforensics.seed_outcome=\"PASS\"\nforensics.seed_score=10.0\n\nEDIT BOUNDS:\ntorso_mass: current=5.0071 range=[0.2, 80]\nthigh_length: rear=0.3016 front=0.2999 range=[0.05, 1.2]\nshank_length: rear=0.3016 front=0.2999 range=[0.05, 1.2]\nfoot_length: rear=0.1608 front=0.1608 range=[0.02, 0.6]\nleg_density: current=1000 range=[50, 8000]\nfoot_friction: current=1 range=[0.01, 3]\ntorque_limit: current=60 range=[0.5, 500]\nstand.kp: current=150 range=[0, 500] u=0.3\nstand.kd: current=8 range=[0, 50] u=0.16\nstand.balance_gain: current=80 range=[0, 200] u=0.4\nstand.stand_hip: current=0 range=[-0.3, 0.3] u=0.5\nstand.stand_knee: current=0 range=[-0.8, 0] u=1"
+    }
+   ],
+   "raw_response": {
+    "id": "chatcmpl-bc593af079d6ab7a",
+    "choices": [
+     {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+       "content": "{\"diagnosis\": {\"summary\": \"The weak direction is consistently backward, with failure triggered by foot slip events. Critical backward force equals ~10\u202fN for many seeds, matching the target force, indicating marginal stability. Increasing rear foot friction should raise the slip threshold and improve backward push resistance.\", \"hypotheses\": [{\"id\": \"H1\", \"mechanism\": \"Backward push creates rear heel slip due to insufficient friction; increasing foot_friction raises the maximum horizontal force before slip occurs.\", \"evidence\": [\"seeds[0].metrics.weak_direction\", \"seeds[0].events[0].kind\", \"forensics.contacts.foot_friction\", \"forensics.contacts.peak_slip_speed_mps\", \"forensics.support.com_margin_before_push_m\"], \"competing\": [\"Insufficient ankle torque limits cause joint saturation before slip.\"]}]}, \"proposals\": [{\"id\": \"P1\", \"hypothesis\": \"H1\", \"category\": \"morphology\", \"edits\": [{\"param\": \"foot_friction\", \"op\": \"scale\", \"value\": 1.5, \"target\": \"both\"}], \"retune_controller\": false, \"prediction\": {\"metric\": \"score\", \"direction\": \"increase\", \"expected_change\": \"+2.5 N\"}, \"tradeoffs\": \"Higher friction may increase ground reaction forces slightly but unlikely to impair standing.\", \"confidence\": 0.7, \"verification\": \"Measured by increased critical_force_bwd in seeds with slip events.\"}]}",
+       "refusal": null,
+       "role": "assistant",
+       "annotations": null,
+       "audio": null,
+       "function_call": null,
+       "tool_calls": null,
+       "reasoning": null
+      },
+      "stop_reason": null,
+      "token_ids": null,
+      "routed_experts": null
+     }
+    ],
+    "created": 1792051794,
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "object": "chat.completion",
+    "moderation": null,
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.1.dev1+g5001743e3-dp2-9bbaa064",
+    "usage": {
+     "completion_tokens": 336,
+     "prompt_tokens": 5234,
+     "total_tokens": 5570,
+     "completion_tokens_details": {
+      "accepted_prediction_tokens": null,
+      "audio_tokens": null,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": null
+     },
+     "prompt_tokens_details": {
+      "audio_tokens": null,
+      "cached_tokens": 0,
+      "created_cache_tokens": 0,
+      "multimodal_tokens": null
+     },
+     "prompt_cache_hit_tokens": 0,
+     "prompt_cache_miss_tokens": 5234
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+   },
+   "content": "{\"diagnosis\": {\"summary\": \"The weak direction is consistently backward, with failure triggered by foot slip events. Critical backward force equals ~10\u202fN for many seeds, matching the target force, indicating marginal stability. Increasing rear foot friction should raise the slip threshold and improve backward push resistance.\", \"hypotheses\": [{\"id\": \"H1\", \"mechanism\": \"Backward push creates rear heel slip due to insufficient friction; increasing foot_friction raises the maximum horizontal force before slip occurs.\", \"evidence\": [\"seeds[0].metrics.weak_direction\", \"seeds[0].events[0].kind\", \"forensics.contacts.foot_friction\", \"forensics.contacts.peak_slip_speed_mps\", \"forensics.support.com_margin_before_push_m\"], \"competing\": [\"Insufficient ankle torque limits cause joint saturation before slip.\"]}]}, \"proposals\": [{\"id\": \"P1\", \"hypothesis\": \"H1\", \"category\": \"morphology\", \"edits\": [{\"param\": \"foot_friction\", \"op\": \"scale\", \"value\": 1.5, \"target\": \"both\"}], \"retune_controller\": false, \"prediction\": {\"metric\": \"score\", \"direction\": \"increase\", \"expected_change\": \"+2.5 N\"}, \"tradeoffs\": \"Higher friction may increase ground reaction forces slightly but unlikely to impair standing.\", \"confidence\": 0.7, \"verification\": \"Measured by increased critical_force_bwd in seeds with slip events.\"}]}",
+   "reasoning_present": false,
+   "request_id": "183b4d0c9fccc44926e85fa2c0d97145",
+   "latency_s": 2.233545753999806,
+   "usage": {
+    "prompt_tokens": 5234,
+    "completion_tokens": 336,
+    "total_tokens": 5570,
+    "reasoning_tokens": 0
+   },
+   "cost_usd": 0.0018725999999999999,
+   "finish_reason": "stop",
+   "http_status": 200,
+   "error": null,
+   "budget_refused": false,
+   "sent": true,
+   "ok": true
+  }
+ ],
+ "reply": {
+  "diagnosis": {
+   "summary": "The weak direction is consistently backward, with failure triggered by foot slip events. Critical backward force equals ~10\u202fN for many seeds, matching the target force, indicating marginal stability. Increasing rear foot friction should raise the slip threshold and improve backward push resistance.",
+   "hypotheses": [
+    {
+     "id": "H1",
+     "mechanism": "Backward push creates rear heel slip due to insufficient friction; increasing foot_friction raises the maximum horizontal force before slip occurs.",
+     "evidence": [
+      "seeds[0].metrics.weak_direction",
+      "seeds[0].events[0].kind",
+      "forensics.contacts.foot_friction",
+      "forensics.contacts.peak_slip_speed_mps",
+      "forensics.support.com_margin_before_push_m"
+     ],
+     "competing": [
+      "Insufficient ankle torque limits cause joint saturation before slip."
+     ]
+    }
+   ]
+  },
+  "proposals": [
+   {
+    "id": "P1",
+    "hypothesis": "H1",
+    "category": "morphology",
+    "edits": [
+     {
+      "param": "foot_friction",
+      "op": "scale",
+      "value": 1.5,
+      "target": "both"
+     }
+    ],
+    "retune_controller": false,
+    "prediction": {
+     "metric": "score",
+     "direction": "increase",
+     "expected_change": "+2.5 N"
+    },
+    "tradeoffs": "Higher friction may increase ground reaction forces slightly but unlikely to impair standing.",
+    "confidence": 0.7,
+    "verification": "Measured by increased critical_force_bwd in seeds with slip events."
+   }
+  ]
+ },
+ "validation": {
+  "schema_errors": [],
+  "hypotheses": [
+   {
+    "id": "H1",
+    "status": "accepted",
+    "reasons": [],
+    "mechanism": "Backward push creates rear heel slip due to insufficient friction; increasing foot_friction raises the maximum horizontal force before slip occurs.",
+    "evidence": [
+     "seeds[0].metrics.weak_direction",
+     "seeds[0].events[0].kind",
+     "forensics.contacts.foot_friction",
+     "forensics.contacts.peak_slip_speed_mps",
+     "forensics.support.com_margin_before_push_m"
+    ],
+    "competing": [
+     "Insufficient ankle torque limits cause joint saturation before slip."
+    ],
+    "values": {
+     "seeds[0].metrics.weak_direction": "backward",
+     "seeds[0].events[0].kind": "foot_slip",
+     "forensics.contacts.foot_friction": 1.0,
+     "forensics.contacts.peak_slip_speed_mps": 0.39,
+     "forensics.support.com_margin_before_push_m": 0.0443
+    }
+   }
+  ],
+  "proposals": [
+   {
+    "id": "P1",
+    "status": "accepted",
+    "reasons": [],
+    "hypothesis": "H1",
+    "category": "morphology",
+    "edits": [
+     {
+      "param": "foot_friction",
+      "op": "scale",
+      "value": 1.5,
+      "target": "both"
+     }
+    ],
+    "retune_controller": false,
+    "prediction": {
+     "metric": "score",
+     "direction": "increase",
+     "expected_change": "+2.5 N"
+    },
+    "tradeoffs": "Higher friction may increase ground reaction forces slightly but unlikely to impair standing.",
+    "confidence": 0.7,
+    "verification": "Measured by increased critical_force_bwd in seeds with slip events.",
+    "citations": [
+     "seeds[0].metrics.weak_direction",
+     "seeds[0].events[0].kind",
+     "forensics.contacts.foot_friction",
+     "forensics.contacts.peak_slip_speed_mps",
+     "forensics.support.com_margin_before_push_m"
+    ],
+    "magnitudes": [
+     0.405465
+    ]
+   }
+  ],
+  "warnings": [],
+  "summary": "The weak direction is consistently backward, with failure triggered by foot slip events. Critical backward force equals ~10\u202fN for many seeds, matching the target force, indicating marginal stability. Increasing rear foot friction should raise the slip threshold and improve backward push resistance."
+ },
+ "arms": [
+  {
+   "arm_id": "original",
+   "source": "original",
+   "proposal_id": null,
+   "edits": [],
+   "retune": null,
+   "provenance": "LIVE",
+   "category": null,
+   "body": {
+    "torso_mass": 5.0071,
+    "thigh_length": 0.301626,
+    "shank_length": 0.301626,
+    "foot_length": 0.160788,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0,
+    "leg_density": 1000.0,
+    "thigh_length_r": 0.299876,
+    "shank_length_r": 0.299876,
+    "foot_length_r": 0.160788,
+    "pose": [
+     0.015281,
+     -0.017767,
+     0.0,
+     -0.019283,
+     -0.018198,
+     -0.0,
+     -0.018852
+    ]
+   },
+   "controllers": {
+    "stand": {
+     "kp": 150.0,
+     "kd": 8.0,
+     "gait_freq": 0.0,
+     "hip_amp": 0.0,
+     "knee_amp": 0.0,
+     "balance_gain": 80.0,
+     "stand_hip": 0.0,
+     "stand_knee": 0.0
+    },
+    "walk": null
+   },
+   "controller_provenance": {
+    "stand": {
+     "kind": "stand-pd",
+     "params": {
+      "kp": 150.0,
+      "kd": 8.0,
+      "gait_freq": 0.0,
+      "hip_amp": 0.0,
+      "knee_amp": 0.0,
+      "balance_gain": 80.0,
+      "stand_hip": 0.0,
+      "stand_knee": 0.0
+     },
+     "edited": false
+    },
+    "walk": {
+     "kind": "none",
+     "vector": null,
+     "adaptation": null
+    }
+   },
+   "error": null,
+   "retune_requested": false,
+   "rollouts": {
+    "adaptation": 0,
+    "screening": 102,
+    "validation": 188,
+    "total": 290
+   }
+  },
+  {
+   "arm_id": "ai:P1",
+   "source": "nemotron",
+   "proposal_id": "P1",
+   "edits": [
+    {
+     "param": "foot_friction",
+     "op": "scale",
+     "value": 1.5,
+     "target": "both"
+    }
+   ],
+   "retune": null,
+   "hypothesis": "H1",
+   "category": "morphology",
+   "provenance": "LIVE",
+   "body": {
+    "torso_mass": 5.0071,
+    "thigh_length": 0.301626,
+    "shank_length": 0.301626,
+    "foot_length": 0.160788,
+    "foot_friction": 1.5,
+    "torque_limit": 60.0,
+    "leg_density": 1000.0,
+    "thigh_length_r": 0.299876,
+    "shank_length_r": 0.299876,
+    "foot_length_r": 0.160788,
+    "pose": [
+     0.015281,
+     -0.017767,
+     0.0,
+     -0.019283,
+     -0.018198,
+     -0.0,
+     -0.018852
+    ]
+   },
+   "controllers": {
+    "stand": {
+     "kp": 150.0,
+     "kd": 8.0,
+     "gait_freq": 0.0,
+     "hip_amp": 0.0,
+     "knee_amp": 0.0,
+     "balance_gain": 80.0,
+     "stand_hip": 0.0,
+     "stand_knee": 0.0
+    },
+    "walk": null
+   },
+   "controller_provenance": {
+    "stand": {
+     "kind": "stand-pd",
+     "params": {
+      "kp": 150.0,
+      "kd": 8.0,
+      "gait_freq": 0.0,
+      "hip_amp": 0.0,
+      "knee_amp": 0.0,
+      "balance_gain": 80.0,
+      "stand_hip": 0.0,
+      "stand_knee": 0.0
+     },
+     "edited": false
+    },
+    "walk": {
+     "kind": "none",
+     "vector": null,
+     "adaptation": null
+    }
+   },
+   "error": null,
+   "retune_requested": false,
+   "rollouts": {
+    "adaptation": 0,
+    "screening": 102,
+    "validation": 188,
+    "total": 290
+   }
+  },
+  {
+   "arm_id": "random:P1",
+   "source": "random_baseline",
+   "proposal_id": "P1",
+   "edits": [
+    {
+     "param": "foot_length",
+     "op": "scale",
+     "value": 0.6666666666666666,
+     "target": "both"
+    }
+   ],
+   "retune": null,
+   "category": "morphology",
+   "provenance": "LIVE",
+   "body": {
+    "torso_mass": 5.0071,
+    "thigh_length": 0.301626,
+    "shank_length": 0.301626,
+    "foot_length": 0.10719199999999998,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0,
+    "leg_density": 1000.0,
+    "thigh_length_r": 0.299876,
+    "shank_length_r": 0.299876,
+    "foot_length_r": 0.10719199999999998,
+    "pose": [
+     0.015281,
+     -0.017767,
+     0.0,
+     -0.019283,
+     -0.018198,
+     -0.0,
+     -0.018852
+    ]
+   },
+   "controllers": {
+    "stand": {
+     "kp": 150.0,
+     "kd": 8.0,
+     "gait_freq": 0.0,
+     "hip_amp": 0.0,
+     "knee_amp": 0.0,
+     "balance_gain": 80.0,
+     "stand_hip": 0.0,
+     "stand_knee": 0.0
+    },
+    "walk": null
+   },
+   "controller_provenance": {
+    "stand": {
+     "kind": "stand-pd",
+     "params": {
+      "kp": 150.0,
+      "kd": 8.0,
+      "gait_freq": 0.0,
+      "hip_amp": 0.0,
+      "knee_amp": 0.0,
+      "balance_gain": 80.0,
+      "stand_hip": 0.0,
+      "stand_knee": 0.0
+     },
+     "edited": false
+    },
+    "walk": {
+     "kind": "none",
+     "vector": null,
+     "adaptation": null
+    }
+   },
+   "error": null,
+   "retune_requested": false,
+   "rollouts": {
+    "adaptation": 0,
+    "screening": 102,
+    "validation": 0,
+    "total": 102
+   }
+  },
+  {
+   "arm_id": "heuristic",
+   "source": "heuristic",
+   "proposal_id": null,
+   "edits": [
+    {
+     "param": "foot_friction",
+     "op": "scale",
+     "value": 1.3,
+     "target": "both"
+    }
+   ],
+   "retune": null,
+   "category": "morphology",
+   "provenance": "LIVE",
+   "body": {
+    "torso_mass": 5.0071,
+    "thigh_length": 0.301626,
+    "shank_length": 0.301626,
+    "foot_length": 0.160788,
+    "foot_friction": 1.3,
+    "torque_limit": 60.0,
+    "leg_density": 1000.0,
+    "thigh_length_r": 0.299876,
+    "shank_length_r": 0.299876,
+    "foot_length_r": 0.160788,
+    "pose": [
+     0.015281,
+     -0.017767,
+     0.0,
+     -0.019283,
+     -0.018198,
+     -0.0,
+     -0.018852
+    ]
+   },
+   "controllers": {
+    "stand": {
+     "kp": 150.0,
+     "kd": 8.0,
+     "gait_freq": 0.0,
+     "hip_amp": 0.0,
+     "knee_amp": 0.0,
+     "balance_gain": 80.0,
+     "stand_hip": 0.0,
+     "stand_knee": 0.0
+    },
+    "walk": null
+   },
+   "controller_provenance": {
+    "stand": {
+     "kind": "stand-pd",
+     "params": {
+      "kp": 150.0,
+      "kd": 8.0,
+      "gait_freq": 0.0,
+      "hip_amp": 0.0,
+      "knee_amp": 0.0,
+      "balance_gain": 80.0,
+      "stand_hip": 0.0,
+      "stand_knee": 0.0
+     },
+     "edited": false
+    },
+    "walk": {
+     "kind": "none",
+     "vector": null,
+     "adaptation": null
+    }
+   },
+   "error": null,
+   "retune_requested": false,
+   "rollouts": {
+    "adaptation": 0,
+    "screening": 102,
+    "validation": 188,
+    "total": 290
+   }
+  }
+ ],
+ "seeds": {
+  "train": [
+   407113,
+   407114,
+   407115
+  ],
+  "screen": [
+   681311,
+   681312,
+   681313,
+   681314,
+   681315,
+   681316
+  ],
+  "validate": [
+   183044,
+   183045,
+   183046,
+   183047,
+   183048,
+   183049,
+   183050,
+   183051,
+   183052,
+   183053,
+   183054,
+   183055
+  ],
+  "round_used": 1
+ },
+ "screening": {
+  "original": {
+   "seeds": [
+    {
+     "seed": 681311,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681312,
+     "score": 14.375,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 28.75,
+      "critical_force_bwd": 14.375,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681313,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681314,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.25,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681315,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681316,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 12.5,
+    "mean": 12.8125,
+    "n": 6,
+    "errors": 0,
+    "counts": {
+     "PASS": 6,
+     "POOR": 0,
+     "FAIL": 0,
+     "ERROR": 0
+    },
+    "rollouts": 102
+   }
+  },
+  "ai:P1": {
+   "seeds": [
+    {
+     "seed": 681311,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.25,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681312,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681313,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681314,
+     "score": 10.625,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.875,
+      "critical_force_bwd": 10.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681315,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681316,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 11.5625,
+    "mean": 11.666666666666666,
+    "n": 6,
+    "errors": 0,
+    "counts": {
+     "PASS": 6,
+     "POOR": 0,
+     "FAIL": 0,
+     "ERROR": 0
+    },
+    "rollouts": 102
+   }
+  },
+  "random:P1": {
+   "seeds": [
+    {
+     "seed": 681311,
+     "score": 6.25,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 20.625,
+      "critical_force_bwd": 6.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681312,
+     "score": 9.375,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 18.125,
+      "critical_force_bwd": 9.375,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681313,
+     "score": 7.5,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 19.375,
+      "critical_force_bwd": 7.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681314,
+     "score": 5.625,
+     "outcome": "FAIL",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 21.25,
+      "critical_force_bwd": 5.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681315,
+     "score": 6.875,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 20.0,
+      "critical_force_bwd": 6.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681316,
+     "score": 7.5,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 19.375,
+      "critical_force_bwd": 7.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 7.1875,
+    "mean": 7.1875,
+    "n": 6,
+    "errors": 0,
+    "counts": {
+     "PASS": 0,
+     "POOR": 5,
+     "FAIL": 1,
+     "ERROR": 0
+    },
+    "rollouts": 102
+   }
+  },
+  "heuristic": {
+   "seeds": [
+    {
+     "seed": 681311,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681312,
+     "score": 13.75,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 28.75,
+      "critical_force_bwd": 13.75,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681313,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681314,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.25,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681315,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 681316,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 12.1875,
+    "mean": 12.291666666666666,
+    "n": 6,
+    "errors": 0,
+    "counts": {
+     "PASS": 6,
+     "POOR": 0,
+     "FAIL": 0,
+     "ERROR": 0
+    },
+    "rollouts": 102
+   }
+  }
+ },
+ "selection": {
+  "rule": "Screening only selects. Best AI arm = highest MEDIAN screening score among AI arms (ties: higher mean, then arm order); best baseline = the same rule among random_baseline + heuristic arms. Arms with any ERROR seed are excluded and listed. Validation (held-out seeds, original + selected arms) decides via verdict_v1. Model confidence is never read.",
+  "excluded": {},
+  "ranking": {
+   "ai": [
+    {
+     "arm_id": "ai:P1",
+     "median": 11.5625,
+     "mean": 11.666666666666666,
+     "order": 1
+    }
+   ],
+   "baseline": [
+    {
+     "arm_id": "heuristic",
+     "median": 12.1875,
+     "mean": 12.291666666666666,
+     "order": 3
+    },
+    {
+     "arm_id": "random:P1",
+     "median": 7.1875,
+     "mean": 7.1875,
+     "order": 2
+    }
+   ]
+  },
+  "ai": "ai:P1",
+  "baseline": "heuristic",
+  "validated": [
+   "ai:P1",
+   "heuristic"
+  ]
+ },
+ "validation_results": {
+  "original": {
+   "seeds": [
+    {
+     "seed": 183044,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183045,
+     "score": 0.0,
+     "outcome": "FAIL",
+     "rollouts": 1,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 0.0,
+      "critical_force_bwd": 0.0,
+      "weak_direction": "equal",
+      "censored": false,
+      "falls_without_push": true,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183046,
+     "score": 10.625,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 32.5,
+      "critical_force_bwd": 10.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183047,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183048,
+     "score": 10.625,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.875,
+      "critical_force_bwd": 10.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183049,
+     "score": 13.75,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.75,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183050,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.25,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183051,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.875,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183052,
+     "score": 13.75,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.75,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183053,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183054,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183055,
+     "score": 9.375,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 32.5,
+      "critical_force_bwd": 9.375,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 12.1875,
+    "mean": 11.041666666666666,
+    "n": 12,
+    "errors": 0,
+    "counts": {
+     "PASS": 10,
+     "POOR": 1,
+     "FAIL": 1,
+     "ERROR": 0
+    },
+    "rollouts": 188
+   }
+  },
+  "ai:P1": {
+   "seeds": [
+    {
+     "seed": 183044,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183045,
+     "score": 0.0,
+     "outcome": "FAIL",
+     "rollouts": 1,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 0.0,
+      "critical_force_bwd": 0.0,
+      "weak_direction": "equal",
+      "censored": false,
+      "falls_without_push": true,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183046,
+     "score": 9.375,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 32.5,
+      "critical_force_bwd": 9.375,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183047,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183048,
+     "score": 10.0,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 32.5,
+      "critical_force_bwd": 10.0,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183049,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183050,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.25,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183051,
+     "score": 9.375,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 32.5,
+      "critical_force_bwd": 9.375,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183052,
+     "score": 12.5,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 12.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183053,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183054,
+     "score": 10.625,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.875,
+      "critical_force_bwd": 10.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183055,
+     "score": 7.5,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 34.375,
+      "critical_force_bwd": 7.5,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 10.9375,
+    "mean": 9.947916666666666,
+    "n": 12,
+    "errors": 0,
+    "counts": {
+     "PASS": 8,
+     "POOR": 3,
+     "FAIL": 1,
+     "ERROR": 0
+    },
+    "rollouts": 188
+   }
+  },
+  "heuristic": {
+   "seeds": [
+    {
+     "seed": 183044,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183045,
+     "score": 0.0,
+     "outcome": "FAIL",
+     "rollouts": 1,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 0.0,
+      "critical_force_bwd": 0.0,
+      "weak_direction": "equal",
+      "censored": false,
+      "falls_without_push": true,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183046,
+     "score": 10.0,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 32.5,
+      "critical_force_bwd": 10.0,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183047,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183048,
+     "score": 10.625,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.875,
+      "critical_force_bwd": 10.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183049,
+     "score": 13.75,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.75,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183050,
+     "score": 11.25,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.25,
+      "critical_force_bwd": 11.25,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183051,
+     "score": 10.625,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 31.875,
+      "critical_force_bwd": 10.625,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183052,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 29.375,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183053,
+     "score": 13.125,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.0,
+      "critical_force_bwd": 13.125,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183054,
+     "score": 11.875,
+     "outcome": "PASS",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 30.625,
+      "critical_force_bwd": 11.875,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    },
+    {
+     "seed": 183055,
+     "score": 8.75,
+     "outcome": "POOR",
+     "rollouts": 17,
+     "error": null,
+     "metrics": {
+      "critical_force_fwd": 33.125,
+      "critical_force_bwd": 8.75,
+      "weak_direction": "backward",
+      "censored": false,
+      "falls_without_push": false,
+      "force_resolution_N": 0.625
+     }
+    }
+   ],
+   "summary": {
+    "median": 11.5625,
+    "mean": 10.677083333333334,
+    "n": 12,
+    "errors": 0,
+    "counts": {
+     "PASS": 10,
+     "POOR": 1,
+     "FAIL": 1,
+     "ERROR": 0
+    },
+    "rollouts": 188
+   }
+  }
+ },
+ "verdicts": {
+  "ai:P1": {
+   "rule": "verdict_v1",
+   "kind": "push",
+   "n": 12,
+   "resolution": 0.625,
+   "alpha": 0.05,
+   "min_non_tied": 6,
+   "pass_rate": {
+    "original": {
+     "k": 10,
+     "n": 12,
+     "rate": 0.8333333333333334,
+     "ci95": [
+      0.5519636426153274,
+      0.9530358523851776
+     ],
+     "method": "wilson"
+    },
+    "candidate": {
+     "k": 8,
+     "n": 12,
+     "rate": 0.6666666666666666,
+     "ci95": [
+      0.3906175873976139,
+      0.8618821601026385
+     ],
+     "method": "wilson"
+    }
+   },
+   "wins": 0,
+   "losses": 8,
+   "ties": 4,
+   "median_diff": -1.25,
+   "p_one_sided": 1.0,
+   "p_worse": 0.00390625,
+   "min_effect": {
+    "abs": 3.0,
+    "rel": 0.1,
+    "required": 3.0
+   },
+   "errors": [],
+   "non_tied": 8,
+   "status": "NOT_VERIFIED",
+   "reasons": [
+    "0 wins, 8 losses, 4 ties (|diff| <= 0.625) of 12 paired seeds",
+    "median paired diff -1.25",
+    "mirrored sign test significant (p=0.0039) but median diff -1.25 not beyond -3"
+   ],
+   "source": "nemotron",
+   "provenance": "LIVE"
+  },
+  "heuristic": {
+   "rule": "verdict_v1",
+   "kind": "push",
+   "n": 12,
+   "resolution": 0.625,
+   "alpha": 0.05,
+   "min_non_tied": 6,
+   "pass_rate": {
+    "original": {
+     "k": 10,
+     "n": 12,
+     "rate": 0.8333333333333334,
+     "ci95": [
+      0.5519636426153274,
+      0.9530358523851776
+     ],
+     "method": "wilson"
+    },
+    "candidate": {
+     "k": 10,
+     "n": 12,
+     "rate": 0.8333333333333334,
+     "ci95": [
+      0.5519636426153274,
+      0.9530358523851776
+     ],
+     "method": "wilson"
+    }
+   },
+   "wins": 0,
+   "losses": 0,
+   "ties": 12,
+   "median_diff": -0.625,
+   "p_one_sided": 1.0,
+   "p_worse": 1.0,
+   "min_effect": {
+    "abs": 3.0,
+    "rel": 0.1,
+    "required": 3.0
+   },
+   "errors": [],
+   "non_tied": 0,
+   "status": "INCONCLUSIVE",
+   "reasons": [
+    "0 wins, 0 losses, 12 ties (|diff| <= 0.625) of 12 paired seeds",
+    "median paired diff -0.625",
+    "only 0 non-tied pairs; at least 6 are needed for a verdict"
+   ],
+   "source": "heuristic",
+   "provenance": "LIVE"
+  }
+ },
+ "budget": {
+  "rollouts": 972,
+  "wall_s": 131.464,
+  "calls": 1,
+  "tokens": 5570,
+  "usd": 0.001873
+ },
+ "code": {
+  "commit": "2a5864676464e9eb98e33bb3be475270a5764ad1",
+  "dirty": false
+ },
+ "status": "done",
+ "error": null
+}

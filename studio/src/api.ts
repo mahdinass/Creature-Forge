@@ -5,6 +5,7 @@ import type { OverviewData } from './overview/overviewTypes'
 import type { WalkingReplay, WalkingSummary } from './walking/walkingTypes'
 import type { FreehandResult, SandboxBodyDict, SandboxSchema, StrokeIn } from './sketch/freehandTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
+import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, StartedChallenge, StartedInvestigation } from './forge/forgeTypes'
 
 export const STALE_HINT =
   'The running Studio server is probably older than this page. Close it and start the current one with scripts\start_studio.ps1.'
@@ -91,3 +92,59 @@ export const interpretFreehand = (strokes: StrokeIn[], guided: boolean, material
   fetch('/api/freehand/interpret', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ strokes, guided, materials }) }).then((r) => j<FreehandResult>(r))
 export const sandboxSimulate = (body: SandboxBodyDict, push: PushInfo | null, seed = 0, duration = 5) =>
   fetch('/api/sandbox/simulate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ body, seed, duration, push }) }).then((r) => j<RunPayload & { sandbox: true; explanation: import('./sketch/freehandTypes').Explanation }>(r))
+
+// ---- Forge workspace (/api/forge/*): your own creature, live MuJoCo. Errors keep the HTTP status so the UI can tell 503 (not available) apart.
+export class ForgeApiError extends Error {
+  status: number
+  constructor(message: string, status: number) {
+    super(message)
+    this.name = 'ForgeApiError'
+    this.status = status
+  }
+}
+export async function fj<T>(res: Response): Promise<T> {
+  try {
+    return await j<T>(res)
+  } catch (e) {
+    throw new ForgeApiError((e as Error).message, res.status)
+  }
+}
+const FORGE = '/api/forge'
+const postJson = (url: string, body: unknown) =>
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+
+export interface ForgeReplayQuery { runId: string; seed: number; direction?: 1 | -1; force?: number | null }
+/** Query string of GET /api/forge/replay for a challenge run (direction and force only for push replays). */
+export function forgeReplayUrl(q: ForgeReplayQuery): string {
+  const p = new URLSearchParams({ run_id: q.runId, seed: String(q.seed) })
+  if (q.direction !== undefined) p.set('direction', String(q.direction))
+  if (q.force !== undefined && q.force !== null) p.set('force', String(q.force))
+  return `${FORGE}/replay?${p.toString()}`
+}
+/** Replay of one arm of an investigation (503 until the investigation backend exists). */
+export function forgeArmReplayUrl(investigationId: string, arm: string, seed: number): string {
+  return `${FORGE}/replay?${new URLSearchParams({ investigation_id: investigationId, arm, seed: String(seed) }).toString()}`
+}
+
+export const getForgeStatus = () => fetch(`${FORGE}/status`).then((r) => fj<ForgeStatus>(r))
+export const listCreatures = () => fetch(`${FORGE}/creatures`).then((r) => fj<CreatureSummary[]>(r))
+export const createCreature = (b: { name: string; body: unknown; mode: 'guided' | 'experimental'; drawing: unknown }) =>
+  postJson(`${FORGE}/creatures`, b).then((r) => fj<Creature>(r))
+export const getCreature = (cid: string) => fetch(`${FORGE}/creatures/${encodeURIComponent(cid)}`).then((r) => fj<Creature>(r))
+export const setCurrentVersion = (cid: string, n: number) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/current`, { n }).then((r) => fj<Creature>(r))
+export const startChallenge = (cid: string, n: number, b: { kind: Kind; seeds?: number; overrides?: Record<string, number | string> }) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/versions/${n}/challenges`, b).then((r) => fj<StartedChallenge>(r))
+export const getForgeRun = (runId: string) => fetch(`${FORGE}/runs/${encodeURIComponent(runId)}`).then((r) => fj<ChallengeRun>(r))
+export const getForgeJob = (jobId: string, since = 0) =>
+  fetch(`${FORGE}/jobs/${encodeURIComponent(jobId)}?since=${since}`).then((r) => fj<JobPoll>(r))
+export const cancelForgeJob = (jobId: string) => postJson(`${FORGE}/jobs/${encodeURIComponent(jobId)}/cancel`, {}).then((r) => fj<Job>(r))
+export const getForgeReplay = (q: ForgeReplayQuery) => fetch(forgeReplayUrl(q)).then((r) => fj<RunPayload>(r))
+export const getForgeArmReplay = (investigationId: string, arm: string, seed: number) =>
+  fetch(forgeArmReplayUrl(investigationId, arm, seed)).then((r) => fj<RunPayload>(r))
+export const startInvestigation = (cid: string, n: number, b: { run_id: string; mode: 'live' | 'scripted'; loop?: boolean; probes?: boolean; memory?: boolean; profile?: 'default' | 'deep' }) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/versions/${n}/investigations`, b).then((r) => fj<StartedInvestigation>(r))
+export const getInvestigation = (id: string) => fetch(`${FORGE}/investigations/${encodeURIComponent(id)}`).then((r) => fj<InvestigationRecord>(r))
+export const listInvestigations = (cid: string) => fetch(`${FORGE}/investigations?cid=${encodeURIComponent(cid)}`).then((r) => fj<InvestigationSummary[]>(r))
+export const acceptArm = (cid: string, b: { investigation_id: string; arm_id: string }) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/accept`, b).then((r) => fj<Creature>(r))

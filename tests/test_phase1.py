@@ -1,4 +1,8 @@
 """Phase 1 offline tests: forensics, evaluation protocol, baselines, forensic investigator. No network."""
+import os
+
+os.environ.setdefault("CF_ALLOW_TESTSERVER", "1")  # Starlette TestClient sends Host: testserver (see studio/security.py)
+
 import json
 import math
 import tempfile

@@ -1,0 +1,40 @@
+{
+ "n": 1,
+ "parent": null,
+ "mode": "guided",
+ "body": {
+  "torso_mass": 5.0,
+  "thigh_length": 0.3,
+  "shank_length": 0.3,
+  "foot_length": 0.16,
+  "foot_friction": 1.0,
+  "torque_limit": 60.0,
+  "leg_density": 1000.0,
+  "thigh_length_r": 0.3,
+  "shank_length_r": 0.3,
+  "foot_length_r": 0.16,
+  "pose": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ },
+ "controllers": {
+  "stand": {
+   "kp": 150.0,
+   "kd": 8.0,
+   "gait_freq": 0.0,
+   "hip_amp": 0.0,
+   "knee_amp": 0.0,
+   "balance_gain": 80.0,
+   "stand_hip": 0.0,
+   "stand_knee": 0.0
+  },
+  "walk": null
+ },
+ "origin": "user"
+}

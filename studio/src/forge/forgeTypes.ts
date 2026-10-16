@@ -1,0 +1,270 @@
+// Mirrors the /api/forge/* responses (docs/FORGE_LOOP_CONTRACTS.md sections 3, 4, 6, 8, 9; creature_forge/studio/forge_api.py).
+// Everything shown on the forge page comes from these shapes; nothing is invented client-side.
+import type { SandboxBodyDict } from '../sketch/freehandTypes'
+
+export type Kind = 'stand' | 'push' | 'walk'
+export type Outcome = 'PASS' | 'POOR' | 'FAIL' | 'ERROR'
+export type JobStatus = 'queued' | 'running' | 'done' | 'failed' | 'cancelled'
+export type VerdictStatus = 'VERIFIED_IMPROVEMENT' | 'NOT_VERIFIED' | 'WORSE' | 'INCONCLUSIVE'
+export type ArmSource = 'original' | 'nemotron' | 'scripted_mock' | 'random_baseline' | 'heuristic'
+
+export interface ForgeStatus {
+  live_available: boolean
+  model: { model: string; selected?: string } | null
+  ledger: { requests?: number; usd?: number; caps?: { requests: number; usd: number }; error?: string } | null
+  workers: number
+  version: string
+}
+
+export interface CreatureSummary { id: string; name: string; current: number; n_versions: number; created: string }
+
+export interface Controllers {
+  stand: Record<string, number>
+  walk: null | { vector: number[]; provenance: Record<string, unknown> | null }
+}
+
+export interface VersionChange {
+  edits?: { param: string; op: string; value: number; target?: string }[]
+  category?: string
+  rationale?: string
+  source?: string
+  model?: string
+  investigation_id?: string
+  arm_id?: string
+  verdict?: Verdict
+  provenance?: string
+  round?: number
+}
+
+export interface CreatureVersion {
+  n: number
+  parent: number | null
+  created: string
+  content_hash: string
+  mode: 'guided' | 'experimental'
+  body: SandboxBodyDict
+  controllers: Controllers
+  origin: 'user' | 'ai_accepted'
+  drawing: { strokes?: unknown[]; interpretation?: unknown; approximation?: unknown } | null
+  change: VersionChange | null
+}
+
+export interface Creature { id: string; name: string; created: string; current: number; versions: CreatureVersion[] }
+
+export interface JobProgress { phase: string | null; done: number; total: number }
+export interface Job {
+  id: string
+  kind: 'challenge' | 'investigation' | 'loop'
+  status: JobStatus
+  created: string
+  started: string | null
+  finished: string | null
+  progress: JobProgress
+  result_ref: { run_id?: string; investigation_id?: string } | null
+  error: string | null
+}
+export interface JobEvent { i: number; t: number; type: string; data: Record<string, unknown> }
+export interface JobPoll { job: Job; events: JobEvent[] }
+
+export interface ForgeEvent { time: number; kind: string; evidence?: Record<string, unknown> }
+export interface SeedResult {
+  seed: number
+  outcome: Outcome
+  score: number
+  metrics: Record<string, unknown>
+  events: ForgeEvent[]
+  rollouts: number
+  error?: string | null
+}
+
+export interface ControllerProvenance {
+  stand?: { kind?: string; params?: Record<string, number>; edited?: boolean }
+  walk?: { kind?: string; vector?: number[] | null; adaptation?: null | { budget?: number; rollouts_used?: number; train_seeds?: number[]; noise_seed?: number } }
+}
+
+export interface ChallengeSpecDict {
+  kind: Kind
+  seeds: number[]
+  duration: number
+  perturb?: number
+  target_force?: number
+  push_time?: number
+  push_duration?: number
+  max_force?: number
+  start?: string
+  settle_s?: number
+}
+
+export interface ChallengeRun {
+  run_id: string
+  creature: { cid: string; n: number; content_hash: string }
+  created: string
+  spec: ChallengeSpecDict
+  body: Record<string, unknown>
+  controller?: ControllerProvenance
+  controllers?: Controllers
+  per_seed: SeedResult[]
+  outcome: Outcome
+  summary?: Record<string, unknown>
+  forensics?: Record<string, unknown>
+  rollouts?: number
+  wall_s?: number
+}
+
+export interface StartedChallenge { job_id: string; run_id: string }
+export interface StartedInvestigation { job_id: string; investigation_id: string }
+
+// ---- investigation record (creature_forge/investigation.py, arena.py, verdict.py; real LIVE records in experiments/forge_loop/dev_live_records)
+export interface MinEffect { abs?: number; rel?: number; required?: number }
+export interface Verdict {
+  status: VerdictStatus
+  rule?: string
+  kind?: Kind
+  n?: number
+  wins?: number
+  losses?: number
+  ties?: number
+  non_tied?: number
+  median_diff?: number
+  p_one_sided?: number
+  p_worse?: number
+  resolution?: number
+  alpha?: number
+  min_non_tied?: number
+  min_effect?: number | MinEffect
+  pass_rate?: Record<string, unknown>
+  reasons?: string[]
+  errors?: string[]
+  source?: string
+  provenance?: string
+}
+
+export interface Edit { param: string; op: string; value: number; target?: string }
+
+export interface Arm {
+  arm_id: string
+  source: ArmSource
+  proposal_id?: string | null
+  hypothesis?: string
+  edits?: Edit[]
+  category?: string | null
+  body?: Record<string, number | number[] | null>
+  controllers?: Controllers
+  controller_provenance?: ControllerProvenance
+  retune?: null | { budget: number; noise_seed: number; rollouts_used: number }
+  unavailable?: string
+  error?: string | null
+  provenance?: string
+  rollouts?: { adaptation?: number; screening?: number; validation?: number; total?: number }
+}
+
+export interface ModelCall {
+  model: string
+  request_id?: string | null
+  latency_s?: number | null
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null
+  cost_usd?: number | null
+  finish_reason?: string | null
+  http_status?: number | null
+  error?: string | null
+  reasoning_present?: boolean
+  ok?: boolean
+  sent?: boolean
+}
+
+export interface ValidatedProposal { id: string; status: 'accepted' | 'rejected'; reasons?: string[]; hypothesis?: string; edits?: Edit[]; category?: string; prediction?: { expected_change?: string }; tradeoffs?: string; confidence?: number }
+export interface Hypothesis { id: string; mechanism: string; evidence?: string[]; competing?: string[] }
+export interface ValidatedHypothesis extends Hypothesis { status?: string; reasons?: string[]; values?: Record<string, string | number | boolean | null> }
+
+export interface SeedRecord { seed: number; score: number | null; outcome: Outcome; rollouts?: number; error?: string | null; metrics?: Record<string, unknown> }
+export interface ArmResults { seeds: SeedRecord[]; summary?: { median?: number | null; mean?: number | null; n?: number; errors?: number; counts?: Record<string, number>; rollouts?: number } }
+export interface RankRow { arm_id: string; median: number | null; mean: number | null; order: number }
+export interface Selection {
+  rule?: string
+  excluded?: Record<string, string>
+  ranking?: { ai?: RankRow[]; baseline?: RankRow[] }
+  ai?: string | null
+  baseline?: string | null
+  matched_twin?: string | null
+  validated?: string[]
+}
+
+export interface ProbeResult {
+  probe_id: string
+  measurement?: string
+  transformation?: string
+  status: string
+  error?: string
+  median?: number | null
+  median_delta?: number | null
+  mean_delta?: number | null
+  n_seeds?: number
+  wins?: number
+  losses?: number
+  ties?: number
+  static_fall_frac?: number | null
+}
+export interface ProbeExpectation { probe_id: string; hypothesis?: string | null; expect?: string | null; observed?: string | null; confirmed?: boolean | null }
+export interface ProbesRecord {
+  requested?: { probe_id: string; hypothesis?: string | null; expect?: string | null }[]
+  skipped?: string
+  seeds?: number[]
+  resolution?: number
+  rollouts?: number
+  kind?: Kind
+  original?: { median?: number | null; status?: string } | null
+  results?: Record<string, ProbeResult>
+  expectations?: ProbeExpectation[]
+  provenance?: string
+}
+
+export interface InvestigationRecord {
+  id: string
+  created: string
+  mode: 'live' | 'scripted'
+  provenance: 'LIVE' | 'SCRIPTED_MOCK'
+  creature: { cid: string; n: number; content_hash: string; round?: number; hypothetical_parent?: unknown; loop_id?: string }
+  challenge_run_id: string
+  spec?: ChallengeSpecDict
+  evidence?: Record<string, unknown>
+  model_calls?: ModelCall[]
+  reply?: { diagnosis?: { summary?: string; hypotheses?: Hypothesis[] }; proposals?: ValidatedProposal[] } | null
+  probes?: ProbesRecord | null
+  memory?: { used: boolean; retrieved: { lesson_id: string; similarity: number }[]; bank_size: number | null; k: number | null } | null
+  validation?: { proposals?: ValidatedProposal[]; hypotheses?: ValidatedHypothesis[]; summary?: string; warnings?: string[]; schema_errors?: string[] } | null
+  arms?: Arm[]
+  seeds?: { train?: number[]; screen?: number[]; validate?: number[]; round_used?: number }
+  screening?: Record<string, ArmResults>
+  selection?: Selection
+  validation_results?: Record<string, ArmResults>
+  verdicts?: Record<string, Verdict>
+  budget?: { rollouts?: number; wall_s?: number; calls?: number; tokens?: number; usd?: number }
+  status: string
+  error?: string | null
+}
+
+export interface InvestigationSummary {
+  id: string
+  created: string
+  mode: 'live' | 'scripted'
+  provenance: 'LIVE' | 'SCRIPTED_MOCK'
+  creature: { cid: string; n: number; round?: number }
+  challenge_run_id: string
+  status: string
+  error?: string | null
+  n_arms: number
+  verdicts: Record<string, string | null>
+  budget?: InvestigationRecord['budget']
+}
+
+export interface LoopRound { round: number; investigation_id: string; status: string; run_id: string; hypothetical_parent: unknown; best_verified_arm: string | null; best_verdict: Verdict | null }
+export interface LoopResult {
+  loop_id: string
+  mode: string
+  provenance: string
+  rounds: LoopRound[]
+  stop_reason: string
+  best: LoopRound | null
+  budget: { rollouts: number; calls: number; wall_s: number }
+  auto_accepted: boolean
+}

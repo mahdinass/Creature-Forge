@@ -1,0 +1,225 @@
+{
+ "evidence": {
+  "creature": {
+   "name": "Stubby (calibration creature)",
+   "mode": "experimental",
+   "body": {
+    "torso_mass": 6.0,
+    "thigh_length": 0.3,
+    "shank_length": 0.3,
+    "foot_length": 0.05,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0,
+    "leg_density": 1000.0,
+    "thigh_length_r": 0.3,
+    "shank_length_r": 0.3,
+    "foot_length_r": 0.05
+   },
+   "derived": {
+    "leg_length_m": 0.6,
+    "foot_to_leg_ratio": 0.0833,
+    "torso_weight_n": 58.9
+   }
+  },
+  "challenge": {
+   "kind": "push",
+   "push_force_n": 25.0,
+   "push_time_s": 1.0,
+   "push_duration_s": 0.15,
+   "duration_s": 5.0,
+   "success": "torso stays upright (no fall) for the whole run"
+  },
+  "controller": {
+   "stand": {
+    "kp": 150.0,
+    "kd": 8.0,
+    "gait_freq": 0.0,
+    "hip_amp": 0.0,
+    "knee_amp": 0.0,
+    "balance_gain": 80.0,
+    "stand_hip": 0.0,
+    "stand_knee": 0.0
+   }
+  },
+  "outcome": {
+   "seeds_n": 3,
+   "falls": 2
+  },
+  "seeds": [
+   {
+    "seed": 100001,
+    "fell": true,
+    "fall_time_s": 2.53,
+    "max_abs_pitch_rad": 1.6,
+    "events": [
+     {
+      "kind": "fall",
+      "time_s": 2.53
+     }
+    ],
+    "min_height_ratio": 0.0448
+   },
+   {
+    "seed": 100002,
+    "fell": false,
+    "fall_time_s": null,
+    "max_abs_pitch_rad": 0.127,
+    "events": [],
+    "min_height_ratio": 0.991
+   },
+   {
+    "seed": 100003,
+    "fell": true,
+    "fall_time_s": 1.79,
+    "max_abs_pitch_rad": 1.61,
+    "events": [
+     {
+      "kind": "fall",
+      "time_s": 1.79
+     }
+    ],
+    "min_height_ratio": 0.0448
+   }
+  ],
+  "forensics_seed0": {
+   "definitions": {
+    "com_margin_m": "distance from whole-body COM x to nearest support edge; negative = COM outside support",
+    "xcom_margin_m": "same for extrapolated COM x + vx*sqrt(h/g) (LIP approximation); negative = momentum carries COM past support",
+    "support": "interval between min and max x of loaded foot-floor contact points (MuJoCo contacts)",
+    "instability_onset_s": "first time the extrapolated-COM margin stays negative for 0.05 s after the push starts",
+    "xcom_margin_recovered_s": "first time after onset the extrapolated-COM margin stays positive for 0.05 s (null = never)",
+    "ankle_demand_over_limit": "|demanded ankle torque| / actuator torque limit; >1 means the actuator clipped the demand"
+   },
+   "disturbance": {
+    "push_time_s": 1.0,
+    "push_force_N": 25.0,
+    "push_duration_s": 0.15,
+    "impulse_Ns": 3.75,
+    "pitch_before_push_rad": -0.118,
+    "com_vx_before_push_mps": -0.169,
+    "com_vx_at_push_end_mps": 0.175,
+    "com_x_shift_during_push_m": -0.0002,
+    "peak_abs_pitch_within_1s_rad": 0.158,
+    "time_of_peak_pitch_s": 2.0,
+    "peak_pitch_rate_within_1s_rad_s": 0.471
+   },
+   "failure": {
+    "fell": true,
+    "fall_time_s": 2.53,
+    "fall_after_push_end_s": 1.38,
+    "instability_onset_s": 1.0,
+    "onset_after_push_start_s": 0.001,
+    "xcom_margin_recovered_s": null,
+    "com_left_support_s": 1.0,
+    "pitch_at_fall_rad": -1.0,
+    "min_torso_height_m": 0.0341
+   },
+   "support": {
+    "support_length_before_push_m": 0.0079,
+    "com_margin_before_push_m": -0.0422,
+    "xcom_margin_before_push_m": -0.0804,
+    "min_com_margin_after_push_m": -0.352,
+    "min_xcom_margin_after_push_m": -0.562,
+    "time_of_min_xcom_margin_s": 2.47,
+    "cop_minus_com_x_at_push_end_m": 0.044,
+    "feet_unloaded_fraction_after_push": 0.042
+   },
+   "actuation": {
+    "torque_limit_Nm": 60.0,
+    "ankle_peak_demand_Nm": 1.21,
+    "ankle_peak_applied_Nm": 1.21,
+    "ankle_demand_over_limit_peak": 0.02,
+    "any_joint_demand_over_limit_peak": 0.028,
+    "fraction_samples_saturated_push_to_fall": 0.0
+   },
+   "contacts": {
+    "peak_slip_speed_mps": 0.166,
+    "fraction_samples_slipping_push_to_fall": 0.013,
+    "foot_friction": 1.0
+   },
+   "timeline": {}
+  }
+ },
+ "editable": {
+  "torso_mass": {
+   "current": 6.0,
+   "rule": "scale 0.5-1.5",
+   "meaning": "torso mass (kg)"
+  },
+  "thigh_length": {
+   "current": 0.3,
+   "rule": "scale 0.5-1.5",
+   "meaning": "upper-leg length (m)"
+  },
+  "shank_length": {
+   "current": 0.3,
+   "rule": "scale 0.5-1.5",
+   "meaning": "lower-leg length (m)"
+  },
+  "foot_length": {
+   "current": 0.05,
+   "rule": "scale 0.5-1.5",
+   "meaning": "foot length (m), support polygon size"
+  },
+  "leg_density": {
+   "current": 1000.0,
+   "rule": "scale 0.5-1.5",
+   "meaning": "leg material density (kg/m^3)"
+  },
+  "foot_friction": {
+   "current": 1.0,
+   "rule": "scale 0.5-1.5",
+   "meaning": "foot-ground friction coefficient"
+  },
+  "torque_limit": {
+   "current": 60.0,
+   "rule": "scale 0.5-1.5",
+   "meaning": "max motor torque per joint (N m)"
+  },
+  "stand.kp": {
+   "current": 150.0,
+   "range": [
+    0.0,
+    500.0
+   ],
+   "rule": "set, |change| <= 25% of range",
+   "meaning": "joint PD stiffness"
+  },
+  "stand.kd": {
+   "current": 8.0,
+   "range": [
+    0.0,
+    50.0
+   ],
+   "rule": "set, |change| <= 25% of range",
+   "meaning": "joint PD damping"
+  },
+  "stand.balance_gain": {
+   "current": 80.0,
+   "range": [
+    0.0,
+    200.0
+   ],
+   "rule": "set, |change| <= 25% of range",
+   "meaning": "ankle torque per rad of torso pitch"
+  },
+  "stand.stand_hip": {
+   "current": 0.0,
+   "range": [
+    -0.3,
+    0.3
+   ],
+   "rule": "set, |change| <= 25% of range",
+   "meaning": "standing hip angle target (rad)"
+  },
+  "stand.stand_knee": {
+   "current": 0.0,
+   "range": [
+    -0.8,
+    0.0
+   ],
+   "rule": "set, |change| <= 25% of range",
+   "meaning": "standing knee angle target (rad, <= 0)"
+  }
+ }
+}
