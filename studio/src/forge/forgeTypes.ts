@@ -2,6 +2,7 @@
 // Everything shown on the forge page comes from these shapes; nothing is invented client-side.
 import type { SandboxBodyDict } from '../sketch/freehandTypes'
 
+export type Origin = 'user' | 'ai_accepted' | 'baseline_accepted'
 export type Kind = 'stand' | 'push' | 'walk'
 export type Outcome = 'PASS' | 'POOR' | 'FAIL' | 'ERROR'
 export type JobStatus = 'queued' | 'running' | 'done' | 'failed' | 'cancelled'
@@ -34,6 +35,11 @@ export interface VersionChange {
   verdict?: Verdict
   provenance?: string
   round?: number
+  // walking recovery change records
+  kind?: string
+  recovery_id?: string
+  director?: string
+  status?: string
 }
 
 export interface CreatureVersion {
@@ -44,7 +50,7 @@ export interface CreatureVersion {
   mode: 'guided' | 'experimental'
   body: SandboxBodyDict
   controllers: Controllers
-  origin: 'user' | 'ai_accepted'
+  origin: Origin
   drawing: { strokes?: unknown[]; interpretation?: unknown; approximation?: unknown } | null
   change: VersionChange | null
 }
@@ -54,7 +60,7 @@ export interface Creature { id: string; name: string; created: string; current: 
 export interface JobProgress { phase: string | null; done: number; total: number }
 export interface Job {
   id: string
-  kind: 'challenge' | 'investigation' | 'loop'
+  kind: 'challenge' | 'investigation' | 'loop' | 'recovery'
   status: JobStatus
   created: string
   started: string | null
@@ -268,3 +274,169 @@ export interface LoopResult {
   budget: { rollouts: number; calls: number; wall_s: number }
   auto_accepted: boolean
 }
+
+// ---- walking recovery (creature_forge/recoveries.py, recovery.py, walk_pipelines.py, director.py)
+export type RecoveryStatus = 'FULL_RECOVERY' | 'PARTIAL_IMPROVEMENT' | 'NOT_RECOVERED' | 'INCONCLUSIVE_ERROR'
+export type RecoveryProvenance = 'LIVE' | 'SCRIPTED_MOCK' | 'NON_AI'
+export type RecoveryDirector = 'ai' | 'fix'
+export type RecoveryPhase = 'diagnostics' | 'probes' | 'plans' | 'screening' | 'validation' | 'confirmation' | 'done'
+
+export interface RecoverySummary {
+  id: string
+  created: string
+  creature: { cid: string; n: number; content_hash?: string }
+  director: RecoveryDirector
+  mode: 'live' | 'scripted' | null
+  provenance: RecoveryProvenance
+  model: string | null
+  status: string   // a RecoveryStatus, or failed / cancelled
+  error?: string | null
+  scale?: string
+  budget: { total?: number | null; used?: number | null }
+  n_edits: number
+  walking_frac: number | null
+}
+
+export interface BudgetLine { item: string; n: number; detail?: Record<string, unknown>; cumulative: number }
+export interface ScoreDict { walking_count?: number; survival_count?: number; mean_fitness?: number }
+export interface PipelineProbe {
+  probe_id: string
+  round: number
+  status: string
+  reason?: string
+  rollouts?: number
+  delta_walking?: number
+  delta_mean_fitness?: number
+  best_score?: ScoreDict | null
+  edits?: Edit[]
+}
+export interface PlanSpec { init: string; ctrl_subspaces: string[]; body_params: string[]; budget_share: number; rationale?: string }
+export interface PipelinePlan {
+  plan_id: string
+  round: number
+  plan: PlanSpec
+  budget: number
+  status: string
+  reason?: string
+  rollouts_used?: number
+  refunded?: number
+  best_score?: ScoreDict | null
+  walking_count?: number
+  init_score?: ScoreDict | null
+  improvement?: { delta_mean_fitness?: number; delta_walking?: number }
+  edits?: Edit[]
+}
+export interface PipelineRound {
+  round: number
+  probes: PipelineProbe[]
+  rejected_probes: { probe_id: unknown; reason: string }[]
+  plans: PipelinePlan[]
+  rejected_plans: { index: number | null; plan: unknown; reasons: string[] }[]
+}
+export interface PipelineRecord {
+  total_budget: number
+  budget_lines: BudgetLine[]
+  used: number
+  rounds: PipelineRound[]
+  start_score?: ScoreDict
+  decisions?: { round: number; kind: 'probes' | 'plans'; returned: unknown }[]
+  final: { body: Record<string, number>; vector: number[]; edits: Edit[]; source: string; aliases?: string[]; train_score?: number[]; screen?: Record<string, unknown> }
+  settings?: Record<string, unknown>
+}
+
+export interface DirectorDecision {
+  kind: 'probes' | 'plans'
+  round: number
+  status: string
+  calls?: number[]
+  returned?: unknown
+  diagnosis?: string
+  validation_errors?: string[]
+  repaired?: boolean
+}
+export interface DirectorHypothesis { round: number; mechanism: string; evidence: string[]; competing: string[]; refuted: boolean; refuted_round: number | null }
+export interface DirectorCall {
+  model?: string
+  request_id?: string | null
+  latency_s?: number | null
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null
+  cost_usd?: number | null
+  finish_reason?: string | null
+  error?: string | null
+  sent?: boolean
+  ok?: boolean
+  messages?: { role?: string; content?: string }[]
+}
+export interface DirectorRecord {
+  provenance: string
+  model: string
+  calls: DirectorCall[]
+  decisions: DirectorDecision[]
+  hypotheses: Record<string, DirectorHypothesis>
+  plan_meta?: Record<string, { init: string; ctrl_subspaces: string[]; body_params: string[]; budget_share: number; hypothesis: string; prediction: string; evidence: string[] }>
+  expectations?: Record<string, { hypothesis: string; expect: 'improves' | 'no_change' | string; round: number }>
+  refuted_by_round?: Record<string, string[]>
+  cost_usd: number
+  tokens?: { prompt: number; completion: number }
+  note?: string
+}
+
+export interface RecoverySeedRow {
+  seed: number
+  outcome: Outcome
+  score: number | null
+  walking: boolean
+  fell?: boolean | null
+  label?: string | null
+  fall_time?: number | null
+  speed_upright?: number | null
+  body_contact_frac?: number | null
+  error?: string | null
+}
+export interface RecoveryConfirmation {
+  run: boolean
+  reason?: string
+  duration?: number
+  per_seed?: RecoverySeedRow[]
+  aggregate?: string
+  passed?: boolean
+  checks?: {
+    walking_frac: { value: number; need: number; passed: boolean }
+    median_speed_upright: { value: number; need: number; passed: boolean }
+    body_contact: { seeds_over: number[]; max_frac: number; passed: boolean }
+  }
+}
+export interface RecoveryAssessment {
+  rule: string
+  status: RecoveryStatus
+  reasons: string[]
+  validation: { original: RecoverySeedRow[]; candidate: RecoverySeedRow[]; verdict: Verdict; aggregate: string; walking_frac: number }
+  confirmation: RecoveryConfirmation
+  rollouts?: { validation?: number; confirmation?: number }
+  seeds: { validate: number[]; confirm: number[] }
+  errors?: { arm: string; seed: number; error: string }[]
+  worse?: boolean
+}
+
+export interface RecoveryRecord {
+  id: string
+  created: string
+  finished?: string
+  creature: { cid: string; n: number; content_hash: string }
+  director: RecoveryDirector
+  mode: 'live' | 'scripted' | null
+  provenance: RecoveryProvenance
+  model: string | null
+  budget: { requested: number; total: number; used: number | null; probe_budget?: number }
+  scale?: string
+  rule?: string
+  seeds?: Record<string, number[]>
+  pipeline: PipelineRecord | null
+  director_record: DirectorRecord | null
+  assessment: RecoveryAssessment | null
+  candidate: { body: Record<string, number>; vector: number[]; edits: Edit[]; source: string; train_score?: number[]; screen?: Record<string, unknown> } | null
+  status: string   // a RecoveryStatus, or failed / cancelled
+  error: string | null
+  cost?: { usd: number; tokens?: unknown; calls: number; pipeline_rollouts?: number | null }
+}
+export interface StartedRecovery { job_id: string; recovery_id: string }

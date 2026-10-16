@@ -5,7 +5,7 @@ import type { OverviewData } from './overview/overviewTypes'
 import type { WalkingReplay, WalkingSummary } from './walking/walkingTypes'
 import type { FreehandResult, SandboxBodyDict, SandboxSchema, StrokeIn } from './sketch/freehandTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
-import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, StartedChallenge, StartedInvestigation } from './forge/forgeTypes'
+import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, RecoveryRecord, RecoverySummary, StartedChallenge, StartedInvestigation, StartedRecovery } from './forge/forgeTypes'
 
 export const STALE_HINT =
   'The running Studio server is probably older than this page. Close it and start the current one with scripts\start_studio.ps1.'
@@ -148,3 +148,16 @@ export const getInvestigation = (id: string) => fetch(`${FORGE}/investigations/$
 export const listInvestigations = (cid: string) => fetch(`${FORGE}/investigations?cid=${encodeURIComponent(cid)}`).then((r) => fj<InvestigationSummary[]>(r))
 export const acceptArm = (cid: string, b: { investigation_id: string; arm_id: string }) =>
   postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/accept`, b).then((r) => fj<Creature>(r))
+
+// ---- walking recovery ("Recover walking"): creature_forge/recoveries.py
+export function forgeRecoveryReplayUrl(recoveryId: string, arm: 'original' | 'candidate', seed: number): string {
+  return `${FORGE}/recoveries/${encodeURIComponent(recoveryId)}/replay?${new URLSearchParams({ arm, seed: String(seed) }).toString()}`
+}
+export const startRecovery = (cid: string, n: number, b: { director: 'ai' | 'fix'; mode?: 'live' | 'scripted'; budget: number }) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/versions/${n}/recoveries`, b).then((r) => fj<StartedRecovery>(r))
+export const listRecoveries = (cid: string) => fetch(`${FORGE}/recoveries?cid=${encodeURIComponent(cid)}`).then((r) => fj<RecoverySummary[]>(r))
+export const getRecovery = (id: string) => fetch(`${FORGE}/recoveries/${encodeURIComponent(id)}`).then((r) => fj<RecoveryRecord>(r))
+export const getRecoveryReplay = (id: string, arm: 'original' | 'candidate', seed: number) =>
+  fetch(forgeRecoveryReplayUrl(id, arm, seed)).then((r) => fj<RunPayload>(r))
+export const acceptRecovery = (cid: string, recoveryId: string) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/accept-recovery`, { recovery_id: recoveryId }).then((r) => fj<Creature>(r))

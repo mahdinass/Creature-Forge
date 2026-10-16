@@ -5,6 +5,7 @@ import { CreatureBar } from './CreatureBar'
 import { DEFAULT_TARGET_FORCE, forgeUrl, parseForgeLink } from './forgeLogic'
 import type { ChallengeRun, Creature, ForgeStatus, Kind } from './forgeTypes'
 import { InvestigationList, InvestigationView } from './InvestigationView'
+import { RecoveryList, RecoveryPanel } from './RecoveryView'
 import { RunView } from './RunView'
 import './forge.css'
 
@@ -34,12 +35,14 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
   const [openInv, setOpenInv] = useState<string | null>(null)
   const [invNonce, setInvNonce] = useState(0)
   const [acceptedN, setAcceptedN] = useState<number | null>(null)
+  const [openRec, setOpenRec] = useState<string | null>(null)
+  const [recNonce, setRecNonce] = useState(0)
 
   useEffect(() => { getForgeStatus().then(setStatus).catch(() => undefined) }, [])
 
   // resolve which creature to show: explicit link, then the last one used, then the newest one
   useEffect(() => {
-    if (target?.cid && target.cid !== cid) { setCid(target.cid); setViewN(target.n); setJobId(null); setRunId(null) }
+    if (target?.cid && target.cid !== cid) { setCid(target.cid); setViewN(target.n); setJobId(null); setRunId(null); setOpenRec(null) }
   }, [target]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (cid) return
@@ -90,6 +93,24 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
       setStarting(false)
     }
   }
+  /** "Run walk challenge on v(n+1)" after a recovery was accepted: a walk challenge of that version, same seed count. */
+  const runWalkOn = async (n: number) => {
+    if (!creature) return
+    setKind('walk')
+    setStarting(true)
+    setStartError(null)
+    try {
+      const r = await startChallenge(creature.id, n, { kind: 'walk', seeds })
+      setViewN(n)
+      setJobId(r.job_id)
+      setRunId(r.run_id)
+      setRun(null)
+    } catch (e) {
+      setStartError((e as Error).message)
+    } finally {
+      setStarting(false)
+    }
+  }
   const selectVersion = (n: number) => { setViewN(n); setJobId(null); setRunId(null); setRun(null); setAcceptedN(null) }
   const makeCurrent = async (n: number) => {
     if (!creature) return
@@ -119,6 +140,7 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
               onRun={() => void run_()} busy={starting} lastRun={run} versionLabel={`v${version.n}`} />
             {startError && <div className="error" role="alert" data-testid="start-error">Could not start the challenge: {startError}</div>}
             <InvestigationList cid={creature.id} nonce={invNonce} openId={openInv} onOpen={setOpenInv} />
+            <RecoveryList cid={creature.id} nonce={recNonce} openId={openRec} onOpen={setOpenRec} />
           </div>
           <div className="fg-main">
             {acceptedN !== null && acceptedN === version.n && (
@@ -128,6 +150,8 @@ export function ForgePage({ target, go }: { target: { cid: string; n: number | n
               </div>
             )}
             <RunView jobId={jobId} runId={runId} onRun={onRun} />
+            <RecoveryPanel cid={creature.id} version={version} versions={creature.versions} run={run} status={status} openId={openRec} onOpenId={setOpenRec}
+              onChanged={() => setRecNonce((k) => k + 1)} onAccepted={accepted} onRunWalk={(n) => void runWalkOn(n)} />
             <InvestigationView cid={creature.id} version={version} versions={creature.versions} run={run} status={status} openId={openInv} onOpenId={setOpenInv}
               onChanged={() => setInvNonce((k) => k + 1)} onAccepted={accepted} />
           </div>

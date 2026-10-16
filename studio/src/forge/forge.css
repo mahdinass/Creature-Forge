@@ -92,3 +92,41 @@
 
 .fg-probe { display: grid; gap: 3px; padding: 8px 10px; border-radius: var(--r-sm); border: 1px solid var(--line-2); }
 .fg-probe-CONFIRMED { border-color: var(--ok); } .fg-probe-REFUTED { border-color: var(--bad); } .fg-probe-NOT_EVALUATED { border-style: dashed; }
+
+/* walking recovery ("Recover walking") */
+.fg-rec-panel { border-color: rgba(156, 140, 255, .45); }
+.fg-rec-form { border: none; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
+.fg-rec-form:disabled { opacity: .7; }
+.fg-live-tag { color: var(--ok); } .fg-mock-tag { color: var(--warn); }
+.fg-rec { gap: 14px; }
+.fg-rec-head { gap: 8px; }
+.fg-rec-head.fg-verdict-ok { border-color: var(--ok); } .fg-rec-head.fg-verdict-warn { border-color: var(--warn); } .fg-rec-head.fg-verdict-bad { border-color: var(--bad); } .fg-rec-head.fg-verdict-error { border: 1px dashed #c58cff; }
+.fg-prov-NON_AI { border-color: var(--simulate); }
+.fg-headline { margin: 0; overflow-wrap: anywhere; }
+.fg-chip-good { border-color: var(--ok); color: var(--ok); } .fg-chip-bad { border-color: var(--bad); color: #ff8b97; } .fg-chip-fp { border-color: var(--create); color: var(--create); background: rgba(255, 122, 69, .1); }
+.fg-rec-st-ok { border-color: var(--ok); color: var(--ok); } .fg-rec-st-warn { border-color: var(--warn); color: var(--warn); } .fg-rec-st-bad { border-color: var(--bad); color: #ff8b97; } .fg-rec-st-error { border-style: dashed; border-color: #c58cff; color: #c58cff; }
+.fg-hyp { display: grid; gap: 4px; padding: 8px 10px; border-radius: var(--r-sm); border: 1.5px dashed var(--investigate); background: var(--model-bg); overflow-wrap: anywhere; }
+.fg-rec-hyp.refuted { border-color: var(--bad); opacity: .85; }
+.fg-cites code { overflow-wrap: anywhere; }
+.fg-rec-sub { font: 650 14px var(--font-display); color: #c4ccda; }
+.fg-rec-block { display: grid; gap: 6px; }
+.fg-rec-probe.fg-rec-chip-ok { border-color: var(--ok); } .fg-rec-probe.fg-rec-chip-bad { border-color: var(--bad); } .fg-rec-probe.fg-rec-chip-muted { border-style: dashed; }
+.fg-rec-plan { display: grid; gap: 4px; overflow-wrap: anywhere; }
+.fg-rec-sub-control { border-color: var(--simulate); color: var(--simulate); } .fg-rec-sub-body { border-color: var(--create); color: var(--create); }
+.fg-rec-diag { margin: 0; padding: 8px 12px; border-left: 3px solid var(--investigate); background: var(--panel-2); overflow-wrap: anywhere; }
+.fg-ledger { display: flex; height: 18px; border-radius: 6px; overflow: hidden; background: var(--panel-2); border: 1px solid var(--line-2); }
+.fg-seg { display: block; height: 100%; min-width: 2px; }
+.fg-seg-start { background: #8f9aae; } .fg-seg-probes { background: var(--simulate); } .fg-seg-plans { background: var(--investigate); } .fg-seg-screening { background: var(--warn); } .fg-seg-unspent { background: repeating-linear-gradient(45deg, #232c3b, #232c3b 4px, #1b212c 4px, #1b212c 8px); }
+.fg-legend { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: 14px; }
+.fg-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; border: 1px solid var(--line-2); }
+.fg-gains { display: flex; gap: 8px; flex-wrap: wrap; }
+.fg-vstrip { display: flex; gap: 6px; flex-wrap: wrap; }
+.fg-vseed { display: grid; gap: 2px; padding: 4px 6px; min-width: 84px; border-radius: var(--r-md); background: var(--panel-2); border: 1px solid var(--line-2); font-size: 12px; text-align: center; }
+.fg-vcell { padding: 1px 6px; border-radius: 6px; border: 1px solid var(--line-2); font-weight: 700; }
+.fg-vcell.tone-ok { color: var(--ok); border-color: rgba(79, 209, 139, .6); } .fg-vcell.tone-bad { color: #ff8b97; border-color: rgba(255, 93, 108, .6); } .fg-vcell.tone-warn { color: var(--warn); border-color: rgba(242, 180, 65, .6); } .fg-vcell.tone-error { color: #c58cff; border-style: dashed; }
+.fg-checks, .fg-reasons { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 6px; } .fg-reasons { padding-left: 18px; list-style: disc; color: #c4ccda; }
+.fg-checks li { overflow-wrap: anywhere; }
+.fg-rec-compare { display: grid; gap: 10px; }
+.fg-pair-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.fg-card table tr.changed td { color: var(--create); font-weight: 700; }
+@media (max-width: 640px) { .fg-pair-2 { grid-template-columns: minmax(0, 1fr); } .fg-pair-2 .viewport { height: 300px; } .fg-vseed { min-width: 72px; } }
