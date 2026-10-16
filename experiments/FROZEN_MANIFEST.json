@@ -107,6 +107,7 @@
  "experiments/walk_recovery/dev_pilot/REPORT_S2.md": "9d949bba5b8aad4aa4e0dcf115ee2137a24de6d3",
  "experiments/walk_recovery/dev_pilot/protocol_s2.json": "7bf4f66d7ed3cf18fb9a6d70d89a3bf2c606eb53",
  "experiments/walk_recovery/dev_pilot/protocol_s2b.json": "949f897e725848e53e49f313ae9b2bd8cd797c5a",
+ "experiments/walk_recovery/dev_pilot/protocol_s2b_amend1.json": "b195b227cbf1d2c43a3978ee632df362d8eda038",
  "experiments/walk_recovery/dev_pilot/results/MANIFEST.json": "9b61a0e7ccc56af3fa818ea1ffd51901bebcb6db",
  "experiments/walk_recovery/dev_pilot/results/analysis_output.txt": "efa95ecf25e410341a6367ea873e87f87a164444",
  "experiments/walk_recovery/dev_pilot/results/shard0.jsonl": "7799b8be002c6095fa38f1a458c94d2c889e2c00",
