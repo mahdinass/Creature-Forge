@@ -475,6 +475,17 @@ class RealSmoke(unittest.TestCase):
         self.assertEqual(len(rec["final"]["vector"]), 15)
         json.dumps(rec)
 
+    def test_stilts_family17_fixed_director(self):
+        body = {"torso_mass": 4.7917, "thigh_length": 0.55, "shank_length": 0.55, "foot_length": 0.07,
+                "foot_friction": 1.0, "torque_limit": 60.0, "leg_density": 1000.0, "pose": [0.0] * 7}
+        seeds = {"diag": [31, 32, 33, 34], "train": [41, 42], "screen": [51, 52]}
+        rec = wp.run_pipeline(body, wp.FixedDirector(), total_budget=400, family=17, seeds=seeds, noise_seed=3,
+                              probe_budget=40, rounds=1, screen_top_k=3, screen_n=2)
+        self.assertLessEqual(rec["used"], 400)
+        self.assertEqual(rec["used"], sum(l["n"] for l in rec["budget_lines"]))
+        self.assertEqual(len(rec["final"]["vector"]), 17)
+        json.dumps(rec)
+
 
 if __name__ == "__main__":
     unittest.main()
