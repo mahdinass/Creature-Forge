@@ -270,3 +270,11 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Budgets after the evaluation: inference 140 requests, $0.54 of $15; infra ledger in `forge_cloud.py spend`.
 - Submission docs: capture plan rewritten for the Forge Loop, feedback updated for Nemotron-3-Super, `webgl-constants`
   confirmed MIT (`4a43440`).
+
+## 2026-10-16 - Walking-recovery research started (branch `feature/walk-recovery` from `main` e58dbdf)
+- Plan approved by the owner (rev. 2): `~/.claude/plans/pasted-content-id-4675-creature-merry-corbato.md` (local) — G1 recoverability gate first; Nemotron-as-director later; equal-total-compute comparisons; `full_recovery_v1`; staged spend.
+- New modules (VM-tested): `walk_opt.py` (budget-exact numpy CMA-ES, IPOP, subspaces, similarity init, 17-D support), `creature_gen.py` (walkrec seed namespace >= 10M, regions, generator, failing-panel rule, dev bodies), `recovery.py` (`full_recovery_v1`), `gait_features.py` (cadence, capture margin, foot placement, fall direction), `phasegait_fp.py` (optional SIMBICON-style foot placement; zero gains bit-identical to the 15-D controller). Scripts `walk_profile.py`, `walk_oracle.py`, `walk_oracle_report.py`.
+- S0 profile: 8-vCPU VM = 4 physical cores; ~11 walking / ~37 falling rollouts/s; 65 MB/worker.
+- M1a (registered `563f41c`, results `2274e80`, development data): 4/4 dev creatures fail; similarity transfer never helps; 4k-rollout CMA reaches walking 0.38-1.00, 1 FULL_RECOVERY (weak-slippery, joint); budget-limited; overfitting signs. `experiments/walk_recovery/oracle/REPORT_M1A.md`.
+- Incident: a slot sync deleted partial M1a results; re-run deterministically (INCIDENTS 2026-10-16). Outputs now go to git-ignored `artifacts/`.
+- Spend: infra $5.00 of $10 (VM STOPPED); inference unchanged ($0.55). Next: S1 (full M1, 12-creature dev panel) awaits owner approval.
