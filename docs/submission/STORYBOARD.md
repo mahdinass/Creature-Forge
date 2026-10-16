@@ -27,4 +27,4 @@ If the honest-negative clip should show an INCONCLUSIVE verdict instead of walki
 - Do not display NVIDIA or Nebius logos or marks (not licensed for use here); name them in text only.
 - Do not say "partner", "sponsored by" or "endorsed by"; say "built for the Nebius x NVIDIA Global AI Hackathon".
 - Never say the model "proves", "beats random", or is "significantly better"; never present the scoreboard without its caveats; never say Nemotron produced the classical 150/150 controller.
-- The memory evaluation is pending: do not mention results for it.
+- The memory evaluation is complete with a null result (no evidence of a benefit, p = 0.77). If mentioned at all, say exactly that; never imply memory helped.

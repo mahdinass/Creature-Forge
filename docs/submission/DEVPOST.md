@@ -21,14 +21,14 @@ The loop is Draw, Challenge, AI Redesign, Verify, Evolve:
 The model proposes, the physics measures, the rule judges, the user decides. Model confidence never enters a verdict.
 
 ## How we built it
-- **NVIDIA Nemotron-3-Super-120B on Nebius Token Factory:** strict JSON-schema replies whose enums list every editable parameter and every citable evidence value; thinking disabled; diagnostic probes; hard request, token and dollar caps in a ledger.
+- **NVIDIA Nemotron-3-Super-120B (NVIDIA Nemotron Open Model License) on Nebius Token Factory:** strict JSON-schema replies whose enums list every editable parameter and every citable evidence value; thinking disabled; diagnostic probes; hard request, token and dollar caps in a ledger.
 - **MuJoCo:** planar biped, challenges, probes, and a deterministic verdict. Replays are fresh deterministic rollouts.
 - **Counterfactual Arena:** every AI result is shown beside its matched-random twin.
 - **Nebius AI Cloud:** all simulation and testing ran on a Nebius CPU VM, driven by our own start/stop/sync tooling with a spend cap.
 - **Studio:** React and React Three Fiber frontend, FastAPI backend.
 
 ## Challenges
-- Our earlier Nemotron Nano experiment returned empty replies (hidden reasoning used the whole token budget), so that comparison was never completed. We ran a model calibration (30 requests, $0.31) and chose Super with thinking off.
+- Our earlier Nemotron Nano experiment returned empty replies (hidden reasoning used the whole token budget), so that comparison was never completed. We ran a model calibration (30 requests, $0.31) comparing Nemotron Nano, Super, Ultra and Lightning configurations, and chose Super with thinking off.
 - The first calibration produced 0 of 12 valid replies because of contract defects (ids, citation paths); schema enums fixed them.
 - Push measurements were too coarse to see small gains; we refined the resolution to 0.625 N.
 - In one run the model proposed a mechanism its own probes had refuted; we added an explicit method rule.
@@ -43,7 +43,7 @@ The model proposes, the physics measures, the rule judges, the user decides. Mod
 Random edits are a strong baseline (about 15% of random push edits verified in our null pilot), so a single VERIFIED proposal says little about model skill; the matched-twin comparison does. Calibrate output format and contracts before judging reasoning.
 
 ## What's next
-A pre-registered paired evaluation of engineering memory (lessons from other creatures, memory on versus off) is running; its result is pending and not claimed here. Next: walking co-design and more creature families.
+We also tested an idea that did not work: engineering memory (measured lessons from other creatures added to the evidence). A pre-registered paired evaluation (12 pairs, memory on versus off, identical seeds) found no evidence of a benefit: verified redesigns 6 of 12 with memory and 7 of 12 without (exact one-sided McNemar p = 0.77), and the model never cited a lesson although they were in its evidence. Memory stays off by default (`experiments/forge_loop/memory_eval/REPORT.md`). Next: walking co-design and more creature families.
 
 ## Built with
 Python, MuJoCo, NumPy, FastAPI, React, React Three Fiber, TypeScript, Vite, **NVIDIA Nemotron**, **Nebius Token Factory**, **Nebius AI Cloud**.
