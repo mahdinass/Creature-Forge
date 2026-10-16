@@ -1,0 +1,19 @@
+{
+  "sha256": {
+    "analysis_output.txt": "8e1974dec4b05953ab50942daf0a8e4ae759082542ba4b7235e4b4723a97bf74",
+    "shard0.jsonl": "12479d16d9c8957f60af967457f087f7c9c086abc6bae2496304527b87bf0565",
+    "shard1.jsonl": "0b8af15c4e715510b174584f368c0d2fb6fac541c4975ba5704f7caa0b2021d9",
+    "shard10.jsonl": "7c10e96cc8ef939688cec0a589b593185d4aec092a3a675293a1ee683af7c591",
+    "shard11.jsonl": "5c4a4f7a39b6a5c88f070d388824e5df7c3e1a031c94fe30bb4a02c0868b701a",
+    "shard2.jsonl": "39fd4e846073a8704af5b947ae66a6bf0c74aa7ecfd694c20d32817431ae789a",
+    "shard3.jsonl": "68830a9534f28d1cad427ce734105bf1eb61f8c56d187089880a44d7bc4a9608",
+    "shard4.jsonl": "56810abbacfbb93fe00a80aa827b294df2a697b4e83b2a75e21d6d8f37e5d377",
+    "shard5.jsonl": "064d9544679300dc58f95ebf69f15c7fbc9348cfea5046e8e4a030e365aebd87",
+    "shard6.jsonl": "f1cfa05df130581355bb6347663d221f77bc379cd1cbdd0637f0bf527c2d604a",
+    "shard7.jsonl": "34854be3672e80ac2fd23e706bf79b933f06094847eb2ed34b81ba66a5042815",
+    "shard8.jsonl": "8bfe253713d84915b2c669ef730684acc14a4ededae916f4584aad2b92f539ba",
+    "shard9.jsonl": "d19def43f605f11f940feb824d1b7ba3a3f2e82d82ab3eb4ef588b2311b35092",
+    "summary.json": "87c72ef02322c7ede07f10409ac26fbee22b68925db50821f54eb931ed23dfbc"
+  },
+  "note": "S2 records from the batch VM (slot s2, snapshot 08e7dc1 = da421f2 + clean tree); analysis_output.txt = single run of scripts/walk_s2_analysis.py (a799d1f)"
+}

@@ -1,0 +1,42 @@
+144 units; unit errors: 0
+G2 accounting: 144 units OK, violations []
+
+| method | budget | FULL | PARTIAL | NOT | other |
+|---|---|---|---|---|---|
+| ai | 2000 | 2 | 7 | 3 | 0 |
+| ai | 4000 | 1 | 9 | 2 | 0 |
+| ai_nogait | 2000 | 2 | 7 | 3 | 0 |
+| cma_ctrl | 2000 | 3 | 4 | 5 | 0 |
+| cma_ctrl | 4000 | 3 | 4 | 5 | 0 |
+| cma_joint | 2000 | 3 | 8 | 1 | 0 |
+| cma_joint | 4000 | 6 | 5 | 1 | 0 |
+| fix | 2000 | 4 | 7 | 1 | 0 |
+| fix | 4000 | 8 | 2 | 2 | 0 |
+| rand | 2000 | 7 | 3 | 2 | 0 |
+| rand | 4000 | 5 | 4 | 3 | 0 |
+
+| creature | ai@2000 | ai@4000 | ai_nogait@2000 | cma_ctrl@2000 | cma_ctrl@4000 | cma_joint@2000 | cma_joint@4000 | fix@2000 | fix@4000 | rand@2000 | rand@4000 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| stilts-drawn | PART 0.83 | PART 0.58 | PART 0.67 | NOT_ 0.00 | PART 0.71 | PART 0.83 | PART 0.83 | FULL 0.88 | FULL 0.96 | PART 0.62 | NOT_ 0.04 |
+| tiny-feet | NOT_ 0.38 | PART 0.92 | PART 0.96 | NOT_ 0.50 | NOT_ 0.38 | PART 0.79 | PART 0.88 | PART 0.71 | NOT_ 0.33 | FULL 1.00 | FULL 0.88 |
+| walkrec-dev-m1-gen-0006 | NOT_ 0.38 | NOT_ 0.54 | NOT_ 0.79 | NOT_ 0.54 | NOT_ 1.00 | NOT_ 0.92 | NOT_ 1.00 | NOT_ 1.00 | NOT_ 0.96 | FULL 0.92 | NOT_ 1.00 |
+| walkrec-dev-m1-gen-0007 | PART 0.79 | PART 0.79 | PART 0.79 | PART 0.25 | PART 0.88 | PART 0.79 | FULL 0.96 | PART 0.79 | FULL 0.88 | FULL 0.92 | PART 0.83 |
+| top-heavy | FULL 0.88 | NOT_ 0.50 | PART 0.67 | PART 0.88 | PART 0.88 | PART 0.67 | FULL 0.96 | PART 0.79 | FULL 0.92 | FULL 0.96 | NOT_ 0.46 |
+| weak-slippery | PART 0.00 | PART 0.00 | PART 0.00 | PART 0.00 | NOT_ 0.21 | PART 0.00 | FULL 0.92 | PART 0.00 | FULL 1.00 | PART 0.00 | FULL 0.92 |
+| walkrec-dev-m1-gen-0000 | PART 0.71 | PART 0.58 | PART 0.92 | FULL 1.00 | FULL 1.00 | FULL 0.92 | FULL 1.00 | PART 0.92 | FULL 0.92 | NOT_ 0.04 | PART 0.83 |
+| walkrec-dev-m1-gen-0001 | PART 0.71 | PART 0.79 | PART 0.75 | FULL 0.88 | FULL 0.92 | PART 0.58 | PART 0.58 | PART 0.71 | PART 0.71 | PART 0.71 | PART 0.71 |
+| walkrec-dev-m1-gen-0002 | PART 0.79 | FULL 0.83 | FULL 0.92 | FULL 0.88 | FULL 0.92 | FULL 0.92 | PART 0.75 | PART 0.67 | PART 0.75 | FULL 0.88 | PART 0.79 |
+| walkrec-dev-m1-gen-0003 | NOT_ 0.00 | PART 0.50 | NOT_ 0.00 | NOT_ 0.00 | NOT_ 0.00 | PART 0.00 | PART 0.54 | FULL 0.96 | FULL 0.96 | NOT_ 0.00 | FULL 0.92 |
+| walkrec-dev-m1-gen-0004 | FULL 0.92 | PART 0.88 | FULL 1.00 | PART 0.83 | PART 0.79 | PART 0.71 | FULL 0.88 | FULL 0.88 | FULL 0.92 | FULL 0.92 | FULL 0.96 |
+| walkrec-dev-m1-gen-0005 | PART 0.79 | PART 0.67 | NOT_ 0.54 | NOT_ 0.42 | NOT_ 0.33 | FULL 1.00 | FULL 1.00 | FULL 0.92 | FULL 1.00 | FULL 1.00 | FULL 1.00 |
+
+R* = 2000: best non-AI method recovers 4/12 (25-60% rule)
+primary comparator at R*: fix (cma_joint 3 vs fix 4; ties -> cma_joint)
+
+ai: 24 pipelines; valid plan in 24/24 = 100% (G2 needs >= 80%); decision statuses {'ok': 93, 'invalid_after_repair': 3}; 116 calls, $0.1928
+
+ai_nogait: 12 pipelines; valid plan in 12/12 = 100% (G2 needs >= 80%); decision statuses {'ok': 36, 'model_failed': 11, 'repair_failed': 1}; 49 calls, $0.0540
+H6 ai: round-1 probes include a census top-2 probe in 11/24 pipelines (random choice of the same size: 8.0/24 expected)
+H6 ai_nogait: round-1 probes include a census top-2 probe in 2/12 pipelines (random choice of the same size: 4.0/12 expected)
+
+census best probes per creature: stilts-drawn: opt_body (+7), opt_timing (+6); tiny-feet: opt_body (+5), opt_placement (+5); walkrec-dev-m1-gen-0006: opt_feedback (+7), opt_stride (+5); walkrec-dev-m1-gen-0007: opt_timing (+6), opt_placement (+6); top-heavy: opt_body (+8), opt_placement (+5); weak-slippery: opt_body (+0), opt_posture (+0); walkrec-dev-m1-gen-0000: opt_body (+8), opt_placement (+7); walkrec-dev-m1-gen-0001: opt_body (+8), opt_timing (+7); walkrec-dev-m1-gen-0002: opt_posture (+8), opt_stride (+8); walkrec-dev-m1-gen-0003: opt_body (+0), opt_feedback (+0); walkrec-dev-m1-gen-0004: opt_body (+8), opt_placement (+7); walkrec-dev-m1-gen-0005: opt_body (+7), opt_placement (+7)

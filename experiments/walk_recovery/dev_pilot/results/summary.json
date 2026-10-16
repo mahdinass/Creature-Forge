@@ -1,0 +1,20 @@
+{
+ "full": {
+  "ai@2000": 2,
+  "ai@4000": 1,
+  "ai_nogait@2000": 2,
+  "cma_ctrl@2000": 3,
+  "cma_ctrl@4000": 3,
+  "cma_joint@2000": 3,
+  "cma_joint@4000": 6,
+  "fix@2000": 4,
+  "fix@4000": 8,
+  "rand@2000": 7,
+  "rand@4000": 5
+ },
+ "r_star": 2000,
+ "r_star_reason": "best non-AI method recovers 4/12 (25-60% rule)",
+ "primary_comparator": "fix",
+ "accounting_violations": [],
+ "unit_errors": []
+}

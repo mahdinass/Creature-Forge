@@ -11,3 +11,4 @@ experiments/walk_recovery/**/results/*.json -text
 experiments/walk_recovery/**/results/**/*.jsonl -text
 experiments/walk_recovery/**/results/**/*.json -text
 experiments/walk_recovery/**/results/**/*.txt -text
+experiments/walk_recovery/**/results/*.txt -text
