@@ -31,8 +31,8 @@ def main() -> int:
         rs = cells[k]
         fs = [r["final"]["status"] for r in rs]
         ws = [r["warm_assessment"]["status"] for r in rs]
-        fw = sum(r["final"]["validation"]["walking_frac"] for r in rs) / len(rs)
-        ww = sum(r["warm_assessment"]["validation"]["walking_frac"] for r in rs) / len(rs)
+        fw = sum(r["final"]["walking_frac"] for r in rs) / len(rs)
+        ww = sum(r["warm_assessment"]["walking_frac"] for r in rs) / len(rs)
         fb = sum(bool(r.get("decision", {}).get("fallback_to_r2")) for r in rs)
         full[k] = fs.count("FULL_RECOVERY")
         print(f"| {k[0]} | {k[1]} | {full[k]}/{len(rs)} | {fs.count('PARTIAL_IMPROVEMENT')} | {ws.count('FULL_RECOVERY')} | {ww:.2f} | {fw:.2f} | {fb} |")
