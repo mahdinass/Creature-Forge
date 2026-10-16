@@ -118,6 +118,8 @@ def main() -> int:
     ap.add_argument("--methods")
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--ledger", help="inference ledger path for the ai method (default: env CF_INFERENCE_LEDGER)")
+    ap.add_argument("--skip-done-from", nargs="*", default=[],
+                    help="earlier result files of the SAME protocol id (e.g. before a cap amendment): their completed units are skipped, never rerun")
     a = ap.parse_args()
     ppath = Path(a.protocol)
     proto = json.loads(ppath.read_text(encoding="utf-8"))
@@ -134,6 +136,13 @@ def main() -> int:
                 raise SystemExit("results file was produced under a different protocol")
             done.add(r["unit"])
             used += r["rollouts"]["method"] + r["rollouts"]["assessment"]
+    base_id = proto.get("amends", proto["id"])
+    for prev in a.skip_done_from:
+        for line in Path(prev).read_text(encoding="utf-8").splitlines():
+            r = json.loads(line)
+            if r["protocol_id"] != base_id:
+                raise SystemExit(f"{prev}: protocol id {r['protocol_id']} is not {base_id}")
+            done.add(r["unit"])
     creatures, panel_sha = load_creatures(proto, Path(a.panel))
     methods = a.methods.split(",") if a.methods else [m["id"] for m in proto["methods"]]
     shard = tuple(int(x) for x in a.shard.split("/")) if a.shard else None
