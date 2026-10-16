@@ -182,7 +182,8 @@ def encode(space: SearchSpace, base_body, base_vector, body, vector) -> np.ndarr
     for p in space.body_params:
         lo, hi = _log_interval(space, base, p)
         z = (math.log(float(body[p]) / float(base[p])) - lo) / (hi - lo)
-        if not (-1e-9 <= z <= 1 + 1e-9):
+        tol = 1e-9 + 2 * _MARGIN / (hi - lo)   # a value exactly on a mode bound sits _MARGIN outside the shrunk interval
+        if not (-tol <= z <= 1 + tol):
             raise ValueError(f"body {p}={body[p]!r} is outside the searched interval for base {base[p]!r}")
         x.append(min(1.0, max(0.0, z)))
     return np.asarray(x, dtype=float)

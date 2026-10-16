@@ -270,3 +270,15 @@ class MujocoSmokeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BaseOnBoundTests(unittest.TestCase):
+    def test_base_body_on_a_mode_bound_encodes(self):
+        # regression (M1a, 2026-10-16): tiny-feet has foot_length exactly on the guided lower bound 0.06
+        from creature_forge import walk_opt as wo
+        import creature_forge.creature_walk as cw
+        body = {"torso_mass": 15.0, "thigh_length": 0.3, "shank_length": 0.3, "foot_length": 0.06, "foot_friction": 1.0,
+                "torque_limit": 60.0, "leg_density": 1000.0, "pose": [0.0] * 7}
+        space = wo.SearchSpace.full_ctrl(body_params=("foot_length", "torso_mass"))
+        x = wo.encode(space, body, list(cw.R2_WINNER), body, list(cw.R2_WINNER))
+        self.assertTrue(all(0.0 <= v <= 1.0 for v in x))
