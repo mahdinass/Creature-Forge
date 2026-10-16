@@ -8,3 +8,6 @@ experiments/forge_loop/memory_eval/bank.jsonl -text
 experiments/forge_loop/memory_eval/results/records/*.json -text
 experiments/walk_recovery/**/results/*.jsonl -text
 experiments/walk_recovery/**/results/*.json -text
+experiments/walk_recovery/**/results/**/*.jsonl -text
+experiments/walk_recovery/**/results/**/*.json -text
+experiments/walk_recovery/**/results/**/*.txt -text
