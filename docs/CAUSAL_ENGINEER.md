@@ -142,7 +142,40 @@ decisions never had to be *right about a cause* to matter, and they never were c
 - 2026-10-17: **held-out benchmark build** (`experiments/causal_engineer/heldout/BUILD_SPEC.md`, frozen before the build):
   28 S3 bases × 8 faults × {0.5, 1.0}, screen-first, on the batch VM.
 - 2026-10-17: **pilot3** (a fresh dev subset of 16 instances, not in pilot1/2): `scientist_think`, `scientist_1shot_think`,
-  `scientist_think_mem`, `exhaustive`, `expert`. Results pending.
+  `scientist_think_mem`, `exhaustive`, `expert`.
+
+  | arm | FULL / PARTIAL / NOT | rollouts | chose a repairing tool |
+  |---|---|---|---|
+  | exhaustive | 9 / 5 / 2 | 687 | 14/16 |
+  | `scientist_1shot_think` | 3 / 9 / 4 | 393 | 14/16 |
+  | `scientist_think` | 2 / 8 / 6 | 298 | 13/16 |
+  | `scientist_think_mem` | 2 / 9 / 5 | 300 | 13/16 |
+  | expert | 2 / 9 / 5 | 690 | 11/16 |
+
+  - Diagnosis:
+    - Decision quality is close to exhaustive's, but the scientist concluded once its 4 training seeds walked and left
+      more than half of the budget unused. Its designs then failed the 20 s confirmation.
+    - Exhaustive spends everything on two 330-rollout optimisations, often with tools that do not match the fault.
+  - Memory: the scientist judged retrieved items in both directions.
+    - Episodes: 5 applies, 7 does_not_apply, 15 needs_adaptation, 3 test_first.
+    - Cards: 6 applies, 6 does_not_apply, 1 needs_adaptation, 2 test_first.
+  - Defect: pilot3's memory bank used the stale stored features, which affected 4 of 18 retrieval dimensions; fixed afterwards.
+- 2026-10-17: **v2.2**: the prompt states the exact full_recovery_v1 criteria (pilot4).
+- 2026-10-17: **v2.3**: a 20 s **stress-test** instrument (current best design on the visible obs seeds, 2 × n_obs rollouts,
+  predicted walking count registered first, once per design), plus "N rollouts would stay unused" at decision time (pilot5).
+
+  Paired results on the same 7 dev instances (FULL recoveries):
+
+  | v2.1 | v2.2 | v2.3 | exhaustive |
+  |---|---|---|---|
+  | 0 | 1 | 3 | 5 |
+
+  - The stress test was used in 6 of 7 episodes and changed decisions; for example, a prediction of 2 against a measured 4
+    led it to conclude, and a measured 0 led it to repair further.
+  - Development only; tuned on these instances.
+- 2026-10-17: thinking arms raised to max_tokens 32,000 (three pilot5 steps were lost to `finish_reason=length`).
+- 2026-10-17: **held-out evaluation registered** (`experiments/causal_engineer/heldout/PROTOCOL.md` + `protocol.json`): 40
+  instances on 22 unseen bases, 8 arms, hypotheses C1–C5b with Holm correction.
 - 2026-10-17: **security incident** (logged in `docs/memory/INCIDENTS.md`):
   - a CRLF `.env` sourced by bash put the API key into four dev result files on the VM; the files were deleted;
   - redaction and the record guards are fixed;
