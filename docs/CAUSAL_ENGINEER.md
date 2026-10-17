@@ -122,6 +122,25 @@ decisions never had to be *right about a cause* to matter, and they never were c
     repair matrix; `scripts/ce_probe_dataset.py`, 165 instances, 5,600 rollouts), plus earlier investigations;
   - mechanism cards are rebuilt per robot;
   - development runs exclude the robot's own base.
+- 2026-10-17: **Level C** (`repair_learner.py`, numpy only). Target: the measured repair matrix (walking ≥ 6/8 check seeds);
+  12-fold leave-one-base-out; base-clustered bootstrap CIs (`experiments/causal_engineer/dev/LEVEL_C_LOBO.md`).
+
+  | features | logistic | MLP ensemble | kNN | CF heuristic (exhaustive) | expert rules | prior |
+  |---|---|---|---|---|---|---|
+  | observation only | 0.59 | 0.54 | 0.56 | – | 0.39 | 0.39 |
+  | observation + counterfactuals | 0.66 | 0.67 | 0.63 | 0.59 | 0.39 | 0.39 |
+
+  (top-1 hit rate)
+  - Learned beats the hand-made ranking: logistic minus CF heuristic +0.07 [0.02, 0.14].
+  - Learned does NOT beat kNN retrieval: +0.03 [−0.06, 0.12]. Counterfactual information adds about 0.08 top-1.
+  - The MLP ensemble spread carries no uncertainty signal (AUROC 0.55), so it is not used as uncertainty.
+  - Shuffled-target controls sit near the prior.
+  - Fix during this work: the fault-bench `features` field describes the creature before its S2 recovery, so it was replaced
+    by the faulty robot's own body features everywhere (memory and Level C). The v0 results are kept as `*_v0_stale_features*`.
+  - Runtime model: `level_c_logistic.json`. New `learned` policy: the exhaustive procedure with this ranking. New advice item for
+    the scientist (observation-only model, labelled with its held-out accuracy).
+- 2026-10-17: **held-out benchmark build** (`experiments/causal_engineer/heldout/BUILD_SPEC.md`, frozen before the build):
+  28 S3 bases × 8 faults × {0.5, 1.0}, screen-first, on the batch VM.
 - 2026-10-17: **pilot3** (a fresh dev subset of 16 instances, not in pilot1/2): `scientist_think`, `scientist_1shot_think`,
   `scientist_think_mem`, `exhaustive`, `expert`. Results pending.
 - 2026-10-17: **security incident** (logged in `docs/memory/INCIDENTS.md`):
