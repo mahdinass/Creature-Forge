@@ -119,5 +119,43 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(t.calls, [])
 
 
+class RedactionRegression(unittest.TestCase):
+    """Incident 2026-10-17: a key with a trailing CR (CRLF .env sourced by a shell) made the HTTP layer raise
+    "Invalid header value b'Bearer <key>\r'", whose text the exact-match redaction and the record guard missed."""
+    KEY = "v1.ABCDEFGHIJKLMNOP_qrstuv-123"
+
+    def test_cr_key_and_any_bearer_are_redacted(self):
+        from creature_forge.nebius import redact_secret
+        for secret in (self.KEY + "\r", self.KEY, None):
+            err = str(ValueError("Invalid header value " + repr(("Bearer " + self.KEY + "\r").encode())))
+            out = redact_secret(err, secret)
+            self.assertNotIn(self.KEY, out)
+            self.assertIn("[redacted]", out)
+
+    def test_contains_secret_fails_closed(self):
+        import json
+        from creature_forge.nebius import contains_secret
+        rec = json.dumps({"error": "x " + self.KEY + "\r y"})          # JSON escapes the CR
+        self.assertTrue(contains_secret(rec, self.KEY + "\r"))
+        self.assertTrue(contains_secret(json.dumps({"e": "Bearer abc.def"}), None))
+        self.assertFalse(contains_secret(json.dumps({"e": "Bearer [redacted]"}), None))
+        self.assertFalse(contains_secret("nothing here", self.KEY))
+
+    def test_key_from_env_is_stripped(self):
+        import os
+        from creature_forge.config import nebius_api_key
+        old = os.environ.get("NEBIUS_API_KEY")
+        try:
+            os.environ["NEBIUS_API_KEY"] = self.KEY + "\r"
+            self.assertEqual(nebius_api_key(), self.KEY)
+            os.environ["NEBIUS_API_KEY"] = " \r "
+            self.assertIsNone(nebius_api_key())
+        finally:
+            if old is None:
+                os.environ.pop("NEBIUS_API_KEY", None)
+            else:
+                os.environ["NEBIUS_API_KEY"] = old
+
+
 if __name__ == "__main__":
     unittest.main()

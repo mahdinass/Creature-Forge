@@ -6,6 +6,7 @@ and time limits; NO retries of any kind; the transport is injectable so tests ne
 from __future__ import annotations
 
 import json
+import re
 import time
 import urllib.error
 import urllib.request
@@ -79,12 +80,33 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 _OPENER = urllib.request.build_opener(_NoRedirect)
 
 
+_BEARER = re.compile(r"(Bearer\s+)[^\s'\"\\]+")
+
+
 def redact_secret(text: str, secret: str | None) -> str:
-    """Remove every occurrence of the API key (and its Bearer form) from provider-supplied text."""
+    """Remove every occurrence of the API key from provider-supplied text: the key as given, stripped of surrounding whitespace,
+    in its escaped repr form (an exception message shows a trailing CR as the two characters backslash-r), and ANY
+    "Bearer <token>" (incident 2026-10-17: a key with a trailing CR from a CRLF .env produced an "Invalid header value" error
+    whose text the exact-match redaction missed)."""
     text = str(text)
-    if secret and len(secret) >= 4:
-        text = text.replace(secret, "[redacted]")
-    return text
+    if secret and len(secret.strip()) >= 4:
+        for form in sorted({secret, secret.strip(), repr(secret)[1:-1], repr(secret.strip())[1:-1]}, key=len, reverse=True):
+            if len(form) >= 4:
+                text = text.replace(form, "[redacted]")
+    return _BEARER.sub(r"\1[redacted]", text)
+
+
+def contains_secret(text: str, secret: str | None) -> bool:
+    """True if `text` (e.g. a JSON-serialised record) holds the key in any form redact_secret removes, its JSON-escaped form, or an
+    un-redacted "Bearer <token>". Used by record guards, which must fail closed."""
+    import json as _json
+    text = str(text)
+    if secret and len(secret.strip()) >= 4:
+        forms = {secret, secret.strip(), repr(secret)[1:-1], repr(secret.strip())[1:-1], _json.dumps(secret)[1:-1],
+                 _json.dumps(secret.strip())[1:-1]}
+        if any(len(f) >= 4 and f in text for f in forms):
+            return True
+    return any(m.group(0)[len(m.group(1)):] != "[redacted]" for m in _BEARER.finditer(text))
 
 
 def _key_from_headers(headers: dict) -> str | None:

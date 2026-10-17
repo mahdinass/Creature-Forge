@@ -43,7 +43,7 @@ from .evidence import leaf_items, leaf_paths
 from .forge_ai import ModelCall, ModelConfig, call_model, make_client, parse_reply
 from .inference_ledger import Caps, InferenceLedger
 from .investigation import (PROVENANCE, SCRIPTED_MODEL, LiveRefused, live_refusal, load_model_config, new_investigation_id)
-from .nebius import estimate_prompt_tokens, redact_secret
+from .nebius import contains_secret, estimate_prompt_tokens, redact_secret
 
 VERSION = "nemotron_director_v1"
 PROMPT_VERSIONS = ("v1", "v2")
@@ -800,6 +800,6 @@ class NemotronDirector:
                "expectations": copy.deepcopy(self.expectations), "refuted_by_round": copy.deepcopy(self.refuted_by_round),
                "cost_usd": sum(float(c.get("cost_usd") or 0.0) for c in self.calls), "tokens": tok}
         text = json.dumps(rec)      # must be JSON-safe
-        if self.api_key and self.api_key in text:
+        if contains_secret(text, self.api_key):
             raise RuntimeError("API key found in the director record; refusing to return it")
         return json.loads(text)

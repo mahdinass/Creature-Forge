@@ -83,3 +83,19 @@ Append one incident per significant recurring failure. Mark everything here as `
 ## 2026-10-17 S3 nearly reached the batch VM's deadman deadline
 - The S3 confirmatory run was launched with a 4 h VM deadline that included the time spent on smokes and the amendment; the local background waiter that would have flagged it was stopped by Claude Code (Windows host low on memory). A one-off check found 0.11 h left with 28 units running; `forge_cloud.py extend --hours 2` (cap-guarded) fixed it before the guest powered off. No unit was interrupted.
 - Lesson: set the deadline at launch for the projected run time + margin (not the default), and do not rely on a local waiter process for safety-relevant extensions.
+## 2026-10-17 API key written into dev result files on the VM (trailing CR, redaction miss)
+- What happened:
+  - The causal-engineer pilot2 launch sourced `~/dev/.env` in bash (`set -a; . ~/dev/.env`). That file has CRLF line endings, so `NEBIUS_API_KEY` carried a trailing CR.
+  - Every request failed locally (`ValueError: Invalid header value b'Bearer <key>\r'`); no request reached the provider and nothing was spent.
+  - The error text contained the key. `redact_secret` and the record guards compare the exact key (with the CR) and missed the escaped form, so the key was written into 4 git-ignored result files on the VM (`~/dev/ce3/artifacts/ce/pilot2_shard*.jsonl`).
+  - The key was also echoed once into the operator's local session transcript while diagnosing.
+- Containment:
+  - The 4 files (0 successful calls, no results) were deleted.
+  - A grep of the VM logs, ledger and other slots found no other copy. Nothing was committed or pushed.
+- Fix:
+  - `config.nebius_api_key()` strips whitespace.
+  - `nebius.redact_secret` also removes stripped and escaped forms and any `Bearer <token>`.
+  - A new fail-closed `nebius.contains_secret` (which also checks JSON-escaped forms) is used by the director, mech_director and scientist record guards.
+  - Regression tests in `tests/test_nebius_client.py`.
+  - Launch rule: never `source` the .env in a shell; the Python `load_env` (dotenv) reads it.
+- Owner action recommended: rotate the Nebius Token Factory key, since it appeared in a local transcript.

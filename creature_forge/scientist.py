@@ -34,6 +34,7 @@ from . import physics_digest as pdg
 from .forge_ai import ModelCall, parse_reply
 from .inference_ledger import Caps, InferenceLedger
 from .investigation import SCRIPTED_MODEL, new_investigation_id
+from .nebius import contains_secret
 from .physics_probe import PROBE_DOCS
 
 VERSION = "causal_scientist_v2"   # v1 (pilot1) is at commit 4d286e5; v2 changes: experiments/causal_engineer/dev/AUDIT_PILOT1.md
@@ -1307,6 +1308,6 @@ class Scientist(dr.NemotronDirector):
         })
         import json
         text = json.dumps(rec)
-        if self.api_key and self.api_key in text:
+        if contains_secret(text, self.api_key):
             raise RuntimeError("API key found in the scientist record; refusing to return it")
         return json.loads(text)

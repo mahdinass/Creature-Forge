@@ -43,6 +43,7 @@ from .evidence import leaf_paths
 from .forge_ai import ModelCall, parse_reply
 from .inference_ledger import InferenceLedger
 from .investigation import new_investigation_id
+from .nebius import contains_secret
 
 VERSION = "nemotron_mech_director_v1"
 MODES = ("iterative", "one_shot")
@@ -690,6 +691,6 @@ class MechDirector(dr.NemotronDirector):
         rec.update(version=VERSION, method=self.method, mech_mode=self.mech_mode, mech_meta=copy.deepcopy(self.mech_meta),
                    reference_features=copy.deepcopy(self.reference))
         text = json.dumps(rec)
-        if self.api_key and self.api_key in text:
+        if contains_secret(text, self.api_key):
             raise RuntimeError("API key found in the director record; refusing to return it")
         return json.loads(text)
