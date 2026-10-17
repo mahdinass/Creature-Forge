@@ -322,5 +322,15 @@ class TestCeEval(unittest.TestCase):
             self.assertEqual(ce_eval.done_pairs(p + ".missing"), set())
 
 
+class AuthFailFast(unittest.TestCase):
+    def test_auth_failed_detects_401_only_for_scientist_arms(self):
+        bad = {"policy": "scientist_think", "policy_record": {"calls": [{"ok": False, "error": "NebiusError: HTTP 401: {...}"}]}}
+        ok = {"policy": "scientist_think", "policy_record": {"calls": [{"ok": False, "error": "finish_reason=length"}]}}
+        nonai = {"policy": "exhaustive", "policy_record": {"calls": [{"error": "HTTP 401"}]}}
+        self.assertTrue(ce_eval.auth_failed(bad))
+        self.assertFalse(ce_eval.auth_failed(ok))
+        self.assertFalse(ce_eval.auth_failed(nonai))
+
+
 if __name__ == "__main__":
     unittest.main()

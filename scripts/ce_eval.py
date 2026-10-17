@@ -34,6 +34,35 @@ SCIENTIST_ARMS = {"scientist": ("iterative", False, False), "scientist_1shot": (
 POLICIES = tuple(SCIENTIST_ARMS) + ("exhaustive", "expert", "random", "blind", "learned")
 
 
+AUTH_MARKERS = ("HTTP 401", "HTTP 403")
+
+
+def auth_failed(rec: dict) -> bool:
+    """True if any model call of the episode failed authentication (an infrastructure failure, not a model decision)."""
+    calls = ((rec.get("policy_record") or {}).get("calls") or []) if rec.get("policy") in SCIENTIST_ARMS else []
+    return any(any(m in str(c.get("error") or "") for m in AUTH_MARKERS) for c in calls)
+
+
+def live_key_check() -> str | None:
+    """Read-only GET /models with the configured key (no tokens). None if it works, else the reason (never the key)."""
+    import urllib.error
+    import urllib.request
+    from creature_forge.config import load_env, nebius_api_key, nebius_base_url
+    from creature_forge.nebius import DEFAULT_BASE_URL
+    load_env()
+    key = nebius_api_key()
+    if not key:
+        return "NEBIUS_API_KEY is not set"
+    req = urllib.request.Request(f"{nebius_base_url(DEFAULT_BASE_URL)}/models", headers={"Authorization": f"Bearer {key}"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return None if r.status == 200 else f"HTTP {r.status}"
+    except urllib.error.HTTPError as e:
+        return f"HTTP {e.code}"
+    except (urllib.error.URLError, TimeoutError, OSError) as e:
+        return type(e).__name__
+
+
 def thinking_config():
     from creature_forge.investigation import load_model_config
     import dataclasses
@@ -266,6 +295,12 @@ def main(argv=None) -> int:
     if a.limit:
         pairs = pairs[: a.limit]
     print(f"{len(pairs)} episode(s)", flush=True)
+    # Fail fast on credentials (incident 2026-10-18: a key rotated mid-run turned AI episodes into scored failures).
+    if a.source == "live" and any(p in SCIENTIST_ARMS for _, p in pairs):
+        why = live_key_check()
+        if why:
+            print(f"ABORT before any episode: the model API key check failed ({why})", flush=True)
+            return 3
     from creature_forge.forge_pool import ForgePool
     with ForgePool(max_workers=a.workers) as pool, open(a.out, "a", encoding="utf-8") as out:
         for n, (inst, p) in enumerate(pairs):
@@ -276,6 +311,10 @@ def main(argv=None) -> int:
             out.flush()
             print(f"[{n + 1}/{len(pairs)}] {inst['instance_id']} {p} status={(r.get('verification') or {}).get('status')} "
                   f"used={r.get('rollouts_used')} err={r.get('error')} t={r['wall_s']:.0f}s", flush=True)
+            if auth_failed(r):
+                print("ABORT: a model call failed authentication; this shard stops so an outage is never scored as model "
+                      "decisions (the episode above is written and marked by its call errors)", flush=True)
+                return 3
     return 0
 
 
