@@ -38,6 +38,7 @@ from .nebius import contains_secret
 from .physics_probe import PROBE_DOCS
 
 VERSION = "causal_scientist_v2"   # v1 (pilot1) is at commit 4d286e5; v2 changes: experiments/causal_engineer/dev/AUDIT_PILOT1.md
+REVISION = "v2.2"   # v2.1: budget facts (pilot2); v2.2: exact verification criteria (pilot3: concluded on train 4/4 with most budget unused)
 MODES = ("iterative", "one_shot")
 SCHEMA_STEP = "scientist_step"
 SCHEMA_ONE_SHOT = "scientist_one_shot"
@@ -262,8 +263,14 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "BUDGET. All instruments share one rollout budget; the exact costs are stated in every message (a counterfactual costs "
             "n_obs rollouts; a repair costs the budget you grant it, at least the tool's minimum). A repair's budget sets how many "
             "CMA-ES generations it runs (about budget / (n_train x population); the minimum is 3 generations). Rollouts still unused "
-            "when you conclude have no value: the result is judged only by the hidden verification of the submitted design. "
-            "Verification is independent, uses different seeds; training walking counts can overstate it.", "",
+            "when you conclude have no value: the result is judged only by the hidden verification of the submitted design.", "",
+            "VERIFICATION (fixed rule full_recovery_v1, applied after you conclude; its seeds are hidden): the submitted design counts as "
+            "recovered only if (1) at least 80% of 24 fresh 10 s rollouts walk, under the same kind of random perturbations and floor "
+            "friction variation as training; (2) it is a statistically verified improvement over the original robot on those seeds; "
+            "and (3) at least 80% of 24 further 20 s rollouts walk, with sufficient median speed and no body dragging. Training uses "
+            "only n_train = 4 seeds of 10 s, so walking on all training seeds is necessary but far from sufficient. A repair's "
+            "train_fitness keeps rising with more CMA-ES generations after all training seeds walk; it is the only robustness signal "
+            "available before verification.", "",
             "KEY FACTS AND HEALTHY REFERENCE. Each message starts the observation with computed facts (fall direction per seed in "
             "words, fall times, cadence, the pendulum frequency sqrt(g/L)/(2 pi) of the leg, Froude number, saturation, slip) and, for "
             "the main quantities, the range p10-p90 measured with the same instruments on verified-walking robots of other shapes. "
@@ -1306,7 +1313,7 @@ class Scientist(dr.NemotronDirector):
     def record(self) -> dict:
         rec = super().record()
         rec.update({
-            "version": VERSION, "director_version": rec.get("version"), "scientist_mode": self.sci_mode,
+            "version": VERSION, "revision": REVISION, "director_version": rec.get("version"), "scientist_mode": self.sci_mode,
             "method": f"SCIENTIST-{self.sci_mode}", "max_steps": self.max_steps, "order_seed": self.order_seed,
             "show_controller": self.show_controller, "system_prompt": self.system,
             "quantities": list(QUANTITIES), "tolerance": TOLERANCE_DOCS,
