@@ -293,3 +293,18 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Regression on the branch: 1178 Python tests, frontend + build, 314 browser checks PASS (main VM, 2026-10-17).
 - Spend: infra ~$26 of $35; inference ~$3.7 of $15. Both VMs STOPPED; the batch VM can be deleted (owner).
 - Next: owner decides the demo/submission framing; demo take of "Recover walking" on the stilts robot; Devpost/storyboard update; PR for review (no merge without the owner).
+
+## 2026-10-17 evening - Causal engineer (branch `feature/causal-engineer`), development in progress
+- Owner directive: the autonomous physics-grounded AI engineering scientist; log in `docs/CAUSAL_ENGINEER.md` §4.
+- Done:
+  - pilot1 audit, scientist v2 / v2.1, physics digest with a healthy reference;
+  - parametric experiments;
+  - Level A/B memory (`experience_bank.py`, `ce_memory.py`) and the probe dataset (165 dev instances);
+  - `ce_eval` arms: thinking, one-shot thinking and memory.
+- Pilot2 (dev): the thinking scientist chose a repairing tool in 9/13 (v1: 4/13) and recovered 4 FULL.
+- Pilot3 (fresh dev subset) is running on the main VM. Level C (repair learner) is being built.
+- Security incident (see `docs/memory/INCIDENTS.md`): fixed. The owner should rotate the Token Factory key.
+- Budgets:
+  - inference caps raised by the owner to $30 / 4,000 requests (ledger about $5);
+  - infra cap $35 (ledger about $29.5); the real account balance is about $11.
+- PR #18 (CI fix) is open for review. PR #17 is untouched.

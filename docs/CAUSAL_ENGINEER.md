@@ -85,6 +85,49 @@ decisions never had to be *right about a cause* to matter, and they never were c
     level. Inference cost was $0.20.
   - The next development step is to find why it concludes or under-spends, and why its first repairs miss, before
     building experience levels. No evaluation instances were touched.
+- 2026-10-17: **pilot1 audit** (`experiments/causal_engineer/dev/AUDIT_PILOT1.md`). Main causes:
+  - interface defects ended 5/13 runs, which accounts for the unused budget;
+  - hypotheses were never revised (0 status updates);
+  - no healthy reference, and fall-direction signs were misread;
+  - our prompt said "experiments are expensive";
+  - the counterfactual catalogue was one-directional;
+  - diagnosis is often non-identifiable (7/13 robots are repaired by 3–7 tools).
+  The evidence itself is mostly sufficient: systematic counterfactuals rank a repairing tool first in 9/13.
+- 2026-10-17: **scientist v2** (`causal_scientist_v2`):
+  - reasoning-first reply: `result_reading`, required verdicts on scored hypotheses, new hypotheses, then the action;
+  - parametric one- or two-parameter experiments;
+  - KEY FACTS with signs in words, plus a healthy-reference range from 12 dev base robots (`physics_digest.py`);
+  - neutral cost wording.
+- 2026-10-17: **pilot2** (the same 13 dev instances, v2): see the table below.
+
+  | arm | FULL / PARTIAL / NOT | chose a repairing tool | first repair repairs | diagnosis match | LLM $ |
+  |---|---|---|---|---|---|
+  | v2, thinking off | 3 / 4 / 6 | 4/13 | 3/13 | 1/13 | 0.48 |
+  | v2, thinking on (`scientist_think`) | 4 / 6 / 3 | 9/13 | 7/13 | 5/13 | 1.05 |
+
+  - Process change against v1: 96–99 status updates, 54–60 new hypotheses after step 1, 32–51 refutations (v1: 0 / 0 / 0).
+  - Remaining problems:
+    - under-spending: the thinking arm used 260 of 700 rollouts, with repair shares of 0.1–0.2;
+    - prediction accuracy 0.29, below the always-`no_change` baseline of about 0.56, because most measured changes are
+      within tolerance;
+    - 0/3 feedback faults recovered.
+  - Interpretation: development evidence only, on the same 13 instances as pilot1, so possibly tuned to them.
+- 2026-10-17: **v2.1**:
+  - the prompt states that unused rollouts have no value and that a repair's budget sets its number of CMA-ES generations;
+  - the message shows the within-tolerance base rate;
+  - limits raised to 12 predictions and 16 citations;
+  - ×0.33 and ×3 experiment levels added.
+- 2026-10-17: **Level A/B memory** (`experience_bank.py`, `ce_memory.py`):
+  - one "probe" episode per training instance (initial observation, fixed-catalogue counterfactual responses, measured
+    repair matrix; `scripts/ce_probe_dataset.py`, 165 instances, 5,600 rollouts), plus earlier investigations;
+  - mechanism cards are rebuilt per robot;
+  - development runs exclude the robot's own base.
+- 2026-10-17: **pilot3** (a fresh dev subset of 16 instances, not in pilot1/2): `scientist_think`, `scientist_1shot_think`,
+  `scientist_think_mem`, `exhaustive`, `expert`. Results pending.
+- 2026-10-17: **security incident** (logged in `docs/memory/INCIDENTS.md`):
+  - a CRLF `.env` sourced by bash put the API key into four dev result files on the VM; the files were deleted;
+  - redaction and the record guards are fixed;
+  - the owner should rotate the key.
 
 ## 5. Scientist loop specification (`creature_forge/scientist.py`, to be implemented on top of physics_probe + eng_tools)
 Per faulty robot, one total budget (development default 700 rollouts). One Nemotron call per step, at most about 14 calls;
