@@ -91,7 +91,8 @@ def run_unit(proto: dict, name: str, body: dict, method: str, budget: int, noise
     rec = wp.run_pipeline(body, director, total_budget=budget, family=family,
                           seeds={"diag": seeds["diag"], "train": seeds["train"], "screen": seeds["screen"]},
                           noise_seed=noise_seed, pool=pool, probe_budget=probe_budget, rounds=rounds,
-                          screen_top_k=int(st["screen_top_k"]), screen_n=int(st["screen_n"]), director_name=method)
+                          screen_top_k=int(st["screen_top_k"]), screen_n=int(st["screen_n"]), director_name=method,
+                          selection=st.get("selection", "v1"))
     ai_record = director.record() if hasattr(director, "record") else None
     final = rec["final"]
     original = {"body": body, "vector": list(cw.R2_WINNER)}

@@ -489,3 +489,24 @@ class RealSmoke(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SelectionV2Tests(unittest.TestCase):
+    def test_effect_bar_ranks_first(self):
+        cands = [{"train_score": [5, 5, 1.0], "screen": {"walking": 10, "median": 3.0}, "order": 0},
+                 {"train_score": [4, 4, 0.5], "screen": {"walking": 8, "median": 4.6}, "order": 1}]
+        self.assertEqual(wp.select_final(cands), 0)                     # v1: most walking
+        self.assertEqual(wp.select_final(cands, effect_bar=4.5), 1)     # v2: only cand 1 out-distances the original by 0.5 m
+        self.assertEqual(wp.select_final(cands, effect_bar=2.0), 0)     # both pass -> v1 key decides
+
+    def test_v2_pipeline_accounting_and_record(self):
+        rec, fake = run(wp.FullSpaceDirector(), selection="v2")
+        invariant(self, rec, fake)
+        self.assertEqual(rec["selection"]["rule"], "v2")
+        self.assertIsNotNone(rec["selection"]["effect_bar"])
+
+    def test_v1_default_unchanged(self):
+        a, _ = run(wp.FullSpaceDirector())
+        b, _ = run(wp.FullSpaceDirector(), selection="v1")
+        self.assertEqual(a["final"], b["final"])
+        self.assertEqual(a["selection"]["rule"], "v1")

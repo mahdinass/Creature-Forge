@@ -4,7 +4,7 @@
   "registered_before_run": true,
   "status": "DRAFT until the owner approves the freeze; the freeze commit hash is the registration",
   "question": "At an equal TOTAL rollout budget, does Nemotron directing the engineering decisions (which experiments to run, which subsystems of controller and body to change, how to spend the budget) make more genuinely failing, never-seen creatures walk than the best non-AI strategy we built?",
-  "development_history": "M1 (G1 PROCEED: joint 17-D search 6/12), S2 (R* = 2000; primary comparator FIX; G2 PASS), S2b (director prompt v2 = the one dev revision of the AI; Ultra ineligible under G2), L2 (G3 FAIL: no experience arm). Reports in experiments/walk_recovery/*/REPORT_*.md. Every number there is development data; none of it is pooled here.",
+  "development_history": "M1 (G1 PROCEED: joint 17-D search 6/12), S2 (R* = 2000; primary comparator FIX; G2 PASS), S2b (director prompt v2 = the one dev revision of the AI in this design; Ultra ineligible under G2), L2 (G3 FAIL: no experience arm), iteration 3 / S4a (G4 FAIL: closed-loop mechanism invention 4/24 vs fix15 11/24; not in S3). Reports: experiments/walk_recovery/*/REPORT_*.md. Every number there is development data; none of it is pooled here.",
   "campaign": "walkrec-confirm-v1",
   "family": 17,
   "seeds": {
@@ -18,7 +18,8 @@
     "probe_budget_frac": 0.1,
     "rounds": 2,
     "screen_top_k": 3,
-    "screen_n": 12
+    "screen_n": 12,
+    "selection": "v2"
   },
   "budget_R_star": 2000,
   "methods": [
@@ -108,5 +109,6 @@
     "allowed_regions": "all 24",
     "rule": "creature_gen.generate_panel: guided bodies from GEN_DIST; accepted iff the R2-transfer walk challenge on 8 selection seeds is aggregate FAIL with <= 1 walking seed; region cap ceil(48/24)+1 = 3; every draw recorded; generated ONCE after the freeze commit, before any method runs; its sha256 is stored in every unit",
     "no_recoverability_prescreen": true
-  }
+  },
+  "selection_note": "selection v2 for EVERY arm (walk_pipelines selection='v2'): the final screening also requires the screen median to reach the original's screen median + 0.5 m (verdict_v1's walk minimum effect) before walking count decides; the shared fix approved with iteration 3 for a method-independent artifact (a stable walker that does not out-distance a runaway original cannot be verified). The original's screen is charged to every arm. verdict_v1 itself is unchanged. The ai_v2 prompt is unchanged (byte-identical to S2b)."
 }

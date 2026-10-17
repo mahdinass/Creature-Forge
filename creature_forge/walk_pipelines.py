@@ -216,12 +216,16 @@ def validate_plan(plan, *, family: int, runs: dict) -> list[str]:
 
 
 # ---------------------------------------------------------------------------------------------------------- final selection
-def select_final(cands: list[dict]) -> int:
+def select_final(cands: list[dict], effect_bar: float | None = None) -> int:
     """Index (into `cands`) of the final candidate. Each: {train_score: [w, s, f], screen: {walking, median}, order}.
-    Most screen-walking seeds; ties: higher median screen score, then higher train score, then lower order."""
+    selection v1 (effect_bar None): most screen-walking seeds; ties: higher median screen score, then higher train score, then
+    lower order. selection v2 (effect_bar = the original's screen median + verdict_v1's walk minimum effect): candidates whose
+    screen median reaches the bar rank first, then the v1 key (fixes the method-independent artifact found after S2: a stable
+    walker that does not out-distance a runaway original cannot be verified)."""
     best = None
     for i, c in enumerate(cands):
-        key = (c["screen"]["walking"], c["screen"]["median"], tuple(c["train_score"]), -c["order"])
+        bar = () if effect_bar is None else (c["screen"]["median"] >= effect_bar - 1e-9,)
+        key = bar + (c["screen"]["walking"], c["screen"]["median"], tuple(c["train_score"]), -c["order"])
         if best is None or key > best[0]:
             best = (key, i)
     return best[1]
@@ -242,10 +246,12 @@ def _screen_summary(rows: list[dict]) -> dict:
 def run_pipeline(body, director, *, total_budget: int, family: int, seeds: dict, noise_seed: int, pool=None,
                  probe_budget: int = 300, rounds: int = 2, screen_top_k: int = 3, screen_n: int = 12,
                  director_name: str = "", log: Callable | None = None, start_vector: Sequence[float] | None = None,
-                 eval_override: dict | None = None) -> dict:
+                 eval_override: dict | None = None, selection: str = "v1") -> dict:
     t0 = time.perf_counter()
     ov = dict(eval_override or {})
     say = log or (lambda msg: None)
+    if selection not in ("v1", "v2"):
+        raise ValueError("selection must be 'v1' or 'v2'")
     if family not in (15, 17):
         raise ValueError("family must be 15 or 17")
     for k in ("diag", "train", "screen"):
@@ -272,7 +278,7 @@ def run_pipeline(body, director, *, total_budget: int, family: int, seeds: dict,
                       ("screen_n", screen_n, 1)):
         if isinstance(v, bool) or not isinstance(v, int) or v < lo:
             raise ValueError(f"{nm} must be an integer >= {lo}")
-    reserve = screen_top_k * screen_n
+    reserve = (screen_top_k + (1 if selection == "v2" else 0)) * screen_n   # v2 also screens the original once
     budget = Budget(total_budget)
     if total_budget < reserve + S:
         raise ValueError(f"total_budget {total_budget} cannot pay for screening ({reserve}) and the start evaluation ({S})")
@@ -545,7 +551,23 @@ def run_pipeline(body, director, *, total_budget: int, family: int, seeds: dict,
                                      variation=arena.VARIATION_PRESET, pool=pool)
         c["screen"] = _screen_summary(rows)
         screened.append(c)
-    win = screened[select_final(screened)]
+    effect_bar = None
+    orig_screen = None
+    if selection == "v2":
+        from . import verdict as vd
+        start_c = next((c for c in screened if c["source"] == "start" or "start" in c["aliases"]), None)
+        if start_c is not None:
+            orig_screen = start_c["screen"]
+        else:
+            budget.charge(screen_n, "screen:original", {"screen_n": screen_n, "purpose": "selection v2 effect bar"})
+            if "screen_fn" in ov:
+                rows = ov["screen_fn"](base, start_vec, screen_seeds)
+            else:
+                rows = rc.run_walk_seeds(base, start_vec, screen_seeds, duration=SCREEN_DURATION, variation=arena.VARIATION_PRESET,
+                                         pool=pool)
+            orig_screen = _screen_summary(rows)
+        effect_bar = orig_screen["median"] + float(vd.MIN_EFFECT["walk"]["abs"])
+    win = screened[select_final(screened, effect_bar)]
     used = budget.used
     assert used <= total_budget, "budget exceeded"
     assert used == sum(l["n"] for l in budget.lines), "ledger sum mismatch"
@@ -559,6 +581,8 @@ def run_pipeline(body, director, *, total_budget: int, family: int, seeds: dict,
         "final": {"body": win["body"], "vector": win["vector"], "edits": wo.body_edits(base, win["body"]),
                   "source": win["source"], "aliases": win["aliases"], "train_score": win["train_score"], "screen": scr},
         "decisions": decisions, "seeds": {"train": train, "screen": screen_seeds, "diag": diag},
+        "selection": {"rule": selection, "effect_bar": effect_bar,
+                      "original_screen": None if orig_screen is None else {k: v for k, v in orig_screen.items() if k != "median"}},
         "settings": {"probe_budget": probe_budget, "rounds": rounds, "screen_top_k": screen_top_k, "screen_n": screen_n,
                      "noise_seed": noise_seed, "plan_rejection_rule": "rejected plan costs 0, share forfeited"},
         "wall_s": time.perf_counter() - t0})
