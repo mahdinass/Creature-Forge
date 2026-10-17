@@ -70,6 +70,18 @@ function PredictionTable({ e }: { e: Experiment }) {
 export function ExperimentCard({ e, memoryIds, onItem }: { e: Experiment; memoryIds: string[]; onItem: (id: string) => void }) {
   const w = walkingChange(e)
   const t = scoreTally(e.scoring)
+  if (e.kind === 'test') {
+    return (
+      <article className="cz-exp" data-testid={`cz-exp-${e.id}`}>
+        <header><b>{e.id}</b><Chip tone="cf">20 s stress test</Chip><OriginBadge kind="measured" hint="Rollouts counted and run by the benchmark workbench" /><small>{e.cost} rollouts</small></header>
+        {e.purpose && <Block kind="model" title="Purpose, as the model wrote it"><p><ModelText text={e.purpose} memoryIds={memoryIds} onItem={onItem} /></p></Block>}
+        {e.status === 'ok'
+          ? <p className="cz-walk">The current best design walked the whole {e.duration ?? 20} s on <b>{e.n_walking}</b> of {e.n_obs} observation seeds{e.predicted_n_walking != null ? ` (the AI predicted ${e.predicted_n_walking})` : ''}. <small>Visible seeds; the independent check uses hidden ones.</small></p>
+          : <p className="dim">Refused by the workbench.</p>}
+        {e.falls && e.falls.length > 0 && <p className="dim">{e.falls.join('; ')}</p>}
+      </article>
+    )
+  }
   if (e.kind === 'repair') {
     return (
       <article className="cz-exp cz-repair" data-testid={`cz-exp-${e.id}`}>

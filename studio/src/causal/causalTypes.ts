@@ -59,6 +59,13 @@ export interface Experiment {
   prediction_error?: number
   rollouts_used?: number
   is_current_best?: boolean
+  // test (20 s stress test, scientist v2.3)
+  n_walking?: number
+  n_fell?: number
+  n_obs?: number
+  duration?: number
+  design_index?: number
+  falls?: string[]
 }
 
 export interface HypothesisHistory {
