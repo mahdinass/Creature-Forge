@@ -329,3 +329,11 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   - update `docs/CAUSAL_ENGINEER.md` (results, what Nemotron contributes, limitations);
   - refresh the Studio demo records.
 - Batch VM: STOPPED. Infra ledger about $31.3 of $38; inference about $10.7 of $30 before the run (about $12 expected).
+
+## 2026-10-18 morning - Held-out run finished; AI arms invalidated by key rotation; owner decision pending
+- Results, single analysis and REPORT are in `experiments/causal_engineer/heldout/` (frozen). Non-AI arms are valid:
+  exhaustive 23/40, learned 18/40 (C5a not supported), random 12/40, expert 6/40.
+- AI arms: the key was rotated at 21:02 UTC, about 50 minutes into the run, and every later call returned HTTP 401.
+- The new key is on the VM (verified read-only). The main VM is STOPPED and the batch VM STOPPED.
+- Inference: real spend $12.37; the ledger shows $20.50, including $7.42 worst-case settlements for failed calls.
+- Decision needed: amendment 1 (re-run the 4 AI arms, about $10 real); this requires raising the ledger cap to about $40.

@@ -254,3 +254,12 @@ cd ~/dev/ceh && CREATURE_FORGE_ENABLE_LIVE=1 CF_INFERENCE_LEDGER=$HOME/dev/ledge
   --out artifacts/ce/heldout_eval_shard$i.jsonl
 ```
 The memory inputs in `artifacts/mem/` must match the SHA-256 values in `protocol.json`; this was verified before launch.
+
+## Held-out evaluation, registered run (2026-10-17/18): see `experiments/causal_engineer/heldout/REPORT.md`
+- **Valid (non-AI arms):** exhaustive 23/40, learned (Level C ranking) 18/40, random 12/40, expert 6/40 FULL recoveries on 40
+  instances over 22 unseen morphologies. C5a (learned > exhaustive) is not supported: 1 vs 6 discordant, p = 0.99. Level C's
+  better dev ranking did not become better verified repairs on unseen robots.
+- **Invalid (AI arms):** the API key was rotated 50 minutes into the run, on the operator's advice. Every later model call
+  returned HTTP 401, so C1–C4 and C5b measure the outage and are uninterpretable; they are reported as registered.
+- **Pending the owner's decision:** amendment 1, re-running only the four AI arms with the new key and the same frozen inputs
+  (post-hoc, labelled as such). The runner now checks the key before starting and fails fast on authentication errors.
