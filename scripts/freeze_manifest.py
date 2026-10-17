@@ -21,7 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_REL = "experiments/FROZEN_MANIFEST.json"
-EXCLUDED_PREFIXES = ("experiments/forge_loop/", "experiments/causal_engineer/dev/")   # living dirs; registered causal-engineer records live outside dev/ and are frozen
+EXCLUDED_PREFIXES = ("experiments/forge_loop/", "experiments/causal_engineer/dev/", "experiments/causal_engineer/demo_records/")   # living dirs; registered causal-engineer records live outside dev/ and are frozen
 
 
 def git(args: list[str], stdin: bytes | None = None) -> bytes:
