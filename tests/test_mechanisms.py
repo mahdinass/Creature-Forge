@@ -341,3 +341,20 @@ class MuJoCoMechanisms(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ConstantsTests(unittest.TestCase):
+    def test_pi_is_an_allowed_constant_and_evaluates(self):
+        import math
+        from creature_forge import mechanisms as mx
+        m = {"id": "pc", "target": "hip", "leg": "swing", "terms": ["sin(2 * pi * phase)"], "gain_bound": 1.0}
+        self.assertEqual(mx.validate_mechanism(m), [])
+        c = mx.compile_mechanism(m)
+        sig = {k: 0.0 for k in mx.SIGNALS}
+        sig["phase"] = 0.25
+        self.assertAlmostEqual(float(c.evaluate(sig)[0]), math.sin(2 * math.pi * 0.25))
+
+    def test_controller_parameters_are_not_signals(self):
+        from creature_forge import mechanisms as mx
+        reasons = mx.validate_mechanism({"id": "f", "target": "hip", "leg": "swing", "terms": ["freq * t"], "gain_bound": 1.0})
+        self.assertTrue(any("not signals" in r for r in reasons))

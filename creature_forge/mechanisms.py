@@ -79,6 +79,7 @@ SIGNAL_DOCS = {
     "t": "time since the start of the rollout (s)",
 }
 SIGNALS = tuple(SIGNAL_DOCS)
+CONSTANTS = {"pi": math.pi}   # named numeric constants allowed in terms (2026-10-17, after the S4 smoke: 'pi' was rejected)
 _GEO = ("d", "v", "h")
 
 
@@ -144,8 +145,11 @@ def _check_node(node, reasons: list, names: set) -> None:
         if not ok:
             reasons.append("numeric literal is not finite")
     elif isinstance(node, ast.Name):
-        if node.id not in SIGNALS:
-            reasons.append(f"unknown name {node.id!r} (allowed signals: {', '.join(SIGNALS)})")
+        if node.id in CONSTANTS:
+            pass                                   # a named numeric constant (e.g. pi), not a signal
+        elif node.id not in SIGNALS:
+            reasons.append(f"unknown name {node.id!r} (allowed: the signals {', '.join(SIGNALS)} and the constants "
+                           f"{', '.join(CONSTANTS)}; controller parameters such as freq are not signals)")
         else:
             names.add(node.id)
     elif isinstance(node, ast.BinOp):
@@ -259,6 +263,11 @@ def validate_mechanisms(mechs) -> list:
 class _Rewrite(ast.NodeTransformer):
     def visit_Constant(self, node):
         return ast.copy_location(ast.Constant(float(node.value)), node)
+
+    def visit_Name(self, node):
+        if node.id in CONSTANTS:
+            return ast.copy_location(ast.Constant(float(CONSTANTS[node.id])), node)
+        return node
 
     def visit_BinOp(self, node):
         self.generic_visit(node)

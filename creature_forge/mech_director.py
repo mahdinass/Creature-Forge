@@ -106,6 +106,20 @@ def _static_docs() -> list[str]:
     return docs
 
 
+MECH_TEXT_MAX = 1500   # free-text fields (2026-10-17, after the S4 smoke: a 500-character diagnosis cap discarded a whole final plan)
+
+
+def _mtext(v, where: str, errs: list, required: bool = True) -> None:
+    if v is None or (isinstance(v, str) and not v.strip()):
+        if required:
+            errs.append(f"{where}: required text is empty")
+        return
+    if not isinstance(v, str):
+        errs.append(f"{where}: must be a string")
+    elif len(v) > MECH_TEXT_MAX:
+        errs.append(f"{where}: longer than {MECH_TEXT_MAX} characters")
+
+
 def build_system_prompt(mode: str = "iterative", order_seed: int | None = None) -> str:
     """The system prompt (deterministic for (mode, order_seed)). Neutral: it describes the language, the economics and the rules, never a
     specific mechanism or which structure tends to work."""
@@ -176,8 +190,9 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None) 
         f"- leg: one of {', '.join(legs)}: which leg receives the contribution, decided from the gait phase at every instant "
         "(the swing leg, the stance leg, or both).",
         "- terms: 1-4 expressions over the signals below. The contribution is the sum over terms of gain_i x term_i.",
-        f"- operations allowed in an expression: {ops}. Names outside the signal list, attribute access, other function calls, loops "
-        "and imports are rejected.",
+        f"- operations allowed in an expression: {ops}. Allowed names: the signals listed below and the constant pi. Controller "
+        "parameters (for example the gait frequency) are NOT signals; use the phase signal for timing. Any other name, attribute access, "
+        "other function calls, loops and imports are rejected.",
         "- gains: ONE signed gain per term, fitted by the optimiser. A gain is bounded to [-gain_bound, +gain_bound] and every gain "
         "STARTS AT 0, so a new mechanism leaves the creature exactly unchanged until the optimiser moves its gains; the optimiser "
         "chooses sign and size. gain_bound is a number in (0, 5]: it is part of the structure (the size of authority the mechanism may "
@@ -215,7 +230,8 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None) 
         "excludes everything outside it; a larger one includes more but needs more rollouts for the same progress. The lists in this "
         "message are in no particular order.",
         "",
-        "HYPOTHESES: state hypotheses about WHY the creature does not walk. Ground each in evidence by citing evidence paths (copied "
+        "HYPOTHESES: state hypotheses about WHY the creature does not walk; the `mechanism` field of a hypothesis describes the physical "
+        "cause in words (not an id). Ground each in evidence by citing evidence paths (copied "
         "exactly from the EVIDENCE lines) and give at least one competing explanation. Every mechanism and probe tests a hypothesis "
         "(`hypothesis` field) with an expected outcome \"improves\" (best candidate beats the start on the training seeds) or "
         "\"no_change\", and every mechanism cites 1-4 evidence paths.",
@@ -343,13 +359,13 @@ def validate_investigate_reply(reply, *, paths: set, new_ids: list[str], live_id
         elif h["id"] in seen:
             errs.append(f"{w}: duplicate id {h['id']!r}")
         seen.add(h["id"])
-        dr._text(h["mechanism"], f"{w}.mechanism", errs)
+        _mtext(h["mechanism"], f"{w}.mechanism", errs)
         dr._cites(h["evidence"], f"{w}.evidence", paths, dr.MAX_CITATIONS, errs)
         if not isinstance(h["competing"], list) or not h["competing"]:
             errs.append(f"{w}.competing: give at least one competing explanation")
         else:
             for j, c in enumerate(h["competing"]):
-                dr._text(c, f"{w}.competing[{j}]", errs)
+                _mtext(c, f"{w}.competing[{j}]", errs)
     for i, r in enumerate(ref):
         if not isinstance(r, str) or r not in refutable:
             errs.append(f"refuted[{i}]: {r!r} is not an existing hypothesis that is still open (open: {refutable})")
@@ -381,7 +397,7 @@ def validate_investigate_reply(reply, *, paths: set, new_ids: list[str], live_id
         if isinstance(m["gain_bound"], bool) or not isinstance(m["gain_bound"], (int, float)) or not math.isfinite(float(m["gain_bound"])):
             errs.append(f"{w}.gain_bound: must be a finite number")
             continue
-        dr._text(m["rationale"], f"{w}.rationale", errs)
+        _mtext(m["rationale"], f"{w}.rationale", errs)
         dr._cites(m["evidence"], f"{w}.evidence", paths, MAX_MECH_CITATIONS, errs)
         rev = m["revises"]
         core = {"id": m["id"], "target": m["target"], "leg": m["leg"], "terms": list(m["terms"]),
@@ -428,7 +444,7 @@ def validate_final_reply(reply, *, paths: set, live_ids: list[str], refutable: l
     ref, plans = reply["refuted"], reply["plans"]
     if not isinstance(ref, list) or not isinstance(plans, list):
         return errs + ["reply: refuted and plans must be lists"]
-    dr._text(reply["diagnosis"], "diagnosis", errs)
+    _mtext(reply["diagnosis"], "diagnosis", errs)
     for i, r in enumerate(ref):
         if not isinstance(r, str) or r not in refutable:
             errs.append(f"refuted[{i}]: {r!r} is not an existing hypothesis that is still open (open: {refutable})")
@@ -453,7 +469,7 @@ def validate_final_reply(reply, *, paths: set, live_ids: list[str], refutable: l
             errs.append(f"{w}: hypothesis {h!r} is not an open hypothesis (open: {live_ids}; use {dr.NO_HYPOTHESIS!r} with evidence)")
         if h in ref:
             errs.append(f"{w}: hypothesis {h!r} is listed in refuted; a refuted hypothesis must not be pursued")
-        dr._text(p["prediction"], f"{w}.prediction", errs)
+        _mtext(p["prediction"], f"{w}.prediction", errs)
         dr._cites(p["evidence"], f"{w}.evidence", paths, dr.MAX_PLAN_CITATIONS, errs)
         sh = p["budget_share"]
         if isinstance(sh, (int, float)) and not isinstance(sh, bool) and math.isfinite(float(sh)):
