@@ -42,6 +42,66 @@ COUNTERFACTUALS = {
     "leg_length_x0.85": [{"param": "leg_length", "op": "scale", "value": 0.85}],
 }
 
+# Parametric counterfactuals (added 2026-10-17 after the pilot1 audit, F4: the fixed catalogue is one-directional). A policy composes
+# its own matched intervention of ONE or TWO atomic changes, each a parameter with a symbolic level. Multiplicative parameters take a
+# scale level; parameters that are signed or may sit at 0 take an additive level, a signed fraction of the parameter's bound range
+# (R = upper - lower). Id grammar: "<param>@<level>" or "<param>@<level>&<param>@<level>" (two different parameters). A change that
+# would leave the guided / controller bounds is refused, never clipped. The fixed catalogue above is unchanged (non-AI baselines).
+CF_SCALE_LEVELS = {"x0.5": 0.5, "x0.7": 0.7, "x0.85": 0.85, "x1.2": 1.2, "x1.5": 1.5, "x2": 2.0}
+CF_ADD_LEVELS = {"-0.2R": -0.2, "-0.1R": -0.1, "-0.05R": -0.05, "+0.05R": 0.05, "+0.1R": 0.1, "+0.2R": 0.2}
+CF_ADDITIVE = ("duty", "knee_shift", "stance_knee", "hip_bias", "pitch_ref", "sync_gain", "start_lean", "fp_kd", "fp_kv")
+CF_BODY_PARAMS = ("torso_mass", "foot_length", "torque_limit", "foot_friction", "leg_length", "leg_density")
+CF_PARAMS = tuple(wo.ALL_NAMES) + CF_BODY_PARAMS
+CF_LEVELS = tuple(CF_SCALE_LEVELS) + tuple(CF_ADD_LEVELS)
+CF_MAX_ATOMS = 2
+
+
+def _ctrl_range(param: str) -> tuple[float, float]:
+    from .phasegait_fp import LOWER17, UPPER17
+    i = wo.ALL_NAMES.index(param)
+    return float(LOWER17[i]), float(UPPER17[i])
+
+
+def levels_for(param: str) -> tuple[str, ...]:
+    if param not in CF_PARAMS:
+        raise ValueError(f"unknown parameter {param!r}; known: {list(CF_PARAMS)}")
+    return tuple(CF_ADD_LEVELS) if param in CF_ADDITIVE else tuple(CF_SCALE_LEVELS)
+
+
+def parametric_change(param: str, level: str) -> dict:
+    """One atomic change {"param", "op", "value"} for (param, level). Raises ValueError for an unknown parameter or a level of the
+    wrong kind (a scale level on an additive parameter or vice versa)."""
+    if level not in levels_for(param):
+        raise ValueError(f"level {level!r} is not valid for {param}; valid: {list(levels_for(param))}")
+    if param in CF_ADDITIVE:
+        lo, hi = _ctrl_range(param)
+        return {"param": param, "op": "add", "value": round(CF_ADD_LEVELS[level] * (hi - lo), 10)}
+    return {"param": param, "op": "scale", "value": CF_SCALE_LEVELS[level]}
+
+
+def parametric_id(atoms) -> str:
+    """Canonical id of [(param, level), ...] (order kept: the first atom is the primary change)."""
+    return "&".join(f"{p}@{l}" for p, l in atoms)
+
+
+def parse_counterfactual(cid: str) -> list[dict]:
+    """Atomic changes of a catalogue id or a parametric id. Raises ValueError if neither."""
+    if cid in COUNTERFACTUALS:
+        return copy.deepcopy(COUNTERFACTUALS[cid])
+    parts = str(cid).split("&")
+    if not 1 <= len(parts) <= CF_MAX_ATOMS:
+        raise ValueError(f"a counterfactual has 1-{CF_MAX_ATOMS} atomic changes, got {len(parts)}")
+    out, seen = [], set()
+    for part in parts:
+        if part.count("@") != 1:
+            raise ValueError(f"atomic change {part!r} must be '<param>@<level>'")
+        p, l = part.split("@")
+        if p in seen:
+            raise ValueError(f"parameter {p!r} appears twice")
+        seen.add(p)
+        out.append(parametric_change(p, l))
+    return out
+
 
 class RepairRefused(ValueError):
     """A repair cannot run as asked (unknown tool, budget too small, no search room)."""
@@ -172,11 +232,14 @@ class Workbench:
 
     def counterfactual(self, change) -> dict:
         cid = change.get("id") if isinstance(change, dict) else change
-        if cid not in COUNTERFACTUALS:
-            return self._refuse("counterfactual", f"unknown counterfactual {cid!r}; catalogue: {list(COUNTERFACTUALS)}")
+        try:
+            atoms = parse_counterfactual(cid)
+        except ValueError as exc:
+            return self._refuse("counterfactual", f"unknown counterfactual {cid!r} ({exc}); catalogue: {list(COUNTERFACTUALS)} or "
+                                                  f"parametric '<param>@<level>[&<param>@<level>]'")
         d = self.designs[self._best]
         try:
-            body, vec = apply_changes(d["body"], d["vector"], COUNTERFACTUALS[cid])
+            body, vec = apply_changes(d["body"], d["vector"], atoms)
         except InvalidInstance as exc:
             return self._refuse("counterfactual", f"unavailable: {exc}", id=cid)
         need = self.n_obs * (1 if self._best in self._obs_cache else 2)
@@ -198,7 +261,7 @@ class Workbench:
         for k in ("n_walking", "n_fell"):
             if isinstance(out.get(k), (int, float)) and isinstance(cur.get(k), (int, float)):
                 deltas[k] = out[k] - cur[k]
-        return {"ok": True, "id": cid, "changes": copy.deepcopy(COUNTERFACTUALS[cid]), "design_index": j,
+        return {"ok": True, "id": cid, "changes": copy.deepcopy(atoms), "design_index": j,
                 "observation": out, "deltas_vs_current": deltas}
 
     def repair(self, tool: str, budget: int) -> dict:
