@@ -99,3 +99,22 @@ Append one incident per significant recurring failure. Mark everything here as `
   - Regression tests in `tests/test_nebius_client.py`.
   - Launch rule: never `source` the .env in a shell; the Python `load_env` (dotenv) reads it.
 - Owner action recommended: rotate the Nebius Token Factory key, since it appeared in a local transcript.
+## 2026-10-17/18 Registered held-out run: AI arms invalidated by a key rotation during the run
+- Timeline:
+  - The registered evaluation (`experiments/causal_engineer/heldout/`) was launched at 20:12 UTC.
+  - At about 20:45 UTC the operator recommended rotating the Token Factory key (see the previous incident) without saying to
+    wait until the run ended.
+  - The owner rotated it at 21:02 UTC. Every model request after 21:03:50 UTC returned HTTP 401.
+- Effect:
+  - AI episodes ended as `consecutive_invalid` with the unrepaired robot submitted; only 4–15 of 40 per AI arm ran before
+    the outage.
+  - Non-AI arms were unaffected.
+  - 231 failed calls were settled in the ledger at worst case ($7.42 recorded, nothing billed).
+- Handling:
+  - The registered analysis was run once and reported as is (`REPORT.md`), with the AI tests marked uninterpretable.
+  - The new key was installed on the VM (verified read-only).
+  - A re-run of the AI arms is proposed as amendment 1 and needs the owner's decision.
+- Lessons:
+  - no credential changes during live runs;
+  - pre-run live key check;
+  - runners must fail fast on authentication errors.
