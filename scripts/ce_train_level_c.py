@@ -34,25 +34,11 @@ def main() -> int:
     pred = rl.RepairPredictor(a.model).fit(rows)
     lobo = json.load(open(a.lobo, encoding="utf-8"))
 
-    def find(d, model, setting):
-        """Locate {top1, top3} for (model, setting) in the ce_learn_eval JSON (searched, so the exact nesting does not matter)."""
-        if isinstance(d, dict):
-            if d.get("model") == model and d.get("setting") == setting and "top1" in d:
-                return d
-            for k, v in d.items():
-                if k == setting and isinstance(v, dict) and model in v and isinstance(v[model], dict) and "top1" in v[model]:
-                    return v[model]
-                got = find(v, model, setting)
-                if got:
-                    return got
-        elif isinstance(d, list):
-            for v in d:
-                got = find(v, model, setting)
-                if got:
-                    return got
-        return None
+    def stat(setting, key):
+        v = lobo["settings"][setting]["models"][a.model][key]
+        return round(float(v["value"]), 3)
 
-    pred.heldout = {s: {k: (find(lobo, a.model, s) or {}).get(k) for k in ("top1", "top3")} for s in rl.SETTINGS}
+    pred.heldout = {st: {k: stat(st, k) for k in ("top1", "top3")} for st in rl.SETTINGS}
     pred.heldout["top1"] = pred.heldout["obs"]["top1"]          # advice_text default: the observation-only setting
     pred.heldout["setting"] = "obs"
     pred.save(a.out)
