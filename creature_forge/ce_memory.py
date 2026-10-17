@@ -19,6 +19,17 @@ from .scientist import tolerance
 VERSION = "ce_memory_v1"
 
 
+def robot_features(row: dict) -> dict:
+    """Body features of the robot actually under investigation (`creature_gen.features` of `row["robot"]["body"]`), the same thing a
+    policy computes at runtime. NOT the fault-bench `features` field, which describes the creature before its earlier recovery
+    (found 2026-10-17: using it mismatched training and runtime features)."""
+    from . import creature_gen as cg
+    try:
+        return {k: v for k, v in cg.features(row["robot"]["body"]).items() if isinstance(v, (int, float)) and not isinstance(v, bool)}
+    except Exception:       # noqa: BLE001 - descriptive features only
+        return {}
+
+
 def group_key(base_id: str) -> str:
     return "G-" + hashlib.sha256(("group|" + str(base_id)).encode()).hexdigest()[:8]
 
@@ -47,7 +58,7 @@ def build_bank(probe_rows: list[dict], episode_records: list[dict] = ()) -> xb.E
     by_id = {r["instance_id"]: r for r in probe_rows}
     bank = xb.ExperienceBank()
     for row in probe_rows:
-        inst = {"features": row.get("features"), "repair_matrix": row.get("repair_matrix"),
+        inst = {"features": robot_features(row), "repair_matrix": row.get("repair_matrix"),
                 "initial_observation": {"median": (row.get("observation") or {}).get("median")}}
         ep = xb.episode_from_record(_probe_record(row), inst)
         ep["group_key"] = group_key(row["base_id"])
@@ -56,12 +67,33 @@ def build_bank(probe_rows: list[dict], episode_records: list[dict] = ()) -> xb.E
         row = by_id.get(rec.get("instance_id"))
         if row is None:
             continue
-        inst = {"features": row.get("features"), "repair_matrix": row.get("repair_matrix"),
+        inst = {"features": robot_features(row), "repair_matrix": row.get("repair_matrix"),
                 "initial_observation": {"median": (row.get("observation") or {}).get("median")}}
         ep = xb.episode_from_record(rec, inst)
         ep["group_key"] = group_key(row["base_id"])
         bank.add(ep)
     return bank
+
+
+class AdviceMemory:
+    """Adds ONE learned-advice item (Level C, observation-only setting: no extra rollouts) to what an inner memory adapter retrieves.
+    The text states it is a statistical prediction from training robots with its leave-one-base-out accuracy, never a measurement."""
+
+    def __init__(self, inner, predictor):
+        self.inner, self.predictor = inner, predictor
+
+    def retrieve(self, obs_evidence: dict, features: dict) -> list[dict]:
+        items = list(self.inner.retrieve(obs_evidence, features)) if self.inner is not None else []
+        obs = {"median": (obs_evidence or {}).get("median"), "n_walking": (obs_evidence or {}).get("n_walking"),
+               "n_fell": (obs_evidence or {}).get("n_fell")}
+        items.append({"id": "LEARNED-1", "kind": "learned_advice", "text": self.predictor.advice_text(obs, features or {})})
+        return items
+
+    def item_provenance(self, item_id: str) -> dict:
+        if item_id == "LEARNED-1":
+            return {"kind": "learned_advice", "model": self.predictor.model_name, "n_train": self.predictor.n_train,
+                    "heldout": self.predictor.heldout}
+        return self.inner.item_provenance(item_id)
 
 
 def adapter_for(bank: xb.ExperienceBank, *, exclude_base: str | None = None, mode: str = "episodes+cards", k_episodes: int = 2,

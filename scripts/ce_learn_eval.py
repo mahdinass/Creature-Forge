@@ -40,7 +40,14 @@ METRICS = ("top1", "top3", "mrr", "brier")
 
 
 def load_rows(path: str) -> list[dict]:
-    return [json.loads(l) for l in Path(path).read_text(encoding="utf-8").splitlines() if l.strip()]
+    """Probe rows with `features` REPLACED by the body features of the robot under investigation (`ce_memory.robot_features`), which
+    is what a policy computes at runtime; the stored field describes the creature before its earlier recovery (fixed 2026-10-17)."""
+    from creature_forge.ce_memory import robot_features
+    rows = [json.loads(l) for l in Path(path).read_text(encoding="utf-8").splitlines() if l.strip()]
+    for r in rows:
+        r["features_stored"] = r.get("features")
+        r["features"] = robot_features(r)
+    return rows
 
 
 def load_faults(pattern: str) -> dict:

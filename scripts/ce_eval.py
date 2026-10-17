@@ -27,8 +27,11 @@ VERSION = "ce_eval_v1"
 # *_mem arms: the same scientist with retrieved experience (Levels A/B, `creature_forge.ce_memory`); needs --memory-probe.
 SCIENTIST_ARMS = {"scientist": ("iterative", False, False), "scientist_1shot": ("one_shot", False, False),
                   "scientist_think": ("iterative", True, False), "scientist_1shot_think": ("one_shot", True, False),
-                  "scientist_think_mem": ("iterative", True, True), "scientist_1shot_think_mem": ("one_shot", True, True)}
-POLICIES = tuple(SCIENTIST_ARMS) + ("exhaustive", "expert", "random", "blind")
+                  "scientist_think_mem": ("iterative", True, True), "scientist_1shot_think_mem": ("one_shot", True, True),
+                  "scientist_think_mem_learned": ("iterative", True, "learned")}
+# learned: non-AI Level C policy (exhaustive's procedure, trained ranking); needs --learned-model. *_learned scientist arms add the
+# Level C advice item (observation-only) to the retrieved memory.
+POLICIES = tuple(SCIENTIST_ARMS) + ("exhaustive", "expert", "random", "blind", "learned")
 
 
 def thinking_config():
@@ -114,7 +117,7 @@ def _llm(rec: dict | None) -> dict:
 
 def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4, n_obs: int = 4, pool=None, bench_factory=None,
              verify_fn=None, scientist_factory=None, features_fn=None, source: str = "live", fixture=None, max_steps: int = 12,
-             memory=None, memory_exclude_own_base: bool = True) -> dict:
+             memory=None, memory_exclude_own_base: bool = True, predictor=None) -> dict:
     """One (instance, policy) episode -> record (JSON-safe)."""
     if policy not in POLICIES:
         raise ValueError(f"unknown policy {policy!r}; known: {list(POLICIES)}")
@@ -145,13 +148,19 @@ def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4
                     raise ValueError(f"policy {policy} needs a memory bank (--memory-probe)")
                 from creature_forge import ce_memory
                 mem = ce_memory.adapter_for(memory, exclude_base=instance["base_id"] if memory_exclude_own_base else None)
+                if use_mem == "learned":
+                    if predictor is None:
+                        raise ValueError(f"policy {policy} needs --learned-model")
+                    mem = ce_memory.AdviceMemory(mem, predictor)
             prec = sci.investigate(bench, view, memory=mem)
             if mem is not None:
-                prec["memory_meta"] = {"bank_episodes": len(mem.bank.episodes), "cards": len(mem.cards),
+                inner = getattr(mem, "inner", mem)
+                prec["memory_meta"] = {"bank_episodes": len(inner.bank.episodes), "cards": len(inner.cards),
+                                       "learned_advice": inner is not mem,
                                        "excluded_own_base": bool(memory_exclude_own_base)}
             llm_rec = prec
         else:
-            pol = cp.make_policy(policy, seed=_h(instance["instance_id"], "random"))
+            pol = cp.make_policy(policy, seed=_h(instance["instance_id"], "random"), predictor=predictor)
             prec = pol.run(bench, view)
         design = bench.best_design()
         ledger = bench.ledger()
@@ -210,6 +219,7 @@ def main(argv=None) -> int:
     ap.add_argument("--limit", type=int, default=0, help="stop after this many (instance, policy) pairs")
     ap.add_argument("--memory-probe", help="probe-dataset jsonl(s) (comma-separated) of TRAINING robots for the *_mem arms")
     ap.add_argument("--memory-episodes", help="comma-separated ce_eval result files of TRAINING robots added to the bank")
+    ap.add_argument("--learned-model", help="Level C RepairPredictor JSON (scripts/ce_train_level_c.py) for learned / *_learned arms")
     ap.add_argument("--memory-keep-own-base", action="store_true",
                     help="do not exclude the robot's own base from memory (default: excluded, for development transfer tests)")
     ap.add_argument("--instance-ids", nargs="*", help="restrict to these instance ids (development)")
@@ -227,6 +237,12 @@ def main(argv=None) -> int:
         print(f"memory bank: {len(memory.episodes)} episodes from {len(rows)} probe rows and {len(eps)} episode records", flush=True)
     if any(SCIENTIST_ARMS.get(p, (0, 0, False))[2] for p in pols) and memory is None:
         ap.error("*_mem policies need --memory-probe")
+    predictor = None
+    if a.learned_model:
+        from creature_forge.repair_learner import RepairPredictor
+        predictor = RepairPredictor.load(a.learned_model)
+    if (("learned" in pols) or any(SCIENTIST_ARMS.get(p, (0, 0, False))[2] == "learned" for p in pols)) and predictor is None:
+        ap.error("learned / *_learned policies need --learned-model")
     i, k = (int(x) for x in a.shard.split("/"))
     if not 0 <= i < k:
         ap.error("--shard must be i/k with 0 <= i < k")
@@ -254,7 +270,7 @@ def main(argv=None) -> int:
         for n, (inst, p) in enumerate(pairs):
             r = evaluate(inst, p, budget=a.budget, n_train=a.n_train, n_obs=a.n_obs, pool=pool, source=a.source,
                          fixture=json.loads(json.dumps(fixture)) if fixture is not None else None, max_steps=a.max_steps,
-                         memory=memory, memory_exclude_own_base=not a.memory_keep_own_base)
+                         memory=memory, memory_exclude_own_base=not a.memory_keep_own_base, predictor=predictor)
             out.write(json.dumps(r, sort_keys=True) + "\n")
             out.flush()
             print(f"[{n + 1}/{len(pairs)}] {inst['instance_id']} {p} status={(r.get('verification') or {}).get('status')} "

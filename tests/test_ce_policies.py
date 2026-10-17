@@ -73,6 +73,38 @@ class TestExhaustive(unittest.TestCase, Common):
         self.assertTrue(set(cp.CF_TO_TOOL.values()) <= set(fb.TOOLS))
 
 
+class FakePredictor:
+    """Ranks torque_limit, then stride, ... and records what it was given."""
+    def __init__(self):
+        self.seen = None
+
+    def advise(self, observation, features, cf_results=None):
+        self.seen = (observation, features, cf_results)
+        order = ["torque_limit", "stride"] + [t for t in fb.TOOLS if t not in ("torque_limit", "stride")]
+        return [{"tool": t, "p_repair": 0.9 - 0.05 * i, "uncertainty": None, "rank": i + 1, "setting": "obs+cf"} for i, t in enumerate(order)]
+
+
+class TestLearned(unittest.TestCase, Common):
+    def test_same_experiments_as_exhaustive_then_predicted_top2(self):
+        p = FakePredictor()
+        b = bench()
+        rec = cp.Learned(p).run(b, {"robot": {"body": BODY, "vector": VEC}, "features": {"foot_to_leg": 0.2}})
+        ex, bex = run(cp.Exhaustive())
+        n_cf = lambda bb: sum(1 for l in bb.ledger()["lines"] if l["item"] == "counterfactual" and l["n"] > 0)
+        self.assertEqual(n_cf(b), n_cf(bex))                                # identical instruments and costs
+        self.assertEqual([r["tool"] for r in rec["repairs"] if r.get("ok")], ["torque_limit", "stride"])
+        obs, feats, cfr = p.seen
+        self.assertEqual(feats, {"foot_to_leg": 0.2})
+        self.assertEqual(set(cfr), set(et.COUNTERFACTUALS))                 # unavailable entries are marked refused
+        self.assertIn("deltas", cfr["foot_length_x1.3"])
+        self.assertIn("median", obs)
+        self.assert_within_budget(b)
+
+    def test_needs_a_predictor(self):
+        with self.assertRaises(ValueError):
+            cp.make_policy("learned")
+
+
 class TestExpert(unittest.TestCase, Common):
     def test_rules(self):
         base = {"median": {"leg_length_m": 0.8}}

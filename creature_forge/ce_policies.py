@@ -11,6 +11,9 @@ design (`bench.best_design()`), the decisions and the bench ledger. All four are
                same split. The thresholds are nominal engineering values chosen by us BEFORE the evaluation instances existed in this
                work (not fitted to them, not tuned on them) and are disclosed here; unmatched cases fall back to FALLBACK_ORDER.
   RandomPolicy two random available counterfactuals, then two random tools, same split.
+  Learned      (Level C, 2026-10-17) Exhaustive's procedure with the hand-made ranking replaced by a TRAINED repair-effect predictor
+               (`repair_learner.RepairPredictor`, fitted on training robots only): observe, run every available catalogue counterfactual,
+               rank the tools by predicted P(repair | observation, body features, counterfactual responses), repair the top two.
   Blind        one CMA-ES over the UNION of all control dimensions (posture, timing, feedback, stride, placement = 17) and four body
                parameters (foot_length, torso_mass, torque_limit, foot_friction), with the whole remaining budget. `walk_opt` allows at
                most four body parameters (`MAX_BODY_PARAMS`), so leg length (thigh and shank) is the only repair tool whose dimensions are
@@ -311,7 +314,35 @@ class Blind(_Policy):
                                                  "train_walking": (res.get("best") or {}).get("train_walking")}]})
 
 
-def make_policy(name: str, *, seed: int = 0, min_budget_fn=None):
+class Learned(_Policy):
+    name = "learned"
+
+    def __init__(self, predictor, min_budget_fn=None):
+        super().__init__(min_budget_fn)
+        if predictor is None:
+            raise ValueError("the learned policy needs a trained RepairPredictor")
+        self.predictor = predictor
+
+    def run(self, bench, robot_view=None) -> dict:
+        r0 = bench.observe()
+        obs0 = r0.get("observation") or {}
+        cf_results = {}
+        for cid in available_counterfactuals(bench):
+            res = bench.counterfactual(cid)
+            cf_results[cid] = {"deltas": res.get("deltas_vs_current") or {}} if res.get("ok") else {"refused": res.get("refused")}
+        for cid in eng_tools.COUNTERFACTUALS:
+            cf_results.setdefault(cid, {"refused": "unavailable for this design"})
+        feats = (robot_view or {}).get("features") or {}
+        advice = self.predictor.advise(obs0, feats, cf_results)
+        log: list = []
+        run_repairs(bench, [a["tool"] for a in advice], 2, self._min, log)
+        return self._record(bench, {"advice": advice, "repairs": log, "counterfactuals": sorted(k for k, v in cf_results.items()
+                                                                                                if "deltas" in v)})
+
+
+def make_policy(name: str, *, seed: int = 0, min_budget_fn=None, predictor=None):
+    if name == "learned":
+        return Learned(predictor, min_budget_fn)
     if name == "exhaustive":
         return Exhaustive(min_budget_fn)
     if name == "expert":
