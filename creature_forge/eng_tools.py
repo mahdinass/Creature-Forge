@@ -47,7 +47,7 @@ COUNTERFACTUALS = {
 # scale level; parameters that are signed or may sit at 0 take an additive level, a signed fraction of the parameter's bound range
 # (R = upper - lower). Id grammar: "<param>@<level>" or "<param>@<level>&<param>@<level>" (two different parameters). A change that
 # would leave the guided / controller bounds is refused, never clipped. The fixed catalogue above is unchanged (non-AI baselines).
-CF_SCALE_LEVELS = {"x0.5": 0.5, "x0.7": 0.7, "x0.85": 0.85, "x1.2": 1.2, "x1.5": 1.5, "x2": 2.0}
+CF_SCALE_LEVELS = {"x0.33": 0.33, "x0.5": 0.5, "x0.7": 0.7, "x0.85": 0.85, "x1.2": 1.2, "x1.5": 1.5, "x2": 2.0, "x3": 3.0}   # x0.33/x3: v2.1 (pilot2: x2 could not reveal a 10x gain loss)
 CF_ADD_LEVELS = {"-0.2R": -0.2, "-0.1R": -0.1, "-0.05R": -0.05, "+0.05R": 0.05, "+0.1R": 0.1, "+0.2R": 0.2}
 CF_ADDITIVE = ("duty", "knee_shift", "stance_knee", "hip_bias", "pitch_ref", "sync_gain", "start_lean", "fp_kd", "fp_kv")
 CF_BODY_PARAMS = ("torso_mass", "foot_length", "torque_limit", "foot_friction", "leg_length", "leg_density")

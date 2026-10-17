@@ -139,7 +139,7 @@ def _top_changes(quantities: dict, k: int = 4) -> list[list]:
     rows = []
     for q, x in sorted((quantities or {}).items()):
         d, tol = _num(x.get("delta")), _num(x.get("tolerance"))
-        if d is None or not tol or tol <= 0 or q in ("leg_length_m", "n_swing_phases"):
+        if d is None or not tol or tol <= 0 or q in ("leg_length_m", "n_swing_phases", "fall_direction"):
             continue
         rows.append((abs(d / tol), q, d / tol))
     rows.sort(key=lambda t: (-t[0], t[1]))
@@ -185,8 +185,9 @@ def _describe_signature(s: dict) -> str:
     parts = []
     fd = s.get("fall_direction")
     if fd is not None:
-        word = "fell FORWARD" if fd > 0 else "fell BACKWARD" if fd < 0 else "did not fall"
-        parts.append(word + (f" at {_r(s['time_upright'])} s" if fd != 0 and s.get("time_upright") is not None else ""))
+        # fall_direction is a median of per-seed +1 / -1 / 0, so 0 can mean mixed directions (not "no fall")
+        word = "fell FORWARD" if fd > 0 else "fell BACKWARD" if fd < 0 else "median fall direction 0 (mixed or no falls)"
+        parts.append(word + (f", upright {_r(s['time_upright'])} s" if s.get("time_upright") is not None else ""))
     for k, label in (("pitch_end", "end pitch {} rad"), ("capture_margin_over_L_end", "capture margin/L {}"),
                      ("com_vx_end", "end COM vx {} m/s"), ("step_freq_norm", "norm. step freq {}"), ("slip_fraction", "slip {}"),
                      ("sat_max", "max saturation {}")):
@@ -196,24 +197,27 @@ def _describe_signature(s: dict) -> str:
 
 
 def _episode_text(ep: dict, hint: str, budget: int = MAX_TEXT) -> str:
+    """Most decision-relevant facts first (signature, measured repair matrix, verified outcome), then what was tried, so clipping to
+    the budget drops the least important part."""
     seg = [f"Earlier robot, {hint}: {_describe_signature(ep['signature'] or {})}."]
+    m = ep.get("repair_matrix")
+    if m:
+        ok = sorted(((v, t) for t, v in m.items() if v >= REPAIR_THRESHOLD), key=lambda t: (-t[0], t[1]))
+        bad = sorted(t for t, v in m.items() if v < REPAIR_THRESHOLD)
+        seg.append("Measured repair matrix (walking fraction on check seeds after a 160-rollout repair): repaired by "
+                   + (", ".join(f"{t} {v:g}" for v, t in ok) or "no tool") + "; not by " + (", ".join(bad) or "none") + ".")
+    if ep["outcome"].get("status"):
+        seg.append(f"Verified outcome of that investigation: {ep['outcome']['status']}, walking fraction {ep['outcome']['walking_frac']}.")
     tried = []
     for x in ep["experiments"]:
         if x["kind"] == "counterfactual":
-            ch = ", ".join(f"{q} {_s(z)}x tol" for q, z in x["top_changes"][:3])
+            ch = ", ".join(f"{q} {_s(z)}x tol" for q, z in x["top_changes"][:2])
             tried.append(f"{x['change']}: walking {x['n_walking'][0]}->{x['n_walking'][1]}" + (f" ({ch})" if ch else ""))
         else:
             a, b = x["train_walking"]
             tried.append(f"repair {x['tool']}: train walking {'?' if a is None else a}->{b}")
     if tried:
-        seg.append("Tried: " + "; ".join(tried[:5]) + ".")
-    seg.append(f"Verified outcome {ep['outcome']['status']}, walking fraction {ep['outcome']['walking_frac']}.")
-    m = ep.get("repair_matrix")
-    if m:
-        ok = sorted(((v, t) for t, v in m.items() if v >= REPAIR_THRESHOLD), key=lambda t: (-t[0], t[1]))
-        bad = sorted(t for t, v in m.items() if v < REPAIR_THRESHOLD)
-        seg.append("Measured repair matrix: repaired by " + (", ".join(f"{t} {v:g}" for v, t in ok) or "no tool") + "; not by "
-                   + (", ".join(bad) or "none") + ".")
+        seg.append("Measured experiments: " + "; ".join(tried) + ".")
     return _clip(" ".join(seg), budget)
 
 
@@ -288,6 +292,16 @@ class ExperienceBank:
         if item_id in self.episodes:
             return {"kind": "episode", "record": copy.deepcopy(self.episodes[item_id])}
         raise KeyError(item_id)
+
+    def subset(self, exclude_groups=()) -> "ExperienceBank":
+        """A new bank without the episodes whose opaque `group_key` (set by the builder, e.g. a hash of the base robot) is excluded:
+        development evaluation retrieves only experience from OTHER morphologies than the robot under investigation."""
+        ex = set(exclude_groups)
+        b = ExperienceBank()
+        for ep in self.episodes.values():
+            if ep.get("group_key") not in ex:
+                b.add(ep)
+        return b
 
 
 # --------------------------------------------------------------------------------------------- Level B: cards

@@ -138,7 +138,7 @@ class TestBank(unittest.TestCase):
         t = bank.retrieve(obs(1), FEATS, k=1)[0]["text"]
         self.assertIn("fell BACKWARD", t)
         self.assertIn("torso_mass_x0.75", t)
-        self.assertIn("Measured repair matrix: repaired by timing", t)
+        self.assertIn("Measured repair matrix (walking fraction on check seeds after a 160-rollout repair): repaired by timing", t)
         self.assertEqual(eb._r(0.123456), 0.123)
 
     def test_provenance(self):

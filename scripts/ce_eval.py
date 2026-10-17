@@ -23,9 +23,12 @@ from creature_forge import ce_policies as cp  # noqa: E402
 from creature_forge import fault_bench as fb  # noqa: E402
 
 VERSION = "ce_eval_v1"
-POLICIES = ("scientist", "scientist_1shot", "scientist_think", "exhaustive", "expert", "random", "blind")
 # scientist_think (dev 2026-10-17): the iterative scientist with the model's thinking ENABLED (same model, schema and budget).
-SCIENTIST_ARMS = {"scientist": ("iterative", False), "scientist_1shot": ("one_shot", False), "scientist_think": ("iterative", True)}
+# *_mem arms: the same scientist with retrieved experience (Levels A/B, `creature_forge.ce_memory`); needs --memory-probe.
+SCIENTIST_ARMS = {"scientist": ("iterative", False, False), "scientist_1shot": ("one_shot", False, False),
+                  "scientist_think": ("iterative", True, False), "scientist_1shot_think": ("one_shot", True, False),
+                  "scientist_think_mem": ("iterative", True, True), "scientist_1shot_think_mem": ("one_shot", True, True)}
+POLICIES = tuple(SCIENTIST_ARMS) + ("exhaustive", "expert", "random", "blind")
 
 
 def thinking_config():
@@ -111,7 +114,7 @@ def _llm(rec: dict | None) -> dict:
 
 def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4, n_obs: int = 4, pool=None, bench_factory=None,
              verify_fn=None, scientist_factory=None, features_fn=None, source: str = "live", fixture=None, max_steps: int = 12,
-             memory=None) -> dict:
+             memory=None, memory_exclude_own_base: bool = True) -> dict:
     """One (instance, policy) episode -> record (JSON-safe)."""
     if policy not in POLICIES:
         raise ValueError(f"unknown policy {policy!r}; known: {list(POLICIES)}")
@@ -128,7 +131,7 @@ def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4
     llm_rec = None
     try:
         if policy in SCIENTIST_ARMS:
-            mode, think = SCIENTIST_ARMS[policy]
+            mode, think, use_mem = SCIENTIST_ARMS[policy]
             order_seed = _h(instance["instance_id"], "order")
             if scientist_factory is not None:
                 sci = scientist_factory(mode=mode, order_seed=order_seed)
@@ -136,7 +139,16 @@ def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4
                 from creature_forge.scientist import Scientist
                 sci = Scientist(mode, source=source, fixture=fixture, order_seed=order_seed, max_steps=max_steps,
                                 config=thinking_config() if (think and source == "live") else None)
-            prec = sci.investigate(bench, view, memory=memory)
+            mem = None
+            if use_mem:
+                if memory is None:
+                    raise ValueError(f"policy {policy} needs a memory bank (--memory-probe)")
+                from creature_forge import ce_memory
+                mem = ce_memory.adapter_for(memory, exclude_base=instance["base_id"] if memory_exclude_own_base else None)
+            prec = sci.investigate(bench, view, memory=mem)
+            if mem is not None:
+                prec["memory_meta"] = {"bank_episodes": len(mem.bank.episodes), "cards": len(mem.cards),
+                                       "excluded_own_base": bool(memory_exclude_own_base)}
             llm_rec = prec
         else:
             pol = cp.make_policy(policy, seed=_h(instance["instance_id"], "random"))
@@ -196,15 +208,25 @@ def main(argv=None) -> int:
     ap.add_argument("--fixture", help="JSON list of scripted scientist replies (with --source scripted)")
     ap.add_argument("--max-steps", type=int, default=12)
     ap.add_argument("--limit", type=int, default=0, help="stop after this many (instance, policy) pairs")
-    ap.add_argument("--memory", help="memory bank (not implemented yet)")
+    ap.add_argument("--memory-probe", help="probe-dataset jsonl(s) (comma-separated) of TRAINING robots for the *_mem arms")
+    ap.add_argument("--memory-episodes", help="comma-separated ce_eval result files of TRAINING robots added to the bank")
+    ap.add_argument("--memory-keep-own-base", action="store_true",
+                    help="do not exclude the robot's own base from memory (default: excluded, for development transfer tests)")
     ap.add_argument("--instance-ids", nargs="*", help="restrict to these instance ids (development)")
     a = ap.parse_args(argv)
     pols = [p for p in a.policies.split(",") if p]
     bad = [p for p in pols if p not in POLICIES]
     if bad:
         ap.error(f"unknown policies {bad}; known: {list(POLICIES)}")
-    if a.memory:
-        ap.error("--memory: memory banks are not implemented yet")
+    memory = None
+    if a.memory_probe:
+        from creature_forge import ce_memory
+        rows = [json.loads(l) for path in a.memory_probe.split(",") for l in open(path, encoding="utf-8") if l.strip()]
+        eps = [json.loads(l) for path in (a.memory_episodes or "").split(",") if path for l in open(path, encoding="utf-8") if l.strip()]
+        memory = ce_memory.build_bank(rows, eps)
+        print(f"memory bank: {len(memory.episodes)} episodes from {len(rows)} probe rows and {len(eps)} episode records", flush=True)
+    if any(SCIENTIST_ARMS.get(p, (0, 0, False))[2] for p in pols) and memory is None:
+        ap.error("*_mem policies need --memory-probe")
     i, k = (int(x) for x in a.shard.split("/"))
     if not 0 <= i < k:
         ap.error("--shard must be i/k with 0 <= i < k")
@@ -231,7 +253,8 @@ def main(argv=None) -> int:
     with ForgePool(max_workers=a.workers) as pool, open(a.out, "a", encoding="utf-8") as out:
         for n, (inst, p) in enumerate(pairs):
             r = evaluate(inst, p, budget=a.budget, n_train=a.n_train, n_obs=a.n_obs, pool=pool, source=a.source,
-                         fixture=json.loads(json.dumps(fixture)) if fixture is not None else None, max_steps=a.max_steps)
+                         fixture=json.loads(json.dumps(fixture)) if fixture is not None else None, max_steps=a.max_steps,
+                         memory=memory, memory_exclude_own_base=not a.memory_keep_own_base)
             out.write(json.dumps(r, sort_keys=True) + "\n")
             out.flush()
             print(f"[{n + 1}/{len(pairs)}] {inst['instance_id']} {p} status={(r.get('verification') or {}).get('status')} "

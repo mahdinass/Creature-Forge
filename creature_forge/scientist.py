@@ -44,8 +44,8 @@ SCHEMA_ONE_SHOT = "scientist_one_shot"
 MAX_STEPS = 12
 MAX_REQUESTS = 24
 MAX_NEW_HYPOTHESES = 3
-MAX_CITATIONS = 12          # v2: 6 rejected a valid reply in pilot1 (F1)
-MAX_PREDICTIONS = 8
+MAX_CITATIONS = 16          # v2: 6 rejected a valid reply in pilot1 (F1); v2.1: 16 (pilot2, thinking replies cite more)
+MAX_PREDICTIONS = 12        # v2.1 (pilot2: thinking replies register more predictions)
 TEXT_MAX = 1500
 STATUSES = ("open", "supported", "refuted", "unresolved")
 DIRECTIONS = ("increase", "decrease", "no_change")
@@ -260,8 +260,10 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "- conclude: stop. Available once at least one repair has been attempted (or when no repair is affordable any more). The "
             "design submitted is always the best training design found so far (\"best\").", "",
             "BUDGET. All instruments share one rollout budget; the exact costs are stated in every message (a counterfactual costs "
-            "n_obs rollouts; a repair costs the budget you grant it, at least the tool's minimum). Verification of the submitted design "
-            "is independent, uses different seeds and is hidden from you; training walking counts can overstate it.", "",
+            "n_obs rollouts; a repair costs the budget you grant it, at least the tool's minimum). A repair's budget sets how many "
+            "CMA-ES generations it runs (about budget / (n_train x population); the minimum is 3 generations). Rollouts still unused "
+            "when you conclude have no value: the result is judged only by the hidden verification of the submitted design. "
+            "Verification is independent, uses different seeds; training walking counts can overstate it.", "",
             "KEY FACTS AND HEALTHY REFERENCE. Each message starts the observation with computed facts (fall direction per seed in "
             "words, fall times, cadence, the pendulum frequency sqrt(g/L)/(2 pi) of the leg, Froude number, saturation, slip) and, for "
             "the main quantities, the range p10-p90 measured with the same instruments on verified-walking robots of other shapes. "
@@ -288,7 +290,8 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "repairs.<R#>.train_fitness. Only values that exist are citable.", "",
             "PREDICTIONS. Before each counterfactual you register, per hypothesis, the direction (increase, decrease, no_change) "
             "of named quantities. Quantities you may predict: " + q_lines + ". They are logged before the experiment runs and scored "
-            "afterwards: the observed direction is the sign of the measured change beyond a tolerance. " + TOLERANCE_DOCS + " "
+            "afterwards: the observed direction is the sign of the measured change beyond a tolerance, so a change smaller than the "
+            "tolerance counts as no_change. " + TOLERANCE_DOCS + " "
             "Predicting a quantity that is undefined (None) in the baseline or the intervention is not scored. For a repair you predict "
             "the number of training seeds walked afterwards.", "",
             "DIAGNOSIS CATEGORIES (physical mechanisms; use \"unresolved\" if the evidence does not decide):", *cat_lines, "",
@@ -511,7 +514,8 @@ def validate_step(reply, ctx: dict) -> list[str]:
         elif hyp_status[u["id"]] == "refuted":
             errs.append(f"{w}: hypothesis {u['id']!r} is refuted and cannot be changed; propose a new hypothesis")
         elif u["id"] in updated:
-            errs.append(f"{w}: duplicate id {u['id']!r}")
+            errs.append(f"{w}: duplicate id {u['id']!r}: give at most ONE status update per hypothesis per reply (cite all "
+                        f"relevant experiments in it)")
         else:
             updated[u["id"]] = u["status"]
         if u["status"] not in STATUSES:
@@ -599,6 +603,15 @@ def _drop_placeholders(reply):
                 keep.append(u)
         reply = {**reply, "status_updates": keep}
     return reply, warn
+
+
+def _generations(e: dict) -> int:
+    """CMA-ES generations a finished repair ran (initial evaluation excluded)."""
+    try:
+        pop = eng_tools.population(eng_tools.tool_space(e["tool"]))
+        return max(0, int((int(e["rollouts_used"]) // max(1, int(e["n_train"])) - 1) // pop))
+    except Exception:       # noqa: BLE001 - descriptive only
+        return 0
 
 
 def repair_budget(share, remaining: int) -> int:
@@ -805,7 +818,7 @@ class Scientist(dr.NemotronDirector):
                     out.append(head + f"; REFUSED: {e.get('refused')}")
                 else:
                     out.append(head + f"; result: train walking {e['start_walking']} -> {e['train_walking']} of {e['n_train']}, "
-                                      f"train fitness {_r(e['train_fitness'])}, rollouts used {e['rollouts_used']}, "
+                                      f"train fitness {_r(e['train_fitness'])}, rollouts used {e['rollouts_used']} (about {_generations(e)} CMA-ES generations), "
                                       f"{'became the current best design' if e['is_current_best'] else 'did not beat the current best'}")
         return out
 
@@ -870,7 +883,9 @@ class Scientist(dr.NemotronDirector):
         lines += (["  " + x for x in el] if el else ["  (none yet)"])
         ps = self.prediction_summary()
         if ps["n_scored"]:
-            lines.append(f"  prediction record so far: {ps['n_correct']} of {ps['n_scored']} scored predictions correct")
+            nc = (ps["observed_directions"] or {}).get("no_change", 0)
+            lines.append(f"  prediction record so far: {ps['n_correct']} of {ps['n_scored']} scored predictions correct; "
+                         f"{nc} of those {ps['n_scored']} measured changes were within tolerance (no_change)")
         if self.memory_items:
             lines += ["", "RETRIEVED MEMORY ITEMS (hearsay from other robots):"]
             for m in self.memory_items:
