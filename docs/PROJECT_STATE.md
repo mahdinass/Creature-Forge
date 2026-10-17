@@ -308,3 +308,24 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   - inference caps raised by the owner to $30 / 4,000 requests (ledger about $5);
   - infra cap $35 (ledger about $29.5); the real account balance is about $11.
 - PR #18 (CI fix) is open for review. PR #17 is untouched.
+
+## 2026-10-17 22:45 Oslo - Registered held-out evaluation RUNNING (causal engineer)
+- Protocol: `experiments/causal_engineer/heldout/PROTOCOL.md` + `protocol.json`, frozen at code commit `5ca165c` (protocol
+  commit `c4c2c87`, pushed).
+- Scope: 40 instances on 22 unseen bases × 8 arms = 320 episodes.
+- Location: main VM, slot `ceh`, 16 tmux sessions `heval_0..15`. Results in `~/dev/ceh/artifacts/ce/heldout_eval_shard*.jsonl`.
+- When all shards exit, tmux `hwatch` writes `heldout_eval.sha256`, backs up the ledger to
+  `~/dev/ledger/backup/inference_ledger_after_heldout.jsonl` and powers the VM off after 15 min. The VM deadline (10 h) is the
+  backstop.
+- ETA: about 6 h, CPU-bound.
+- If interrupted:
+  - restart the same `ce_eval.py` command per shard with `--resume`; the command is in this file's git history and in
+    `docs/CAUSAL_ENGINEER.md`; episodes are append-only, never rerun;
+  - then run `scripts/ce_heldout_analysis.py` ONCE.
+- Next:
+  - pull results;
+  - run the single analysis;
+  - write REPORT.md;
+  - update `docs/CAUSAL_ENGINEER.md` (results, what Nemotron contributes, limitations);
+  - refresh the Studio demo records.
+- Batch VM: STOPPED. Infra ledger about $31.3 of $38; inference about $10.7 of $30 before the run (about $12 expected).
