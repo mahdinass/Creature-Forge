@@ -366,7 +366,7 @@ class StatusAndStubTests(ApiCase):
             self.assertEqual((s["live_available"], s["workers"], s["version"]), (False, 6, "forge-v1"))
             self.assertEqual(s["model"]["model"], "nvidia/nemotron-3-super-120b-a12b")
             self.assertEqual(set(s["model"]["profiles"]), {"default", "deep"})
-            self.assertEqual((s["ledger"]["requests"], s["ledger"]["usd"], s["ledger"]["caps"]["requests"]), (0, 0, 1500))
+            self.assertEqual((s["ledger"]["requests"], s["ledger"]["usd"], s["ledger"]["caps"]["requests"]), (0, 0, 4000))
             os.environ["NEBIUS_API_KEY"] = "sk-super-secret-value"
             self.assertFalse(self.c.get("/api/forge/status").json()["live_available"])  # live flag missing
             os.environ["CREATURE_FORGE_ENABLE_LIVE"] = "1"
