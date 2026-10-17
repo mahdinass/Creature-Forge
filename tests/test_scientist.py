@@ -87,6 +87,7 @@ def make(fixture, mode="iterative", **kw):
     hook = (lambda ev: log.append("event:" + ev["type"])) if log is not None else None
     return sc.Scientist(mode, fixture=json.loads(json.dumps(fixture)), reference_features=REF, event_hook=hook,
                         require_repair_before_conclude=kw.pop('require_repair_before_conclude', False),
+                        repair_calls=kw.pop('repair_calls', 1),
                         order_seed=kw.pop("order_seed", 5), **kw)
 
 

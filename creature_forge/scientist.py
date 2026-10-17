@@ -40,7 +40,7 @@ MODES = ("iterative", "one_shot")
 SCHEMA_STEP = "scientist_step"
 SCHEMA_ONE_SHOT = "scientist_one_shot"
 MAX_STEPS = 12
-MAX_REQUESTS = 16
+MAX_REQUESTS = 24
 MAX_NEW_HYPOTHESES = 3
 MAX_CITATIONS = 6
 MAX_PREDICTIONS = 8
@@ -424,8 +424,9 @@ def validate_step(reply, ctx: dict) -> list[str]:
         v = reply[a]
         if not isinstance(v, list):
             errs.append(f"{a}: must be a list")
-        elif a == action and not (len(v) == 1 or (a == "repair" and len(v) == 2)):
-            errs.append(f"{a}: the chosen action needs exactly one element" + (" (repair: one or two, run in order)" if a == "repair" else ""))
+        elif a == action and not (len(v) == 1 or (a in ("repair", "counterfactual") and len(v) == 2)):
+            errs.append(f"{a}: the chosen action needs exactly one element" + (" (repair and counterfactual: one or two, run in order)"
+                                                                              if a in ("repair", "counterfactual") else ""))
         elif a != action and v:
             errs.append(f"{a}: must be empty when the action is {action!r}")
     hyp_status = dict(ctx["hypotheses"])
@@ -460,31 +461,40 @@ def validate_step(reply, ctx: dict) -> list[str]:
     usable = {h for h, s in hyp_status.items() if s != "refuted" and updated.get(h) != "refuted"} | set(new_ids)
     if ctx.get("mem_ids") is not None:
         _validate_memory(reply["memory_assessments"], ctx["mem_ids"], bool(ctx.get("first_step")), errs)
-    if action == "counterfactual" and isinstance(reply["counterfactual"], list) and len(reply["counterfactual"]) == 1:
-        c = reply["counterfactual"][0]
-        if dr._exact(c, {"change", "purpose", "predictions"}, "counterfactual[0]", errs):
+    if action == "counterfactual" and isinstance(reply["counterfactual"], list) and len(reply["counterfactual"]) in (1, 2):
+        cfs = reply["counterfactual"]
+        if len(cfs) == 2 and isinstance(cfs[0], dict) and isinstance(cfs[1], dict) and cfs[0].get("change") == cfs[1].get("change"):
+            errs.append("counterfactual: the two counterfactuals must be different changes")
+        if len(cfs) == 2 and ctx["remaining"] < ctx["cf_cost"] + ctx.get("cf_cost_next", ctx["cf_cost"]):
+            errs.append(f"counterfactual: two counterfactuals cost {ctx['cf_cost'] + ctx.get('cf_cost_next', ctx['cf_cost'])} rollouts; "
+                        f"only {ctx['remaining']} remain")
+        for k, c in enumerate(cfs):
+            w0 = f"counterfactual[{k}]"
+            if not dr._exact(c, {"change", "purpose", "predictions"}, w0, errs):
+                continue
             if c["change"] not in ctx["cf_available"]:
-                errs.append(f"counterfactual[0].change: {c['change']!r} is not available now; available (affordable, not yet run on "
+                errs.append(f"{w0}.change: {c['change']!r} is not available now; available (affordable, not yet run on "
                             f"the current design): {list(ctx['cf_available'])}")
-            _text(c["purpose"], "counterfactual[0].purpose", errs)
+            _text(c["purpose"], f"{w0}.purpose", errs)
             ps = c["predictions"]
             if not isinstance(ps, list) or not 1 <= len(ps) <= MAX_PREDICTIONS:
-                errs.append(f"counterfactual[0].predictions: give 1-{MAX_PREDICTIONS} predictions")
-            else:
-                seen = set()
-                for j, p in enumerate(ps):
-                    w = f"counterfactual[0].predictions[{j}]"
-                    if not dr._exact(p, {"hypothesis", "quantity", "direction"}, w, errs):
-                        continue
-                    if p["hypothesis"] not in usable:
-                        errs.append(f"{w}.hypothesis: {p['hypothesis']!r} is not an open/supported/unresolved hypothesis {sorted(usable)}")
-                    if p["quantity"] not in QUANTITIES:
-                        errs.append(f"{w}.quantity: {p['quantity']!r} is not a predictable quantity")
-                    if p["direction"] not in DIRECTIONS:
-                        errs.append(f"{w}.direction: must be one of {list(DIRECTIONS)}")
-                    if (p["hypothesis"], p["quantity"]) in seen:
-                        errs.append(f"{w}: duplicate (hypothesis, quantity)")
-                    seen.add((p["hypothesis"], p["quantity"]))
+                errs.append(f"{w0}.predictions: give 1-{MAX_PREDICTIONS} predictions")
+                continue
+            seen = set()
+            for j, p in enumerate(ps):
+                w = f"{w0}.predictions[{j}]"
+                if not dr._exact(p, {"hypothesis", "quantity", "direction"}, w, errs):
+                    continue
+                if p["hypothesis"] not in usable:
+                    errs.append(f"{w}.hypothesis: {p['hypothesis']!r} is not an open/supported/unresolved hypothesis {sorted(usable)}"
+                                + (" - declare it in new_hypotheses in the same reply" if not usable else ""))
+                if p["quantity"] not in QUANTITIES:
+                    errs.append(f"{w}.quantity: {p['quantity']!r} is not a predictable quantity")
+                if p["direction"] not in DIRECTIONS:
+                    errs.append(f"{w}.direction: must be one of {list(DIRECTIONS)}")
+                if (p["hypothesis"], p["quantity"]) in seen:
+                    errs.append(f"{w}: duplicate (hypothesis, quantity)")
+                seen.add((p["hypothesis"], p["quantity"]))
     if action == "repair" and isinstance(reply["repair"], list) and len(reply["repair"]) in (1, 2):
         for k, r in enumerate(reply["repair"]):
             errs += _validate_repair(r, f"repair[{k}]", ctx, usable)
@@ -502,6 +512,25 @@ def validate_step(reply, ctx: dict) -> list[str]:
             if c["submit"] != "best":
                 errs.append("conclude[0].submit: must be 'best'")
     return errs
+
+
+REPAIR_CALLS_PER_STEP = 2   # dev change 2026-10-17 (live smoke): the step schema is demanding; two repair calls per step
+_PLACEHOLDER_IDS = {"", "none", "(none)", "null", "n/a", "-"}
+
+
+def _drop_placeholders(reply):
+    """Drop obviously empty placeholder entries the model sometimes emits (e.g. a status update with id "(none)"); recorded as a
+    warning. Nothing else is changed: real content is never repaired or invented."""
+    warn = []
+    if isinstance(reply, dict) and isinstance(reply.get("status_updates"), list):
+        keep = []
+        for u in reply["status_updates"]:
+            if isinstance(u, dict) and str(u.get("id", "")).strip().lower() in _PLACEHOLDER_IDS:
+                warn.append(f"dropped placeholder status update {u.get('id')!r}")
+            else:
+                keep.append(u)
+        reply = {**reply, "status_updates": keep}
+    return reply, warn
 
 
 def repair_budget(share, remaining: int) -> int:
@@ -575,8 +604,9 @@ class Scientist(dr.NemotronDirector):
                  fixture: Sequence | None = None, max_steps: int = MAX_STEPS, max_requests: int = MAX_REQUESTS,
                  max_total_tokens: int = 400_000, config=None, order_seed: int | None = None,
                  reference_features: dict | None = None, show_controller: bool = True, event_hook=None,
-                 min_budget_fn=None, require_repair_before_conclude: bool = True):
+                 min_budget_fn=None, require_repair_before_conclude: bool = True, repair_calls: int = REPAIR_CALLS_PER_STEP):
         self.require_repair_before_conclude = bool(require_repair_before_conclude)
+        self.repair_calls = int(repair_calls)
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}, got {mode!r}")
         src = source or ("scripted" if fixture is not None or transport is not None else "live")
@@ -757,6 +787,9 @@ class Scientist(dr.NemotronDirector):
                 reply = parse_reply(call.content)
             except ValueError as e:
                 return None, [str(e)]
+            reply, warn = _drop_placeholders(reply)
+            if warn:
+                dec.setdefault("warnings", []).extend(warn)
             return reply, validate(reply)
 
         call, idx = self._send(messages, schema, name, f"scientist_{kind}")
@@ -766,14 +799,18 @@ class Scientist(dr.NemotronDirector):
             return dec
         reply, errs = assess(call)
         dec["parsed"] = reply
-        if errs:
-            dec["first_attempt_errors"] = [self._clean(e) for e in errs]
+        attempts = 0
+        while errs and attempts < self.repair_calls:
+            attempts += 1
+            if attempts == 1:
+                dec["first_attempt_errors"] = [self._clean(e) for e in errs]
             dec["repaired"] = True
             call2, idx2 = self._send(self._repair_messages(messages, call, errs), schema, name, "scientist_repair")
             dec["calls"].append(idx2)
             if not call2.ok:
                 dec.update(status="repair_failed", validation_errors=dec["first_attempt_errors"] + [self._clean(call2.error or "no content")])
                 return dec
+            call = call2
             reply, errs = assess(call2)
             dec["parsed"] = reply
         if errs:
@@ -977,7 +1014,7 @@ class Scientist(dr.NemotronDirector):
         if step >= self.max_steps or nreq_left <= 2:       # the last step may only conclude (keeps a request for its repair call)
             actions = ["conclude"]
         return {"bench": bench, "best": best, "remaining": remaining, "total": int(bench.ledger()["total"]), "best_observed": observed,
-                "cf_available": cfs_aff, "cf_cost": cost, "tool_min": mins, "tools": list(mins), "actions": actions,
+                "cf_available": cfs_aff, "cf_cost": cost, "cf_cost_next": bench.n_obs, "tool_min": mins, "tools": list(mins), "actions": actions,
                 "n_train": bench.n_train}
 
     def _loop(self, bench, total: int) -> None:
@@ -1030,8 +1067,9 @@ class Scientist(dr.NemotronDirector):
                 self._apply_memory(step, reply["memory_assessments"])
                 srec["memory_assessments"] = copy.deepcopy(reply["memory_assessments"])
             if reply["action"] == "counterfactual":
-                ent = self._do_counterfactual(bench, step, reply["counterfactual"][0], ctx["best"])
-                srec["experiment"] = ent["id"]
+                ents = [self._do_counterfactual(bench, step, c, ctx["best"]) for c in reply["counterfactual"]]
+                srec["experiment"] = ents[-1]["id"]
+                srec["experiments"] = [e["id"] for e in ents]
             elif reply["action"] == "repair":
                 rem0 = bench.remaining      # both shares are fractions of the rollouts remaining at this step
                 ents = []
