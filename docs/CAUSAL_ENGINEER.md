@@ -98,3 +98,4 @@ the model may conclude at any step.
   - Prediction accuracy.
   - Rollouts used and the number of experiments.
   - LLM calls, cost and wall time.
+- 2026-10-17: physics_probe.py integrated (bit-identical dynamics; COM, angular momentum, CoP, support interval, capture point, friction use, saturation, tracking-error proxy, swing clearance; sanity values in the commit report). Finding: a healthy walker's capture point lies ahead of its support interval during normal stepping, so the useful instability signals are trends and pre-fall deltas against the walker's own baseline. Model quirk noted (not changed): torso box true mass = 0.6 x torso_mass.
