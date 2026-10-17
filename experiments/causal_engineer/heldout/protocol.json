@@ -1,0 +1,152 @@
+{
+ "id": "ce-heldout-eval-v1",
+ "code_commit": "5ca165c6ffc4d4c68e25255118531004b0449c67",
+ "protocol_md_sha256": "52a80140c2ad48018834a6995c1e5d2a01722cf0a1bf2d0ddf060ac06f8ebd99",
+ "arms": [
+  "scientist_think",
+  "scientist_1shot_think",
+  "scientist_think_mem",
+  "scientist_think_mem_learned",
+  "exhaustive",
+  "learned",
+  "expert",
+  "random"
+ ],
+ "hypotheses": [
+  {
+   "id": "C2",
+   "a": "scientist_think",
+   "b": "scientist_1shot_think"
+  },
+  {
+   "id": "C3",
+   "a": "scientist_think",
+   "b": "exhaustive"
+  },
+  {
+   "id": "C4",
+   "a": "scientist_think_mem",
+   "b": "scientist_think"
+  },
+  {
+   "id": "C5a",
+   "a": "learned",
+   "b": "exhaustive"
+  },
+  {
+   "id": "C5b",
+   "a": "scientist_think_mem_learned",
+   "b": "scientist_think_mem"
+  },
+  {
+   "id": "C1",
+   "a": "scientist_think prediction accuracy",
+   "b": "majority-direction baseline"
+  }
+ ],
+ "alpha": 0.05,
+ "correction": "Holm-Bonferroni over C1, C2, C3, C4, C5a, C5b",
+ "primary_outcome": "FULL_RECOVERY (full_recovery_v1)",
+ "budget": 700,
+ "n_train": 4,
+ "n_obs": 4,
+ "max_steps": 12,
+ "thinking_model_config": {
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "max_tokens": 32000,
+  "temperature": 0.6,
+  "reasoning_effort": null,
+  "extra_body": {
+   "chat_template_kwargs": {
+    "enable_thinking": true
+   }
+  },
+  "json_schema": true,
+  "timeout_s": 600.0
+ },
+ "inputs": {
+  "instances": {
+   "heldout_shard0.jsonl": "49bb84629c8ec58109e48918b3c1d0cacebffa155b6e5891f95792777a604061",
+   "heldout_shard1.jsonl": "591fa25d82f9e80162d7972a8ab0d54c7711f2a5ccd243a380a542188c5eabec",
+   "heldout_shard2.jsonl": "4b4774dc90df7b88a8d7edb6c8ed7998a938a16a9bcb07978cd62046620b5c8f",
+   "heldout_shard3.jsonl": "181bf10bdfdc837108608ecec367ff5a6e1aeccff2faccd254a682d98336dafb",
+   "heldout_shard4.jsonl": "3c53cd27271f7be8b94a395ebce7a1b67e6f14dd06db577407d47224d6d34c03",
+   "heldout_shard5.jsonl": "6522c1a5ccde3010c980761fe6e428e51bb182fb7da9b8ed81ce2a6d141e7920",
+   "heldout_shard6.jsonl": "5a753e2bbd859476506bd974387afe76e1afab8e74c3e104d078574fc962cf9b",
+   "heldout_shard7.jsonl": "b32486b1681ef5b4007feead36f5837ea817b94a250897c67c2fe68c62a5ebe1"
+  },
+  "memory_probe": {
+   "probe_dev.jsonl": "25cfd983cc32f63809f9561432ecb9d648d48c13f3c24c21ffd46f747da2e62c"
+  },
+  "memory_episodes": {
+   "pilot1_shard0.jsonl": "f587ab8e1f28cd6846360d8938ecc5f785e404e285378cd8c924222a23ce9363",
+   "pilot1_shard1.jsonl": "55a505ae8d59c578f52cc16a59e17b50d29e1a2db334a85ebc1dbc7c0ebb4142",
+   "pilot1_shard2.jsonl": "f7cbe5a8f59de0928da2c727b71dc440abaf229418a91ccbf7aa04a58dddd37a",
+   "pilot1_shard3.jsonl": "0774a30c9fdf984a12623614350b85256d66c3f31d730765f6fce0c7a7fafae4",
+   "pilot2_shard0.jsonl": "165e23ccfa97d7ca03f969d74e49ee2b0ec5c12e5b851c011f34fce0452f0ef3",
+   "pilot2_shard1.jsonl": "eac238ee3eb60fb84fb63bf64d4439d26a5f8c4ad6c1959eef53a42efc096eff",
+   "pilot2_shard2.jsonl": "5ec2d14f448d29072fa063cf9226370b3cdc81d544fcd1cf28b35fbba497a56a",
+   "pilot2_shard3.jsonl": "5cdd6956ebf0139d0be8e543ffbfe75745831590b6c4d12d38639900d671ff41",
+   "pilot3_shard0.jsonl": "c0e6df2458b02ab1f568032745a98a96151a2c547a5c16ca6a7a45c8e53be68c",
+   "pilot3_shard1.jsonl": "696641ae58213c87e1feb50608c04d1cfcb57c95f3901c89ba952a2d9a530d6b",
+   "pilot3_shard2.jsonl": "5fe3cf7a7d9d67c266ce7dd4de7c636fa1117e905c866642f52bb61b23c4c2f1",
+   "pilot3_shard3.jsonl": "9aa1759afcaa3fee1192dc1b80ee21e3581cf73f0063674ae24c921f91629433",
+   "pilot4_shard0.jsonl": "fc05f82a330e9fd012ce5d7207dbb661a34e80823ee959017e11279095c5e016",
+   "pilot4_shard1.jsonl": "3c5370fd5517e362143aa1fafce2e844386226fa7f44aa6beca815febdaa599a",
+   "pilot5_shard0.jsonl": "e554d6d887cf321293b3781a21e763154f3da560d5ece28e2d1d8ed90296769f",
+   "pilot5_shard1.jsonl": "18d54bc94d97622527f84498e9bf9fecdb35cf6b5f110cfd8d2fd41fa726498f",
+   "pilot5_shard2.jsonl": "d2c07fc21e8784dad066ec33fbccd449d127534228f5b7031c84ec39eba5fc9a",
+   "pilot5_shard3.jsonl": "61558c3810bccfd171c78e82e96d6d6f74afab03ca0f72accebd71b670687785"
+  },
+  "learned_model": {
+   "level_c_logistic.json": "f363ab9badbb651fc873fac1f81bc8596717469fbb6f456b21883a12730b3ff3"
+  }
+ },
+ "selection": {
+  "rule": "PROTOCOL.md",
+  "base_cap_used": 3,
+  "n_pool_kept": 124
+ },
+ "instance_ids": [
+  "walkrec-confirm-v1-gen-0006:placement_loss:0.5",
+  "walkrec-confirm-v1-gen-0024:short_feet:0.5",
+  "walkrec-confirm-v1-gen-0006:placement_loss:1.0",
+  "walkrec-confirm-v1-gen-0002:posture_lean:0.5",
+  "walkrec-confirm-v1-gen-0028:weak_motors:0.5",
+  "walkrec-confirm-v1-gen-0036:feedback_loss:1.0",
+  "walkrec-confirm-v1-gen-0021:placement_loss:1.0",
+  "walkrec-confirm-v1-gen-0007:short_feet:0.5",
+  "walkrec-confirm-v1-gen-0030:placement_loss:1.0",
+  "walkrec-confirm-v1-gen-0018:short_feet:0.5",
+  "walkrec-confirm-v1-gen-0021:cadence_fast:1.0",
+  "walkrec-confirm-v1-gen-0037:feedback_loss:0.5",
+  "walkrec-confirm-v1-gen-0025:placement_loss:1.0",
+  "walkrec-confirm-v1-gen-0009:short_feet:1.0",
+  "walkrec-confirm-v1-gen-0032:feedback_loss:1.0",
+  "walkrec-confirm-v1-gen-0024:heavy_torso:0.5",
+  "walkrec-confirm-v1-gen-0045:short_feet:1.0",
+  "walkrec-confirm-v1-gen-0021:feedback_loss:0.5",
+  "walkrec-confirm-v1-gen-0023:short_feet:0.5",
+  "walkrec-confirm-v1-gen-0041:feedback_loss:1.0",
+  "walkrec-confirm-v1-gen-0002:heavy_torso:1.0",
+  "walkrec-confirm-v1-gen-0042:feedback_loss:1.0",
+  "walkrec-confirm-v1-gen-0039:placement_loss:1.0",
+  "walkrec-confirm-v1-gen-0037:posture_lean:0.5",
+  "walkrec-confirm-v1-gen-0045:heavy_torso:0.5",
+  "walkrec-confirm-v1-gen-0024:heavy_torso:1.0",
+  "walkrec-confirm-v1-gen-0023:cadence_fast:0.5",
+  "walkrec-confirm-v1-gen-0011:heavy_torso:1.0",
+  "walkrec-confirm-v1-gen-0023:posture_lean:0.5",
+  "walkrec-confirm-v1-gen-0030:cadence_fast:1.0",
+  "walkrec-confirm-v1-gen-0041:weak_motors:0.5",
+  "walkrec-confirm-v1-gen-0008:posture_lean:0.5",
+  "walkrec-confirm-v1-gen-0007:heavy_torso:1.0",
+  "walkrec-confirm-v1-gen-0025:posture_lean:0.5",
+  "walkrec-confirm-v1-gen-0006:weak_motors:0.5",
+  "walkrec-confirm-v1-gen-0013:cadence_fast:0.5",
+  "walkrec-confirm-v1-gen-0018:posture_lean:0.5",
+  "walkrec-confirm-v1-gen-0029:weak_motors:0.5",
+  "walkrec-confirm-v1-gen-0002:cadence_fast:0.5",
+  "walkrec-confirm-v1-gen-0030:cadence_fast:0.5"
+ ]
+}

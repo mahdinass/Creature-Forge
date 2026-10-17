@@ -9,6 +9,7 @@
  "experiments/causal_engineer/heldout/instances/heldout_shard5.jsonl": "a6dca346229fe6b6a1b84a5db091dcd0d2ec2bf6",
  "experiments/causal_engineer/heldout/instances/heldout_shard6.jsonl": "8a76a06be6a7f916b337eb1b225bb55dc4529a02",
  "experiments/causal_engineer/heldout/instances/heldout_shard7.jsonl": "5c5c20ccc98e6019f29fcce27626ef0e17e3279e",
+ "experiments/causal_engineer/heldout/protocol.json": "752da6a0c7ec99b3ddde8f62f3dfe5b0eefd038e",
  "experiments/demo_trials/20261013T002054Z-aaad96.json": "4b68c8a79d79d3574c3c7a81e56481299ddcad78",
  "experiments/demo_trials/20261013T010249Z-ca2db8.json": "7d00187dcb273bd09cc0bbc2d84fa42190e51ee8",
  "experiments/demo_trials/20261013T010325Z-9d9310.json": "b78eb3bebf9c66d20d910e17eaeac5fe7425c4a8",
