@@ -23,7 +23,17 @@ from creature_forge import ce_policies as cp  # noqa: E402
 from creature_forge import fault_bench as fb  # noqa: E402
 
 VERSION = "ce_eval_v1"
-POLICIES = ("scientist", "scientist_1shot", "exhaustive", "expert", "random", "blind")
+POLICIES = ("scientist", "scientist_1shot", "scientist_think", "exhaustive", "expert", "random", "blind")
+# scientist_think (dev 2026-10-17): the iterative scientist with the model's thinking ENABLED (same model, schema and budget).
+SCIENTIST_ARMS = {"scientist": ("iterative", False), "scientist_1shot": ("one_shot", False), "scientist_think": ("iterative", True)}
+
+
+def thinking_config():
+    from creature_forge.investigation import load_model_config
+    import dataclasses
+    cfg = load_model_config("default")
+    return dataclasses.replace(cfg, max_tokens=16000, extra_body={"chat_template_kwargs": {"enable_thinking": True}},
+                               timeout_s=300.0).validate()
 
 # Ground-truth mapping from the injected benchmark mechanism to the scientist's neutral diagnosis taxonomy. EVALUATION ONLY: the scientist
 # module never imports or sees this table. The taxonomy's decoys (low_joint_impedance, leg_geometry_mismatch, gait_initiation_failure,
@@ -117,14 +127,15 @@ def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4
     prec = None
     llm_rec = None
     try:
-        if policy in ("scientist", "scientist_1shot"):
-            mode = "iterative" if policy == "scientist" else "one_shot"
+        if policy in SCIENTIST_ARMS:
+            mode, think = SCIENTIST_ARMS[policy]
             order_seed = _h(instance["instance_id"], "order")
             if scientist_factory is not None:
                 sci = scientist_factory(mode=mode, order_seed=order_seed)
             else:
                 from creature_forge.scientist import Scientist
-                sci = Scientist(mode, source=source, fixture=fixture, order_seed=order_seed, max_steps=max_steps)
+                sci = Scientist(mode, source=source, fixture=fixture, order_seed=order_seed, max_steps=max_steps,
+                                config=thinking_config() if (think and source == "live") else None)
             prec = sci.investigate(bench, view, memory=memory)
             llm_rec = prec
         else:
@@ -152,7 +163,7 @@ def evaluate(instance: dict, policy: str, *, budget: int = 700, n_train: int = 4
                submitted_design={"index": design["index"], "source": design["source"]}, llm=_llm(llm_rec),
                policy_record=prec, wall_s=time.time() - t0)
     _truth(rec, instance)
-    if policy in ("scientist", "scientist_1shot"):
+    if policy in SCIENTIST_ARMS:
         fin = prec.get("final") or {}
         cat = fin.get("diagnosis_category")
         rec["diagnosis"] = {"category": cat, "ended_by": fin.get("ended_by"), "confidence": fin.get("confidence"),
@@ -186,6 +197,7 @@ def main(argv=None) -> int:
     ap.add_argument("--max-steps", type=int, default=12)
     ap.add_argument("--limit", type=int, default=0, help="stop after this many (instance, policy) pairs")
     ap.add_argument("--memory", help="memory bank (not implemented yet)")
+    ap.add_argument("--instance-ids", nargs="*", help="restrict to these instance ids (development)")
     a = ap.parse_args(argv)
     pols = [p for p in a.policies.split(",") if p]
     bad = [p for p in pols if p not in POLICIES]
@@ -202,7 +214,9 @@ def main(argv=None) -> int:
             ap.error("--source scripted needs --fixture")
         with open(a.fixture, encoding="utf-8") as fh:
             fixture = json.load(fh)
-    insts = load_instances(a.instances)
+    insts = [r for path in a.instances.split(",") for r in load_instances(path)]
+    if a.instance_ids:
+        insts = [r for r in insts if r["instance_id"] in set(a.instance_ids)]
     pairs = [(inst, p) for inst in insts for p in pols]
     pairs = [x for n, x in enumerate(pairs) if n % k == i]
     if a.resume:
