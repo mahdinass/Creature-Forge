@@ -99,3 +99,28 @@ the model may conclude at any step.
   - Rollouts used and the number of experiments.
   - LLM calls, cost and wall time.
 - 2026-10-17: physics_probe.py integrated (bit-identical dynamics; COM, angular momentum, CoP, support interval, capture point, friction use, saturation, tracking-error proxy, swing clearance; sanity values in the commit report). Finding: a healthy walker's capture point lies ahead of its support interval during normal stepping, so the useful instability signals are trends and pre-fall deltas against the walker's own baseline. Model quirk noted (not changed): torso box true mass = 0.6 x torso_mass.
+
+## 6. Experience system specification (Levels A–C)
+- **Supervision principle.** Experience comes from outcomes the system measured itself:
+  - its investigations (hypotheses, predictions, experiment results, repairs, verification);
+  - the repair matrices of training instances, i.e. which tools verifiably fixed which robots.
+  Injected fault labels are used only for scoring diagnosis accuracy, never as training input to memory or the learner.
+- **Level A — episodic memory** (`experience_bank.py`).
+  - One record per finished investigation on a training instance: robot features, the observation signature (a
+    standardised vector of selected physics keys), the hypothesis and experiment ledgers, repairs and outcomes, and
+    verification.
+  - Retrieval is kNN over the signature plus features. Each item returns its id, a short text and a distance.
+- **Level B — mechanism cards.**
+  - Clusters of training signatures, each with: the signature condition (feature ranges), per-tool verified repair
+    rates, counter-examples where a tool failed, and support counts.
+  - Nemotron writes the human-readable principle of each card. Its status is computed deterministically: `empirical
+    heuristic` (≥ 3 supporting instances and > 70% repair rate), `hypothesis` (otherwise), or `established physics` only
+    when the card restates a textbook relation (marked as such, with no discovery claim).
+  - At use time the scientist must state for every retrieved card or episode: APPLIES, ADAPT, TEST-FIRST or REJECT.
+- **Level C — learned repair-effect predictor.**
+  - P(tool repairs | signature, features) for every tool, trained on the training instances' repair matrices.
+  - Baselines: kNN matrix retrieval, expert rules, the global tool prior.
+  - Evaluation on held-out bases (other morphologies) by top-k hit rate, and at the policy level as advice to the
+    scientist and as a stand-alone "predict then repair" policy, at equal budget.
+- **Negative transfer.** A memory-assisted decision that applies a remembered repair which then fails, where a
+  different tool would have worked. It is counted per arm.
