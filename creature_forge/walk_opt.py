@@ -54,13 +54,14 @@ from __future__ import annotations
 import math
 import time
 from typing import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 
 from . import arena, challenges, creature_walk as cw, r2, r3
 from . import interventions as iv
 from .forge_pool import InlinePool, is_error
+from .mechanisms import MAX_GAINS, n_gains as _n_gains, validate_mechanisms
 from .morphology import build_model
 from .optimize import jsonable
 from .phasegait_fp import FP_NAMES, LOWER17, UPPER17
@@ -94,8 +95,17 @@ class SearchSpace:
     body_params: tuple = ()
     body_ratio: tuple = (0.5, 1.5)
     mode: str = "guided"
+    mechanisms: tuple = field(default=(), hash=False)   # control-law mechanisms (dicts, JSON-safe); their gains are extra dims
 
     def __post_init__(self):
+        mechs = tuple(dict(m) if isinstance(m, dict) else m for m in self.mechanisms)
+        object.__setattr__(self, "mechanisms", mechs)
+        if mechs:
+            reasons = validate_mechanisms(list(mechs))
+            if reasons:
+                raise ValueError("invalid mechanisms: " + "; ".join(reasons))
+            if any(p in FP_NAMES for p in self.ctrl_params):
+                raise ValueError("a search space cannot combine foot-placement parameters (17-D) with mechanisms")
         object.__setattr__(self, "ctrl_params", tuple(self.ctrl_params))
         object.__setattr__(self, "body_params", tuple(self.body_params))
         object.__setattr__(self, "body_ratio", tuple(float(x) for x in self.body_ratio))
@@ -111,7 +121,7 @@ class SearchSpace:
             raise ValueError("duplicate body parameters")
         if len(self.body_params) > MAX_BODY_PARAMS:
             raise ValueError(f"at most {MAX_BODY_PARAMS} body parameters (got {len(self.body_params)})")
-        if not self.ctrl_params and not self.body_params:
+        if not self.ctrl_params and not self.body_params and not mechs:
             raise ValueError("the search space needs at least one dimension")
         if self.mode not in iv.MODES:
             raise ValueError(f"mode must be one of {iv.MODES}, got {self.mode!r}")
@@ -125,8 +135,21 @@ class SearchSpace:
         return any(p in FP_NAMES for p in self.ctrl_params)
 
     @property
+    def n_gains(self) -> int:
+        return _n_gains(self.mechanisms) if self.mechanisms else 0
+
+    @property
+    def gain_bounds(self) -> list:
+        """The bound b of every gain dimension, in vector order (each gain is searched over [-b, b])."""
+        return [float(m["gain_bound"]) for m in self.mechanisms for _ in m["terms"]]
+
+    @property
+    def gain_names(self) -> list:
+        return [f"gain:{m['id']}:{i}" for m in self.mechanisms for i in range(len(m["terms"]))]
+
+    @property
     def dim(self) -> int:
-        return len(self.ctrl_params) + len(self.body_params)
+        return len(self.ctrl_params) + self.n_gains + len(self.body_params)
 
     @staticmethod
     def full_ctrl(body_params=(), **kw) -> "SearchSpace":
@@ -148,8 +171,11 @@ class SearchSpace:
         return SearchSpace(tuple(p for p in ALL_NAMES if p in chosen), tuple(body_params), **kw)
 
     def to_dict(self) -> dict:
-        return {"ctrl_params": list(self.ctrl_params), "body_params": list(self.body_params),
-                "body_ratio": list(self.body_ratio), "mode": self.mode, "dim": self.dim}
+        d = {"ctrl_params": list(self.ctrl_params), "body_params": list(self.body_params),
+             "body_ratio": list(self.body_ratio), "mode": self.mode, "dim": self.dim}
+        if self.mechanisms:
+            d["mechanisms"] = [dict(m) for m in self.mechanisms]
+        return d
 
 
 def _base_dict(body) -> dict:
@@ -201,15 +227,33 @@ def _base_vector(v, fp: bool = False) -> np.ndarray:
     return a
 
 
+def _split_gains(space: SearchSpace, vector) -> tuple:
+    """(base part, gains) of a vector for `space`: with mechanisms a 15-D vector means all gains 0, 15 + n_gains carries them."""
+    if not space.mechanisms:
+        return vector, []
+    n = space.n_gains
+    v = list(vector)
+    if len(v) == 15:
+        return v, [0.0] * n
+    if len(v) == 15 + n:
+        return v[:15], [float(g) for g in v[15:]]
+    raise ValueError(f"vector must have 15 or 15 + {n} (gains) entries for this mechanism space, got {len(v)}")
+
+
 def encode(space: SearchSpace, base_body, base_vector, body, vector) -> np.ndarray:
     """[0,1]^n point of (body, vector). Dims not searched are ignored. Raises ValueError if a body value is outside its interval."""
     base, body = _base_dict(base_body), _base_dict(body)
+    vector, gains = _split_gains(space, vector)
     vec = np.asarray(pad_to_17(vector) if space.uses_fp else vector, dtype=float)
     lo_v, hi_v = (LOWER17, UPPER17) if space.uses_fp else (LOWER15, UPPER15)
     x = []
     for p in space.ctrl_params:
         i = ALL_NAMES.index(p)
         x.append((vec[i] - lo_v[i]) / (hi_v[i] - lo_v[i]))
+    for g, b in zip(gains, space.gain_bounds):
+        if not (math.isfinite(g) and abs(g) <= b):
+            raise ValueError(f"gain {g!r} is outside +-{b} (not clipped)")
+        x.append((g + b) / (2.0 * b))
     for p in space.body_params:
         lo, hi = _log_interval(space, base, p)
         z = (math.log(float(body[p]) / float(base[p])) - lo) / (hi - lo)
@@ -223,6 +267,7 @@ def encode(space: SearchSpace, base_body, base_vector, body, vector) -> np.ndarr
 def decode(space: SearchSpace, base_body, base_vector, x) -> tuple[dict, list]:
     """(body_dict, vector_list) of a [0,1]^n point (folded with r2.reflect first). Non-searched parts come from the base."""
     base = _base_dict(base_body)
+    base_vector, _ = _split_gains(space, base_vector)
     vec = _base_vector(base_vector, space.uses_fp).copy()
     lo_v, hi_v = (LOWER17, UPPER17) if space.uses_fp else (LOWER15, UPPER15)
     u = r2.reflect(np.asarray(x, dtype=float))
@@ -232,13 +277,15 @@ def decode(space: SearchSpace, base_body, base_vector, x) -> tuple[dict, list]:
     for j, p in enumerate(space.ctrl_params):
         i = ALL_NAMES.index(p)
         vec[i] = min(hi_v[i], max(lo_v[i], lo_v[i] + (hi_v[i] - lo_v[i]) * u[j]))
+    ng = space.n_gains
+    gains = [min(b, max(-b, -b + 2.0 * b * float(u[k + j]))) for j, b in enumerate(space.gain_bounds)]
     body = dict(base)
     for j, p in enumerate(space.body_params):
         lo, hi = _log_interval(space, base, p)
-        ratio = math.exp(lo + float(u[k + j]) * (hi - lo))
+        ratio = math.exp(lo + float(u[k + ng + j]) * (hi - lo))
         for f in _fields(p):
             body[f] = float(base[f]) * ratio
-    return body, [float(v) for v in vec]
+    return body, [float(v) for v in vec] + gains
 
 
 def body_edits(base_body, body) -> list[dict]:
@@ -374,7 +421,10 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
         raise ValueError("space must be a SearchSpace")
     var = None if variation is None else arena._check_variation(dict(variation))
     base = _base_dict(body)
-    vec0 = _base_vector(init_vector, space.uses_fp)
+    base_part, gains0 = _split_gains(space, init_vector)
+    vec0 = _base_vector(base_part, space.uses_fp)
+    if space.mechanisms:
+        vec0 = np.concatenate([vec0, gains0])     # 15 base parameters followed by the gains
     S, n = len(seeds), space.dim
     if budget < S:
         raise ValueError(f"budget {budget} cannot pay for the initial evaluation ({S} rollouts)")
@@ -417,6 +467,8 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
                     jb = b if cd["friction_factor"] is None else arena._body_with_friction(b, cd["friction_factor"])[0]
                     jobs.append({"vector": [float(a) for a in v], "body": jb, "seeds": [s], "duration": duration,
                                  "start": cd["start"], "perturb": cd["perturb"]})
+                    if space.mechanisms:
+                        jobs[-1]["mechanisms"] = [dict(m) for m in space.mechanisms]
                     index.append((ci, si))
             per = [[None] * S for _ in cands]
             for i, out in pool.imap(cw.eval_job, jobs):
@@ -526,7 +578,7 @@ def cma_search(body, init_vector, space: SearchSpace, *, budget: int, train_seed
         if c <= budget:
             eligible = [b for b in improvements if b["found_at_rollouts"] <= c]
             cps[str(c)] = pack(eligible[-1]) if eligible else None
-    extra = ({"candidates": cand_log, "space_names": list(space.ctrl_params) + list(space.body_params)}
+    extra = ({"candidates": cand_log, "space_names": list(space.ctrl_params) + space.gain_names + list(space.body_params)}
              if log_candidates else {})
     return jsonable({
         **extra,

@@ -30,6 +30,7 @@ from .forge_pool import InlinePool, is_error
 from .locomotion import PERTURB as WALK_PERTURB
 from .locomotion import compute_metrics
 from .optimize import jsonable
+from .mechanisms import controller_from_spec, n_gains, validate_mechanisms
 from .phasegait_init import controller_from_vector
 from .render_export import export_scene, mj_to_three_pos, mj_to_three_quat, payload_from_telemetry
 from .sandbox import SandboxBody
@@ -208,6 +209,18 @@ def stand_gait(controllers: dict | None) -> GaitParams:
     return GaitParams(**c).validate()
 
 
+def walk_mechanisms(controllers: dict | None) -> list[dict]:
+    """The validated control-law mechanisms of the walking controller ([] when there are none)."""
+    w = (controllers or {}).get("walk")
+    mechs = w.get("mechanisms") if isinstance(w, dict) else None
+    if not mechs:
+        return []
+    reasons = validate_mechanisms(mechs)
+    if reasons:
+        raise ChallengeError("invalid walking mechanisms: " + "; ".join(reasons))
+    return [dict(m) for m in mechs]
+
+
 def walk_vector(controllers: dict | None) -> list[float]:
     w = (controllers or {}).get("walk")
     if w is None:
@@ -215,11 +228,22 @@ def walk_vector(controllers: dict | None) -> list[float]:
     if isinstance(w, dict):
         w = w.get("vector")
         if w is None:
-            return list(cw.R2_WINNER)
+            return list(cw.R2_WINNER) + [0.0] * n_gains(walk_mechanisms(controllers))
     vec = [float(x) for x in w]
+    mechs = walk_mechanisms(controllers)
+    if mechs:
+        if len(vec) != cw.N_PARAMS + n_gains(mechs):
+            raise ChallengeError(f"the walking controller with mechanisms needs {cw.N_PARAMS} numbers + {n_gains(mechs)} gains "
+                                 f"= {cw.N_PARAMS + n_gains(mechs)}, got {len(vec)}")
+        return vec
     if len(vec) not in (cw.N_PARAMS, cw.N_PARAMS + 2):
         raise ChallengeError(f"the walking controller needs {cw.N_PARAMS} numbers (or {cw.N_PARAMS + 2} with the foot-placement gains fp_kd, fp_kv), got {len(vec)}")
     return vec
+
+
+def _walk_controller(vec, controllers, body):
+    mechs = walk_mechanisms(controllers)
+    return controller_from_spec(vec, mechs, body=body) if mechs else controller_from_vector(vec, body=body)
 
 
 def controller_provenance(controllers: dict | None, kind: str) -> dict:
@@ -239,6 +263,9 @@ def controller_provenance(controllers: dict | None, kind: str) -> dict:
     else:
         wk = "adapted" if adaptation else "custom"
     prov["walk"] = {"kind": wk, "vector": vec, "adaptation": adaptation}
+    mechs = walk_mechanisms(controllers)
+    if mechs:
+        prov["walk"]["mechanisms"] = mechs
     return prov
 
 
@@ -438,7 +465,7 @@ WALK_KEEP = ("label", "walking", "violations", "fell", "fall_time", "fall_pitch"
 def _run_walk(body, controllers, spec, seed) -> SeedResult:
     vec = walk_vector(controllers)
     crit = cw.creature_criteria(body)
-    ctrl = controller_from_vector(vec, body=body)
+    ctrl = _walk_controller(vec, controllers, body)
     tr = cw.rollout(ctrl, body, seed, spec.duration, start=spec.start, perturb=spec.perturb, settle_s=spec.settle_s)
     for k in ("x", "z", "pitch", "tau"):
         if not np.all(np.isfinite(tr[k])):
@@ -616,7 +643,7 @@ def replay_payload(body, controllers: dict | None, spec: ChallengeSpec, seed: in
 def _walk_payload(body: SandboxBody, controllers: dict | None, spec: ChallengeSpec, seed: int, max_hz: int,
                   ndigits: int = 5) -> dict:
     vec = walk_vector(controllers)
-    ctrl = controller_from_vector(vec, body=body)
+    ctrl = _walk_controller(vec, controllers, body)
     tr = cw.rollout(ctrl, body, seed, spec.duration, start=spec.start, perturb=spec.perturb, record_poses=True,
                     settle_s=spec.settle_s)
     m = compute_metrics(tr, cw.creature_criteria(body))
