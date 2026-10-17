@@ -128,7 +128,7 @@ def _cmp(v, st) -> str:
 def _fall_lines(obs: dict) -> list[str]:
     per = obs.get("per_seed") or []
     n = len(per)
-    if not n:
+    if not n or not all("fell" in p for p in per):
         return [f"falls: {obs.get('n_fell')} fell, {obs.get('n_walking')} walking (per-seed detail unavailable)"]
     fell = [p for p in per if p.get("fell")]
     fwd = sum(1 for p in fell if _num(p.get("fall_direction")) and p["fall_direction"] > 0)
@@ -155,8 +155,10 @@ def key_facts(obs: dict, body: dict | None, vector: Sequence[float] | None, ref:
     pitch_end = _g(med, "pitch_end")
     if pitch_end is not None:
         lines.append(f"torso pitch over the last 0.2 s before the end/fall: {_r(pitch_end)} rad "
-                     f"({'leaning FORWARD (nose down)' if pitch_end > 0 else 'leaning BACKWARD'}); mean COM forward speed over the "
-                     f"last 0.2 s {_r(_g(med, 'com_vx_end'))} m/s ({'moving forward' if (_g(med, 'com_vx_end') or 0) > 0 else 'moving backward'})")
+                     f"({'leaning FORWARD (nose down)' if pitch_end > 0 else 'leaning BACKWARD'})")
+    vx_end = _g(med, "com_vx_end")
+    if vx_end is not None:
+        lines.append(f"COM forward speed over the last 0.2 s: {_r(vx_end)} m/s ({'moving FORWARD' if vx_end > 0 else 'moving BACKWARD'})")
     if d["pendulum_freq_hz"] is not None:
         lines.append(f"leg length L = {_r(d['leg_length_m'])} m; pendulum frequency sqrt(g/L)/(2 pi) = {_r(d['pendulum_freq_hz'])} Hz; "
                      f"commanded gait frequency freq = {_r(vector[0] if vector else None)} Hz -> commanded touchdowns "

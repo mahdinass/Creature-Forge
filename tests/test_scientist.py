@@ -57,28 +57,30 @@ def hyp(i, cat="short_support_base", ev=("robot.body.foot_length", "observation.
             "category": cat, "evidence": list(ev), "confidence": 0.5}
 
 
-def reply(action, *, new=(), status=(), cf=(), rep=(), con=(), mem=None):
-    r = {"action": action, "new_hypotheses": list(new), "status_updates": list(status), "counterfactual": list(cf),
-         "repair": list(rep), "conclude": list(con)}
+def reply(action, *, new=(), status=(), cf=(), rep=(), con=(), mem=None, reading="the robot falls after about 2 s"):
+    r = {"result_reading": reading, "status_updates": list(status), "new_hypotheses": list(new), "action": action,
+         "counterfactual": list(cf), "repair": list(rep), "conclude": list(con)}
     if mem is not None:
         r["memory_assessments"] = list(mem)
     return r
 
 
 def cf(change, preds, purpose="test the support base"):
-    return {"change": change, "purpose": purpose, "predictions": [{"hypothesis": h, "quantity": q, "direction": d} for h, q, d in preds]}
+    """change: a parametric id "<param>@<level>[&<param>@<level>]"."""
+    atoms = [dict(zip(("param", "level"), part.split("@"))) for part in change.split("&")]
+    return {"changes": atoms, "purpose": purpose, "predictions": [{"hypothesis": h, "quantity": q, "direction": d} for h, q, d in preds]}
 
 
 def upd(i, status, exps, reason="measured"):
     return {"id": i, "status": status, "confidence": 0.7, "reason": reason, "experiments": list(exps)}
 
 
-S1 = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length_x1.3", [("H1", "n_walking", "increase"), ("H1", "slip_fraction", "increase")])])
+S1 = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length@x1.5", [("H1", "n_walking", "increase"), ("H1", "slip_fraction", "increase")])])
 S2 = reply("counterfactual", new=[hyp("H2", "low_traction")], status=[upd("H1", "supported", ["E1"])],
-           cf=[cf("torso_mass_x0.75", [("H2", "saturation_frac_ankle", "decrease"), ("H1", "n_walking", "no_change")])])
-S3 = reply("repair", status=[upd("H2", "refuted", ["E2"])],
+           cf=[cf("torso_mass@x0.7", [("H2", "saturation_frac_ankle", "decrease"), ("H1", "n_walking", "no_change")])])
+S3 = reply("repair", status=[upd("H2", "refuted", ["E2"]), upd("H1", "supported", ["E1", "E2"])],
            rep=[{"tool": "foot_length", "budget_share": 0.5, "hypothesis": "H1", "predicted_n_walking": 4}])
-S4 = reply("conclude", con=[{"diagnosis_category": "short_support_base", "explanation": "feet too short", "confidence": 0.8, "submit": "best"}])
+S4 = reply("conclude", status=[upd("H1", "supported", ["E1"])], con=[{"diagnosis_category": "short_support_base", "explanation": "feet too short", "confidence": 0.8, "submit": "best"}])
 GOOD = [S1, S2, S3, S4]
 
 
@@ -170,7 +172,7 @@ class Loop(unittest.TestCase):
         rec, _, _ = self.run_good()
         h = rec["hypotheses"]
         self.assertEqual((h["H1"]["status"], h["H2"]["status"]), ("supported", "refuted"))
-        self.assertEqual([x["status"] for x in h["H1"]["history"]], ["open", "supported"])
+        self.assertEqual([x["status"] for x in h["H1"]["history"]], ["open", "supported", "supported", "supported"])
         tr = rec["steps"][1]["hypothesis_transitions"]
         supp = next(t for t in tr if t["id"] == "H1")
         self.assertEqual((supp["from"], supp["to"]), ("open", "supported"))
@@ -220,11 +222,11 @@ class Loop(unittest.TestCase):
         self.assertEqual(rec["final"]["ended_by"], "concluded")
 
     def test_repeated_counterfactual_rejected(self):
-        again = reply("counterfactual", status=[upd("H1", "open", ["E1"])], cf=[cf("foot_length_x1.3", [("H1", "n_walking", "increase")])])
+        again = reply("counterfactual", status=[upd("H1", "open", ["E1"])], cf=[cf("foot_length@x1.5", [("H1", "n_walking", "increase")])])
         s = make([S1, again, again, S4])
         rec = s.investigate(make_bench(), VIEW)
         self.assertEqual(rec["steps"][1]["status"], "invalid_after_repair")
-        self.assertTrue(any("not available now" in e for e in rec["steps"][1]["validation_errors"]))
+        self.assertTrue(any("already measured" in e for e in rec["steps"][1]["validation_errors"]))
 
     def test_max_steps_leaves_only_conclude(self):
         s = make([S1, S4], max_steps=2)
@@ -289,8 +291,10 @@ class NoLeakage(unittest.TestCase):
     def test_system_prompt_lists_instruments(self):
         rec = make(GOOD).investigate(make_bench(), VIEW)
         self.assertEqual(rec["calls"][0]["schema_name"], sc.SCHEMA_STEP)
-        for cid in et.COUNTERFACTUALS:
-            self.assertIn(cid, rec["system_prompt"])
+        for p in et.CF_PARAMS:
+            self.assertIn(p, rec["system_prompt"])
+        for lv in et.CF_LEVELS:
+            self.assertIn(lv, rec["system_prompt"])
         for t in fb.TOOLS:
             self.assertIn(t, rec["system_prompt"])
         for c in sc.CATEGORIES:
@@ -298,7 +302,7 @@ class NoLeakage(unittest.TestCase):
 
 
 class SchemaAndValidation(unittest.TestCase):
-    CTX = dict(new_ids=["H1", "H2", "H3"], hypotheses={}, exp_ids=["O0"], cf_available=["foot_length_x1.3"], tools=["foot_length"],
+    CTX = dict(new_ids=["H1", "H2", "H3"], hypotheses={}, exp_ids=["O0"], cf_done=[], cf_check=None, tools=["foot_length"],
                tool_min={"foot_length": 52}, remaining=400, n_train=4, paths={"robot.body.foot_length", "observation.median.slip_fraction"},
                actions=["counterfactual", "repair", "conclude"], mem_ids=None, first_step=True)
 
@@ -316,9 +320,11 @@ class SchemaAndValidation(unittest.TestCase):
         self.assertTrue(any("conclude: must be empty" in e for e in errs))
 
     def test_schema_shape(self):
-        sch = sc.step_schema(paths=["a"], new_ids=["H1"], existing=[], all_hyp=["H1"], exp_ids=["O0"], cf_ids=["x"], tools=["t"],
+        sch = sc.step_schema(paths=["a"], new_ids=["H1"], existing=[], all_hyp=["H1"], exp_ids=["O0"], tools=["t"],
                              quantities=sc.QUANTITIES, actions=["conclude"], mem_ids=["M1"])
         self.assertEqual(set(sch["required"]), set(sch["properties"]))
+        self.assertEqual(list(sch["properties"])[:3], ["result_reading", "status_updates", "new_hypotheses"])   # reasoning first
+        self.assertLess(list(sch["properties"]).index("memory_assessments"), list(sch["properties"]).index("action"))
         self.assertEqual(sch["properties"]["action"]["enum"], ["conclude"])
         self.assertIn("memory_assessments", sch["properties"])
         q = sch["properties"]["counterfactual"]["items"]["properties"]["predictions"]["items"]["properties"]["quantity"]["enum"]
@@ -327,7 +333,7 @@ class SchemaAndValidation(unittest.TestCase):
 
 
 class OneShot(unittest.TestCase):
-    ONE = {"hypotheses": [hyp("H1"), hyp("H2", "low_traction")],
+    ONE = {"observation_reading": "falls forward at 2 s", "hypotheses": [hyp("H1"), hyp("H2", "low_traction")],
            "repairs": [{"tool": "foot_length", "budget_share": 0.4, "hypothesis": "H1", "predicted_n_walking": 4},
                        {"tool": "foot_friction", "budget_share": 0.4, "hypothesis": "H2", "predicted_n_walking": 2}],
            "diagnosis_category": "short_support_base", "explanation": "short feet", "confidence": 0.6}
@@ -373,8 +379,9 @@ class Memory(unittest.TestCase):
     MEM = [{"item": "M1", "verdict": "test_first", "reason": "similar symptom"}, {"item": "M2", "verdict": "does_not_apply", "reason": "no slip"}]
 
     def test_assessments_recorded(self):
-        first = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length_x1.3", [("H1", "n_walking", "increase")])], mem=self.MEM)
-        later = reply("conclude", con=S4["conclude"], mem=[{"item": "M1", "verdict": "applies", "reason": "confirmed by E1"}])
+        first = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length@x1.5", [("H1", "n_walking", "increase")])], mem=self.MEM)
+        later = reply("conclude", status=[upd("H1", "supported", ["E1"])], con=S4["conclude"],
+                      mem=[{"item": "M1", "verdict": "applies", "reason": "confirmed by E1"}])
         mem = FakeMemory()
         rec = make([first, later]).investigate(make_bench(), VIEW, memory=mem)
         self.assertEqual(len(mem.calls), 1)
@@ -385,7 +392,7 @@ class Memory(unittest.TestCase):
         self.assertIn("MEMORY.", rec["system_prompt"])
 
     def test_missing_assessment_rejected(self):
-        first = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length_x1.3", [("H1", "n_walking", "increase")])], mem=self.MEM[:1])
+        first = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length@x1.5", [("H1", "n_walking", "increase")])], mem=self.MEM[:1])
         rec = make([first, first]).investigate(make_bench(), VIEW, memory=FakeMemory())
         self.assertTrue(any("missing" in e for e in rec["steps"][0]["validation_errors"]))
 
@@ -394,6 +401,45 @@ class Memory(unittest.TestCase):
         self.assertEqual(rec["memory"]["items"], [])
         self.assertNotIn("RETRIEVED MEMORY", rec["steps"][0]["user_message"])
         self.assertNotIn("MEMORY.", rec["system_prompt"])
+
+
+class V2(unittest.TestCase):
+    """v2 (pilot1 audit): verdicts required on scored hypotheses, parametric experiments, key facts in the message."""
+
+    def test_verdict_required_on_scored_hypotheses(self):
+        no_verdict = reply("repair", rep=[{"tool": "foot_length", "budget_share": 0.5, "hypothesis": "H1", "predicted_n_walking": 4}])
+        rec = make([S1, no_verdict, no_verdict, S4]).investigate(make_bench(), VIEW)
+        self.assertEqual(rec["steps"][1]["status"], "invalid_after_repair")
+        self.assertTrue(any("give a verdict" in e and "H1" in e for e in rec["steps"][1]["validation_errors"]))
+        self.assertIn("required for H1", rec["steps"][1]["user_message"])
+
+    def test_parametric_levels_validated_and_never_clipped(self):
+        ctx = dict(SchemaAndValidation.CTX)
+        for change, needle in (("pitch_ref@x2", "not valid for the additive"), ("foot_length@+0.1R", "not valid for the multiplicative"),
+                               ("kp@x2&kp@x0.5", "same parameter"), ("nosuch@x2", "not a parameter")):
+            r = reply("counterfactual", new=[hyp("H1")], cf=[cf(change, [("H1", "n_walking", "increase")])])
+            self.assertTrue(any(needle in e for e in sc.validate_step(r, ctx)), change)
+        ctx["cf_check"] = lambda changes: "foot_length=0.4 outside guided bounds"
+        r = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length@x2", [("H1", "n_walking", "increase")])])
+        self.assertTrue(any("not possible on the current design" in e for e in sc.validate_step(r, ctx)))
+
+    def test_two_parameter_counterfactual_runs_on_the_bench(self):
+        two = reply("counterfactual", new=[hyp("H1")], cf=[cf("foot_length@x1.5&torso_mass@x0.7", [("H1", "n_walking", "increase")])])
+        rec = make([two, S4]).investigate(make_bench(), VIEW)
+        e1 = rec["experiments"][0]
+        self.assertEqual(e1["change"], "foot_length@x1.5&torso_mass@x0.7")
+        self.assertEqual([c["param"] for c in e1["changes"]], ["foot_length", "torso_mass"])
+        self.assertEqual(e1["scoring"][0]["status"], "correct")
+
+    def test_message_has_key_facts_and_parameter_table(self):
+        rec = make(GOOD).investigate(make_bench(), VIEW)
+        um = rec["steps"][0]["user_message"]
+        self.assertIn("KEY FACTS", um)
+        self.assertIn("pendulum frequency", um)
+        self.assertIn("COUNTERFACTUAL PARAMETERS", um)
+        self.assertIn("pitch_ref = ", um)
+        self.assertIn("% of the total budget", um)
+        self.assertNotIn("Experiments are expensive", rec["system_prompt"])
 
 
 if __name__ == "__main__":
