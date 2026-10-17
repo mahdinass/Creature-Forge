@@ -1,0 +1,25 @@
+protocol walkrec-confirm-v1-amend1 sha256 41ad66b2faf4; 240 units (expected 240); 48 creatures; panel ['4e45f5de167a']; commits ['77981e22d630750c412df13f31c81747f573cee7']
+missing units: []
+unit errors (counted as not recovered): []
+accounting violations: []
+
+| method | FULL | PARTIAL | NOT | error/missing | mean validation walking | mean budget used |
+|---|---|---|---|---|---|---|
+| ai_v2 | 9 | 25 | 14 | 0 | 0.50 | 0.86 |
+| fix | 19 | 23 | 6 | 0 | 0.70 | 0.98 |
+| cma_joint | 11 | 21 | 16 | 0 | 0.55 | 0.96 |
+| cma_ctrl | 8 | 20 | 20 | 0 | 0.47 | 0.98 |
+| rand | 11 | 27 | 10 | 0 | 0.59 | 0.98 |
+
+PRIMARY ai_v2 > fix: ai-only 4, fix-only 14, both 5, neither 25; exact one-sided McNemar p = 0.9962 -> NOT SUPPORTED at alpha 0.05
+SECONDARY (Holm):
+- ai_v2 > cma_joint: 7 vs 9 discordant, p = 0.7728, Holm threshold 0.0250 -> not rejected
+- ai_v2 > rand: 6 vs 8 discordant, p = 0.7880, Holm threshold 0.0500 -> not rejected
+- ai_v2 > cma_ctrl: 6 vs 5 discordant, p = 0.5000, Holm threshold 0.0167 -> not rejected
+EXPLORATORY (two-sided, no multiplicity claim):
+- fix vs cma_joint: 14 vs 6 discordant, two-sided p = 0.1153
+- rand vs fix: 4 vs 12 discordant, two-sided p = 0.0768
+- cma_joint vs cma_ctrl: 9 vs 6 discordant, two-sided p = 0.6072
+region-cluster sign test (ai_v2 - fix): 1 regions favour ai, 9 favour fix, 8 tied; one-sided p = 0.9990
+
+AI: 48 pipelines, valid plan in 48; plans with body co-design 50/112; 219 calls, $0.3786
