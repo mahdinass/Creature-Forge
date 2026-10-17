@@ -377,14 +377,18 @@ class InstanceTests(unittest.TestCase):
 class MuJocoSmoke(unittest.TestCase):
     def test_one_instance_end_to_end(self):
         from creature_forge.forge_pool import ForgePool
-        base = next(b for b in fb.load_bases("dev") if fb.inject(b, "short_feet", 0.5)["valid"])   # first base with room to shrink
+        bases = [b for b in fb.load_bases("dev") if fb.inject(b, "short_feet", 0.5)["valid"]]   # room to shrink the feet
+        rec = None
         with ForgePool(max_workers=int(os.environ.get("CF_WORKERS", "2"))) as pool:
-            rec = fb.build_instance(base, "short_feet", 0.5, "cebench-smoke", pool, budget=64, n_train=2, n_check=4)
-        print("SMOKE", json.dumps({k: rec.get(k) for k in ("instance_id", "valid", "kept", "reason", "faulty_check",
-                                                           "repair_matrix", "ranking", "n_tools_that_repair", "rollouts")}))
+            for base in bases[:8]:          # first base whose faulty robot actually fails, so the matrix is exercised
+                rec = fb.build_instance(base, "short_feet", 0.5, "cebench-smoke", pool, budget=64, n_train=2, n_check=4)
+                print("SMOKE", json.dumps({k: rec.get(k) for k in ("instance_id", "valid", "kept", "reason", "faulty_check",
+                                                                   "repair_matrix", "ranking", "n_tools_that_repair", "rollouts")}))
+                if "repair_matrix" in rec:
+                    break
         self.assertTrue(rec["valid"], rec["reason"])
-        if rec["valid"] and "repair_matrix" in rec:
-            self.assertEqual(set(rec["repair_matrix"]) | set(rec["repair_detail"]), set(fb.TOOLS))
+        self.assertIn("repair_matrix", rec, "no base in the first 8 produced a failing faulty robot")
+        self.assertEqual(set(rec["repair_matrix"]) | set(rec["repair_detail"]), set(fb.TOOLS))
 
 
 if __name__ == "__main__":
