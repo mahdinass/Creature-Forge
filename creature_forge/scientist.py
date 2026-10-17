@@ -230,7 +230,9 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
     q_lines = ", ".join(dr._order(QUANTITIES, order_seed))
     head = ("You are a causal engineering scientist. A bipedal robot simulated in MuJoCo, which is known to have walked well in some "
             "earlier configuration, now fails to walk. Your job: find out WHY it fails, by experiment, then direct a repair that is "
-            "checked by an independent verification you cannot see.")
+            "checked by an independent verification you cannot see. The GOAL is a design that genuinely walks in that hidden "
+            "verification: a correct diagnosis alone repairs nothing, and concluding before any repair has improved the robot submits "
+            "the unchanged, failing robot.")
     if mode == "one_shot":
         head += (" In this session you answer ONCE, from the initial observation only: you receive no experimental feedback. Give your "
                  "hypotheses and up to two repairs.")
@@ -245,7 +247,8 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "- repair: a CMA-ES search over the dimensions of ONE tool, starting from the current best design, scored on training "
             "seeds. Cost = the budget you grant it = floor(budget_share x remaining rollouts); it must reach the tool's minimum budget "
             "(shown in each message) or it is refused. A repair that improves the training result (more walking seeds, then more "
-            "surviving seeds, then fitness) becomes the new current best design. Tools:", *tool_lines,
+            "surviving seeds, then fitness) becomes the new current best design. A repair action may contain one or two repairs, run in "
+            "order; their budget_shares are fractions of the rollouts remaining at that step and must sum to at most 1. Tools:", *tool_lines,
             "- conclude: stop at any time. The design submitted is always the best training design found so far (\"best\").", "",
             "Experiments are expensive: every rollout spent on experiments is not available for repair. Verification of the submitted "
             "design is independent, uses different seeds and is hidden from you; training walking counts can overstate it.", "",
@@ -420,8 +423,8 @@ def validate_step(reply, ctx: dict) -> list[str]:
         v = reply[a]
         if not isinstance(v, list):
             errs.append(f"{a}: must be a list")
-        elif a == action and len(v) != 1:
-            errs.append(f"{a}: the chosen action needs exactly one element")
+        elif a == action and not (len(v) == 1 or (a == "repair" and len(v) == 2)):
+            errs.append(f"{a}: the chosen action needs exactly one element" + (" (repair: one or two, run in order)" if a == "repair" else ""))
         elif a != action and v:
             errs.append(f"{a}: must be empty when the action is {action!r}")
     hyp_status = dict(ctx["hypotheses"])
@@ -481,8 +484,13 @@ def validate_step(reply, ctx: dict) -> list[str]:
                     if (p["hypothesis"], p["quantity"]) in seen:
                         errs.append(f"{w}: duplicate (hypothesis, quantity)")
                     seen.add((p["hypothesis"], p["quantity"]))
-    if action == "repair" and isinstance(reply["repair"], list) and len(reply["repair"]) == 1:
-        errs += _validate_repair(reply["repair"][0], "repair[0]", ctx, usable)
+    if action == "repair" and isinstance(reply["repair"], list) and len(reply["repair"]) in (1, 2):
+        for k, r in enumerate(reply["repair"]):
+            errs += _validate_repair(r, f"repair[{k}]", ctx, usable)
+        shares = [r.get("budget_share") for r in reply["repair"] if isinstance(r, dict)]
+        if len(shares) == 2 and all(isinstance(x, (int, float)) for x in shares) and sum(shares) > 1 + 1e-9:
+            errs.append("repair: the budget_shares of the two repairs must sum to at most 1 (both are fractions of the rollouts "
+                        "remaining at this step)")
     if action == "conclude" and isinstance(reply["conclude"], list) and len(reply["conclude"]) == 1:
         c = reply["conclude"][0]
         if dr._exact(c, {"diagnosis_category", "explanation", "confidence", "submit"}, "conclude[0]", errs):
@@ -1016,8 +1024,12 @@ class Scientist(dr.NemotronDirector):
                 ent = self._do_counterfactual(bench, step, reply["counterfactual"][0], ctx["best"])
                 srec["experiment"] = ent["id"]
             elif reply["action"] == "repair":
-                ent = self._do_repair(bench, step, reply["repair"][0])
-                srec["experiment"] = ent["id"]
+                rem0 = bench.remaining      # both shares are fractions of the rollouts remaining at this step
+                ents = []
+                for r in reply["repair"]:
+                    ents.append(self._do_repair_budget(bench, step, r, repair_budget(r["budget_share"], rem0)))
+                srec["experiment"] = ents[-1]["id"]
+                srec["experiments"] = [e["id"] for e in ents]
             else:
                 c = reply["conclude"][0]
                 self.final = {"diagnosis_category": c["diagnosis_category"], "explanation": c["explanation"],
