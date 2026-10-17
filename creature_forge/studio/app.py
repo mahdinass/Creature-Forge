@@ -32,6 +32,7 @@ from ..freehand import interpret as interpret_freehand
 from ..sandbox import POSE_RANGES, SANDBOX_BOUNDS, SandboxBody, SandboxError, build_sandbox_payload
 from ..sketch import SketchError, compile_sketch, default_sketch, normalize_sketch, support_info
 from ..trial_view import trial_view
+from .causal_api import create_causal_router
 from .forge_api import create_forge_router
 from .security import RequestGuard
 
@@ -410,6 +411,8 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
 
     # Forge Loop (/api/forge/*): creature versions, challenges, jobs. Nothing is created until first use.
     app.include_router(create_forge_router(forge_dir))
+    # Causal engineer (/api/causal/*): recorded investigations and replays of their designs (read-only).
+    app.include_router(create_causal_router())
 
     @app.api_route("/api", methods=["GET", "HEAD"], include_in_schema=False)
     @app.api_route("/api/{rest:path}", methods=["GET", "HEAD"], include_in_schema=False)

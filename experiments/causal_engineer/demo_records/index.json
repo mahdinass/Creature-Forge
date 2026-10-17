@@ -1,0 +1,85 @@
+{
+ "schema": "causal_record_v1",
+ "records": [
+  {
+   "id": "c-7ded8bd98a21",
+   "policy": "scientist_think",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 1.0,
+   "n_steps": 3,
+   "n_experiments": 2,
+   "cost_usd": 0.0182643,
+   "llm_calls": 4,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.622,
+    "torso_mass": 5.0071,
+    "foot_length": 0.08173839699573288,
+    "foot_friction": 1.0,
+    "torque_limit": 70.88236439262232
+   },
+   "final_category": "posture_bias",
+   "has_memory": false
+  },
+  {
+   "id": "c-f7962f95fe72",
+   "policy": "scientist_think",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 1.0,
+   "n_steps": 7,
+   "n_experiments": 8,
+   "cost_usd": 0.0666684,
+   "llm_calls": 13,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.672,
+    "torso_mass": 2.5666786999999998,
+    "foot_length": 0.075872,
+    "foot_friction": 0.960053,
+    "torque_limit": 37.521325
+   },
+   "final_category": "poor_foot_placement",
+   "has_memory": false
+  },
+  {
+   "id": "c-e1567f0b30d6",
+   "policy": "scientist_think",
+   "status": "PARTIAL_IMPROVEMENT",
+   "walking_frac": 0.75,
+   "n_steps": 7,
+   "n_experiments": 7,
+   "cost_usd": 0.0745044,
+   "llm_calls": 14,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.672,
+    "torso_mass": 1.509811,
+    "foot_length": 0.075872,
+    "foot_friction": 0.960053,
+    "torque_limit": 37.521325
+   },
+   "final_category": "posture_bias",
+   "has_memory": false
+  },
+  {
+   "id": "c-bd5d4620f2bc",
+   "policy": "scientist_think",
+   "status": "NOT_RECOVERED",
+   "walking_frac": 0.08333333333333333,
+   "n_steps": 11,
+   "n_experiments": 14,
+   "cost_usd": 0.1382913,
+   "llm_calls": 24,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.663,
+    "torso_mass": 6.351141877560075,
+    "foot_length": 0.06630498286262382,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0
+   },
+   "final_category": null,
+   "has_memory": false
+  }
+ ]
+}

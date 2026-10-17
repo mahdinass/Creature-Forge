@@ -5,6 +5,7 @@ import type { OverviewData } from './overview/overviewTypes'
 import type { WalkingReplay, WalkingSummary } from './walking/walkingTypes'
 import type { FreehandResult, SandboxBodyDict, SandboxSchema, StrokeIn } from './sketch/freehandTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
+import type { CausalIndex, CausalRecord, CausalReplay, DesignKey } from './causal/causalTypes'
 import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, RecoveryRecord, RecoverySummary, StartedChallenge, StartedInvestigation, StartedRecovery } from './forge/forgeTypes'
 
 export const STALE_HINT =
@@ -161,3 +162,9 @@ export const getRecoveryReplay = (id: string, arm: 'original' | 'candidate', see
   fetch(forgeRecoveryReplayUrl(id, arm, seed)).then((r) => fj<RunPayload>(r))
 export const acceptRecovery = (cid: string, recoveryId: string) =>
   postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/accept-recovery`, { recovery_id: recoveryId }).then((r) => fj<Creature>(r))
+
+// Causal engineer (/api/causal/*): recorded investigations of why a robot falls; replays are fresh deterministic MuJoCo rollouts, no model call
+export const getCausalRecords = () => fetch('/api/causal/records').then((r) => j<CausalIndex>(r))
+export const getCausalRecord = (id: string) => fetch(`/api/causal/records/${encodeURIComponent(id)}`).then((r) => j<CausalRecord>(r))
+export const getCausalReplay = (id: string, design: DesignKey, seed: number) =>
+  fetch(`/api/causal/records/${encodeURIComponent(id)}/replay?design=${design}&seed=${seed}`).then((r) => j<CausalReplay>(r))
