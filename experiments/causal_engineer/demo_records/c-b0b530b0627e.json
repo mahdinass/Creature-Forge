@@ -1,0 +1,1093 @@
+{
+ "budget": {
+  "designs": [
+   {
+    "index": 0,
+    "source": "initial"
+   },
+   {
+    "index": 1,
+    "parent": 0,
+    "source": "counterfactual:leg_length@x0.5"
+   },
+   {
+    "index": 2,
+    "parent": 0,
+    "source": "counterfactual:leg_length@x0.5&freq@x0.5"
+   },
+   {
+    "index": 3,
+    "parent": 0,
+    "rollouts": 76,
+    "source": "repair:leg_length",
+    "tool": "leg_length",
+    "train_fitness": 5.987037981743305,
+    "train_walking": 4
+   }
+  ],
+  "lines": [
+   {
+    "cumulative": 4,
+    "detail": {
+     "design": 0
+    },
+    "item": "observe",
+    "n": 4
+   },
+   {
+    "cumulative": 8,
+    "detail": {
+     "design": 0,
+     "id": "leg_length@x0.5"
+    },
+    "item": "counterfactual",
+    "n": 4
+   },
+   {
+    "cumulative": 12,
+    "detail": {
+     "design": 0,
+     "id": "leg_length@x0.5&freq@x0.5"
+    },
+    "item": "counterfactual",
+    "n": 4
+   },
+   {
+    "cumulative": 94,
+    "detail": {
+     "budget": 82,
+     "design": 0,
+     "tool": "leg_length"
+    },
+    "item": "repair",
+    "n": 82
+   },
+   {
+    "cumulative": 88,
+    "detail": {
+     "tool": "leg_length",
+     "unused": 6
+    },
+    "item": "repair",
+    "n": -6
+   },
+   {
+    "cumulative": 96,
+    "detail": {
+     "design": 3,
+     "duration": 20.0
+    },
+    "item": "stress_test",
+    "n": 8
+   }
+  ],
+  "remaining": 604,
+  "total": 700,
+  "used": 96
+ },
+ "config": {
+  "budget": 700,
+  "max_steps": 12,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_obs": 4,
+  "n_train": 4,
+  "prompt_version": "v2",
+  "provenance": "LIVE",
+  "scientist_mode": "iterative",
+  "system_prompt": {
+   "length": 12227,
+   "sha256": "d928475ba7248d7c36a39d82457762a462101f6f102dfd6e24c6f9d136c71bef"
+  },
+  "thinking": true,
+  "tolerance": "n_walking, n_fell: exact (tolerance 0). Others: max(absolute, 5 % of the baseline value); absolute tolerances: fall_time and time_upright 0.25 s; any *_slope 0.005; pitch_rate 0.05 rad/s; pitch 0.02 rad; tracking_error 0.005 rad; friction_utilisation 0.05; fractions and saturation_frac 0.02; step_freq_hz 0.15 Hz; com_vx 0.05 m/s; *_over_L and angmom_norm 0.02; anything else 0.02."
+ },
+ "error": null,
+ "evaluation_only": {
+  "diagnosis_category": "leg_geometry_mismatch",
+  "diagnosis_match": false,
+  "fault": "posture_lean",
+  "injected_category": "posture_bias",
+  "matching_tool": "posture",
+  "note": "Ground truth added by the evaluation runner after the AI finished. The AI never saw it: its prompt contained only the faulty robot, its own measurements and (optionally) retrieved memory items.",
+  "severity": 0.25
+ },
+ "experiments": [
+  {
+   "atoms": [
+    {
+     "level": "x0.5",
+     "param": "leg_length"
+    }
+   ],
+   "change": "leg_length@x0.5",
+   "changes": [
+    {
+     "op": "scale",
+     "param": "leg_length",
+     "value": 0.5
+    }
+   ],
+   "cost": 4,
+   "design_index": 0,
+   "executed_seq": 4,
+   "id": "E1",
+   "kind": "counterfactual",
+   "outcome": {
+    "cost_of_counterfactual_only": 4,
+    "n_fell": 0,
+    "n_fell_base": 4,
+    "n_walking": 2,
+    "n_walking_base": 0
+   },
+   "predictions": [
+    {
+     "direction": "increase",
+     "hypothesis": "H1",
+     "quantity": "step_length_over_L"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H1",
+     "quantity": "capture_margin_over_L_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H1",
+     "quantity": "pitch_rate_mean"
+    }
+   ],
+   "purpose": "Shorten the legs to bring the pendulum frequency closer to the commanded step frequency, reducing the stride\u2011frequency\u2011to\u2011pendulum ratio and allowing more time for proper foot placement.",
+   "registered_seq": 3,
+   "result_design_index": 1,
+   "scoring": [
+    {
+     "base": 0.1222027740655883,
+     "delta": 0.023705258525889034,
+     "hypothesis": "H1",
+     "new": 0.14590803259147733,
+     "observed": "increase",
+     "predicted": "increase",
+     "quantity": "step_length_over_L",
+     "status": "correct",
+     "tolerance": 0.02
+    },
+    {
+     "base": -0.14869427757750198,
+     "delta": 0.02020628710371003,
+     "hypothesis": "H1",
+     "new": -0.12848799047379195,
+     "observed": "increase",
+     "predicted": "increase",
+     "quantity": "capture_margin_over_L_mean",
+     "status": "correct",
+     "tolerance": 0.02
+    },
+    {
+     "base": 0.1812449836463997,
+     "delta": -0.16980871614003623,
+     "hypothesis": "H1",
+     "new": 0.011436267506363468,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "pitch_rate_mean",
+     "status": "correct",
+     "tolerance": 0.05
+    }
+   ],
+   "status": "ok",
+   "step": 1
+  },
+  {
+   "atoms": [
+    {
+     "level": "x0.5",
+     "param": "leg_length"
+    },
+    {
+     "level": "x0.5",
+     "param": "freq"
+    }
+   ],
+   "change": "leg_length@x0.5&freq@x0.5",
+   "changes": [
+    {
+     "op": "scale",
+     "param": "leg_length",
+     "value": 0.5
+    },
+    {
+     "op": "scale",
+     "param": "freq",
+     "value": 0.5
+    }
+   ],
+   "cost": 4,
+   "design_index": 0,
+   "executed_seq": 6,
+   "id": "E2",
+   "kind": "counterfactual",
+   "outcome": {
+    "cost_of_counterfactual_only": 4,
+    "n_fell": 2,
+    "n_fell_base": 4,
+    "n_walking": 2,
+    "n_walking_base": 0
+   },
+   "predictions": [
+    {
+     "direction": "decrease",
+     "hypothesis": "H1",
+     "quantity": "step_freq_hz"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H1",
+     "quantity": "time_upright"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H1",
+     "quantity": "com_ahead_of_cop_over_L_mean"
+    }
+   ],
+   "purpose": "Test whether reducing both leg length and step frequency together improves walking more than either change alone.",
+   "registered_seq": 5,
+   "result_design_index": 2,
+   "scoring": [
+    {
+     "base": 3.087870997896575,
+     "delta": -1.4225270232596505,
+     "hypothesis": "H1",
+     "new": 1.6653439746369243,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "step_freq_hz",
+     "status": "correct",
+     "tolerance": 0.15439354989482876
+    },
+    {
+     "base": 5.858500000000289,
+     "delta": 1.906999999999801,
+     "hypothesis": "H1",
+     "new": 7.76550000000009,
+     "observed": "increase",
+     "predicted": "increase",
+     "quantity": "time_upright",
+     "status": "correct",
+     "tolerance": 0.2929250000000145
+    },
+    {
+     "base": 0.024821822775561657,
+     "delta": -0.043248249427112154,
+     "hypothesis": "H1",
+     "new": -0.018426426651550497,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "com_ahead_of_cop_over_L_mean",
+     "status": "correct",
+     "tolerance": 0.02
+    }
+   ],
+   "status": "ok",
+   "step": 1
+  },
+  {
+   "budget": 82,
+   "budget_share": 0.12,
+   "cost": 76,
+   "executed_seq": 9,
+   "hypothesis": "H1",
+   "id": "R1",
+   "is_current_best": true,
+   "kind": "repair",
+   "n_train": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": 0,
+   "registered_seq": 8,
+   "result_design_index": 3,
+   "rollouts_used": 76,
+   "start_walking": 0,
+   "status": "ok",
+   "step": 2,
+   "tool": "leg_length",
+   "train_fitness": 5.987037981743305,
+   "train_walking": 4
+  },
+  {
+   "cost": 8,
+   "design_index": 3,
+   "duration": 20.0,
+   "executed_seq": 12,
+   "falls": [
+    "seeds: 4; walking 4; fell 0 (FORWARD, i.e. nose down / torso ahead, on 0; BACKWARD on 0; other 0); labels walking: 4"
+   ],
+   "id": "T1",
+   "kind": "test",
+   "n_fell": 0,
+   "n_obs": 4,
+   "n_walking": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": 0,
+   "purpose": "Assess whether the repaired design maintains walking over the longer 20\u202fs horizon, indicating robustness beyond the 10\u202fs training seeds.",
+   "registered_seq": 11,
+   "status": "ok",
+   "step": 3
+  }
+ ],
+ "final": {
+  "confidence": 0.95,
+  "diagnosis_category": "leg_geometry_mismatch",
+  "ended_by": "concluded",
+  "explanation": "Shortening the leg length brought the pendulum frequency closer to the commanded step frequency, improving stability.",
+  "step": 4,
+  "submit": "best"
+ },
+ "hypotheses": {
+  "H1": {
+   "category": "leg_geometry_mismatch",
+   "causal_chain": "Long leg length \u2192 low pendulum frequency (0.48\u202fHz) << commanded frequency (1.46\u202fHz) \u2192 high stride_freq_over_pendulum \u2192 short stance time per cycle \u2192 inadequate foot placement & ground reaction \u2192 COM moves ahead of CoP (com_ahead_of_cop_over_L \u2191) \u2192 capture point shifts outside support (capture_margin_over_L \u2193) \u2192 pitch & angular momentum increase \u2192 forward fall.",
+   "confidence": 0.9,
+   "created_step": 1,
+   "evidence": [
+    "observation.median.time_upright",
+    "observation.median.step_length_over_L",
+    "observation.median.step_freq_hz",
+    "observation.median.fall_time",
+    "observation.median.com_ahead_of_cop_over_L_mean",
+    "observation.median.capture_margin_over_L_end",
+    "observation.median.pitch_rate_mean",
+    "observation.median.angmom_norm_mean",
+    "observation.median.tracking_error_hip",
+    "observation.median.tracking_error_knee",
+    "observation.median.swing_peak_clearance_mean_over_L",
+    "observation.median.flight_fraction",
+    "observation.median.max_friction_utilisation"
+   ],
+   "history": [
+    {
+     "confidence": 0.78,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 1
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 6,
+      "n_scored": 6
+     },
+     "confidence": 0.85,
+     "experiments": [
+      "E1",
+      "E2"
+     ],
+     "reason": "All six quantitative predictions made for H1 were confirmed by experiments E1 and E2: step_length_over_L increased, capture_margin_over_L_mean increased, pitch_rate_mean decreased, step_freq_hz decreased, time_upright increased, and com_ahead_of_cop_over_L_mean decreased.",
+     "status": "supported",
+     "step": 2
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 0
+     },
+     "confidence": 0.9,
+     "experiments": [
+      "R1"
+     ],
+     "reason": "Repair R1 (leg_length) succeeded as predicted (n_walking 4/4), confirming that shortening the leg length alleviates the forward fall mechanism.",
+     "status": "supported",
+     "step": 3
+    }
+   ],
+   "id": "H1",
+   "mechanism": "The leg length (L\u22481.08\u202fm) is too long for the commanded step frequency (freq\u22481.46\u202fHz), making the natural pendulum period too long. Consequently there is insufficient time to reposition the swinging foot and generate adequate ground\u2011reaction forces before the COM moves ahead of the CoP. This yields a forward toppling moment, positive capture\u2011point margin error, increasing pitch angle and angular momentum, ending in a forward fall.",
+   "status": "supported"
+  }
+ },
+ "id": "c-b0b530b0627e",
+ "initial_observation": {
+  "median": {
+   "angmom_norm_end": 0.08022264142611592,
+   "angmom_norm_mean": 0.007569865734586578,
+   "angmom_norm_slope": 0.005131866943630908,
+   "capture_inside_fraction": 0.045000617558935245,
+   "capture_margin_over_L_end": -0.6170442031885415,
+   "capture_margin_over_L_mean": -0.14869427757750198,
+   "capture_margin_over_L_slope": -0.04685527042542945,
+   "com_ahead_of_cop_over_L_end": 0.32899818215868426,
+   "com_ahead_of_cop_over_L_mean": 0.024821822775561657,
+   "com_ahead_of_cop_over_L_slope": 0.009275934679164767,
+   "com_height_over_L_end": 0.8368707419409296,
+   "com_height_over_L_mean": 0.9201649338753155,
+   "com_height_over_L_slope": -0.004909974861620342,
+   "com_vx_end": 1.0092470706441135,
+   "com_vx_mean": 0.4571577512676035,
+   "com_vx_slope": 0.14252283074533628,
+   "cp_ahead_of_front_edge_over_L_end": 0.6170442031885415,
+   "cp_ahead_of_front_edge_over_L_mean": 0.1452068638783625,
+   "cp_ahead_of_front_edge_over_L_slope": 0.05117459195527167,
+   "double_support_fraction": 0.024657222937656237,
+   "fall_direction": 1.0,
+   "fall_time": 5.85350000000029,
+   "flight_fraction": 0.02990791078545616,
+   "friction_utilisation_p95": 0.4411146675992935,
+   "leg_length_m": 1.081294,
+   "max_friction_utilisation": 1.0,
+   "n_swing_phases": 18.5,
+   "pitch_end": 0.7593393437885094,
+   "pitch_mean": 0.1054569545637293,
+   "pitch_rate_end": 2.3896326573697335,
+   "pitch_rate_mean": 0.1812449836463997,
+   "pitch_rate_slope": 0.14227469539814092,
+   "pitch_slope": 0.08545747425208013,
+   "saturation_frac_ankle": 0.0,
+   "saturation_frac_hip": 0.0,
+   "saturation_frac_knee": 0.0039422263043204205,
+   "slip_fraction": 0.002029108971081131,
+   "step_freq_hz": 3.087870997896575,
+   "step_length_over_L": 0.1222027740655883,
+   "swing_clearance_min_over_L": -0.0009916497750516186,
+   "swing_peak_clearance_mean_over_L": 0.03410519749654504,
+   "swing_peak_clearance_min_over_L": -3.70166486051577e-05,
+   "time_upright": 5.858500000000289,
+   "tracking_error_ankle": 0.026385851376622905,
+   "tracking_error_hip": 0.07232636875621477,
+   "tracking_error_knee": 0.04836287824314142
+  },
+  "n_fell": 4,
+  "n_walking": 0,
+  "pre_fall": {
+   "angmom_norm": 0.05275516740487702,
+   "capture_margin_over_L": -0.4209582095469865,
+   "com_ahead_of_cop_over_L": 0.16523441731512867,
+   "com_height_over_L": 0.875386051337285,
+   "com_vx": 0.8993584694447199,
+   "cp_ahead_of_front_edge_over_L": 0.4209582095469865,
+   "max_friction_utilisation": 1.0,
+   "pitch": 0.5524875903152435,
+   "pitch_rate": 1.4360572345696303,
+   "saturation_frac_ankle": 0.0,
+   "saturation_frac_hip": 0.0,
+   "saturation_frac_knee": 0.045000000000000005,
+   "slip_fraction": 0.014395194697597348,
+   "window_s": 0.4950000000001653
+  }
+ },
+ "llm": {
+  "calls": 7,
+  "cost_usd": 0.0323226,
+  "latency_s": 67.03318204800235,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "provenance": "LIVE",
+  "tokens": {
+   "completion": 11298,
+   "prompt": 73848
+  }
+ },
+ "memory": {
+  "assessments": {},
+  "error": null,
+  "items": [],
+  "log": []
+ },
+ "no_ai_comparison": [
+  {
+   "error": null,
+   "policy": "exhaustive",
+   "rollouts_used": 696,
+   "status": "FULL_RECOVERY",
+   "walking_frac": 0.875
+  }
+ ],
+ "prediction_summary": {
+  "accuracy": 1.0,
+  "by_predicted_direction": {
+   "decrease": {
+    "correct": 3,
+    "n": 3
+   },
+   "increase": {
+    "correct": 3,
+    "n": 3
+   }
+  },
+  "by_quantity": {
+   "capture_margin_over_L_mean": {
+    "correct": 1,
+    "n": 1
+   },
+   "com_ahead_of_cop_over_L_mean": {
+    "correct": 1,
+    "n": 1
+   },
+   "pitch_rate_mean": {
+    "correct": 1,
+    "n": 1
+   },
+   "step_freq_hz": {
+    "correct": 1,
+    "n": 1
+   },
+   "step_length_over_L": {
+    "correct": 1,
+    "n": 1
+   },
+   "time_upright": {
+    "correct": 1,
+    "n": 1
+   }
+  },
+  "chance_three_way": 0.3333333333333333,
+  "majority_observed_baseline": 0.5,
+  "n_correct": 6,
+  "n_scored": 6,
+  "observed_directions": {
+   "decrease": 3,
+   "increase": 3
+  },
+  "repair_predictions": {
+   "abs_errors": [
+    0
+   ],
+   "n": 1,
+   "within_one": 1
+  },
+  "tolerance": "n_walking, n_fell: exact (tolerance 0). Others: max(absolute, 5 % of the baseline value); absolute tolerances: fall_time and time_upright 0.25 s; any *_slope 0.005; pitch_rate 0.05 rad/s; pitch 0.02 rad; tracking_error 0.005 rad; friction_utilisation 0.05; fractions and saturation_frac 0.02; step_freq_hz 0.15 Hz; com_vx 0.05 m/s; *_over_L and angmom_norm 0.02; anything else 0.02."
+ },
+ "robot": {
+  "base_region": "L2-f0-t1-q1",
+  "initial": {
+   "body": {
+    "foot_friction": 1.057631,
+    "foot_length": 0.124379,
+    "foot_length_r": 0.124379,
+    "leg_density": 383.772263,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "shank_length": 0.598252,
+    "shank_length_r": 0.598252,
+    "thigh_length": 0.483042,
+    "thigh_length_r": 0.483042,
+    "torque_limit": 41.683255,
+    "torso_mass": 11.057383
+   },
+   "vector": [
+    1.4613592256811718,
+    0.620749262566184,
+    0.06360334138900163,
+    0.8595200316946476,
+    -0.0597984185120959,
+    -0.004597134741325837,
+    0.1995479649846929,
+    121.70337151766175,
+    10.762497323989722,
+    133.01587595349372,
+    86.46280690087647,
+    0.19365164042268157,
+    0.8745373874736129,
+    0.37308082048845015,
+    0.01830344347150241,
+    1.2160619371195414,
+    0.5014720067748321
+   ]
+  },
+  "initial_matches_prompt": true,
+  "submitted": {
+   "body": {
+    "foot_friction": 1.057631,
+    "foot_length": 0.124379,
+    "foot_length_r": 0.124379,
+    "leg_density": 383.772263,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "shank_length": 0.5845447896707858,
+    "shank_length_r": 0.5845447896707858,
+    "thigh_length": 0.34801578827057955,
+    "thigh_length_r": 0.34801578827057955,
+    "torque_limit": 41.683255,
+    "torso_mass": 11.057383
+   },
+   "design_index": 3,
+   "source": "repair:leg_length",
+   "vector": [
+    1.4613592256811718,
+    0.620749262566184,
+    0.06360334138900163,
+    0.8595200316946476,
+    -0.0597984185120959,
+    -0.004597134741325837,
+    0.1995479649846929,
+    121.70337151766175,
+    10.762497323989722,
+    133.01587595349372,
+    86.46280690087647,
+    0.19365164042268157,
+    0.8745373874736129,
+    0.37308082048845015,
+    0.01830344347150241,
+    1.2160619371195414,
+    0.5014720067748321
+   ]
+  },
+  "vector_names": [
+   "freq",
+   "duty",
+   "hip_amp",
+   "knee_amp",
+   "knee_shift",
+   "stance_knee",
+   "hip_bias",
+   "kp",
+   "kd",
+   "balance_gain",
+   "pitch_kp",
+   "pitch_ref",
+   "sync_gain",
+   "ramp_s",
+   "start_lean",
+   "fp_kd",
+   "fp_kv"
+  ]
+ },
+ "schema": "causal_record_v1",
+ "source": {
+  "file": "demo_src.jsonl",
+  "line": 4,
+  "note": "The full prompts and replies stay in the source file.",
+  "policy": "scientist_think",
+  "runner_version": "ce_eval_v1",
+  "scientist_version": "causal_scientist_v2"
+ },
+ "steps": [
+  {
+   "action": "counterfactual",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0053939999999999995,
+     "finish_reason": "stop",
+     "index": 0,
+     "latency_s": 17.18508769899927,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 3028,
+      "prompt_tokens": 8896,
+      "reasoning_tokens": 2128,
+      "total_tokens": 11924
+     }
+    },
+    {
+     "cost_usd": 0.0044208,
+     "finish_reason": "stop",
+     "index": 1,
+     "latency_s": 8.956416446999356,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1619,
+      "prompt_tokens": 9879,
+      "reasoning_tokens": 576,
+      "total_tokens": 11498
+     }
+    },
+    {
+     "cost_usd": 0.004252199999999999,
+     "finish_reason": "stop",
+     "index": 2,
+     "latency_s": 7.367649240000901,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1386,
+      "prompt_tokens": 10016,
+      "reasoning_tokens": 338,
+      "total_tokens": 11402
+     }
+    }
+   ],
+   "experiment": "E2",
+   "experiments": [
+    "E1",
+    "E2"
+   ],
+   "first_attempt_errors": [
+    "counterfactual[0].predictions: give 1-12 predictions",
+    "counterfactual[1].predictions: give 1-12 predictions"
+   ],
+   "hypothesis_transitions": [
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H1",
+     "reason": "created",
+     "to": "open"
+    }
+   ],
+   "parsed": {
+    "action": "counterfactual",
+    "conclude": [],
+    "counterfactual": [
+     {
+      "changes": [
+       {
+        "level": "x0.5",
+        "param": "leg_length"
+       }
+      ],
+      "predictions": [
+       {
+        "direction": "increase",
+        "hypothesis": "H1",
+        "quantity": "step_length_over_L"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H1",
+        "quantity": "capture_margin_over_L_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H1",
+        "quantity": "pitch_rate_mean"
+       }
+      ],
+      "purpose": "Shorten the legs to bring the pendulum frequency closer to the commanded step frequency, reducing the stride\u2011frequency\u2011to\u2011pendulum ratio and allowing more time for proper foot placement."
+     },
+     {
+      "changes": [
+       {
+        "level": "x0.5",
+        "param": "leg_length"
+       },
+       {
+        "level": "x0.5",
+        "param": "freq"
+       }
+      ],
+      "predictions": [
+       {
+        "direction": "decrease",
+        "hypothesis": "H1",
+        "quantity": "step_freq_hz"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H1",
+        "quantity": "time_upright"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H1",
+        "quantity": "com_ahead_of_cop_over_L_mean"
+       }
+      ],
+      "purpose": "Test whether reducing both leg length and step frequency together improves walking more than either change alone."
+     }
+    ],
+    "new_hypotheses": [
+     {
+      "category": "leg_geometry_mismatch",
+      "causal_chain": "Long leg length \u2192 low pendulum frequency (0.48\u202fHz) << commanded frequency (1.46\u202fHz) \u2192 high stride_freq_over_pendulum \u2192 short stance time per cycle \u2192 inadequate foot placement & ground reaction \u2192 COM moves ahead of CoP (com_ahead_of_cop_over_L \u2191) \u2192 capture point shifts outside support (capture_margin_over_L \u2193) \u2192 pitch & angular momentum increase \u2192 forward fall.",
+      "confidence": 0.78,
+      "evidence": [
+       "observation.median.time_upright",
+       "observation.median.step_length_over_L",
+       "observation.median.step_freq_hz",
+       "observation.median.fall_time",
+       "observation.median.com_ahead_of_cop_over_L_mean",
+       "observation.median.capture_margin_over_L_end",
+       "observation.median.pitch_rate_mean",
+       "observation.median.angmom_norm_mean",
+       "observation.median.tracking_error_hip",
+       "observation.median.tracking_error_knee",
+       "observation.median.swing_peak_clearance_mean_over_L",
+       "observation.median.flight_fraction",
+       "observation.median.max_friction_utilisation"
+      ],
+      "id": "H1",
+      "mechanism": "The leg length (L\u22481.08\u202fm) is too long for the commanded step frequency (freq\u22481.46\u202fHz), making the natural pendulum period too long. Consequently there is insufficient time to reposition the swinging foot and generate adequate ground\u2011reaction forces before the COM moves ahead of the CoP. This yields a forward toppling moment, positive capture\u2011point margin error, increasing pitch angle and angular momentum, ending in a forward fall."
+     }
+    ],
+    "repair": [],
+    "result_reading": "The robot falls forward on all 4 seeds after a median of 5.86\u202fs of upright time (healthy walking robots stay upright the full 10\u202fs). Key abnormal metrics: step length is short at 0.122\u202fL (healthy range 0.157\u20110.231), while step frequency is high giving a stride\u2011frequency\u2011to\u2011pendulum ratio of 3.05\u202fHz (healthy 1.58\u20113.0). The centre of mass is consistently ahead of the centre of pressure (com_ahead_of_cop_over_L_mean\u202f=\u202f0.025, healthy \u20130.001\u20110.010) and the capture point lies far outside the support interval at the end of the step (capture_margin_over_L_end\u202f=\u202f\u20110.62, healthy median \u2248\u20110.13). Angular momentum and pitch rate are elevated (angmom_norm_mean\u202f=\u202f0.0076, healthy\u202f0.0005\u20110.0016; pitch_rate_mean\u202f=\u202f0.181\u202frad/s, healthy\u202f\u20110.001\u20110.0155). Tracking errors at hip and knee are above healthy ranges, swing clearance and flight fraction are excessive, and torque saturation is minimal. These symptoms indicate the robot is stepping too fast for its long legs, generating forward toppling moments it cannot counteract.",
+    "status_updates": [],
+    "test": []
+   },
+   "remaining_after": 688,
+   "remaining_before": 696,
+   "repaired": true,
+   "status": "ok",
+   "step": 1,
+   "user_message": {
+    "length": 17330,
+    "sha256": "35daa7f8bdff7a4627edd51eb7fe860c83ecc843ec735d71cfc2e7730869d368"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "repair",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0042408,
+     "finish_reason": "stop",
+     "index": 3,
+     "latency_s": 6.550698282000667,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1012,
+      "prompt_tokens": 11100,
+      "reasoning_tokens": 641,
+      "total_tokens": 12112
+     }
+    }
+   ],
+   "experiment": "R1",
+   "experiments": [
+    "R1"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [
+    {
+     "cited_predictions": {
+      "n_correct": 6,
+      "n_scored": 6
+     },
+     "experiments": [
+      "E1",
+      "E2"
+     ],
+     "from": "open",
+     "id": "H1",
+     "reason": "All six quantitative predictions made for H1 were confirmed by experiments E1 and E2: step_length_over_L increased, capture_margin_over_L_mean increased, pitch_rate_mean decreased, step_freq_hz decreased, time_upright increased, and com_ahead_of_cop_over_L_mean decreased.",
+     "to": "supported"
+    }
+   ],
+   "parsed": {
+    "action": "repair",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [],
+    "repair": [
+     {
+      "budget_share": 0.12,
+      "hypothesis": "H1",
+      "predicted_n_walking": 4,
+      "tool": "leg_length"
+     }
+    ],
+    "result_reading": "Halving leg length (E1) increased walking seeds from 0 to 2, reduced pitch rate mean from 0.181 to 0.011 rad/s, increased step length over L from 0.122 to 0.146, decreased COM-ahead-of-CoP mean from 0.025 to -0.002, and increased time upright to the full 10 s. Halving both leg length and frequency (E2) also yielded 2 walking seeds but introduced 2 backward falls, with step frequency dropping to 1.66 Hz and step length over L rising to 0.212, while COM-ahead-of-CoP became more negative (-0.018). These results confirm that excessive leg length relative to commanded step frequency contributes to forward falls.",
+    "status_updates": [
+     {
+      "confidence": 0.85,
+      "experiments": [
+       "E1",
+       "E2"
+      ],
+      "id": "H1",
+      "reason": "All six quantitative predictions made for H1 were confirmed by experiments E1 and E2: step_length_over_L increased, capture_margin_over_L_mean increased, pitch_rate_mean decreased, step_freq_hz decreased, time_upright increased, and com_ahead_of_cop_over_L_mean decreased.",
+      "status": "supported"
+     }
+    ],
+    "test": []
+   },
+   "remaining_after": 612,
+   "remaining_before": 688,
+   "repaired": false,
+   "status": "ok",
+   "step": 2,
+   "user_message": {
+    "length": 22892,
+    "sha256": "493fe6201c94db61ce420d0f1dd7690411e9231d1bfd65a0b2bf432f7446e218"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "test",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0049026,
+     "finish_reason": "stop",
+     "index": 4,
+     "latency_s": 11.373869858001854,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1726,
+      "prompt_tokens": 11164,
+      "reasoning_tokens": 1449,
+      "total_tokens": 12890
+     }
+    }
+   ],
+   "experiment": "T1",
+   "experiments": [
+    "T1"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 0
+     },
+     "experiments": [
+      "R1"
+     ],
+     "from": "supported",
+     "id": "H1",
+     "reason": "Repair R1 (leg_length) succeeded as predicted (n_walking 4/4), confirming that shortening the leg length alleviates the forward fall mechanism.",
+     "to": "supported"
+    }
+   ],
+   "parsed": {
+    "action": "test",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [],
+    "repair": [],
+    "result_reading": "After the leg_length repair (R1), the current best design achieved walking on all 4 training seeds (n_walking: 0 \u2192 4) with a train fitness of 5.987, up from 5.987? Actually initial fitness was not given but improved. This indicates the leg length mismatch has been resolved: the pendulum frequency now better matches the commanded step frequency, allowing sufficient stance time for foot placement and ground\u2011reaction forces, eliminating the forward toppling moment observed previously.",
+    "status_updates": [
+     {
+      "confidence": 0.9,
+      "experiments": [
+       "R1"
+      ],
+      "id": "H1",
+      "reason": "Repair R1 (leg_length) succeeded as predicted (n_walking 4/4), confirming that shortening the leg length alleviates the forward fall mechanism.",
+      "status": "supported"
+     }
+    ],
+    "test": [
+     {
+      "predicted_n_walking": 4,
+      "purpose": "Assess whether the repaired design maintains walking over the longer 20\u202fs horizon, indicating robustness beyond the 10\u202fs training seeds."
+     }
+    ]
+   },
+   "remaining_after": 604,
+   "remaining_before": 612,
+   "repaired": false,
+   "status": "ok",
+   "step": 3,
+   "user_message": {
+    "length": 23101,
+    "sha256": "d8715de9bd79cc4da2014ba239c4818ed85e52806c4902890befddd052b76cbd"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "conclude",
+   "allowed_actions": [
+    "counterfactual",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.004213499999999999,
+     "finish_reason": "stop",
+     "index": 5,
+     "latency_s": 5.9528154879990325,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 917,
+      "prompt_tokens": 11294,
+      "reasoning_tokens": 780,
+      "total_tokens": 12211
+     }
+    },
+    {
+     "cost_usd": 0.0048987,
+     "finish_reason": "stop",
+     "index": 6,
+     "latency_s": 9.646645034001267,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1610,
+      "prompt_tokens": 11499,
+      "reasoning_tokens": 1414,
+      "total_tokens": 13109
+     }
+    }
+   ],
+   "first_attempt_errors": [
+    "conclude: the chosen action needs exactly one element"
+   ],
+   "hypothesis_transitions": [],
+   "parsed": {
+    "action": "conclude",
+    "conclude": [
+     {
+      "confidence": 0.95,
+      "diagnosis_category": "leg_geometry_mismatch",
+      "explanation": "Shortening the leg length brought the pendulum frequency closer to the commanded step frequency, improving stability.",
+      "submit": "best"
+     }
+    ],
+    "counterfactual": [],
+    "new_hypotheses": [],
+    "repair": [],
+    "result_reading": "After the leg_length repair (R1), the robot walked on all 4 training seeds (100% walking). The subsequent 20\u2011second stress test (T1) showed that the robot walked the entire 20\u202fs on all 4 seeds, with zero falls. No forward or backward falls were observed, indicating that the shortened leg length has resolved the forward\u2011toppling instability seen in the initial observation.",
+    "status_updates": [],
+    "test": []
+   },
+   "remaining_after": 604,
+   "remaining_before": 604,
+   "repaired": true,
+   "status": "ok",
+   "step": 4,
+   "user_message": {
+    "length": 23523,
+    "sha256": "f12239a86b13926f3d1000f0aa5cc399085babf6c9a342feca7f829e9e2318d9"
+   },
+   "validation_errors": []
+  }
+ ],
+ "verification": {
+  "independent": true,
+  "note": "Independent verification on hidden seeds the AI never saw (full_recovery_v1, uncharged).",
+  "reasons": [
+   "confirmation: walking on 58% of seeds at 20 s, needs >= 80%"
+  ],
+  "rollouts": {
+   "confirmation": 24,
+   "confirmation_rollout_equivalents": 48.0,
+   "validation": 48
+  },
+  "status": "PARTIAL_IMPROVEMENT",
+  "walking_frac": 0.8333333333333334
+ }
+}
