@@ -110,3 +110,8 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - M1 (`experiments/walk_recovery/oracle/REPORT_M1.md`): joint body+controller CMA with the new foot-placement controller (17-D, `phasegait_fp.py`) fully recovers 6/12 dev creatures at 8k rollouts (ctrl15 1/12, ctrl17 5/12, joint15 4/12); union 8/12. Pre-declared G1 rule (>= 50%) met exactly -> proceed to the AI-director stage.
 - Decisions for M2: every method uses the 17-D family with optional 4-parameter body co-design; final candidates are selected on held-out screening seeds (train-validation gap +0.21 median; 8k worse than 4k); training on 8 seeds under the validation-variation preset (H7: 3 nominal seeds generalise worse); similarity transfer dropped as a fix (never helped). R* chosen on the method pilot by the plan's 25-60% rule.
 - Not claimed: impossibility for the 4 unrecovered creatures (walking 0.62-0.96, "not within 8k"); anything about Nemotron (no model calls in M1).
+
+## 2026-10-17 Walking recovery: confirmatory result and what the project claims
+- S3 (frozen walkrec-confirm-v1 + pre-data amendment 1; `experiments/walk_recovery/confirmatory/REPORT.md`): equal total budget 2,000, 48 fresh failing robots: FIX 19, CMA-joint 11, RAND 11, ai_v2 9, CMA-ctrl 8 full recoveries. Primary ai_v2 > FIX NOT supported (4 vs 14, p = 0.996).
+- Claim: the classical procedure (foot-placement controller + body co-design + diagnostic subspace probes + verdict-aware selection) makes 40% of genuinely failing never-seen robots walk under the strict criterion. Not claimed: AI decision value. Summary: `docs/WALK_RECOVERY.md`.
+- Development negatives kept: S2/S2b director, L2 learned experience (G3 FAIL), S4a control-law invention and closed loop (G4 FAIL).

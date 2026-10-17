@@ -287,3 +287,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - New product feature: Studio "Recover walking" (backend + frontend, accept only FULL_RECOVERY).
 - Spend: infra $17.65 of $35 (owner-approved); inference ~$3.3 of $15. VMs stopped.
 - Next: owner decision on the S3 confirmatory freeze (`experiments/walk_recovery/confirmatory/protocol.json`, DRAFT).
+
+## 2026-10-17 - S3 confirmatory complete (walking recovery)
+- FIX 19/48, CMA-joint 11, RAND 11, Nemotron director 9, CMA-ctrl 8 (equal total budget 2,000; full_recovery_v1). Primary AI > FIX not supported (p = 0.996). Report `experiments/walk_recovery/confirmatory/REPORT.md`; summary `docs/WALK_RECOVERY.md`.
+- Regression on the branch: 1178 Python tests, frontend + build, 314 browser checks PASS (main VM, 2026-10-17).
+- Spend: infra ~$26 of $35; inference ~$3.7 of $15. Both VMs STOPPED; the batch VM can be deleted (owner).
+- Next: owner decides the demo/submission framing; demo take of "Recover walking" on the stilts robot; Devpost/storyboard update; PR for review (no merge without the owner).
