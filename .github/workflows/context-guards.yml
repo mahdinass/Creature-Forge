@@ -1,17 +1,36 @@
 name: Context safeguards
 
+# Triggers (CI-minutes hygiene, 2026-10-17):
+# - pull_request: every PR (opened, synchronize, reopened, ready_for_review) - the run that gates a merge.
+# - push: only main (post-merge check). Pushes to a branch with an open PR are covered by its pull_request run, so they are
+#   no longer run twice; branches without a PR are tested on the Nebius dev VM (infra/nebius/forge_dev.py test).
+# - workflow_dispatch: manual run of any branch when needed.
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One run per PR (or per ref for main/manual). On a PR a newer push cancels the outdated in-progress run; runs on main are
+# queued, never cancelled, so every merged commit keeps a complete post-merge check.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
 
 jobs:
   test-context-guards:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: pyproject.toml
       - name: Install package (MuJoCo, NumPy)
         run: python -m pip install -e ".[studio]"
       - name: Record simulator and dependency versions
@@ -24,17 +43,22 @@ jobs:
         run: python scripts/smoke_test.py
   studio-frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+          cache-dependency-path: studio/package-lock.json
       - run: npm --prefix studio ci
       - run: npm --prefix studio test
       - run: npm --prefix studio run build
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: pyproject.toml
       - run: python -m pip install -e ".[studio]"
       - name: Investigation Lab real-browser flow (bundled demo records, no model calls)
         run: python scripts/lab_browser_check.py
