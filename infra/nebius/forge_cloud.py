@@ -23,7 +23,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 # Infra cap across ALL VM profiles (combined): $10 (2026-10-14), raised to $20 by the owner on 2026-10-16 for the
 # walking-recovery S1 stage (temporary 64-vCPU batch VM), and to $35 on 2026-10-17 for iteration 3 (S4a, S4b, S3, demo). create/start/extend refuse beyond it.
-SPEND_CAP_USD = 35.0
+SPEND_CAP_USD = 38.0   # 2026-10-17: owner let Claude adjust the cap; real balance ~$11 at a ledger of $28.9 -> real total ~$40, $2 margin kept
 SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
 _BASE = {
