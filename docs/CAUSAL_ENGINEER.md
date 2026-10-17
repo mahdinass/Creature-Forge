@@ -62,3 +62,39 @@ decisions never had to be *right about a cause* to matter, and they never were c
 ## 4. Execution log
 - 2026-10-17: branch created; spend verified; S3 complete (see `docs/WALK_RECOVERY.md`).
 - 2026-10-17: subagent routing verified (sonnet -> claude-sonnet-5-5, haiku -> claude-haiku-5-5). Healthy-base audit: 17-D verified walkers from S2/S2b (19 dev creatures) and S3 (28 creatures, held-out family for this benchmark); 15-D walkers from S4a (19 dev creatures).
+
+## 5. Scientist loop specification (`creature_forge/scientist.py`, to be implemented on top of physics_probe + eng_tools)
+Per faulty robot, one total budget (development default 700 rollouts). One Nemotron call per step, at most about 14 calls;
+the model may conclude at any step.
+- **State given to the model:**
+  - Robot features against the reference body.
+  - The initial `observe` summary, including the pre-fall block.
+  - The hypothesis ledger (each hypothesis: mechanism text, causal chain, cited evidence paths, testable predictions,
+    status open / supported / refuted / unresolved).
+  - The experiment ledger (action, the model's pre-registered predictions, the measured outcome, deterministic
+    prediction scoring).
+  - Repairs tried with their training results; the remaining budget.
+  - Memory items, only in the memory arms.
+- **Actions** (exactly one per step):
+  - `counterfactual(change)` with a prediction per open hypothesis: the sign of change of named quantities, chosen from
+    a fixed quantity list such as walking_count, pre_fall.capture_margin, slip_frac or saturation_frac.ankle.
+  - `observe_more`.
+  - `repair(tool, budget_share)`, citing the hypothesis it acts on.
+  - `conclude(diagnosis_category, explanation, final_design)`.
+- **Diagnosis categories:** a neutral engineering taxonomy of failure mechanisms. It covers the 8 benchmark mechanisms
+  plus decoys (insufficient joint stiffness, leg-length mismatch, gait-initiation failure) and "unresolved". The model
+  is never told which categories are used by the benchmark.
+- **Prediction scoring is deterministic:** observed sign versus predicted sign, with a noise tolerance. Hypotheses are
+  updated by the model, and the record keeps whether the model's updates follow the evidence.
+- **Baselines over the same Workbench:**
+  - EXHAUSTIVE: every counterfactual, then repair the top-2 tools by counterfactual effect.
+  - EXPERT_RULES: hand-written telemetry thresholds mapped to tools, then repair; written on dev data, disclosed.
+  - RANDOM: random counterfactuals and tools.
+  - BLIND: CMA over the union of all tools with the whole budget.
+  - SCIENTIST_1SHOT: one call from the initial observation, then repair; tests C2.
+- **Metrics:**
+  - Verified repair (`full_recovery_v1` against the faulty robot).
+  - Diagnosis accuracy against the injected mechanism (hidden).
+  - Prediction accuracy.
+  - Rollouts used and the number of experiments.
+  - LLM calls, cost and wall time.
