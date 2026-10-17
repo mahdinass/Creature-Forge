@@ -242,3 +242,15 @@ the model may conclude at any step.
     scientist and as a stand-alone "predict then repair" policy, at equal budget.
 - **Negative transfer.** A memory-assisted decision that applies a remembered repair which then fails, where a
   different tool would have worked. It is counted per arm.
+
+### Held-out run command (main VM, slot `ceh`, shard i of 16; add `--resume` to continue an interrupted shard)
+```
+cd ~/dev/ceh && CREATURE_FORGE_ENABLE_LIVE=1 CF_INFERENCE_LEDGER=$HOME/dev/ledger/inference_ledger.jsonl ~/dev/venvs/ceh/bin/python \
+  scripts/ce_eval.py --instances <experiments/causal_engineer/heldout/instances/heldout_shard*.jsonl, comma-separated> \
+  --instance-ids <protocol.json instance_ids> \
+  --policies scientist_think,scientist_1shot_think,scientist_think_mem,scientist_think_mem_learned,exhaustive,learned,expert,random \
+  --memory-probe artifacts/mem/probe_dev.jsonl --memory-episodes <artifacts/mem/pilot*_shard*.jsonl, comma-separated> \
+  --learned-model experiments/causal_engineer/dev/level_c_logistic.json --budget 700 --workers 1 --shard i/16 \
+  --out artifacts/ce/heldout_eval_shard$i.jsonl
+```
+The memory inputs in `artifacts/mem/` must match the SHA-256 values in `protocol.json`; this was verified before launch.
