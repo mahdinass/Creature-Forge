@@ -62,6 +62,29 @@ decisions never had to be *right about a cause* to matter, and they never were c
 ## 4. Execution log
 - 2026-10-17: branch created; spend verified; S3 complete (see `docs/WALK_RECOVERY.md`).
 - 2026-10-17: subagent routing verified (sonnet -> claude-sonnet-5-5, haiku -> claude-haiku-5-5). Healthy-base audit: 17-D verified walkers from S2/S2b (19 dev creatures) and S3 (28 creatures, held-out family for this benchmark); 15-D walkers from S4a (19 dev creatures).
+- 2026-10-17: fault bench built on dev bases.
+  - Severity 1.0: 41 of 192 candidates kept.
+  - Mild severities 0.0/0.25: 27 of 144 kept (feedback_loss 10, posture_lean 8, cadence_fast 3, short_feet 2,
+    weak_motors 2, slippery 2).
+  - Files: `artifacts/vm/ce/ce/dev_*.jsonl`.
+- 2026-10-17: **dev pilot1** (development only, not a claim): 13 instances × 6 policies, budget about 700 rollouts each.
+  Results in `artifacts/vm/ce2/ce/pilot1_*` (`ce_analysis.py`).
+
+  | policy | FULL / PARTIAL / NOT | rollouts | chose a repairing tool |
+  |---|---|---|---|
+  | exhaustive | 5 / 6 / 2 | — | 11/13 |
+  | expert | 4 / 5 / 4 | — | — |
+  | blind | 3 / 5 / 5 | — | — |
+  | random | 3 / 7 / 3 | — | — |
+  | scientist (closed loop) | 3 / 2 / 8 | 425 of about 690 | 4/13 |
+  | scientist_1shot | 2 / 7 / 4 | — | 8/13 |
+
+  - The closed-loop scientist was the weakest arm. It left about 40% of its budget unspent and its mean walking
+    fraction was 0.27.
+  - Its diagnosis matched the injected fault in only 1/13; prediction accuracy was 0.38 (n = 71) against a 1/3 chance
+    level. Inference cost was $0.20.
+  - The next development step is to find why it concludes or under-spends, and why its first repairs miss, before
+    building experience levels. No evaluation instances were touched.
 
 ## 5. Scientist loop specification (`creature_forge/scientist.py`, to be implemented on top of physics_probe + eng_tools)
 Per faulty robot, one total budget (development default 700 rollouts). One Nemotron call per step, at most about 14 calls;
