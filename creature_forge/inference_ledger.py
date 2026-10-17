@@ -7,7 +7,7 @@ Lines written here add `reservation_id` and `status`. A request is first RESERVE
 cost) and then SETTLED with the real usage; both happen under an exclusive file lock together with the cap check, so concurrent processes
 cannot jointly overshoot. A reservation that is never settled (crash) keeps counting at its worst case.
 
-Caps (default; raised 2026-10-17 by the owner from 1,500 / USD 15): 4,000 requests and USD 30.00 in total; per investigation 4 requests and 80,000 tokens. `reserve` raises
+Caps (default; raised 2026-10-17 by the owner from 1,500 / USD 15): 8,000 requests (2026-10-17 evening, for the held-out run) and USD 30.00 in total; per investigation 4 requests and 80,000 tokens. `reserve` raises
 `BudgetExceeded` BEFORE any network call. An unknown model price refuses (fail closed). Unparseable lines are skipped and counted in
 `status()["skipped_lines"]`; they never grant headroom to anyone but they are not guessed at either.
 """
@@ -47,7 +47,7 @@ class LedgerLockTimeout(BudgetExceeded):
 
 @dataclass(frozen=True)
 class Caps:
-    max_requests: int = 4000
+    max_requests: int = 8000
     max_usd: float = 30.0
     inv_max_requests: int = 4
     inv_max_tokens: int = 80_000

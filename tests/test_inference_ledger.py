@@ -43,7 +43,7 @@ class PriceTests(unittest.TestCase):
 
     def test_default_caps(self):
         c = Caps()
-        self.assertEqual((c.max_requests, c.max_usd, c.inv_max_requests, c.inv_max_tokens), (4000, 30.0, 4, 80_000))
+        self.assertEqual((c.max_requests, c.max_usd, c.inv_max_requests, c.inv_max_tokens), (8000, 30.0, 4, 80_000))
 
 
 class PathTests(Base):
@@ -161,7 +161,7 @@ class CapTests(Base):
 
     def test_default_totals_cap(self):
         led = self.ledger()
-        self.assertEqual(led.caps.max_requests, 4000)
+        self.assertEqual(led.caps.max_requests, 8000)
         self.assertEqual(led.caps.max_usd, 30.0)
 
 

@@ -38,8 +38,9 @@ def thinking_config():
     from creature_forge.investigation import load_model_config
     import dataclasses
     cfg = load_model_config("default")
-    return dataclasses.replace(cfg, max_tokens=16000, extra_body={"chat_template_kwargs": {"enable_thinking": True}},
-                               timeout_s=300.0).validate()
+    # max_tokens 32000 / timeout 600 s (pilot5: three steps lost to finish_reason=length at 16000 while reasoning)
+    return dataclasses.replace(cfg, max_tokens=32000, extra_body={"chat_template_kwargs": {"enable_thinking": True}},
+                               timeout_s=600.0).validate()
 
 # Ground-truth mapping from the injected benchmark mechanism to the scientist's neutral diagnosis taxonomy. EVALUATION ONLY: the scientist
 # module never imports or sees this table. The taxonomy's decoys (low_joint_impedance, leg_geometry_mismatch, gait_initiation_failure,
