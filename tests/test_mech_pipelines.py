@@ -683,9 +683,19 @@ class AdapterTests(unittest.TestCase):
         self.assertNotIn("mechanisms", calls[1]["controllers"]["walk"])
         self.assertIsNone(mpl.job_fn_for([]))
 
-    def test_features_without_hook_fails_loudly_with_mechanisms(self):
-        with self.assertRaises(NotImplementedError):
+    def test_features_hook_is_wired_for_mechanisms(self):
+        # integration (2026-10-17): gait_features.features_for gained `mechanisms`; the adapter must pass them through
+        import inspect
+        from creature_forge import gait_features as gf
+        self.assertIn("mechanisms", inspect.signature(gf.features_for).parameters)
+        seen = {}
+        orig = gf.features_for
+        gf.features_for = lambda body, vector, seed, mechanisms=(), **kw: seen.update(m=mechanisms) or {"ok": 1}
+        try:
             mpl.features_with_mechanisms({}, [0.0] * 18, [GOOD], 1)
+        finally:
+            gf.features_for = orig
+        self.assertEqual(seen["m"][0]["id"], GOOD["id"])
 
 
 if __name__ == "__main__":

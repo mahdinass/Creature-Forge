@@ -228,10 +228,18 @@ SUMMARY_DOCS: dict[str, str] = {
 }
 
 
-def features_for(body, vector, seed: int, *, duration: float = 10.0, perturb=None) -> dict:
-    """Roll out `vector` on `body` (start "neutral") and return `gait_features`."""
-    from .phasegait_init import controller_from_vector
+def features_for(body, vector, seed: int, *, duration: float = 10.0, perturb=None, mechanisms=()) -> dict:
+    """Roll out `vector` on `body` (start "neutral") and return `gait_features`. With `mechanisms` (control-law DSL, see
+    `mechanisms.py`) the vector is 15 base params followed by the gains; `controller_freq_*` read the base `freq` (index 0)."""
     body = cw._body(body)          # accepts a SandboxBody or a body dict
     kw = {} if perturb is None else {"perturb": perturb}
-    tr = cw.rollout(controller_from_vector(vector, body=body), body, seed, duration, start="neutral", **kw)
-    return gait_features(tr, body, vector)
+    if mechanisms:
+        from .mechanisms import controller_from_spec
+        ctrl = controller_from_spec(vector, mechanisms, body=body)
+        vec_for_features = list(vector)[:15]
+    else:
+        from .phasegait_init import controller_from_vector
+        ctrl = controller_from_vector(vector, body=body)
+        vec_for_features = vector
+    tr = cw.rollout(ctrl, body, seed, duration, start="neutral", **kw)
+    return gait_features(tr, body, vec_for_features)
