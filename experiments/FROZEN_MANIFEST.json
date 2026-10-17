@@ -166,6 +166,7 @@
  "experiments/walk_recovery/experience/results/panel_test.json": "89a2cfc90d331a53294b1622fa7fbc7684661a25",
  "experiments/walk_recovery/experience/results/panel_train.json": "e53d67f7d6ac2d2ba9f972033e78fe38a555fbc5",
  "experiments/walk_recovery/experience/results/summary.json": "6c1c9fbf499f41ea5dcb065747cdb269d11fb243",
+ "experiments/walk_recovery/mech_pilot/protocol_s4a.json": "846d2d755b6ffbcb341eaba64ea1c38a380148fe",
  "experiments/walk_recovery/oracle/REPORT_M1.md": "f05bd518f97056668c4b55a070c22465a3cd3ee3",
  "experiments/walk_recovery/oracle/REPORT_M1A.md": "84ffc692892a1c010dfa635c7a14132fd2fc716d",
  "experiments/walk_recovery/oracle/protocol_m1.json": "03fa55a3620b8c1eb9401a3a56f06a5b3819ffb3",
