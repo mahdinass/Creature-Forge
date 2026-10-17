@@ -38,7 +38,9 @@ from .nebius import contains_secret
 from .physics_probe import PROBE_DOCS
 
 VERSION = "causal_scientist_v2"   # v1 (pilot1) is at commit 4d286e5; v2 changes: experiments/causal_engineer/dev/AUDIT_PILOT1.md
-REVISION = "v2.2"   # v2.1: budget facts (pilot2); v2.2: exact verification criteria (pilot3: concluded on train 4/4 with most budget unused)
+REVISION = "v2.3"   # v2.1: budget facts (pilot2); v2.2: exact verification criteria (pilot3: concluded on train 4/4 with most of the
+                    # budget unused); v2.3: a 20 s stress-test instrument + "rollouts left unused" line (pilot4: still concluded early
+                    # and failed only the 20 s confirmation)
 MODES = ("iterative", "one_shot")
 SCHEMA_STEP = "scientist_step"
 SCHEMA_ONE_SHOT = "scientist_one_shot"
@@ -51,7 +53,7 @@ TEXT_MAX = 1500
 STATUSES = ("open", "supported", "refuted", "unresolved")
 DIRECTIONS = ("increase", "decrease", "no_change")
 MEMORY_VERDICTS = ("applies", "needs_adaptation", "test_first", "does_not_apply")
-ACTIONS = ("counterfactual", "repair", "conclude")
+ACTIONS = ("counterfactual", "test", "repair", "conclude")   # test: v2.3 (20 s stress test)
 NO_ID = "(none)"
 INITIAL_OBS = "O0"
 
@@ -253,6 +255,9 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "measured change of every summary quantity and the new falls. A counterfactual is a measurement, not a repair: it never "
             "changes the current best design. A counterfactual action may hold one or two experiments, run in order. Each change is "
             "{param, level}:", *cf_lines,
+            "- test: a 20 s stress test of the CURRENT BEST design on the observation seeds (twice the training horizon, same "
+            "perturbations); cost 2 x n_obs rollouts; once per design. Before it runs you predict how many of the n_obs seeds will walk "
+            "for the whole 20 s. It changes nothing; it measures robustness on visible seeds.",
             "- repair: a CMA-ES search over the dimensions of ONE tool, starting from the current best design, scored on training "
             "seeds. Cost = the budget you grant it = floor(budget_share x remaining rollouts); it must reach the tool's minimum budget "
             "(shown in each message) or it is refused. A repair that improves the training result (more walking seeds, then more "
@@ -293,7 +298,7 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "robot.controller.<parameter>, robot.features.<feature>, reference.features.<feature>, observation.median.<key>, "
             "observation.pre_fall.<key> (the key without its pre_fall. prefix), observation.n_walking, observation.n_fell, "
             "experiments.<E#>.delta.<quantity> (measured change of a quantity in counterfactual E#), experiments.<E#>.n_walking, "
-            "experiments.<E#>.n_fell, repairs.<R#>.budget, repairs.<R#>.start_walking, repairs.<R#>.train_walking, "
+            "experiments.<E#>.n_fell, tests.<T#>.n_walking, tests.<T#>.n_fell, repairs.<R#>.budget, repairs.<R#>.start_walking, repairs.<R#>.train_walking, "
             "repairs.<R#>.train_fitness. Only values that exist are citable.", "",
             "PREDICTIONS. Before each counterfactual you register, per hypothesis, the direction (increase, decrease, no_change) "
             "of named quantities. Quantities you may predict: " + q_lines + ". They are logged before the experiment runs and scored "
@@ -315,7 +320,7 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
                  "initial observation shows), with numbers; (2) status_updates: a verdict for EVERY hypothesis that had predictions scored "
                  "in the newest experiments (keep it open, mark it supported, refuted or unresolved, citing the experiment ids), and any "
                  "other revision; (3) new_hypotheses, including new explanations when the evidence contradicts the current ones; (4) the "
-                 "action: ONE of counterfactual (one or two experiments), repair (one or two repairs) or conclude, in the list of that "
+                 "action: ONE of counterfactual (one or two experiments), test (one stress test), repair (one or two repairs) or conclude, in the list of that "
                  "name; the other action lists stay empty. Reply with a single JSON object that follows the response schema; no prose."]
     else:
         body += ["PROTOCOL. A single reply: JSON object following the response schema, no prose. Write it in the schema's order: first "
@@ -366,6 +371,8 @@ def step_schema(*, paths, new_ids, existing, all_hyp, exp_ids, tools, quantities
            "required": ["tool", "budget_share", "hypothesis", "predicted_n_walking"],
            "properties": {"tool": {"type": "string", "enum": list(tools)}, "budget_share": {"type": "number"},
                           "hypothesis": {"type": "string", "enum": list(all_hyp) or [NO_ID]}, "predicted_n_walking": {"type": "integer"}}}
+    tst = {"type": "object", "additionalProperties": False, "required": ["purpose", "predicted_n_walking"],
+           "properties": {"purpose": {"type": "string"}, "predicted_n_walking": {"type": "integer"}}}
     con = {"type": "object", "additionalProperties": False, "required": ["diagnosis_category", "explanation", "confidence", "submit"],
            "properties": {"diagnosis_category": {"type": "string", "enum": list(CATEGORIES)}, "explanation": {"type": "string"},
                           "confidence": {"type": "number"}, "submit": {"type": "string", "enum": ["best"]}}}
@@ -375,7 +382,7 @@ def step_schema(*, paths, new_ids, existing, all_hyp, exp_ids, tools, quantities
     if mem_ids is not None:
         props["memory_assessments"] = {"type": "array", "items": _memory_schema(mem_ids)}
     props.update(action={"type": "string", "enum": list(actions)}, counterfactual={"type": "array", "items": cf},
-                 repair={"type": "array", "items": rep}, conclude={"type": "array", "items": con})
+                 test={"type": "array", "items": tst}, repair={"type": "array", "items": rep}, conclude={"type": "array", "items": con})
     return {"type": "object", "additionalProperties": False, "required": list(props), "properties": props}
 
 
@@ -484,7 +491,7 @@ def validate_step(reply, ctx: dict) -> list[str]:
     """Errors (empty = valid). ctx: new_ids, hypotheses {id: status}, exp_ids, must_assess, cf_done / cf_check (parametric experiments on the current
     design) with cf_cost, tools, tool_min {tool: min budget}, remaining, n_train, paths, actions, mem_ids (or None), first_step."""
     errs: list[str] = []
-    required = {"result_reading", "action", "new_hypotheses", "status_updates", "counterfactual", "repair", "conclude"}
+    required = {"result_reading", "action", "new_hypotheses", "status_updates", "counterfactual", "test", "repair", "conclude"}
     if ctx.get("mem_ids") is not None:
         required.add("memory_assessments")
     if not dr._exact(reply, required, "reply", errs):
@@ -574,6 +581,13 @@ def validate_step(reply, ctx: dict) -> list[str]:
                 if (p["hypothesis"], p["quantity"]) in seen:
                     errs.append(f"{w}: duplicate (hypothesis, quantity)")
                 seen.add((p["hypothesis"], p["quantity"]))
+    if action == "test" and isinstance(reply["test"], list) and len(reply["test"]) == 1:
+        t = reply["test"][0]
+        if dr._exact(t, {"purpose", "predicted_n_walking"}, "test[0]", errs):
+            _text(t["purpose"], "test[0].purpose", errs)
+            pn = t["predicted_n_walking"]
+            if isinstance(pn, bool) or not isinstance(pn, int) or not 0 <= pn <= ctx.get("n_obs", 4):
+                errs.append(f"test[0].predicted_n_walking: integer in [0, {ctx.get('n_obs', 4)}] (observation seeds)")
     if action == "repair" and isinstance(reply["repair"], list) and len(reply["repair"]) in (1, 2):
         for k, r in enumerate(reply["repair"]):
             errs += _validate_repair(r, f"repair[{k}]", ctx, usable)
@@ -775,6 +789,8 @@ class Scientist(dr.NemotronDirector):
                 d = {"n_walking": e["outcome"]["n_walking"], "n_fell": e["outcome"]["n_fell"],
                      "delta": {q: x["delta"] for q, x in e["outcome"]["quantities"].items() if x["delta"] is not None}}
                 ev.setdefault("experiments", {})[e["id"]] = d
+            elif e["kind"] == "test" and e.get("status") == "ok":
+                ev.setdefault("tests", {})[e["id"]] = {"n_walking": e["n_walking"], "n_fell": e["n_fell"]}
             elif e["kind"] == "repair" and e.get("status") == "ok":
                 ev.setdefault("repairs", {})[e["id"]] = {"budget": e["budget"], "start_walking": e["start_walking"],
                                                           "train_walking": e["train_walking"], "train_fitness": e["train_fitness"]}
@@ -801,6 +817,13 @@ class Scientist(dr.NemotronDirector):
         for e in self.experiments:
             if e["kind"] == "observe":
                 out.append(f"{e['id']} [step {e['step']}] re-observation of design {e['design_index']} (cost {e['cost']})")
+            elif e["kind"] == "test":
+                head = f"{e['id']} [step {e['step']}] 20 s stress test of design {e['design_index']}; purpose: {e['purpose']}; cost {e['cost']}"
+                if e.get("status") != "ok":
+                    out.append(head + f"; REFUSED: {e.get('refused')}")
+                else:
+                    out.append(head + f"; walked the whole 20 s on {e['n_walking']} of {e['n_obs']} seeds (you predicted "
+                                      f"{e['predicted_n_walking']}); " + "; ".join(e.get("falls") or []))
             elif e["kind"] == "counterfactual":
                 head = f"{e['id']} [step {e['step']}] counterfactual {e['change']} on design {e['design_index']}; purpose: {e['purpose']}; cost {e['cost']}"
                 if e.get("status") != "ok":
@@ -907,7 +930,13 @@ class Scientist(dr.NemotronDirector):
         lines += ["", "COSTS NOW:"]
         lines.append(f"  counterfactual: {ctx['cf_cost']} rollouts each ({100 * ctx['cf_cost'] / max(1, ctx['total']):.1f}% of the "
                      f"total budget){'' if ctx.get('cf_affordable', True) else ' - not available now'}")
+        if "test_cost" in ctx:
+            lines.append(f"  test (20 s stress test of the current best design): {ctx['test_cost']} rollouts"
+                         + ("" if "test" in ctx.get("actions", []) else " - not available now (already tested, or not affordable)"))
         lines.append("  repair minimum budgets (rollouts): " + ", ".join(f"{t}={b}" for t, b in ctx["tool_min"].items()))
+        if "conclude" in ctx.get("actions", []) and ctx["remaining"] > 0:
+            lines.append(f"  if you conclude now, {ctx['remaining']} rollouts ({100 * ctx['remaining'] / max(1, ctx['total']):.0f}% of the "
+                         f"budget) stay unused")
         lines += ["", task]
         return "\n".join(lines)
 
@@ -1101,6 +1130,26 @@ class Scientist(dr.NemotronDirector):
         self.experiments.append(ent)
         return ent
 
+    def _do_test(self, bench, step: int, t: dict, best: dict) -> dict:
+        eid = f"T{1 + sum(1 for e in self.experiments if e['kind'] == 'test')}"
+        ent = {"id": eid, "kind": "test", "step": step, "purpose": t["purpose"], "design_index": best["index"],
+               "predicted_n_walking": int(t["predicted_n_walking"]), "n_obs": bench.n_obs}
+        reg = self._event("prediction_registered", step, experiment=eid, predicted_n_walking=ent["predicted_n_walking"])
+        ent["registered_seq"] = reg["seq"]
+        before = bench.remaining
+        ex = self._event("bench_call", step, call="stress_test", experiment=eid)
+        ent["executed_seq"] = ex["seq"]
+        res = bench.stress_test()
+        ent["cost"] = before - bench.remaining
+        if not res.get("ok"):
+            ent.update(status="refused", refused=res.get("refused"))
+        else:
+            o = res["observation"]
+            ent.update(status="ok", duration=res["duration"], n_walking=o.get("n_walking"), n_fell=o.get("n_fell"),
+                       falls=pdg._fall_lines(o), prediction_error=(o.get("n_walking") or 0) - ent["predicted_n_walking"])
+        self.experiments.append(ent)
+        return ent
+
     def _do_repair(self, bench, step: int, r: dict) -> dict:
         return self._do_repair_budget(bench, step, r, repair_budget(r["budget_share"], bench.remaining))
 
@@ -1153,7 +1202,10 @@ class Scientist(dr.NemotronDirector):
         # repaired design, so `conclude` is offered only once a repair has been attempted, or when no repair is affordable any more.
         # This does not force experiments: a first-step repair is allowed.
         conclude_ok = repaired or not tools_aff or not self.require_repair_before_conclude
-        actions = [a for a, ok in (("counterfactual", bool(cfs_aff)), ("repair", bool(tools_aff)), ("conclude", conclude_ok)) if ok]
+        test_ok = remaining >= 2 * bench.n_obs and hasattr(bench, "stress_test") and not any(
+            e["kind"] == "test" and e.get("design_index") == best["index"] for e in self.experiments)
+        actions = [a for a, ok in (("counterfactual", bool(cfs_aff)), ("test", test_ok), ("repair", bool(tools_aff)),
+                                   ("conclude", conclude_ok)) if ok]
         if not actions:
             actions = ["conclude"]
         nreq_left = self.max_requests - len(self.calls)
@@ -1162,7 +1214,7 @@ class Scientist(dr.NemotronDirector):
         return {"bench": bench, "best": best, "remaining": remaining, "total": int(bench.ledger()["total"]), "best_observed": observed,
                 "cf_affordable": cfs_aff, "cf_done": self._cf_done(best), "cf_check": self._cf_check(best), "cf_cost": cost,
                 "cf_cost_next": bench.n_obs, "tool_min": mins, "tools": list(mins), "actions": actions,
-                "n_train": bench.n_train}
+                "n_train": bench.n_train, "n_obs": bench.n_obs, "test_cost": 2 * bench.n_obs}
 
     def _loop(self, bench, total: int) -> None:
         fails = 0
@@ -1221,6 +1273,10 @@ class Scientist(dr.NemotronDirector):
                 ents = [self._do_counterfactual(bench, step, c, ctx["best"]) for c in reply["counterfactual"]]
                 srec["experiment"] = ents[-1]["id"]
                 srec["experiments"] = [e["id"] for e in ents]
+            elif reply["action"] == "test":
+                ent = self._do_test(bench, step, reply["test"][0], ctx["best"])
+                srec["experiment"] = ent["id"]
+                srec["experiments"] = [ent["id"]]
             elif reply["action"] == "repair":
                 rem0 = bench.remaining      # both shares are fractions of the rollouts remaining at this step
                 ents = []

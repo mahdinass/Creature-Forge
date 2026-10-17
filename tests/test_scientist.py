@@ -57,9 +57,9 @@ def hyp(i, cat="short_support_base", ev=("robot.body.foot_length", "observation.
             "category": cat, "evidence": list(ev), "confidence": 0.5}
 
 
-def reply(action, *, new=(), status=(), cf=(), rep=(), con=(), mem=None, reading="the robot falls after about 2 s"):
+def reply(action, *, new=(), status=(), cf=(), rep=(), con=(), mem=None, test=(), reading="the robot falls after about 2 s"):
     r = {"result_reading": reading, "status_updates": list(status), "new_hypotheses": list(new), "action": action,
-         "counterfactual": list(cf), "repair": list(rep), "conclude": list(con)}
+         "counterfactual": list(cf), "test": list(test), "repair": list(rep), "conclude": list(con)}
     if mem is not None:
         r["memory_assessments"] = list(mem)
     return r
@@ -440,6 +440,39 @@ class V2(unittest.TestCase):
         self.assertIn("pitch_ref = ", um)
         self.assertIn("% of the total budget", um)
         self.assertNotIn("Experiments are expensive", rec["system_prompt"])
+
+
+class StressTest(unittest.TestCase):
+    """v2.2: a 20 s stress test of the current best design, prediction registered first, once per design."""
+
+    def test_runs_after_repair_costs_2n_obs_and_is_shown(self):
+        t = reply("test", status=[upd("H1", "supported", ["E1"])], test=[{"purpose": "check robustness at 20 s", "predicted_n_walking": 3}])
+        rep_ = reply("repair", status=[upd("H1", "supported", ["E1"])],
+                     rep=[{"tool": "foot_length", "budget_share": 0.5, "hypothesis": "H1", "predicted_n_walking": 4}])
+        log = []
+        b = make_bench(log=log)
+        rec = make([S1, rep_, t, S4], log=log).investigate(b, VIEW)
+        self.assertEqual([s["action"] for s in rec["steps"]], ["counterfactual", "repair", "test", "conclude"])
+        t1 = next(e for e in rec["experiments"] if e["kind"] == "test")
+        self.assertEqual((t1["cost"], t1["n_obs"], t1["predicted_n_walking"]), (8, 4, 3))
+        self.assertEqual(t1["design_index"], rec["submitted_design"]["index"])
+        self.assertLess(t1["registered_seq"], t1["executed_seq"])
+        um = rec["steps"][3]["user_message"]
+        self.assertIn("20 s stress test", um)
+        self.assertIn("stay unused", um)
+        self.assertIn("test:", rec["system_prompt"])
+
+    def test_once_per_design(self):
+        t = reply("test", test=[{"purpose": "robustness", "predicted_n_walking": 0}], new=[hyp("H1")])
+        rec = make([t, t, t, S4]).investigate(make_bench(), VIEW)
+        self.assertEqual(rec["steps"][0]["status"], "ok")
+        self.assertNotIn("test", rec["steps"][1]["allowed_actions"])        # the same (initial) design was already tested
+
+    def test_prediction_range_validated(self):
+        ctx = dict(SchemaAndValidation.CTX, n_obs=4)
+        ctx["actions"] = ["test", "conclude"]
+        r = reply("test", new=[hyp("H1")], test=[{"purpose": "x", "predicted_n_walking": 9}])
+        self.assertTrue(any("predicted_n_walking" in e for e in sc.validate_step(r, ctx)))
 
 
 if __name__ == "__main__":

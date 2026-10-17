@@ -225,6 +225,30 @@ class Workbench:
         self._obs_cache[idx] = out
         return {"ok": True, "design_index": idx, "observation": out}
 
+    STRESS_DURATION = 20.0
+
+    def stress_test(self) -> dict:
+        """The current best design on the obs seeds for 20 s (twice the training horizon) under the same variation: a visible
+        stand-in for the long-horizon part of the hidden verification. Cost 2 x n_obs rollout-equivalents (a 20 s rollout = two
+        10 s ones). Added 2026-10-17 (pilot3/4: the scientist concluded on 4/4 training walks with most of the budget unused and
+        failed the 20 s confirmation)."""
+        cost = 2 * self.n_obs
+        if self.remaining < cost:
+            return self._refuse("stress_test", f"needs {cost} rollout-equivalents, {self.remaining} remain")
+        idx = self._best
+        d = self.designs[idx]
+        self._spend(cost, "stress_test", {"design": idx, "duration": self.STRESS_DURATION})
+        fn = self._observe_fn
+        if fn is None:
+            from .physics_probe import observe as fn
+        try:
+            out = fn(d["body"], list(d["vector"]), list(self.obs_seeds), variation=self.variation, duration=self.STRESS_DURATION,
+                     pool=self.pool)
+        except Exception:
+            self.budget.refund(cost, "stress_test", {"design": idx, "reason": "error"})
+            raise
+        return {"ok": True, "design_index": idx, "observation": out, "duration": self.STRESS_DURATION, "cost": cost}
+
     def _settle(self, charged: int, out: dict, item: str, idx) -> None:
         used = out.get("rollouts") if isinstance(out, dict) else None
         if isinstance(used, int) and not isinstance(used, bool) and 0 <= used < charged:
