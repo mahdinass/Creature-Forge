@@ -278,3 +278,12 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - M1a (registered `563f41c`, results `2274e80`, development data): 4/4 dev creatures fail; similarity transfer never helps; 4k-rollout CMA reaches walking 0.38-1.00, 1 FULL_RECOVERY (weak-slippery, joint); budget-limited; overfitting signs. `experiments/walk_recovery/oracle/REPORT_M1A.md`.
 - Incident: a slot sync deleted partial M1a results; re-run deterministically (INCIDENTS 2026-10-16). Outputs now go to git-ignored `artifacts/`.
 - Spend: infra $5.00 of $10 (VM STOPPED); inference unchanged ($0.55). Next: S1 (full M1, 12-creature dev panel) awaits owner approval.
+
+## 2026-10-17 - Walking-recovery development stages complete (all development data; reports under experiments/walk_recovery/)
+- M1 (G1 PROCEED): foot-placement controller + body co-design make 6/12 failing dev creatures walk (full_recovery_v1).
+- S2/S2b: Nemotron director v1 2/12, v2 4/12 at 2k vs FIX 4, RAND 7, CMA-joint 3 (noise-dominated; AI under-uses body co-design; Ultra fails G2).
+- L2 (G3 FAIL): learned surrogate warm starts no better than a reused medoid of past solutions.
+- Iteration 3 / S4a (G4 FAIL): closed-loop control-law invention (mechanism DSL, director v3) 4/24 (iterative), 5/24 (one-shot) vs fix15 11/24; the loop works (self-stops, revisions) but does not help; invented laws mostly redundant stance torques.
+- New product feature: Studio "Recover walking" (backend + frontend, accept only FULL_RECOVERY).
+- Spend: infra $17.65 of $35 (owner-approved); inference ~$3.3 of $15. VMs stopped.
+- Next: owner decision on the S3 confirmatory freeze (`experiments/walk_recovery/confirmatory/protocol.json`, DRAFT).

@@ -178,3 +178,9 @@ and S2. Commits: authored Mahdi, NO AI trailers.
   `forge_cloud.py spend` shows both profiles against the combined $20 cap.
 - **Next:** analyse S2 once (R* rule, primary comparator rule, G2) -> L2 experience pilot (`experience.py` in progress) -> G3 ->
   confirmatory protocol freeze (target 10-23) -> S3 approval -> confirmatory run -> demo take -> submission docs.
+
+## 2026-10-17 later — development finished; S3 awaiting the owner's freeze approval
+- Reports: oracle/REPORT_M1A.md, REPORT_M1.md; dev_pilot/REPORT_S2.md, REPORT_S2B.md; experience/REPORT_L2.md; mech_pilot/REPORT_S4A.md.
+- Authoritative inference ledger: batch VM `~/dev/ledger/inference_ledger.jsonl` (backup `artifacts/vm/ledger_backup/inference_ledger_20261017c_batch.jsonl`, 1424 lines); copy it to the main VM before any live call there.
+- Both VMs STOPPED. Infra cap $35 (forge_cloud SPEND_CAP_USD). Batch VM (CF_VM=batch) kept for S3; delete after S3.
+- S3: run `scripts/walk_oracle.py --make-panel` with the frozen protocol, then `scripts/walk_s2_pilot.py` shards (methods from the protocol), then `scripts/walk_confirm_analysis.py` ONCE.
