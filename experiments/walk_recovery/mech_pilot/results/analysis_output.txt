@@ -1,0 +1,46 @@
+144 units, 24 creatures, methods ['fix15', 'generic', 'randmech', 'expert', 'ai_1shot', 'ai_iter']; unit errors []; accounting violations []
+
+| method | FULL | PARTIAL | NOT | other | mean validation walking | mean budget used |
+|---|---|---|---|---|---|---|
+| fix15 | 11 | 11 | 2 | 0 | 0.78 | 0.99 |
+| generic | 5 | 12 | 7 | 0 | 0.54 | 0.99 |
+| randmech | 6 | 16 | 2 | 0 | 0.69 | 1.00 |
+| expert | 9 | 12 | 3 | 0 | 0.75 | 0.98 |
+| ai_1shot | 5 | 13 | 6 | 0 | 0.55 | 0.93 |
+| ai_iter | 4 | 12 | 8 | 0 | 0.49 | 0.99 |
+
+| creature | fix15 | generic | randmech | expert | ai_1shot | ai_iter |
+|---|---|---|---|---|---|---|
+| 0000 | NOT_ 0.00 | NOT_ 0.00 | PART 0.00 | NOT_ 0.00 | NOT_ 0.00 | FULL 0.88 |
+| 0001 | FULL 0.96 | NOT_ 0.00 | PART 0.00 | FULL 0.88 | NOT_ 0.00 | NOT_ 0.00 |
+| 0002 | PART 0.71 | PART 0.75 | PART 0.75 | PART 0.71 | PART 0.62 | NOT_ 0.00 |
+| 0003 | NOT_ 0.46 | NOT_ 0.46 | PART 0.88 | NOT_ 0.00 | NOT_ 0.00 | NOT_ 0.42 |
+| 0004 | FULL 1.00 | PART 0.96 | PART 0.88 | PART 0.96 | PART 0.75 | NOT_ 0.00 |
+| 0005 | FULL 0.88 | PART 0.79 | FULL 0.88 | FULL 0.83 | NOT_ 0.00 | NOT_ 0.00 |
+| 0006 | PART 0.62 | PART 0.62 | PART 0.67 | PART 0.62 | PART 0.62 | PART 0.62 |
+| 0007 | FULL 0.83 | NOT_ 0.00 | NOT_ 0.00 | PART 0.88 | PART 0.83 | NOT_ 0.00 |
+| 0008 | PART 0.88 | FULL 0.96 | PART 0.88 | PART 0.88 | PART 0.71 | PART 0.75 |
+| 0009 | FULL 0.83 | FULL 1.00 | NOT_ 0.00 | NOT_ 0.46 | PART 0.50 | PART 0.46 |
+| 0010 | FULL 0.92 | PART 0.00 | PART 0.88 | FULL 0.92 | PART 0.00 | PART 0.58 |
+| 0011 | PART 0.67 | FULL 0.96 | PART 0.71 | PART 0.75 | PART 0.67 | PART 0.67 |
+| 0012 | FULL 0.96 | PART 0.54 | PART 0.92 | PART 0.88 | PART 0.83 | FULL 0.83 |
+| 0013 | PART 0.79 | FULL 1.00 | FULL 0.88 | FULL 1.00 | FULL 0.83 | NOT_ 0.00 |
+| 0014 | FULL 1.00 | PART 0.92 | FULL 0.96 | FULL 0.88 | FULL 0.96 | FULL 0.96 |
+| 0015 | FULL 0.92 | FULL 0.92 | PART 0.88 | PART 0.75 | PART 0.33 | PART 0.58 |
+| 0016 | PART 0.83 | PART 0.58 | PART 0.79 | PART 0.62 | NOT_ 0.21 | PART 0.67 |
+| 0017 | FULL 0.96 | PART 0.29 | FULL 0.83 | FULL 0.96 | PART 0.79 | FULL 0.88 |
+| 0018 | PART 0.71 | NOT_ 0.38 | PART 0.67 | FULL 0.96 | FULL 0.88 | PART 0.75 |
+| 0019 | PART 0.71 | PART 0.79 | PART 0.79 | PART 0.79 | NOT_ 0.46 | NOT_ 0.58 |
+| 0020 | PART 0.79 | NOT_ 0.04 | FULL 0.96 | PART 0.71 | PART 0.67 | PART 0.67 |
+| 0021 | PART 0.75 | PART 0.79 | PART 0.79 | PART 0.71 | FULL 0.92 | PART 0.29 |
+| 0022 | FULL 0.88 | PART 0.29 | FULL 0.83 | FULL 0.88 | PART 0.67 | PART 0.67 |
+| 0023 | PART 0.79 | NOT_ 0.00 | PART 0.79 | FULL 0.92 | FULL 0.96 | PART 0.46 |
+
+G4: ai_iter 4 vs best non-AI structure arm 11 ({'fix15': 11, 'generic': 5, 'randmech': 6}) -> FAIL (needs +3); expert reference 9
+capability 1, paired: ai_iter-only 3, ai_1shot-only 4
+ai_iter: mechanism probes ok: new 42 (improved over start 40), revisions 6 (improved over the revised one 2); mean rounds 3.04; pipelines with a stop decision 23
+ai_1shot: mechanism probes ok: new 40 (improved over start 38), revisions 0 (improved over the revised one 0); mean rounds 1.00; pipelines with a stop decision 0
+ai_iter: 48 mechanisms probed; targets {'hip': 6, 'torque_hip': 13, 'torque_ankle': 25, 'ankle': 4}; legs {'swing': 6, 'stance': 24, 'both': 18}; signals {'phase': 13, 'pitch_rate': 7, 'v': 9, 'loaded': 5, 'pitch': 11, 'swing': 3, 'd': 2, 'hip': 3, 'stance': 1}; swing/both-hip laws on d or v 1; all gains near zero 6
+ai_1shot: 40 mechanisms probed; targets {'torque_hip': 13, 'torque_ankle': 17, 'hip': 7, 'ankle': 3}; legs {'stance': 26, 'both': 11, 'swing': 3}; signals {'pitch': 12, 'loaded': 5, 'phase': 17, 'v': 7, 'pitch_rate': 6, 'stance': 1, 'd': 1, 'swing': 2}; swing/both-hip laws on d or v 0; all gains near zero 2
+randmech: 96 mechanisms probed; targets {'ankle': 11, 'hip': 13, 'knee': 17, 'torque_hip': 21, 'torque_ankle': 18, 'torque_knee': 16}; legs {'swing': 31, 'stance': 25, 'both': 40}; signals {'phase': 13, 'swing': 20, 'stance': 17, 't': 16, 'd': 22, 'loaded': 16, 'ankle': 15, 'pitch_rate': 11, 'hip': 23, 'v': 19, 'knee': 16, 'pitch': 11, 'h': 15}; swing/both-hip laws on d or v 3; all gains near zero 6
+AI decisions {'ok': 134, 'invalid_after_repair': 11}; cost $0.522; calls 206
