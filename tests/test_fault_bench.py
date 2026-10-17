@@ -321,6 +321,24 @@ class InstanceTests(unittest.TestCase):
         self.assertEqual(rec["rollouts"], 8 + sum(c["used"] for c in calls) + 8 * len(fb.TOOLS))
         self.assertAlmostEqual(rec["robot"]["body"]["foot_length"], 0.104)
 
+    def test_screen_first_same_matrix_when_kept_and_early_stop_otherwise(self):
+        def cma(body, vector, space, **kw):
+            res = fake_cma()(body, vector, space, **kw)
+            if space.body_params == ("foot_length",):
+                res["best"]["body"] = {**body, "foot_length": body["foot_length"] * 1.4, "foot_length_r": body["foot_length_r"] * 1.4}
+            return res
+        walk = self.walk_fn(1, 0, per_tool=lambda b, v: 7 if b["foot_length"] > 0.12 else 1)
+        full = fb.build_instance(BASE, "short_feet", 0.5, "camp", None, budget=160, cma_fn=cma, walk_fn=walk)
+        scr = fb.build_instance(BASE, "short_feet", 0.5, "camp", None, budget=160, cma_fn=cma, walk_fn=walk, screen_first=True)
+        self.assertTrue(scr["kept"] and scr["matrix_complete"])
+        self.assertEqual(scr["repair_matrix"], full["repair_matrix"])
+        calls = []
+        rej = fb.build_instance(BASE, "short_feet", 0.5, "camp", None, cma_fn=fake_cma(calls), walk_fn=self.walk_fn(0, 3), screen_first=True)
+        self.assertFalse(rej["kept"])
+        self.assertFalse(rej["matrix_complete"])
+        self.assertEqual(list(rej["repair_matrix"]), ["foot_length"])
+        self.assertEqual(len(calls), 1)
+
     def test_build_instance_rejections(self):
         # faulty robot still walks -> not kept, no repair attempted
         calls = []

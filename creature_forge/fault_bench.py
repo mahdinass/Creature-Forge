@@ -306,12 +306,15 @@ def _tool_noise_seed(instance_id: str, tool: str) -> int:
 
 def build_instance(base: dict, fault: str, severity: float, campaign: str, pool=None, *, budget: int = DEFAULT_BUDGET,
                    n_train: int = DEFAULT_TRAIN, n_check: int = CHECK_N, tools: Sequence[str] | None = None,
-                   cma_fn: Callable | None = None, walk_fn: Callable | None = None) -> dict:
+                   cma_fn: Callable | None = None, walk_fn: Callable | None = None, screen_first: bool = False) -> dict:
     """Inject, require the faulty robot to fail, run every repair tool at budget B and measure walking on the check seeds.
 
     The record is always returned (invalid / not-failing / not-kept ones carry `valid`, `kept` and `reason`).
     repair_matrix[tool] = walking fraction on the n_check check seeds; kept = the matching tool restores walking on
-    >= 6/8 (scaled to n_check) of them."""
+    >= 6/8 (scaled to n_check) of them.
+    screen_first: run the matching tool first and stop if it does not restore walking (the instance is then not kept and its matrix
+    holds only that tool, `matrix_complete` False). Each tool has its own noise seed, so a kept instance's matrix is identical to a
+    full build. Saves about 90% of the rollouts on candidates that are not kept."""
     from . import eng_tools
     iid = instance_key(base["base_id"], fault, severity)
     seeds = instance_seeds(campaign, base["base_id"], fault, severity)
@@ -340,7 +343,12 @@ def build_instance(base: dict, fault: str, severity: float, campaign: str, pool=
         rec.update(reason=f"faulty robot still walks on {faulty['walking']}/{faulty['n']} check seeds (needs <= {max_fail})")
         return rec
     matrix, detail = {}, {}
-    for tool in (tools or list(TOOLS)):
+    order = list(tools or list(TOOLS))
+    if screen_first and MATCHING_TOOL[fault] in order:
+        order.remove(MATCHING_TOOL[fault])
+        order.insert(0, MATCHING_TOOL[fault])
+    rec["matrix_complete"] = True
+    for tool in order:
         try:
             res = eng_tools.run_repair(robot, tool, budget, seeds["train"][:n_train], _tool_noise_seed(iid, tool), pool,
                                        cma_fn=cma_fn)
@@ -354,6 +362,9 @@ def build_instance(base: dict, fault: str, severity: float, campaign: str, pool=
                         "train_walking": best["walking_count"], "train_fitness": best["mean_fitness"]}
         if not chk["errors"]:
             matrix[tool] = chk["frac"]
+        if screen_first and tool == MATCHING_TOOL[fault] and not round(matrix.get(tool, 0.0) * len(check)) >= min_ok:
+            rec["matrix_complete"] = len(order) == 1
+            break
     rec["repair_matrix"] = matrix
     rec["repair_detail"] = detail
     rec["ranking"] = sorted(matrix, key=lambda t: (-matrix[t], t))

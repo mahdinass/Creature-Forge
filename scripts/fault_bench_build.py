@@ -54,6 +54,7 @@ def main(argv=None) -> int:
     ap.add_argument("--n-check", type=int, default=fb.CHECK_N)
     ap.add_argument("--rollout-cap", type=int, default=0, help="stop starting new instances once this many rollouts were used (0 = none)")
     ap.add_argument("--bases", nargs="*", help="restrict to these base ids")
+    ap.add_argument("--screen-first", action="store_true", help="matching tool first; skip the other tools if it fails (kept matrices unchanged)")
     ap.add_argument("--max-bases", type=int, default=0)
     a = ap.parse_args(argv)
     unknown = [f for f in a.faults if f not in fb.FAULTS]
@@ -75,7 +76,8 @@ def main(argv=None) -> int:
             if a.rollout_cap and used >= a.rollout_cap:
                 print(f"rollout cap {a.rollout_cap} reached after {n} instances", flush=True)
                 break
-            rec = fb.build_instance(b, f, s, a.campaign, pool, budget=a.budget, n_train=a.n_train, n_check=a.n_check)
+            rec = fb.build_instance(b, f, s, a.campaign, pool, budget=a.budget, n_train=a.n_train, n_check=a.n_check,
+                                    screen_first=a.screen_first)
             rec["split"] = a.split
             used += rec["rollouts"]
             out.write(json.dumps(rec, sort_keys=True) + "\n")
