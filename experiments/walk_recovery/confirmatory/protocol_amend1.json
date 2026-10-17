@@ -86,7 +86,7 @@
   "itt_and_errors": "an AI pipeline whose director returns nothing valid keeps the start candidate (not recovered); a unit error is recorded and counted as not recovered in the primary analysis, and listed; no unit is rerun; one analysis after all units completed",
   "power": "48 pairs; an exact one-sided McNemar detects e.g. 7 vs 1 (p = 0.035) or 9 vs 2 (p = 0.033) discordant pairs; a null result is a valid outcome and will be reported as such",
   "frozen_components": {
-    "code_commit": "<set in the amendment commit>",
+    "code_commit": "700924f (code; the next commit only records this hash)",
     "director_prompt": "director.build_system_prompt('v2', order_seed) with the recorded order seed per pipeline",
     "model_config": "experiments/forge_loop/model_config.json default profile",
     "analysis_script": "scripts/walk_confirm_analysis.py at bfca67d",
