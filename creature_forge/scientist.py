@@ -249,7 +249,8 @@ def build_system_prompt(mode: str = "iterative", order_seed: int | None = None, 
             "(shown in each message) or it is refused. A repair that improves the training result (more walking seeds, then more "
             "surviving seeds, then fitness) becomes the new current best design. A repair action may contain one or two repairs, run in "
             "order; their budget_shares are fractions of the rollouts remaining at that step and must sum to at most 1. Tools:", *tool_lines,
-            "- conclude: stop at any time. The design submitted is always the best training design found so far (\"best\").", "",
+            "- conclude: stop. Available once at least one repair has been attempted (or when no repair is affordable any more). The "
+            "design submitted is always the best training design found so far (\"best\").", "",
             "Experiments are expensive: every rollout spent on experiments is not available for repair. Verification of the submitted "
             "design is independent, uses different seeds and is hidden from you; training walking counts can overstate it.", "",
             "PHYSICS QUANTITIES. Sign conventions: pitch and pitch_rate are positive for forward lean; angmom_norm is positive for forward "
@@ -574,7 +575,8 @@ class Scientist(dr.NemotronDirector):
                  fixture: Sequence | None = None, max_steps: int = MAX_STEPS, max_requests: int = MAX_REQUESTS,
                  max_total_tokens: int = 400_000, config=None, order_seed: int | None = None,
                  reference_features: dict | None = None, show_controller: bool = True, event_hook=None,
-                 min_budget_fn=None):
+                 min_budget_fn=None, require_repair_before_conclude: bool = True):
+        self.require_repair_before_conclude = bool(require_repair_before_conclude)
         if mode not in MODES:
             raise ValueError(f"mode must be one of {MODES}, got {mode!r}")
         src = source or ("scripted" if fixture is not None or transport is not None else "live")
@@ -963,7 +965,14 @@ class Scientist(dr.NemotronDirector):
         cfs_aff = [c for c in cfs if remaining >= cost]
         mins = self._tool_mins(bench)
         tools_aff = {t: b for t, b in mins.items() if b <= remaining}
-        actions = [a for a, ok in (("counterfactual", bool(cfs_aff)), ("repair", bool(tools_aff))) if ok] + ["conclude"]
+        repaired = any(e["kind"] == "repair" for e in self.experiments)
+        # Workflow rule (2026-10-17, after the live smoke where the model concluded with a diagnosis at step 1): the deliverable is a
+        # repaired design, so `conclude` is offered only once a repair has been attempted, or when no repair is affordable any more.
+        # This does not force experiments: a first-step repair is allowed.
+        conclude_ok = repaired or not tools_aff or not self.require_repair_before_conclude
+        actions = [a for a, ok in (("counterfactual", bool(cfs_aff)), ("repair", bool(tools_aff)), ("conclude", conclude_ok)) if ok]
+        if not actions:
+            actions = ["conclude"]
         nreq_left = self.max_requests - len(self.calls)
         if step >= self.max_steps or nreq_left <= 2:       # the last step may only conclude (keeps a request for its repair call)
             actions = ["conclude"]

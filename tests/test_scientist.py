@@ -86,6 +86,7 @@ def make(fixture, mode="iterative", **kw):
     log = kw.pop("log", None)
     hook = (lambda ev: log.append("event:" + ev["type"])) if log is not None else None
     return sc.Scientist(mode, fixture=json.loads(json.dumps(fixture)), reference_features=REF, event_hook=hook,
+                        require_repair_before_conclude=kw.pop('require_repair_before_conclude', False),
                         order_seed=kw.pop("order_seed", 5), **kw)
 
 
@@ -255,6 +256,13 @@ class Loop(unittest.TestCase):
         rec = s.investigate(bench, VIEW)
         self.assertEqual(rec["final"]["diagnosis_category"], "unresolved")
         self.assertEqual(bench.ledger()["used"], 4)
+
+    def test_conclude_not_offered_before_a_repair_when_rule_on(self):
+        con = [{"diagnosis_category": "unresolved", "explanation": "no idea", "confidence": 0.1, "submit": "best"}]
+        s = make([reply("conclude", new=[hyp("H1")], con=con)] * 4, require_repair_before_conclude=True)
+        rec = s.investigate(make_bench(), VIEW)
+        self.assertNotEqual(rec["final"].get("ended_by"), "concluded")      # a first-step conclude is rejected by the workflow rule
+        self.assertIsNone(rec["final"]["diagnosis_category"])
 
 
 class NoLeakage(unittest.TestCase):
