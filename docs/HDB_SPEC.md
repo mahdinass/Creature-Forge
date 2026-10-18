@@ -4,7 +4,7 @@ Status: **FROZEN 2026-10-19 (bench definition; code at commit `251765b`)**, afte
 (`experiments/causal_engineer/dev/hdb/IDENTIFIABILITY_v2_multiclass.md`: 282/302 dev instances identified with all
 instruments; observation alone 245, + condition tests 270). The owner's confirmation of the threshold-relative severity
 definition (§3) is pending: a change would be a dated amendment before any registered run.
-Hashes at the freeze:
+Hashes at the freeze (SHA-256 of the committed blobs at that commit, LF line endings: `git show <commit>:<path> | sha256sum`):
 - `creature_forge/hdb_bench.py` sha256 `7bd810cf9b843ef9fa9b84f73f7f03ae55f91878030a2acbd85446845a64af05`
 - `creature_forge/hdb_heldout.py` sha256 `3875de597cfbcb8dd71cd4fae8ddc533d8e0cdeb2d23492174fc8cfec79f1077`
 - `creature_forge/hidden_plant.py` sha256 `91c26fd93fcb303e877ff5ee15ee62b7543077b2f549aae0875bad9e2773b7c6`
