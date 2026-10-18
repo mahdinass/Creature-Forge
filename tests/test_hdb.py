@@ -105,3 +105,27 @@ class Engine(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Sealing(unittest.TestCase):
+    AGENT_FACING = ("belief_engine", "scientist_has", "hdb_policies", "hdb_workbench", "hidden_plant", "hdb_bench")
+
+    def test_agent_facing_code_never_references_heldout_families(self):
+        import os
+        from creature_forge import hdb_heldout
+        root = os.path.dirname(hdb_heldout.__file__)
+        for mod in self.AGENT_FACING:
+            src = open(os.path.join(root, mod + ".py"), encoding="utf-8").read()
+            self.assertNotIn("hdb_heldout", src, mod)
+            for fam in hdb_heldout.HELDOUT_FAMILY_SPECS:
+                self.assertNotIn(fam, src, f"{mod} mentions {fam}")
+
+    def test_all_family_variants_make_valid_deviations(self):
+        from creature_forge import hdb_heldout
+        base = fb.load_bases("dev")[0]
+        specs = {**hb.FAMILY_SPECS, **hdb_heldout.HELDOUT_FAMILY_SPECS}
+        for fam, spec in specs.items():
+            for var in spec["variants"]:
+                smax = hb.variant_max(base, fam, var) if fam in hb.FAMILY_SPECS else spec["variants"][var]["max"]
+                for s in (0.0, 0.5 * smax, smax):
+                    hp.validate_deviation(spec["variants"][var]["make"](s, base))

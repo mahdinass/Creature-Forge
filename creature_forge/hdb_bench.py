@@ -91,6 +91,28 @@ FAMILY_SPECS: dict[str, dict] = {
     "short_feet": {"pair": "T4", "split": "dev", "taxonomy": "geometry", "variants": {
         "": {"make": _strength_dev("segment_length", "feet", "factor", lambda s, b: round(math.exp(-s), 6)),
              "max": None}}},
+    # T1 balance instability (dev member; its twin, sensor latency, is held out): the balance feedback gains degrade.
+    "feedback_gain_loss": {"pair": "T1", "split": "dev", "taxonomy": "control", "variants": {
+        "": {"make": _strength_dev("gain_scale", "balance_feedback", "factor", lambda s, b: round(math.exp(-s), 6)),
+             "max": math.log(1 / 0.02)}}},
+    # T3 weakness (dev member; its twin, joint damping wear, is held out): every actuator delivers less torque.
+    "actuator_weakness": {"pair": "T3", "split": "dev", "taxonomy": "actuation", "variants": {
+        "": {"make": _strength_dev("actuator_strength", "all", "factor", lambda s, b: round(math.exp(-s), 6)),
+             "max": math.log(1 / 0.05)}}},
+    # singles (dev)
+    "one_side_weakness": {"pair": "S1", "split": "dev", "taxonomy": "actuation", "variants": {
+        "left": {"make": _strength_dev("actuator_strength", "left", "factor", lambda s, b: round(math.exp(-s), 6)),
+                 "max": math.log(1 / 0.05)},
+        "right": {"make": _strength_dev("actuator_strength", "right", "factor", lambda s, b: round(math.exp(-s), 6)),
+                  "max": math.log(1 / 0.05)}}},
+    "clock_fault": {"pair": "S2", "split": "dev", "taxonomy": "control timing", "variants": {
+        "fast": {"make": _strength_dev("clock_scale", "clock", "factor", lambda s, b: round(math.exp(s), 6)),
+                 "max": math.log(2.5)},
+        "slow": {"make": _strength_dev("clock_scale", "clock", "factor", lambda s, b: round(math.exp(-s), 6)),
+                 "max": math.log(1 / 0.4)}}},
+    "heavy_torso": {"pair": "S3", "split": "dev", "taxonomy": "mass properties", "variants": {
+        "": {"make": _strength_dev("torso_mass", "torso", "factor", lambda s, b: round(math.exp(s), 6)),
+             "max": math.log(4.0)}}},
 }
 
 
