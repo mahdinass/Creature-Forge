@@ -73,6 +73,36 @@ def mkv(paths) -> str:
     return "\n".join(L) + "\n"
 
 
+def arms(paths) -> str:
+    """Per-arm FULL counts and paired contrasts on shared eligible instances (development only)."""
+    rows = [r for r in _rows(paths) if "verification" in r]
+    by = defaultdict(dict)
+    for r in rows:
+        by[r["instance_id"]][r.get("arm", "A1")] = r
+    names = sorted({a for v in by.values() for a in v})
+    L = ["# Arms on the Hidden-Damage Bench (dev; development only, no claim)", "",
+         "| arm | n | FULL | PARTIAL | NOT | mean plant used | mean twin used |", "|---|---|---|---|---|---|---|"]
+    for a in names:
+        ar = [v[a] for v in by.values() if a in v]
+        st = Counter(x["verification"]["status"] for x in ar)
+        led = [x.get("ledger") or (x.get("engine") or {}).get("ledger") or {} for x in ar]
+        pu = sum(l.get("used", 0) for l in led) / max(1, len(led))
+        tu = sum((l.get("twin") or {}).get("used", 0) for l in led) / max(1, len(led))
+        L.append(f"| {a} | {len(ar)} | {st['FULL_RECOVERY']} | {st['PARTIAL_IMPROVEMENT']} | {st['NOT_RECOVERED']} | {pu:.0f} | {tu:.0f} |")
+    L += ["", "Paired contrasts on FULL (exact one-sided McNemar, first arm better; development only):", ""]
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            pairs = [(v[a]["verification"]["status"] == "FULL_RECOVERY", v[b]["verification"]["status"] == "FULL_RECOVERY")
+                     for v in by.values() if a in v and b in v]
+            w = sum(x and not y for x, y in pairs)
+            l = sum(y and not x for x, y in pairs)
+            L.append(f"- {a} vs {b}: n {len(pairs)}, {a} only {w}, {b} only {l}, p({a}>{b}) = {exact_mcnemar_one_sided(w, l):.3f}, "
+                     f"p({b}>{a}) = {exact_mcnemar_one_sided(l, w):.3f}")
+    return "
+".join(L) + "
+"
+
+
 if __name__ == "__main__":
     kind, paths = sys.argv[1], sys.argv[2:]
-    print({"vs": vs, "mkv": mkv}[kind](paths))
+    print({"vs": vs, "mkv": mkv, "arms": arms}[kind](paths))
