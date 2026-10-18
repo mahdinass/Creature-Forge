@@ -48,6 +48,12 @@ def measure(job) -> dict:
     rows = hp.walk_seeds(inst["plant"], design["body"], design["vector"], s["robust"][:16])
     w = [1 if r.get("ok") and r["walking"] else 0 for r in rows]
     ev["robust8"], ev["robust16"] = int(sum(w[:8])), int(sum(w))
+    # forward progress on the same robust seeds, candidate and faulty nominal design (verdict_v1 compares displacement)
+    base = hp.walk_seeds(inst["plant"], inst["robot"]["body"], inst["robot"]["vector"], s["robust"][:16])
+    disp = lambda rr: [float(r.get("forward_disp_upright") or 0.0) if r.get("ok") else 0.0 for r in rr]  # noqa: E731
+    ev["disp16_median"] = float(np.median(disp(rows)))
+    ev["disp16_faulty_median"] = float(np.median(disp(base)))
+    ev["disp16_paired_gain_median"] = float(np.median(np.array(disp(rows)) - np.array(disp(base))))
     ev["twin8"] = _walk({"deviation": map_dev}, design, s["twin"][:8]) if map_dev is not None else None
     ver = hb.verify(inst, design)
     return {**meta, **ev, "status": ver["status"], "label": int(ver["status"] == "FULL_RECOVERY")}
