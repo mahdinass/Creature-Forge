@@ -186,3 +186,9 @@ Rules:
   - A1 vs A0, paired: 19 vs 8, one-sided p = 0.026 (development; the engine was tuned on these instances).
   - The stopping variants are within 1–4 discordant pairs of each other.
   - Record: `experiments/causal_engineer/dev/hdb/ARMS_dev_engine_v4.md`.
+- **Engine v5 + calibrated stopping (A1c5), dev, 113 instances.**
+  - FULL 44 (39 %), against A0 28 (25 %): paired 24 vs 8, one-sided p = 0.004.
+  - vs A1c on v4: 8 vs 2, p = 0.055 (the twin-CMA tool screen).
+  - Twin use 1,968 of 2,800 on average; plant use 596.
+  - Development only (engine and stopping map were tuned on these instances). Record:
+    `experiments/causal_engineer/dev/hdb/ARMS_dev_engine_v4_v5.md`.
