@@ -91,6 +91,15 @@ def tolerance_draws(k: int, seed: int) -> list[list[dict]]:
     return out
 
 
+def provisional_accept(ev: dict) -> bool:
+    """Development stop rule until the calibrated mapping exists: 15/16 on the robust seeds."""
+    return ev.get("robust16") is not None and ev["robust16"] >= 15
+
+
+def SPEND_ALL(ev: dict) -> bool:          # noqa: N802 - arm A1f: never accept early, spend the budget, select by evidence
+    return False
+
+
 # ---------------------------------------------------------------------------------------------------------
 # features and likelihood
 # ---------------------------------------------------------------------------------------------------------
@@ -569,12 +578,15 @@ class Episode:
         return [{"deviation": hyps[i % len(hyps)][0].deviation + tol[i]} for i in range(k)]
 
     def robust_repair(self, *, twin_budget: int = 800, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
-                      tool_order: list[str] | None = None, engineer=None) -> dict:
+                      tool_order: list[str] | None = None, engineer=None, accept_fn=None) -> dict:
         """Posterior-robust repair (v2): (1) ensemble-robust twin optimisation of the first tool as a warm start, checked on the
         plant; (2) empirical plant optimisation from it with most of the remaining plant budget, chained over two tools; (3) the
         design with the best robustness evidence is submitted. Provisional stop rule (dev): accept on 15/16 robust seeds (the
         calibrated mapping replaces it before registration).
-        `engineer(state, ranking) -> {"tool_order": [...], ...}` (optional) may reorder the tools after the twin screen."""
+        `engineer(state, ranking) -> {"tool_order": [...], ...}` (optional) may reorder the tools after the twin screen.
+        `accept_fn(evidence) -> bool` decides early acceptance from policy-visible evidence {"robust8", "robust16", "twin_walking",
+        "train_walking", "remaining"}; default: provisional 15/16 on the robust seeds; `SPEND_ALL` never accepts early (arm A1f)."""
+        accept_fn = accept_fn or provisional_accept
         post = self.posterior()
         hyps, mass = [], 0.0
         for p, w in post:
@@ -614,7 +626,9 @@ class Episode:
             if w is not None and w >= accept and self.b.remaining >= 16:
                 w16 = check(cur, 16)
                 log[-1]["check16"] = w16
-                if w16 is not None and w16 >= 15:
+                ev = {"robust8": w, "robust16": w16, "twin_walking": int(best["walking_count"]), "train_walking": None,
+                      "remaining": self.b.remaining}
+                if w16 is not None and accept_fn(ev):
                     return {"accepted": True, "design": cur, "log": log}
         # 2) empirical plant optimisation from the warm start with most of the remaining plant budget, chained over the tools
         reserve = 16
@@ -634,7 +648,9 @@ class Episode:
             w16 = check(cur, 16) if self.b.remaining >= 16 else None
             log.append({"step": "plant", "tool": tool, "budget": budget, "design": cur,
                         "train_walking": rep["best"]["train_walking"], "check16": w16})
-            if w16 is not None and w16 >= 15:
+            ev = {"robust8": None, "robust16": w16, "twin_walking": None, "train_walking": rep["best"]["train_walking"],
+                  "remaining": self.b.remaining}
+            if w16 is not None and accept_fn(ev):
                 return {"accepted": True, "design": cur, "log": log}
         # 3) submit the design with the best robustness evidence (walking fraction on its largest check)
         if checked:
