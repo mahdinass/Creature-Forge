@@ -60,11 +60,28 @@ def severities(family: str, which: str, v2: bool = False) -> list[int]:
     return sorted(set(out))
 
 
+def run_a0(inst: dict, bench, pool, t0) -> dict:
+    from creature_forge import hdb_policies as pol
+    info = pol.generic_exhaustive(bench)
+    design = bench.best_design()
+    ver = hb.verify(inst, {"body": design["body"], "vector": design["vector"]}, pool=pool)
+    return jsonable({
+        "version": "hdb_vs_v1", "instance_id": inst["instance_id"], "family": inst["family"], "pair": inst["pair"],
+        "severity": inst["severity"], "bench": inst["version"], "strength": inst.get("strength"), "mult": inst.get("mult"),
+        "provenance": "NO_AI", "arm": "A0", "check": inst["check"], "policy": info,
+        "verification": {"status": ver["status"], "walking_frac": ver["validation"]["walking_frac"], "reasons": ver["reasons"],
+                         "rollouts": ver["rollouts"]},
+        "ledger": bench.ledger(), "designs": [{k: d[k] for k in ("index", "source", "body", "vector")} for d in bench.designs],
+        "submitted": design["index"], "wall_s": time.perf_counter() - t0})
+
+
 def run_one(inst: dict, pool, a) -> dict:
     t0 = time.perf_counter()
     view = hb.policy_view(inst)
     bench = HDBWorkbench(view, inst["plant"], total_budget=a.budget, twin_budget=a.twin_budget, pool=pool,
                          noise_seed=int.from_bytes(inst["instance_id"].encode()[:4], "big") % (2 ** 31))
+    if a.arm == "A0":
+        return run_a0(inst, bench, pool, t0)
     proposer, nem = (mock_proposer if a.proposer == "mock" else None), None
     if a.arm in ARM_ROLES:
         from creature_forge import scientist_has as sh
@@ -79,7 +96,8 @@ def run_one(inst: dict, pool, a) -> dict:
     ep = be.Episode(bench, proposer=proposer, use_generic=not a.no_generic, max_alive=a.max_alive, generic_kinds=kinds)
     diag = ep.diagnose(max_experiments=a.max_experiments, choose=nem.choose if nem and "choose" in nem.roles else None)
     rep = ep.robust_repair(twin_budget=a.twin_repair, plant_budget=a.plant_repair,
-                           engineer=nem.engineer if nem and "engineer" in nem.roles else None)
+                           engineer=nem.engineer if nem and "engineer" in nem.roles else None,
+                           accept_fn=be.SPEND_ALL if a.arm == "A1f" else None)
     design = bench.best_design()
     ver = hb.verify(inst, {"body": design["body"], "vector": design["vector"]}, pool=pool)
     inj = [list(x) for x in hb.mechanism_signature(inst)]
@@ -113,7 +131,7 @@ def main() -> None:
     ap.add_argument("--max-alive", type=int, default=12)
     ap.add_argument("--max-experiments", type=int, default=6)
     ap.add_argument("--proposer", choices=["mock"], default=None)
-    ap.add_argument("--arm", choices=["A1", *ARM_ROLES], default="A1")
+    ap.add_argument("--arm", choices=["A0", "A1", "A1f", *ARM_ROLES], default="A1")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
     ap.add_argument("--no-generic", action="store_true")
     ap.add_argument("--smoke", action="store_true")
