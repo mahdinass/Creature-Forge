@@ -41,6 +41,9 @@ def mock_proposer(state: dict) -> list:
     return out
 
 
+ARM_ROLES = {"A3h": ("propose",), "A3hx": ("propose", "choose"), "A3": ("propose", "choose", "engineer")}
+
+
 def severities(family: str, which: str) -> list[int]:
     n = hb.severity_count(family)
     pick = {"mid": [n // 2], "max": [n - 1], "min": [0], "all": list(range(n))}
@@ -55,11 +58,21 @@ def run_one(inst: dict, pool, a) -> dict:
     view = hb.policy_view(inst)
     bench = HDBWorkbench(view, inst["plant"], total_budget=a.budget, twin_budget=a.twin_budget, pool=pool,
                          noise_seed=int.from_bytes(inst["instance_id"].encode()[:4], "big") % (2 ** 31))
-    proposer = mock_proposer if a.proposer == "mock" else None
+    proposer, nem = (mock_proposer if a.proposer == "mock" else None), None
+    if a.arm in ARM_ROLES:
+        from creature_forge import scientist_has as sh
+        cfg = None
+        if a.source == "live":
+            from ce_eval import thinking_config
+            cfg = thinking_config()
+        nem = sh.HasNemotron(roles=ARM_ROLES[a.arm], source=a.source, config=cfg, design=view["robot"],
+                             investigation_id=f"has-{a.arm}-{view['robot_id']}")
+        proposer = nem.propose
     kinds = ("contact_friction", "segment_length", "sensor_bias", "payload") if a.smoke else None
     ep = be.Episode(bench, proposer=proposer, use_generic=not a.no_generic, max_alive=a.max_alive, generic_kinds=kinds)
-    diag = ep.diagnose(max_experiments=a.max_experiments)
-    rep = ep.robust_repair(twin_budget=a.twin_repair, plant_budget=a.plant_repair)
+    diag = ep.diagnose(max_experiments=a.max_experiments, choose=nem.choose if nem and "choose" in nem.roles else None)
+    rep = ep.robust_repair(twin_budget=a.twin_repair, plant_budget=a.plant_repair,
+                           engineer=nem.engineer if nem and "engineer" in nem.roles else None)
     design = bench.best_design()
     ver = hb.verify(inst, {"body": design["body"], "vector": design["vector"]}, pool=pool)
     inj = [list(x) for x in hb.mechanism_signature(inst)]
@@ -67,8 +80,10 @@ def run_one(inst: dict, pool, a) -> dict:
     mass_inj = sum(w for s, w in sp if [list(x) for x in s] == inj)
     return jsonable({
         "version": "hdb_vs_v1", "instance_id": inst["instance_id"], "family": inst["family"], "pair": inst["pair"],
-        "severity": inst["severity"], "provenance": "SCRIPTED_MOCK" if a.proposer == "mock" else "NO_AI",
-        "arm": "A1" if a.proposer is None else "A1+mock", "check": inst["check"],
+        "severity": inst["severity"],
+        "provenance": nem.provenance if nem else ("SCRIPTED_MOCK" if a.proposer == "mock" else "NO_AI"),
+        "arm": a.arm if a.proposer is None else a.arm + "+mock", "check": inst["check"],
+        "nemotron": nem.record() if nem else None,
         "injected_structure": inj, "map_structure": diag["map_structure"], "map_mass": diag["map_mass"],
         "posterior_mass_on_injected": mass_inj, "repair": rep,
         "verification": {"status": ver["status"], "walking_frac": ver["validation"]["walking_frac"], "reasons": ver["reasons"],
@@ -91,6 +106,8 @@ def main() -> None:
     ap.add_argument("--max-alive", type=int, default=12)
     ap.add_argument("--max-experiments", type=int, default=6)
     ap.add_argument("--proposer", choices=["mock"], default=None)
+    ap.add_argument("--arm", choices=["A1", *ARM_ROLES], default="A1")
+    ap.add_argument("--source", choices=["live", "scripted"], default="live")
     ap.add_argument("--no-generic", action="store_true")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--workers", type=int, default=0)
