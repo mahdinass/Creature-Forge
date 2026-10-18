@@ -1,5 +1,8 @@
 # Creature Forge — observed current project state
 
+> **Current state (2026-10-18): read `docs/RESEARCH_HANDOFF_2026-10-18.md` first.** This file is an append-only log; the
+> header and early sections below describe 2026-10-13 and are historical.
+
 Updated: 2026-10-13. Local environment audit **reported by Claude Code and relayed by project owner**; ChatGPT has not executed these checks on the Windows machine. Facts may change; always rerun the preflight.
 
 ## GitHub / implementation
@@ -350,3 +353,15 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   - infra: ledger $33.2 against a $38 cap.
   - Both VMs are STOPPED; the boot disks keep billing about $0.12/day each.
 - Open for the owner: PR #18 (CI fix) review/merge; whether to delete the batch VM; demo framing for the submission.
+
+## 2026-10-18 - Research handoff written (no experiments, no cloud cost)
+- Handoff for the next session: `docs/RESEARCH_HANDOFF_2026-10-18.md`. It covers state, research history, architecture,
+  experience levels, negative findings, infrastructure, budgets, repository operations, priorities, reproducibility, rules,
+  and a table resolving outdated statements.
+- Verified read-only:
+  - both VMs STOPPED;
+  - infra ledger $33.28 of $38;
+  - inference ledger $32.88 of $40 (real spend $23.6–25.5; $7.42 is unbilled 401 settlements);
+  - PR #17 Draft and PR #18 open, both unmerged; repo private.
+- New issue: GitHub Actions did not start the run for `192c000` ("recent account payments have failed or your spending
+  limit needs to be increased"). The owner must fix billing.

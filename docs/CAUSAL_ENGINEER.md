@@ -4,7 +4,7 @@ Branch `feature/causal-engineer` (from `feature/walk-recovery` @ `f96b9d9`). Own
 autonomous, physics-grounded AI engineering scientist. Nemotron is the reasoning brain; MuJoCo, optimisers and physics
 analysis are its instruments; independent verification stays authoritative.
 
-Budgets (verified 2026-10-17):
+Budgets (verified 2026-10-17; superseded: see `docs/RESEARCH_HANDOFF_2026-10-18.md` §8):
 - **Infra:** $26.77 of the $35 approved cap (conservative ledger). About $2 is reserved for the demo, so about $6 is
   usable: roughly 22 h on the 8-vCPU main VM, or about 3 h on the batch VM.
 - **Inference:** $3.67 of $15 (958 requests).
@@ -330,5 +330,5 @@ The memory inputs in `artifacts/mem/` must match the SHA-256 values in `protocol
   better dev ranking did not become better verified repairs on unseen robots.
 - **Invalid (AI arms):** the API key was rotated 50 minutes into the run, on the operator's advice. Every later model call
   returned HTTP 401, so C1–C4 and C5b measure the outage and are uninterpretable; they are reported as registered.
-- **Pending the owner's decision:** amendment 1, re-running only the four AI arms with the new key and the same frozen inputs
+- **Resolved 2026-10-18:** amendment 1 was approved, registered (`8fa4bd1`) and run (`db9f722`, `REPORT_AMEND1.md`). Original text: amendment 1, re-running only the four AI arms with the new key and the same frozen inputs
   (post-hoc, labelled as such). The runner now checks the key before starting and fails fast on authentication errors.

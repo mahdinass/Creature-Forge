@@ -1,5 +1,8 @@
 # RESUME CHECKPOINT — Creature Forge (written 2026-10-15 ~19:10 UTC)
 
+> **SUPERSEDED (2026-10-18).** Historical checkpoint of the Forge Loop session (2026-10-15). For the current state read
+> `docs/RESEARCH_HANDOFF_2026-10-18.md`.
+
 Read this first. **Verify each fact against Git / the VM / GitHub before acting** (commands in §9); trust files and commits
 over any conversation summary. The objective is to resume in minutes without redoing finished work.
 
