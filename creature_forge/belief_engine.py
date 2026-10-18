@@ -23,7 +23,7 @@ import numpy as np
 
 from . import hidden_plant as hp
 
-VERSION = "belief_engine_v2"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence
+VERSION = "belief_engine_v3"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence; v3: 4-level generic magnitudes, two-step refinement
 
 # per-seed summary features in the likelihood and their noise scales (provisional; calibrated on dev, frozen before comparisons)
 FEATURES = {"walking": 0.35, "time_upright": 1.5, "fall_direction": 0.7, "pitch_mean": 0.04, "com_vx_mean": 0.08,
@@ -35,17 +35,18 @@ NU = 3.0                     # Student-t degrees of freedom
 WEIGH_SIGMA = {"mass_frac": 0.025, "com_x_m": 0.008}   # weigh-test noise incl. the reality gap (torso mass +-3 %)
 
 # generic library: coarse magnitudes per kind (declared a priori from physical plausibility, identical for every arm)
-GENERIC = {
-    "segment_length": {"targets": ("feet", "legs", "shank_l", "shank_r", "thigh_l", "thigh_r"), "values": {"factor": (0.6, 0.8, 1.25)}},
-    "actuator_strength": {"targets": ("all", "left", "right", "hips", "knees", "ankles"), "values": {"factor": (0.25, 0.45, 0.7)}},
-    "joint_damping": {"targets": ("all", "left", "right", "hips", "knees", "ankles"), "values": {"factor": (5.0, 15.0, 40.0)}},
-    "torso_mass": {"targets": ("torso",), "values": {"factor": (1.4, 1.8, 2.4)}},
-    "payload": {"targets": ("torso",), "values": {"mass_frac": (0.25, 0.45), "x_m": (-0.12, 0.0, 0.12)}},
-    "contact_friction": {"targets": ("feet",), "values": {"factor": (0.15, 0.3, 0.5)}},
-    "gain_scale": {"targets": ("balance_feedback", "placement"), "values": {"factor": (0.1, 0.3, 0.6)}},
-    "sensor_delay": {"targets": ("pitch", "joints", "all"), "values": {"seconds": (0.02, 0.05, 0.09)}},
-    "sensor_bias": {"targets": ("pitch",), "values": {"rad": (-0.15, -0.07, 0.07, 0.15)}},
-    "clock_scale": {"targets": ("clock",), "values": {"factor": (0.7, 1.35, 1.7)}},
+GENERIC = {      # v3 (2026-10-18, dev): 4 log-spaced magnitudes per kind from small to large (v2 dev runs: threshold-level faults
+    # are small, e.g. payloads of 1-15 % of body mass, and the v1/v2 coarse grid could not reach them)
+    "segment_length": {"targets": ("feet", "legs", "shank_l", "shank_r", "thigh_l", "thigh_r"), "values": {"factor": (0.5, 0.7, 0.85, 1.2)}},
+    "actuator_strength": {"targets": ("all", "left", "right", "hips", "knees", "ankles"), "values": {"factor": (0.2, 0.4, 0.6, 0.8)}},
+    "joint_damping": {"targets": ("all", "left", "right", "hips", "knees", "ankles"), "values": {"factor": (3.0, 8.0, 20.0, 50.0)}},
+    "torso_mass": {"targets": ("torso",), "values": {"factor": (1.15, 1.4, 1.8, 2.4)}},
+    "payload": {"targets": ("torso",), "values": {"mass_frac": (0.04, 0.1, 0.25), "x_m": (-0.12, 0.0, 0.12)}},
+    "contact_friction": {"targets": ("feet",), "values": {"factor": (0.15, 0.3, 0.5, 0.75)}},
+    "gain_scale": {"targets": ("balance_feedback", "placement"), "values": {"factor": (0.1, 0.3, 0.6, 0.85)}},
+    "sensor_delay": {"targets": ("pitch", "joints", "all"), "values": {"seconds": (0.01, 0.03, 0.06, 0.1)}},
+    "sensor_bias": {"targets": ("pitch",), "values": {"rad": (-0.3, -0.15, -0.07, -0.03, 0.03, 0.07, 0.15, 0.3)}},
+    "clock_scale": {"targets": ("clock",), "values": {"factor": (0.6, 0.8, 1.25, 1.6)}},
 }
 # candidate plant experiments (generic): design-parameter counterfactuals (one level each way) plus the condition tests
 CANDIDATE_CFS = ("pitch_ref@+0.1R", "pitch_ref@-0.1R", "hip_bias@+0.1R", "hip_bias@-0.1R", "foot_length@x1.5",
@@ -207,10 +208,10 @@ def neighbours(dev: list, step: float = 0.35) -> list[list[dict]]:
         if name == "factor":
             cands = (v * math.exp(step), v * math.exp(-step))
         elif name == "mass_kg":
-            cands = (v * 1.4, v / 1.4)
+            cands = (v * math.exp(step), v * math.exp(-step))
         else:
             span = hi - lo
-            cands = (v + 0.12 * span, v - 0.12 * span)
+            cands = (v + 0.35 * step * span, v - 0.35 * step * span)
         for c in cands:
             if lo <= c <= hi and abs(c - v) > 1e-9:
                 q = copy.deepcopy(p)
@@ -344,17 +345,19 @@ class Episode:
         self.add_particles([d for _, d in scored[:self.max_alive]], "generic")
 
     def refine(self) -> None:
-        """Local parameter refinement around the leading structures."""
-        seen_struct = set()
-        props = []
-        for p, w in self.posterior():
-            if p.structure in seen_struct:
-                continue
-            seen_struct.add(p.structure)
-            props += neighbours(p.deviation)
-            if len(seen_struct) >= self.refine_top:
-                break
-        self.add_particles(props, "refine")
+        """Local parameter refinement around the best particle of each leading structure: a coarse step, then (after those
+        are scored) a fine step around the new best (v3)."""
+        for step in (0.35, 0.15):
+            seen_struct = set()
+            props = []
+            for p, w in self.posterior():
+                if p.structure in seen_struct:
+                    continue
+                seen_struct.add(p.structure)
+                props += neighbours(p.deviation, step)
+                if len(seen_struct) >= self.refine_top:
+                    break
+            self.add_particles(props, "refine")
 
     def prune(self) -> None:
         post = self.posterior()

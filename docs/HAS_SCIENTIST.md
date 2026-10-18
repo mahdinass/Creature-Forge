@@ -64,3 +64,49 @@ Rules:
   - Every primitive kind has a measured effect.
   - `full_recovery_v1` runs unchanged on the plant through `recovery.assess(job_fn=...)`.
   - Found while testing: MuJoCo `actuator_force` is pre-gear, so the plant trace records delivered torque (exact at gear 1).
+- **2026-10-18 — vertical-slice code.**
+  - New modules: `hdb_bench.py` (dev families T2/T4), `hdb_workbench.py`, `belief_engine.py`, `hdb_policies.py` (A0) and
+    `scientist_has.py` (Nemotron roles).
+  - Scripts: `hdb_vs_run.py` (arms A1/A3h/A3hx/A3), `hdb_identifiability.py`, `hdb_mkv.py`, `hdb_stop_calibration.py`,
+    `hdb_walkers.py`, `hdb_report.py`.
+  - Tests: `test_hdb`, `test_hidden_plant`, `test_scientist_has` (27 pass).
+- **Local smoke (1 episode, reduced library, small repair budgets).**
+  - Hidden friction loss was identified from one observation (posterior 1.0 on the true structure, 128 twin rollouts).
+  - The twin-optimised design walked on the twin, but only 4–5/8 on the plant, and verification failed (11/24).
+  - Lesson: designing against the single MAP hypothesis overfits the twin, just as the old scientist overfit 4 training seeds.
+  - Fix: posterior-robust repair across an ensemble. Each of 8 twin seeds runs one of the leading hypotheses combined with a
+    draw from a generic tolerance prior. The prior is declared a priori and is wider than, and independent of, the bench's
+    sealed reality gap.
+- **Design refinement proposed for registration (owner to confirm): C-MKV primary K1 vs K3** (correct vs symptom-twin
+  structure, identical pipeline and compute). K1 vs K0 (model-free A0) is confounded by the twin machinery itself, so it
+  becomes a secondary contrast.
+- **2026-10-18 — first batch-VM block (Stage 1).** Ran: VS A1 (24 episodes, full generic library), the identifiability
+  study (6 dev bases × 23 severities) and MKV dev (3 bases, mid severity).
+- **v1 results (dev, engine v1, fixed severity grid).**
+  - Diagnosis 17/20 correct, FULL 0/20.
+  - The posterior is overconfident: all 3 misses carry mass 1.00.
+  - Some 88–100 %-walking designs failed `verdict_v1`. The frozen walk verdict compares forward displacement with the faulty
+    robot, which can travel far before it falls. Others narrowly failed the 20 s confirmation.
+  - MKV v1: even K2 (exact deviation) 0/9 FULL. The v1 grid sits far beyond the failure threshold (see below), so the
+    population measured nothing.
+- **Identifiability (v1 grid, 88 eligible dev instances).**
+  - Model-based twin-pair posterior: correct family 88/88, already from the first observation.
+  - Model-free 1-NN on the same plant panel: T2 51/57, T4 21/31.
+  - Simulation makes the twins separable, and the generic single-primitive library covers every single-primitive family.
+    Nemotron's hypothesis contribution can therefore come only from search efficiency, magnitudes outside the coarse grid,
+    and multi-primitive compositions.
+- **Bench v2 (pre-freeze revision, physics only).** Severities are 1.0/1.3/1.7 × each base's failure threshold, found by
+  bisection on the gap-free plant. The thresholds are small: payloads of 1–15 % of body mass, foot friction ×0.2–0.6.
+- **Engine v2 repair:** twin warm start → warm-started plant optimisation with the remaining budget → selection by
+  robustness evidence.
+- **VS v2, A1 (dev, 12 old dev bases, 1.0× and 1.3× threshold, 113 eligible).**
+  - FULL 37/113: payload 20/41, sensor bias 12/40, short feet 4/15, friction 1/17.
+  - Identification only 51/113. Friction is 17/17, but small payloads and biases lie outside the coarse generic magnitudes.
+- **MKV v2 (dev, 21 instances at 1.3×; development only).** FULL: K2 7/21, A0 (K0) 5/18, K4 3/18, K0n 3/19, K1 2/21,
+  K3 1/21. K2 > K1 one-sided p = 0.031.
+  - Exact quantitative knowledge helps. Structure alone does not, because the engine then misestimates the magnitude
+    (same defect as above).
+- **Engine v3 (dev fix before freeze, applies to every arm).** Generic magnitudes on a 4-level log grid from small to large
+  (122 hypotheses); two-step parameter refinement.
+- **Fresh walkers.** Panel of 250 failing bodies, split by region hash before any pipeline (dev 67, test 183). Pipelines
+  running.
