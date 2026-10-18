@@ -337,3 +337,16 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - The new key is on the VM (verified read-only). The main VM is STOPPED and the batch VM STOPPED.
 - Inference: real spend $12.37; the ledger shows $20.50, including $7.42 worst-case settlements for failed calls.
 - Decision needed: amendment 1 (re-run the 4 AI arms, about $10 real); this requires raising the ledger cap to about $40.
+
+## 2026-10-18 - Causal engineer: held-out evaluation complete (registered run + amendment 1)
+- Summary: `docs/CAUSAL_ENGINEER.md` §0. Reports: `experiments/causal_engineer/heldout/REPORT.md` and `REPORT_AMEND1.md` (frozen).
+- Held-out FULL recoveries of 40:
+  - exhaustive 23, learned 18, scientist+memory 16, scientist 14, scientist+memory+advice 14, random 12, one-shot 8,
+    expert 6.
+  - No registered hypothesis is supported. Closed loop vs one-shot gives p = 0.09.
+- Spend:
+  - inference: real $24.75; the ledger shows $32.88 against a $40 cap, including $7.42 of worst-case settlements for calls
+    that failed authentication;
+  - infra: ledger $33.2 against a $38 cap.
+  - Both VMs are STOPPED; the boot disks keep billing about $0.12/day each.
+- Open for the owner: PR #18 (CI fix) review/merge; whether to delete the batch VM; demo framing for the submission.

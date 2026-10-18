@@ -10,6 +10,75 @@ Budgets (verified 2026-10-17):
 - **Inference:** $3.67 of $15 (958 requests).
 - No new paid services.
 
+## 0. Results summary (2026-10-18)
+
+### What exists
+- **Instruments** (`physics_probe`, `physics_digest`, `eng_tools`):
+  - physics observations: COM, angular momentum, CoP, capture point, contacts, friction use, saturation, cadence against the
+    pendulum frequency, Froude number;
+  - healthy-reference ranges;
+  - model-designed one- or two-parameter counterfactuals (never clipped);
+  - a 20 s stress test;
+  - CMA-ES repairs per tool;
+  - all under one budget-exact ledger.
+- **The Nemotron scientist** (`scientist.py`, v2.3) runs a closed loop:
+  - its reply starts with its reading of the newest measurements, then a verdict on every tested hypothesis, then new
+    hypotheses, then one action: experiment, test, repair or conclude;
+  - predictions are registered before every experiment and scored afterwards;
+  - verification is independent and hidden.
+- **Experience:**
+  - Level A, episodic memory, and Level B, mechanism cards (`experience_bank.py`, `ce_memory.py`), with applicability verdicts
+    by the model;
+  - Level C, a learned repair-effect predictor (`repair_learner.py`), used as advice and as a `learned` policy.
+- **Comparison arms:** non-AI policies on the same tools (exhaustive, learned, random, expert rules) and one-shot ablations.
+- **Studio:** the "Causal engineer" page shows recorded investigations (replays, timeline, hypotheses, predictions, memory
+  verdicts, independent verification).
+
+### Development evidence (dev robots only; prompts were tuned on them)
+- The pilot1 audit found interface and evidence defects, not just model failure (`experiments/causal_engineer/dev/AUDIT_PILOT1.md`).
+- v1 to v2.3 turned a non-revising agent (0 status updates) into one that revises, designs experiments and tests robustness.
+- On 7 paired dev robots: 0 → 3 FULL recoveries.
+
+### Held-out evaluation (registered; 40 robots on 22 unseen morphologies)
+Reports: `experiments/causal_engineer/heldout/REPORT.md` (registered run) and `REPORT_AMEND1.md` (AI arms re-run after the
+authentication outage, owner-approved, post-hoc).
+
+| arm | FULL recoveries |
+|---|---|
+| exhaustive | 23 |
+| learned | 18 |
+| scientist + memory | 16 |
+| scientist (closed loop) | 14 |
+| scientist + memory + learned advice | 14 |
+| random | 12 |
+| one-shot scientist | 8 |
+| expert rules | 6 |
+
+- **No registered hypothesis is supported** after Holm correction.
+- Closed loop vs one-shot is directionally favourable (10 vs 4 discordant, p = 0.09).
+- The fixed exhaustive procedure beats the scientist (2 vs 11).
+- Memory and learned advice show no measurable benefit.
+- Level C's learned ranking is better on development ranking metrics but not on held-out recoveries (18 vs 23).
+- Prediction accuracy (0.37) is below an always-`no_change` baseline.
+
+### What Nemotron contributes, honestly
+- On unseen robots it genuinely investigates: it designs experiments, registers predictions, revises and refutes hypotheses,
+  and judges whether past experience applies (117 items: 33 applies, 38 does_not_apply, 44 needs_adaptation; 1 case of
+  negative transfer).
+- Its tool choices are about as good as the systematic procedure's (34/40 vs 38/40 chose a repairing tool). Its recoveries
+  are better than random choices or hand-written rules, and worse than the exhaustive procedure.
+- The main measured weakness is budget use: it stops after 317–362 of 700 rollouts instead of buying robustness. Its
+  numerical predictions are not calibrated, and it largely ignores accurate learned advice (top-1 correct 31/40, followed
+  9/40).
+
+### Research opportunities that remain
+1. Budget policy: let the AI choose a budget plan with the stress test as the stopping rule, and test whether that closes the
+   gap to exhaustive.
+2. Calibrated predictions: magnitude predictions with explicit tolerances, plus feedback on calibration.
+3. Advice use: test whether presenting Level C advice as a measured hit rate per robot type changes decisions.
+4. A larger held-out set (N = 40 detects only large effects).
+5. Learning from investigation traces (which experiments were informative), as opposed to repair outcomes.
+
 ## 1. Why the previous AI architecture failed (S2–S4a, confirmatory S3)
 The AI chose search-space allocations for an optimiser on robots with *unknown, mixed* causes. At the budgets used,
 optimiser noise dominated, and a fixed rule that always co-designs the body won (S3: rule 19/48, AI 9/48). The AI's
