@@ -211,6 +211,8 @@ def main() -> None:
                 continue
             out.write(json.dumps(rec) + "\n")
             out.flush()
+            if rec.get("skipped"):
+                continue
             print(rec["instance_id"], rec["eligible"], {g: round(max(p.values()), 3) for g, p in rec["posterior"].items()},
                   round(rec["wall_s"]), flush=True)
 
