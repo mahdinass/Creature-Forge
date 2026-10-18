@@ -181,3 +181,8 @@ Rules:
 - **A1c calibration check (dev, 113 episodes, τ = 0.75).** Accepted 23; mean mapped P(FULL) 0.77; 16/23 = 0.70 verified.
   Close calibration, slightly optimistic and in-sample (the map was fitted on dev designs of these instances). Not
   accepted: 22/90 verified. Total FULL 38/113 (A1-provisional 39).
+- **Complete dev arm comparison (113 instances; correction: the earlier A0 count of 101 came from a partial pull).**
+  - FULL: A0 28, A1 39, A1c 38, A1f 36.
+  - A1 vs A0, paired: 19 vs 8, one-sided p = 0.026 (development; the engine was tuned on these instances).
+  - The stopping variants are within 1–4 discordant pairs of each other.
+  - Record: `experiments/causal_engineer/dev/hdb/ARMS_dev_engine_v4.md`.
