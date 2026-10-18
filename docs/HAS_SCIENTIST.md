@@ -42,6 +42,15 @@ Rules:
 - The controller keeps the **design's** geometry, torque limit and weight calibration; the plant does not inform it.
 - Recorded `tau` is the delivered joint torque: actuator force × gear.
 
+## Literature checked against full text (2026-10-18; Elicit was unavailable)
+
+| Paper | What the full text shows | Consequence here |
+|---|---|---|
+| Piriyakulkij et al. 2024 (arXiv 2402.06025, NeurIPS) | LLM-proposed rules tracked as weighted particles. The LLM revises only low-likelihood particles; experiments are chosen by information gain. Zendo ablation: InfoGain 6.55, random experiments 5.84, LLM-only experiments 4.72. The authors note the LLM experiment proposer "does not clearly beat random proposals" | A3hx (Nemotron chooses experiments) may well be *worse* than engine EIG; the arm measures it. The proposer is given residuals of poorly fitting hypotheses |
+| BED-LLM (arXiv 2508.21184, ICLR 2026) | In-context belief updating is unreliable (GPT-4o "regularly sample[s] hypotheses incompatible with past observations"). Hypotheses are filtered against the whole history by an explicit likelihood. EIG uses a Rao-Blackwellised estimator. Candidates are generated conditioned on the hypothesis pool to split it | Beliefs live in the engine, never in the prompt. Nemotron's experiment candidates may be conditioned on the current pool |
+| ModelSMC (arXiv 2602.18266) | Executable simulator programs as particles; LLM revision; weights from a TabPFN-surrogate marginal likelihood. Mixed results: single-particle beats it on SIR, it wins on Hodgkin-Huxley. Expensive | Expect mixed gains from LLM proposals; measure, don't assume |
+| Experience-following (Xiong et al., arXiv 2505.16067) | Agents copy similar memories; errors propagate. Add-all memory hurts (e.g. CIC-IoT 71.5 → 59.9). Strict selection helps (85.4). Later outcomes are free quality labels for deletion | Dossiers only from verified dev investigations; outcome-based pruning; a corrupted-dossier probe |
+
 ## Execution log
 - **2026-10-18 — plan approved; Stage 1 started.**
   - Infra cap `SPEND_CAP_USD` 38 → 72: ledger $33.29 + envelope $35 + accrual. Real Cloud credit is $66.
