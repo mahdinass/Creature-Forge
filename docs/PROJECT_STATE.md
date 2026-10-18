@@ -365,3 +365,27 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   - PR #17 Draft and PR #18 open, both unmerged; repo private.
 - New issue: GitHub Actions did not start the run for `192c000` ("recent account payments have failed or your spending
   limit needs to be increased"). The owner must fix billing.
+
+## 2026-10-18 - Causal-engineer artifacts archived; branch pushed (no experiments, no cloud cost)
+- What was archived: 66 git-ignored files, 118.7 MB:
+  - memory inputs and Level C training data;
+  - raw dev traces from pilots 1–5;
+  - fault-bench candidates;
+  - ledgers.
+
+  All 27 inputs pinned in `protocol.json` are included. Archive SHA-256
+  `b81ea8be8d8e40a32a33e02992e66ef0832650abc0423fd7ab292ceb53c20611`.
+- Locations:
+  - `C:\Users\mbnas\CreatureForge-archive\2026-10-18\`;
+  - a draft (unpublished, untagged) release `archive-ce-artifacts-2026-10-18` of the private repo.
+
+  Procedure: `docs/ARTIFACT_ARCHIVE_2026-10-18.md`; checksums: `docs/archive/ce_artifacts_2026-10-18.SHA256SUMS`.
+- Verification: both copies were extracted into fresh directories, and all 66 files match their SHA-256.
+- Secret scan, 0 hits in each case:
+  - the archive inputs;
+  - the extracted copies;
+  - all 1,461 blobs and 619 commits in the Git object database, including unreachable objects. The only pattern hits are
+    the known placeholders (`.env.example` empty value, test fakes).
+- **Infrastructure blocker:** GitHub Actions does not start runs ("recent account payments have failed or your spending
+  limit needs to be increased"), first seen on `192c000`. CI results for this branch are unavailable until the owner fixes
+  GitHub billing. This is not a code failure.

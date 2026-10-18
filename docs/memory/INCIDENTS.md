@@ -118,3 +118,10 @@ Append one incident per significant recurring failure. Mark everything here as `
   - no credential changes during live runs;
   - pre-run live key check;
   - runners must fail fast on authentication errors.
+## 2026-10-18 GitHub Actions refuses to start runs (account billing) - infrastructure blocker
+- Push run 39088125876 (`feature/causal-engineer` @ `192c000`): both jobs failed in 1-2 s without starting.
+  - The annotation said "The job was not started because recent account payments have failed or your spending limit needs
+    to be increased."
+  - No test ran, so this is not a code failure.
+- Impact: there is no CI signal on any branch or PR (including PR #18) until the owner fixes GitHub billing.
+- Not done: no workaround, and no workflow change on this branch. PR #18 already reduces Actions usage once merged.

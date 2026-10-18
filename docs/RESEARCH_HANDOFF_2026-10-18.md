@@ -437,11 +437,14 @@ total compute, on fresh registered held-out data.
 ### Technical risks
 - **The held-out set is spent.** Any confirmatory claim needs **fresh registered instances**. Unused held-out bench
   instances exist (124 kept, 40 used), but using them needs a new protocol and must avoid instances already seen.
-- **Reproducibility of the memory arms:** the pinned memory inputs (`probe_dev.jsonl`, `pilot1..5_shard*.jsonl`) and the
-  held-out instance copies are **git-ignored**. Copies with matching SHA-256 exist locally under
-  `artifacts/vm/{ce2,ce3,cehb}/ce/` and on the VM disks. If the VMs are deleted and the PC is lost, the memory arms can no
-  longer be reproduced. Archiving them is an owner decision; run a secret scan first, because the 2026-10-17 leak
-  touched pilot2 files, which were deleted and regenerated.
+- **Reproducibility of the memory arms (resolved 2026-10-18):**
+  - The pinned memory inputs (`probe_dev.jsonl`, `pilot1..5_shard*.jsonl`) and the other git-ignored causal-engineer
+    artifacts are archived after a secret scan with 0 hits.
+  - There are two copies: a local folder outside the repository, and a draft release of the private repository. Both were
+    verified by SHA-256.
+  - Locations and the recovery procedure: `docs/ARTIFACT_ARCHIVE_2026-10-18.md`; checksums in
+    `docs/archive/ce_artifacts_2026-10-18.SHA256SUMS`.
+  - VM-only logs were not inventoried, because the VMs were not started.
 - **Low power:** N = 40 detects only large effects (C2 p = 0.09).
 - **The benchmark favours screening:** single faults with matching tools, and repairs often non-identifiable.
 - **Prompt tuning:** prompts were tuned on dev instances (v2 → v2.3).
