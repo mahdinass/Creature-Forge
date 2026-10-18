@@ -62,8 +62,17 @@ class Engine(unittest.TestCase):
         off = be.loglik(obs, {1: dict(f, pitch_mean=0.3), 2: dict(f)})
         self.assertGreater(same, off)
         self.assertEqual(be.loglik(obs, {3: dict(f)}), 0.0)           # unpaired seeds say nothing
+        same_one = be.loglik({1: {"step_freq_hz": 2.0}}, {1: {"step_freq_hz": 2.0}})
         miss = be.loglik({1: {"step_freq_hz": None}}, {1: {"step_freq_hz": 2.0}})
-        self.assertEqual(miss, -be.MISSING_PENALTY)
+        self.assertLess(miss, same_one)
+
+    def test_one_divergent_seed_costs_a_bounded_amount(self):
+        f = {k: 0.0 for k in be.FEATURES}
+        wild = {k: 50.0 * sd for k, sd in be.FEATURES.items()}
+        good = be.loglik({1: dict(f), 2: dict(f)}, {1: dict(f), 2: dict(f)})
+        one_bad = be.loglik({1: dict(f), 2: dict(f)}, {1: dict(f), 2: wild})
+        self.assertLess(good - one_bad, 60.0)                 # bounded by the outlier branch
+        self.assertGreater(good - one_bad, 5.0)               # but still evidence
 
     def test_generic_library(self):
         lib = be.generic_particles(20.0)

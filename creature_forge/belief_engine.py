@@ -23,13 +23,19 @@ import numpy as np
 
 from . import hidden_plant as hp
 
-VERSION = "belief_engine_v3"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence; v3: 4-level generic magnitudes, two-step refinement
+VERSION = "belief_engine_v4"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence; v3: 4-level generic magnitudes, two-step refinement; v4: calibrated scales + seed-level contamination likelihood
 
 # per-seed summary features in the likelihood and their noise scales (provisional; calibrated on dev, frozen before comparisons)
+# v4 (dev noise calibration, scripts/hdb_noise_calibration.py, 175 dev instances, plant vs twin with the TRUE deviation): the
+# residuals are ~0 on most seeds with heavy tails from occasional chaotic divergence that hits all features of a seed together
+# (p95 |r|: walking 1.0, time_upright 1.3 s, step_freq 0.73 Hz, ankle saturation 0.20, friction use 0.25). Hence the seed-level
+# contamination model below and wider scales where the measured tails exceeded the provisional ones.
 FEATURES = {"walking": 0.35, "time_upright": 1.5, "fall_direction": 0.7, "pitch_mean": 0.04, "com_vx_mean": 0.08,
-            "step_freq_hz": 0.3, "step_length_over_L": 0.03, "slip_fraction": 0.03, "double_support_fraction": 0.05,
+            "step_freq_hz": 0.4, "step_length_over_L": 0.03, "slip_fraction": 0.03, "double_support_fraction": 0.05,
             "capture_margin_over_L_mean": 0.02, "saturation_frac_hip": 0.05, "saturation_frac_knee": 0.05,
-            "saturation_frac_ankle": 0.05, "friction_utilisation_p95": 0.08}
+            "saturation_frac_ankle": 0.1, "friction_utilisation_p95": 0.12}
+SEED_OUTLIER = 0.1           # probability that a seed diverged chaotically (all its features together)
+OUTLIER_FEATURE_LOGP = -3.0  # uniform contamination: an outlier seed's features have a constant log-density each (bounded cost)
 MISSING_PENALTY = 1.0        # nats when exactly one of observed/simulated is undefined (e.g. no steps before a fall)
 NU = 3.0                     # Student-t degrees of freedom
 WEIGH_SIGMA = {"mass_frac": 0.025, "com_x_m": 0.008}   # weigh-test noise incl. the reality gap (torso mass +-3 %)
@@ -107,22 +113,35 @@ def _t_logpdf(r: float) -> float:
     return -0.5 * (NU + 1.0) * math.log1p(r * r / NU)
 
 
+def _seed_terms(fo: dict, fs: dict) -> tuple[float, float]:
+    """(inlier, outlier) log-densities of one seed's features, up to the same constant."""
+    inl = out = 0.0
+    for k, sd in FEATURES.items():
+        a, b = fo.get(k), fs.get(k)
+        if a is None and b is None:
+            continue
+        out += OUTLIER_FEATURE_LOGP
+        if a is None or b is None:
+            inl -= MISSING_PENALTY
+            continue
+        inl += _t_logpdf((a - b) / sd)
+    return inl, out
+
+
 def loglik(obs: dict, sim: dict) -> float:
-    """Paired log-likelihood (up to a constant) of observed per-seed features given simulated ones; seeds missing in either
-    are skipped (they cost nothing and say nothing)."""
+    """Paired log-likelihood (up to a constant) of observed per-seed features given simulated ones, with a seed-level
+    contamination model (v4): each seed is twin-consistent (Student-t per feature) or, with probability SEED_OUTLIER, a chaotic
+    outlier with a constant density per feature (uniform contamination: one divergent seed costs a bounded amount). Seeds missing in either are skipped (they cost nothing and say nothing)."""
     total = 0.0
+    li, lo = math.log1p(-SEED_OUTLIER), math.log(SEED_OUTLIER)
     for s, fo in obs.items():
         fs = sim.get(s)
         if fs is None:
             continue
-        for k, sd in FEATURES.items():
-            a, b = fo.get(k), fs.get(k)
-            if a is None and b is None:
-                continue
-            if a is None or b is None:
-                total -= MISSING_PENALTY
-                continue
-            total += _t_logpdf((a - b) / sd)
+        inl, out = _seed_terms(fo, fs)
+        a, b = li + inl, lo + out
+        m = max(a, b)
+        total += m + math.log(math.exp(a - m) + math.exp(b - m))
     return total
 
 
