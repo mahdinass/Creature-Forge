@@ -126,7 +126,7 @@ def analyse(path: str) -> str:
     if el and el[0].get("rivals") == "all":
         fams = sorted({r["family"] for r in el})
         L += ["## Multi-class (every dev family is a rival)", "",
-              "| injected \ MAP (all instruments) | " + " | ".join(fams) + " | correct: obs | obs+conditions | all |",
+              "| injected / MAP (all instruments) | " + " | ".join(fams) + " | correct: obs | obs+conditions | all |",
               "|---|" + "---|" * (len(fams) + 3)]
         for fam in fams:
             fr = [r for r in el if r["family"] == fam]
@@ -183,6 +183,7 @@ def main() -> None:
     ap.add_argument("--analyse", default=None)
     ap.add_argument("--thresholds", default=None)
     ap.add_argument("--rivals", choices=["pair", "all"], default="pair")
+    ap.add_argument("--shard", default="0/1", help="k/n: this process takes jobs k, k+n, ... (ForgePool caps workers at 7)")
     ap.add_argument("--split", default="dev")
     ap.add_argument("--mults", default=None, help="v2: comma list of multiples to include, e.g. 1.3")
     a = ap.parse_args()
@@ -200,6 +201,8 @@ def main() -> None:
     jobs = [(b, f, s, th, a.rivals) for b in bases for f in fams for s in range(nsev(f))
             if hb.instance_key(b["base_id"], f, s) not in done
             and (keep is None or th is None or hb.v2_severities(f)[s][1] in keep)]
+    k, n = (int(x) for x in a.shard.split("/"))
+    jobs = jobs[k::n]
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     with ForgePool(max_workers=a.workers) as pool, open(a.out, "a", encoding="utf-8") as out:
         for _, rec in pool.imap(study_instance, jobs):
