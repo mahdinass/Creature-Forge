@@ -73,7 +73,8 @@ def run_one(inst: dict, pool, a) -> dict:
         "posterior_mass_on_injected": mass_inj, "repair": rep,
         "verification": {"status": ver["status"], "walking_frac": ver["validation"]["walking_frac"], "reasons": ver["reasons"],
                          "rollouts": ver["rollouts"]},
-        "engine": ep.record(), "wall_s": time.perf_counter() - t0})
+        "engine": ep.record(), "designs": [{k: d[k] for k in ("index", "source", "body", "vector")} for d in bench.designs],
+        "wall_s": time.perf_counter() - t0})
 
 
 def main() -> None:
