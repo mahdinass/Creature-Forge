@@ -24,6 +24,6 @@ Local Windows PC: edit files, git, ssh only — it has almost no free RAM. Every
 
 ## Secrets and spend
 - `.env` lives only on Windows and at `~/dev/.env` (mode 600) on the VM. Never print, log, commit or pass keys as args.
-- Inference ledger on the VM: `~/dev/ledger/inference_ledger.jsonl` (`CF_INFERENCE_LEDGER`); caps $30 / 8,000 (raised 2026-10-17, owner-delegated)
+- Inference ledger on the VM: `~/dev/ledger/inference_ledger.jsonl` (`CF_INFERENCE_LEDGER`); caps $40 / 8,000 (2026-10-18, owner-approved amendment)
   requests. Infra ledger: `infra/nebius/spend_ledger.jsonl` (git-ignored), cap $10.
 - On any failure: record state in `docs/PROJECT_STATE.md`, stop the VM if idle, resume from the last commit.
