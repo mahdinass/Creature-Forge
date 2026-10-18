@@ -139,3 +139,23 @@ Rules:
   - `hdb_replay.py`: deterministic replay attribution on recorded plant data.
 - **Spend at 16:50 UTC:** infra ledger $40.45 of the $72 cap, i.e. about $7.2 of the $35 Stage-1 envelope. Inference
   $0.013 for the live smoke.
+- **Engine v2 → v4 on the same 49 dev instances (interim).**
+  - Structure correct 23 → 42.
+  - Confident-but-wrong posteriors 20 → 5.
+  - Mean posterior on the injected structure 0.47 → 0.85.
+  - FULL 11 → 12. Diagnosis is no longer the bottleneck; repair and stopping are.
+- **Why verification fails (VS v2, 76 non-FULL):**
+  - 50: validation walking below 80 %;
+  - 18: robust walking but `verdict_v1` not VERIFIED (forward displacement vs the faulty robot);
+  - 7: 20 s confirmation failed.
+  - The calibration builder now also records forward displacement for the candidate and the faulty design on the robust
+    seeds.
+- **Stopping calibration (dev; partial, 566 designs, 65 FULL).**
+  - The naive Beta reading of robust16 has Brier 0.105, *worse* than a constant forecast (0.102); ECE 0.11.
+  - Logistic leave-one-base-out: robust16 alone 0.070; robust16 + 20 s stress test 0.067 (ECE 0.03, AUROC 0.92); all
+    visible evidence 0.064.
+  - Empirical FULL rates: robust16 = 15 → 10/30; 16 → 24/33; 16 with stress 4/4 → 19/23.
+  - So the provisional 15/16 rule (and the old scientist's 4/4 stress test) accepted designs that fail about two times in
+    three.
+  - Engine: candidates reaching ≥ 14/16 get the 8-rollout stress test; acceptance uses the mapped P(FULL) ≥ τ (dev choice
+    τ = 0.75). The map and τ are frozen at registration and never refitted on test.
