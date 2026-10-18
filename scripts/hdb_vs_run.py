@@ -60,6 +60,13 @@ def severities(family: str, which: str, v2: bool = False) -> list[int]:
     return sorted(set(out))
 
 
+def stop_rule(a):
+    """Calibrated stopping when a dev-fitted model is given (frozen at registration), else the provisional dev rule."""
+    if not a.stop_model:
+        return None
+    return be.calibrated_accept(json.load(open(a.stop_model, encoding="utf-8")), a.tau)
+
+
 def run_a0(inst: dict, bench, pool, t0) -> dict:
     from creature_forge import hdb_policies as pol
     info = pol.generic_exhaustive(bench)
@@ -97,7 +104,7 @@ def run_one(inst: dict, pool, a) -> dict:
     diag = ep.diagnose(max_experiments=a.max_experiments, choose=nem.choose if nem and "choose" in nem.roles else None)
     rep = ep.robust_repair(twin_budget=a.twin_repair, plant_budget=a.plant_repair,
                            engineer=nem.engineer if nem and "engineer" in nem.roles else None,
-                           accept_fn=be.SPEND_ALL if a.arm == "A1f" else None)
+                           accept_fn=be.SPEND_ALL if a.arm == "A1f" else stop_rule(a))
     design = bench.best_design()
     ver = hb.verify(inst, {"body": design["body"], "vector": design["vector"]}, pool=pool)
     inj = [list(x) for x in hb.mechanism_signature(inst)]
@@ -113,6 +120,7 @@ def run_one(inst: dict, pool, a) -> dict:
         "posterior_mass_on_injected": mass_inj, "repair": rep,
         "verification": {"status": ver["status"], "walking_frac": ver["validation"]["walking_frac"], "reasons": ver["reasons"],
                          "rollouts": ver["rollouts"]},
+        "stop_rule": {"model": a.stop_model, "tau": a.tau} if a.stop_model else ("spend_all" if a.arm == "A1f" else "provisional_15of16"),
         "engine": ep.record(), "designs": [{k: d[k] for k in ("index", "source", "body", "vector")} for d in bench.designs],
         "wall_s": time.perf_counter() - t0})
 
@@ -133,6 +141,8 @@ def main() -> None:
     ap.add_argument("--proposer", choices=["mock"], default=None)
     ap.add_argument("--arm", choices=["A0", "A1", "A1f", *ARM_ROLES], default="A1")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
+    ap.add_argument("--stop-model", default=None, help="dev-fitted stopping map (hdb_stop_calibration.py fit)")
+    ap.add_argument("--tau", type=float, default=0.8)
     ap.add_argument("--no-generic", action="store_true")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--workers", type=int, default=0)
