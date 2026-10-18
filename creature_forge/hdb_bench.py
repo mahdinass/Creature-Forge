@@ -60,6 +60,104 @@ FAMILIES: dict[str, dict] = {
 }
 
 
+# ---------------------------------------------------------------------------------------------------------
+# v2 severities: relative to each base's own failure threshold (physics only; no policy or oracle outcome is used)
+# ---------------------------------------------------------------------------------------------------------
+# A family variant maps a fault STRENGTH s >= 0 (0 = no fault, monotone) to a deviation. The threshold s* of a (base, variant)
+# is found by bisection on the GAP-FREE plant: the smallest strength at which the nominal design walks on <= FAIL_MAX_WALKING
+# of the CHECK_N check seeds. Instances use s = MULTS x s* (capped at the variant's maximum), so every failure is real and
+# severities range from just past the edge to clearly past it. Introduced 2026-10-18 before any frozen population: with the
+# v1 fixed grid even the exact-deviation oracle (MKV K2) and A0 almost never recovered, i.e. the population measured nothing.
+MULTS = (1.0, 1.3, 1.7)
+BISECT_STEPS = 6
+
+
+def _strength_dev(kind, target, pname, transform):
+    return lambda s, base: [prim(kind, target, **{pname: transform(s, base)})]
+
+
+FAMILY_SPECS: dict[str, dict] = {
+    "pitch_sensor_bias": {"pair": "T2", "split": "dev", "taxonomy": "sensing", "variants": {
+        "+": {"make": _strength_dev("sensor_bias", "pitch", "rad", lambda s, b: round(s, 6)), "max": 0.4},
+        "-": {"make": _strength_dev("sensor_bias", "pitch", "rad", lambda s, b: round(-s, 6)), "max": 0.4}}},
+    "payload_offset": {"pair": "T2", "split": "dev", "taxonomy": "mass properties", "variants": {
+        "fwd": {"make": lambda s, b: [prim("payload", "torso", mass_kg=round(s * design_mass(b["body"]), 6), x_m=0.12)],
+                "max": None},
+        "back": {"make": lambda s, b: [prim("payload", "torso", mass_kg=round(s * design_mass(b["body"]), 6), x_m=-0.12)],
+                 "max": None}}},
+    "low_ground_friction": {"pair": "T4", "split": "dev", "taxonomy": "contact / environment", "variants": {
+        "": {"make": _strength_dev("contact_friction", "feet", "factor", lambda s, b: round(math.exp(-s), 6)),
+             "max": math.log(1 / 0.02)}}},
+    "short_feet": {"pair": "T4", "split": "dev", "taxonomy": "geometry", "variants": {
+        "": {"make": _strength_dev("segment_length", "feet", "factor", lambda s, b: round(math.exp(-s), 6)),
+             "max": None}}},
+}
+
+
+def variant_max(base: dict, family: str, variant: str) -> float:
+    v = FAMILY_SPECS[family]["variants"][variant]
+    if v["max"] is not None:
+        return v["max"]
+    if family == "payload_offset":
+        return min(0.75, 15.0 / design_mass(base["body"]))
+    if family == "short_feet":       # factor >= 0.3 (DSL) and foot length >= 0.02 m (sandbox)
+        return math.log(1 / max(0.3, 0.02 / float(base["body"]["foot_length"]) + 1e-6))
+    raise ValueError(family)
+
+
+def threshold(base: dict, family: str, variant: str, pool=None) -> dict:
+    """Bisection for the failure threshold s* on the gap-free plant (check seeds of the variant's own key)."""
+    smax = variant_max(base, family, variant)
+    seeds = instance_seeds(base["base_id"], f"{family}{variant}", -1)["check"]
+    make = FAMILY_SPECS[family]["variants"][variant]["make"]
+
+    def walking(s):
+        rows = hp.walk_seeds({"deviation": make(s, base)}, base["body"], base["vector"], seeds, pool=pool)
+        return int(sum(1 for r in rows if r.get("ok") and r["walking"]))
+    trace = []
+    w = walking(smax)
+    trace.append((smax, w))
+    if w > FAIL_MAX_WALKING:
+        return {"base_id": base["base_id"], "family": family, "variant": variant, "s_star": None, "s_max": smax,
+                "trace": trace, "reason": "the nominal design still walks at the strongest allowed fault"}
+    lo, hi = 0.0, smax
+    for _ in range(BISECT_STEPS):
+        mid = 0.5 * (lo + hi)
+        w = walking(mid)
+        trace.append((mid, w))
+        if w <= FAIL_MAX_WALKING:
+            hi = mid
+        else:
+            lo = mid
+    return {"base_id": base["base_id"], "family": family, "variant": variant, "s_star": hi, "s_max": smax, "trace": trace,
+            "rollouts": CHECK_N * len(trace)}
+
+
+def v2_severities(family: str) -> list[tuple[str, float]]:
+    return [(v, m) for v in FAMILY_SPECS[family]["variants"] for m in MULTS]
+
+
+def make_instance_v2(base: dict, family: str, severity: int, thresholds: dict, *, gap: bool = True) -> dict | None:
+    """v2 instance; None when the variant has no threshold or the multiple exceeds the variant's maximum strength."""
+    variant, mult = v2_severities(family)[severity]
+    th = thresholds.get(f"{base['base_id']}|{family}|{variant}")
+    if not th or th.get("s_star") is None:
+        return None
+    s = mult * th["s_star"]
+    if s > th["s_max"] + 1e-12:
+        return None
+    key = instance_key(base["base_id"], family, severity)
+    seeds = instance_seeds(base["base_id"], family, severity)
+    assert_disjoint(seeds)
+    fam = FAMILY_SPECS[family]
+    dev = FAMILY_SPECS[family]["variants"][variant]["make"](s, base)
+    plant = {"deviation": dev, "gap": reality_gap(key) if gap else []}
+    return {"version": "hdb_v2", "instance_id": key, "base_id": base["base_id"], "family": family, "pair": fam["pair"],
+            "split": fam["split"], "severity": int(severity), "variant": variant, "strength": s, "mult": mult,
+            "s_star": th["s_star"], "plant": hp.normalize_plant(plant),
+            "robot": {"body": dict(base["body"]), "vector": [float(x) for x in base["vector"]]}, "seeds": seeds}
+
+
 def design_mass(body: dict) -> float:
     from .creature_walk import _body
     from .morphology import build_model
@@ -152,3 +250,33 @@ def severity_count(family: str) -> int:
     return len(FAMILIES[family]["grid"])
 
 
+
+
+WALKERS_GLOB = "artifacts/hdb/walkers_s*.jsonl"
+
+
+def load_bases(split: str, walkers_glob: str | None = None) -> list[dict]:
+    """HDB bases. "dev": the 12 earlier dev walkers (fault_bench dev split) followed by the fresh hdb-v1 walkers whose region is
+    on the dev side; "test": fresh walkers on the test side only (never used in development); "olddev": the 12 only.
+    Fresh walkers are the FULL_RECOVERY designs of scripts/hdb_walkers.py (other creatures are not bases)."""
+    import glob
+    import json
+    import os
+    from . import fault_bench as fb
+    if split not in ("dev", "test", "olddev"):
+        raise ValueError(f"split must be dev, test or olddev, got {split!r}")
+    out = [] if split == "test" else list(fb.load_bases("dev"))
+    if split == "olddev":
+        return out
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pattern = walkers_glob or os.environ.get("CF_HDB_WALKERS") or os.path.join(root, WALKERS_GLOB)
+    fresh = []
+    for path in sorted(glob.glob(pattern)):
+        for line in open(path, encoding="utf-8"):
+            r = json.loads(line)
+            if r.get("status") == "FULL_RECOVERY" and r.get("hdb_split") == split:
+                fin = r["pipeline"]["final"]
+                fresh.append({"base_id": r["creature"], "creature": r["creature"], "body": dict(fin["body"]),
+                              "vector": [float(x) for x in fin["vector"]], "features": r.get("features"),
+                              "region": r.get("region"), "source": "hdb-v1-walkers"})
+    return out + sorted(fresh, key=lambda b: b["base_id"])

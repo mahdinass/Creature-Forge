@@ -54,7 +54,8 @@ def measure(job) -> dict:
 
 
 def build(a) -> None:
-    bases = {b["base_id"]: b for b in fb.load_bases("dev")}
+    bases = {b["base_id"]: b for b in hb.load_bases("dev")}
+    th = json.load(open(a.thresholds, encoding="utf-8")) if a.thresholds else None
     jobs, seen = [], set()
     for path in a.episodes.split(","):
         for line in open(path, encoding="utf-8"):
@@ -62,7 +63,10 @@ def build(a) -> None:
             if not rec.get("designs"):
                 continue
             base_id, fam, sev = rec["instance_id"].rsplit(":", 2)
-            inst = hb.make_instance(bases[base_id], fam, int(sev))
+            inst = (hb.make_instance_v2(bases[base_id], fam, int(sev), th) if rec.get("bench") == "hdb_v2"
+                    else hb.make_instance(bases[base_id], fam, int(sev)))
+            if inst is None:
+                continue
             parts = ((rec.get("engine") or {}).get("particles")) or (((rec.get("info") or {}).get("engine") or {}).get("particles")) or []
             map_dev = parts[0]["deviation"] if parts else None
             cf_kept = 0
@@ -168,6 +172,7 @@ def main() -> None:
     b.add_argument("--episodes", required=True)
     b.add_argument("--workers", type=int, default=4)
     b.add_argument("--out", required=True)
+    b.add_argument("--thresholds", default=None)
     an = sub.add_parser("analyse")
     an.add_argument("path")
     a = ap.parse_args()

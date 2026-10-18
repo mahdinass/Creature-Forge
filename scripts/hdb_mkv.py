@@ -45,11 +45,15 @@ def structure_grid(structure, design_mass: float) -> list[list[dict]]:
 
 def twin_structure(inst: dict):
     fam = inst["family"]
-    pair = hb.FAMILIES[fam]["pair"]
-    rivals = [f for f, s in hb.FAMILIES.items() if s["pair"] == pair and f != fam]
+    pair = hb.FAMILY_SPECS[fam]["pair"]
+    rivals = [f for f, s in hb.FAMILY_SPECS.items() if s["pair"] == pair and f != fam]
     if not rivals:
         return None
-    dev = hb.deviation_for({"base_id": inst["base_id"], "body": inst["robot"]["body"]}, rivals[0], 0)
+    if inst.get("version") == "hdb_v2":
+        v = next(iter(hb.FAMILY_SPECS[rivals[0]]["variants"].values()))
+        dev = v["make"](0.1, {"base_id": inst["base_id"], "body": inst["robot"]["body"]})
+    else:
+        dev = hb.deviation_for({"base_id": inst["base_id"], "body": inst["robot"]["body"]}, rivals[0], 0)
     return tuple(sorted((p["kind"], p["target"]) for p in dev))
 
 
@@ -108,11 +112,13 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--shard", default="0/1")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--thresholds", default=None, help="v2 bench: thresholds JSON (scripts/hdb_thresholds.py)")
     a = ap.parse_args()
     from hdb_vs_run import severities          # same severity selection rule as the VS runner
     k, n = (int(x) for x in a.shard.split("/"))
-    bases = fb.load_bases("dev")[a.base_offset:a.base_offset + a.bases]
-    todo = [(b, f, s) for b in bases for f in a.families.split(",") for s in severities(f, a.severities)][k::n]
+    bases = hb.load_bases("dev")[a.base_offset:a.base_offset + a.bases]
+    th = json.load(open(a.thresholds, encoding="utf-8")) if a.thresholds else None
+    todo = [(b, f, s) for b in bases for f in a.families.split(",") for s in severities(f, a.severities, v2=th is not None)][k::n]
     done = set()
     if os.path.exists(a.out):
         done = {(r["instance_id"], r["condition"]) for r in map(json.loads, open(a.out, encoding="utf-8")) if "condition" in r}
@@ -120,14 +126,17 @@ def main() -> None:
     pool_cm = ForgePool(max_workers=a.workers) if a.workers else contextlib.nullcontext(InlinePool())
     with pool_cm as pool, open(a.out, "a", encoding="utf-8") as out:
         for b, f, s in todo:
-            inst = hb.check_eligibility(hb.make_instance(b, f, s), pool=pool)
+            raw = hb.make_instance_v2(b, f, s, th) if th is not None else hb.make_instance(b, f, s)
+            if raw is None:
+                continue
+            inst = hb.check_eligibility(raw, pool=pool)
             if not inst["eligible"]:
                 continue
             for cond in a.conditions.split(","):
                 if (inst["instance_id"], cond) in done:
                     continue
                 rec = {"version": "hdb_mkv_v1", "instance_id": inst["instance_id"], "family": f, "severity": s,
-                       "provenance": "NO_AI", **run_condition(inst, cond, pool, a)}
+                       "bench": inst["version"], "provenance": "NO_AI", **run_condition(inst, cond, pool, a)}
                 out.write(json.dumps(jsonable(rec)) + "\n")
                 out.flush()
                 print(inst["instance_id"], cond, rec.get("status"), rec.get("skipped"), round(rec.get("wall_s", 0)), flush=True)

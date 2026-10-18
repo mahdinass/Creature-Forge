@@ -44,7 +44,14 @@ def mock_proposer(state: dict) -> list:
 ARM_ROLES = {"A3h": ("propose",), "A3hx": ("propose", "choose"), "A3": ("propose", "choose", "engineer")}
 
 
-def severities(family: str, which: str) -> list[int]:
+V2_SEL = {"m10": 1.0, "m13": 1.3, "m17": 1.7}
+
+
+def severities(family: str, which: str, v2: bool = False) -> list[int]:
+    if v2:
+        sev = hb.v2_severities(family)
+        want = {V2_SEL[w] for w in which.split(",")} if which != "all" else set(hb.MULTS)
+        return [i for i, (_, m) in enumerate(sev) if m in want]
     n = hb.severity_count(family)
     pick = {"mid": [n // 2], "max": [n - 1], "min": [0], "all": list(range(n))}
     out = []
@@ -80,7 +87,7 @@ def run_one(inst: dict, pool, a) -> dict:
     mass_inj = sum(w for s, w in sp if [list(x) for x in s] == inj)
     return jsonable({
         "version": "hdb_vs_v1", "instance_id": inst["instance_id"], "family": inst["family"], "pair": inst["pair"],
-        "severity": inst["severity"],
+        "severity": inst["severity"], "bench": inst["version"], "strength": inst.get("strength"), "mult": inst.get("mult"),
         "provenance": nem.provenance if nem else ("SCRIPTED_MOCK" if a.proposer == "mock" else "NO_AI"),
         "arm": a.arm if a.proposer is None else a.arm + "+mock", "check": inst["check"],
         "nemotron": nem.record() if nem else None,
@@ -114,10 +121,12 @@ def main() -> None:
     ap.add_argument("--shard", default="0/1")
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--thresholds", default=None, help="v2 bench: thresholds JSON (scripts/hdb_thresholds.py)")
     a = ap.parse_args()
     k, n = (int(x) for x in a.shard.split("/"))
-    bases = fb.load_bases(a.split)[a.base_offset:a.base_offset + a.bases]
-    todo = [(b, f, s) for b in bases for f in a.families.split(",") for s in severities(f, a.severities)]
+    bases = hb.load_bases(a.split)[a.base_offset:a.base_offset + a.bases]
+    th = json.load(open(a.thresholds, encoding="utf-8")) if a.thresholds else None
+    todo = [(b, f, s) for b in bases for f in a.families.split(",") for s in severities(f, a.severities, v2=th is not None)]
     todo = todo[k::n]
     done = set()
     if a.resume and os.path.exists(a.out):
@@ -130,7 +139,10 @@ def main() -> None:
             iid = hb.instance_key(b["base_id"], f, s)
             if iid in done:
                 continue
-            inst = hb.check_eligibility(hb.make_instance(b, f, s), pool=pool)
+            raw = hb.make_instance_v2(b, f, s, th) if th is not None else hb.make_instance(b, f, s)
+            if raw is None:
+                continue
+            inst = hb.check_eligibility(raw, pool=pool)
             if not inst["eligible"]:
                 rec = {"version": "hdb_vs_v1", "instance_id": iid, "family": f, "severity": s, "eligible": False,
                        "reason": inst["reason"], "check": inst["check"]}

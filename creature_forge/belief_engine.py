@@ -23,7 +23,7 @@ import numpy as np
 
 from . import hidden_plant as hp
 
-VERSION = "belief_engine_v1"
+VERSION = "belief_engine_v2"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence
 
 # per-seed summary features in the likelihood and their noise scales (provisional; calibrated on dev, frozen before comparisons)
 FEATURES = {"walking": 0.35, "time_upright": 1.5, "fall_direction": 0.7, "pitch_mean": 0.04, "com_vx_mean": 0.08,
@@ -548,8 +548,10 @@ class Episode:
 
     def robust_repair(self, *, twin_budget: int = 800, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
                       tool_order: list[str] | None = None, engineer=None) -> dict:
-        """Posterior-robust repair: twin-optimise the best tool under the MAP hypothesis, check on the plant, and fine-tune on
-        the plant only if the check fails. Provisional stop rule (VS): robustness_check >= accept / n_check.
+        """Posterior-robust repair (v2): (1) ensemble-robust twin optimisation of the first tool as a warm start, checked on the
+        plant; (2) empirical plant optimisation from it with most of the remaining plant budget, chained over two tools; (3) the
+        design with the best robustness evidence is submitted. Provisional stop rule (dev): accept on 15/16 robust seeds (the
+        calibrated mapping replaces it before registration).
         `engineer(state, ranking) -> {"tool_order": [...], ...}` (optional) may reorder the tools after the twin screen."""
         post = self.posterior()
         hyps, mass = [], 0.0
@@ -566,31 +568,58 @@ class Episode:
             if plan.get("tool_order"):
                 tools = list(plan["tool_order"]) + [t for t in tools if t not in plan["tool_order"]]
         log = []
-        for tool in tools[:2]:
-            start = self.b.best_design()
-            res = self.b.twin_cma(hyps[0][0].deviation, start, tool, twin_budget, role="twin", n_train=8,
-                                  noise_seed=len(log), tag=f"robust:{tool}", ensemble=self.ensemble(hyps))
-            if res is None:
-                log.append({"tool": tool, "twin": "budget"})
-                continue
+        checked: dict[int, tuple] = {}            # design index -> (walking, n) from plant robustness checks
+
+        def check(idx: int, n: int) -> int | None:
+            self.b.select(idx)
+            c = self.b.robustness_check(n)
+            if not c.get("ok"):
+                return None
+            checked[idx] = (c["walking"], n)
+            return c["walking"]
+        # 1) model-based warm start: ensemble-robust twin optimisation of the first tool
+        t1 = tools[0]
+        start = self.b.best_design()
+        res = self.b.twin_cma(hyps[0][0].deviation, start, t1, min(twin_budget, self.b.twin.remaining), role="twin",
+                              n_train=8, noise_seed=0, tag=f"robust:{t1}", ensemble=self.ensemble(hyps))
+        cur = start["index"]
+        if res is not None:
             best = res["best"]
-            j = self.b.add_twin_design(best["body"], best["vector"], source=f"cma:{tool}", tool=tool,
-                                       twin_walking=int(best["walking_count"]))
-            self.b.select(j)
-            chk = self.b.robustness_check(n_check)
-            log.append({"tool": tool, "twin_walking": int(best["walking_count"]), "design": j, "check": chk.get("walking")})
-            if chk.get("ok") and chk["walking"] >= accept:
-                return {"accepted": True, "design": j, "log": log}
-            if self.b.remaining >= plant_budget + 16:
-                rep = self.b.repair(tool, plant_budget, n_train=8, init={"index": j})
-                if rep.get("ok"):
-                    self.b.select(rep["design_index"])
-                    chk2 = self.b.robustness_check(16)
-                    log[-1].update(plant_repair=rep["design_index"], plant_train_walking=rep["best"]["train_walking"],
-                                   check16=chk2.get("walking"))
-                    if chk2.get("ok") and chk2["walking"] >= 15:
-                        return {"accepted": True, "design": rep["design_index"], "log": log}
-        return {"accepted": False, "design": self.b.best_design()["index"], "log": log}
+            cur = self.b.add_twin_design(best["body"], best["vector"], source=f"cma:{t1}", tool=t1,
+                                         twin_walking=int(best["walking_count"]))
+            w = check(cur, n_check)
+            log.append({"step": "twin", "tool": t1, "twin_walking": int(best["walking_count"]), "design": cur, "check": w})
+            if w is not None and w >= accept and self.b.remaining >= 16:
+                w16 = check(cur, 16)
+                log[-1]["check16"] = w16
+                if w16 is not None and w16 >= 15:
+                    return {"accepted": True, "design": cur, "log": log}
+        # 2) empirical plant optimisation from the warm start with most of the remaining plant budget, chained over the tools
+        reserve = 16
+        for k, tool in enumerate(tools[:2]):
+            avail = self.b.remaining - reserve
+            budget = int(avail * 0.6) if k == 0 else avail
+            if budget < plant_budget // 3:
+                break
+            from .hdb_workbench import min_budget
+            if budget < min_budget(tool, 4):
+                continue
+            rep = self.b.repair(tool, budget, n_train=4, init={"index": cur})
+            if not rep.get("ok"):
+                log.append({"step": "plant", "tool": tool, "refused": rep.get("refused")})
+                continue
+            cur = rep["design_index"]
+            w16 = check(cur, 16) if self.b.remaining >= 16 else None
+            log.append({"step": "plant", "tool": tool, "budget": budget, "design": cur,
+                        "train_walking": rep["best"]["train_walking"], "check16": w16})
+            if w16 is not None and w16 >= 15:
+                return {"accepted": True, "design": cur, "log": log}
+        # 3) submit the design with the best robustness evidence (walking fraction on its largest check)
+        if checked:
+            best_idx = max(checked, key=lambda i: (checked[i][0] / checked[i][1], checked[i][1], i))
+            self.b.select(best_idx)
+        return {"accepted": False, "design": self.b.best_design()["index"], "log": log,
+                "checked": {str(k): list(v) for k, v in checked.items()}}
 
     def record(self) -> dict:
         return {"version": VERSION, "settings": {"max_alive": self.max_alive, "screen_seeds": self.screen_seeds,
