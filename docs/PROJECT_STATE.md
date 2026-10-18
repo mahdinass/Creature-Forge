@@ -398,3 +398,8 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Spend:** infra cap raised to $72 for Stage 1 (ledger $33.29); inference cap unchanged at $40 (ledger $32.88). VMs stopped.
 - **Next:** vertical slice by 21 Oct (bench families T2/T4, workbench on the plant, belief engine, mock proposer).
 - **Deadline:** internal deadline 29 Oct.
+
+## 2026-10-18 - Phase 3 correction: dev records moved into the living dev directory
+- The M0 diagnosis outputs were moved to `experiments/causal_engineer/dev/phase3_diagnosis/`; phase-3 dev reports live in
+  `experiments/causal_engineer/dev/hdb/`.
+- Committing them outside the living directories had broken `tests/test_frozen_records.py` since `777ef0d`; it passes again.

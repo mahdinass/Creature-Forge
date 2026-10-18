@@ -6,7 +6,7 @@ exploratory and post hoc. Inputs (all read-only):
   experiments/causal_engineer/heldout/results_amend1/nonai_from_registered.jsonl   (non-AI arms, registered run)
   experiments/causal_engineer/heldout/instances/heldout_shard*.jsonl               (instances, repair matrices)
   artifacts/vm/ce3/ce/probe_dev.jsonl                                              (dev probe dataset; optional, git-ignored)
-Outputs: experiments/causal_engineer/phase3_diagnosis/{diagnosis.json, DIAGNOSIS.md}
+Outputs: experiments/causal_engineer/dev/phase3_diagnosis/{diagnosis.json, DIAGNOSIS.md}
 
 Usage: python scripts/phase3_diagnosis.py [--out DIR]
 """
@@ -281,7 +281,7 @@ def render(res: dict) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default=str(ROOT / "experiments" / "causal_engineer" / "phase3_diagnosis"))
+    ap.add_argument("--out", default=str(ROOT / "experiments" / "causal_engineer" / "dev" / "phase3_diagnosis"))
     a = ap.parse_args()
     recs, inst = load()
     rows = lineage_rows(recs, inst)

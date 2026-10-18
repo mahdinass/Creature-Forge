@@ -4,7 +4,7 @@ Plan of record (owner-approved 2026-10-18, revision 2): `docs/HAS_PLAN_2026-10-1
 and log. Branch `feature/has-scientist` (from `feature/causal-engineer` @ `c429329`).
 
 ## Diagnosis that motivated the phase (exploratory)
-`experiments/causal_engineer/phase3_diagnosis/DIAGNOSIS.md`, produced by `scripts/phase3_diagnosis.py` from frozen held-out
+`experiments/causal_engineer/dev/phase3_diagnosis/DIAGNOSIS.md`, produced by `scripts/phase3_diagnosis.py` from frozen held-out
 records. Main points:
 - **Weak visible evidence.** The old scientist stopped on statistically weak evidence: a 4/4 stress test led to only 51% FULL.
 - **Flat budget curve.** Verification hardly depends on optimiser budget.
@@ -110,3 +110,9 @@ Rules:
   (122 hypotheses); two-step parameter refinement.
 - **Fresh walkers.** Panel of 250 failing bodies, split by region hash before any pipeline (dev 67, test 183). Pipelines
   running.
+- **Correction (2026-10-18).**
+  - Since M0 (`777ef0d`), the phase-3 dev records were committed outside the living directories. That broke
+    `tests/test_frozen_records.py`, which requires every tracked file under `experiments/` outside `…/dev/`, `forge_loop/`
+    and `demo_records/` to be frozen.
+  - They now live in `experiments/causal_engineer/dev/phase3_diagnosis/` and `experiments/causal_engineer/dev/hdb/`.
+  - The guard passes again. Lesson: run the frozen-record guard before every commit that adds files under `experiments/`.
