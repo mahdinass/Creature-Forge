@@ -192,3 +192,13 @@ Rules:
   - Twin use 1,968 of 2,800 on average; plant use 596.
   - Development only (engine and stopping map were tuned on these instances). Record:
     `experiments/causal_engineer/dev/hdb/ARMS_dev_engine_v4_v5.md`.
+- **MKV, engine v5 (dev, 21 instances at 1.3×, provisional stopping).**
+  - FULL: K2 8, A0 (K0) 6, K1 5, K3 5, K0n 5, K4 4.
+  - Mean validation walking: K2 0.79, K1 0.77, K4 0.76, K3 0.73, A0 0.73, K0n 0.63.
+  - K1 vs K3: 3 vs 3 discordant. K2 vs K1: 4 vs 1, p = 0.19.
+  - Interpretation (dev): the ensemble-robust pipeline tolerates a wrong *structure* (twin optimisation and plant
+    optimisation compensate), while exact *quantitative* knowledge helps more.
+  - The planned C-MKV primary on binary FULL (K1 vs K3) looks underpowered and close to null at N = 160. The owner decides
+    the registered form; proposal in the status report.
+- **Operations.** `ForgePool` caps workers at 7 (`MAX_WORKERS`). Parallelism comes from sharding, and the
+  identifiability script gained `--shard`. Infra ledger $52.43 at 22:30 UTC (Stage 1 spent about $19 of $35).
