@@ -96,6 +96,19 @@ def provisional_accept(ev: dict) -> bool:
     return ev.get("robust16") is not None and ev["robust16"] >= 15
 
 
+def calibrated_accept(model: dict, tau: float):
+    """accept_fn from a dev-fitted mapping (scripts/hdb_stop_calibration.py fit): accept iff P(FULL | robust16) >= tau."""
+    if model.get("kind") != "isotonic_robust16" or len(model.get("p", [])) != 17:
+        raise ValueError("unsupported stopping model")
+    table = [float(x) for x in model["p"]]
+
+    def accept(ev: dict) -> bool:
+        k = ev.get("robust16")
+        return k is not None and table[int(k)] >= tau
+    accept.model, accept.tau = model.get("fitted_on"), tau
+    return accept
+
+
 def SPEND_ALL(ev: dict) -> bool:          # noqa: N802 - arm A1f: never accept early, spend the budget, select by evidence
     return False
 

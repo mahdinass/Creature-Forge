@@ -165,6 +165,48 @@ def analyse(path: str) -> dict:
     return out
 
 
+def isotonic_counts(k: np.ndarray, y: np.ndarray, n: int) -> list[float]:
+    """Pool-adjacent-violators fit of P(label | count k in 0..n), non-decreasing in k; empty cells borrow neighbours."""
+    blocks = []                       # [sum_y, count, lo_k, hi_k]
+    for v in range(n + 1):
+        m = k == v
+        if m.any():
+            blocks.append([float(y[m].sum()), int(m.sum()), v, v])
+            while len(blocks) > 1 and blocks[-2][0] / blocks[-2][1] > blocks[-1][0] / blocks[-1][1]:
+                b = blocks.pop()
+                blocks[-1][0] += b[0]
+                blocks[-1][1] += b[1]
+                blocks[-1][3] = b[3]
+    p = [None] * (n + 1)
+    for s_, c, lo, hi in blocks:
+        for v in range(lo, hi + 1):
+            p[v] = s_ / c
+    last = 0.0
+    for v in range(n + 1):
+        last = p[v] if p[v] is not None else last
+        p[v] = last
+    return p
+
+
+def fit(path: str, out: str) -> dict:
+    """Isotonic map robust16 -> P(FULL), with leave-one-base-out predictions for honest metrics."""
+    rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+    k = np.array([r["robust16"] for r in rows])
+    y = np.array([r["label"] for r in rows], float)
+    bases = np.array([r["base_id"] for r in rows])
+    lobo = np.zeros(len(y))
+    for b in sorted(set(bases)):
+        te = bases == b
+        table = isotonic_counts(k[~te], y[~te], 16)
+        lobo[te] = [table[v] for v in k[te]]
+    model = {"kind": "isotonic_robust16", "fitted_on": os.path.basename(path), "n": int(len(y)),
+             "p": [round(v, 6) for v in isotonic_counts(k, y, 16)], "lobo_metrics": metrics(lobo, y),
+             "naive_beta_metrics": metrics([beta_pass(int(v), 16) for v in k], y)}
+    with open(out, "w", encoding="utf-8") as fh:
+        json.dump(model, fh, indent=1)
+    return model
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -175,9 +217,14 @@ def main() -> None:
     b.add_argument("--thresholds", default=None)
     an = sub.add_parser("analyse")
     an.add_argument("path")
+    ft = sub.add_parser("fit")
+    ft.add_argument("path")
+    ft.add_argument("--out", required=True)
     a = ap.parse_args()
     if a.cmd == "build":
         build(a)
+    elif a.cmd == "fit":
+        print(json.dumps(fit(a.path, a.out), indent=1))
     else:
         print(json.dumps(analyse(a.path), indent=1))
 
