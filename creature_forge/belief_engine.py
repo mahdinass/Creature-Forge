@@ -96,16 +96,34 @@ def provisional_accept(ev: dict) -> bool:
     return ev.get("robust16") is not None and ev["robust16"] >= 15
 
 
+def mapped_p_full(model: dict, ev: dict) -> float | None:
+    """P(full_recovery_v1 | visible evidence) from a dev-fitted map (scripts/hdb_stop_calibration.py fit)."""
+    kind = model.get("kind")
+    if kind == "isotonic_robust16":
+        k = ev.get("robust16")
+        return None if k is None else float(model["p"][int(k)])
+    if kind == "logistic_robust16_stress4":
+        x = [1.0]
+        for f in model["features"]:
+            v, n = ev.get(f), model["n_by_feature"][f]
+            if v is None:
+                return None
+            x.append(math.log((v + 0.5) / (n - v + 0.5)))      # empirical logit, as in the fit
+        z = sum(a * b for a, b in zip(model["w"], x))
+        return 1.0 / (1.0 + math.exp(-z))
+    raise ValueError(f"unsupported stopping model {kind!r}")
+
+
 def calibrated_accept(model: dict, tau: float):
-    """accept_fn from a dev-fitted mapping (scripts/hdb_stop_calibration.py fit): accept iff P(FULL | robust16) >= tau."""
-    if model.get("kind") != "isotonic_robust16" or len(model.get("p", [])) != 17:
-        raise ValueError("unsupported stopping model")
-    table = [float(x) for x in model["p"]]
+    """accept_fn from a dev-fitted mapping: accept iff mapped P(FULL) >= tau. Needs the evidence the map uses (the engine runs
+    the 20 s stress test for promising candidates when the map uses it)."""
+    mapped_p_full(model, {"robust16": 16, "stress4": 4})        # validates the model
 
     def accept(ev: dict) -> bool:
-        k = ev.get("robust16")
-        return k is not None and table[int(k)] >= tau
-    accept.model, accept.tau = model.get("fitted_on"), tau
+        p = mapped_p_full(model, ev)
+        ev["p_full"] = p
+        return p is not None and p >= tau
+    accept.model, accept.tau, accept.needs_stress = model.get("fitted_on"), tau, "stress4" in model.get("features", [])
     return accept
 
 
@@ -624,6 +642,14 @@ class Episode:
                 return None
             checked[idx] = (c["walking"], n)
             return c["walking"]
+
+        def stress(idx: int, w16) -> int | None:
+            """20 s stress test (obs seeds, 2 x n_obs) for a promising candidate when the stopping map uses it."""
+            if not getattr(accept_fn, "needs_stress", False) or w16 is None or w16 < 14 or self.b.remaining < 2 * self.b.n_obs:
+                return None
+            self.b.select(idx)
+            t = self.b.stress_test()
+            return t["observation"]["n_walking"] if t.get("ok") else None
         # 1) model-based warm start: ensemble-robust twin optimisation of the first tool
         t1 = tools[0]
         start = self.b.best_design()
@@ -639,8 +665,9 @@ class Episode:
             if w is not None and w >= accept and self.b.remaining >= 16:
                 w16 = check(cur, 16)
                 log[-1]["check16"] = w16
-                ev = {"robust8": w, "robust16": w16, "twin_walking": int(best["walking_count"]), "train_walking": None,
-                      "remaining": self.b.remaining}
+                ev = {"robust8": w, "robust16": w16, "stress4": stress(cur, w16), "twin_walking": int(best["walking_count"]),
+                      "train_walking": None, "remaining": self.b.remaining}
+                log[-1]["evidence"] = ev
                 if w16 is not None and accept_fn(ev):
                     return {"accepted": True, "design": cur, "log": log}
         # 2) empirical plant optimisation from the warm start with most of the remaining plant budget, chained over the tools
@@ -661,8 +688,9 @@ class Episode:
             w16 = check(cur, 16) if self.b.remaining >= 16 else None
             log.append({"step": "plant", "tool": tool, "budget": budget, "design": cur,
                         "train_walking": rep["best"]["train_walking"], "check16": w16})
-            ev = {"robust8": None, "robust16": w16, "twin_walking": None, "train_walking": rep["best"]["train_walking"],
-                  "remaining": self.b.remaining}
+            ev = {"robust8": None, "robust16": w16, "stress4": stress(cur, w16), "twin_walking": None,
+                  "train_walking": rep["best"]["train_walking"], "remaining": self.b.remaining}
+            log[-1]["evidence"] = ev
             if w16 is not None and accept_fn(ev):
                 return {"accepted": True, "design": cur, "log": log}
         # 3) submit the design with the best robustness evidence (walking fraction on its largest check)

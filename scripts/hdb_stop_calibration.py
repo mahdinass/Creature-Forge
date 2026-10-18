@@ -213,6 +213,26 @@ def fit(path: str, out: str) -> dict:
     return model
 
 
+def fit_logistic_rs(path: str, out: str) -> dict:
+    """Logistic map (robust16, stress4) -> P(FULL) with leave-one-base-out metrics (dev only)."""
+    rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+    y = np.array([r["label"] for r in rows], float)
+    bases = np.array([r["base_id"] for r in rows])
+    feats = ("robust16", "stress4")
+    X = design_matrix(rows, feats)
+    lobo = np.zeros(len(y))
+    for b in sorted(set(bases)):
+        te = bases == b
+        lobo[te] = 1 / (1 + np.exp(-X[te] @ fit_logistic(X[~te], y[~te])))
+    w = fit_logistic(X, y)
+    model = {"kind": "logistic_robust16_stress4", "features": list(feats), "n_by_feature": {"robust16": 16, "stress4": 4},
+             "w": [round(float(v), 6) for v in w], "fitted_on": os.path.basename(path), "n": int(len(y)),
+             "lobo_metrics": metrics(lobo, y), "naive_beta_metrics": metrics([beta_pass(int(r["robust16"]), 16) for r in rows], y)}
+    with open(out, "w", encoding="utf-8") as fh:
+        json.dump(model, fh, indent=1)
+    return model
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -226,11 +246,12 @@ def main() -> None:
     ft = sub.add_parser("fit")
     ft.add_argument("path")
     ft.add_argument("--out", required=True)
+    ft.add_argument("--kind", choices=["logistic", "isotonic"], default="logistic")
     a = ap.parse_args()
     if a.cmd == "build":
         build(a)
     elif a.cmd == "fit":
-        print(json.dumps(fit(a.path, a.out), indent=1))
+        print(json.dumps(fit_logistic_rs(a.path, a.out) if a.kind == "logistic" else fit(a.path, a.out), indent=1))
     else:
         print(json.dumps(analyse(a.path), indent=1))
 
