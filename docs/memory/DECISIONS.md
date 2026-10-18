@@ -115,3 +115,23 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - S3 (frozen walkrec-confirm-v1 + pre-data amendment 1; `experiments/walk_recovery/confirmatory/REPORT.md`): equal total budget 2,000, 48 fresh failing robots: FIX 19, CMA-joint 11, RAND 11, ai_v2 9, CMA-ctrl 8 full recoveries. Primary ai_v2 > FIX NOT supported (4 vs 14, p = 0.996).
 - Claim: the classical procedure (foot-placement controller + body co-design + diagnostic subspace probes + verdict-aware selection) makes 40% of genuinely failing never-seen robots walk under the strict criterion. Not claimed: AI decision value. Summary: `docs/WALK_RECOVERY.md`.
 - Development negatives kept: S2/S2b director, L2 learned experience (G3 FAIL), S4a control-law invention and closed loop (G4 FAIL).
+
+## 2026-10-18 Phase 3: Hypothesis-as-Simulation scientist on a hidden-damage bench (owner-approved plan, revision 2)
+- **Plan of record:** `docs/HAS_PLAN_2026-10-18.md`; living spec and log: `docs/HAS_SCIENTIST.md`; branch `feature/has-scientist`.
+- **Architecture:**
+  - Nemotron writes executable deviation hypotheses (a generic DSL), experiments and repair strategies.
+  - A deterministic engine weighs the hypotheses by paired same-seed twin simulation, chooses experiments by EIG, runs
+    posterior-robust repair, and stops on a dev-validated evidence→`full_recovery_v1` mapping.
+- **Benchmark integrity:**
+  - The agent sees the nominal design. The plant adds a hidden deviation and a reality gap.
+  - Eligibility is physics-only. Oracle R/U and ambiguity are labels, never filters.
+  - An identifiability study runs before any comparative run. Families are frozen before comparative dev runs.
+- **Hypotheses:**
+  - Primary, fixed in every protocol variant: FULL(A3 HaS) > FULL(A1 engine-only), one-sided exact McNemar.
+  - Separate confirmatory C-MKV: K1 (true mechanism structure) > K0 (none).
+  - Variants: P-main / P-reduced (if Tier B slips) / P-fallback.
+- **Attribution:** arms A0/A1/A1f/A2/A3h/A3hx/A3/A4/A5, plus deterministic replay. Nemotron's predictive distributions are
+  compared with the engine-only posterior predictive.
+- **Spending:** staged. Stage 1 approved: infra $35 (cap 38 → 72) and inference ≤ $5 within the $40 cap. Real credit on
+  2026-10-18 was Cloud $66, Token Factory $52. Later stages need owner approval with advance notice.
+- **Elicit:** API access was denied; no Elicit result is used anywhere.

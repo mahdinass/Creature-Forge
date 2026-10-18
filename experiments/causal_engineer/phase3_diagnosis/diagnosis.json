@@ -1,0 +1,237 @@
+{
+ "version": "phase3_diagnosis_v1",
+ "n_records": 320,
+ "decomposition": {
+  "exhaustive": {
+   "n": 40,
+   "full": 23,
+   "non_full": {
+    "right_tool_budget_spent": 15,
+    "wrong_tools_only": 2
+   },
+   "mean_remaining": 10.7
+  },
+  "learned": {
+   "n": 40,
+   "full": 18,
+   "non_full": {
+    "right_tool_budget_spent": 19,
+    "wrong_tools_only": 3
+   },
+   "mean_remaining": 12.2
+  },
+  "scientist_think_mem": {
+   "n": 40,
+   "full": 16,
+   "non_full": {
+    "right_tool_stopped_with_budget": 16,
+    "right_tool_budget_spent": 2,
+    "wrong_tools_only": 5,
+    "right_tool_not_submitted": 1
+   },
+   "mean_remaining": 341.1
+  },
+  "scientist_think": {
+   "n": 40,
+   "full": 14,
+   "non_full": {
+    "right_tool_stopped_with_budget": 18,
+    "no_repair": 2,
+    "wrong_tools_only": 4,
+    "right_tool_not_submitted": 1,
+    "right_tool_budget_spent": 1
+   },
+   "mean_remaining": 382.7
+  },
+  "scientist_think_mem_learned": {
+   "n": 40,
+   "full": 14,
+   "non_full": {
+    "right_tool_stopped_with_budget": 16,
+    "wrong_tools_only": 4,
+    "right_tool_not_submitted": 3,
+    "right_tool_budget_spent": 1,
+    "no_repair": 2
+   },
+   "mean_remaining": 338.5
+  },
+  "random": {
+   "n": 40,
+   "full": 12,
+   "non_full": {
+    "right_tool_budget_spent": 16,
+    "wrong_tools_only": 12
+   },
+   "mean_remaining": 10.0
+  },
+  "scientist_1shot_think": {
+   "n": 40,
+   "full": 8,
+   "non_full": {
+    "right_tool_stopped_with_budget": 19,
+    "right_tool_budget_spent": 3,
+    "wrong_tools_only": 10
+   },
+   "mean_remaining": 319.2
+  },
+  "expert": {
+   "n": 40,
+   "full": 6,
+   "non_full": {
+    "right_tool_budget_spent": 25,
+    "wrong_tools_only": 9
+   },
+   "mean_remaining": 10.5
+  }
+ },
+ "budget_curve": {
+  "0-150": {
+   "full": 19,
+   "n": 36,
+   "rate": 0.528
+  },
+  "150-300": {
+   "full": 12,
+   "n": 34,
+   "rate": 0.353
+  },
+  "300-450": {
+   "full": 22,
+   "n": 48,
+   "rate": 0.458
+  },
+  "450-600": {
+   "full": 5,
+   "n": 16,
+   "rate": 0.312
+  },
+  "600-800": {
+   "full": 53,
+   "n": 128,
+   "rate": 0.414
+  }
+ },
+ "visible_evidence": {
+  "train_4of4_at_submission": {
+   "full": 109,
+   "n": 246,
+   "rate": 0.443
+  },
+  "stress_test_on_submitted": {
+   "0": {
+    "full": 0,
+    "n": 8
+   },
+   "1": {
+    "full": 0,
+    "n": 3
+   },
+   "2": {
+    "full": 0,
+    "n": 3
+   },
+   "3": {
+    "full": 4,
+    "n": 12
+   },
+   "4": {
+    "full": 34,
+    "n": 67
+   }
+  }
+ },
+ "injected_vs_compensating": {
+  "pooled": {
+   "injected": {
+    "full": 77,
+    "n": 145,
+    "rate": 0.531
+   },
+   "compensating": {
+    "full": 34,
+    "n": 117,
+    "rate": 0.291
+   }
+  },
+  "within_instance": {
+   "instances": 28,
+   "mean_diff": 0.215,
+   "bootstrap95": [
+    0.08,
+    0.354
+   ],
+   "positive": 14,
+   "negative": 4,
+   "sign_test_one_sided_p": 0.0154
+  },
+  "caveat": "exploratory association; arms choose tools from evidence that also predicts difficulty, and the matching tool's subspace is the one the bench was screened with"
+ },
+ "first_repair": {
+  "exhaustive": {
+   "injected_first": 26,
+   "with_repair": 40
+  },
+  "learned": {
+   "injected_first": 10,
+   "with_repair": 40
+  },
+  "scientist_think_mem": {
+   "injected_first": 17,
+   "with_repair": 40
+  },
+  "scientist_think": {
+   "injected_first": 9,
+   "with_repair": 38
+  },
+  "scientist_think_mem_learned": {
+   "injected_first": 14,
+   "with_repair": 38
+  },
+  "random": {
+   "injected_first": 7,
+   "with_repair": 40
+  },
+  "scientist_1shot_think": {
+   "injected_first": 6,
+   "with_repair": 40
+  },
+  "expert": {
+   "injected_first": 8,
+   "with_repair": 40
+  }
+ },
+ "predictions": {
+  "null_wrong": 1650,
+  "real_said_no_change": 69,
+  "real_sign_right": 1236,
+  "real_sign_wrong": 554,
+  "null_right": 86
+ },
+ "learnability": {
+  "n_instances": 143,
+  "n_bases": 12,
+  "k": 7,
+  "targets": {
+   "time_upright": {
+    "mae_no_change": 1.4875,
+    "mae_knn_lobo": 1.4157
+   },
+   "capture_margin_over_L_mean": {
+    "mae_no_change": 0.0227,
+    "mae_knn_lobo": 0.0202
+   },
+   "pitch_mean": {
+    "mae_no_change": 0.0427,
+    "mae_knn_lobo": 0.0434
+   },
+   "step_freq_hz": {
+    "mae_no_change": 0.2797,
+    "mae_knn_lobo": 0.2451
+   },
+   "n_walking": {
+    "mae_no_change": 0.5548,
+    "mae_knn_lobo": 0.6894
+   }
+  }
+ }
+}

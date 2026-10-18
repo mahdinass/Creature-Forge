@@ -389,3 +389,12 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Infrastructure blocker:** GitHub Actions does not start runs ("recent account payments have failed or your spending
   limit needs to be increased"), first seen on `192c000`. CI results for this branch are unavailable until the owner fixes
   GitHub billing. This is not a code failure.
+
+## 2026-10-18 - Phase 3 (HaS scientist) approved; Stage 1 started (branch `feature/has-scientist`)
+- **Plan:** `docs/HAS_PLAN_2026-10-18.md`; spec and log: `docs/HAS_SCIENTIST.md`; diagnosis of the frozen held-out records:
+  `experiments/causal_engineer/phase3_diagnosis/` (exploratory).
+- **Done:** `creature_forge/hidden_plant.py` (deviation DSL, hidden plant, hooks for Workbench and `full_recovery_v1`) with
+  `tests/test_hidden_plant.py`: 11 pass locally, bit-identical at zero deviation.
+- **Spend:** infra cap raised to $72 for Stage 1 (ledger $33.29); inference cap unchanged at $40 (ledger $32.88). VMs stopped.
+- **Next:** vertical slice by 21 Oct (bench families T2/T4, workbench on the plant, belief engine, mock proposer).
+- **Deadline:** internal deadline 29 Oct.

@@ -8,7 +8,7 @@ description: Use whenever Creature Forge work needs the Nebius VM (tests, builds
 Local Windows PC: edit files, git, ssh only — it has almost no free RAM. Everything heavy runs on the VM.
 
 ## Lifecycle (`infra/nebius/forge_cloud.py`, Nebius CLI runs inside WSL)
-- `status`, `start` (refuses beyond the infra cap `SPEND_CAP_USD`, $38 since 2026-10-17; sets a verified 6 h deadline), `extend --hours H`
+- `status`, `start` (refuses beyond the infra cap `SPEND_CAP_USD`, $72 since 2026-10-18 (phase-3 Stage 1); sets a verified 6 h deadline), `extend --hours H`
   (cap-guarded), `stop`, `spend` (ledger total). Never `create`/`delete` without owner approval.
 - Deadman timer on the VM powers off at the deadline; the Windows task `CreatureForgeNebiusWatchdog` stops it too.
 - Stop the VM at the end of every work block or when idle > 30 min. Pull artifacts first.
@@ -25,5 +25,5 @@ Local Windows PC: edit files, git, ssh only — it has almost no free RAM. Every
 ## Secrets and spend
 - `.env` lives only on Windows and at `~/dev/.env` (mode 600) on the VM. Never print, log, commit or pass keys as args.
 - Inference ledger on the VM: `~/dev/ledger/inference_ledger.jsonl` (`CF_INFERENCE_LEDGER`); caps $40 / 8,000 (2026-10-18, owner-approved amendment)
-  requests. Infra ledger: `infra/nebius/spend_ledger.jsonl` (git-ignored), cap `SPEND_CAP_USD` ($38).
+  requests. Infra ledger: `infra/nebius/spend_ledger.jsonl` (git-ignored), cap `SPEND_CAP_USD` ($72, phase-3 Stage 1, 2026-10-18).
 - On any failure: record state in `docs/PROJECT_STATE.md`, stop the VM if idle, resume from the last commit.
