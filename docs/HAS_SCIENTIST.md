@@ -116,3 +116,14 @@ Rules:
     and `demo_records/` to be frozen.
   - They now live in `experiments/causal_engineer/dev/phase3_diagnosis/` and `experiments/causal_engineer/dev/hdb/`.
   - The guard passes again. Lesson: run the frozen-record guard before every commit that adds files under `experiments/`.
+- **Gate G-VS (target 21 Oct): met on 18 Oct.**
+  - End-to-end episodes are deterministic: two runs of the same episode give byte-identical records, wall time excluded.
+  - Plant and twin ledgers are exact; the workbench asserts it on every ledger read.
+  - The posterior concentrates on the injected class in most dev episodes: T2/T4 v1 grid 17/20. On the v2 threshold
+    severities, identification fell to 51/113 with engine v2; engines v3/v4 address that and are being measured.
+  - Bit-identity tests pass. Full Python regression on the main VM: 1,370 tests OK (5 skipped).
+- **Live smoke (Stage 1, ≤ $5 allowed).**
+  - 3 A3 episodes, all roles valid, $0.013 in total (about $0.004 per episode, far below the $0.25 planning estimate).
+  - The engine identified the injected structure in 3/3, but 0/3 recovered.
+  - Two of the episodes accepted on 15/16 robust seeds with 650+ plant rollouts unused and then failed verification by one
+    seed. This is the stopping problem the dev calibration addresses: `accept_fn` interface; A1f = spend all.
