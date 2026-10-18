@@ -127,3 +127,15 @@ Rules:
   - The engine identified the injected structure in 3/3, but 0/3 recovered.
   - Two of the episodes accepted on 15/16 robust seeds with 650+ plant rollouts unused and then failed verification by one
     seed. This is the stopping problem the dev calibration addresses: `accept_fn` interface; A1f = spend all.
+- **Fresh-walker campaign (`hdb-v1-walkers`) complete.**
+  - 250 genuinely failing guided bodies (S3 generation rule, unchanged). Each went through the FIX pipeline at 2,000
+    rollouts, then `full_recovery_v1`.
+  - 135 verified walkers became HDB bases: 36 dev-side, 99 test-side. The region-hash split was fixed before any pipeline
+    ran. The other 115 creatures (PARTIAL 89, NOT 26) are reported, never used.
+  - Test-side bases are never used in development.
+- **Engine additions:**
+  - `calibrated_accept` (isotonic robust16 → P(FULL), dev-fitted);
+  - runner arms A0 and A1f;
+  - `hdb_replay.py`: deterministic replay attribution on recorded plant data.
+- **Spend at 16:50 UTC:** infra ledger $40.45 of the $72 cap, i.e. about $7.2 of the $35 Stage-1 envelope. Inference
+  $0.013 for the live smoke.
