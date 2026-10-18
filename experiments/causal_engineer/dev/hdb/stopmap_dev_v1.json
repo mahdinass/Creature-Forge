@@ -1,0 +1,34 @@
+{
+ "kind": "logistic_robust16_stress4",
+ "features": [
+  "robust16",
+  "stress4"
+ ],
+ "n_by_feature": {
+  "robust16": 16,
+  "stress4": 4
+ },
+ "w": [
+  -3.715339,
+  1.125044,
+  0.445421
+ ],
+ "fitted_on": "stopcal.jsonl",
+ "n": 668,
+ "lobo_metrics": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.0722,
+  "log_loss": 0.2211,
+  "ece": 0.042,
+  "auroc": 0.913
+ },
+ "naive_beta_metrics": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.1165,
+  "log_loss": 0.3502,
+  "ece": 0.1205,
+  "auroc": 0.912
+ }
+}
