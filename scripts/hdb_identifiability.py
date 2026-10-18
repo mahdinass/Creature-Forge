@@ -70,7 +70,7 @@ def _grid(base, family, th):
 
 
 def study_instance(args) -> dict:
-    base, family, sev, th = args
+    base, family, sev, th, rivals_mode = args
     t0 = time.perf_counter()
     raw = hb.make_instance_v2(base, family, sev, th) if th is not None else hb.make_instance(base, family, sev)
     if raw is None:
@@ -82,7 +82,7 @@ def study_instance(args) -> dict:
     dm = hb.design_mass(inst["robot"]["body"])
     specs = hb.FAMILY_SPECS if th is not None else hb.FAMILIES
     pair = specs[family]["pair"]
-    rivals = [f for f, s in specs.items() if s["pair"] == pair]
+    rivals = [f for f, s in specs.items() if s["pair"] == pair] if rivals_mode == "pair" else list(specs)
     grids = {f: _grid(base, f, th) for f in rivals}
     # twin predictions for every (family, grid point) on TWIN_SEEDS seeds; gap-free
     ll = {}
@@ -112,6 +112,7 @@ def study_instance(args) -> dict:
         z = sum(math.exp(v - m) for v in fam_lml.values())
         post[gname] = {f: math.exp(v - m) / z for f, v in fam_lml.items()}
     return {"instance_id": inst["instance_id"], "base_id": base["base_id"], "family": family, "pair": pair, "severity": sev,
+            "rivals": rivals_mode,
             "eligible": inst["eligible"], "check": inst["check"]["walking"], "panel": plant_panel, "posterior": post,
             "wall_s": time.perf_counter() - t0}
 
@@ -122,7 +123,18 @@ def analyse(path: str) -> str:
          f"Instances: {len(rows)}; eligible (plant fails): {sum(r['eligible'] for r in rows)}. Results below use eligible instances; "
          "the posterior is over the two families of the instance's twin pair (uniform prior, marginal over each family's grid).", ""]
     el = [r for r in rows if r["eligible"]]
-    for pair in sorted({r["pair"] for r in el}):
+    if el and el[0].get("rivals") == "all":
+        fams = sorted({r["family"] for r in el})
+        L += ["## Multi-class (every dev family is a rival)", "",
+              "| injected \ MAP (all instruments) | " + " | ".join(fams) + " | correct: obs | obs+conditions | all |",
+              "|---|" + "---|" * (len(fams) + 3)]
+        for fam in fams:
+            fr = [r for r in el if r["family"] == fam]
+            cnt = {g: sum(max(r["posterior"][g], key=r["posterior"][g].get) == fam for r in fr) for g in ("obs", "obs+conditions", "all")}
+            row = [sum(max(r["posterior"]["all"], key=r["posterior"]["all"].get) == m for r in fr) for m in fams]
+            L.append(f"| {fam} (n={len(fr)}) | " + " | ".join(map(str, row)) + f" | {cnt['obs']} | {cnt['obs+conditions']} | {cnt['all']} |")
+        L.append("")
+    for pair in sorted({r["pair"] for r in el} if not (el and el[0].get("rivals") == "all") else []):
         pr = [r for r in el if r["pair"] == pair]
         L += [f"## {pair}", "", "| family | n | MAP correct: obs | obs+conditions | all | mean P(correct) all |", "|---|---|---|---|---|---|"]
         for fam in sorted({r["family"] for r in pr}):
@@ -170,19 +182,24 @@ def main() -> None:
     ap.add_argument("--out", default="artifacts/hdb/ident.jsonl")
     ap.add_argument("--analyse", default=None)
     ap.add_argument("--thresholds", default=None)
+    ap.add_argument("--rivals", choices=["pair", "all"], default="pair")
+    ap.add_argument("--split", default="dev")
+    ap.add_argument("--mults", default=None, help="v2: comma list of multiples to include, e.g. 1.3")
     a = ap.parse_args()
     if a.analyse:
         print(analyse(a.analyse))
         return
-    bases = hb.load_bases("dev")[a.base_offset:a.base_offset + a.bases]
+    bases = hb.load_bases(a.split)[a.base_offset:a.base_offset + a.bases]
     th = json.load(open(a.thresholds, encoding="utf-8")) if a.thresholds else None
     fams = hb.FAMILY_SPECS if th is not None else hb.FAMILIES
     nsev = (lambda f: len(hb.v2_severities(f))) if th is not None else hb.severity_count
     done = set()
     if os.path.exists(a.out):
         done = {json.loads(l)["instance_id"] for l in open(a.out, encoding="utf-8") if l.strip()}
-    jobs = [(b, f, s, th) for b in bases for f in fams for s in range(nsev(f))
-            if hb.instance_key(b["base_id"], f, s) not in done]
+    keep = None if not a.mults else {float(x) for x in a.mults.split(",")}
+    jobs = [(b, f, s, th, a.rivals) for b in bases for f in fams for s in range(nsev(f))
+            if hb.instance_key(b["base_id"], f, s) not in done
+            and (keep is None or th is None or hb.v2_severities(f)[s][1] in keep)]
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     with ForgePool(max_workers=a.workers) as pool, open(a.out, "a", encoding="utf-8") as out:
         for _, rec in pool.imap(study_instance, jobs):
