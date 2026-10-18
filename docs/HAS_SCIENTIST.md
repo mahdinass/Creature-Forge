@@ -159,3 +159,22 @@ Rules:
     three.
   - Engine: candidates reaching ≥ 14/16 get the 8-rollout stress test; acceptance uses the mapped P(FULL) ≥ τ (dev choice
     τ = 0.75). The map and τ are frozen at registration and never refitted on test.
+- **MKV v4 (dev, 21 instances at 1.3×).**
+  - FULL: K2 6, K1 4, K0n 4, K4 4, K3 2, A0 (K0) 6.
+  - Mean validation walking: K2 0.76 > K1 0.71 > K3 0.65 > K0n 0.59. A graded dose-response to mechanism information, but
+    with small FULL counts.
+  - With the exact deviation, the failures came from the repair search: crude tool screen (probe edits smaller than the
+    needed fix, e.g. posture compensation of a sensor bias), weak twin optimisation of the chosen tool, and 15/16
+    acceptances.
+  - Engine v5: the top-5 tools are re-ranked by short ensemble twin CMA.
+- **Dev arm comparison (12 old dev bases; development only; the engine was tuned on these instances, so no claim).**
+  - A1 (engine v4, provisional stop) vs A0 (generic exhaustive), paired on 101 instances: A1-only 17, A0-only 7,
+    one-sided p = 0.032. FULL: A1 39/113, A0 23/101.
+  - Plant rollouts: A1 472, A0 690 on average.
+  - The first time in the project any procedure beats exhaustive screening, even in development. Only the registered test
+    on fresh robots can confirm it.
+- **Stopping rules barely change outcomes.**
+  - Paired: A1-provisional vs A1c (calibrated, τ = 0.75) 1/1 discordant; A1 vs A1f (spend all) 1/1; A1c vs A1f 0/0.
+  - The calibrated and spend-all rules use 650–690 plant rollouts against 472.
+  - This replicates the diagnosis: more optimiser budget does not buy verification. The calibrated map's value is an honest
+    P(pass) and compute, not recoveries. Repair quality is the lever (engine v5).
