@@ -98,9 +98,7 @@ def arms(paths) -> str:
             l = sum(y and not x for x, y in pairs)
             L.append(f"- {a} vs {b}: n {len(pairs)}, {a} only {w}, {b} only {l}, p({a}>{b}) = {exact_mcnemar_one_sided(w, l):.3f}, "
                      f"p({b}>{a}) = {exact_mcnemar_one_sided(l, w):.3f}")
-    return "
-".join(L) + "
-"
+    return "\n".join(L) + "\n"
 
 
 if __name__ == "__main__":
