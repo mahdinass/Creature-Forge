@@ -219,14 +219,18 @@ class HDBWorkbench(Workbench):
                              pool=self.pool)
 
     def twin_cma(self, deviation, design: dict, tool: str, budget: int, *, role: str = "twin", n_train: int = 4,
-                 noise_seed: int = 0, tag: str = "") -> dict | None:
+                 noise_seed: int = 0, tag: str = "", ensemble: list | None = None) -> dict | None:
+        """CMA-ES on the twin. `ensemble` (list of plants) judges every candidate across plausible plants (seed i on plant
+        i mod K) instead of the single `deviation`."""
         seeds = self._twin_seeds(role, n_train)
         if budget < min_budget(tool, n_train):
             return None
-        if not self._twin_charge(budget, "twin_cma", {"tool": tool, "role": role, "budget": budget, "tag": tag}):
+        if not self._twin_charge(budget, "twin_cma", {"tool": tool, "role": role, "budget": budget, "tag": tag,
+                                                      "ensemble": len(ensemble or [])}):
             return None
         res = hp.plant_cma(design["body"], list(design["vector"]), tool_space(tool), plant={"deviation": deviation},
-                           budget=budget, train_seeds=seeds, noise_seed=noise_seed, pool=self.pool, variation=self.variation)
+                           budget=budget, train_seeds=seeds, noise_seed=noise_seed, pool=self.pool, variation=self.variation,
+                           ensemble=ensemble)
         used = int(res["rollouts_used"])
         if used < budget:
             self.twin.refund(budget - used, "twin_cma", {"tool": tool, "unused": budget - used})

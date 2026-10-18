@@ -551,6 +551,40 @@ def make_eval_fn(plant, train_seeds, *, variation=None, duration: float = 10.0, 
     return eval_fn
 
 
+def make_ensemble_eval_fn(plants, train_seeds, *, variation=None, duration: float = 10.0, pool=None):
+    """Like make_eval_fn, but training seed i is simulated on plants[i % len(plants)]: every candidate is judged across an
+    ensemble of plausible plants at the cost of one rollout per seed (posterior-robust optimisation on the twin)."""
+    from .arena import VARIATION_PRESET
+    from . import r2
+    variation = VARIATION_PRESET if variation is None else variation
+    seeds = [int(s) for s in train_seeds]
+    conds = _conditions(seeds, variation)
+    plants = [normalize_plant(p) for p in plants]
+    pool = pool or InlinePool()
+
+    def eval_fn(cands):
+        jobs = []
+        for b, v in cands:
+            for i, (s, c) in enumerate(zip(seeds, conds)):
+                jobs.append({"vector": [float(x) for x in v], "body": dict(b), "seed": s, "duration": duration,
+                             "perturb": c["perturb"], "friction_factor": c["friction_factor"], "plant": plants[i % len(plants)]})
+        res: list = [None] * len(jobs)
+        for i, r in pool.imap(walk_job, jobs):
+            res[i] = {"ok": False, "error": r[1]} if isinstance(r, tuple) and is_error(r) else r
+        recs = []
+        S = len(seeds)
+        for ci in range(len(cands)):
+            row = res[ci * S:(ci + 1) * S]
+            fits = [r2.ERROR_FITNESS if not r.get("ok") or not math.isfinite(r["fitness"]) else r["fitness"] for r in row]
+            errs = [f"seed {seeds[k]}: {r['error']}" for k, r in enumerate(row) if not r.get("ok")]
+            recs.append({"walking_count": sum(1 for r in row if r.get("ok") and r["walking"]),
+                         "survival_count": sum(1 for r in row if r.get("ok") and not r["fell"]),
+                         "mean_fitness": float(np.mean(fits)), "error": "; ".join(errs) if errs else None})
+        return recs
+
+    return eval_fn
+
+
 def plant_cma(body, init_vector, space, *, plant=None, budget: int, train_seeds, noise_seed: int, pool=None,
               variation=None, **kw) -> dict:
     """walk_opt.cma_search with every candidate evaluated on the plant (a Workbench `cma_fn`)."""
@@ -558,7 +592,9 @@ def plant_cma(body, init_vector, space, *, plant=None, budget: int, train_seeds,
     from .arena import VARIATION_PRESET
     variation = VARIATION_PRESET if variation is None else variation
     duration = kw.pop("duration", 10.0)
-    fn = make_eval_fn(plant, train_seeds, variation=variation, duration=duration, pool=pool)
+    ensemble = kw.pop("ensemble", None)
+    fn = (make_ensemble_eval_fn(ensemble, train_seeds, variation=variation, duration=duration, pool=pool) if ensemble
+          else make_eval_fn(plant, train_seeds, variation=variation, duration=duration, pool=pool))
     return wo.cma_search(body, init_vector, space, budget=budget, train_seeds=train_seeds, noise_seed=noise_seed, pool=pool,
                          variation=variation, duration=duration, eval_fn=fn, **kw)
 

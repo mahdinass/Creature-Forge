@@ -86,7 +86,7 @@ def main() -> None:
     ap.add_argument("--severities", default="mid,max")
     ap.add_argument("--budget", type=int, default=700)
     ap.add_argument("--twin-budget", type=int, default=2800)
-    ap.add_argument("--twin-repair", type=int, default=400)
+    ap.add_argument("--twin-repair", type=int, default=800)
     ap.add_argument("--plant-repair", type=int, default=300)
     ap.add_argument("--max-alive", type=int, default=12)
     ap.add_argument("--max-experiments", type=int, default=6)

@@ -64,6 +64,26 @@ TOOL_PROBES = {"posture": ("pitch_ref@+0.1R", "pitch_ref@-0.1R", "hip_bias@+0.1R
                "leg_length": ("leg_length@x0.85", "leg_length@x1.2")}
 
 
+# generic manufacturing-tolerance prior for posterior-robust design (declared a priori; deliberately wider than, and independent
+# of, the bench's sealed reality-gap generator): real robots differ from their designs by a few percent
+TOLERANCE = {"torso_mass": (0.95, 1.05), "actuator_strength": (0.92, 1.08), "joint_damping": (0.7, 1.4),
+             "contact_friction": (0.9, 1.1)}
+
+
+def tolerance_draws(k: int, seed: int) -> list[list[dict]]:
+    """k deterministic nuisance deviations from the tolerance prior (per-joint actuator draws)."""
+    rng = np.random.default_rng(np.random.SeedSequence([int(seed) % (2 ** 32), 0x701]))
+    out = []
+    for _ in range(k):
+        d = [{"kind": "torso_mass", "target": "torso", "params": {"factor": float(rng.uniform(*TOLERANCE["torso_mass"]))}},
+             {"kind": "joint_damping", "target": "all", "params": {"factor": float(rng.uniform(*TOLERANCE["joint_damping"]))}},
+             {"kind": "contact_friction", "target": "feet", "params": {"factor": float(rng.uniform(*TOLERANCE["contact_friction"]))}}]
+        d += [{"kind": "actuator_strength", "target": j, "params": {"factor": float(rng.uniform(*TOLERANCE["actuator_strength"]))}}
+              for j in hp.JOINTS]
+        out.append(hp.validate_deviation(d))
+    return out
+
+
 # ---------------------------------------------------------------------------------------------------------
 # features and likelihood
 # ---------------------------------------------------------------------------------------------------------
@@ -520,10 +540,17 @@ class Episode:
         self._event("tool_screen", ranking=out)
         return out
 
-    def robust_repair(self, *, twin_budget: int = 400, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
-                      tool_order: list[str] | None = None) -> dict:
+    def ensemble(self, hyps: list[tuple[Particle, float]], k: int = 8) -> list[dict]:
+        """Plausible plants for posterior-robust design: the leading hypotheses (cycled in weight order) each combined with a
+        tolerance draw."""
+        tol = tolerance_draws(k, seed=len(self.design0["vector"]) * 7919 + int(1e6 * float(self.design0["vector"][0])))
+        return [{"deviation": hyps[i % len(hyps)][0].deviation + tol[i]} for i in range(k)]
+
+    def robust_repair(self, *, twin_budget: int = 800, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
+                      tool_order: list[str] | None = None, engineer=None) -> dict:
         """Posterior-robust repair: twin-optimise the best tool under the MAP hypothesis, check on the plant, and fine-tune on
-        the plant only if the check fails. Provisional stop rule (VS): robustness_check >= accept / n_check."""
+        the plant only if the check fails. Provisional stop rule (VS): robustness_check >= accept / n_check.
+        `engineer(state, ranking) -> {"tool_order": [...], ...}` (optional) may reorder the tools after the twin screen."""
         post = self.posterior()
         hyps, mass = [], 0.0
         for p, w in post:
@@ -533,11 +560,16 @@ class Episode:
                 break
         ranking = self.screen_tools(hyps)
         tools = tool_order or [r["tool"] for r in ranking]
+        if engineer is not None:
+            plan = engineer(self.state(), ranking) or {}
+            self._event("engineer_plan", plan=plan, engine_order=[r["tool"] for r in ranking])
+            if plan.get("tool_order"):
+                tools = list(plan["tool_order"]) + [t for t in tools if t not in plan["tool_order"]]
         log = []
         for tool in tools[:2]:
             start = self.b.best_design()
-            res = self.b.twin_cma(hyps[0][0].deviation, start, tool, twin_budget, role="twin", n_train=4,
-                                  noise_seed=len(log), tag=f"robust:{tool}")
+            res = self.b.twin_cma(hyps[0][0].deviation, start, tool, twin_budget, role="twin", n_train=8,
+                                  noise_seed=len(log), tag=f"robust:{tool}", ensemble=self.ensemble(hyps))
             if res is None:
                 log.append({"tool": tool, "twin": "budget"})
                 continue
@@ -550,7 +582,7 @@ class Episode:
             if chk.get("ok") and chk["walking"] >= accept:
                 return {"accepted": True, "design": j, "log": log}
             if self.b.remaining >= plant_budget + 16:
-                rep = self.b.repair(tool, plant_budget, n_train=4, init={"index": j})
+                rep = self.b.repair(tool, plant_budget, n_train=8, init={"index": j})
                 if rep.get("ok"):
                     self.b.select(rep["design_index"])
                     chk2 = self.b.robustness_check(16)
