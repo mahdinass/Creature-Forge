@@ -178,3 +178,6 @@ Rules:
   - The calibrated and spend-all rules use 650–690 plant rollouts against 472.
   - This replicates the diagnosis: more optimiser budget does not buy verification. The calibrated map's value is an honest
     P(pass) and compute, not recoveries. Repair quality is the lever (engine v5).
+- **A1c calibration check (dev, 113 episodes, τ = 0.75).** Accepted 23; mean mapped P(FULL) 0.77; 16/23 = 0.70 verified.
+  Close calibration, slightly optimistic and in-sample (the map was fitted on dev designs of these instances). Not
+  accepted: 22/90 verified. Total FULL 38/113 (A1-provisional 39).
