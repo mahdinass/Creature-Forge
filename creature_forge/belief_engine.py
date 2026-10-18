@@ -23,7 +23,7 @@ import numpy as np
 
 from . import hidden_plant as hp
 
-VERSION = "belief_engine_v4"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence; v3: 4-level generic magnitudes, two-step refinement; v4: calibrated scales + seed-level contamination likelihood
+VERSION = "belief_engine_v5"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence; v3: 4-level generic magnitudes, two-step refinement; v4: calibrated scales + seed-level contamination likelihood; v5: tool screen by short ensemble twin CMA
 
 # per-seed summary features in the likelihood and their noise scales (provisional; calibrated on dev, frozen before comparisons)
 # v4 (dev noise calibration, scripts/hdb_noise_calibration.py, 175 dev instances, plant vs twin with the TRUE deviation): the
@@ -602,6 +602,29 @@ class Episode:
         self._event("tool_screen", ranking=out)
         return out
 
+    def screen_tools_cma(self, hyps, ranking: list[dict], *, top: int = 5, budget: int = 150) -> list[dict]:
+        """v5: re-rank the `top` tools of the probe screen by a short ensemble-robust twin optimisation each (probe edits are too
+        small to reveal tools whose fix needs a large change, e.g. posture compensation of a sensor bias)."""
+        from .hdb_workbench import min_budget
+        start = self.b.best_design()
+        ens = self.ensemble(hyps, k=4)
+        out = []
+        for r in ranking[:top]:
+            tool = r["tool"]
+            b = max(budget, min_budget(tool, 4))
+            res = self.b.twin_cma(hyps[0][0].deviation, start, tool, b, role="twin", n_train=4, noise_seed=11,
+                                  tag=f"screen_cma:{tool}", ensemble=ens)
+            if res is None:
+                out.append({**r, "cma_walking": None, "cma_fitness": None})
+                continue
+            best = res["best"]
+            out.append({**r, "cma_walking": int(best["walking_count"]), "cma_fitness": float(best["mean_fitness"])})
+        out.sort(key=lambda t: (-(t["cma_walking"] if t["cma_walking"] is not None else -1),
+                                -(t["cma_fitness"] if t["cma_fitness"] is not None else -1e9)))
+        rest = [r for r in ranking[top:]]
+        self._event("tool_screen_cma", ranking=out)
+        return out + rest
+
     def ensemble(self, hyps: list[tuple[Particle, float]], k: int = 8) -> list[dict]:
         """Plausible plants for posterior-robust design: the leading hypotheses (cycled in weight order) each combined with a
         tolerance draw."""
@@ -609,7 +632,8 @@ class Episode:
         return [{"deviation": hyps[i % len(hyps)][0].deviation + tol[i]} for i in range(k)]
 
     def robust_repair(self, *, twin_budget: int = 800, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
-                      tool_order: list[str] | None = None, engineer=None, accept_fn=None) -> dict:
+                      tool_order: list[str] | None = None, engineer=None, accept_fn=None, screen_cma: bool = True,
+                      screen_top: int = 5, screen_budget: int = 150) -> dict:
         """Posterior-robust repair (v2): (1) ensemble-robust twin optimisation of the first tool as a warm start, checked on the
         plant; (2) empirical plant optimisation from it with most of the remaining plant budget, chained over two tools; (3) the
         design with the best robustness evidence is submitted. Provisional stop rule (dev): accept on 15/16 robust seeds (the
@@ -626,6 +650,8 @@ class Episode:
             if mass >= 0.8 or len(hyps) >= 3:
                 break
         ranking = self.screen_tools(hyps)
+        if screen_cma and tool_order is None:
+            ranking = self.screen_tools_cma(hyps, ranking, top=screen_top, budget=screen_budget)
         tools = tool_order or [r["tool"] for r in ranking]
         if engineer is not None:
             plan = engineer(self.state(), ranking) or {}
