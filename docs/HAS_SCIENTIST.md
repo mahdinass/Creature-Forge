@@ -202,3 +202,9 @@ Rules:
     the registered form; proposal in the status report.
 - **Operations.** `ForgePool` caps workers at 7 (`MAX_WORKERS`). Parallelism comes from sharding, and the
   identifiability script gained `--shard`. Infra ledger $52.43 at 22:30 UTC (Stage 1 spent about $19 of $35).
+- **Multi-class identifiability (dev, 302 eligible instances, all 9 dev families as rivals, 1.3× threshold).**
+  - Injected family is the MAP: observation only 245, + condition tests 270, all instruments 282 (93 %).
+  - The 20 remaining confusions (actuator weakness / heavy torso / one-side weakness; balance-gain loss / short feet)
+    form the ambiguous stratum.
+  - Experiments carry information, so experiment choice matters (grounds for arm A3hx).
+- **HDB v2 frozen** (`docs/HDB_SPEC.md`, module hashes recorded). The severity definition awaits the owner's confirmation.

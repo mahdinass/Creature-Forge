@@ -1,6 +1,14 @@
 # Hidden-Damage Bench (HDB) v2: specification
 
-Status: **DRAFT (2026-10-18). To be frozen after the multi-class identifiability study and before any registered comparison.**
+Status: **FROZEN 2026-10-19 (bench definition; code at commit `251765b`)**, after the multi-class identifiability study
+(`experiments/causal_engineer/dev/hdb/IDENTIFIABILITY_v2_multiclass.md`: 282/302 dev instances identified with all
+instruments; observation alone 245, + condition tests 270). The owner's confirmation of the threshold-relative severity
+definition (§3) is pending: a change would be a dated amendment before any registered run.
+Hashes at the freeze:
+- `creature_forge/hdb_bench.py` sha256 `7bd810cf9b843ef9fa9b84f73f7f03ae55f91878030a2acbd85446845a64af05`
+- `creature_forge/hdb_heldout.py` sha256 `3875de597cfbcb8dd71cd4fae8ddc533d8e0cdeb2d23492174fc8cfec79f1077`
+- `creature_forge/hidden_plant.py` sha256 `91c26fd93fcb303e877ff5ee15ee62b7543077b2f549aae0875bad9e2773b7c6`
+- `creature_forge/hdb_workbench.py` sha256 `ba34b0a5f0aa2c729218a53a80a7525a60f6b474086bc79ee8049a50081d83d0`
 At the freeze, this file gets the commit and the SHA-256 of `creature_forge/hdb_bench.py`, `creature_forge/hdb_heldout.py`,
 `creature_forge/hidden_plant.py` and `creature_forge/hdb_workbench.py`. Any later change is a dated amendment with a reason;
 none may be motivated by an arm's results. Plan of record: `docs/HAS_PLAN_2026-10-18.md`. Log: `docs/HAS_SCIENTIST.md`.
