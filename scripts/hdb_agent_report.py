@@ -118,11 +118,51 @@ def process(rows: list[dict]) -> list[str]:
     return L
 
 
+def walking_pairs(rows: list[dict]) -> list[str]:
+    """Paired validation walking fraction between arms on shared instances (one-sided Wilcoxon, first arm better)."""
+    from hdb_report import wilcoxon_one_sided
+    by = defaultdict(dict)
+    for r in rows:
+        if "verification" in r:
+            by[r["instance_id"]][r["arm"]] = r["verification"]["walking_frac"]
+    names = sorted({a for v in by.values() for a in v})
+    L = ["", "Paired validation walking fraction (one-sided Wilcoxon, first arm better; development only):", ""]
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            d = [v[a] - v[b] for v in by.values() if a in v and b in v]
+            if d:
+                w = wilcoxon_one_sided(d)
+                L.append(f"- {a} vs {b}: n {len(d)}, mean diff {w['mean_diff']:+.3f}, p({a}>{b}) = {w['p']:.3f}, "
+                         f"p({b}>{a}) = {wilcoxon_one_sided([-x for x in d])['p']:.3f}")
+    return L
+
+
+def corrupt_probe(rows: list[dict], probe_id: str = "D90", probe_tool: str = "foot_friction") -> list[str]:
+    """Negative-transfer probe: did the scientist apply the deliberately wrong dossier or adopt its repair?"""
+    rs = [r for r in rows if r["arm"] == "A4bad"]
+    if not rs:
+        return []
+    applied = adopted = shown_top = 0
+    for r in rs:
+        ag = r["agent"]
+        acts = [t["action"] for t in ag["trace"] if t["actor"] == "nemotron"]
+        applied += any(a.get("action") == "apply_dossier" and a.get("dossier") == probe_id for a in acts)
+        adopted += any(probe_tool in (a.get("tool_order") or []) or (a.get("action") == "repair" and a.get("tool") == probe_tool)
+                       or "foot_friction@" in (a.get("start_edits") or "") for a in acts)
+        shown_top += any(v["shown"] and v["shown"][0][0] == probe_id for v in ag.get("memory_views") or [])
+    st = Counter(r["verification"]["status"] for r in rs)
+    return ["", f"## Corrupted-dossier probe (A4bad, n = {len(rs)}; the probe dossier claims low friction for every failure)", "",
+            f"- probe dossier ranked first on some turn: {shown_top}/{len(rs)}; applied as hypotheses: {applied}/{len(rs)}; its "
+            f"repair adopted (tool order, trial repair or start edits): {adopted}/{len(rs)}",
+            f"- outcomes: {dict(st)}"]
+
+
 def main() -> None:
     paths = [p for p in sys.argv[1:] if not p.startswith("--")]
     rows = _rows(paths)
     print(arms(paths))
-    print("\n".join(["# Process metrics (development only)", ""] + process(rows)))
+    print("\n".join(walking_pairs(rows)))
+    print("\n".join(["", "# Process metrics (development only)", ""] + process(rows) + corrupt_probe(rows)))
 
 
 if __name__ == "__main__":
