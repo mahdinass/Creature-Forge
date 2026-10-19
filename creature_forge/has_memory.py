@@ -326,7 +326,9 @@ class Memory:
             a = self.applicability(d, session)
             sig = a["signature"]
             ev = sig["true"] + sig["false"]
-            score = (sig["true"] / ev if ev else 0.0) - 1.0 * (a["fails_when"]["true"] > 0)
+            # retrieval v2 (after A4 pilot): the engine's belief in the dossier's mechanism leads (it identifies mechanisms by
+            # simulation; raw signature thresholds barely separate them on dev data), signature checks are secondary evidence
+            score = a["engine_weight"] + 0.25 * (sig["true"] / ev if ev else 0.0) - 1.0 * (a["fails_when"]["true"] > 0)
             rows.append((score, d, a))
         rows.sort(key=lambda t: (-t[0], t[1]["id"]))
         out = []

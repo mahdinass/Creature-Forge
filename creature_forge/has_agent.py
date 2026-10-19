@@ -40,7 +40,8 @@ from . import belief_engine as be
 from . import scientist_has as sh
 from .hdb_workbench import min_budget
 
-VERSION = "has_agent_v3"   # v3: experiment/prediction/hypotheses are required schema fields (optional ones were dropped
+VERSION = "has_agent_v4"   # v4: memory retrieval by believed mechanism + how to use it
+                           # v3: experiment/prediction/hypotheses are required schema fields (optional ones were dropped
                            # under constrained decoding); a missing prediction is recorded, it no longer voids the action
                            # v2 (after pilot 1): delegate_repair takes the scientist's tool order and start edits; accurate
                            # tool costs in the prompt; a failed reply never triggers a terminal fallback
@@ -550,7 +551,10 @@ def notebook(s: LabSession, turn: int, max_turns: int) -> list[str]:
         s.dossiers_shown = s.memory.view(s)
         s.memory_views.append({"turn": turn, "shown": [(d["id"], d["score"]) for d in s.dossiers_shown]})
     if s.dossiers_shown:
-        L += ["", "MEMORY (dossiers from earlier investigations; applicability re-checked against this robot's data every turn):"]
+        L += ["", "MEMORY (dossiers learned from earlier investigations, ranked by the engine's current belief in their mechanism; "
+                  "applicability re-checked against this robot's data every turn). Use a dossier's repair knowledge through "
+                  "delegate_repair `tool_order`/`start_edits` or a trial repair; apply_dossier adds its mechanism as hypotheses. "
+                  "Trust it only where its applicability checks and evidence hold:"]
         for d in s.dossiers_shown:
             L.append(f"  {d['id']}: {d['line']}")
     if s.learned is not None:
