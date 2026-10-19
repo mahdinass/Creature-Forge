@@ -25,7 +25,10 @@ ROOT = HERE.parents[1]
 # walking-recovery S1 stage (temporary 64-vCPU batch VM), and to $35 on 2026-10-17 for iteration 3 (S4a, S4b, S3, demo). create/start/extend refuse beyond it.
 # 2026-10-18: phase-3 Stage 1 approved by the owner (infra envelope $35; real Cloud credit $66 at a ledger of $33.29).
 # Cap = ledger 33.29 + envelope 35 + ~3 disk accrual; the credit-supported maximum is ~$94 (ledger + credit - $5 reserve).
-SPEND_CAP_USD = 72.0
+# 2026-10-19: Stage 1 ended at a ledger of $75.48 (5.39 h of unplanned batch time past a deadline, CLI login expired).
+# Phase-3 Stage 2 approved by the owner: +$20 incremental infra. Cap = ledger at the Stage-2 start $75.48 + $20 + $0.5
+# accounting slack (disk accrual rounding). Estimated real credit before Stage 2 is ~$23.8.
+SPEND_CAP_USD = 96.0
 SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
 _BASE = {
@@ -52,13 +55,39 @@ HOST = CFG["host"]
 WSL = ["wsl.exe", "-d", "Ubuntu", "-u", "mahdi", "--", "bash", "-s"]
 
 
-def nebius(*args: str, check: bool = True) -> str:
-    cmd = "~/.nebius/bin/nebius " + " ".join(shlex.quote(a) for a in args) + "\n"
-    r = subprocess.run(WSL, input=cmd.encode(), capture_output=True)
+AUTH_BLOCKED = HERE / "AUTH_BLOCKED"       # git-ignored marker: set on the first auth failure, cleared only by `login`
+_AUTH_SIGNS = ("auth.nebius.com", "authentication", "oauth2", "unauthenticated", "token is expired")
+
+
+def nebius(*args: str, check: bool = True, interactive: bool = False) -> str:
+    """Run the Nebius CLI in WSL. Unattended calls never open a browser (--no-browser) and give up on auth after 30 s.
+    An auth failure writes AUTH_BLOCKED; every later unattended call then refuses without contacting Nebius (no repeated
+    login attempts) until the owner runs `forge_cloud.py login` in a terminal (owner instruction, 2026-10-19)."""
+    if not interactive and AUTH_BLOCKED.exists():
+        raise SystemExit(f"nebius auth blocked since {AUTH_BLOCKED.read_text('utf-8').strip()}: "
+                         "run `python infra/nebius/forge_cloud.py login` in a terminal (opens the browser once)")
+    flags = [] if interactive else ["--no-browser", "--auth-timeout", "30s"]
+    cmd = "~/.nebius/bin/nebius " + " ".join(shlex.quote(a) for a in [*flags, *args]) + "\n"
+    try:
+        r = subprocess.run(WSL, input=cmd.encode(), capture_output=True, timeout=None if interactive else 180)
+    except subprocess.TimeoutExpired:
+        raise SystemExit(f"nebius {' '.join(args[:3])} timed out")
     out = r.stdout.decode(errors="replace").replace("\0", "")
+    err = r.stderr.decode(errors="replace").replace("\0", "")
+    if r.returncode != 0 and not interactive and any(k in (out + err).lower() for k in _AUTH_SIGNS):
+        AUTH_BLOCKED.write_text(time.strftime("%Y-%m-%dT%H:%M:%S%z") + "\n", "utf-8")
+        raise SystemExit("nebius auth failed (login expired): AUTH_BLOCKED written, no further attempts. "
+                         "Run `python infra/nebius/forge_cloud.py login` in a terminal.")
     if check and r.returncode != 0:
-        raise SystemExit(f"nebius {' '.join(args[:3])} failed:\n{r.stderr.decode(errors='replace').replace(chr(0), '')[-1500:]}")
+        raise SystemExit(f"nebius {' '.join(args[:3])} failed:\n{err[-1500:]}")
     return out
+
+
+def cmd_login(_a=None) -> None:
+    """Owner action in a terminal: refresh the CLI login (may open the browser once), then clear AUTH_BLOCKED."""
+    nebius("compute", "instance", "list", "--parent-id", CFG["project_id"], "--format", "json", interactive=True)
+    AUTH_BLOCKED.unlink(missing_ok=True)
+    print("login ok; AUTH_BLOCKED cleared")
 
 
 def load() -> dict:
@@ -411,7 +440,7 @@ def cmd_watchdog(_a=None) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
-    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend"):
+    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend", "login"):
         sp.add_parser(n)
     e = sp.add_parser("exec"); e.add_argument("command"); e.add_argument("--timeout", type=int, default=600)
     r = sp.add_parser("run-stage"); r.add_argument("stage", choices=["pilot", "train", "validate", "gate", "select"]); r.add_argument("--rep", type=int, default=1)
@@ -422,7 +451,7 @@ def main() -> None:
     a = ap.parse_args()
     {"plan": cmd_plan, "create": cmd_create, "status": cmd_status, "ssh-config": cmd_ssh_config, "bootstrap": cmd_bootstrap,
      "check": cmd_check, "exec": cmd_exec, "run-stage": cmd_run_stage, "monitor": cmd_monitor, "sync-down": cmd_sync_down,
-     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend}[a.cmd](a)
+     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend, "login": cmd_login}[a.cmd](a)
 
 
 if __name__ == "__main__":

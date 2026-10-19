@@ -64,13 +64,56 @@ def mkv(paths) -> str:
         st = Counter(x["status"] for x in cr)
         L.append(f"| {c} | {st['FULL_RECOVERY']}/{len(cr)} | {st['PARTIAL_IMPROVEMENT']} | {st['NOT_RECOVERED']} | "
                  f"{sum(x['walking_frac'] for x in cr) / len(cr):.2f} |")
-    L += ["", "Paired contrasts on FULL (exact one-sided McNemar; development only, not a registered test):", ""]
-    for a, b in (("K1", "K3"), ("K1", "K0"), ("K1", "K0n"), ("K2", "K1"), ("K4", "K0"), ("K4", "K3")):
-        pairs = [(v[a]["status"] == "FULL_RECOVERY", v[b]["status"] == "FULL_RECOVERY") for v in by.values() if a in v and b in v]
-        w = sum(x and not y for x, y in pairs)
-        l = sum(y and not x for x, y in pairs)
-        L.append(f"- {a} vs {b}: n {len(pairs)}, {a} only {w}, {b} only {l}, p = {exact_mcnemar_one_sided(w, l):.3f}")
+    L += ["", "C-MKV analysis (fixed 2026-10-19 by the owner before any sealed evaluation; choosing K2 vs K0n as primary was",
+          "motivated by development results). FULL: exact one-sided McNemar. Walking: one-sided Wilcoxon signed-rank on the",
+          "paired validation walking fraction. Development data only, not a registered test.", ""]
+    for role, (a, b) in MKV_CONTRASTS:
+        pairs = [(v[a], v[b]) for v in by.values() if a in v and b in v]
+        w = sum(x["status"] == "FULL_RECOVERY" and y["status"] != "FULL_RECOVERY" for x, y in pairs)
+        l = sum(y["status"] == "FULL_RECOVERY" and x["status"] != "FULL_RECOVERY" for x, y in pairs)
+        wil = wilcoxon_one_sided([x["walking_frac"] - y["walking_frac"] for x, y in pairs])
+        L.append(f"- [{role}] {a} vs {b}: n {len(pairs)}; FULL {a} only {w}, {b} only {l}, p = {exact_mcnemar_one_sided(w, l):.3f}; "
+                 f"walking mean diff {wil['mean_diff']:+.3f}, Wilcoxon p = {wil['p']:.3f} (n nonzero {wil['n']})")
     return "\n".join(L) + "\n"
+
+
+# C-MKV registered form (owner decision 2026-10-19):
+# - primary: K2 (exact deviation) vs K0n (same pipeline, nominal model only);
+# - secondary: K1 vs K3 (correct vs symptom-twin structure) and K2 vs K1 (value of quantitative identification);
+# - the paired walking fraction is a secondary engineering outcome of every contrast.
+# Oracle mechanism knowledge is never a Nemotron capability.
+MKV_CONTRASTS = (("primary", ("K2", "K0n")), ("secondary", ("K1", "K3")), ("secondary", ("K2", "K1")),
+                 ("descriptive", ("K4", "K0n")), ("descriptive", ("K4", "K0")))
+
+
+def wilcoxon_one_sided(diffs) -> dict:
+    """One-sided Wilcoxon signed-rank test of median(diff) > 0.
+    Zero differences are dropped and ties get average ranks; normal approximation with tie-corrected variance and
+    continuity correction."""
+    d = [x for x in diffs if abs(x) > 1e-12]
+    n = len(d)
+    mean = sum(diffs) / len(diffs) if diffs else 0.0
+    if n == 0:
+        return {"n": 0, "w_plus": 0.0, "p": 1.0, "mean_diff": mean}
+    order = sorted(range(n), key=lambda i: abs(d[i]))
+    ranks = [0.0] * n
+    ties = 0.0
+    i = 0
+    while i < n:
+        j = i
+        while j + 1 < n and abs(abs(d[order[j + 1]]) - abs(d[order[i]])) < 1e-12:
+            j += 1
+        for k in range(i, j + 1):
+            ranks[order[k]] = (i + j) / 2.0 + 1.0
+        ties += (j - i + 1) ** 3 - (j - i + 1)
+        i = j + 1
+    w_plus = sum(r for r, x in zip(ranks, d) if x > 0)
+    mu = n * (n + 1) / 4.0
+    var = n * (n + 1) * (2 * n + 1) / 24.0 - ties / 48.0
+    if var <= 0:
+        return {"n": n, "w_plus": w_plus, "p": 1.0 if w_plus <= mu else 0.0, "mean_diff": mean}
+    z = (w_plus - mu - 0.5) / math.sqrt(var)
+    return {"n": n, "w_plus": w_plus, "p": 0.5 * math.erfc(z / math.sqrt(2.0)), "mean_diff": mean}
 
 
 def arms(paths) -> str:

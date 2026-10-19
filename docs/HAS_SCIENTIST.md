@@ -215,3 +215,25 @@ Rules:
   - Development evidence on morphologies not used for tuning. The engine, map and families are dev, and only the
     registered test (99 sealed bases + held-out families) can confirm it. Record:
     `experiments/causal_engineer/dev/hdb/ARMS_fresh_dev_9families.md`.
+- **2026-10-19 — owner decisions on Stage 1; Stage 2 authorized.**
+  - Severity definition (1.0×, 1.3×, 1.7× of each robot's failure threshold) **confirmed**. HDB v2 stays frozen as specified.
+  - **C-MKV registered form (fixed now, before any sealed evaluation; the change was motivated by development results):**
+    - primary: K2 (exact deviation) vs K0n (same inference/repair pipeline, nominal model only), exact one-sided McNemar
+      on FULL;
+    - secondary: K1 vs K3, and K2 vs K1;
+    - secondary engineering outcome for each contrast: paired validation walking fraction, one-sided Wilcoxon
+      signed-rank;
+    - analysis code: `scripts/hdb_report.py` `MKV_CONTRASTS` and `wilcoxon_one_sided`.
+    - Dev MKV v5 under this analysis: K2 vs K0n FULL 4 vs 1 (p = 0.19), walking +0.17 (Wilcoxon p = 0.003).
+    - Oracle mechanism knowledge (K1/K2) is a property of the pipeline, **never a capability demonstrated by Nemotron**.
+  - **Stage 2 envelopes (incremental): infra $20, inference $10.** Stage 3 and the registered evaluation are not authorized.
+  - **Reconciliation of Stage 1.**
+    - Infra ledger: $33.29 → $75.48 (+$42.19 against the $35 envelope).
+    - The overrun comes from the batch VM running 5.39 h past its deadline (≈ $11.39 at the quoted rate) after an expired
+      CLI login disabled the watchdog. Without it, Stage 1 would have cost ≈ $30.8.
+    - Real credit is not queryable through the CLI. Estimate: $66 − $42.19 ≈ $23.8 left (conservative, because the ledger
+      charges every hour up to the API stop). That covers the $20 Stage-2 envelope, but not the $5 demo reserve, so the
+      owner's console balance is needed before Stage 3.
+  - **Cloud safety.** Unattended Nebius CLI calls now run with `--no-browser --auth-timeout 30s`. The first auth failure
+    writes `infra/nebius/AUTH_BLOCKED`, and every later unattended call refuses without contacting Nebius until the owner
+    runs `forge_cloud.py login`.
