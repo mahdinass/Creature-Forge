@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from creature_forge import has_memory as hm                       # noqa: E402
+from creature_forge import hdb_bench as hb                        # noqa: E402
 
 
 def main() -> None:
@@ -31,6 +32,8 @@ def main() -> None:
     ap.add_argument("--records", nargs="+", required=True)
     ap.add_argument("--split-file", required=True)
     ap.add_argument("--exclude-families", default="")
+    ap.add_argument("--thresholds", required=True, help="to reconstruct each dev instance's true deviation (post-mortem)")
+    ap.add_argument("--rounds", type=int, default=2, help="revision rounds")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
     ap.add_argument("--fixture", default=None)
     ap.add_argument("--out", required=True)
@@ -38,6 +41,8 @@ def main() -> None:
     split = json.load(open(a.split_file, encoding="utf-8"))
     exp_bases = set(split["experience_bases"])
     excl = {f for f in a.exclude_families.split(",") if f}
+    th = json.load(open(a.thresholds, encoding="utf-8"))
+    bases = {b["base_id"]: b for b in hb.load_bases("dev")}
     summaries, skipped = [], {"not_experience_base": 0, "excluded_family": 0, "no_engine": 0}
     for path in a.records:
         for line in open(path, encoding="utf-8"):
@@ -51,7 +56,11 @@ def main() -> None:
             if r.get("family") in excl:
                 skipped["excluded_family"] += 1
                 continue
-            summaries.append(hm.episode_summary(r))
+            s = hm.episode_summary(r)
+            base_id, fam, sev = r["instance_id"].rsplit(":", 2)
+            inst = hb.make_instance_v2(bases[base_id], fam, int(sev), th, gap=False)
+            s["true_deviation"] = inst["plant"]["deviation"] if inst else None
+            summaries.append(s)
     cfg = None
     if a.source == "live":
         from ce_eval import thinking_config
@@ -62,8 +71,10 @@ def main() -> None:
     w = con.write(summaries, mem)
     mem.refresh_support(summaries)
     support_after_write = {d["id"]: dict(d["support"]) for d in mem.dossiers.values()}
-    r = con.revise(summaries, mem)
-    mem.refresh_support(summaries)
+    r = []
+    for _ in range(a.rounds):
+        r.append(con.revise(summaries, mem))
+        mem.refresh_support(summaries)
     meta = {"records": a.records, "n_summaries": len(summaries), "skipped": skipped, "excluded_families": sorted(excl),
             "experience_bases": len(exp_bases), "write": w, "revise": r, "support_after_write": support_after_write,
             "consolidator": con.record()}
