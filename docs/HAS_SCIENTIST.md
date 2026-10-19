@@ -237,3 +237,80 @@ Rules:
   - **Cloud safety.** Unattended Nebius CLI calls now run with `--no-browser --auth-timeout 30s`. The first auth failure
     writes `infra/nebius/AUTH_BLOCKED`, and every later unattended call refuses without contacting Nebius until the owner
     runs `forge_cloud.py login`.
+
+## Stage 2 (authorized 2026-10-19): the autonomous scientist
+
+### Architecture (`creature_forge/has_agent.py`)
+- **Roles.** Nemotron directs the investigation. MuJoCo (plant and twin), the Bayesian belief engine, EIG estimates, CMA-ES
+  and the dev-calibrated verification map are its instruments.
+- **Each turn.** Nemotron reads a lab notebook and calls ONE tool. The notebook holds:
+  - the measurements;
+  - the engine's posterior over executable explanations;
+  - a model check (UNEXPLAINED residuals);
+  - candidate experiments with their EIG and each leading explanation's prediction;
+  - the tool screen;
+  - designs with plant evidence and P(pass);
+  - memory dossiers with live applicability checks;
+  - the engine's own recommendation.
+- **Tools:**
+  - experiment (engine candidates or Nemotron-designed counterfactuals / floor tests, with a registered prediction);
+  - propose (executable hypotheses, may accompany any action);
+  - delegate_diagnosis, screen_tools;
+  - repair (twin or plant mode, tool, physically reasoned start edits, design against belief or leading explanation);
+  - check;
+  - assimilate (fold a repaired design's plant check into the belief: a failed repair is evidence about the mechanism);
+  - apply_dossier, use_learned;
+  - delegate_repair, conclude.
+- **Delegation is exact.** The engine's recommendations are exactly arm A1c5's steps, so an agent that always delegates
+  reproduces A1c5 (checked: `A1e`). Invalid or failed replies fall back to the recommendation (recorded).
+- **Engine changes (behaviour-preserving for A1c5).**
+  - `diagnose` is split into `start / rank_experiments / experiment_step / diagnosis_done`.
+  - `assimilate_check`: walking-only likelihood of a robustness check on the robust seeds.
+
+### Experience (`creature_forge/has_memory.py`) and the learned posterior (`creature_forge/amortized_posterior.py`)
+- **Dossiers** are executable and checkable:
+  - mechanism template (DSL structure + parameter ranges);
+  - signature and fails_when predicates on measurements, or on the engine's belief in the dossier's own mechanism;
+  - recommended repair and principle text.
+- **Support statistics** are computed by code only, on dev records: signature precision/recall, verified outcome of the
+  recommended repair vs other repairs, magnitude coverage.
+- **Revision.**
+  - Deterministic rules mark a dossier contested / retired.
+  - Nemotron (consolidator) writes and revises dossiers from a deterministic evidence digest (contrasts between mechanisms,
+    post-mortem magnitudes, outcomes by repair tool).
+  - The memory is frozen during evaluation.
+- **Learned posterior:**
+  - Softmax structure classifier, per-class ridge magnitudes, and a Mahalanobis out-of-distribution flag.
+  - Trained on simulated deviations of the dev structures (held-out primitives excluded), on experience bases only.
+  - Inputs are differences from the nominal twin on the same seeds.
+  - Its suggestions are hypotheses the data must confirm.
+
+### Development protocol for Stage 2 (fixed 2026-10-19, before any agent pilot)
+- **Split** (`experiments/causal_engineer/dev/hdb/stage2_split.json`):
+  - **experience** = the 30 dev bases already used in Stage 1;
+  - **transfer** = the other 18 fresh dev bases, never used.
+  - Dossiers, the learned posterior and all prompt or agent tuning use experience bases only.
+- **Pilots** (≤ 3 iterations) run on experience-base instances. Traces are inspected and the agent is improved.
+- **Then one transfer evaluation**, never tuned on afterwards:
+  - transfer bases, 9 dev families, 1.3×;
+  - 4 eligible instances per family (seeded shuffle 20261019) = 36;
+  - arms A1e (engine), A2 (engine + learned), A3 (Nemotron agent), A4 (agent + dossiers + learned);
+  - paired FULL and walking, plant/twin/token costs, and the process metrics of `scripts/hdb_agent_report.py`.
+- **Unfamiliar mechanisms.** A leave-family-out memory (two dev families excluded from consolidation) is evaluated on
+  those families' transfer instances. This measures applicability checks and negative transfer. The sealed held-out
+  families stay sealed.
+- **Status of these results.** All are development evidence. The registered primary (A3 vs A1) is tested only in Stage 3
+  on the sealed test split, and Stage 3 needs owner approval.
+
+### Stage-2 log
+- **2026-10-19 — first consolidations (live, $0.19 in total):**
+  1. One dossier was written. Its mechanism range pointed the wrong way (it encoded the repair, actuator strength > 1, not
+     the deviation). Its signature had 9 % precision, and the code retired it.
+  2. With a contrast digest: the reasoning drafted 10 dossiers, but the schema-constrained answer was empty. Fixed with
+     one call per mechanism.
+  3. A leading boolean in the schema was emitted as `false` before the reasoning concluded. Fixed by putting the decision
+     field last.
+  4. Result: 6 dossiers with deterministic support, e.g. "sensor bias pitch" precision 0.92 / recall 0.33.
+  - **Finding (dev):** observation medians barely separate the mechanisms. The largest contrast is fall direction, at
+    0.67 of the spread; the engine's model-based inference identifies them. Dossiers can therefore condition on the
+    engine's belief ("once the mechanism is identified, apply the learned repair principle").
