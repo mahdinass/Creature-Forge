@@ -436,7 +436,7 @@ class Episode:
                     break
             self.add_particles(props, "refine")
 
-    def fit_structures(self, pids: list[str], steps: tuple = (0.35, 0.15, 0.07), rounds: int = 2) -> None:
+    def fit_structures(self, pids: list[str], steps: tuple = (0.35, 0.15), rounds: int = 1) -> None:
         """Per-structure parameter fit of externally proposed hypotheses (has_agent): coordinate search around the best
         particle of each proposed structure. A proposal with the right mechanism but a wrong magnitude is not discarded
         before its magnitude is fitted to the data."""
@@ -708,6 +708,9 @@ class Episode:
         if prefer:       # an external scientist's tool choice goes first; the engine's ranking fills the rest (has_agent)
             tools = list(prefer) + [t for t in tools if t not in prefer]
             self._event("preferred_tools", prefer=list(prefer), engine_order=[r["tool"] for r in ranking])
+        if not tools:    # no twin budget left for a screen (only reachable after external proposals used it): fixed order
+            tools = list(TOOL_PROBES)
+            self._event("tool_screen_unavailable", fallback_order=tools)
         if engineer is not None:
             plan = engineer(self.state(), ranking) or {}
             self._event("engineer_plan", plan=plan, engine_order=[r["tool"] for r in ranking])
