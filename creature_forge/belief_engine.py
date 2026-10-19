@@ -340,7 +340,7 @@ class Episode:
             pred = self.b.twin_weigh(p.deviation, exp["design"])
         else:
             seeds_n = n if n is not None else len(exp["seeds"])
-            obs = self.b.twin_observe(p.deviation, exp["design"], role="obs", n=seeds_n,
+            obs = self.b.twin_observe(p.deviation, exp["design"], role=exp.get("role", "obs"), n=seeds_n,
                                       friction_mult=exp.get("friction_mult", 1.0), tag=f"{p.pid}|{exp['id']}")
             if obs is None:
                 return None
@@ -351,7 +351,25 @@ class Episode:
     def _score(self, p: Particle, exp: dict, pred) -> float:
         if exp["kind"] == "weigh":
             return weigh_loglik(exp["measured"], pred, self.design_mass)
+        if exp.get("keys"):          # partial measurement (e.g. a robustness check records walking only)
+            pred = {s: {k: f.get(k) for k in exp["keys"]} for s, f in pred.items()}
         return loglik(exp["features"], pred)
+
+    def assimilate_check(self, design: dict, check: dict, *, seeds: list[int]) -> dict:
+        """Fold a plant robustness check of a (repaired) design into the belief: per-seed walking on the robust seeds,
+        compared with every particle's twin prediction of the same design on the same seeds (walking-only likelihood).
+        A repair that fails on the plant although the leading hypotheses predicted success is evidence against them."""
+        walk = {int(s): {"walking": 1.0 if lab == "walking" else 0.0} for s, lab in zip(seeds, check["labels"])}
+        exp = {"id": f"X{len(self.experiments)}:check@{check['design_index']}", "kind": "check", "role": "robust",
+               "design": {"body": design["body"], "vector": design["vector"]}, "seeds": [int(s) for s in seeds[:len(walk)]],
+               "features": walk, "keys": ["walking"], "cost": 0}
+        before = self.structure_posterior()[:3]
+        self._register(exp)
+        self.refine()
+        self.prune()
+        self.snapshot(f"after_{exp['id']}")
+        return {"id": exp["id"], "before": [([list(x) for x in s], round(w, 4)) for s, w in before],
+                "after": [([list(x) for x in s], round(w, 4)) for s, w in self.structure_posterior()[:3]]}
 
     def _update_particle(self, p: Particle) -> bool:
         """Bring p's log-likelihood up to date with every plant experiment. False if the twin budget ran out."""
@@ -510,6 +528,20 @@ class Episode:
     def diagnose(self, *, confident: float = 0.9, max_experiments: int = 6, choose=None) -> dict:
         """observe -> proposals -> (EIG experiment -> update -> refine)* until a structure holds `confident` mass, the diagnosis
         plant budget is spent or `max_experiments` ran. `choose(cands_with_eig, state)` lets an external experimenter pick."""
+        self.start()
+        for i in range(max_experiments):
+            if self.diagnosis_done(confident):
+                break
+            scored = self.rank_experiments()
+            if not scored:
+                break
+            pick = choose(scored, self.state()) if choose else scored[0][2]
+            self.experiment_step(pick, by="external" if choose else "eig", scored=scored)
+        return self.diagnosis_summary()
+
+    # the steps of `diagnose`, also driven one at a time by an external scientist (has_agent)
+    def start(self) -> None:
+        """First observation, generic screen, first proposals, refinement."""
         self.run_observe()
         if self.use_generic:
             self._screen_generic()
@@ -518,31 +550,36 @@ class Episode:
         self.refine()
         self.prune()
         self.snapshot("after_observation")
-        for i in range(max_experiments):
-            sp = self.structure_posterior()
-            if sp and sp[0][1] >= confident:
+
+    def diagnosis_done(self, confident: float = 0.9) -> bool:
+        """The engine's own stopping rule for diagnosis: a structure holds `confident` mass or the diagnosis budget is spent."""
+        sp = self.structure_posterior()
+        return bool(sp and sp[0][1] >= confident) or self.b.budget.used >= self.diag_budget
+
+    def rank_experiments(self, extra: list[dict] | None = None) -> list[tuple]:
+        """[(eig_per_rollout, eig, candidate)], best first, over the generic candidates plus `extra` (externally designed)."""
+        top = self.posterior()[:self.eig_top]
+        scored = []
+        for c in self.candidate_experiments() + list(extra or []):
+            g = self.eig(c, top)
+            if g is None:
                 break
-            if self.b.budget.used >= self.diag_budget:
-                break
-            top = self.posterior()[:self.eig_top]
-            scored = []
-            for c in self.candidate_experiments():
-                g = self.eig(c, top)
-                if g is None:
-                    break
-                scored.append((g / c["cost"], g, c))
-            if not scored:
-                break
-            scored.sort(key=lambda t: -t[0])
-            pick = choose(scored, self.state()) if choose else scored[0][2]
-            self._event("experiment_chosen", id=pick["id"], by="external" if choose else "eig",
-                        ranking=[{"id": c["id"], "eig": round(g, 4), "eig_per_rollout": round(r, 5)} for r, g, c in scored[:8]])
-            self.run_experiment(pick)
-            if self.proposer is not None:
-                self.add_particles(self.proposer(self.state()), "proposer")
-            self.refine()
-            self.prune()
-            self.snapshot(f"after_{pick['id']}")
+            scored.append((g / c["cost"], g, c))
+        scored.sort(key=lambda t: -t[0])
+        return scored
+
+    def experiment_step(self, pick: dict, *, by: str, scored: list | None = None) -> dict:
+        self._event("experiment_chosen", id=pick["id"], by=by,
+                    ranking=[{"id": c["id"], "eig": round(g, 4), "eig_per_rollout": round(r, 5)} for r, g, c in (scored or [])[:8]])
+        res = self.run_experiment(pick)
+        if self.proposer is not None:
+            self.add_particles(self.proposer(self.state()), "proposer")
+        self.refine()
+        self.prune()
+        self.snapshot(f"after_{pick['id']}")
+        return res
+
+    def diagnosis_summary(self) -> dict:
         sp = self.structure_posterior()
         return {"map_structure": [list(x) for x in sp[0][0]] if sp else None, "map_mass": sp[0][1] if sp else 0.0,
                 "map_particle": self.posterior()[0][0].as_dict() if self.particles else None}
