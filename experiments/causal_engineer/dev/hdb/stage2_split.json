@@ -53,5 +53,9 @@
   "hdb-v1-gen-0167",
   "hdb-v1-gen-0170",
   "hdb-v1-gen-0222"
- ]
+ ],
+ "excluded_from_transfer_eval": [
+  "hdb-v1-gen-0070:pitch_sensor_bias:1"
+ ],
+ "exclusion_reason": "used by the SCRIPTED_MOCK tool smoke on 2026-10-19 (no tuning; excluded to keep the transfer evaluation untouched)"
 }

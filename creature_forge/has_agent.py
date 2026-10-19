@@ -187,6 +187,7 @@ class LabSession:
 
     def propose(self, devs: list, source: str = "nemotron") -> dict:
         added = self.ep.add_particles(devs, source)
+        self.ep.fit_structures(added)
         self.ep.refine()
         self.ep.prune()
         self._changed()
@@ -194,12 +195,15 @@ class LabSession:
         best_ll = max((p.loglik for p in self.ep.particles.values()), default=0.0)
         report = []
         for pid in added:
-            if pid in post:
-                w, rank = post[pid]
-                report.append({"pid": pid, "weight": _r(w, 4), "rank": rank + 1,
-                               "loglik_gap": _r(self.ep.particles[pid].loglik - best_ll, 2)})
+            st = pid_structure(pid)
+            fam = [(q, post[q.pid]) for q in self.ep.particles.values() if q.pid in post and q.structure == st]
+            if fam:
+                q, (w, rank) = max(fam, key=lambda t: t[0].loglik)
+                report.append({"pid": pid, "fitted": q.pid, "weight": _r(w, 4), "rank": rank + 1,
+                               "loglik_gap": _r(q.loglik - best_ll, 2)})
             else:
-                report.append({"pid": pid, "weight": 0.0, "rank": None, "status": "pruned: far worse than the leaders"})
+                report.append({"pid": pid, "weight": 0.0, "rank": None, "status": "pruned: far worse than the leaders even "
+                                                                                  "after fitting its magnitude"})
         return {"ok": True, "added": report, "not_new": len(devs) - len(added), "posterior": self.top_structures()}
 
     def delegate_diagnosis(self) -> dict:
@@ -400,6 +404,13 @@ class LabSession:
                 "tool_ranking": self.tool_ranking}
 
 
+def pid_structure(pid: str) -> tuple:
+    """Structure (sorted (kind, target) pairs) of a particle id such as 'payload:torso(mass_kg=1,x_m=0.1)+sensor_bias:pitch(rad=0.1)'."""
+    if pid == "nominal":
+        return ()
+    return tuple(sorted(tuple(part.split("(", 1)[0].split(":", 1)) for part in pid.split("+")))
+
+
 def _ev_view(ev: dict) -> dict:
     out = {k: ev[k] for k in ("twin_pred", "robust8", "robust16", "stress4", "p_full", "train", "contradiction")
            if ev.get(k) is not None}
@@ -425,8 +436,8 @@ def feedback_lines(action: str, res: dict) -> list[str]:
     if pr and pr.get("added"):
         for h in pr["added"]:
             if h.get("rank"):
-                out.append(f"your hypothesis {h['pid']}: weight {h['weight']:.3f}, rank {h['rank']}, "
-                           f"log-likelihood {h['loglik_gap']:+.1f} vs the best")
+                out.append(f"your hypothesis {h['pid']}: after fitting its magnitude to the data ({h.get('fitted')}) weight "
+                           f"{h['weight']:.3f}, rank {h['rank']}, log-likelihood {h['loglik_gap']:+.1f} vs the best")
             else:
                 out.append(f"your hypothesis {h['pid']}: {h.get('status')}")
     if not res.get("ok", True) and res.get("refused"):

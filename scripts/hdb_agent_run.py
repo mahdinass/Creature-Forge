@@ -46,6 +46,9 @@ def instances(a) -> list[tuple]:
             for s, (_, m) in enumerate(hb.v2_severities(f)):
                 if m in mults:
                     out.append((b, f, s))
+    if a.which == "transfer":
+        skip = set(split.get("excluded_from_transfer_eval") or [])
+        out = [t for t in out if hb.instance_key(t[0]["base_id"], t[1], t[2]) not in skip]
     if a.sample:
         import random
         random.Random(a.sample_seed).shuffle(out)

@@ -255,27 +255,27 @@ def generic_particles(design_mass: float) -> list[list[dict]]:
     return [hp.validate_deviation(d) for d in out]
 
 
-def neighbours(dev: list, step: float = 0.35) -> list[list[dict]]:
-    """Local refinements of a 1-primitive hypothesis: each parameter moved by +-step (log for factors, linear otherwise)."""
-    if len(dev) != 1:
+def neighbours(dev: list, step: float = 0.35, *, multi: bool = False) -> list[list[dict]]:
+    """Local refinements of a hypothesis: each parameter moved by +-step (log for factors and masses, linear otherwise).
+    The engine's own refinement covers 1-primitive hypotheses only. `multi` (fitting an externally proposed 2-primitive
+    hypothesis) moves each parameter of each primitive in turn."""
+    if len(dev) != 1 and not multi:
         return []
-    p = dev[0]
-    lo_hi = hp.PRIMITIVES[p["kind"]]["params"]
     out = []
-    for name, v in p["params"].items():
-        lo, hi = lo_hi[name]
-        if name == "factor":
-            cands = (v * math.exp(step), v * math.exp(-step))
-        elif name == "mass_kg":
-            cands = (v * math.exp(step), v * math.exp(-step))
-        else:
-            span = hi - lo
-            cands = (v + 0.35 * step * span, v - 0.35 * step * span)
-        for c in cands:
-            if lo <= c <= hi and abs(c - v) > 1e-9:
-                q = copy.deepcopy(p)
-                q["params"][name] = float(round(c, 6))
-                out.append([q])
+    for i, p in enumerate(dev):
+        lo_hi = hp.PRIMITIVES[p["kind"]]["params"]
+        for name, v in p["params"].items():
+            lo, hi = lo_hi[name]
+            if name in ("factor", "mass_kg"):
+                cands = (v * math.exp(step), v * math.exp(-step))
+            else:
+                span = hi - lo
+                cands = (v + 0.35 * step * span, v - 0.35 * step * span)
+            for c in cands:
+                if lo <= c <= hi and abs(c - v) > 1e-9:
+                    q = copy.deepcopy(dev)
+                    q[i]["params"][name] = float(round(c, 6))
+                    out.append(q)
     return [hp.validate_deviation(d) for d in out]
 
 
@@ -435,6 +435,21 @@ class Episode:
                 if len(seen_struct) >= self.refine_top:
                     break
             self.add_particles(props, "refine")
+
+    def fit_structures(self, pids: list[str], steps: tuple = (0.35, 0.15, 0.07), rounds: int = 2) -> None:
+        """Per-structure parameter fit of externally proposed hypotheses (has_agent): coordinate search around the best
+        particle of each proposed structure. A proposal with the right mechanism but a wrong magnitude is not discarded
+        before its magnitude is fitted to the data."""
+        for pid in pids:
+            p0 = self.particles.get(pid)
+            if p0 is None:
+                continue
+            st, src = p0.structure, p0.source + "+fit"
+            for step in steps:
+                for _ in range(rounds):
+                    best = max((q for q in self.particles.values() if q.structure == st), key=lambda q: q.loglik)
+                    if not self.add_particles(neighbours(best.deviation, step, multi=True), src):
+                        break
 
     def prune(self) -> None:
         post = self.posterior()
