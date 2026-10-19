@@ -108,7 +108,8 @@ if __name__ == "__main__":
 
 
 class Sealing(unittest.TestCase):
-    AGENT_FACING = ("belief_engine", "scientist_has", "hdb_policies", "hdb_workbench", "hidden_plant", "hdb_bench")
+    AGENT_FACING = ("belief_engine", "scientist_has", "hdb_policies", "hdb_workbench", "hidden_plant", "hdb_bench",
+                    "has_agent", "has_memory", "amortized_posterior")   # Stage 2 agent-facing modules
 
     def test_agent_facing_code_never_references_heldout_families(self):
         import os

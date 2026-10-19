@@ -38,6 +38,13 @@ def instances(a) -> list[tuple]:
     split = json.load(open(a.split_file, encoding="utf-8"))
     want = split[f"{a.which}_bases"]
     bases = [b for b in hb.load_bases("dev") if b["base_id"] in set(want)]
+    if a.devcomp:          # development compositions: (base, pair, None)
+        from creature_forge import hdb_devcomp
+        out = [(b, p, None) for b in bases for p in hdb_devcomp.candidate_pairs()]
+        if a.sample:
+            import random
+            random.Random(a.sample_seed).shuffle(out)
+        return out
     fams = a.families.split(",") if a.families else list(hb.FAMILY_SPECS)
     mults = {float(x) for x in a.mults.split(",")}
     out = []
@@ -121,6 +128,7 @@ def main() -> None:
     ap.add_argument("--sample-seed", type=int, default=20261019)
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--only", default=None, help="comma list of instance ids")
+    ap.add_argument("--devcomp", action="store_true", help="development compositions (hdb_devcomp) instead of single families")
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--shard", default="0/1")
     ap.add_argument("--out", required=True)
@@ -131,7 +139,7 @@ def main() -> None:
         raise SystemExit("A2/A4 need --learned")
     th = json.load(open(a.thresholds, encoding="utf-8"))
     todo = instances(a)
-    if a.only:
+    if a.only and not a.devcomp:
         keep = set(a.only.split(","))
         todo = [t for t in todo if hb.instance_key(t[0]["base_id"], t[1], t[2]) in keep]
     k, n = (int(x) for x in a.shard.split("/"))
@@ -144,8 +152,13 @@ def main() -> None:
     taken = 0
     with pool_cm as pool, open(a.out, "a", encoding="utf-8") as out:
         for i, (b, f, s) in enumerate(todo):
-            iid = hb.instance_key(b["base_id"], f, s)
-            raw = hb.make_instance_v2(b, f, s, th)
+            if a.devcomp:
+                from creature_forge import hdb_devcomp
+                raw = hdb_devcomp.make_instance(b, f, th)
+                iid = raw["instance_id"] if raw else None
+            else:
+                iid = hb.instance_key(b["base_id"], f, s)
+                raw = hb.make_instance_v2(b, f, s, th)
             if raw is None:
                 continue
             inst = hb.check_eligibility(raw, pool=pool)
