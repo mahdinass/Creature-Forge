@@ -328,3 +328,29 @@ Rules:
     (0.93; 7/10 vs 2/4), balance-feedback gain (0.78; 3/4 vs 2/5), actuator strength all (0.40).
   - The code marked the sensor-bias dossier contested (its recommended repair verified 3/22 vs 10/32 for others) and
     short feet contested, and retired right-side weakness (precision 0.09).
+- **2026-10-19 — live pilot 1 (agent v1, A3, 9 experience-base instances, one per dev family; $0.10 = $0.011 per
+  episode, about 5 calls each).**
+  - **Outcomes:** FULL 5/9; correct leading explanation 6/9.
+  - **Paired with engine-only (A1c5) on the 7 instances that have it:** A3 3/7 vs engine 5/7. Losses on heavy torso and
+    low friction; no wins.
+  - **Diagnosed causes (from traces; no instance-specific tuning):**
+    1. Nemotron's own plant-mode repairs used small budgets (120–124 rollouts, n_train 8). They barely optimise, and
+       they drain the budget the engine's repair later needs.
+    2. It misread tools: it believed delegate_diagnosis costs no plant rollouts, and it misread a weigh test without the
+       design's mass.
+    3. A third of its turns failed validation, mostly because the optional `prediction` field was dropped under
+       constrained decoding. The fallback then executed the engine's terminal recommendation, which ended the
+       investigation.
+    4. Its physical repair insight could not be passed to the engine's repair procedure.
+  - **Positive signs:**
+    - On average its experiment choices matched the engine's best EIG (median ratio 1.0).
+    - It noticed physically meaningful anomalies, e.g. a too-high step frequency pointing to a timing fault.
+    - Its 90 % prediction intervals covered 9/10 (walking), 6/10 (upright time) and 8/10 (pitch).
+  - **Hypothesis contribution:** its 9 proposed hypotheses never entered the top 3. The engine's generic library already
+    covered the dev mechanisms.
+  - **Changes:**
+    - v2: delegate_repair takes the scientist's tool order and start edits (engine numerics unchanged); accurate tool
+      costs and minimum budgets in the prompt; no terminal fallback; the design's own mass is shown beside weigh tests.
+    - v3: required experiment/prediction/hypotheses fields; a missing prediction is recorded instead of voiding the
+      action.
+    - Engine: proposed hypotheses get a per-structure magnitude fit (the A1c5 path is unchanged).
