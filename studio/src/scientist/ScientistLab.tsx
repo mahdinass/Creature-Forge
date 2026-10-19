@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactElement } from 'react'
 import { getScientistRecord, getScientistRecords, getScientistReplay } from '../api'
 import { Notice } from '../lab/Badges'
 import { ReplaySection } from '../causal/CausalLab'
@@ -22,7 +22,7 @@ function Words({ s }: { s: Step }) {
 
 function Result({ s }: { s: Step }) {
   const r = s.result
-  const rows: JSX.Element[] = []
+  const rows: ReactElement[] = []
   if (r.refused) rows.push(<p key="ref" className="cz-bad">Refused by the instruments: {r.refused}</p>)
   for (const h of r.proposals?.added ?? []) {
     rows.push(<p key={`h-${h.pid}`} className="sc-hyp">Hypothesis <b>{hypothesisLabel(h.pid)}</b>: {h.rank ? `simulated against all data, weight ${h.weight.toFixed(3)}, rank ${h.rank}` : 'simulated against all data and rejected (far worse than the leading explanations)'}</p>)
