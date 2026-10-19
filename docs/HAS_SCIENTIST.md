@@ -409,3 +409,18 @@ Rules:
   - Arms: A3 and A4 on the 36 single-family and 16 composition transfer instances; A4lfo on 8; A4bad (corrupted-dossier
     probe) on 12.
   - Launcher: `scripts/stage2_transfer_eval.sh`.
+- **2026-10-19 16:00 UTC — incident: transfer-evaluation LLM arms on the batch VM ran with a stale API key.**
+  - Every call returned HTTP 401: 312 calls between 15:36 and 15:57. The key was rotated on 17 Oct, and the batch VM's
+    `.env` was never updated (only the main VM has the current key).
+  - **Process failure:** the planned pre-run authentication check was not run, and the agent turned each failed call
+    into an engine fallback instead of stopping.
+  - **Consequences:**
+    - All 40 A3/A4 records of that run are invalid. They were moved to `artifacts/hdb/invalid_401_20261019/` (batch VM)
+      and are never analysed.
+    - The inference ledger booked $9.38 of worst-case settlements for the failed calls (not billed: authentication
+      failures never reach the model).
+  - **Fixes:**
+    - `has_agent.AuthFailure`: any 401/403 aborts the run without writing a record.
+    - LLM arms run only on the main VM (no credential changes on the batch VM).
+    - Inference cap $43.40 → $52.78 = $32.90 + $10 + $0.50 + $9.38 of unbilled 401 settlements. Real Stage-2 spend is
+      still held to +$10, counted from successful calls only.

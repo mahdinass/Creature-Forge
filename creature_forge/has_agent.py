@@ -638,6 +638,10 @@ Reply with ONE JSON object following the schema. `understanding` = what you now 
 numbers); `uncertainty` = what you do not yet understand; `why` = why this action is the most valuable now."""
 
 
+class AuthFailure(RuntimeError):
+    """The model endpoint rejected the credentials: never continue on fallbacks."""
+
+
 class NemotronScientist(sh.HasNemotron):
     """Nemotron as the investigation's director (one instance per investigation)."""
 
@@ -754,6 +758,9 @@ class NemotronScientist(sh.HasNemotron):
     def act(self, session: LabSession, turn: int, max_turns: int) -> dict | None:
         lines = notebook(session, turn, max_turns) + ["", "TASK: choose the single most valuable next action."]
         dec = self._call("agent", lines, self.schema(), lambda r: self._validate(r, session))
+        if any(self.calls[i].get("http_status") in (401, 403) for i in dec["calls"]):
+            # fail fast (2026-10-19 incident: a stale key on one VM turned a whole run into silent engine fallbacks)
+            raise AuthFailure("model endpoint refused authentication: the run is aborted, no record is written")
         out = dec.get("out")
         if out is not None:
             session.notes.append({"turn": turn, "understanding": str(out.get("understanding", "")),

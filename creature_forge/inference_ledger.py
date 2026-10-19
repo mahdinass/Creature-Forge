@@ -7,7 +7,7 @@ Lines written here add `reservation_id` and `status`. A request is first RESERVE
 cost) and then SETTLED with the real usage; both happen under an exclusive file lock together with the cap check, so concurrent processes
 cannot jointly overshoot. A reservation that is never settled (crash) keeps counting at its worst case.
 
-Caps (default; raised 2026-10-17 by the owner from 1,500 / USD 15): 8,000 requests and USD 43.40 in total (2026-10-19: phase-3 Stage 2, +$10 on a $32.90 ledger; 2026-10-18: amendment 1; the ledger holds 7.42 USD of worst-case settlements for calls that failed authentication); per investigation 4 requests and 80,000 tokens. `reserve` raises
+Caps (default; raised 2026-10-17 by the owner from 1,500 / USD 15): 8,000 requests and USD 52.78 in total (2026-10-19: phase-3 Stage 2, +$10 on a $32.90 ledger, plus $9.38 unbilled 401 settlements; 2026-10-18: amendment 1; the ledger holds 7.42 USD of worst-case settlements for calls that failed authentication); per investigation 4 requests and 80,000 tokens. `reserve` raises
 `BudgetExceeded` BEFORE any network call. An unknown model price refuses (fail closed). Unparseable lines are skipped and counted in
 `status()["skipped_lines"]`; they never grant headroom to anyone but they are not guessed at either.
 """
@@ -48,7 +48,10 @@ class LedgerLockTimeout(BudgetExceeded):
 @dataclass(frozen=True)
 class Caps:
     max_requests: int = 8000
-    max_usd: float = 43.4      # 2026-10-19 phase-3 Stage 2 (owner): ledger $32.90 + $10 incremental + $0.50 slack
+    # 2026-10-19 phase-3 Stage 2 (owner): ledger $32.90 + $10 incremental + $0.50 slack, plus $9.38 of worst-case
+    # settlements booked for 312 calls that failed authentication (HTTP 401, stale key on the batch VM; not billed). Real
+    # Stage-2 spend stays within +$10 (tracked from successful calls only).
+    max_usd: float = 52.78
     inv_max_requests: int = 4
     inv_max_tokens: int = 80_000
 
