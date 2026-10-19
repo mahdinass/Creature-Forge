@@ -685,7 +685,7 @@ class Episode:
 
     def robust_repair(self, *, twin_budget: int = 800, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
                       tool_order: list[str] | None = None, engineer=None, accept_fn=None, screen_cma: bool = True,
-                      screen_top: int = 5, screen_budget: int = 150) -> dict:
+                      screen_top: int = 5, screen_budget: int = 150, prefer: list[str] | None = None) -> dict:
         """Posterior-robust repair (v2): (1) ensemble-robust twin optimisation of the first tool as a warm start, checked on the
         plant; (2) empirical plant optimisation from it with most of the remaining plant budget, chained over two tools; (3) the
         design with the best robustness evidence is submitted. Provisional stop rule (dev): accept on 15/16 robust seeds (the
@@ -702,9 +702,12 @@ class Episode:
             if mass >= 0.8 or len(hyps) >= 3:
                 break
         ranking = self.screen_tools(hyps)
-        if screen_cma and tool_order is None:
+        if screen_cma and tool_order is None and not prefer:
             ranking = self.screen_tools_cma(hyps, ranking, top=screen_top, budget=screen_budget)
         tools = tool_order or [r["tool"] for r in ranking]
+        if prefer:       # an external scientist's tool choice goes first; the engine's ranking fills the rest (has_agent)
+            tools = list(prefer) + [t for t in tools if t not in prefer]
+            self._event("preferred_tools", prefer=list(prefer), engine_order=[r["tool"] for r in ranking])
         if engineer is not None:
             plan = engineer(self.state(), ranking) or {}
             self._event("engineer_plan", plan=plan, engine_order=[r["tool"] for r in ranking])

@@ -40,7 +40,8 @@ from . import belief_engine as be
 from . import scientist_has as sh
 from .hdb_workbench import min_budget
 
-VERSION = "has_agent_v1"
+VERSION = "has_agent_v2"   # v2 (after pilot 1): delegate_repair takes the scientist's tool order and start edits; accurate
+                           # tool costs in the prompt; a failed reply never triggers a terminal fallback
 MAX_TURNS = 14
 ACTIONS = ("experiment", "propose", "delegate_diagnosis", "screen_tools", "repair", "check", "assimilate", "apply_dossier",
            "use_learned", "delegate_repair", "conclude")
@@ -344,10 +345,26 @@ class LabSession:
         sugg = self.learned.suggest(self.ep)
         return {**self.propose([d for d, _ in sugg], source="learned"), "suggested": [[be._pid(d), _r(p)] for d, p in sugg]}
 
-    def delegate_repair(self) -> dict:
+    def delegate_repair(self, tool_order: list[str] | None = None, start_edits: str | None = None,
+                        from_design: int | None = None) -> dict:
+        """The engine's posterior-robust repair procedure with the remaining budgets, then it submits. The scientist may set
+        the tools to try first (`tool_order`) and a physically reasoned start design (`start_edits` applied to `from_design`
+        or the current design); the engine then runs its numerics unchanged."""
+        from .eng_tools import parse_counterfactual
+        from .fault_bench import apply_changes
         self.phase = "repair"
+        if from_design is not None:
+            self.b.select(int(from_design))
+        if start_edits:
+            d = self.b.best_design()
+            try:
+                body, vec = apply_changes(d["body"], d["vector"], parse_counterfactual(start_edits))
+            except Exception as exc:   # noqa: BLE001
+                return {"ok": False, "refused": f"start edits {start_edits!r} rejected: {exc}"}
+            self.b.select(self.b.add_twin_design(body, vec, source=f"edit:{start_edits}", parent=d["index"]))
         accept = be.calibrated_accept(self.stop_model, self.tau) if self.stop_model else None
-        rep = self.ep.robust_repair(twin_budget=TWIN_REPAIR_BUDGET, plant_budget=300, accept_fn=accept)
+        rep = self.ep.robust_repair(twin_budget=TWIN_REPAIR_BUDGET, plant_budget=300, accept_fn=accept,
+                                    prefer=list(tool_order) if tool_order else None)
         self.done = True
         self.conclusion = {"design": self.b.best_design()["index"], "by": "engine_repair", "repair": rep}
         return {"ok": True, "accepted": rep.get("accepted"), "design": self.conclusion["design"]}
@@ -396,7 +413,7 @@ class LabSession:
         elif a == "use_learned":
             res.update(self.use_learned())
         elif a == "delegate_repair":
-            res.update(self.delegate_repair())
+            res.update(self.delegate_repair(act.get("tool_order"), act.get("start_edits") or None, act.get("design")))
         elif a == "conclude":
             res.update(self.conclude(act["design"]))
         self._log(actor, {k: v for k, v in act.items() if k != "hypotheses_devs"}, res, before, turn)
@@ -516,6 +533,8 @@ def notebook(s: LabSession, turn: int, max_turns: int) -> list[str]:
                 else:
                     preds.append(str(sum(1 for f in pr.values() if f.get("walking"))))
             L.append(f"  {c['id']}: cost {c['cost']}, EIG {g:.2f}, H1/H2/H3 predict {'/'.join(preds)}")
+    L += ["", "REPAIR TOOL MINIMUM PLANT BUDGETS (plant-mode CMA, n_train 4 / 8): " + ", ".join(
+        f"{t} {min_budget(t, 4)}/{min_budget(t, 8)}" for t in sh.TOOLS)]
     if s.tool_ranking:
         L += ["", "TOOL SCREEN (twin, under the belief; cma_walking = walking trials of 4 after a short twin optimisation):"]
         L += [f"  {r['tool']}: probe score {r['score']:.2f}, cma_walking {r.get('cma_walking')}" for r in s.tool_ranking[:6]]
@@ -586,15 +605,26 @@ ACTIONS (exactly one per turn; `hypotheses` may accompany any action):
   m in [0.2, 5], weigh_test). Field `prediction` = your 5/25/50/75/95 % quantiles for n_walking (of 4), time_upright (s) and
   pitch_mean (rad) BEFORE it runs.
 - propose: only add `hypotheses`.
-- delegate_diagnosis: the engine runs its own EIG experiments until its stopping rule holds.
-- screen_tools: the engine ranks the repair tools on the simulator under the belief (costs simulation budget).
-- repair: fields `tool`, `mode` (twin | plant), optional `design_against` (belief | leading), `start_edits` (a counterfactual
-  string applied to the start design first, e.g. pitch_ref@-0.1R), `design` (start from this design index), `plant_share`
-  (plant mode: fraction 0.1-1 of the remaining plant budget), `n_train` (4 | 8, plant mode).
+- delegate_diagnosis: the engine runs its own highest-EIG experiments (4 plant rollouts each) until a single explanation
+  type holds 90 % of the posterior or 120 plant rollouts have been used in total; it runs nothing if that already holds.
+- screen_tools: the engine ranks the repair tools on the simulator under the belief (about 900 simulations, no plant cost).
+- repair (one trial repair you direct): fields `tool`, `mode`, optional `design_against` (belief | leading), `start_edits`
+  (a counterfactual string applied to the start design first, e.g. balance_gain@x2&pitch_kp@x2), `design` (start design).
+  * mode twin: CMA-ES on the simulator against the belief (800 simulations), then a plant check (8, then 16 fresh trials
+    and a 20 s stress test if it qualifies): about 8-32 plant rollouts.
+  * mode plant: CMA-ES on the real robot with `plant_share` (0.1-1) of the remaining plant budget and `n_train` (4 | 8)
+    trials per candidate, then a 16-trial check. A plant CMA needs roughly 150+ rollouts per tool to make progress (the
+    minimum per tool is shown in the notebook); small budgets rarely help.
 - check: fields `design`, `n` (8 | 16): robustness check, and the 20 s stress test when the design qualifies.
 - assimilate: field `design`: fold that design's plant check into the belief.
 - apply_dossier: field `dossier` (memory arms only). use_learned: add the learned posterior's suggestions (when available).
-- delegate_repair: the engine's posterior-robust repair with the remaining budget, then it submits (ends the investigation).
+- delegate_repair: the engine's repair procedure with ALL remaining budgets, then it submits (ends the investigation): a
+  simulator screen of the tools under the belief, an ensemble-robust simulator optimisation of the first tool (800
+  simulations) checked on the robot, then CMA-ES on the robot with 60 % of the remaining plant budget on the first tool and
+  the rest on the second, stopping early when P(pass) >= 0.75, else submitting the design with the best plant evidence.
+  Optional fields: `tool_order` (1-3 tools YOU choose to try first, e.g. from physical reasoning about the cause; the engine's
+  own screen ranks the rest), `start_edits` and `design` (start the procedure from that design, with those edits applied).
+  Its success rate depends on the plant and simulation budget left when you call it.
 - conclude: field `design`: submit it for independent verification (ends the investigation).
 
 Sign conventions: pitch > 0 = torso leans forward. fall_direction +1 = fell forward. x is forward.
@@ -627,7 +657,8 @@ class NemotronScientist(sh.HasNemotron):
                     "design_against": {"type": "string", "enum": ["belief", "leading"]},
                     "start_edits": {"type": "string"}, "plant_share": {"type": "number"},
                     "n_train": {"type": "integer", "enum": [4, 8]}, "design": {"type": "integer"},
-                    "n": {"type": "integer", "enum": [8, 16]}, "dossier": {"type": "string"}}}
+                    "n": {"type": "integer", "enum": [8, 16]}, "dossier": {"type": "string"},
+                    "tool_order": {"type": "array", "maxItems": 3, "items": {"type": "string", "enum": list(sh.TOOLS)}}}}
 
     def _validate(self, reply, session: LabSession):
         errs = []
@@ -682,6 +713,18 @@ class NemotronScientist(sh.HasNemotron):
                     parse_counterfactual(reply["start_edits"])
                 except ValueError as exc:
                     errs.append(f"start_edits: {exc}")
+        if a == "delegate_repair":
+            order = reply.get("tool_order") or []
+            if len(set(order)) != len(order) or any(t not in sh.TOOLS for t in order):
+                errs.append(f"tool_order must list distinct tools from {list(sh.TOOLS)}")
+            if reply.get("start_edits"):
+                from .eng_tools import parse_counterfactual
+                try:
+                    parse_counterfactual(reply["start_edits"])
+                except ValueError as exc:
+                    errs.append(f"start_edits: {exc}")
+            if reply.get("design") is not None and not 0 <= reply["design"] < n_designs:
+                errs.append(f"design must be an existing design index (0-{n_designs - 1})")
         if a in ("check", "assimilate", "conclude"):
             d = reply.get("design")
             if not isinstance(d, int) or not 0 <= d < n_designs:
@@ -724,6 +767,9 @@ def run_agent(session: LabSession, scientist, *, max_turns: int = MAX_TURNS, aut
         actor = "nemotron"
         if act is None:         # no scientist (engine-only, reproduces A1c5) or a failed/invalid reply (recorded fallback)
             act, actor = session.recommend(), ("engine" if scientist is None else "fallback")
+            if actor == "fallback" and act["action"] in ("delegate_repair", "conclude") and max_turns - turn > 2:
+                # a formatting failure must not end the investigation: the turn passes, the scientist decides next turn
+                act = {"action": "propose", "why": "fallback no-op after an invalid reply"}
         session.execute(act, actor, turn)
     if not session.done:
         session.force_conclude("turn limit")
