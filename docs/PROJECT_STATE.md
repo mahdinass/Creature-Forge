@@ -440,3 +440,22 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   auth is valid, and stop through the API instead of relying on the deadline.
 - **Artifacts:** all Stage-1 dev artifacts are present locally (`artifacts/vm/hdb/`, 71 MB; fresh_A0/A1c5 220 rows each).
   The dev reports are committed.
+
+## 2026-10-19 - Phase 3 Stage 2 (owner-authorized: +$20 infra, +$10 inference) in progress
+- **Caps:** infra `SPEND_CAP_USD` $96 (ledger $75.48 + $20 + $0.50); inference USD cap $43.40 (ledger $32.90 + $10 + $0.50).
+  Requests stay at 8,000 (4,733 used).
+- **Nebius auth guard:** unattended CLI calls use `--no-browser --auth-timeout 30s`. An auth failure writes
+  `infra/nebius/AUTH_BLOCKED` and stops every further attempt until the owner runs `forge_cloud.py login`.
+- **Owner decisions recorded:**
+  - severity definition confirmed;
+  - C-MKV registered form: primary K2 vs K0n, secondary K1 vs K3 and K2 vs K1, plus a paired Wilcoxon on walking
+    (`scripts/hdb_report.py`).
+- **Built:**
+  - `has_agent.py` (Nemotron-directed scientist; full delegation reproduces A1c5 exactly: identical plant/twin ledgers
+    and verification on 3/3 checked instances);
+  - `has_memory.py` (dossiers, deterministic support, Nemotron consolidator);
+  - `amortized_posterior.py`;
+  - `scripts/hdb_agent_run.py`, `hdb_memory_build.py`, `hdb_amortized.py`, `hdb_agent_report.py`, `has_export_records.py`;
+  - Studio "AI scientist" tab + `/api/scientist`.
+- **Dev protocol (fixed before pilots):** tune on the experience bases, evaluate once on the 18 unseen transfer bases
+  (`experiments/causal_engineer/dev/hdb/stage2_split.json`). Details in `docs/HAS_SCIENTIST.md`.
