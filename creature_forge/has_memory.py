@@ -526,6 +526,89 @@ class Consolidator:
                 "signature": x["signature"], "fails_when": x.get("fails_when") or [],
                 "repair": {"tools": x["tools"], "start_edits": x.get("start_edits") or None}, "status": "active", "history": []}
 
+    def write_each(self, summaries: list[dict], memory: Memory, *, min_n: int = 8) -> dict:
+        """One small call per mechanism with >= min_n investigations (a single call asking for all dossiers came back empty
+        under schema-constrained decoding although the reasoning had drafted them, 2026-10-19)."""
+        groups: dict[str, int] = {}
+        for x in summaries:
+            k = struct_key(x.get("true_structure") or [])
+            groups[k] = groups.get(k, 0) + 1
+        schema = {"type": "object", "additionalProperties": False, "required": ["write", "why", "dossier"],
+                  "properties": {"write": {"type": "boolean"}, "why": {"type": "string"}, "dossier": self.dossier_schema()}}
+        out = {"created": [], "skipped": {}, "status": []}
+        dig = digest(summaries)
+        for key, n in sorted(groups.items()):
+            if n < min_n:
+                out["skipped"][key] = f"only {n} investigations"
+                continue
+            did = f"D{len(memory.dossiers) + 1}"
+
+            def validate(reply, did=did):
+                if not reply.get("write"):
+                    return [], None
+                d = self.to_dossier(reply["dossier"], did)
+                errs = validate_dossier(d)
+                if struct_key(d["mechanism"]["structure"]) != key:
+                    errs.append(f"the dossier's mechanism must be {key}")
+                return errs, d
+            lines = ["EVIDENCE DIGEST (development investigations; quantiles 10/50/90 % over investigations):", *dig, "",
+                     f"TASK: write the dossier for MECHANISM {key} (set write=false with the reason if the evidence does not "
+                     "support a checkable, transferable principle)."]
+            dec = self.n._call("consolidate_write", lines, schema, validate)
+            out["status"].append(dec["status"])
+            d = dec.get("out")
+            if d is not None:
+                d["history"].append({"event": "created", "by": "nemotron"})
+                memory.dossiers[d["id"]] = d
+                out["created"].append(d["id"])
+            else:
+                out["skipped"][key] = (dec.get("parsed") or {}).get("why") or dec["status"]
+        return out
+
+    def revise_each(self, summaries: list[dict], memory: Memory) -> dict:
+        """One call per dossier: its deterministic support is shown; keep, revise or retire it."""
+        schema = {"type": "object", "additionalProperties": False, "required": ["decision", "why", "dossier"],
+                  "properties": {"decision": {"type": "string", "enum": ["keep", "revise", "retire"]}, "why": {"type": "string"},
+                                 "dossier": self.dossier_schema()}}
+        dig = digest(summaries)
+        changed, status = [], []
+        for did in list(memory.dossiers):
+            old = memory.dossiers[did]
+            sup = old.get("support") or {}
+            key = struct_key(old["mechanism"]["structure"])
+
+            def validate(reply, did=did, key=key):
+                if reply.get("decision") != "revise":
+                    return [], None
+                d = self.to_dossier(reply["dossier"], did)
+                errs = validate_dossier(d)
+                if struct_key(d["mechanism"]["structure"]) != key:
+                    errs.append(f"a revision keeps the mechanism {key}")
+                return errs, d
+            lines = ["EVIDENCE DIGEST:", *dig, "", f"DOSSIER {did} [{old.get('status')}]: {json.dumps({k: old[k] for k in ('title', 'principle', 'mechanism', 'signature', 'fails_when', 'repair')})}",
+                     f"SUPPORT (computed by the lab's code): matched {sup.get('matched')} of {sup.get('evaluable')} evaluable "
+                     f"investigations; precision {sup.get('precision')} (share of matches that really had this mechanism); "
+                     f"recall {sup.get('recall')}; recommended repair verified {sup.get('recommended_repair')} vs other repairs "
+                     f"{sup.get('other_repairs')} (verified/total among matches); true magnitudes inside its ranges "
+                     f"{sup.get('magnitude_coverage')}",
+                     "", "TASK: keep, revise or retire this dossier (`dossier` is used only when revising; otherwise repeat it)."]
+            dec = self.n._call("consolidate_revise", lines, schema, validate)
+            status.append(dec["status"])
+            r = dec.get("parsed") or {}
+            d = dec.get("out")
+            if r.get("decision") == "revise" and d is not None:
+                d["history"] = old.get("history", []) + [{"event": "revised", "by": "nemotron", "why": r.get("why"),
+                                                          "previous": {k: old[k] for k in ("signature", "fails_when", "mechanism",
+                                                                                           "repair", "principle")}}]
+                d["support"] = old.get("support")
+                memory.dossiers[did] = d
+                changed.append(did)
+            elif r.get("decision") == "retire" and dec["status"] == "ok":
+                old["status"] = "retired"
+                old.setdefault("history", []).append({"event": "retired", "by": "nemotron", "why": r.get("why")})
+                changed.append(did)
+        return {"status": status, "changed": changed}
+
     def write(self, summaries: list[dict], memory: Memory) -> dict:
         """One call: new dossiers from the digest (existing dossiers are listed so they are not duplicated)."""
         existing = [f"{d['id']}: {d['title']} ({'+'.join(f'{a}:{b}' for a, b in d['mechanism']['structure'])})"

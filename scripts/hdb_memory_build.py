@@ -33,7 +33,7 @@ def main() -> None:
     ap.add_argument("--split-file", required=True)
     ap.add_argument("--exclude-families", default="")
     ap.add_argument("--thresholds", required=True, help="to reconstruct each dev instance's true deviation (post-mortem)")
-    ap.add_argument("--rounds", type=int, default=2, help="revision rounds")
+    ap.add_argument("--rounds", type=int, default=1, help="revision rounds")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
     ap.add_argument("--fixture", default=None)
     ap.add_argument("--out", required=True)
@@ -68,12 +68,12 @@ def main() -> None:
     fixture = json.load(open(a.fixture, encoding="utf-8")) if a.fixture else None
     con = hm.Consolidator(source=a.source, config=cfg, fixture=fixture, investigation_id="memory-build")
     mem = hm.Memory([], frozen=False)
-    w = con.write(summaries, mem)
+    w = con.write_each(summaries, mem)
     mem.refresh_support(summaries)
     support_after_write = {d["id"]: dict(d["support"]) for d in mem.dossiers.values()}
     r = []
     for _ in range(a.rounds):
-        r.append(con.revise(summaries, mem))
+        r.append(con.revise_each(summaries, mem))
         mem.refresh_support(summaries)
     meta = {"records": a.records, "n_summaries": len(summaries), "skipped": skipped, "excluded_families": sorted(excl),
             "experience_bases": len(exp_bases), "write": w, "revise": r, "support_after_write": support_after_write,
