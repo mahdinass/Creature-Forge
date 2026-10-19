@@ -377,3 +377,19 @@ Rules:
   - Reason: pilots showed the engine cannot represent two-cause failures. The protocol must also measure the capability
     where the engine is structurally limited, not only where it is already strong.
   - The single-family part (36 instances) is unchanged.
+- **2026-10-19 — A2 on the 36 transfer instances** (engine + learned posterior, non-LLM; part of the fixed transfer
+  evaluation, run early because it does not depend on the agent).
+  - FULL: A2 12/36 vs A1e 14/36 (discordant 3 vs 5).
+  - Identification improves slightly: correct leading explanation 31 vs 29, mean posterior on the truth 0.85 vs 0.80.
+  - The learned top-3 contained the true structure in 23/36, its top-1 in 11/36; no out-of-distribution flags (all dev
+    mechanisms).
+  - Reading: the learned posterior adds a little identification, but identification is not the binding constraint on
+    verified recovery here. This agrees with MKV, where exact deviation knowledge (K2) recovers only 8/21.
+- **2026-10-19 — A4 pilot (agent v3 + memory v5 + learned posterior; 9 experience instances; in-sample for the memory,
+  so a mechanics check only).**
+  - FULL 6/9, the same as A3 v3; $0.008 per episode.
+  - Nemotron never applied a dossier and did not carry dossier tools into the repair.
+  - Cause: retrieval ranked dossiers by observation thresholds that barely separate mechanisms, so the same dossier
+    topped almost every robot.
+  - v4 fixes: retrieval leads with the engine's belief in each dossier's mechanism (signatures secondary), and the
+    memory section says how to use a dossier (delegate_repair `tool_order` / `start_edits`).
