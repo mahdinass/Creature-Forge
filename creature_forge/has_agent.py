@@ -128,6 +128,13 @@ class LabSession:
         self.ep.start()
         self._log("engine", {"action": "observe"}, {"posterior": self.top_structures()}, before)
 
+    def design_weigh(self) -> dict:
+        """Static mass and centre of mass of the nominal DESIGN (known to the scientist; no plant cost)."""
+        if not hasattr(self, "_design_weigh"):
+            from .hdb_workbench import static_mass_com
+            self._design_weigh = static_mass_com(None, self.ep.design0["body"], design_only=True)
+        return self._design_weigh
+
     def top_structures(self, k: int = 4) -> list:
         return [[[list(x) for x in s], round(w, 4)] for s, w in self.ep.structure_posterior()[:k]]
 
@@ -470,6 +477,10 @@ def notebook(s: LabSession, turn: int, max_turns: int) -> list[str]:
     st = ep.state()
     L += ["", "MEASUREMENTS ON THE REAL ROBOT:",
           *["  " + x for x in sh.experiment_lines({"experiments": [e for e in st["experiments"] if e["kind"] != "check"]})]]
+    if any(e["kind"] == "weigh" for e in ep.experiments):
+        dm = s.design_weigh()
+        L.append(f"  (for comparison, the DESIGN itself: total mass {dm['mass_kg']:.3f} kg, centre of mass "
+                 f"{dm['com_x_m'] * 100:+.1f} cm forward of the hip; the scale's noise is about 1 % in mass and 0.5 cm)")
     checks = [e for e in ep.experiments if e["kind"] == "check"]
     for e in checks:
         L.append(f"  {e['id']}: robustness check folded into the belief (walking {sum(1 for f in e['features'].values() if f['walking'])}"

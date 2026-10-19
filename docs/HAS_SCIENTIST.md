@@ -314,3 +314,17 @@ Rules:
   - **Finding (dev):** observation medians barely separate the mechanisms. The largest contrast is fall direction, at
     0.67 of the spread; the engine's model-based inference identifies them. Dossiers can therefore condition on the
     engine's belief ("once the mechanism is identified, apply the learned repair principle").
+- **2026-10-19 — the agent loop with full delegation reproduces A1c5 exactly.** On 4/4 experience-base instances,
+  A1e (`hdb_agent_run.py --arm A1e`) has the same verification, plant ledger, twin ledger and every design vector as the
+  Stage-1 A1c5 record. Any A3 vs A1e difference therefore comes from Nemotron's non-delegated decisions.
+- **2026-10-19 — learned amortised posterior v1** (3,628 simulated failures on the 30 experience bases; 5-fold
+  leave-bases-out CV over 10 dev structures, chance 0.10):
+  - observation only: top-1 0.37, top-3 0.67 (log loss 1.78 vs chance 2.30);
+  - plus floor test and weigh test: top-1 0.50, top-3 0.81 (log loss 1.39).
+  - Real signal, but weaker than the engine's model-based identification (identifiability study: 245/302 from
+    observation alone). Its use is as a proposal source, not as the inference.
+- **2026-10-19 — memory v5** (live consolidation, $0.14): 7 executable dossiers.
+  - Code-computed support: payload (precision 0.81; recommended repair verified 17/22 vs 14/25 for others), clock
+    (0.93; 7/10 vs 2/4), balance-feedback gain (0.78; 3/4 vs 2/5), actuator strength all (0.40).
+  - The code marked the sensor-bias dossier contested (its recommended repair verified 3/22 vs 10/32 for others) and
+    short feet contested, and retired right-side weakness (precision 0.09).
