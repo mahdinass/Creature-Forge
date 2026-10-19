@@ -1,0 +1,13 @@
+/* AI scientist page: builds on causal.css. Nemotron's words keep the dashed model convention; instrument results are solid. */
+.sc-words { border-left: 2px dashed var(--model); padding: 4px 0 4px 12px; display: grid; gap: 4px; }
+.sc-words p { margin: 0; max-width: 92ch; overflow-wrap: anywhere; color: #c4ccda; }
+.sc-result { display: grid; gap: 4px; } .sc-result p { margin: 0; max-width: 100ch; overflow-wrap: anywhere; }
+.sc-hyp b { color: var(--investigate); }
+.sc-timeline { list-style: none; margin: 0; padding-left: 4px; }
+.sc-belief { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sc-belief li { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 10px; align-items: center; }
+.sc-belief-label { color: var(--dim); font-size: 13px; overflow-wrap: anywhere; }
+.sc-bars { display: flex; height: 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.sc-bar { display: inline-block; height: 100%; font: 600 11px var(--font-body); color: #0d1016; white-space: nowrap; overflow: hidden; padding: 3px 6px; }
+.sc-bar-0 { background: var(--investigate); } .sc-bar-1 { background: var(--simulate); } .sc-bar-2 { background: var(--create); } .sc-bar-3 { background: var(--line-2); }
+@media (max-width: 760px) { .sc-belief li { grid-template-columns: minmax(0, 1fr); } }

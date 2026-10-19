@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getPhase0, getSchema, sandboxSimulate, simulate } from './api'
 import { CausalLab } from './causal/CausalLab'
+import { ScientistLab } from './scientist/ScientistLab'
 import { Demo } from './demo/Demo'
 import { ForgePage } from './forge/ForgePage'
 import { forgeUrl } from './forge/forgeLogic'
@@ -208,6 +209,7 @@ export default function App() {
       {tab === 'demo' && <Demo initialRun={q.get('run')} go={go} />}
 
       {tab === 'causal' && <CausalLab />}
+      {tab === 'scientist' && <ScientistLab />}
 
       {tab === 'lab' && <Lab initialTrial={link.trial} initialStep={link.step} />}
 

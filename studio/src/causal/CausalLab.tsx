@@ -19,7 +19,10 @@ const outcomeChip = (r: CausalReplay) =>
       : { t: r.locomotion.label.replace(/_/g, ' '), tone: 'warn' }
 
 /** The robot first: the faulty design and the design the AI submitted, on the same start, as fresh MuJoCo rollouts. */
-function ReplaySection({ id, seeds, note, status }: { id: string; seeds: number[]; note: string; status: string | null }) {
+export function ReplaySection({ id, seeds, note, status, getReplay = getCausalReplay }: {
+  id: string; seeds: number[]; note: string; status: string | null
+  getReplay?: (id: string, design: DesignKey, seed: number) => Promise<CausalReplay>
+}) {
   const [seed, setSeed] = useState(seeds[0] ?? 1)
   const [view, setView] = useState<View>('side')
   const [pair, setPair] = useState<Pair>({ status: 'loading' })
@@ -33,7 +36,7 @@ function ReplaySection({ id, seeds, note, status }: { id: string; seeds: number[
       const k = `${id}|${d}|${seed}`
       const hit = cache.current.get(k)
       if (hit) return hit
-      const r = await getCausalReplay(id, d, seed)
+      const r = await getReplay(id, d, seed)
       cache.current.set(k, r)
       return r
     }

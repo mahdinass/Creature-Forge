@@ -6,6 +6,7 @@ import type { WalkingReplay, WalkingSummary } from './walking/walkingTypes'
 import type { FreehandResult, SandboxBodyDict, SandboxSchema, StrokeIn } from './sketch/freehandTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
 import type { CausalIndex, CausalRecord, CausalReplay, DesignKey } from './causal/causalTypes'
+import type { ScientistIndex, ScientistRecord } from './scientist/scientistTypes'
 import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, RecoveryRecord, RecoverySummary, StartedChallenge, StartedInvestigation, StartedRecovery } from './forge/forgeTypes'
 
 export const STALE_HINT =
@@ -168,3 +169,9 @@ export const getCausalRecords = () => fetch('/api/causal/records').then((r) => j
 export const getCausalRecord = (id: string) => fetch(`/api/causal/records/${encodeURIComponent(id)}`).then((r) => j<CausalRecord>(r))
 export const getCausalReplay = (id: string, design: DesignKey, seed: number) =>
   fetch(`/api/causal/records/${encodeURIComponent(id)}/replay?design=${design}&seed=${seed}`).then((r) => j<CausalReplay>(r))
+
+// Autonomous HaS scientist (/api/scientist/*): recorded Stage-2 investigations; same replay contract as the causal records
+export const getScientistRecords = () => fetch('/api/scientist/records').then((r) => j<ScientistIndex>(r))
+export const getScientistRecord = (id: string) => fetch(`/api/scientist/records/${encodeURIComponent(id)}`).then((r) => j<ScientistRecord>(r))
+export const getScientistReplay = (id: string, design: DesignKey, seed: number) =>
+  fetch(`/api/scientist/records/${encodeURIComponent(id)}/replay?design=${design}&seed=${seed}`).then((r) => j<CausalReplay>(r))
