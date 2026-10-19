@@ -420,3 +420,23 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Spend:** infra ledger about $60 of the $72 cap; inference ledger +$0.013. VMs stopped.
 - **Next:** owner decisions (C-MKV primary, severity definition, Stage 2 approval), then LLM development (A3h/A3hx/A3),
   then registration on the test split.
+
+## 2026-10-19 - Ops incident: batch VM ran past its deadline (corrects "VMs stopped" above)
+- **What happened:** the session's API stop of `creature-forge-batch` was killed (local out-of-memory) before it ran. The Nebius
+  CLI login then expired, so the Windows watchdog's `instance get` failed from 01:47 to 08:47 UTC and it could not stop
+  the VM. The deadline was 03:56 UTC.
+- **Observed state:**
+  - 08:57 and 09:12 UTC: the watchdog saw STOPPING.
+  - 09:19 UTC: the control plane reported STARTING, then RUNNING. The cause is not known; it was not started by any script
+    in this repository.
+- **Stopped:** an API stop at 09:20 UTC (`forge_cloud.py stop`). STOPPED was confirmed twice. The main VM was STOPPED
+  throughout.
+- **Spend (quoted-rate estimate, not a provider statement):**
+  - The conservative ledger is $75.47, over the $72 cap, so `start` now refuses.
+  - Stage-1 increment: $42.18 against the $35 envelope.
+  - Charged past the deadline: 5.39 h × $2.112/h ≈ $11.39 (worst case; billing during guest-off/STOPPING is not known).
+- **Billing:** the Nebius CLI has no balance query (`billing` only has `pricing-policy`). The owner checks the console.
+- **Lesson:** an expired CLI login silently disables the watchdog. Before leaving a VM on a deadline, confirm the CLI
+  auth is valid, and stop through the API instead of relying on the deadline.
+- **Artifacts:** all Stage-1 dev artifacts are present locally (`artifacts/vm/hdb/`, 71 MB; fresh_A0/A1c5 220 rows each).
+  The dev reports are committed.
