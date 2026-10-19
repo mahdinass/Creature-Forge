@@ -66,7 +66,7 @@ def main() -> None:
         from ce_eval import thinking_config
         cfg = thinking_config()
     fixture = json.load(open(a.fixture, encoding="utf-8")) if a.fixture else None
-    con = hm.Consolidator(source=a.source, config=cfg, fixture=fixture, investigation_id="memory-build")
+    con = hm.Consolidator(source=a.source, config=cfg, fixture=fixture, investigation_id=f"memory-build-{os.path.basename(a.out)}-{int(__import__('time').time())}")
     mem = hm.Memory([], frozen=False)
     w = con.write_each(summaries, mem)
     mem.refresh_support(summaries)

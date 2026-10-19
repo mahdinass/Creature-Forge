@@ -490,7 +490,7 @@ class Consolidator:
 
     def __init__(self, **kw):
         from .scientist_has import HasNemotron, _dsl_doc
-        kw.setdefault("max_requests", 12)
+        kw.setdefault("max_requests", 64)
         kw.setdefault("max_total_tokens", 400_000)
         self.n = HasNemotron(roles=("consolidate",), **kw)
         self.n.system = CONSOLIDATOR_SYSTEM.replace("{dsl}", _dsl_doc())
@@ -533,8 +533,11 @@ class Consolidator:
         for x in summaries:
             k = struct_key(x.get("true_structure") or [])
             groups[k] = groups.get(k, 0) + 1
-        schema = {"type": "object", "additionalProperties": False, "required": ["write", "why", "dossier"],
-                  "properties": {"write": {"type": "boolean"}, "why": {"type": "string"}, "dossier": self.dossier_schema()}}
+        # field order matters under schema-constrained decoding: a leading boolean was emitted as false before the
+        # reasoning's conclusion (2026-10-19), so the decision comes last
+        schema = {"type": "object", "additionalProperties": False, "required": ["why", "dossier", "decision"],
+                  "properties": {"why": {"type": "string"}, "dossier": self.dossier_schema(),
+                                 "decision": {"type": "string", "enum": ["write", "skip"]}}}
         out = {"created": [], "skipped": {}, "status": []}
         dig = digest(summaries)
         for key, n in sorted(groups.items()):
@@ -544,7 +547,7 @@ class Consolidator:
             did = f"D{len(memory.dossiers) + 1}"
 
             def validate(reply, did=did):
-                if not reply.get("write"):
+                if reply.get("decision") != "write":
                     return [], None
                 d = self.to_dossier(reply["dossier"], did)
                 errs = validate_dossier(d)
@@ -552,8 +555,9 @@ class Consolidator:
                     errs.append(f"the dossier's mechanism must be {key}")
                 return errs, d
             lines = ["EVIDENCE DIGEST (development investigations; quantiles 10/50/90 % over investigations):", *dig, "",
-                     f"TASK: write the dossier for MECHANISM {key} (set write=false with the reason if the evidence does not "
-                     "support a checkable, transferable principle)."]
+                     f"TASK: write the dossier for MECHANISM {key}, then decision=write. Use decision=skip (with the reason) "
+                     "only if no checkable principle can be stated. Negative knowledge counts: a principle may say that no "
+                     "tested repair works reliably for this mechanism and which one is least bad."]
             dec = self.n._call("consolidate_write", lines, schema, validate)
             out["status"].append(dec["status"])
             d = dec.get("out")
@@ -567,9 +571,9 @@ class Consolidator:
 
     def revise_each(self, summaries: list[dict], memory: Memory) -> dict:
         """One call per dossier: its deterministic support is shown; keep, revise or retire it."""
-        schema = {"type": "object", "additionalProperties": False, "required": ["decision", "why", "dossier"],
-                  "properties": {"decision": {"type": "string", "enum": ["keep", "revise", "retire"]}, "why": {"type": "string"},
-                                 "dossier": self.dossier_schema()}}
+        schema = {"type": "object", "additionalProperties": False, "required": ["why", "dossier", "decision"],
+                  "properties": {"why": {"type": "string"}, "dossier": self.dossier_schema(),
+                                 "decision": {"type": "string", "enum": ["keep", "revise", "retire"]}}}
         dig = digest(summaries)
         changed, status = [], []
         for did in list(memory.dossiers):
@@ -591,7 +595,8 @@ class Consolidator:
                      f"recall {sup.get('recall')}; recommended repair verified {sup.get('recommended_repair')} vs other repairs "
                      f"{sup.get('other_repairs')} (verified/total among matches); true magnitudes inside its ranges "
                      f"{sup.get('magnitude_coverage')}",
-                     "", "TASK: keep, revise or retire this dossier (`dossier` is used only when revising; otherwise repeat it)."]
+                     "", "TASK: decide keep, revise or retire for this dossier. Write `dossier` first (the revised version, "
+                     "or the unchanged one when keeping or retiring), then `decision`."]
             dec = self.n._call("consolidate_revise", lines, schema, validate)
             status.append(dec["status"])
             r = dec.get("parsed") or {}
