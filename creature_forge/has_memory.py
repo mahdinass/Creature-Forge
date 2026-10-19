@@ -220,6 +220,12 @@ def validate_dossier(d: dict) -> list[str]:
                     or x[1] not in hp.PRIMITIVES[x[0]]["targets"]):
                 errs.append(f"mechanism.structure entry {x!r} is not a DSL (kind, target)")
     pr = m.get("params") or {}
+    if isinstance(st, list) and isinstance(pr, dict):
+        for x in st:
+            if isinstance(x, list) and len(x) == 2 and x[0] in hp.PRIMITIVES:
+                for pname in hp.PRIMITIVES[x[0]]["params"]:
+                    if f"{x[0]}.{pname}" not in pr:
+                        errs.append(f"mechanism.params needs a range for {x[0]}.{pname} (the mechanism must be executable)")
     if not isinstance(pr, dict):
         errs.append("mechanism.params must map 'kind.param' to [lo, hi]")
     else:
