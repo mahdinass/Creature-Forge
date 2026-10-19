@@ -130,3 +130,16 @@ class Sealing(unittest.TestCase):
                 smax = hb.variant_max(base, fam, var) if fam in hb.FAMILY_SPECS else spec["variants"][var]["max"]
                 for s in (0.0, 0.5 * smax, smax):
                     hp.validate_deviation(spec["variants"][var]["make"](s, base))
+
+
+class DevCompositions(unittest.TestCase):
+    def test_pairs_are_dev_cross_pair_and_never_sealed(self):
+        from creature_forge import hdb_devcomp, hdb_heldout
+        sealed = {frozenset([(a, va), (b, vb)]) for a, va, b, vb in hdb_heldout.COMPOSITIONS}
+        pairs = hdb_devcomp.candidate_pairs()
+        self.assertEqual(len(pairs), hdb_devcomp.N_PAIRS)
+        for a, va, b, vb in pairs:
+            self.assertIn(a, hb.FAMILY_SPECS)
+            self.assertIn(b, hb.FAMILY_SPECS)
+            self.assertNotEqual(hb.FAMILY_SPECS[a]["pair"], hb.FAMILY_SPECS[b]["pair"])
+            self.assertNotIn(frozenset([(a, va), (b, vb)]), sealed)
