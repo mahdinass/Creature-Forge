@@ -21,7 +21,9 @@ from fastapi import APIRouter, HTTPException, Query
 log = logging.getLogger(__name__)
 
 RECORDS_DIR = Path(__file__).resolve().parents[2] / "experiments" / "causal_engineer" / "demo_records"
+SCIENTIST_DIR = Path(__file__).resolve().parents[2] / "experiments" / "causal_engineer" / "dev" / "scientist_records"
 ID_RE = re.compile(r"c-[0-9a-f]{12}")      # always used with fullmatch
+SCIENTIST_ID_RE = re.compile(r"s-[0-9a-f]{12}")
 REPLAY_SEEDS = (1, 2, 3, 4)                # offered by the UI; any seed in [0, 2**31) is accepted
 MAX_SEED = 2 ** 31 - 1
 REPLAY_DURATION_S = 10.0
@@ -43,11 +45,13 @@ def default_replayer(body: dict, vector: list[float], seed: int) -> dict:
     return payload
 
 
-def create_causal_router(records_dir: str | Path | None = None, replayer: Callable[[dict, list, int], dict] | None = None) -> APIRouter:
-    """Router for `/api/causal`. Nothing is read or imported until first use."""
+def create_causal_router(records_dir: str | Path | None = None, replayer: Callable[[dict, list, int], dict] | None = None, *,
+                         prefix: str = "/api/causal", id_re: re.Pattern = ID_RE, schema: str = "causal_record_v1") -> APIRouter:
+    """Router for `/api/causal` (or, with prefix/id_re/schema, the Stage-2 scientist records at `/api/scientist`). Nothing is read
+    or imported until first use."""
     root = Path(records_dir) if records_dir is not None else RECORDS_DIR
     run = replayer or default_replayer
-    router = APIRouter(prefix="/api/causal")
+    router = APIRouter(prefix=prefix)
     cache: OrderedDict = OrderedDict()
     lock = threading.Lock()
     slots = threading.Semaphore(MAX_CONCURRENT_REPLAYS)
@@ -55,7 +59,7 @@ def create_causal_router(records_dir: str | Path | None = None, replayer: Callab
     def index() -> dict:
         p = root / "index.json"
         if not p.is_file():
-            return {"schema": "causal_record_v1", "records": []}
+            return {"schema": schema, "records": []}
         try:
             return json.loads(p.read_text(encoding="utf-8"))
         except (OSError, ValueError) as exc:
@@ -63,7 +67,7 @@ def create_causal_router(records_dir: str | Path | None = None, replayer: Callab
             raise HTTPException(500, "the record index could not be read") from exc
 
     def load(rid: str) -> dict:
-        if not ID_RE.fullmatch(rid) or rid not in {r.get("id") for r in index()["records"]}:
+        if not id_re.fullmatch(rid) or rid not in {r.get("id") for r in index()["records"]}:
             raise HTTPException(404, f"No such causal record: {rid[:40]}")
         p = root / f"{rid}.json"
         try:

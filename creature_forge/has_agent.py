@@ -79,9 +79,9 @@ class LabSession:
     def _usage(self) -> dict:
         return {"plant_used": self.b.budget.used, "twin_used": self.b.twin.used}
 
-    def _log(self, actor: str, action: dict, result: dict, before: dict) -> None:
+    def _log(self, actor: str, action: dict, result: dict, before: dict, turn: int | None = None) -> None:
         after = self._usage()
-        self.trace.append({"seq": len(self.trace), "actor": actor, "action": copy.deepcopy(action), "result": result,
+        self.trace.append({"seq": len(self.trace), "turn": turn, "actor": actor, "action": copy.deepcopy(action), "result": result,
                            "plant_cost": after["plant_used"] - before["plant_used"],
                            "twin_cost": after["twin_used"] - before["twin_used"], **after})
 
@@ -358,7 +358,7 @@ class LabSession:
         return self.conclude(idx, by=f"forced:{why}")
 
     # ------------------------------------------------------------------ dispatch
-    def execute(self, act: dict, actor: str) -> dict:
+    def execute(self, act: dict, actor: str, turn: int | None = None) -> dict:
         before = self._usage()
         a = act["action"]
         res: dict = {}
@@ -388,7 +388,7 @@ class LabSession:
             res.update(self.delegate_repair())
         elif a == "conclude":
             res.update(self.conclude(act["design"]))
-        self._log(actor, {k: v for k, v in act.items() if k != "hypotheses_devs"}, res, before)
+        self._log(actor, {k: v for k, v in act.items() if k != "hypotheses_devs"}, res, before, turn)
         self.last_feedback = feedback_lines(a, res)
         return res
 
@@ -702,7 +702,7 @@ def run_agent(session: LabSession, scientist, *, max_turns: int = MAX_TURNS, aut
         actor = "nemotron"
         if act is None:         # no scientist (engine-only, reproduces A1c5) or a failed/invalid reply (recorded fallback)
             act, actor = session.recommend(), ("engine" if scientist is None else "fallback")
-        session.execute(act, actor)
+        session.execute(act, actor, turn)
     if not session.done:
         session.force_conclude("turn limit")
     return session.record()
