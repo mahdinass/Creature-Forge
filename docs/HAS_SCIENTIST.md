@@ -354,3 +354,20 @@ Rules:
     - v3: required experiment/prediction/hypotheses fields; a missing prediction is recorded instead of voiding the
       action.
     - Engine: proposed hypotheses get a per-structure magnitude fit (the A1c5 path is unchanged).
+- **2026-10-19 — live pilot 2 (agent v3, the same 9 experience instances).**
+  - **Outcomes:** FULL 5/8 finished; paired engine-only 6/8. One loss (one-side weakness: Nemotron delegated after one
+    low-EIG experiment, and the engine's repair was accepted at P(pass) 0.77 but failed verification). No fallbacks.
+    $0.004–0.03 per episode.
+  - **Pattern:** Nemotron picks experiments (mostly but not always the top-EIG one), sometimes runs a twin repair with
+    its own tool choice, then delegates the repair. On single-mechanism dev failures it is about at engine parity.
+  - **Engine limitation exposed (feedback-gain case):** after an experiment order different from the engine's, the
+    posterior settled with full confidence on a wrong structure, because the true structure had been pruned after the
+    first observation. Nemotron did not propose it again: both explanations fitted the data within noise.
+- **2026-10-19 — development compositions** (`creature_forge/hdb_devcomp.py`: two dev mechanisms at 0.8× their own
+  thresholds; sealed pairs excluded by code).
+  - Engine-only A1e on the first 7 experience-base instances: FULL 3/7, posterior on the true two-cause structure 0 in
+    7/7. The generic library cannot express two causes; this is the structural opening for Nemotron's compositional
+    hypotheses (pilot 3).
+- **Inference ledgers.** The batch VM's ledger (1,076 entries, Oct 14–17) is fully contained in the main VM's ledger.
+  The main ledger is the master. Any LLM run on the batch VM uses a ledger handover: copy main → batch, no LLM calls on
+  main meanwhile, copy back.
