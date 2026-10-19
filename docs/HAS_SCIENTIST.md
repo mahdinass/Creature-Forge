@@ -393,3 +393,19 @@ Rules:
     topped almost every robot.
   - v4 fixes: retrieval leads with the engine's belief in each dossier's mechanism (signatures secondary), and the
     memory section says how to use a dossier (delegate_repair `tool_order` / `start_edits`).
+- **2026-10-19 — composition pilot (A3 v4, 7 experience-base dev compositions; $0.17).**
+  - **Diagnosis:** Nemotron's two-primitive hypotheses entered and often led the belief. On top-heavy, its "low ground
+    friction + balance-gain loss" was exactly the injected pair and took all the posterior mass. On gen-0062 a partly
+    right pair (hip weakness + short feet; truth payload + short feet) led with 0.83–0.99. The engine's library cannot
+    express any of these.
+  - **Recovery did not follow:** FULL 1/7 for A3 vs 3/8 for engine-only on the same instances. On gen-0044 the engine
+    accepted a foot-length fix after 41 rollouts, while A3 spent 677 and ended PARTIAL.
+  - **Crash fixed:** the cost of fitting several two-primitive hypotheses exhausted the simulation budget, and the
+    engine's repair then had no tool screen. It now falls back to a fixed tool order (unreachable in A1c5), and the fit
+    is cheaper.
+- **2026-10-19 15:36 UTC — agent frozen (tag `stage2-agent-v4-frozen`) after 3 pilot iterations;** transfer evaluation
+  launched on the batch VM.
+  - Ledger handover: the main ledger ($34.00, 5,050 requests) was copied to batch; the main VM was STOPPED.
+  - Arms: A3 and A4 on the 36 single-family and 16 composition transfer instances; A4lfo on 8; A4bad (corrupted-dossier
+    probe) on 12.
+  - Launcher: `scripts/stage2_transfer_eval.sh`.
