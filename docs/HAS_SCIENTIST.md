@@ -371,3 +371,9 @@ Rules:
 - **Inference ledgers.** The batch VM's ledger (1,076 entries, Oct 14–17) is fully contained in the main VM's ledger.
   The main ledger is the master. Any LLM run on the batch VM uses a ledger handover: copy main → batch, no LLM calls on
   main meanwhile, copy back.
+- **2026-10-19 — transfer-evaluation addendum (declared before any LLM run on transfer bases).**
+  - Added: 16 development-composition instances on the transfer bases (`--devcomp --which transfer --sample --sample-seed
+    20261019 --limit 16`), arms A1e, A3, A4.
+  - Reason: pilots showed the engine cannot represent two-cause failures. The protocol must also measure the capability
+    where the engine is structurally limited, not only where it is already strong.
+  - The single-family part (36 instances) is unchanged.
