@@ -31,7 +31,7 @@ from creature_forge.forge_pool import ForgePool, InlinePool       # noqa: E402
 from creature_forge.hdb_workbench import HDBWorkbench             # noqa: E402
 from creature_forge.optimize import jsonable                      # noqa: E402
 
-ARMS = ("A1e", "A2", "A3", "A4", "A4m")
+ARMS = ("A1e", "A2", "A3", "A4", "A4m", "A4lfo", "A4bad")   # A4lfo / A4bad: A4 with the leave-family-out / corrupted memory
 
 
 def instances(a) -> list[tuple]:
@@ -70,15 +70,15 @@ def run_one(inst: dict, pool, a) -> dict:
     stop_model = json.load(open(a.stop_model, encoding="utf-8"))
     ep = be.Episode(bench, proposer=None, use_generic=True, max_alive=12)
     memory = learned = None
-    if a.arm in ("A4", "A4m"):
+    if a.arm.startswith("A4"):
         from creature_forge.has_memory import Memory
         memory = Memory.load(a.memory, frozen=True)
-    if a.arm in ("A2", "A4"):
+    if a.arm in ("A2", "A4", "A4lfo", "A4bad"):
         from creature_forge.amortized_posterior import LearnedPosterior
         learned = LearnedPosterior.load(a.learned)
     session = ha.LabSession(bench, ep, stop_model=stop_model, tau=a.tau, memory=memory, learned=learned)
     sci = None
-    if a.arm in ("A3", "A4", "A4m"):
+    if a.arm == "A3" or a.arm.startswith("A4"):
         cfg = None
         if a.source == "live":
             from ce_eval import thinking_config
@@ -133,9 +133,9 @@ def main() -> None:
     ap.add_argument("--shard", default="0/1")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
-    if a.arm in ("A4", "A4m") and not a.memory:
-        raise SystemExit("A4/A4m need --memory")
-    if a.arm in ("A2", "A4") and not a.learned:
+    if a.arm.startswith("A4") and not a.memory:
+        raise SystemExit("A4 arms need --memory")
+    if a.arm in ("A2", "A4", "A4lfo", "A4bad") and not a.learned:
         raise SystemExit("A2/A4 need --learned")
     th = json.load(open(a.thresholds, encoding="utf-8"))
     todo = instances(a)
