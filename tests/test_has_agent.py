@@ -47,9 +47,11 @@ class AgentValidation(unittest.TestCase):
     def errs(self, r):
         return self.n._validate(r, self.s)[0]
 
-    def test_experiment_needs_registered_prediction(self):
+    def test_missing_prediction_is_recorded_not_fatal(self):
         self.assertEqual(self.errs(reply("experiment", experiment="cf:freq@x0.85", prediction=PRED)), [])
-        self.assertTrue(self.errs(reply("experiment", experiment="cf:freq@x0.85")))
+        errs, out = self.n._validate(reply("experiment", experiment="cf:freq@x0.85"), self.s)
+        self.assertEqual(errs, [])                                     # v3: the experiment still runs
+        self.assertIn("missing", out["prediction_issue"])
         self.assertTrue(self.errs(reply("experiment", experiment="cf:nonsense@x9", prediction=PRED)))
 
     def test_hypotheses_rejected_not_clipped(self):

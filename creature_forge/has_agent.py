@@ -40,7 +40,9 @@ from . import belief_engine as be
 from . import scientist_has as sh
 from .hdb_workbench import min_budget
 
-VERSION = "has_agent_v2"   # v2 (after pilot 1): delegate_repair takes the scientist's tool order and start edits; accurate
+VERSION = "has_agent_v3"   # v3: experiment/prediction/hypotheses are required schema fields (optional ones were dropped
+                           # under constrained decoding); a missing prediction is recorded, it no longer voids the action
+                           # v2 (after pilot 1): delegate_repair takes the scientist's tool order and start edits; accurate
                            # tool costs in the prompt; a failed reply never triggers a terminal fallback
 MAX_TURNS = 14
 ACTIONS = ("experiment", "propose", "delegate_diagnosis", "screen_tools", "repair", "check", "assimilate", "apply_dossier",
@@ -647,7 +649,8 @@ class NemotronScientist(sh.HasNemotron):
         q = {"type": "object", "additionalProperties": False, "required": ["quantity", *sh.QUANTILES],
              "properties": {"quantity": {"type": "string", "enum": list(PRED_QUANTITIES)},
                             **{k: {"type": "number"} for k in sh.QUANTILES}}}
-        return {"type": "object", "additionalProperties": False, "required": ["understanding", "uncertainty", "action", "why"],
+        return {"type": "object", "additionalProperties": False,
+                "required": ["understanding", "uncertainty", "action", "why", "hypotheses", "experiment", "prediction"],
                 "properties": {
                     "understanding": {"type": "string"}, "uncertainty": {"type": "string"},
                     "action": {"type": "string", "enum": list(ACTIONS)}, "why": {"type": "string"},
@@ -685,18 +688,21 @@ class NemotronScientist(sh.HasNemotron):
         if a == "experiment":
             spec = reply.get("experiment")
             if not isinstance(spec, str) or not spec:
-                errs.append("experiment needs the field `experiment`")
+                errs.append("experiment needs the field `experiment` (a candidate id or your own design)")
             else:
                 cand, err = session._candidate(spec)
                 if cand is None:
-                    errs.append(err)
+                    errs.append(err + " (observe was already run; choose a candidate or design a counterfactual)"
+                                if spec.endswith("observe") else err)
+            # the registered prediction is a measurement of the scientist's foresight, not a precondition of the action: a
+            # missing or malformed one is recorded and the experiment still runs
             got = {p.get("quantity") for p in reply.get("prediction") or []}
-            if spec != "weigh_test" and not set(PRED_QUANTITIES) <= got:
-                errs.append(f"experiment needs a prediction for each of {list(PRED_QUANTITIES)}")
-            for p in reply.get("prediction") or []:
-                qs = [p.get(k) for k in sh.QUANTILES]
-                if not all(isinstance(x, (int, float)) for x in qs) or any(y < x for x, y in zip(qs, qs[1:])):
-                    errs.append(f"prediction for {p.get('quantity')}: quantiles must be non-decreasing numbers")
+            bad = [p.get("quantity") for p in reply.get("prediction") or []
+                   if not all(isinstance(p.get(k), (int, float)) for k in sh.QUANTILES)
+                   or any(p[b_] < p[a_] for a_, b_ in zip(sh.QUANTILES, sh.QUANTILES[1:]))]
+            if spec != "weigh_test" and (not set(PRED_QUANTITIES) <= got or bad):
+                reply = dict(reply, prediction_issue=f"missing {sorted(set(PRED_QUANTITIES) - got)}, malformed {bad}")
+                reply["prediction"] = [p for p in reply.get("prediction") or [] if p.get("quantity") not in bad] or None
         if a == "repair":
             if reply.get("tool") not in sh.TOOLS:
                 errs.append(f"repair needs `tool` in {list(sh.TOOLS)}")
