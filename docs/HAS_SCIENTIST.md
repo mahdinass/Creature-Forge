@@ -208,3 +208,10 @@ Rules:
     form the ambiguous stratum.
   - Experiments carry information, so experiment choice matters (grounds for arm A3hx).
 - **HDB v2 frozen** (`docs/HDB_SPEC.md`, module hashes recorded). The severity definition awaits the owner's confirmation.
+- **Fresh dev robots, all 9 dev families (18 fresh dev bases, 1.3× threshold, 211 eligible).**
+  - FULL: A1c5 (engine v5 + calibrated stopping) 109 (52 %), A0 62 (29 %). Paired 61 vs 14, one-sided p < 1e-6.
+  - The engine matches or beats A0 in every family. Low friction stays unsolved (2 vs 1 of 17).
+  - Plant use 586 vs 690; twin use 2,023.
+  - Development evidence on morphologies not used for tuning. The engine, map and families are dev, and only the
+    registered test (99 sealed bases + held-out families) can confirm it. Record:
+    `experiments/causal_engineer/dev/hdb/ARMS_fresh_dev_9families.md`.

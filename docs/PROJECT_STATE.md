@@ -403,3 +403,20 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - The M0 diagnosis outputs were moved to `experiments/causal_engineer/dev/phase3_diagnosis/`; phase-3 dev reports live in
   `experiments/causal_engineer/dev/hdb/`.
 - Committing them outside the living directories had broken `tests/test_frozen_records.py` since `777ef0d`; it passes again.
+
+## 2026-10-19 - Phase 3 Stage 1 (non-LLM development) complete; Stage 2 awaits owner approval
+- **Bench:** Hidden-Damage Bench v2 frozen (`docs/HDB_SPEC.md`). The threshold-relative severity definition awaits owner
+  confirmation.
+- **Bases:** 135 fresh verified walkers (36 dev, 99 test-sealed).
+- **Identifiability (multi-class, dev):** 282/302 identified with all instruments; observation alone 245.
+- **Engine:** v5 (`belief_engine.py`); dev-fitted stopping map in
+  `experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json`.
+- **Dev results, no claims:**
+  - 12 old dev bases: A1c5 44/113 vs A0 28/113.
+  - Fresh dev bases, 9 families: A1c5 109/211 vs A0 62/211 (paired 61 vs 14).
+  - MKV: exact deviation knowledge helps; structure alone adds little.
+  - Calibration: the naive Beta reading is worse than a constant forecast.
+- **Live Nemotron smoke:** 3 A3 episodes, $0.013.
+- **Spend:** infra ledger about $60 of the $72 cap; inference ledger +$0.013. VMs stopped.
+- **Next:** owner decisions (C-MKV primary, severity definition, Stage 2 approval), then LLM development (A3h/A3hx/A3),
+  then registration on the test split.
