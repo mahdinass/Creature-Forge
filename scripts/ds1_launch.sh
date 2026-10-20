@@ -40,9 +40,14 @@ if [[ $part == stream ]]; then
 fi
 if [[ $part == eval-llm || $part == eval-nonllm ]]; then
   E=$D/ds1_eval_instances.json
-  if [[ $part == eval-llm ]]; then ARMS="A3v5 A4x"; PRE=$LIVE; W=1; else ARMS=${NONLLM_ARMS:-"A1e A1e6"}; PRE=$ENV; W=${W:-6}; fi
+  MFINAL=$OUT/stream/cases_upd_r4.json      # M_final (protocol §6): init store + the updating stream's outcomes
+  if [[ $part == eval-llm ]]; then ARMS=${LLM_ARMS:-"A3v5 A4x"}; PRE=$LIVE; W=1; else ARMS=${NONLLM_ARMS:-"A1e A1e6"}; PRE=$ENV; W=${W:-6}; fi
   for arm in $ARMS; do
-    EXTRA=""; [[ $arm == A4x ]] && EXTRA="$X"
+    EXTRA=""
+    if [[ $arm == A4x ]]; then
+      [[ -s $MFINAL ]] || { echo "A4x dev-eval needs M_final ($MFINAL): finish the stream first"; exit 1; }
+      EXTRA="--cases $MFINAL --memory $D/memory_ds1_init.json"
+    fi
     CC=$C; [[ $arm == A1e ]] && CC=$C5
     for k in 0 1 2 3 4 5; do
       launch "E_${arm}_s$k" "$PRE $CC --arm $arm $EXTRA --which transfer --only $(ids $E single $((k*5)) $((k*5+5))) --workers $W --out $OUT/eval_${arm}_s$k.jsonl"
