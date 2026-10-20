@@ -14,9 +14,17 @@ X="--cases $D/cases_init.json --memory $D/memory_ds1_init.json"
 ids() { python3 -c "import json,sys; d=json.load(open('$1')); print(','.join(d['$2'][int('$3'):int('$4')]))"; }
 launch() { tmux new -d -s "$1" "$2 > artifacts/hdb/logs/$1.log 2>&1"; }
 part=$1
-if [[ $part == pilot ]]; then
+if [[ $part == pilot || $part == pilot-single ]]; then
   P=$D/ds1_pilot_instances.json
   S3=$(ids $P single 0 3); S2=$(ids $P single 0 2); S1=$(ids $P single 0 1); CP=$(ids $P comp 0 1)
+fi
+if [[ $part == pilot-single ]]; then
+  launch P_A1e6_s "$ENV $C --arm A1e6 --which init --only $S3 --workers 1 --out $OUT/pilot_A1e6.jsonl"
+  launch P_A3v5_s "$LIVE $C --arm A3v5 --which init --only $S2 --workers 1 --out $OUT/pilot_A3v5.jsonl"
+  launch P_A4x_s "$LIVE $C --arm A4x $X --which init --only $S2 --workers 1 --out $OUT/pilot_A4x.jsonl"
+  launch P_eq_s "$ENV $C --arm A4x $X --no-scientist --which init --only $S1 --workers 1 --out $OUT/pilot_A4x_noscientist.jsonl"
+fi
+if [[ $part == pilot ]]; then
   launch P_A1e6_s "$ENV $C --arm A1e6 --which init --only $S3 --workers 1 --out $OUT/pilot_A1e6.jsonl"
   launch P_A1e6_c "$ENV $C --arm A1e6 --which init --devcomp --only $CP --workers 1 --out $OUT/pilot_A1e6.c.jsonl"
   launch P_A3v5_s "$LIVE $C --arm A3v5 --which init --only $S2 --workers 1 --out $OUT/pilot_A3v5.jsonl"
