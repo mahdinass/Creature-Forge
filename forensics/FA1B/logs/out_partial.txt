@@ -1,0 +1,22 @@
+twin_budget_exhausted events: {('dev-eval-2', 'A3v5', 'add_particles'): 27, ('dev-eval-2', 'A3v5', 'update'): 8}
+episodes with a registration refusal: 4 | rows: 5
+
+ hdb-v1-gen-0073:heavy_torso:2 A3v5 X9:cf:torque_limit@x2 | updated 0 | final with/without E 0 12 | leader has E False | max stale mass 1.0 | nemotron:experiment -> nemotron:experiment;nemotron:experiment;nemotron:conclude | full False | lead payload:torso 0.9262 | match False
+    benign/consistent: E registered but no particle scored it (plant data discarded by inference)
+    after_cf:pitch_ref@+0.1R: with_E 0.000 / without_E 1.000; leader LACKS E | after_cf:torque_limit@x2: with_E 0.000 / without_E 1.000; leader LACKS E | after_cf:foot_length@x1.5: with_E 0.000 / without_E 1.000; leader LACKS E
+
+ hdb-v1-gen-0104:short_feet:2 A3v5 X5:cf:kd@x2 | updated 0 | final with/without E 0 12 | leader has E False | max stale mass 0.948 | nemotron:experiment -> nemotron:experiment;nemotron:experiment;nemotron:conclude | full False | lead actuator_strength:ankle_r+segment_length:feet 0.3679 | match False
+    benign/consistent: E registered but no particle scored it (plant data discarded by inference)
+    after_cf:kd@x0.5: with_E 0.000 / without_E 0.948; leader LACKS E | after_cf:kd@x2: with_E 0.000 / without_E 0.948; leader LACKS E | after_weigh_test: with_E 0.000 / without_E 0.948; leader LACKS E
+
+ hdb-v1-gen-0142:pitch_sensor_bias:5 A3v5 X6:floor_test@x3 | updated 0 | final with/without E 0 12 | leader has E False | max stale mass 0.973 | nemotron:experiment -> nemotron:experiment;nemotron:delegate_diagnosis;nemotron:delegate_diagnosis;nemotron:delegate_diagnosis;nemotron:delegate_repair | full True | lead joint_damping:right 0.3659 | match False
+    benign/consistent: E registered but no particle scored it (plant data discarded by inference)
+    after_floor_test@x3: with_E 0.000 / without_E 0.973; leader LACKS E | after_cf:freq@x0.5: with_E 0.000 / without_E 0.973; leader LACKS E
+
+ hdb-v1-gen-0073:low_ground_friction:0 A3v5 X6:cf:kp@x2 | updated 3 | final with/without E 3 9 | leader has E False | max stale mass 0.997 | nemotron:experiment -> nemotron:delegate_diagnosis;nemotron:experiment;fallback:propose;nemotron:propose;nemotron:delegate_diagnosis;nemotron:delegate_repair | full False | lead contact_friction:feet 1.0 | match True
+    confirmed posterior inconsistency persisting to the final record
+    after_cf:kp@x2: with_E 0.003 / without_E 0.997; leader LACKS E | after_cf:kd@x0.5: with_E 0.003 / without_E 0.997; leader LACKS E
+
+ hdb-v1-gen-0073:low_ground_friction:0 A3v5 X7:cf:kd@x0.5 | updated 0 | final with/without E 0 12 | leader has E False | max stale mass 1.0 | nemotron:experiment -> nemotron:delegate_diagnosis;nemotron:experiment;fallback:propose;nemotron:propose;nemotron:delegate_diagnosis;nemotron:delegate_repair | full False | lead contact_friction:feet 1.0 | match True
+    benign/consistent: E registered but no particle scored it (plant data discarded by inference)
+    after_cf:kp@x2: with_E 0.000 / without_E 1.000; leader LACKS E | after_cf:kd@x0.5: with_E 0.000 / without_E 1.000; leader LACKS E

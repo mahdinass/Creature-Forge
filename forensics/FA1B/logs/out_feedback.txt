@@ -1,0 +1,32 @@
+events: assimilated 183 skipped 98
+context: Counter({'robust_repair:plant': 107, 'robust_repair:twin': 69, 'nemotron:repair/twin': 5, 'nemotron:repair/plant': 2})
+group: [('1 no count-level information', 60), ('2 informative counts, limited posterior effect', 88), ('3 belief changed, no deterministic path, no later Nemotron turn', 24), ('3b belief changed, deterministic re-screen possible but not triggered', 4), ('4 might influence Nemotron (shown in a later prompt)', 7)]
+info x reach:
+   ('belief changed (leader change or TV8 >= 0.05)', 'deterministic re-screen structurally possible') 4
+   ('belief changed (leader change or TV8 >= 0.05)', 'later Nemotron decision(s) possible') 2
+   ('belief changed (leader change or TV8 >= 0.05)', 'no later decision point') 24
+   ('informative counts, limited posterior effect (TV8 < 0.05, leader kept)', 'deterministic re-screen structurally possible') 14
+   ('informative counts, limited posterior effect (TV8 < 0.05, leader kept)', 'later Nemotron decision(s) possible') 2
+   ('informative counts, limited posterior effect (TV8 < 0.05, leader kept)', 'no later decision point') 74
+   ('no count-level disagreement among predicted structures', 'deterministic re-screen structurally possible') 22
+   ('no count-level disagreement among predicted structures', 'later Nemotron decision(s) possible') 3
+   ('no count-level disagreement among predicted structures', 'no later decision point') 38
+deterministic re-screen possible: 40 | FA-1 'decision_reachable': 67 | disagreements: [('hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0103:devcomp:pitch_sensor_bias.++actuator_weakness:0', 'A1e6', 2, False, 'True'), ('hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0070:pitch_sensor_bias:3', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0104:short_feet:2', 'A1e6', 4, False, 'True'), ('hdb-v1-gen-0142:pitch_sensor_bias:3', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0096:feedback_gain_loss:0', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0137:one_side_weakness:5', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0099:payload_offset:3', 'A1e6', 3, False, 'True'), ('hdb-v1-gen-0143:pitch_sensor_bias:3', 'A1e6', 2, False, 'True'), ('hdb-v1-gen-0096:payload_offset:2', 'A1e6', 3, False, 'True')]
+later Nemotron turns > 0: 7 | shown in a later prompt: 7 | next-turn text references the update: 1
+by arm, events with later Nemotron turns: Counter({'A3v5': 5, 'A4x': 2})
+next Nemotron actions after shown updates: Counter({'conclude': 3, 'propose': 2, 'delegate_repair': 1, 'screen_tools': 1})
+leader changes: [('hdb-v1-gen-0137:low_ground_friction:0', 'A4x', 4, 'robust_repair:plant', 'actuator_strength:knees+contact_friction:feet', 0, None, False)]
+belief-changed events (leader change or TV8>=0.05) by reach: Counter({'no later decision point': 24, 'deterministic re-screen structurally possible': 4, 'later Nemotron decision(s) possible': 2})
+  of which shown to Nemotron: 2
+
+D2 replay, EXACT (count = seed mismatch) pairs: n 40; |expected|>0.05: 15
+   median |real - expected| 0.135; p90 0.448; corr 0.759
+   ratio real/expected where |expected|>0.05: median 0.892, IQR 0.540-1.246
+   pairs with IDENTICAL predicted counts (replay expects 0): n 25, |real shift| median 0.017, p90 0.344, max 2.259, >0.1 nats: 11
+
+D2 replay, NON-exact pairs: n 38; |expected|>0.05: 23
+   median |real - expected| 0.148; p90 0.663; corr 0.868
+   ratio real/expected where |expected|>0.05: median 0.834, IQR 0.653-1.061
+   pairs with IDENTICAL predicted counts (replay expects 0): n 15, |real shift| median 0.038, p90 0.277, max 0.449, >0.1 nats: 5
+
+per-seed raw nats K = 2.5597 tempered 0.4266 8-seed ceiling 3.413

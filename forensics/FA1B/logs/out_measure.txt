@@ -1,0 +1,65 @@
+## A3.1 robust-seed displacement status (16 paired robust seeds) x final verdict_v1 (24 paired validation seeds), submitted designs, v6 arms
+   ('INCONCLUSIVE', 'INCONCLUSIVE') 1
+   ('NOT_VERIFIED', 'NOT_VERIFIED') 23
+   ('NOT_VERIFIED', 'VERIFIED(FULL/PARTIAL)') 4
+   ('VERIFIED_IMPROVEMENT', 'NOT_VERIFIED') 2
+   ('VERIFIED_IMPROVEMENT', 'VERIFIED(FULL/PARTIAL)') 59
+   ('WORSE', 'NOT_VERIFIED') 1
+   ('WORSE', 'WORSE') 15
+   (None, 'INCONCLUSIVE') 2
+   (None, 'VERIFIED(FULL/PARTIAL)') 1
+
+## A3.2 the 20 displacement-only failures (walks >= 80 % on validation, verdict not VERIFIED)
+   hdb-v1-gen-0073:heavy_torso:0                    A1e   val 24/24 WORSE        r16 16 robust-disp None None | tool leg_length leg x0.757 fric x1.0 | faulty check {'falling_forward': 8}
+   hdb-v1-gen-0073:heavy_torso:0                    A1e6  val 23/24 WORSE        r16 16 robust-disp WORSE -1.8083 | tool placement leg x0.668 fric x1.0 | faulty check {'falling_forward': 8}
+   hdb-v1-gen-0073:heavy_torso:0                    A4x   val 22/24 WORSE        r16 16 robust-disp WORSE -1.7658 | tool posture leg x0.7 fric x1.0 | faulty check {'falling_forward': 8}
+   hdb-v1-gen-0073:heavy_torso:2                    A1e   val 22/24 NOT_VERIFIED r16 16 robust-disp None None | tool leg_length leg x0.732 fric x1.0 | faulty check {'falling_forward': 7, 'fall': 1}
+   hdb-v1-gen-0073:heavy_torso:2                    A1e6  val 21/24 WORSE        r16 16 robust-disp WORSE -0.8833 | tool placement leg x0.722 fric x1.0 | faulty check {'falling_forward': 7, 'fall': 1}
+   hdb-v1-gen-0073:low_ground_friction:0            A1e   val 22/24 WORSE        r16 15 robust-disp None None | tool leg_length leg x0.69 fric x1.0 | faulty check {'contact_chatter': 7, 'walking': 1}
+   hdb-v1-gen-0073:low_ground_friction:0            A1e6  val 23/24 WORSE        r16 15 robust-disp WORSE -2.272 | tool leg_length leg x0.689 fric x1.0 | faulty check {'contact_chatter': 7, 'walking': 1}
+   hdb-v1-gen-0073:low_ground_friction:0            A4x   val 23/24 WORSE        r16 15 robust-disp WORSE -2.272 | tool leg_length leg x0.689 fric x1.0 | faulty check {'contact_chatter': 7, 'walking': 1}
+   hdb-v1-gen-0073:low_ground_friction:2            A1e   val 24/24 WORSE        r16 16 robust-disp None None | tool placement leg x1.0 fric x1.0 | faulty check {'contact_chatter': 8}
+   hdb-v1-gen-0073:low_ground_friction:2            A1e6  val 23/24 WORSE        r16 16 robust-disp WORSE -2.7965 | tool posture leg x1.0 fric x1.0 | faulty check {'contact_chatter': 8}
+   hdb-v1-gen-0073:low_ground_friction:2            A3v5  val 24/24 WORSE        r16 16 robust-disp WORSE -2.8123 | tool posture leg x1.0 fric x1.0 | faulty check {'contact_chatter': 8}
+   hdb-v1-gen-0073:low_ground_friction:2            A4x   val 23/24 WORSE        r16 16 robust-disp WORSE -2.7965 | tool posture leg x1.0 fric x1.0 | faulty check {'contact_chatter': 8}
+   hdb-v1-gen-0126:low_ground_friction:0            A1e   val 21/24 NOT_VERIFIED r16 15 robust-disp None None | tool feedback leg x1.0 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 1, 'walking': 1}
+   hdb-v1-gen-0126:low_ground_friction:0            A1e6  val 20/24 NOT_VERIFIED r16 14 robust-disp NOT_VERIFIED -0.0704 | tool timing leg x1.0 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 1, 'walking': 1}
+   hdb-v1-gen-0126:low_ground_friction:0            A3v5  val 20/24 NOT_VERIFIED r16 15 robust-disp NOT_VERIFIED -0.4084 | tool posture leg x1.0 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 1, 'walking': 1}
+   hdb-v1-gen-0126:low_ground_friction:0            A4x   val 22/24 NOT_VERIFIED r16 16 robust-disp NOT_VERIFIED 0.1797 | tool feedback leg x1.0 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 1, 'walking': 1}
+   hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A1e6  val 22/24 WORSE        r16 16 robust-disp WORSE -2.2613 | tool timing leg x0.682 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 2}
+   hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5  val 23/24 WORSE        r16 14 robust-disp WORSE -2.2317 | tool posture leg x0.691 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 2}
+   hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A4x   val 22/24 WORSE        r16 16 robust-disp WORSE -2.2613 | tool timing leg x0.682 fric x1.0 | faulty check {'contact_chatter': 6, 'fall': 2}
+   hdb-v1-gen-0142:short_feet:2                     A1e6  val 24/24 NOT_VERIFIED r16 14 robust-disp NOT_VERIFIED 0.3449 | tool foot_length leg x1.0 fric x1.0 | faulty check {'torque_saturated': 5, 'fall': 2, 'walking': 1}
+   unique instances 7 | robust-disp status: Counter({'WORSE': 11, None: 5, 'NOT_VERIFIED': 4}) | verdicts: Counter({'WORSE': 14, 'NOT_VERIFIED': 6})
+   faulty-robot eligibility labels pooled over these episodes: {'contact_chatter': 95, 'fall': 14, 'falling_forward': 38, 'walking': 8, 'torque_saturated': 5}
+   ... and over FULL episodes: {'fall': 59, 'stationary': 9, 'falling_forward': 116, 'slow_or_few_steps': 99, 'walking': 11, 'contact_chatter': 16, 'torque_saturated': 10}
+
+## A3.3 near-threshold walking failures (validation 17-19/24): robust16 of the submitted design vs validation
+   episodes 38 unique instances 15 | with robust16: 37
+   robust16 distribution: [(9, 7), (10, 3), (11, 2), (12, 4), (13, 4), (14, 5), (15, 11), (16, 1)]
+   P(val <= observed | p = robust16/16): median 0.173; < 0.05 in 13 of 37
+   expected val k under p = r16/16: 18.9, observed mean 18.1
+
+## A3.4 all submitted designs with robust16: robust rate vs validation rate (selection / winner's-curse check)
+   robust16 15-16: n 62; mean robust rate 0.967; mean validation rate 0.901; FULL 29
+   robust16 12-14: n 33; mean robust rate 0.837; mean validation rate 0.797; FULL 10
+   robust16 0-11: n 45; mean robust rate 0.340; mean validation rate 0.359; FULL 1
+
+## A3.5 fresh robust re-measurement (ds1_stopdata, init bases): final status by robust16 and displacement status
+   designs 678
+   robust16 15-16: n 293, FULL 178 | of which disp VERIFIED: n 226, FULL 178 | disp WORSE: n 15, FULL 0
+   robust16 12-14: n 216, FULL 77 | of which disp VERIFIED: n 152, FULL 76 | disp WORSE: n 7, FULL 0
+   robust16 0-11: n 169, FULL 3 | of which disp VERIFIED: n 75, FULL 3 | disp WORSE: n 10, FULL 0
+
+## A3.6 submitted-design leg length (thigh + shank) relative to the faulty design, by outcome category
+   ('legs <= x0.85', 'displacement only') 11
+   ('legs <= x0.85', 'walking robustness') 1
+   ('legs >= x1.15', 'FULL') 8
+   ('legs >= x1.15', 'walking robustness') 2
+   ('legs >= x1.15', 'walking robustness only') 7
+   ('legs ~ x1', 'FULL') 32
+   ('legs ~ x1', 'displacement only') 9
+   ('legs ~ x1', 'long-run confirmation') 6
+   ('legs ~ x1', 'walking robustness') 38
+   ('legs ~ x1', 'walking robustness only') 30
+   legs <= x0.85: designs 12 instances 5 FULL 0

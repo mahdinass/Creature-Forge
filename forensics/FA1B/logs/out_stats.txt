@@ -1,0 +1,25 @@
+## E1 descriptive variance shares of binary FULL (144 arm-episodes)
+  instance      : eta^2 0.723  (expected under no effect 0.245, k=36, N=144); omega^2 0.632
+  arm           : eta^2 0.002  (expected under no effect 0.021, k=4, N=144); omega^2 -0.019
+  robot base    : eta^2 0.265  (expected under no effect 0.098, k=15, N=144); omega^2 0.184
+  failure family: eta^2 0.181  (expected under no effect 0.070, k=11, N=144); omega^2 0.119
+
+## E2 pooled single-fault diagnosis x FULL: independence vs. instance clustering
+  singles: 120 arm-episodes, 30 instances, 14 bases; ICC(instance) 0.619; design effect 2.86
+  correct: FULL 18/70 = 0.26; ordinary Wilson 0.17-0.37; with design effect (n_eff 24) 0.13-0.45; distinct instances 22
+  wrong  : FULL 17/50 = 0.34; ordinary Wilson 0.22-0.48; with design effect (n_eff 17) 0.17-0.57; distinct instances 18
+
+## E2 exact McNemar on paired FULL (36 instances, recomputed)
+  A3v5 vs A1e6: A3v5-only 3, A1e6-only 2; exact p one-sided 0.500, two-sided 1.000
+  A4x vs A1e6: A4x-only 3, A1e6-only 1; exact p one-sided 0.312, two-sided 0.625
+  A1e6 vs A1e: A1e6-only 1, A1e-only 2; exact p one-sided 0.875, two-sided 1.000
+  A4x vs A3v5: A4x-only 3, A3v5-only 2; exact p one-sided 0.500, two-sided 1.000
+
+## E3 within-instance diagnosis comparison (singles; instances where arms differ in exact-diagnosis correctness)
+  instances with mixed diagnosis correctness: 10; FULL when correct 6/22, when wrong 5/18
+  of those, instances with mixed FULL outcome: 3
+    hdb-v1-gen-0070:pitch_sensor_bias:3 [(False, True, 'A1e'), (True, True, 'A1e6'), (False, False, 'A3v5'), (False, True, 'A4x')]
+    hdb-v1-gen-0104:clock_fault:3 [(True, True, 'A1e'), (True, False, 'A1e6'), (False, False, 'A3v5'), (False, False, 'A4x')]
+    hdb-v1-gen-0142:pitch_sensor_bias:5 [(False, False, 'A1e'), (True, True, 'A1e6'), (False, True, 'A3v5'), (False, True, 'A4x')]
+  mean within-instance FULL difference (correct - wrong): +0.117 over 10 instances; positive 3, negative 0, zero 7
+  instances where all arms agree on correctness: 20 (correct-everywhere 12, wrong-everywhere 8)

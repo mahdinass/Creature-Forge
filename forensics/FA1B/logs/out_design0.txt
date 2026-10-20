@@ -1,0 +1,5 @@
+{('dev-eval-2', 'delegate_repair'): 67, ('dev-eval-2', 'design=0'): 45, ('dev-eval-2', 'design=0 while a checked non-zero design existed'): 3, ('stream', 'delegate_repair'): 39, ('stream', 'design=0'): 27, ('stream', 'design=0 while a checked non-zero design existed'): 1}
+  ('dev-eval-2', 'hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0', 'A3v5', {'5': (12, None, None)}, 7, 'FULL_RECOVERY')
+  ('dev-eval-2', 'hdb-v1-gen-0142:short_feet:2', 'A3v5', {'2': (14, 7, 0.0010108050064269163)}, 5, 'FULL_RECOVERY')
+  ('dev-eval-2', 'hdb-v1-gen-0073:low_ground_friction:0', 'A3v5', {'5': (16, 8, 0.060033378557576615)}, 9, 'NOT_RECOVERED')
+  ('stream', 'hdb-v1-gen-0064:feedback_gain_loss:0', 'A4x', {'4': (15, None, 0.0028758194550275577)}, 6, 'NOT_RECOVERED')

@@ -1,0 +1,5 @@
+dev-eval-2 hdb-v1-gen-0073:heavy_torso:2 A3v5 artifacts/vm/ds1/eval/eval_A3v5_s0.jsonl#L2: unscored-by-leader experiments shown as 'fits': {'X9:cf:torque_limit@x2': 2, 'X10:cf:foot_length@x1.5': 1}
+dev-eval-2 hdb-v1-gen-0104:short_feet:2 A3v5 artifacts/vm/ds1/eval/eval_A3v5_s0.jsonl#L3: unscored-by-leader experiments shown as 'fits': {'X5:cf:kd@x2': 2}
+dev-eval-2 hdb-v1-gen-0142:pitch_sensor_bias:5 A3v5 artifacts/vm/ds1/eval/eval_A3v5_s2.jsonl#L3: unscored-by-leader experiments shown as 'fits': {'X6:floor_test@x3': 5, 'X7:cf:freq@x0.5': 4}
+dev-eval-2 hdb-v1-gen-0073:low_ground_friction:0 A3v5 artifacts/vm/ds1/eval/eval_A3v5_s3.jsonl#L1: unscored-by-leader experiments shown as 'fits': {'X6:cf:kp@x2': 7, 'X7:cf:kd@x0.5': 5}
+episodes affected: {('dev-eval-2', 'A3v5'): 4}

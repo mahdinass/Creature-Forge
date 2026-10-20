@@ -1,0 +1,65 @@
+episode rows 1440 stream rows 400
+mechanism counts (dev-eval-2): Counter({('foot_friction', 'probe_invalid'): 87, ('foot_length', 'screened_not_cma_reranked(rank>5)'): 73, ('torque_limit', 'screened_not_cma_reranked(rank>5)'): 57, ('torque_limit', 'probe_invalid'): 47, ('foot_friction', 'screened_not_cma_reranked(rank>5)'): 38, ('foot_length', 'ranked_top2'): 31, ('torque_limit', 'screened_ranked_below_2'): 31, ('foot_length', 'screened_ranked_below_2'): 26, ('foot_friction', 'screened_ranked_below_2'): 13, ('foot_length', 'probe_invalid'): 8, ('foot_length', 'no_screen_record'): 4, ('torque_limit', 'no_screen_record'): 4, ('foot_friction', 'no_screen_record'): 4, ('torque_limit', 'ranked_top2'): 3, ('foot_length', 'screen_truncated_by_twin_budget'): 2, ('torque_limit', 'screen_truncated_by_twin_budget'): 2, ('foot_friction', 'screen_truncated_by_twin_budget'): 2})
+truncated/missing screens: [('hdb-v1-gen-0004:feedback_gain_loss:2', 'A4x', 'no_screen_record'), ('hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0', 'A3v5', 'screen_truncated_by_twin_budget'), ('hdb-v1-gen-0073:heavy_torso:2', 'A3v5', 'no_screen_record'), ('hdb-v1-gen-0073:heavy_torso:2', 'A4x', 'no_screen_record'), ('hdb-v1-gen-0104:short_feet:2', 'A3v5', 'no_screen_record'), ('hdb-v1-gen-0108:payload_offset:0', 'A3v5', 'no_screen_record'), ('hdb-v1-gen-0142:pitch_sensor_bias:5', 'A3v5', 'screen_truncated_by_twin_budget')]
+absent_unexplained: [('hdb-v1-gen-0013:low_ground_friction:0', 'A4x', 'foot_length')]
+
+## dev: low_ground_friction family episodes, foot_friction
+  hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A1e6 f= 1.383 probe_invalid cma x0.25-x1.4462 probe_rank None cma_rank None via - req False lead joint_damping:hips full False walking robustness (+displacement)
+  hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 A1e6 f= 0.778 screened_ranked_below_2 cma x0.25-x2.5723 probe_rank 4 cma_rank 4 via - req False lead contact_friction:feet+gain_scale:balance_feedback full False walking robustness (+displacement)
+  hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A1e6 f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead contact_friction:feet+gain_scale:balance_feedback full False displacement only (walks >=80%)
+  hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0 A1e6 f= 0.954 screened_not_cma_reranked(rank>5) cma x0.25-x2.0969 probe_rank 10 cma_rank None via - req False lead payload:torso full False walking robustness (+displacement)
+  hdb-v1-gen-0073:low_ground_friction:2 A1e6 f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0126:low_ground_friction:0 A1e6 f= 1.46 probe_invalid cma x0.25-x1.3699 probe_rank None cma_rank None via - req False lead actuator_strength:left+actuator_strength:right full False displacement only (walks >=80%)
+  hdb-v1-gen-0073:low_ground_friction:0 A1e6 f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0137:low_ground_friction:0 A1e6 f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead actuator_strength:knees+contact_friction:feet full False walking robustness only (displacement verified)
+  hdb-v1-gen-0096:low_ground_friction:2 A1e6 f= 1.06 probe_invalid cma x0.25-x1.8859 probe_rank None cma_rank None via - req False lead contact_friction:feet full False walking robustness (+displacement)
+  hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A1e f= 1.383 probe_invalid cma x0.25-x1.4462 probe_rank None cma_rank None via - req False lead payload:torso full False long-run confirmation
+  hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 A1e f= 0.778 screened_not_cma_reranked(rank>5) cma x0.25-x2.5723 probe_rank 9 cma_rank None via - req False lead contact_friction:feet full False walking robustness (+displacement)
+  hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A1e f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead gain_scale:balance_feedback full False walking robustness (+displacement)
+  hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0 A1e f= 0.954 screened_not_cma_reranked(rank>5) cma x0.25-x2.0969 probe_rank 10 cma_rank None via - req False lead payload:torso full False walking robustness (+displacement)
+  hdb-v1-gen-0073:low_ground_friction:2 A1e f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0126:low_ground_friction:0 A1e f= 1.46 probe_invalid cma x0.25-x1.3699 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0073:low_ground_friction:0 A1e f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0137:low_ground_friction:0 A1e f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead contact_friction:feet full False walking robustness only (displacement verified)
+  hdb-v1-gen-0096:low_ground_friction:2 A1e f= 1.06 probe_invalid cma x0.25-x1.8859 probe_rank None cma_rank None via - req False lead contact_friction:feet full False walking robustness (+displacement)
+  hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5 f= 1.383 screen_truncated_by_twin_budget cma x0.25-x1.4462 probe_rank None cma_rank None via - req False lead payload:torso full True FULL
+  hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5 f= 0.778 screened_ranked_below_2 cma x0.25-x2.5723 probe_rank 3 cma_rank 3 via engine_plant req False lead contact_friction:feet+gain_scale:balance_feedback full False walking robustness (+displacement)
+  hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5 f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead contact_friction:feet+gain_scale:balance_feedback full False displacement only (walks >=80%)
+  hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0 A3v5 f= 0.954 screened_not_cma_reranked(rank>5) cma x0.25-x2.0969 probe_rank 9 cma_rank None via - req False lead actuator_strength:ankles+payload:torso full False walking robustness only (displacement verified)
+  hdb-v1-gen-0073:low_ground_friction:2 A3v5 f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0126:low_ground_friction:0 A3v5 f= 1.46 probe_invalid cma x0.25-x1.3699 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0073:low_ground_friction:0 A3v5 f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False walking robustness (+displacement)
+  hdb-v1-gen-0137:low_ground_friction:0 A3v5 f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead actuator_strength:knees+contact_friction:feet full False walking robustness only (displacement verified)
+  hdb-v1-gen-0096:low_ground_friction:2 A3v5 f= 1.06 probe_invalid cma x0.25-x1.8859 probe_rank None cma_rank None via - req False lead actuator_strength:left+contact_friction:feet full False walking robustness (+displacement)
+  hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A4x f= 1.383 probe_invalid cma x0.25-x1.4462 probe_rank None cma_rank None via - req False lead payload:torso full False walking robustness only (displacement verified)
+  hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 A4x f= 0.778 screened_ranked_below_2 cma x0.25-x2.5723 probe_rank 4 cma_rank 4 via - req False lead contact_friction:feet+gain_scale:balance_feedback full False walking robustness (+displacement)
+  hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 A4x f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead contact_friction:feet+gain_scale:balance_feedback full False displacement only (walks >=80%)
+  hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0 A4x f= 0.954 screened_not_cma_reranked(rank>5) cma x0.25-x2.0969 probe_rank 6 cma_rank None via - req False lead unmodelled:any full False walking robustness (+displacement)
+  hdb-v1-gen-0073:low_ground_friction:2 A4x f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0126:low_ground_friction:0 A4x f= 1.46 probe_invalid cma x0.25-x1.3699 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0073:low_ground_friction:0 A4x f= 1.319 probe_invalid cma x0.25-x1.5158 probe_rank None cma_rank None via - req False lead contact_friction:feet full False displacement only (walks >=80%)
+  hdb-v1-gen-0137:low_ground_friction:0 A4x f= 1.127 probe_invalid cma x0.25-x1.7752 probe_rank None cma_rank None via - req False lead actuator_strength:knees+contact_friction:feet full False walking robustness only (displacement verified)
+  hdb-v1-gen-0096:low_ground_friction:2 A4x f= 1.06 probe_invalid cma x0.25-x1.8859 probe_rank None cma_rank None via - req False lead contact_friction:feet full False walking robustness (+displacement)
+
+## stream: low_ground_friction family episodes, foot_friction
+  hdb-v1-gen-0013:low_ground_friction:2 A4x f= 1.066 probe_invalid cma x0.25-x1.8755 probe_rank None cma_rank None via - req False lead None full False None
+  hdb-v1-gen-0013:low_ground_friction:2 A4x f= 1.066 probe_invalid cma x0.25-x1.8755 probe_rank None cma_rank None via - req False lead None full False None
+  hdb-v1-gen-0013:devcomp:low_ground_friction+actuator_weakness:0 A4x f= 1.066 probe_invalid cma x0.25-x1.8755 probe_rank None cma_rank None via - req False lead None full True None
+  hdb-v1-gen-0038:low_ground_friction:0 A4x f= 0.635 ranked_top2 cma x0.25-x3.1472 probe_rank 1 cma_rank 1 via engine_plant;engine_twin req False lead None full False None
+  hdb-v1-gen-0013:devcomp:low_ground_friction+actuator_weakness:0 A4x f= 1.066 probe_invalid cma x0.25-x1.8755 probe_rank None cma_rank None via - req False lead None full False None
+  hdb-v1-gen-0038:low_ground_friction:0 A4x f= 0.635 ranked_top2 cma x0.25-x3.1472 probe_rank 1 cma_rank 1 via engine_plant;engine_twin req False lead None full False None
+  hdb-v1-gen-0013:low_ground_friction:0 A4x f= 1.066 probe_invalid cma x0.25-x1.8755 probe_rank None cma_rank None via - req False lead None full False None
+  hdb-v1-gen-0013:low_ground_friction:0 A4x f= 1.066 probe_invalid cma x0.25-x1.8755 probe_rank None cma_rank None via - req False lead None full False None
+
+## Nemotron-requested tools absent from the first probe ranking (any tool)
+  dev-eval-2 hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5 placement via nemotron_repair_plant full True
+  stream hdb-v1-gen-0064:one_side_weakness:3 A4x torque_limit via engine_plant;nemotron_prefer full False
+  stream hdb-v1-gen-0013:low_ground_friction:0 A4x foot_length via nemotron_repair_twin full False
+
+## tools optimised that were NOT in the first probe ranking
+  dev-eval-2 hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5 posture engine_plant full True
+  dev-eval-2 hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 A3v5 placement nemotron_repair_plant full True
+  dev-eval-2 hdb-v1-gen-0142:pitch_sensor_bias:5 A3v5 posture engine_plant full True
+  dev-eval-2 hdb-v1-gen-0142:pitch_sensor_bias:5 A3v5 timing engine_plant full True
+  stream hdb-v1-gen-0064:one_side_weakness:3 A4x torque_limit engine_plant;nemotron_prefer full False
+  stream hdb-v1-gen-0013:low_ground_friction:0 A4x foot_length nemotron_repair_twin full False
