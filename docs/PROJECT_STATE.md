@@ -474,3 +474,31 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   ≈ $12.18, inference ≈ $6.25 left).
 - Failure analysis and the DS-1 plan are in `docs/DUAL_SIGNAL_PLAN.md`. They await owner approval before any run. No VM is
   running.
+
+## DS-1 dual-signal iteration — status 2026-10-20 06:20 UTC (in progress)
+- **Done:**
+  - code and tests;
+  - offline stage: G-a FAILED, so no A1x and the R-head never orders tools;
+  - final stop map v2 (`ds1/stopmap_v2_report.json`);
+  - pilot gates (`experiments/causal_engineer/dev/hdb/ds1/PILOT.md`): G-b pass, equivalence pass, G-m FAILED (v6 5/13 vs
+    v5 7/13 on 13 init-base compositions);
+  - amendment 2 in `docs/DS1_PROTOCOL.md`;
+  - non-LLM dev-eval-2 (A1e, A1e6; 72 episodes) on the batch VM, which is STOPPED (verified).
+- **Running on the main VM** (tmux; resumable):
+  - `STREAM`: A4x updating vs frozen, 4 rounds of 5;
+  - `E_A3v5_*`: dev-eval-2;
+  - `CHAIN_A4x`: launches the A4x dev-eval-2 with M_final when the stream ends;
+  - `FINALIZE`: when everything ends, writes `artifacts/hdb/ds1/DS1_RESULTS_vm.md`, `ds1_all.tgz` and the inference
+    total, then powers the VM off. The deadman deadline is 2026-10-20 ~19:00 UTC.
+- **To resume:**
+  1. `python infra/nebius/forge_cloud.py start` if the VM is stopped.
+  2. Pull `artifacts/hdb/ds1/` and `logs/FINALIZE.log`.
+  3. Run `scripts/ds1_report.py`.
+  4. Write `docs/DS1_REPORT.md`.
+  5. Stop the VM and verify STOPPED.
+- **Interim non-LLM finding (dev-eval-2, 30 singles + 6 compositions, new transfer instances):**
+  - v6 diagnosis is better calibrated than v5:
+    - confidently wrong: singles 4 vs 9, compositions 0 vs 6;
+    - mean log P(truth): singles −2.54 vs −2.93, compositions −4.61 vs −9.21.
+  - Repair is unchanged: FULL 8 vs 9 (singles), 1 vs 1 (compositions).
+  - Cross-feedback: 88 plant checks were assimilated and the leading explanation never changed.
