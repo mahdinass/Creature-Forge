@@ -656,14 +656,15 @@ def build_instance(instance_id: str, inputs: dict, pool=None) -> dict:
     return inst
 
 
-def run_episode(inst: dict, arm: str, replicate: int, inputs: dict, pool=None) -> dict:
-    """One A1e6 episode (scripts/hdb_agent_run.run_one with arm A1e6) plus the engineer hook. PHYSICS."""
+def run_episode(inst: dict, arm: str, replicate: int, inputs: dict, pool=None, bench_cls=None) -> dict:
+    """One A1e6 episode (scripts/hdb_agent_run.run_one with arm A1e6) plus the engineer hook. PHYSICS.
+    `bench_cls` (default: the frozen EvidenceWorkbench, as DS-1) lets a versioned study substitute a subclass."""
     from creature_forge.hdb_evidence import EvidenceWorkbench
     t0 = time.perf_counter()
     view = hb.policy_view(inst)
     noise = replicate_noise_seed(inst["instance_id"], replicate)
-    bench = EvidenceWorkbench(view, inst["plant"], total_budget=A1E6["budget"], twin_budget=A1E6["twin_budget"], pool=pool,
-                              noise_seed=noise)
+    bench = (bench_cls or EvidenceWorkbench)(view, inst["plant"], total_budget=A1E6["budget"],
+                                             twin_budget=A1E6["twin_budget"], pool=pool, noise_seed=noise)
     with open(inputs["stop_model"], encoding="utf-8") as fh:
         stop_model = json.load(fh)
     with open(inputs["v6_settings"], encoding="utf-8") as fh:
