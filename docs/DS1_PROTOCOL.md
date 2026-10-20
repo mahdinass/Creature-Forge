@@ -200,3 +200,33 @@ New behaviour lives in new modules or behind flags whose default reproduces engi
   - the A4x stream measures whether Nemotron's decisions improve with accumulating experience.
 - **Equivalence check:** A4x with no scientist (`--no-scientist`) must reproduce A1e6 exactly. This shows the experience
   store does not change the instruments.
+
+## Amendment 2 (2026-10-20 05:00 UTC, after the pilot gates, before any stream or dev-eval-2 outcome was read)
+- **Timing:** the learning stream, the A3v5 dev-eval-2 sessions (main VM) and the A1e dev-eval-2 sessions (batch VM) were
+  started provisionally at 04:39–04:41 UTC so the CPUs would not sit idle. None of their outputs had been read when this
+  amendment was written.
+- **Pilot gates** (`experiments/causal_engineer/dev/hdb/ds1/PILOT.md`):
+  - G-b reply validity: 26/26 model role calls ok → **pass**;
+  - equivalence (A4x with no scientist = A1e6): identical verification, ledgers, design vectors and leading explanation → **pass**;
+  - G-m, first clause (composite work stays within the repair reserve): 15/15 v6 composition episodes → **pass**;
+  - G-m, second clause → **FAIL**.
+- **How the second clause was measured:**
+  - The amended pilot had one composition, so the clause was evaluated on 13 init-base compositions: the pilot composition
+    plus the 12 init-base compositions of Stage 2's `s2DC_exp_A1e.jsonl`.
+  - The v5 side reuses those v5 records; A1e has been verified bit-identical to its Stage-2 records. The v6 side is A1e6.
+- **Result:**
+  - leading explanation shares an injected primitive: v5 7/13, v6 5/13;
+  - FULL: v5 6/13, v6 4/13 (discordant 3 vs 1);
+  - v6's open-world reserve was the leading explanation in 5 of the 13 compositions.
+- **Consequences** (declared now):
+  1. **No credit for the composite mechanism.** DS-1 makes no claim that engine v6's misfit/composite mechanism improves
+     diagnosis of compositions; the mechanism is reported as failing its gate.
+  2. **No engine fix inside DS-1.**
+     - A fix tuned on these 13 compositions could not be re-gated on independent compositions within DS-1's time.
+     - Re-testing on the same 13 would overfit.
+  3. **Stream and dev-eval-2 continue as declared** (§7.4 makes their start conditional on the budget only):
+     - the learning contrasts (A4x vs A3v5; updating vs frozen) and the Nemotron contrast (A3v5 vs A1e6) compare arms on
+       the identical engine v6, so G-m does not confound them;
+     - A1e6 vs A1e on dev-eval-2 measures the engine change itself on new instances and is reported as the engine result.
+  4. **Stage 3:** a Stage-3 request will not adopt v6's composite mechanism as the default engine unless it passes a new
+     gate on independent compositions.
