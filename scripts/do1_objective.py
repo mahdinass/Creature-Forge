@@ -13,17 +13,24 @@ progress = clip(speed_effective / 0.4, -1, 1) * validity. It never sees the faul
     15/16 robust and 19/24 validation (one seed short of PASS).
 
 DO-1 replaces ONLY the per-candidate scalar handed to the unchanged `cma_search` (as `mean_fitness`), with
-  J = 1000 W + (100 + 10 M                     if W = n and shortfall = 0      feasible: robustness margin
-              -10 min(shortfall, 50) + M       otherwise)                      infeasible: paired displacement first
-        + 0.01 f                                                               frozen fitness, tie-break only
-  W          walking train seeds (n = 4), strict precedence (steps of 1000 exceed every other term's range);
+  J = 10000 W + 1000 S + T + 0.001 f
+  T = 100 + 10 M                               if W = n and shortfall = 0      feasible: robustness margin
+      -10 min(shortfall, 50) + 0.1 M           otherwise                       infeasible: paired displacement first
+  W          walking train seeds (n = 4); S surviving train seeds. T spans less than 611 and S <= 8, so J orders candidates
+             exactly as cma_search's frozen best-candidate key `_score` = (W, S, J): the CMA update and the reported best
+             use one priority structure (v1 omitted S from J; corrected in v2 before any physics run);
   shortfall  max(0, TAU_D - median_s(score_s - faulty_s)) / TAU_D: paired forward displacement against the faulty design on
              the SAME train seeds and conditions, with the verifier's walk-score rule (hdb_evidence.walk_score);
   M          mean over seeds of the seed margin: -1 if fell, else the smallest normalised slack of the frozen walking gates
              (speed, step rate, alternation, chatter, flight, slip, body contact, saturation, pitch), each clipped to [-1, 1];
-  f          the frozen mean fitness.
-Feasible candidates always rank above infeasible ones with the same W (Deb's feasibility rules, encoded for the rank-based CMA).
-Because `_score` is unchanged, the reported best is still the most-walking candidate, then survival, then J.
+  f          the frozen mean fitness (range about [-10, 6]), tie-break only.
+Feasible candidates always rank above infeasible ones with the same W and S (Deb's feasibility rules for the rank-based CMA).
+Below feasibility the displacement signal is strictly monotone in the median paired gain (no plateau below TAU_D; the cap
+only binds below -36.75 m), down to a gain of -(faulty score): the frozen walk-score rule floors a candidate's score at 0, so
+candidates that do not move forward share one displacement value and are ordered by margin, then fitness. Exchange rates, i.e. how much a lower-priority term can offset a higher one at most: the margin
+term (span 0.2) offsets at most 0.015 m of median paired gain; the fitness term (span < 0.017) offsets at most 0.0013 m of
+gain, 0.17 infeasible-margin units or 0.0017 feasible-margin units. The displacement signal moves only with the MEDIAN
+paired gain (the verifier's statistic): with 4 seeds, a change confined to the best or worst seed does not move it.
 
 Costs and seeds: the faulty design is walked once per episode on the same train seeds (4 plant rollouts, charged as the
 ledger line `do1_train_baseline` and deducted from that repair's budget, so the plant total stays <= 700). No validation,
@@ -54,14 +61,17 @@ from creature_forge.forge_pool import InlinePool, is_error            # noqa: E4
 from creature_forge.hdb_evidence import EvidenceWorkbench, walk_score # noqa: E402
 from creature_forge.hdb_workbench import min_budget, tool_space       # noqa: E402
 
-VERSION = "do1_objective_v1"
+VERSION = "do1_objective_v2"     # v2: survival in J (one ordering with `_score`), strict-precedence weights (2026-10-21)
 TAU_D = 0.75            # m: 1.5 x verdict_v1's 0.5 m minimum effect (margin for train -> validation shrinkage); fixed a priori
-W_STEP = 1000.0
+W_STEP = 10000.0
+S_STEP = 1000.0
 FEASIBLE_OFFSET = 100.0
-MARGIN_WEIGHT = 10.0
+MARGIN_WEIGHT = 10.0          # feasible tier
+INFEASIBLE_MARGIN_WEIGHT = 0.1
 SHORT_WEIGHT = 10.0
 SHORT_CAP = 50.0
-FIT_WEIGHT = 0.01
+FIT_WEIGHT = 0.001
+MAX_TRAIN = 8                 # S_STEP * MAX_TRAIN + tier span < W_STEP
 DURATION = 10.0
 # (gate, metric key, criteria attribute, kind): "min" gates need metric >= threshold, "max" gates metric <= threshold
 GATES = (
@@ -75,8 +85,9 @@ GATES = (
     ("saturation", "saturation_frac", "max_saturation_frac", "max"),
     ("pitch", "max_abs_pitch", "max_abs_pitch", "max"),
 )
-OBJECTIVE_SPEC = {"version": VERSION, "tau_d_m": TAU_D, "w_step": W_STEP, "feasible_offset": FEASIBLE_OFFSET,
-                  "margin_weight": MARGIN_WEIGHT, "short_weight": SHORT_WEIGHT, "short_cap": SHORT_CAP,
+OBJECTIVE_SPEC = {"version": VERSION, "tau_d_m": TAU_D, "w_step": W_STEP, "s_step": S_STEP, "feasible_offset": FEASIBLE_OFFSET,
+                  "margin_weight": MARGIN_WEIGHT, "infeasible_margin_weight": INFEASIBLE_MARGIN_WEIGHT,
+                  "short_weight": SHORT_WEIGHT, "short_cap": SHORT_CAP,
                   "fit_weight": FIT_WEIGHT, "gates": [g[0] for g in GATES], "baseline": "faulty design 0, same train seeds"}
 
 
@@ -133,8 +144,8 @@ def seed_margin(row: dict) -> tuple[float, str | None]:
 def objective(rows: list, base_scores: list) -> dict:
     """All DO-1 components of one candidate from its train-seed rows and the faulty design's walk scores on the same seeds."""
     n = len(rows)
-    if n == 0 or len(base_scores) != n:
-        raise ValueError("objective needs one faulty walk score per train row")
+    if n == 0 or n > MAX_TRAIN or len(base_scores) != n:
+        raise ValueError(f"objective needs 1-{MAX_TRAIN} train rows and one faulty walk score per row")
     fits = [r2.ERROR_FITNESS if not r.get("ok") or not math.isfinite(r["fitness"]) else float(r["fitness"]) for r in rows]
     walking = sum(1 for r in rows if r.get("ok") and r["walking"])
     survival = sum(1 for r in rows if r.get("ok") and not r["fell"])
@@ -146,8 +157,11 @@ def objective(rows: list, base_scores: list) -> dict:
     m = float(np.mean([g for g, _ in margins]))
     mean_fit = float(np.mean(fits))
     feasible = walking == n and short == 0.0
-    tier = (FEASIBLE_OFFSET + MARGIN_WEIGHT * m) if feasible else (-SHORT_WEIGHT * min(short, SHORT_CAP) + m)
-    j = W_STEP * walking + tier + FIT_WEIGHT * mean_fit
+    if feasible:
+        tier = FEASIBLE_OFFSET + MARGIN_WEIGHT * m
+    else:
+        tier = -SHORT_WEIGHT * min(short, SHORT_CAP) + INFEASIBLE_MARGIN_WEIGHT * m
+    j = W_STEP * walking + S_STEP * survival + tier + FIT_WEIGHT * mean_fit
     errs = [f"seed {r.get('seed')}: {r['error']}" for r in rows if not r.get("ok")]
     return {"J": float(j), "walking_count": int(walking), "survival_count": int(survival), "feasible": bool(feasible),
             "median_diff_m": med, "mean_diff_m": float(np.mean(diffs)), "wins": int(sum(1 for d in diffs if d > 0.05)),

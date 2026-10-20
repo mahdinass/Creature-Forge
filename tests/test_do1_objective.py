@@ -404,20 +404,42 @@ class Phases(unittest.TestCase):
         for r in range(5):
             self.assertEqual(sorted(a for c, a, rr in l4 if rr == r), ["do1", "frozen"])
         self.assertEqual(abl.PHASES["DO1-L1"], [("L1", "frozen", 0), ("L1", "do1", 0)])
+        self.assertEqual(abl.PHASES["DO1-L4-r0"], [("L4", "frozen", 0), ("L4", "do1", 0)])
+        self.assertEqual(ta1.phase_cap(abl.PHASES["DO1-L4-r0"])["total"], 7208)
+        self.assertEqual(abl.PHASES["DO1-L4-r0"], l4[:2])                       # the pilot is DO1-L4's first pair
         self.assertEqual(ta1.phase_cap(l4)["total"], 36040)
         self.assertEqual(ta1.phase_cap(abl.PHASES["DO1-L1"])["total"], 7208)
         self.assertNotIn("DO1-L4", ta1.PHASES)                                  # TA-1 phase lists untouched
 
     def test_preregistration_fields(self):
-        for k in ("hypothesis", "primary_outcome", "primary_test", "success", "falsified", "null_wording"):
-            self.assertTrue(abl.PREREGISTRATION[k])
-        self.assertTrue(abl.PREREGISTRATION["no_outcome_based_stopping"])
+        pre = abl.PREREGISTRATION
+        for k in ("hypothesis", "unit", "primary_outcome", "primary_test", "success", "suggestive", "no_improvement_observed",
+                  "null_wording", "pilot_DO1-L4-r0"):
+            self.assertTrue(pre[k])
+        self.assertTrue(pre["no_outcome_based_stopping"])
+        self.assertIn("McNemar", pre["primary_test"])
+        self.assertNotIn("Fisher", json.dumps(pre))
+        self.assertNotIn("falsified", pre)
+        self.assertIn("NOT a falsification", pre["no_improvement_observed"])
+
+    def test_paired_sign_test_thresholds_quoted(self):
+        from math import comb
+
+        def mcnemar_one_sided(for_do1, against):
+            n = for_do1 + against
+            return sum(comb(n, k) for k in range(for_do1, n + 1)) / 2 ** n
+        self.assertAlmostEqual(mcnemar_one_sided(5, 0), 0.03125)
+        self.assertAlmostEqual(mcnemar_one_sided(4, 0), 0.0625)
+        self.assertGreater(mcnemar_one_sided(4, 1), 0.05)
+        self.assertIn("0.031", abl.PREREGISTRATION["success"])
+        self.assertIn("0.0625", abl.PREREGISTRATION["suggestive"])
 
     def test_dry_runs_simulate_nothing(self):
         with _guard(), mock.patch.object(ta1, "build_instance", _no_physics), \
                 mock.patch.object(abl, "run_do1_episode", _no_physics), contextlib.redirect_stdout(io.StringIO()) as buf:
             self.assertEqual(abl.main([]), 0)
-            self.assertEqual(abl.main(["--phase", "DO1-L4", "--records-root", RECORDS]), 0)
+            for phase in ("DO1-L4-r0", "DO1-L4", "DO1-L1"):
+                self.assertEqual(abl.main(["--phase", phase, "--records-root", RECORDS]), 0)
         self.assertIn("preflight", buf.getvalue())
         self.assertIn("Dry run", buf.getvalue())
 
@@ -439,8 +461,8 @@ class Phases(unittest.TestCase):
 class ExecuteGates(unittest.TestCase):
     """_execute with fake episodes built from the stored L1 record (no physics)."""
 
-    def _fake_run(self, fp_do1="f" * 16):
-        stored = _stored("eval_A1e6_s1.jsonl", 1)
+    def _fake_run(self, fp_do1="f" * 16, ref=("eval_A1e6_s1.jsonl", 1)):
+        stored = _stored(*ref)
 
         def run(inst, arm, r, inputs, pool=None):
             rec = copy.deepcopy(stored)
@@ -459,14 +481,14 @@ class ExecuteGates(unittest.TestCase):
             return rec
         return run
 
-    def _execute(self, run):
+    def _execute(self, run, phase="DO1-L1"):
         tmp = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, tmp)
-        a = argparse.Namespace(out=os.path.join(tmp, "o.jsonl"), phase="DO1-L1", approved_by="test", max_rollouts=10 ** 6,
+        a = argparse.Namespace(out=os.path.join(tmp, "o.jsonl"), phase=phase, approved_by="test", max_rollouts=10 ** 6,
                                max_wall_s=0.0, harness_commit="0" * 40, records_root=RECORDS, workers=0)
         inputs = ta1.config_inputs(ta1.ROOT, os.path.join(ta1.ROOT, "artifacts", "hdb"))
         with _guard(), contextlib.redirect_stdout(io.StringIO()):
-            rc = abl._execute(a, abl.planned_runs("DO1-L1"), inputs, ta1.phase_cap(abl.planned_runs("DO1-L1")),
+            rc = abl._execute(a, abl.planned_runs(phase), inputs, ta1.phase_cap(abl.planned_runs(phase)),
                               build_fn=lambda iid, inputs, pool=None: {"instance_id": iid}, run_fn=run,
                               pool_cm=contextlib.nullcontext(None))
         with open(a.out, encoding="utf-8") as fh:
@@ -484,11 +506,152 @@ class ExecuteGates(unittest.TestCase):
         self.assertEqual(man["objective"], do1.OBJECTIVE_SPEC)
         self.assertEqual(man["runner_version"], abl.RUNNER_VERSION)
 
+    def test_pilot_phase_gates(self):
+        rc, recs, man = self._execute(self._fake_run(ref=("eval_A1e6_s3.jsonl", 4)), phase="DO1-L4-r0")
+        self.assertEqual(rc, 0)
+        self.assertEqual(man["phase"], "DO1-L4-r0")
+        self.assertEqual([(r["instance_id"], r["harness"]["do1"]["arm"]) for r in recs],
+                         [(ta1.CASES["L4"]["instance_id"], "frozen"), (ta1.CASES["L4"]["instance_id"], "do1")])
+        self.assertTrue(recs[0]["harness"]["reproduction"]["exact"])
+        self.assertTrue(recs[1]["harness"]["stored_prefix"]["match"])
+        self.assertTrue(recs[1]["harness"]["paired_prehook"]["equal"])
+
     def test_prehook_mismatch_pauses(self):
         rc, recs, _ = self._execute(self._fake_run(fp_do1="0" * 16))
         self.assertEqual(rc, ta1.PAUSE_EXIT)
         self.assertEqual(len(recs), 2)                                           # persisted before pausing
         self.assertFalse(recs[1]["harness"]["paired_prehook"]["equal"])
+
+
+def _cand(gain, n_walk=4, base=2.0, n_fall=0, **gates):
+    """4 train rows whose paired gain over a faulty score of `base` is `gain` on every seed; the first 4 - n_walk seeds do
+    not walk (the first n_fall of them fall), otherwise identical."""
+    rows = []
+    for k in range(4):
+        walking = k >= 4 - n_walk
+        fell = k < n_fall
+        rows.append(_row(walking=walking, fell=fell, disp=base + gain, fall_time=5.0 if fell else None, seed=k + 1, **gates))
+    return do1.objective(rows, [base] * 4)
+
+
+class ObjectiveV2Behaviour(unittest.TestCase):
+    """Review DO-1 point 2: search signal below feasibility, one priority structure for CMA update and best ranking,
+    normalisation and penalties."""
+
+    def test_displacement_signal_below_feasibility(self):
+        a, b = _cand(0.70), _cand(0.10)
+        self.assertFalse(a["feasible"] or b["feasible"])
+        self.assertEqual((a["walking_count"], a["survival_count"], a["margin"], a["mean_fitness_v1"]),
+                         (b["walking_count"], b["survival_count"], b["margin"], b["mean_fitness_v1"]))  # otherwise equal
+        self.assertGreater(a["J"], b["J"])
+        self.assertAlmostEqual(a["J"] - b["J"], do1.SHORT_WEIGHT * 0.60 / do1.TAU_D)     # 8.0: linear, no plateau
+
+    def test_strictly_monotone_up_to_threshold_then_feasible_jump(self):
+        for n_walk in (4, 3):
+            grid = [-2.0 + 0.05 * i for i in range(55)]                                  # -2.00 ... +0.70 (base 2.0)
+            js = [_cand(g, n_walk=n_walk)["J"] for g in grid]
+            self.assertTrue(all(y > x for x, y in zip(js, js[1:])), n_walk)
+        # below a gain of -faulty score the candidate's walk score is floored at 0 (frozen walk-score rule): flat there
+        self.assertAlmostEqual(_cand(-2.5)["J"], _cand(-4.0)["J"])
+        below, at = _cand(0.749), _cand(0.75)
+        self.assertFalse(below["feasible"])
+        self.assertTrue(at["feasible"])
+        self.assertGreater(at["J"] - below["J"], 90.0)
+        self.assertAlmostEqual(_cand(0.75)["J"], _cand(3.0)["J"])                      # capped above TAU_D by design
+
+    def test_exchange_rates(self):
+        # infeasible: 0.02 m more median gain beats the full margin span
+        lo_margin = _cand(0.30, slip_frac=0.149999)
+        hi_margin = _cand(0.28)
+        self.assertLess(lo_margin["margin"], hi_margin["margin"])
+        self.assertGreater(lo_margin["J"], hi_margin["J"])
+        # infeasible: 0.2 margin units beat the full fitness span
+        rows_a = [_row(disp=2.3, fit=-10.0, slip_frac=0.08)] * 4             # slip binds (speed slack 0.55)
+        rows_b = [_row(disp=2.3, fit=6.0, slip_frac=0.11)] * 4
+        a, b = do1.objective(rows_a, [2.0] * 4), do1.objective(rows_b, [2.0] * 4)
+        self.assertGreaterEqual(a["margin"] - b["margin"], 0.19)
+        self.assertGreater(a["J"], b["J"])
+        # feasible: 0.01 margin units beat the full fitness span
+        rows_a = [_row(disp=3.0, fit=-10.0, slip_frac=0.0800)] * 4
+        rows_b = [_row(disp=3.0, fit=6.0, slip_frac=0.0815)] * 4
+        a, b = do1.objective(rows_a, [2.0] * 4), do1.objective(rows_b, [2.0] * 4)
+        self.assertTrue(a["feasible"] and b["feasible"])
+        self.assertAlmostEqual(a["margin"] - b["margin"], 0.01)
+        self.assertGreater(a["J"], b["J"])
+
+    def test_J_order_is_the_frozen_best_key_order(self):
+        rng = np.random.default_rng(11)
+        cands = []
+        for _ in range(500):
+            rows = []
+            for _s in range(4):
+                u = rng.random()
+                if u < 0.05:
+                    rows.append({"ok": False, "error": "boom", "seed": 1})
+                    continue
+                walking = u < 0.65
+                fell = (not walking) and rng.random() < 0.5
+                rows.append(_row(walking=walking, fell=fell, disp=float(rng.uniform(-1, 12)), fit=float(rng.uniform(-4, 6)),
+                                 fall_time=float(rng.uniform(0, 10)), slip_frac=float(rng.uniform(0, 0.3)),
+                                 max_abs_pitch=float(rng.uniform(0, 1.2))))
+            cands.append(do1.objective(rows, list(rng.uniform(0, 8, 4))))
+        for a in cands:
+            for b in cands:
+                ka = (a["walking_count"], a["survival_count"], a["J"])
+                kb = (b["walking_count"], b["survival_count"], b["J"])
+                self.assertEqual(ka > kb, a["J"] > b["J"])        # wo._score order == J order (CMA update)
+
+    def test_cma_update_receives_J_and_best_is_top_J(self):
+        _, d = _benches()
+        seen = []
+        original = wo._CMA.update
+
+        def spy(self_, x, fitness):
+            seen.append([float(v) for v in fitness])
+            return original(self_, x, fitness)
+        with _guard(), mock.patch.object(hp, "walk_seeds", _fake_walk_seeds), \
+                mock.patch.object(do1, "do1_walk_job", fake_job), mock.patch.object(wo._CMA, "update", spy):
+            out = d.repair("leg_length", 200, n_train=4, init={"index": 0})
+        self.assertTrue(out["ok"])
+        rep = d.do1_record()["repairs"][0]
+        logged = [c["J"] for c in rep["candidates"]]
+        self.assertEqual(rep["cma"]["restarts"], [])
+        lam = rep["cma"]["popsize"]
+        self.assertTrue(seen)
+        for g, fit in enumerate(seen):                         # generation g = log entries 1 + g*lam ... (no restart)
+            self.assertEqual(fit, logged[1 + g * lam: 1 + (g + 1) * lam])
+        self.assertEqual(rep["selected"]["J"], max(logged))
+
+    def test_gate_normalisation(self):
+        at = _row(**{key: float(getattr(CRIT, attr)) for _, key, attr, _ in do1.GATES})
+        self.assertTrue(all(abs(v) < 1e-12 for v in do1.gate_slacks(at).values()))
+        best = _row(speed_upright=2 * CRIT.min_speed, valid_step_rate=2 * CRIT.min_step_rate, alternation=1.0,
+                    raw_touchdown_rate=0.0, flight_frac=0.0, slip_frac=0.0, body_contact_frac=0.0, saturation_frac=0.0,
+                    max_abs_pitch=0.0)
+        self.assertTrue(all(v == 1.0 for v in do1.gate_slacks(best).values()))
+        worst = _row(speed_upright=-5.0, valid_step_rate=0.0, alternation=0.0, raw_touchdown_rate=99.0, flight_frac=1.0,
+                     slip_frac=1.0, body_contact_frac=1.0, saturation_frac=1.0, max_abs_pitch=9.0)
+        self.assertTrue(all(v == -1.0 for v in do1.gate_slacks(worst).values()))
+        self.assertEqual(do1.gate_slacks(_row(slip_frac=float("nan")))["slip"], -1.0)
+        self.assertEqual(set(do1.gate_slacks(at)), {g[0] for g in do1.GATES})
+
+    def test_errors_and_falls_penalised(self):
+        good = do1.objective([_row(disp=3.0)] * 4, [2.0] * 4)
+        fall = do1.objective([_row(disp=3.0)] * 3 + [_row(walking=False, fell=True, fall_time=6.0, disp=3.0)], [2.0] * 4)
+        err = do1.objective([_row(disp=3.0)] * 3 + [{"ok": False, "error": "unstable", "seed": 9}], [2.0] * 4)
+        self.assertGreater(good["J"], fall["J"])
+        self.assertGreater(good["J"], err["J"])
+        self.assertEqual((err["walking_count"], err["survival_count"]), (3, 3))
+        e = err["per_seed"][3]
+        self.assertEqual((e["margin"], e["binding_gate"], e["fitness_v1"], e["score"]), (-1.0, "error", -10.0, None))
+        self.assertEqual(e["diff_m"], -2.0)                                   # an error scores 0 against the faulty robot
+        self.assertIn("unstable", err["error"])
+        self.assertEqual(fall["per_seed"][3]["margin"], -1.0)
+        self.assertEqual(fall["survival_count"], 3)
+
+    def test_objective_rejects_more_than_max_train(self):
+        with self.assertRaises(ValueError):
+            do1.objective([_row()] * 9, [1.0] * 9)
 
 
 if __name__ == "__main__":

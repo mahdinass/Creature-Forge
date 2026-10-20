@@ -9,9 +9,19 @@ Replicate r changes only the bench noise seed (plant-CMA streams), identically i
 trajectory-paired. The only differences after the hook: the CMA ranking scalar and the 4-rollout DO-1 train baseline, which is
 charged inside the plant budget (the frozen arm spends those 4 rollouts on CMA candidates instead).
 
-Phases (each needs its own owner execution approval; nothing here authorises a run):
-  DO1-L4   L4 (hdb-v1-gen-0137:low_ground_friction:0), replicates 0-4, frozen and do1 interleaved: 10 episodes. Primary.
-  DO1-L1   L1 (hdb-v1-gen-0073:low_ground_friction:2), replicate 0, frozen and do1: 2 episodes. Complementary, descriptive.
+Phases (each needs its own owner execution approval; nothing here authorises a run, and no phase starts another):
+  DO1-L4-r0  EXPLORATORY pilot: L4 replicate 0, frozen then do1 (2 episodes, cap 7,208). Descriptive only, no hypothesis test;
+             it checks the end-to-end behaviour (gates, logs, budget) and shows the direction on one pair.
+  DO1-L4     L4 (hdb-v1-gen-0137:low_ground_friction:0), replicates 0-4, frozen and do1 interleaved: 10 episodes. Retained as
+             defined; never run automatically. Its r0 pair is re-executed (deterministic, expected identical to the pilot)
+             and the pilot is not pooled into it unless the owner approves that explicitly.
+  DO1-L1     L1 (hdb-v1-gen-0073:low_ground_friction:2), replicate 0, frozen and do1: 2 episodes. Complementary, descriptive.
+
+Statistics (PAIRED design): replicate r of both arms shares the bench noise seed, so the unit is the (replicate) pair. The
+primary DO1-L4 analysis is the exact one-sided McNemar (sign) test on discordant pairs (FULL in one arm only): with 5 pairs
+p = 0.5 ** n_discordant when every discordant pair favours do1, so p <= 0.05 requires all 5 pairs discordant for do1
+(p = 0.031); 4 discordant for do1 and 0 against gives p = 0.0625 (not significant). The pairs are technical replicates of
+plant-CMA stochasticity on ONE robot instance, not independent robots: any result is instance-specific.
 
 Validity gates (fail closed, stop at the first invalid result; outcomes are never interpreted here):
   * complete verification record; the hook called exactly once;
@@ -22,9 +32,9 @@ Validity gates (fail closed, stop at the first invalid result; outcomes are neve
 Re-screens are recorded, never invalidating.
 
 Usage:
-  python scripts/do1_repair_ablation.py --phase DO1-L4 --artifacts-root <dir> --records-root <dir>      # dry run (default)
-  python scripts/do1_repair_ablation.py --phase DO1-L4 --execute --approved-by "<owner, date>" --harness-commit <40-hex> \\
-      --max-rollouts 36040 --workers 6 --artifacts-root <dir> --records-root <dir> --out <fresh path outside every worktree>
+  python scripts/do1_repair_ablation.py --phase DO1-L4-r0 --artifacts-root <dir> --records-root <dir>   # dry run (default)
+  python scripts/do1_repair_ablation.py --phase DO1-L4-r0 --execute --approved-by "<owner, date>" --harness-commit <40-hex> \\
+      --max-rollouts 7208 --workers 6 --artifacts-root <dir> --records-root <dir> --out <fresh path outside every worktree>
 """
 from __future__ import annotations
 
@@ -45,6 +55,7 @@ RUNNER_VERSION = "do1_ablation_v1"
 ARMS = ("frozen", "do1")
 L4_REPLICATES = 5
 PHASES = {
+    "DO1-L4-r0": [("L4", arm, 0) for arm in ARMS],
     "DO1-L4": [("L4", arm, r) for r in range(L4_REPLICATES) for arm in ARMS],
     "DO1-L1": [("L1", arm, 0) for arm in ARMS],
 }
@@ -55,10 +66,17 @@ PREREGISTRATION = {
                   "walking-gate margin raises validation walking to >= 20/24 while keeping verified displacement.",
     "primary_case": "L4 (original tool order)", "complementary_case": "L1 (descriptive only)",
     "primary_outcome": "FULL_RECOVERY under the unchanged full_recovery_v1, per episode",
-    "primary_test": "one-sided Fisher exact test, do1 vs frozen FULL counts over replicates 0-4 on L4, alpha 0.05",
-    "success": "p <= 0.05 (e.g. do1 >= 4/5 FULL with frozen 0/5, or 5/5 with frozen <= 1/5)",
-    "falsified": "do1 FULL count <= frozen FULL count on L4",
-    "otherwise": "inconclusive at this budget; reported, no follow-up run without approval",
+    "unit": "replicate pair (shared bench noise seed): technical replicates of plant-CMA stochasticity on one robot instance",
+    "primary_test": "DO1-L4: exact one-sided McNemar (sign) test on discordant pairs, do1 FULL vs frozen FULL, alpha 0.05",
+    "success": "p <= 0.05, which with 5 pairs requires all 5 pairs discordant in favour of do1 (p = 0.031); an "
+               "instance-specific finding about this robot and budget, not a rate over robots",
+    "suggestive": "every discordant pair favours do1 but p > 0.05 (e.g. 4 for, 0 against: p = 0.0625): reported as "
+                  "suggestive and inconclusive, never as a demonstrated improvement",
+    "no_improvement_observed": "no discordant pair favours do1: no evidence of improvement on this instance at this budget; "
+                               "with 5 technical replicates this is NOT a falsification of the objective",
+    "otherwise": "inconclusive at this budget (mixed discordant pairs); reported, no follow-up run without approval",
+    "pilot_DO1-L4-r0": "exploratory, one pair, no hypothesis test: FULL status, validation k/24, verdict and median paired "
+                       "displacement per arm, submitted and checked designs, per-candidate DO-1 components, budget split",
     "secondary": ["paired validation walking k/24 (do1 - frozen) per replicate, sign of the 5 differences",
                   "validation verdict and median paired displacement (do1 must stay VERIFIED_IMPROVEMENT)",
                   "train-seed margin, median paired diff and feasibility of each submitted and checked design",
