@@ -424,3 +424,16 @@ Rules:
     - LLM arms run only on the main VM (no credential changes on the batch VM).
     - Inference cap $43.40 → $52.78 = $32.90 + $10 + $0.50 + $9.38 of unbilled 401 settlements. Real Stage-2 spend is
       still held to +$10, counted from successful calls only.
+- **2026-10-19 16:01 UTC – 2026-10-20 01:37 UTC — transfer evaluation, LLM arms (main VM, after a passed auth check).**
+  - 124/124 episodes valid (A3 36 + 16, A4 36 + 16, A4lfo 8, A4bad 12); no authentication failures. 54 of 718 role
+    calls were invalid or failed (92.5 % valid, below the G2 gate of 95 %); those turns fell back to the engine and are
+    recorded.
+  - Single mechanisms, FULL: A1e 14, A2 12, A3 15, A4 14 of 36. A3 vs A1e discordant 4 vs 3. Compositions: A1e 8, A3 6,
+    A4 6 of 16.
+  - The engine is confidently wrong on compositions (≥ 0.95 posterior on a wrong structure in 12–16 of 16 per arm).
+  - Memory was retrieved but almost never used (1 application in 36). The corrupted dossier was never adopted (0/12).
+    Leave-family-out showed no harm (4/8 vs A4 3/8).
+  - The Nebius CLI login expired at 20:58 UTC. The guard stopped further attempts; status was read over SSH until the
+    owner re-logged in. Both VMs were confirmed STOPPED through the control plane at 01:38 UTC.
+  - Record: `experiments/causal_engineer/dev/hdb/STAGE2_TRANSFER_agent_v4.md`. Report and Stage 3 proposal:
+    `docs/STAGE2_REPORT.md`.

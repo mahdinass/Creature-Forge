@@ -459,3 +459,12 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   - Studio "AI scientist" tab + `/api/scientist`.
 - **Dev protocol (fixed before pilots):** tune on the experience bases, evaluate once on the 18 unseen transfer bases
   (`experiments/causal_engineer/dev/hdb/stage2_split.json`). Details in `docs/HAS_SCIENTIST.md`.
+
+## 2026-10-20 - Phase 3 Stage 2 complete; Stage 3 awaits owner approval
+- Transfer evaluation done (124/124 LLM-arm episodes valid). Nemotron scientist at parity with the engine on single
+  mechanisms (FULL 15 vs 14 of 36; discordant 4 vs 3), slightly behind on compositions (6 vs 8 of 16). Memory was barely
+  used. Details: `docs/STAGE2_REPORT.md`, `experiments/causal_engineer/dev/hdb/STAGE2_TRANSFER_agent_v4.md`.
+- Costs: Stage 2 infra $7.82 of $20 (ledger $83.30 / cap $96); inference $3.75 billed of $10 (ledger $46.02 / cap $52.78).
+- Both VMs STOPPED (control plane, 01:38 UTC 20 Oct). Raw records are in `artifacts/vm/hdb/artifacts/hdb/stage2_final/`
+  (git-ignored, SHA-256 in the record file) and on the main VM boot disk.
+- Next: owner decision on Stage 3 (proposed envelopes $65 infra / $15 inference; Cloud top-up of about $55).
