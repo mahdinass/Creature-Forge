@@ -42,7 +42,7 @@ def main() -> None:
             r = json.loads(line)
             if r.get("eligible") is False or "verification" not in r or hc.base_of(r["instance_id"]) not in init:
                 continue
-            sub = r.get("submitted")
+            sub = r.get("submitted", (r.get("repair") or {}).get("design"))
             d = next((x for x in r.get("designs") or [] if x.get("index") == sub), None)
             if d is None:
                 continue

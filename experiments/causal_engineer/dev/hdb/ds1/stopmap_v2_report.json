@@ -1,0 +1,20 @@
+{
+ "n_designs": 231,
+ "n_bases": 20,
+ "full_rate": 0.3116883116883117,
+ "v1": {
+  "brier": 0.15147613484496766,
+  "auroc": 0.8410202655485675
+ },
+ "v2_lobo": {
+  "brier": 0.1139315661300725,
+  "auroc": 0.9052236198462613
+ },
+ "disp_pass_rate_full": 1.0,
+ "disp_pass_rate_not_full": 0.5723270440251572,
+ "accepted_v1_at_tau": 34,
+ "verified_of_accepted_v1": 0.7941176470588235,
+ "accepted_v2_at_tau": 30,
+ "verified_of_accepted_v2": 0.9333333333333333,
+ "use_v2": true
+}
