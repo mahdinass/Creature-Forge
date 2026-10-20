@@ -176,6 +176,8 @@ def main() -> None:
     if a.only and not a.devcomp:
         keep = set(a.only.split(","))
         todo = [t for t in todo if hb.instance_key(t[0]["base_id"], t[1], t[2]) in keep]
+        if len(todo) != len(keep):
+            raise SystemExit(f"--only matched {len(todo)} of {len(keep)} instances (check --which / --mults)")
     if a.exclude_ids:
         bad = {l.strip() for l in open(a.exclude_ids, encoding="utf-8") if l.strip()}
         todo = [t for t in todo if (hb.instance_key(t[0]["base_id"], t[1], t[2]) if not a.devcomp else None) not in bad]

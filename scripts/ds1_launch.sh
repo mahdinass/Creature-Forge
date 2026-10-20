@@ -9,7 +9,7 @@ OUT=artifacts/hdb/ds1
 mkdir -p $OUT artifacts/hdb/logs
 ENV="env PATH=$HOME/dev/venvs/${CF_SLOT:-hdb}/bin:$PATH PYTHONUNBUFFERED=1 CF_HDB_WALKERS=artifacts/hdb/walkers_all.jsonl"
 LIVE="$ENV CREATURE_FORGE_ENABLE_LIVE=1 CF_INFERENCE_LEDGER=$HOME/dev/ledger/inference_ledger.jsonl"
-C="python scripts/hdb_agent_run.py --split-file experiments/causal_engineer/dev/hdb/stage2_split.json --thresholds artifacts/hdb/thresholds_dev.json --stop-model $MAP --v6 $D/engine_v6_settings.json"
+C="python scripts/hdb_agent_run.py --split-file experiments/causal_engineer/dev/hdb/stage2_split.json --thresholds artifacts/hdb/thresholds_dev.json --stop-model $MAP --v6 $D/engine_v6_settings.json --mults 1.0,1.3,1.7"
 X="--cases $D/cases_init.json --memory $D/memory_ds1_init.json"
 ids() { python3 -c "import json,sys; d=json.load(open('$1')); print(','.join(d['$2'][int('$3'):int('$4')]))"; }
 launch() { tmux new -d -s "$1" "$2 > artifacts/hdb/logs/$1.log 2>&1"; }
