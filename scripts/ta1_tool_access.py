@@ -44,6 +44,10 @@ same value for every hdb-v1 instance (1751409197); replicate r uses that value +
 CMA seeds (0, 11), physical seeds, conditions and the instance are fixed: replicates are technical replicates of plant-CMA
 stochasticity, not new robots and not validation-seed generalisation.
 
+Protocol amendment A1 (2026-10-21, see AMENDMENTS): phase `2a-L4-pilot` runs a paired control + treatment r0 on L4 before
+the rest of Phase 2a, with the Phase 1B gates. The preregistered phase lists are unchanged and stay the reference; A1
+authorises nothing else and needs its own execution approval.
+
 Usage:
   python scripts/ta1_tool_access.py --phase 1B --artifacts-root <dir> --records-root <dir>     # dry run (default)
   python scripts/ta1_tool_access.py --phase 1B --execute --approved-by "<owner, date>" --harness-commit <40-hex HEAD> \\
@@ -71,7 +75,7 @@ from creature_forge import has_agent as ha          # noqa: E402
 from creature_forge import hdb_bench as hb          # noqa: E402
 from creature_forge.optimize import jsonable        # noqa: E402
 
-HARNESS_VERSION = "ta1_harness_v2"
+HARNESS_VERSION = "ta1_harness_v3"     # v3: amendment A1 (L4 paired pilot) + per-seed robust-check evidence in records
 TREATMENT_TOOL = "foot_friction"
 REPLICATE_STRIDE = 10007
 
@@ -131,6 +135,28 @@ PHASES = {
     "2a-contingency": [(c, "control", 0) for c in ("L2", "L3", "L4", "L5")],   # only for cases named with --cases
     "2b": [(c, arm, r) for c in ("L1", "L2", "L3", "L4") for arm in ("control", "treatment") for r in (1, 2)],
 }
+# PROTOCOL AMENDMENTS. The preregistered run lists above stay unchanged for reference; an amendment adds its own, separately
+# named phase and needs its own owner execution approval. It never authorises any other phase.
+AMENDMENTS = {
+    "A1": {
+        "date": "2026-10-21", "phase": "2a-L4-pilot", "runs": [("L4", "control", 0), ("L4", "treatment", 0)],
+        "amends": "the Phase 2a execution order (preregistered: treatment r0 on L2, L3, L4, L5, with the stored A1e6 records as the "
+                  "r0 controls)",
+        "change": "run a paired control + treatment r0 on L4 first, with the Phase 1B gates: the control must reproduce the stored "
+                  "A1e6 record exactly and both arms must reach the hook with equal pre-hook fingerprints",
+        "rationale": "Phase 1B (L1) and X1 found no verified recovery; on L4 the stored A1e6 control already passes the displacement "
+                     "test (+1.1 m median on validation) and fails only walking robustness (19/24), so post-screen tool priority is "
+                     "tested where the displacement comparator does not bind",
+        "unchanged": "engine, optimizer, verifier, frozen inputs, seeds, budgets, replicate seed rule; phases 1B, 2a, "
+                     "2a-contingency and 2b remain as preregistered and are not authorised by this amendment",
+        "overlap": "phase 2a's L4 entry (treatment r0) is the same run as this pilot's treatment arm; if 2a is approved later, "
+                   "its L4 entry is not to be repeated",
+        "requires": "separate owner execution approval",
+    },
+}
+AMENDMENT_BY_PHASE = {a["phase"]: {"id": k, **a} for k, a in AMENDMENTS.items()}
+for _a in AMENDMENTS.values():
+    PHASES[_a["phase"]] = list(_a["runs"])
 PAUSE_EXIT = 3
 
 
@@ -338,6 +364,14 @@ def verification_complete(full: dict) -> list[str]:
         if "checks" not in conf:
             errs.append("confirmation: missing checks")
     return errs
+
+
+def robust_evidence(bench) -> dict:
+    """Per-seed robust-check evidence the engine already computed (no extra rollouts): for every checked design, the walk
+    scores and walking flags of its largest robustness check (EvidenceWorkbench.scores), and the faulty design's baseline on
+    the same robust seeds (EvidenceWorkbench._baseline) - the inputs of each candidate's displacement verdict."""
+    return jsonable(copy.deepcopy({"robust_seeds": (getattr(bench, "view_seeds", None) or {}).get("robust"),
+                                   "by_design": getattr(bench, "scores", None), "baseline": getattr(bench, "_baseline", None)}))
 
 
 def resource_accounting(ledger: dict, hook_calls: list, ver: dict | None) -> dict:
@@ -659,7 +693,8 @@ def run_episode(inst: dict, arm: str, replicate: int, inputs: dict, pool=None) -
         "harness": {"version": HARNESS_VERSION, "ta1_arm": arm, "replicate": replicate, "noise_seed": noise,
                     "treatment_tool": TREATMENT_TOOL, "hook_calls": hook.calls,
                     "rescreen": rescreen_summary(engine["events"]),
-                    "resources": resource_accounting(engine["ledger"], hook.calls, ver)},
+                    "resources": resource_accounting(engine["ledger"], hook.calls, ver),
+                    "robust_checks": robust_evidence(bench)},
     }
     rec = jsonable(rec)
     problems = verification_complete(rec["verification"]["full"])
@@ -718,6 +753,10 @@ def main(argv=None) -> int:
     cap = phase_cap(runs)
     print(f"{HARNESS_VERSION}: phase {a.phase}: {cap['episodes']} episodes; caps plant {cap['plant']}, twin {cap['twin']}, "
           f"total {cap['total']} rollout-equivalents")
+    amend = AMENDMENT_BY_PHASE.get(a.phase)
+    if amend:
+        print(f"  PROTOCOL AMENDMENT {amend['id']} ({amend['date']}): amends {amend['amends']}; {amend['change']}. "
+              f"Unchanged: {amend['unchanged']}.")
     for c, arm, r in runs:
         iid = CASES[c]["instance_id"]
         print(f"  {c} {iid} arm={arm} replicate={r} noise_seed={replicate_noise_seed(iid, r)}")
@@ -764,7 +803,8 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
     manifest = provenance_manifest(ROOT, inputs, {"phase": a.phase, "approved_by": a.approved_by, "runs": runs, "cap": cap,
                                                   "max_rollouts": a.max_rollouts, "max_wall_s": a.max_wall_s,
                                                   "harness_commit_approved": a.harness_commit,
-                                                  "records_root": os.path.abspath(a.records_root)})
+                                                  "records_root": os.path.abspath(a.records_root),
+                                                  "amendment": AMENDMENT_BY_PHASE.get(a.phase)})
     with open(manifest_path(a.out), "x", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=1)
     spent, t0, by_unit = 0.0, time.perf_counter(), {}
