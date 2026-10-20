@@ -40,7 +40,7 @@ if [[ $part == stream ]]; then
 fi
 if [[ $part == eval-llm || $part == eval-nonllm ]]; then
   E=$D/ds1_eval_instances.json
-  if [[ $part == eval-llm ]]; then ARMS="A3v5 A4x"; PRE=$LIVE; W=1; else ARMS="A1e A1e6"; PRE=$ENV; W=${W:-6}; fi
+  if [[ $part == eval-llm ]]; then ARMS="A3v5 A4x"; PRE=$LIVE; W=1; else ARMS=${NONLLM_ARMS:-"A1e A1e6"}; PRE=$ENV; W=${W:-6}; fi
   for arm in $ARMS; do
     EXTRA=""; [[ $arm == A4x ]] && EXTRA="$X"
     CC=$C; [[ $arm == A1e ]] && CC=$C5
