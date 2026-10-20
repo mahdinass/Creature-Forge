@@ -15,31 +15,31 @@
   1.5
  ],
  "w": [
-  -8.639053858143113,
-  1.1805374279249796,
-  0.7470410753920894,
-  4.586483283154657,
-  0.4011495912169106
+  -9.86660796171111,
+  1.3676098278635505,
+  0.8128888170377047,
+  6.75296825268553,
+  -0.365137947543959
  ],
  "fitted_on": "DS-1 init experience bases (scripts/ds1_stop_map.py)",
  "lobo": {
-  "n_designs": 231,
+  "n_designs": 678,
   "n_bases": 20,
-  "full_rate": 0.3116883116883117,
+  "full_rate": 0.3805309734513274,
   "v1": {
-   "brier": 0.15147613484496766,
-   "auroc": 0.8410202655485675
+   "brier": 0.16634323313508573,
+   "auroc": 0.83187523071244
   },
   "v2_lobo": {
-   "brier": 0.1139315661300725,
-   "auroc": 0.9052236198462613
+   "brier": 0.098887092312542,
+   "auroc": 0.9348514211886305
   },
-  "disp_pass_rate_full": 1.0,
-  "disp_pass_rate_not_full": 0.5723270440251572,
-  "accepted_v1_at_tau": 34,
-  "verified_of_accepted_v1": 0.7941176470588235,
-  "accepted_v2_at_tau": 30,
-  "verified_of_accepted_v2": 0.9333333333333333,
+  "disp_pass_rate_full": 0.9961240310077519,
+  "disp_pass_rate_not_full": 0.4666666666666667,
+  "accepted_v1_at_tau": 142,
+  "verified_of_accepted_v1": 0.7676056338028169,
+  "accepted_v2_at_tau": 190,
+  "verified_of_accepted_v2": 0.8526315789473684,
   "use_v2": true
  }
 }

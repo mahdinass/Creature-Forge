@@ -9,7 +9,9 @@ OUT=artifacts/hdb/ds1
 mkdir -p $OUT artifacts/hdb/logs
 ENV="env PATH=$HOME/dev/venvs/${CF_SLOT:-hdb}/bin:$PATH PYTHONUNBUFFERED=1 CF_HDB_WALKERS=artifacts/hdb/walkers_all.jsonl"
 LIVE="$ENV CREATURE_FORGE_ENABLE_LIVE=1 CF_INFERENCE_LEDGER=$HOME/dev/ledger/inference_ledger.jsonl"
-C="python scripts/hdb_agent_run.py --split-file experiments/causal_engineer/dev/hdb/stage2_split.json --thresholds artifacts/hdb/thresholds_dev.json --stop-model $MAP --v6 $D/engine_v6_settings.json --mults 1.0,1.3,1.7"
+B="python scripts/hdb_agent_run.py --split-file experiments/causal_engineer/dev/hdb/stage2_split.json --thresholds artifacts/hdb/thresholds_dev.json --mults 1.0,1.3,1.7"
+C="$B --stop-model $MAP --v6 $D/engine_v6_settings.json"
+C5="$B --stop-model experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json"   # v5 reference: exactly the Stage-2 A1e configuration
 X="--cases $D/cases_init.json --memory $D/memory_ds1_init.json"
 ids() { python3 -c "import json,sys; d=json.load(open('$1')); print(','.join(d['$2'][int('$3'):int('$4')]))"; }
 launch() { tmux new -d -s "$1" "$2 > artifacts/hdb/logs/$1.log 2>&1"; }
@@ -41,10 +43,11 @@ if [[ $part == eval-llm || $part == eval-nonllm ]]; then
   if [[ $part == eval-llm ]]; then ARMS="A3v5 A4x"; PRE=$LIVE; W=1; else ARMS="A1e A1e6"; PRE=$ENV; W=${W:-6}; fi
   for arm in $ARMS; do
     EXTRA=""; [[ $arm == A4x ]] && EXTRA="$X"
+    CC=$C; [[ $arm == A1e ]] && CC=$C5
     for k in 0 1 2 3 4 5; do
-      launch "E_${arm}_s$k" "$PRE $C --arm $arm $EXTRA --which transfer --only $(ids $E single $((k*5)) $((k*5+5))) --workers $W --out $OUT/eval_${arm}_s$k.jsonl"
+      launch "E_${arm}_s$k" "$PRE $CC --arm $arm $EXTRA --which transfer --only $(ids $E single $((k*5)) $((k*5+5))) --workers $W --out $OUT/eval_${arm}_s$k.jsonl"
     done
-    launch "E_${arm}_c" "$PRE $C --arm $arm $EXTRA --which transfer --devcomp --only $(ids $E comp 0 6) --workers $W --out $OUT/eval_${arm}_c.jsonl"
+    launch "E_${arm}_c" "$PRE $CC --arm $arm $EXTRA --which transfer --devcomp --only $(ids $E comp 0 6) --workers $W --out $OUT/eval_${arm}_c.jsonl"
   done
 fi
 tmux ls

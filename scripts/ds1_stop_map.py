@@ -2,7 +2,7 @@
 re-measured init-base designs (scripts/ds1_stop_data.py), compared with stop map v1 by leave-one-base-out Brier and AUROC on
 the same designs. Pre-declared rule: v2 replaces v1 in engine v6 only if its LOBO Brier is lower.
 
-Usage: python scripts/ds1_stop_map.py --data artifacts/vm/hdb/artifacts/hdb/ds1_stopdata.jsonl
+Usage: python scripts/ds1_stop_map.py --data artifacts/vm/ds1/ds1_stopdata.jsonl [artifacts/vm/ds1/ds1_stopdata_b.jsonl ...]
        [--v1 experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json] [--out experiments/causal_engineer/dev/hdb/ds1]
 """
 from __future__ import annotations
@@ -31,14 +31,14 @@ def auroc(y, p):
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data", required=True)
+    ap.add_argument("--data", nargs="+", required=True)
     ap.add_argument("--v1", default="experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json")
     ap.add_argument("--out", default="experiments/causal_engineer/dev/hdb/ds1")
     a = ap.parse_args()
     v1 = json.load(open(a.v1, encoding="utf-8"))
     model0 = {"kind": "logistic_v2", "features": FEATURES, "n_by_feature": N_BY, "disp_clip": [-1.5, 1.5], "w": [0.0] * 5}
     rows = []
-    for line in open(a.data, encoding="utf-8"):
+    for line in (l for path in a.data for l in open(path, encoding="utf-8") if l.strip()):
         r = json.loads(line)
         for d in r["designs"]:
             x = be.v2_features(d, model0)
