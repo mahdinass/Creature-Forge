@@ -468,3 +468,9 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Both VMs STOPPED (control plane, 01:38 UTC 20 Oct). Raw records are in `artifacts/vm/hdb/artifacts/hdb/stage2_final/`
   (git-ignored, SHA-256 in the record file) and on the main VM boot disk.
 - Next: owner decision on Stage 3 (proposed envelopes $65 infra / $15 inference; Cloud top-up of about $55).
+
+## 2026-10-20 - Stage 2b proposal (dual-signal learning); Stage 3 deferred by the owner
+- Owner: no Stage 3 yet. The two pre-registration fixes are approved within the remaining Stage-2 allowance (infra
+  ≈ $12.18, inference ≈ $6.25 left).
+- Failure analysis and the DS-1 plan are in `docs/DUAL_SIGNAL_PLAN.md`. They await owner approval before any run. No VM is
+  running.

@@ -437,3 +437,21 @@ Rules:
     owner re-logged in. Both VMs were confirmed STOPPED through the control plane at 01:38 UTC.
   - Record: `experiments/causal_engineer/dev/hdb/STAGE2_TRANSFER_agent_v4.md`. Report and Stage 3 proposal:
     `docs/STAGE2_REPORT.md`.
+- **2026-10-20 — owner decisions after Stage 2; failure analysis and dual-signal proposal.**
+  - Owner decisions:
+    - no Stage 3 yet;
+    - the two pre-registration fixes (one retry for invalid replies; overconfidence / structural uncertainty) are
+      approved within the remaining Stage-2 allowance;
+    - Nemotron vs engine stays a primary comparison;
+    - Nemotron runs on the main VM unless another setup is approved;
+    - next strategy: dual-signal learning with bidirectional causal feedback; BiCAM to be assessed, not assumed.
+  - Failure analysis (`scripts/stage2_failure_analysis.py`, `experiments/causal_engineer/dev/hdb/STAGE2_FAILURE_ANALYSIS.md`):
+    - On single mechanisms diagnosis is already good after observation. Recovery depends mainly on the repair tool, and
+      the engine's tool screen ties in about a quarter of episodes.
+    - 32 of 128 failures walked but failed on displacement, which the stop rule cannot see.
+    - Plant outcomes are never fed back into the belief.
+    - Memory held diagnosis-shaped knowledge that did not beat the engine. A mechanism → tool lookup picks worse than the
+      engine offline: 120 vs 141 of 290.
+    - Used as a correction to the engine's ranking, experience gains about +4 points offline (optimistic).
+    - Likelihood tempering (T ≈ 4–8) fixes single-mechanism overconfidence but not compositions.
+  - Proposal awaiting approval: `docs/DUAL_SIGNAL_PLAN.md` (DS-1; BiCAM no-go before 29 Oct, with a go criterion).
