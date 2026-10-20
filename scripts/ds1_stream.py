@@ -37,6 +37,7 @@ def main() -> None:
     ap.add_argument("--rounds", type=int, default=6)
     ap.add_argument("--per-round", type=int, default=5)
     ap.add_argument("--source", default="live")
+    ap.add_argument("--mults", default="1.0,1.3,1.7")
     ap.add_argument("--out-dir", required=True)
     a = ap.parse_args()
     inst = json.load(open(a.instances, encoding="utf-8"))
@@ -68,7 +69,7 @@ def main() -> None:
                     continue
                 cmd = [sys.executable, RUN, "--arm", "A4x", "--split-file", a.split_file, "--which", "stream", "--only", iid,
                        "--thresholds", a.thresholds, "--stop-model", a.stop_model, "--v6", a.v6, "--cases", store,
-                       "--memory", a.memory, "--source", a.source, "--workers", "1", "--out", out]
+                       "--memory", a.memory, "--source", a.source, "--mults", a.mults, "--workers", "1", "--out", out]
                 if kind == "comp":
                     cmd.append("--devcomp")
                 log = open(out.replace(".jsonl", ".log"), "w")
