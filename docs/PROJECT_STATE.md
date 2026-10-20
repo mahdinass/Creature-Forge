@@ -493,6 +493,8 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   (limit $4.60). No cap changed.
 - **Data:** `artifacts/vm/hdb/artifacts/hdb/ds1_all.tgz` (VM archive), `artifacts/vm/ds1/eval/` (72 + 72 episodes), tables
   `experiments/causal_engineer/dev/hdb/DS1_RESULTS.md`.
-- **Ops:** the main VM powered itself off at 13:42 UTC after finalisation but was running again at 13:45 UTC (cause not
-  identified); Nebius CLI auth blocked since 11:43 UTC, so the control-plane stop/verify waits for `forge_cloud.py login`.
+- **Ops:** in-VM `poweroff` does not keep the main VM stopped: after the finalisation poweroff (13:42 UTC) and a manual one
+  (14:08 UTC) the platform showed it RUNNING again within ~3 min. After the owner's re-login it was stopped via the API at
+  14:15 UTC; **both VMs verified STOPPED via the control plane** (infra ledger $88.47). Future finalisation must stop via
+  the API, not rely on poweroff or the in-VM deadman.
   The batch VM's pre-existing `~/dev/.env` key line (2026-10-16) is untouched; removal is the owner's decision.
