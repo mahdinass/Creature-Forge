@@ -101,6 +101,8 @@ class EngineV6(unittest.TestCase):
         self.assertFalse(ep.diagnosis_done(0.9))                # the reserve is never a confident diagnosis
         ep2 = self.setup({"misfit_threshold": -1e6}, {})
         self.assertLess(ep2.unmodelled_mass(), 1e-6)
+        ep.b.twin.used = ep.b.twin.total - be.V6_DEFAULTS["repair_twin_reserve"] - 10
+        self.assertTrue(ep.diagnosis_done(0.9))                 # budget guard: the repair's simulation budget is kept
 
     def test_assimilation_is_relative(self):
         # both explanations predicted the repair walks; the plant says it fails: no relative change

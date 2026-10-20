@@ -30,6 +30,7 @@ VERSION_V6 = "belief_engine_v6"  # DS-1 (docs/DS1_PROTOCOL.md §1), enabled by E
                                  # displacement-aware evidence, a learned tool ranker hook and submission by mapped P(FULL)
 UNMODELLED = (("unmodelled", "any"),)             # the open-world reserve's structure label (v6)
 DIAGNOSTIC_KINDS = ("observe", "counterfactual", "floor")   # experiments that measure the fault (plant checks of repairs do not)
+DIAG_STEP_TWIN = 250            # v6: twin cost of one more diagnostic step (EIG ranking about 200 + scoring the new data)
 V6_DEFAULTS = {"temperature": 1.0, "misfit_threshold": None, "repair_twin_reserve": 1750, "composite_cap": 500,
                "max_composite_rounds": 2, "auto_assimilate": True, "assimilate_seeds": 8, "select_by_p": True}
 
@@ -739,6 +740,10 @@ class Episode:
         """The engine's own stopping rule for diagnosis: a structure holds `confident` mass or the diagnosis budget is spent.
         (v6: the open-world reserve never counts as a confident diagnosis, and its mass counts against the others.)"""
         sp = [(s, w) for s, w in self.structure_posterior() if s != UNMODELLED]
+        if self.v6 and self.b.twin.remaining < int(self.v6["repair_twin_reserve"]) + DIAG_STEP_TWIN:
+            # v6 budget guard (DS-1 smoke, 2026-10-20): with tempering and the open-world reserve a confident diagnosis is
+            # rarer, and further experiments would eat the simulation budget the repair needs
+            return True
         return bool(sp and sp[0][1] >= confident) or self.b.budget.used >= self.diag_budget
 
     def rank_experiments(self, extra: list[dict] | None = None) -> list[tuple]:
