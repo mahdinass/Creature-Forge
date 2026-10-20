@@ -184,3 +184,19 @@ New behaviour lives in new modules or behind flags whose default reproduces engi
    Stage-3 request.
 6. **G-c (Stage-3 eligibility of A4x):** Nemotron registered P(success) on ≥ 80 % of repair decisions; deviated from the
    default in ≥ 15 % of episodes; A4x not worse than A1x by more than 2 discordant pairs.
+
+## Amendment 1 (2026-10-20 03:05 UTC, before any pilot, stream or dev-eval-2 outcome)
+- **Reason:** wall time, not results. Nemotron episodes cost about 0.62 vCPU-hours each, and the owner keeps LLM runs on the
+  8-vCPU main VM. At the declared sizes the LLM work would need about 13 h of main-VM compute; the owner wants a finished
+  milestone by the morning.
+- **Changes** (applied equally to every arm and declared before any outcome):
+  - pilot: 3 episodes per LLM arm, 4 for A1e6;
+  - learning stream: 20 instances in 4 rounds of 5 (16 single + 4 compositions);
+  - dev-eval-2: 30 single + 6 compositions per arm.
+- **Gate G-a (§2) failed offline** (`experiments/causal_engineer/dev/hdb/ds1/OFFLINE.md`). As declared:
+  - A1x is not run, and the R-head never orders tools;
+  - A4x shows the repair-outcome model only as calibrated evidence, next to the similar cases and its track record;
+  - the non-LLM updating-vs-frozen stream pair is dropped (its learned component failed the gate);
+  - the A4x stream measures whether Nemotron's decisions improve with accumulating experience.
+- **Equivalence check:** A4x with no scientist (`--no-scientist`) must reproduce A1e6 exactly. This shows the experience
+  store does not change the instruments.
