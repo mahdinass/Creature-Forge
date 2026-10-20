@@ -101,7 +101,7 @@ def run_one(inst: dict, pool, a, cases=None) -> dict:
     session = ha.LabSession(bench, ep, stop_model=stop_model, tau=a.tau, memory=memory, learned=learned,
                             v5=a.arm in ("A3v5", "A4x"), cases=cases if a.arm == "A4x" else None)
     sci = None
-    if a.arm in ("A3", "A3v5") or a.arm.startswith("A4"):
+    if (a.arm in ("A3", "A3v5") or a.arm.startswith("A4")) and not a.no_scientist:
         cfg = None
         if a.source == "live":
             from ce_eval import thinking_config
@@ -117,7 +117,8 @@ def run_one(inst: dict, pool, a, cases=None) -> dict:
     return jsonable({
         "version": "hdb_agent_v1", "instance_id": inst["instance_id"], "family": inst["family"], "pair": inst["pair"],
         "severity": inst["severity"], "bench": inst["version"], "strength": inst.get("strength"), "mult": inst.get("mult"),
-        "provenance": sci.provenance if sci else "NO_AI", "arm": a.arm, "check": inst["check"],
+        "provenance": sci.provenance if sci else "NO_AI", "arm": a.arm + ("-noscientist" if a.no_scientist else ""),
+        "check": inst["check"],
         "nemotron": sci.record() if sci else None, "agent": rec_agent,
         "injected_structure": inj, "map_structure": [list(x) for x in sp[0][0]] if sp else None,
         "map_mass": sp[0][1] if sp else 0.0, "posterior_mass_on_injected": sum(w for s, w in sp if [list(x) for x in s] == inj),
@@ -148,6 +149,8 @@ def main() -> None:
     ap.add_argument("--learned", default=None)
     ap.add_argument("--v6", default=None, help="engine v6 settings json (temperature, misfit threshold): DS-1 arms")
     ap.add_argument("--cases", default=None, help="frozen case store (A4x)")
+    ap.add_argument("--no-scientist", action="store_true",
+                    help="equivalence check: the arm's instruments and experience with every decision delegated")
     ap.add_argument("--exclude-ids", default=None, help="file of instance ids never to run (e.g. all ids in earlier records)")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
     ap.add_argument("--fixture", default=None)
@@ -196,6 +199,8 @@ def main() -> None:
             if raw is None:
                 continue
             if a.exclude_ids and a.devcomp and raw["instance_id"] in bad:
+                continue
+            if a.only and a.devcomp and raw["instance_id"] not in set(a.only.split(",")):
                 continue
             inst = hb.check_eligibility(raw, pool=pool)
             if not inst["eligible"]:
