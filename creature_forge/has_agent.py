@@ -45,8 +45,18 @@ VERSION = "has_agent_v4"   # v4: memory retrieval by believed mechanism + how to
                            # under constrained decoding); a missing prediction is recorded, it no longer voids the action
                            # v2 (after pilot 1): delegate_repair takes the scientist's tool order and start edits; accurate
                            # tool costs in the prompt; a failed reply never triggers a terminal fallback
+VERSION_V5 = "has_agent_v5"   # DS-1 (docs/DS1_PROTOCOL.md): constraint feedback (valid counterfactual levels for this design in the
+                               # notebook and in error messages; Stage 2's invalid turns were out-of-bounds levels and deviation
+                               # names used as design parameters), registered P(success) of repair decisions, engine v6 evidence
+                               # (assimilated plant checks, displacement, open-world reserve), shared case evidence and track record
 MAX_TURNS = 14
-ACTIONS = ("experiment", "propose", "delegate_diagnosis", "screen_tools", "repair", "check", "assimilate", "apply_dossier",
+SCALE_LEVELS = ("x0.33", "x0.5", "x0.7", "x0.85", "x1.2", "x1.5", "x2", "x3")
+ADD_LEVELS = ("-0.2R", "-0.1R", "-0.05R", "+0.05R", "+0.1R", "+0.2R")
+ADDITIVE_PARAMS = ("duty", "knee_shift", "stance_knee", "hip_bias", "pitch_ref", "sync_gain", "start_lean", "fp_kd", "fp_kv")
+DESIGN_PARAMS = ("torso_mass", "foot_length", "torque_limit", "foot_friction", "leg_length", "leg_density", "freq", "duty",
+                 "hip_amp", "knee_amp", "knee_shift", "stance_knee", "hip_bias", "kp", "kd", "balance_gain", "pitch_kp",
+                 "pitch_ref", "sync_gain", "ramp_s", "start_lean", "fp_kd", "fp_kv")
+ACTIONS =("experiment", "propose", "delegate_diagnosis", "screen_tools", "repair", "check", "assimilate", "apply_dossier",
            "use_learned", "delegate_repair", "conclude")
 PRED_QUANTITIES = ("n_walking", "time_upright", "pitch_mean")
 TWIN_REPAIR_BUDGET = 800
@@ -56,12 +66,48 @@ def _r(x, nd=3):
     return None if x is None else round(float(x), nd)
 
 
+def valid_levels(design: dict) -> dict[str, list[str]]:
+    """Counterfactual levels that are within bounds for this design, per design parameter (v5 constraint feedback)."""
+    from .eng_tools import parse_counterfactual
+    from .fault_bench import apply_changes
+    out = {}
+    for name in DESIGN_PARAMS:
+        ok = []
+        for lv in (ADD_LEVELS if name in ADDITIVE_PARAMS else SCALE_LEVELS):
+            try:
+                apply_changes(design["body"], design["vector"], parse_counterfactual(f"{name}@{lv}"))
+                ok.append(lv)
+            except Exception:   # noqa: BLE001 - out of bounds or unavailable: not listed
+                continue
+        out[name] = ok
+    return out
+
+
+def level_hint(spec: str, design: dict) -> str:
+    """Why a counterfactual string failed, in terms the scientist can act on."""
+    from . import hidden_plant as hp
+    levels = valid_levels(design)
+    hints = []
+    for part in spec.split("&"):
+        name = part.split("@", 1)[0].strip()
+        kind = name.split(":", 1)[0]
+        if ":" in name or kind in hp.PRIMITIVES:
+            hints.append(f"'{name}' is a hidden-deviation kind (it belongs in `hypotheses`), not a design parameter; experiments "
+                         f"change DESIGN parameters (e.g. torque_limit@x2 tests whether more actuator strength helps)")
+        elif name in levels:
+            hints.append(f"valid levels for {name} on this design: {', '.join(levels[name]) or 'none'}")
+        else:
+            hints.append(f"unknown parameter '{name}'; design parameters: {', '.join(DESIGN_PARAMS)}")
+    return " | " + "; ".join(hints) if hints else ""
+
+
 class LabSession:
     """The instruments of one investigation and their trace. Deterministic given the bench, the proposals and the actions."""
 
     def __init__(self, bench, ep: be.Episode, *, stop_model: dict | None, tau: float = 0.75, memory=None, learned=None,
-                 max_experiments: int = 6, confident: float = 0.9):
+                 max_experiments: int = 6, confident: float = 0.9, v5: bool = False, cases=None):
         self.b, self.ep = bench, ep
+        self.v5, self.cases = v5, cases
         self.stop_model, self.tau = stop_model, tau
         self.needs_stress = bool(stop_model) and "stress4" in stop_model.get("features", [])
         self.memory, self.learned = memory, learned
@@ -166,9 +212,12 @@ class LabSession:
             try:
                 body, vec = apply_changes(base["body"], base["vector"], parse_counterfactual(cid))
             except Exception as exc:   # noqa: BLE001 - reported to the scientist, nothing is clipped
-                return None, f"counterfactual {cid!r} rejected: {exc}"
+                return None, f"counterfactual {cid!r} rejected: {exc}" + (level_hint(cid, base) if self.v5 else "")
             return {"id": spec, "kind": "counterfactual", "cf": cid, "design": {"body": body, "vector": vec},
                     "cost": self.b.n_obs}, None
+        if self.v5 and "@" in spec:
+            return None, (f"unknown experiment {spec!r}: a design counterfactual needs the prefix cf:, e.g. cf:{spec}"
+                          + level_hint(spec, base))
         return None, f"unknown experiment {spec!r}"
 
     def experiment(self, spec: str, *, by: str, prediction=None) -> dict:
@@ -248,7 +297,11 @@ class LabSession:
             t = self.b.stress_test()
             if t.get("ok"):
                 ev["stress4"] = int(t["observation"]["n_walking"])
-        ev["p_full"] = self.p_full({"robust16": ev.get("robust16"), "stress4": ev.get("stress4")})
+        if self.ep.v6 and ev.get("robust16") is not None and hasattr(self.b, "displacement"):
+            d = self.b.displacement(idx)
+            if d is not None:
+                ev.update(disp_pass=d["pass"], disp_median_m=d["median_diff_m"], disp_status=d["status"])
+        ev["p_full"] = self.p_full({k: ev.get(k) for k in ("robust16", "stress4", "disp_pass", "disp_median_m")})
         return ev
 
     def _check(self, idx: int, n: int) -> int | None:
@@ -264,6 +317,13 @@ class LabSession:
         if ev.get("twin_pred") is not None and ev["twin_pred"] >= 0.75 and c["walking"] / n <= 0.5:
             ev["contradiction"] = (f"the belief predicted this design walks ({ev['twin_pred']:.0%} of twin trials); the real robot "
                                    f"walked on {c['walking']}/{n}")
+        if self.ep.v6 and self.ep.v6["auto_assimilate"] and idx != 0:
+            a = self.ep.assimilate_light(self.b.designs[idx], c["labels"], seeds=self.b.view_seeds["robust"][:n],
+                                         design_index=idx)
+            if a:
+                self._changed()
+                ev["assimilated"] = {"observed": f"{a['observed_walking']}/{a['n']}", "predicted": a["predicted_walking"],
+                                     "leader_changed": a["leader_changed"]}
         return int(c["walking"])
 
     def repair(self, *, tool: str, mode: str, against: str = "belief", start_edits: str | None = None,
@@ -381,7 +441,12 @@ class LabSession:
         return {"ok": True, "design": int(design)}
 
     def force_conclude(self, why: str) -> dict:
-        """Out of turns or budget: submit the design with the best plant robustness evidence (the engine's rule)."""
+        """Out of turns or budget: submit the design with the best plant robustness evidence (the engine's rule; v6: the highest
+        mapped P(FULL) when any design has one)."""
+        if self.ep.v6:
+            ps = [(ev["p_full"], i) for i, ev in self.evidence.items() if isinstance(ev.get("p_full"), float)]
+            if ps:
+                return self.conclude(max(ps)[1], by=f"forced:{why}")
         scored = [(ev.get("robust16", -1) / 16 if ev.get("robust16") is not None else (ev.get("robust8", -1) / 8),
                    16 if ev.get("robust16") is not None else 8, i) for i, ev in self.evidence.items()
                   if ev.get("robust16") is not None or ev.get("robust8") is not None]
@@ -424,7 +489,7 @@ class LabSession:
         return res
 
     def record(self) -> dict:
-        return {"version": VERSION, "trace": self.trace, "evidence": {str(k): v for k, v in self.evidence.items()},
+        return {"version": VERSION_V5 if self.v5 else VERSION, "trace": self.trace, "evidence": {str(k): v for k, v in self.evidence.items()},
                 "conclusion": self.conclusion, "notes": self.notes, "predictions": self.predictions,
                 "memory_views": self.memory_views, "memory_uses": self.memory.uses if self.memory is not None else None,
                 "n_experiments": self.n_experiments,
@@ -441,6 +506,11 @@ def pid_structure(pid: str) -> tuple:
 def _ev_view(ev: dict) -> dict:
     out = {k: ev[k] for k in ("twin_pred", "robust8", "robust16", "stress4", "p_full", "train", "contradiction")
            if ev.get(k) is not None}
+    if ev.get("disp_status") is not None:
+        out["farther_than_faulty_robot"] = (f"{'yes' if ev['disp_pass'] else 'no'} (median {ev['disp_median_m']:+.2f} m on the "
+                                            "robust trials; verification requires clearly farther)")
+    if ev.get("assimilated"):
+        out["belief_update"] = ev["assimilated"]
     if ev.get("p_full") is None and ev.get("robust16") is not None and ev["robust16"] < 14:
         out["p_full"] = "low (robust16 < 14; dev rate of passing at 15/16 is about 1 in 3)"
     if isinstance(out.get("p_full"), float):
@@ -536,8 +606,20 @@ def notebook(s: LabSession, turn: int, max_turns: int) -> list[str]:
                 else:
                     preds.append(str(sum(1 for f in pr.values() if f.get("walking"))))
             L.append(f"  {c['id']}: cost {c['cost']}, EIG {g:.2f}, H1/H2/H3 predict {'/'.join(preds)}")
+    if s.v5:
+        lv = valid_levels(b.best_design())
+        L += ["", "DESIGN COUNTERFACTUAL LEVELS WITHIN BOUNDS FOR THE CURRENT DESIGN (cf:<param>@<level>; others are refused):",
+              "  " + "; ".join(f"{k} {','.join(v)}" for k, v in lv.items() if v)]
     L += ["", "REPAIR TOOL MINIMUM PLANT BUDGETS (plant-mode CMA, n_train 4 / 8): " + ", ".join(
         f"{t} {min_budget(t, 4)}/{min_budget(t, 8)}" for t in sh.TOOLS)]
+    if s.cases is not None:
+        probe = next((e["ranking"] for e in reversed(ep.events) if e["kind"] == "tool_screen"), None)
+        cma = next((e["ranking"] for e in reversed(ep.events) if e["kind"] == "tool_screen_cma"), None)
+        order = [r["tool"] for r in (s.tool_ranking or cma or probe or [])]
+        L += ["", "CASE EVIDENCE (shared experience store: verified outcomes of earlier repairs on other robots, retrieved by "
+                  "the engine's current belief; development experience, it can be wrong for this robot):",
+              *s.cases.evidence_lines(ep.structure_posterior(), probe, cma, order),
+              "", "YOUR TRACK RECORD (earlier investigations by you, verified afterwards):", *s.cases.track_record_lines()]
     if s.tool_ranking:
         L += ["", "TOOL SCREEN (twin, under the belief; cma_walking = walking trials of 4 after a short twin optimisation):"]
         L += [f"  {r['tool']}: probe score {r['score']:.2f}, cma_walking {r.get('cma_walking')}" for r in s.tool_ranking[:6]]
@@ -638,6 +720,24 @@ Reply with ONE JSON object following the schema. `understanding` = what you now 
 numbers); `uncertainty` = what you do not yet understand; `why` = why this action is the most valuable now."""
 
 
+AGENT_SYSTEM_V5 = AGENT_SYSTEM + """
+
+INSTRUMENT NOTES (engine v6):
+- The belief may hold mass on "unmodelled:any": evidence that no explanation fits the measurements well (a cause outside
+  the hypotheses, possibly two causes at once). The engine then adds two-cause combinations of the leading single causes by
+  itself; you can propose others.
+- Every plant check of a repaired design is folded into the belief automatically: each explanation predicted whether that
+  design would walk, and only explanations that predicted the outcome differently gain or lose weight. A repair that every
+  explanation expected to work but failed says more about the repair than about the cause.
+- Checks report whether a design travels clearly farther than the faulty robot on the robust trials. The verification
+  requires this, and P(pass) includes it.
+- Counterfactual levels must be within the bounds listed for the current design. Hidden-deviation kinds (e.g.
+  actuator_strength) belong in hypotheses, never in experiments.
+- `p_success` (always required): for repair, delegate_repair and conclude, your probability that the design you end up
+  submitting passes the independent verification. It is scored against the outcome and shown in your track record; for
+  other actions give your current estimate."""
+
+
 class AuthFailure(RuntimeError):
     """The model endpoint rejected the credentials: never continue on fallbacks."""
 
@@ -645,14 +745,22 @@ class AuthFailure(RuntimeError):
 class NemotronScientist(sh.HasNemotron):
     """Nemotron as the investigation's director (one instance per investigation)."""
 
-    def __init__(self, **kw):
+    def __init__(self, *, v5: bool = False, **kw):
         kw.setdefault("max_requests", 2 * MAX_TURNS + 4)
         kw.setdefault("max_total_tokens", 900_000)
         super().__init__(roles=("agent",), **kw)
-        self.system = AGENT_SYSTEM
+        self.v5 = v5
+        self.system = AGENT_SYSTEM_V5 if v5 else AGENT_SYSTEM
+
+    def schema(self) -> dict:
+        s = self.schema_v4()
+        if self.v5:
+            s["required"] = [*s["required"], "p_success"]
+            s["properties"]["p_success"] = {"type": "number"}
+        return s
 
     @staticmethod
-    def schema() -> dict:
+    def schema_v4() -> dict:
         hyp = sh.HasNemotron.propose_schema()["properties"]["hypotheses"]
         q = {"type": "object", "additionalProperties": False, "required": ["quantity", *sh.QUANTILES],
              "properties": {"quantity": {"type": "string", "enum": list(PRED_QUANTITIES)},
@@ -745,6 +853,20 @@ class NemotronScientist(sh.HasNemotron):
                 errs.append(f"{a} needs `design` = an existing design index (0-{n_designs - 1})")
             elif a == "assimilate" and not (session.evidence.get(d) or {}).get("checks"):
                 errs.append(f"design {d} has no plant check to assimilate")
+        if self.v5:
+            ps = reply.get("p_success")
+            if not isinstance(ps, (int, float)) or isinstance(ps, bool) or not 0.0 <= ps <= 1.0:
+                errs.append("p_success must be a probability in [0, 1]")
+            if a in ("repair", "delegate_repair") and reply.get("start_edits"):
+                from .eng_tools import parse_counterfactual
+                from .fault_bench import apply_changes
+                d = reply.get("design")
+                base = session.b.designs[d] if isinstance(d, int) and 0 <= d < n_designs else session.b.best_design()
+                try:
+                    apply_changes(base["body"], base["vector"], parse_counterfactual(reply["start_edits"]))
+                except Exception as exc:   # noqa: BLE001
+                    errs.append(f"start_edits {reply['start_edits']!r} rejected on design {base['index']}: {exc}"
+                                + level_hint(reply["start_edits"], base))
         if a == "apply_dossier" and session.memory is None:
             errs.append("apply_dossier is not available (no memory in this investigation)")
         if a == "apply_dossier" and session.memory is not None and session.memory.get(reply.get("dossier")) is None:

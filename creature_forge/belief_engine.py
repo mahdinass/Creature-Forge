@@ -24,6 +24,14 @@ import numpy as np
 from . import hidden_plant as hp
 
 VERSION = "belief_engine_v5"   # v2: warm-started plant optimisation with the remaining budget + selection by robustness evidence; v3: 4-level generic magnitudes, two-step refinement; v4: calibrated scales + seed-level contamination likelihood; v5: tool screen by short ensemble twin CMA
+VERSION_V6 = "belief_engine_v6"  # DS-1 (docs/DS1_PROTOCOL.md §1), enabled by Episode(v6={...}); without it the engine is v5 exactly:
+                                 # tempered likelihood, structural misfit -> composite hypotheses under a hard twin budget with an
+                                 # open-world reserve, automatic assimilation of plant checks of repairs (relative update),
+                                 # displacement-aware evidence, a learned tool ranker hook and submission by mapped P(FULL)
+UNMODELLED = (("unmodelled", "any"),)             # the open-world reserve's structure label (v6)
+DIAGNOSTIC_KINDS = ("observe", "counterfactual", "floor")   # experiments that measure the fault (plant checks of repairs do not)
+V6_DEFAULTS = {"temperature": 1.0, "misfit_threshold": None, "repair_twin_reserve": 1750, "composite_cap": 500,
+               "max_composite_rounds": 2, "auto_assimilate": True, "assimilate_seeds": 8, "select_by_p": True}
 
 # per-seed summary features in the likelihood and their noise scales (provisional; calibrated on dev, frozen before comparisons)
 # v4 (dev noise calibration, scripts/hdb_noise_calibration.py, 175 dev instances, plant vs twin with the TRUE deviation): the
@@ -111,13 +119,35 @@ def mapped_p_full(model: dict, ev: dict) -> float | None:
             x.append(math.log((v + 0.5) / (n - v + 0.5)))      # empirical logit, as in the fit
         z = sum(a * b for a, b in zip(model["w"], x))
         return 1.0 / (1.0 + math.exp(-z))
+    if kind == "logistic_v2":       # v6: + displacement evidence on the robust seeds (hdb_evidence), scripts/ds1_stop_map.py
+        x = v2_features(ev, model)
+        if x is None:
+            return None
+        z = sum(a * b for a, b in zip(model["w"], x))
+        return 1.0 / (1.0 + math.exp(-z))
     raise ValueError(f"unsupported stopping model {kind!r}")
+
+
+def v2_features(ev: dict, model: dict) -> list[float] | None:
+    """Feature vector of stop map v2: bias, empirical logits of robust16 and stress4, displacement pass flag, clipped median
+    paired displacement difference (m)."""
+    x = [1.0]
+    for f in ("robust16", "stress4"):
+        v, n = ev.get(f), model["n_by_feature"][f]
+        if v is None:
+            return None
+        x.append(math.log((v + 0.5) / (n - v + 0.5)))
+    if ev.get("disp_pass") is None or ev.get("disp_median_m") is None:
+        return None
+    lo, hi = model.get("disp_clip", (-1.5, 1.5))
+    x += [1.0 if ev["disp_pass"] else 0.0, min(hi, max(lo, float(ev["disp_median_m"])))]
+    return x
 
 
 def calibrated_accept(model: dict, tau: float):
     """accept_fn from a dev-fitted mapping: accept iff mapped P(FULL) >= tau. Needs the evidence the map uses (the engine runs
     the 20 s stress test for promising candidates when the map uses it)."""
-    mapped_p_full(model, {"robust16": 16, "stress4": 4})        # validates the model
+    mapped_p_full(model, {"robust16": 16, "stress4": 4, "disp_pass": True, "disp_median_m": 1.0})   # validates the model
 
     def accept(ev: dict) -> bool:
         p = mapped_p_full(model, ev)
@@ -288,8 +318,15 @@ class Episode:
 
     def __init__(self, bench, *, proposer=None, use_generic: bool = True, max_alive: int = 12, screen_seeds: int = 2,
                  diag_plant_budget: int = 120, eig_top: int = 6, refine_top: int = 3, settings: dict | None = None,
-                 generic_kinds: tuple | None = None):
+                 generic_kinds: tuple | None = None, v6: dict | None = None):
         self.b = bench
+        unknown = set(v6 or {}) - set(V6_DEFAULTS)
+        if unknown:
+            raise ValueError(f"unknown v6 options {sorted(unknown)}")
+        self.v6 = None if v6 is None else {**V6_DEFAULTS, **v6}
+        self.T = float(self.v6["temperature"]) if self.v6 else 1.0
+        self._composite_rounds = 0
+        self._assimilated: set[int] = set()
         self.generic_kinds = generic_kinds          # None = the whole generic library (smoke tests may restrict it)
         self.proposer = proposer
         self.use_generic = use_generic
@@ -321,7 +358,138 @@ class Episode:
         agg: dict[tuple, float] = {}
         for p, w in self.posterior():
             agg[p.structure] = agg.get(p.structure, 0.0) + w
+        u = self.unmodelled_mass()
+        if u > 0.0:            # v6 open-world reserve: modelled structures share 1 - u
+            agg = {s: w * (1.0 - u) for s, w in agg.items()}
+            agg[UNMODELLED] = u
         return sorted(agg.items(), key=lambda t: -t[1])
+
+    # ------------------------------------------------------------ v6: structural misfit
+    def _diag_split(self, p: Particle) -> tuple[float, int]:
+        """(log-likelihood of p on the diagnostic experiments, number of their observed seeds)."""
+        ll, n = 0.0, 0
+        for exp in self.experiments:
+            if exp["kind"] not in DIAGNOSTIC_KINDS or exp["id"] not in p.seen:
+                continue
+            ll += self._score(p, exp, p.seen[exp["id"]])
+            n += len(exp["features"])
+        return ll, n
+
+    def misfit_stat(self) -> float | None:
+        """Mean log-likelihood per observed seed of the leading particle on the diagnostic experiments (plant checks of
+        repaired designs are excluded: a repair that fails is not evidence of an unmodelled cause)."""
+        if not self.particles:
+            return None
+        ll, n = self._diag_split(self.posterior()[0][0])
+        return ll / n if n else None
+
+    def unmodelled_mass(self) -> float:
+        """Posterior mass of the open-world reserve: an explanation that fits every diagnostic seed at the dev-calibrated
+        threshold level and is as good as the leader on everything else."""
+        if not self.v6 or self.v6["misfit_threshold"] is None or not self.particles:
+            return 0.0
+        best = max(self.particles.values(), key=lambda q: q.logw)
+        ll, n = self._diag_split(best)
+        if n == 0:
+            return 0.0
+        lr = (self.v6["misfit_threshold"] * n + (best.loglik - ll)) / self.T
+        m = max(lr, best.logw)
+        z = sum(math.exp(p.logw - m) for p in self.particles.values())
+        return math.exp(lr - m) / (z + math.exp(lr - m))
+
+    def _particle_cost(self) -> int:
+        """Twin rollouts needed to score one new particle against every experiment so far."""
+        return sum(0 if e["kind"] == "weigh" else len(e.get("seeds") or e.get("features") or ()) for e in self.experiments)
+
+    def expand_composites(self) -> dict | None:
+        """v6: when the leader misfits the diagnostic data, enumerate two-primitive hypotheses from the leading distinct
+        single-primitive structures (top 4 -> at most 6 pairs), weigh them with the same likelihood and fit the magnitudes
+        of the two best, within min(composite_cap, twin remaining - repair reserve) twin rollouts."""
+        import itertools
+        if not self.v6 or self.v6["misfit_threshold"] is None or self._composite_rounds >= self.v6["max_composite_rounds"]:
+            return None
+        stat = self.misfit_stat()
+        if stat is None or stat >= self.v6["misfit_threshold"]:
+            return None
+        self._composite_rounds += 1
+        cap = min(int(self.v6["composite_cap"]), self.b.twin.remaining - int(self.v6["repair_twin_reserve"]))
+        info = {"stat": round(stat, 3), "threshold": self.v6["misfit_threshold"], "cap": cap}
+        if cap <= 0:
+            self._event("composite_skipped", reason="twin budget reserved for repair", **info)
+            return info
+        singles: list[Particle] = []
+        for p, _ in self.posterior():
+            if len(p.deviation) == 1 and all(p.structure != q.structure for q in singles):
+                singles.append(max((q for q in self.particles.values() if q.structure == p.structure), key=lambda q: q.loglik))
+            if len(singles) >= 4:
+                break
+        pairs = []
+        for a, b in itertools.combinations(singles, 2):
+            try:
+                pairs.append(hp.validate_deviation(copy.deepcopy(a.deviation + b.deviation)))
+            except hp.DeviationError:
+                continue
+        start, per = self.b.twin.used, max(1, self._particle_cost())
+        added = []
+        for dev in pairs:
+            if self.b.twin.used - start + per > cap:
+                break
+            added += self.add_particles([dev], "composite")
+        fitted = []
+        for pid in sorted(added, key=lambda q: -self.particles[q].loglik)[:2]:
+            st = self.particles[pid].structure
+            for step in (0.35, 0.15):
+                best = max((q for q in self.particles.values() if q.structure == st), key=lambda q: q.loglik)
+                neigh = neighbours(best.deviation, step, multi=True)
+                if self.b.twin.used - start + per * len(neigh) > cap:
+                    break
+                self.add_particles(neigh, "composite+fit")
+            fitted.append(pid)
+        self.prune()
+        info.update(pairs=[_pid(d) for d in pairs], added=added, fitted=fitted, twin_cost=self.b.twin.used - start)
+        self._event("composite_expansion", **info)
+        return info
+
+    # ------------------------------------------------------------ v6: cross-feedback from interventions
+    def assimilate_light(self, design: dict, labels: list, *, seeds: list[int], design_index: int) -> dict | None:
+        """Fold a plant robustness check of a repaired design into the belief (v6, automatic). Every alive particle's twin
+        predicts walking for that design on the same robust seeds; the walking-only likelihood reweights them. The update is
+        relative: an outcome that every competing mechanism predicted alike moves no weight. No refinement (bounded cost)."""
+        if not self.v6:
+            return None
+        n = min(int(self.v6["assimilate_seeds"]), len(labels), len(seeds))
+        if int(design_index) in self._assimilated or n == 0:
+            return None
+        need = len(self.particles) * n
+        if self.b.twin.remaining < need:
+            self._event("assimilation_skipped", design=int(design_index), reason=f"needs {need} twin rollouts")
+            return None
+        self._assimilated.add(int(design_index))
+        walk = {int(s): {"walking": 1.0 if lab == "walking" else 0.0} for s, lab in zip(seeds[:n], labels[:n])}
+        exp = {"id": f"X{len(self.experiments)}:check@{int(design_index)}", "kind": "check", "role": "robust",
+               "design": {"body": design["body"], "vector": design["vector"]}, "seeds": [int(s) for s in seeds[:n]],
+               "features": walk, "keys": ["walking"], "cost": 0}
+        before = self.structure_posterior()[:4]
+        self._register(exp)
+        predicted = {}
+        for st, _ in before:
+            if st == UNMODELLED:
+                continue
+            ps = [p for p in self.particles.values() if p.structure == st and exp["id"] in p.seen]
+            if ps:
+                best = max(ps, key=lambda q: q.loglik)
+                predicted["+".join(f"{k}:{t}" for k, t in st)] = int(sum(1 for f in best.seen[exp["id"]].values()
+                                                                           if f.get("walking")))
+        self.prune()
+        self.snapshot(f"after_{exp['id']}")
+        after = self.structure_posterior()[:4]
+        out = {"id": exp["id"], "observed_walking": int(sum(f["walking"] for f in walk.values())), "n": n,
+               "predicted_walking": predicted,
+               "before": [([list(x) for x in s], round(w, 4)) for s, w in before],
+               "after": [([list(x) for x in s], round(w, 4)) for s, w in after],
+               "leader_changed": bool(before and after and before[0][0] != after[0][0])}
+        self._event("assimilated_check", design=int(design_index), **{k: v for k, v in out.items() if k != "id"})
+        return out
 
     def snapshot(self, label: str) -> None:
         self.history.append({"label": label, "plant_used": self.b.budget.used, "twin_used": self.b.twin.used,
@@ -380,7 +548,7 @@ class Episode:
                 return False
             total += self._score(p, exp, pred)
         p.loglik = total
-        p.logw = total
+        p.logw = total if self.T == 1.0 else total / self.T      # v6: tempered likelihood (v5: T = 1, identical)
         return True
 
     def add_particles(self, devs, source: str) -> list[str]:
@@ -564,11 +732,13 @@ class Episode:
             self.add_particles(self.proposer(self.state()), "proposer")
         self.refine()
         self.prune()
+        self.expand_composites()
         self.snapshot("after_observation")
 
     def diagnosis_done(self, confident: float = 0.9) -> bool:
-        """The engine's own stopping rule for diagnosis: a structure holds `confident` mass or the diagnosis budget is spent."""
-        sp = self.structure_posterior()
+        """The engine's own stopping rule for diagnosis: a structure holds `confident` mass or the diagnosis budget is spent.
+        (v6: the open-world reserve never counts as a confident diagnosis, and its mass counts against the others.)"""
+        sp = [(s, w) for s, w in self.structure_posterior() if s != UNMODELLED]
         return bool(sp and sp[0][1] >= confident) or self.b.budget.used >= self.diag_budget
 
     def rank_experiments(self, extra: list[dict] | None = None) -> list[tuple]:
@@ -591,11 +761,12 @@ class Episode:
             self.add_particles(self.proposer(self.state()), "proposer")
         self.refine()
         self.prune()
+        self.expand_composites()
         self.snapshot(f"after_{pick['id']}")
         return res
 
     def diagnosis_summary(self) -> dict:
-        sp = self.structure_posterior()
+        sp = [(s, w) for s, w in self.structure_posterior() if s != UNMODELLED]
         return {"map_structure": [list(x) for x in sp[0][0]] if sp else None, "map_mass": sp[0][1] if sp else 0.0,
                 "map_particle": self.posterior()[0][0].as_dict() if self.particles else None}
 
@@ -685,25 +856,27 @@ class Episode:
 
     def robust_repair(self, *, twin_budget: int = 800, plant_budget: int = 300, n_check: int = 8, accept: int = 7,
                       tool_order: list[str] | None = None, engineer=None, accept_fn=None, screen_cma: bool = True,
-                      screen_top: int = 5, screen_budget: int = 150, prefer: list[str] | None = None) -> dict:
+                      screen_top: int = 5, screen_budget: int = 150, prefer: list[str] | None = None, ranker=None) -> dict:
         """Posterior-robust repair (v2): (1) ensemble-robust twin optimisation of the first tool as a warm start, checked on the
         plant; (2) empirical plant optimisation from it with most of the remaining plant budget, chained over two tools; (3) the
         design with the best robustness evidence is submitted. Provisional stop rule (dev): accept on 15/16 robust seeds (the
         calibrated mapping replaces it before registration).
         `engineer(state, ranking) -> {"tool_order": [...], ...}` (optional) may reorder the tools after the twin screen.
         `accept_fn(evidence) -> bool` decides early acceptance from policy-visible evidence {"robust8", "robust16", "twin_walking",
-        "train_walking", "remaining"}; default: provisional 15/16 on the robust seeds; `SPEND_ALL` never accepts early (arm A1f)."""
+        "train_walking", "remaining"}; default: provisional 15/16 on the robust seeds; `SPEND_ALL` never accepts early (arm A1f).
+        v6 (`Episode(v6=...)`): plant checks of repaired designs are assimilated into the belief (and the tools re-screened if the
+        leading explanation changes), displacement evidence joins the stopping evidence, and the submission is the checked
+        design with the highest mapped P(FULL). `ranker(episode, hyps, ranking) -> ranking` (a learned tool ranker, arm A1x)
+        reorders the engine's screened tools."""
         accept_fn = accept_fn or provisional_accept
-        post = self.posterior()
-        hyps, mass = [], 0.0
-        for p, w in post:
-            hyps.append((p, w))
-            mass += w
-            if mass >= 0.8 or len(hyps) >= 3:
-                break
+        if self.v6 and hasattr(self.b, "baseline"):
+            self.b.baseline()          # the faulty design on the robust seeds, once (displacement evidence; 16 plant rollouts)
+        hyps = self._repair_hyps()
         ranking = self.screen_tools(hyps)
         if screen_cma and tool_order is None and not prefer:
             ranking = self.screen_tools_cma(hyps, ranking, top=screen_top, budget=screen_budget)
+        if ranker is not None and tool_order is None and ranking:
+            ranking = ranker(self, hyps, ranking)
         tools = tool_order or [r["tool"] for r in ranking]
         if prefer:       # an external scientist's tool choice goes first; the engine's ranking fills the rest (has_agent)
             tools = list(prefer) + [t for t in tools if t not in prefer]
@@ -718,6 +891,8 @@ class Episode:
                 tools = list(plan["tool_order"]) + [t for t in tools if t not in plan["tool_order"]]
         log = []
         checked: dict[int, tuple] = {}            # design index -> (walking, n) from plant robustness checks
+        pmap: dict[int, float] = {}               # v6: design index -> mapped P(FULL)
+        assim: list[dict] = []
 
         def check(idx: int, n: int) -> int | None:
             self.b.select(idx)
@@ -725,7 +900,22 @@ class Episode:
             if not c.get("ok"):
                 return None
             checked[idx] = (c["walking"], n)
+            if self.v6 and self.v6["auto_assimilate"] and idx != 0:
+                a = self.assimilate_light(self.b.designs[idx], c["labels"], seeds=self.b.view_seeds["robust"][:n],
+                                          design_index=idx)
+                if a:
+                    assim.append(a)
             return c["walking"]
+
+        def decide(idx: int, ev: dict) -> bool:
+            if self.v6 and ev.get("robust16") is not None and hasattr(self.b, "displacement"):
+                d = self.b.displacement(idx)
+                if d is not None:
+                    ev.update(disp_pass=d["pass"], disp_median_m=d["median_diff_m"], disp_status=d["status"])
+            ok = accept_fn(ev)
+            if ev.get("p_full") is not None:
+                pmap[idx] = float(ev["p_full"])
+            return ok
 
         def stress(idx: int, w16) -> int | None:
             """20 s stress test (obs seeds, 2 x n_obs) for a promising candidate when the stopping map uses it."""
@@ -752,8 +942,17 @@ class Episode:
                 ev = {"robust8": w, "robust16": w16, "stress4": stress(cur, w16), "twin_walking": int(best["walking_count"]),
                       "train_walking": None, "remaining": self.b.remaining}
                 log[-1]["evidence"] = ev
-                if w16 is not None and accept_fn(ev):
-                    return {"accepted": True, "design": cur, "log": log}
+                if w16 is not None and decide(cur, ev):
+                    return {"accepted": True, "design": cur, "log": log, **({"assimilated": assim} if self.v6 else {})}
+        if self.v6 and assim and assim[-1]["leader_changed"] and tool_order is None and not prefer and self.b.twin.remaining >= 250:
+            # the intervention's outcome moved the belief to another explanation: re-screen the tools under it
+            hyps = self._repair_hyps()
+            ranking = self.screen_tools(hyps)
+            if ranker is not None and ranking:
+                ranking = ranker(self, hyps, ranking)
+            if ranking:
+                self._event("rescreen_after_assimilation", old_order=tools[:4], new_order=[r["tool"] for r in ranking][:4])
+                tools = [r["tool"] for r in ranking]
         # 2) empirical plant optimisation from the warm start with most of the remaining plant budget, chained over the tools
         reserve = 16
         for k, tool in enumerate(tools[:2]):
@@ -775,20 +974,39 @@ class Episode:
             ev = {"robust8": None, "robust16": w16, "stress4": stress(cur, w16), "twin_walking": None,
                   "train_walking": rep["best"]["train_walking"], "remaining": self.b.remaining}
             log[-1]["evidence"] = ev
-            if w16 is not None and accept_fn(ev):
-                return {"accepted": True, "design": cur, "log": log}
-        # 3) submit the design with the best robustness evidence (walking fraction on its largest check)
-        if checked:
+            if w16 is not None and decide(cur, ev):
+                return {"accepted": True, "design": cur, "log": log, **({"assimilated": assim} if self.v6 else {})}
+        # 3) submit the design with the best robustness evidence (walking fraction on its largest check); v6: the highest
+        # mapped P(FULL) when any checked design has one (it includes the displacement evidence)
+        if self.v6 and self.v6["select_by_p"] and pmap:
+            best_idx = max(pmap, key=lambda i: (pmap[i], checked.get(i, (0, 1))[0] / checked.get(i, (0, 1))[1], i))
+            self.b.select(best_idx)
+        elif checked:
             best_idx = max(checked, key=lambda i: (checked[i][0] / checked[i][1], checked[i][1], i))
             self.b.select(best_idx)
-        return {"accepted": False, "design": self.b.best_design()["index"], "log": log,
-                "checked": {str(k): list(v) for k, v in checked.items()}}
+        out = {"accepted": False, "design": self.b.best_design()["index"], "log": log,
+               "checked": {str(k): list(v) for k, v in checked.items()}}
+        if self.v6:
+            out.update(assimilated=assim, p_full={str(k): round(v, 4) for k, v in pmap.items()})
+        return out
+
+    def _repair_hyps(self) -> list[tuple[Particle, float]]:
+        """The leading hypotheses a repair is designed against: top particles up to 80 % mass or 3 particles."""
+        hyps, mass = [], 0.0
+        for p, w in self.posterior():
+            hyps.append((p, w))
+            mass += w
+            if mass >= 0.8 or len(hyps) >= 3:
+                break
+        return hyps
 
     def record(self) -> dict:
-        return {"version": VERSION, "settings": {"max_alive": self.max_alive, "screen_seeds": self.screen_seeds,
-                                                 "diag_plant_budget": self.diag_budget, "eig_top": self.eig_top,
-                                                 "refine_top": self.refine_top, "use_generic": self.use_generic,
-                                                 "generic_kinds": self.generic_kinds, **self.settings},
+        v6 = {"v6": dict(self.v6), "unmodelled_mass": round(self.unmodelled_mass(), 5)} if self.v6 else {}
+        return {"version": VERSION_V6 if self.v6 else VERSION,
+                "settings": {"max_alive": self.max_alive, "screen_seeds": self.screen_seeds,
+                             "diag_plant_budget": self.diag_budget, "eig_top": self.eig_top,
+                             "refine_top": self.refine_top, "use_generic": self.use_generic,
+                             "generic_kinds": self.generic_kinds, **self.settings}, **v6,
                 "particles": [p.as_dict() for p, _ in self.posterior()], "history": self.history, "events": self.events,
                 "experiments": [{k: v for k, v in e.items() if k != "design"} for e in self.experiments],
                 "ledger": self.b.ledger()}

@@ -6,6 +6,11 @@ Arms (identical instruments, plant budget 700, twin cap 2,800, same seeds, same 
   A3    Nemotron directs the investigation (no memory, no learned posterior)
   A4    A3 + experience: frozen mechanism dossiers (--memory) and the learned posterior as a tool (--learned)
   A4m   A3 + dossiers only
+DS-1 (docs/DS1_PROTOCOL.md; engine v6 settings via --v6, displacement-aware workbench, stop map via --stop-model):
+  A1e6  engine v6, every decision delegated (the non-LLM comparator with the same instruments)
+  A3v5  Nemotron (agent v5) on engine v6, no experience
+  A4x   A3v5 + the shared case store (--cases: case evidence, repair-outcome model, track record) and dual-scored
+        dossiers (--memory, rescored on the store's summaries)
 Development only: nothing here is a registered comparison.
 
 Usage (VM): python scripts/hdb_agent_run.py --arm A3 --split-file experiments/causal_engineer/dev/hdb/stage2_split.json
@@ -31,12 +36,17 @@ from creature_forge.forge_pool import ForgePool, InlinePool       # noqa: E402
 from creature_forge.hdb_workbench import HDBWorkbench             # noqa: E402
 from creature_forge.optimize import jsonable                      # noqa: E402
 
-ARMS = ("A1e", "A2", "A3", "A4", "A4m", "A4lfo", "A4bad")   # A4lfo / A4bad: A4 with the leave-family-out / corrupted memory
+ARMS = ("A1e", "A2", "A3", "A4", "A4m", "A4lfo", "A4bad", "A1e6", "A3v5", "A4x")   # A4lfo / A4bad: A4 with the leave-family-out / corrupted memory
+V6_ARMS = ("A1e6", "A3v5", "A4x")
 
 
 def instances(a) -> list[tuple]:
     split = json.load(open(a.split_file, encoding="utf-8"))
-    want = split[f"{a.which}_bases"]
+    if a.which in ("init", "stream"):          # DS-1 subsets of the experience bases (pre-declared hash rule)
+        from creature_forge import has_cases as hc
+        want = hc.ds1_init_bases(split) if a.which == "init" else hc.ds1_stream_bases(split)
+    else:
+        want = split[f"{a.which}_bases"]
     bases = [b for b in hb.load_bases("dev") if b["base_id"] in set(want)]
     if a.devcomp:          # development compositions: (base, pair, None)
         from creature_forge import hdb_devcomp
@@ -62,30 +72,43 @@ def instances(a) -> list[tuple]:
     return out
 
 
-def run_one(inst: dict, pool, a) -> dict:
+def run_one(inst: dict, pool, a, cases=None) -> dict:
     t0 = time.perf_counter()
     view = hb.policy_view(inst)
-    bench = HDBWorkbench(view, inst["plant"], total_budget=a.budget, twin_budget=a.twin_budget, pool=pool,
-                         noise_seed=int.from_bytes(inst["instance_id"].encode()[:4], "big") % (2 ** 31))
+    v6 = a.arm in V6_ARMS
+    wb = HDBWorkbench
+    if v6:
+        from creature_forge.hdb_evidence import EvidenceWorkbench as wb
+    bench = wb(view, inst["plant"], total_budget=a.budget, twin_budget=a.twin_budget, pool=pool,
+               noise_seed=int.from_bytes(inst["instance_id"].encode()[:4], "big") % (2 ** 31))
     stop_model = json.load(open(a.stop_model, encoding="utf-8"))
-    ep = be.Episode(bench, proposer=None, use_generic=True, max_alive=12)
+    ep = be.Episode(bench, proposer=None, use_generic=True, max_alive=12,
+                    v6=json.load(open(a.v6, encoding="utf-8")) if v6 else None)
     memory = learned = None
-    if a.arm.startswith("A4"):
+    if a.arm.startswith("A4") and a.arm != "A4x":
         from creature_forge.has_memory import Memory
         memory = Memory.load(a.memory, frozen=True)
+    if a.arm == "A4x":
+        from creature_forge.has_cases import DualMemory
+        if cases is None:
+            from creature_forge.has_cases import CaseStore
+            cases = CaseStore.load(a.cases, frozen=True)
+        memory = DualMemory.load(a.memory, frozen=True)
+        memory.rescore(cases.summaries)
     if a.arm in ("A2", "A4", "A4lfo", "A4bad"):
         from creature_forge.amortized_posterior import LearnedPosterior
         learned = LearnedPosterior.load(a.learned)
-    session = ha.LabSession(bench, ep, stop_model=stop_model, tau=a.tau, memory=memory, learned=learned)
+    session = ha.LabSession(bench, ep, stop_model=stop_model, tau=a.tau, memory=memory, learned=learned,
+                            v5=a.arm in ("A3v5", "A4x"), cases=cases if a.arm == "A4x" else None)
     sci = None
-    if a.arm == "A3" or a.arm.startswith("A4"):
+    if a.arm in ("A3", "A3v5") or a.arm.startswith("A4"):
         cfg = None
         if a.source == "live":
             from ce_eval import thinking_config
             cfg = thinking_config()
         fixture = json.load(open(a.fixture, encoding="utf-8")) if a.fixture else None
         sci = ha.NemotronScientist(source=a.source, config=cfg, design=view["robot"], fixture=fixture,
-                                   investigation_id=f"agent-{a.arm}-{view['robot_id']}")
+                                   investigation_id=f"agent-{a.arm}-{view['robot_id']}", v5=a.arm in ("A3v5", "A4x"))
     rec_agent = ha.run_agent(session, sci, max_turns=a.max_turns, auto_learned=(a.arm == "A2"))
     design = bench.best_design()
     ver = hb.verify(inst, {"body": design["body"], "vector": design["vector"]}, pool=pool)
@@ -102,6 +125,7 @@ def run_one(inst: dict, pool, a) -> dict:
         "verification": {"status": ver["status"], "walking_frac": ver["validation"]["walking_frac"], "reasons": ver["reasons"],
                          "rollouts": ver["rollouts"]},
         "stop_rule": {"model": a.stop_model, "tau": a.tau}, "memory": a.memory if memory else None,
+        "cases": a.cases if a.arm == "A4x" else None, "v6_settings": a.v6 if v6 else None,
         "learned": a.learned if learned else None, "learned_last": getattr(learned, "last", None),
         "engine": ep.record(), "designs": [{k: d[k] for k in ("index", "source", "body", "vector")} for d in bench.designs],
         "wall_s": time.perf_counter() - t0})
@@ -111,7 +135,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", choices=ARMS, required=True)
     ap.add_argument("--split-file", required=True)
-    ap.add_argument("--which", choices=["experience", "transfer"], required=True)
+    ap.add_argument("--which", choices=["experience", "transfer", "init", "stream"], required=True)
     ap.add_argument("--families", default=None)
     ap.add_argument("--mults", default="1.3")
     ap.add_argument("--thresholds", required=True)
@@ -122,6 +146,9 @@ def main() -> None:
     ap.add_argument("--max-turns", type=int, default=ha.MAX_TURNS)
     ap.add_argument("--memory", default=None)
     ap.add_argument("--learned", default=None)
+    ap.add_argument("--v6", default=None, help="engine v6 settings json (temperature, misfit threshold): DS-1 arms")
+    ap.add_argument("--cases", default=None, help="frozen case store (A4x)")
+    ap.add_argument("--exclude-ids", default=None, help="file of instance ids never to run (e.g. all ids in earlier records)")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
     ap.add_argument("--fixture", default=None)
     ap.add_argument("--sample", action="store_true", help="shuffle the instance list with --sample-seed before --limit")
@@ -135,6 +162,10 @@ def main() -> None:
     a = ap.parse_args()
     if a.arm.startswith("A4") and not a.memory:
         raise SystemExit("A4 arms need --memory")
+    if a.arm in V6_ARMS and not a.v6:
+        raise SystemExit("DS-1 arms need --v6")
+    if a.arm == "A4x" and not a.cases:
+        raise SystemExit("A4x needs --cases")
     if a.arm in ("A2", "A4", "A4lfo", "A4bad") and not a.learned:
         raise SystemExit("A2/A4 need --learned")
     th = json.load(open(a.thresholds, encoding="utf-8"))
@@ -142,6 +173,9 @@ def main() -> None:
     if a.only and not a.devcomp:
         keep = set(a.only.split(","))
         todo = [t for t in todo if hb.instance_key(t[0]["base_id"], t[1], t[2]) in keep]
+    if a.exclude_ids:
+        bad = {l.strip() for l in open(a.exclude_ids, encoding="utf-8") if l.strip()}
+        todo = [t for t in todo if (hb.instance_key(t[0]["base_id"], t[1], t[2]) if not a.devcomp else None) not in bad]
     k, n = (int(x) for x in a.shard.split("/"))
     done = set()
     if os.path.exists(a.out):
@@ -160,6 +194,8 @@ def main() -> None:
                 iid = hb.instance_key(b["base_id"], f, s)
                 raw = hb.make_instance_v2(b, f, s, th)
             if raw is None:
+                continue
+            if a.exclude_ids and a.devcomp and raw["instance_id"] in bad:
                 continue
             inst = hb.check_eligibility(raw, pool=pool)
             if not inst["eligible"]:

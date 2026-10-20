@@ -1,0 +1,194 @@
+{
+ "init_bases": [
+  "hdb-v1-gen-0008",
+  "hdb-v1-gen-0011",
+  "hdb-v1-gen-0024",
+  "hdb-v1-gen-0030",
+  "hdb-v1-gen-0034",
+  "hdb-v1-gen-0037",
+  "hdb-v1-gen-0039",
+  "hdb-v1-gen-0040",
+  "hdb-v1-gen-0044",
+  "hdb-v1-gen-0052",
+  "hdb-v1-gen-0054",
+  "hdb-v1-gen-0062",
+  "top-heavy",
+  "walkrec-dev-m1-gen-0000",
+  "walkrec-dev-m1-gen-0002",
+  "walkrec-dev-m1-gen-0003",
+  "walkrec-dev-m1-gen-0004",
+  "walkrec-dev-m1-gen-0006",
+  "walkrec-dev-m1-gen-0007",
+  "weak-slippery"
+ ],
+ "stream_bases": [
+  "hdb-v1-gen-0004",
+  "hdb-v1-gen-0013",
+  "hdb-v1-gen-0028",
+  "hdb-v1-gen-0036",
+  "hdb-v1-gen-0038",
+  "hdb-v1-gen-0064",
+  "stilts-drawn",
+  "tiny-feet",
+  "walkrec-dev-m1-gen-0001",
+  "walkrec-dev-m1-gen-0005"
+ ],
+ "temperature": {
+  "T": 6.0,
+  "lobo_mean_logp_truth_at_T": -1.8842351253275762,
+  "lobo_mean_logp_truth_at_1": -2.3917552352979943,
+  "confident_wrong_at_1": 56,
+  "confident_wrong_at_T": 7,
+  "n": 219
+ },
+ "misfit": {
+  "threshold": -6.532383989998067,
+  "n_calibration": 146,
+  "flag_rate_single_all": 0.1282051282051282,
+  "flag_rate_compositions": 0.4,
+  "n_compositions": 10
+ },
+ "lobo": {
+  "b0": {
+   "log_loss": 0.6539430365081605,
+   "brier": 0.23020457072765194,
+   "ece": 0.00023671975935707357,
+   "reliability": [
+    [
+     0.343,
+     0.343,
+     947
+    ]
+   ]
+  },
+  "b1": {
+   "log_loss": 0.6089169505762733,
+   "brier": 0.2105315146166743,
+   "ece": 0.02538867700897373,
+   "reliability": [
+    [
+     0.141,
+     0.158,
+     209
+    ],
+    [
+     0.292,
+     0.316,
+     361
+    ],
+    [
+     0.492,
+     0.47,
+     347
+    ],
+    [
+     0.63,
+     0.5,
+     30
+    ]
+   ]
+  },
+  "b2": {
+   "log_loss": 0.6394770180150151,
+   "brier": 0.22564805405145605,
+   "ece": 0.05652755910362692,
+   "reliability": [
+    [
+     0.127,
+     0.171,
+     123
+    ],
+    [
+     0.312,
+     0.356,
+     497
+    ],
+    [
+     0.463,
+     0.389,
+     316
+    ],
+    [
+     0.615,
+     0.364,
+     11
+    ]
+   ]
+  },
+  "full": {
+   "log_loss": 0.567926444439601,
+   "brier": 0.19139366076993045,
+   "ece": 0.030052640499020296,
+   "reliability": [
+    [
+     0.11,
+     0.148,
+     332
+    ],
+    [
+     0.295,
+     0.297,
+     232
+    ],
+    [
+     0.493,
+     0.461,
+     219
+    ],
+    [
+     0.683,
+     0.658,
+     146
+    ],
+    [
+     0.819,
+     0.556,
+     18
+    ]
+   ]
+  },
+  "case_attention": {
+   "log_loss": 0.6116861687213857,
+   "brier": 0.21332625135096245,
+   "ece": 0.02419025703374595,
+   "reliability": [
+    [
+     0.136,
+     0.063,
+     79
+    ],
+    [
+     0.315,
+     0.306,
+     487
+    ],
+    [
+     0.474,
+     0.44,
+     366
+    ],
+    [
+     0.651,
+     0.667,
+     15
+    ]
+   ]
+  }
+ },
+ "decision": {
+  "n_instances": 194,
+  "engine": 89.26428571428572,
+  "full": 85.66428571428571,
+  "b1": 83.93095238095239,
+  "case_attention": 74.44999999999999,
+  "random": 70.64845238095236,
+  "rhead_minus_engine_ci90": [
+   -9.336666666666668,
+   1.9333333333333318
+  ]
+ },
+ "gate_G_a": {
+  "passed": false,
+  "rule": "R-head LOBO log loss < B1 AND comparable-support FULL >= engine"
+ }
+}

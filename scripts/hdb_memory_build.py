@@ -32,6 +32,7 @@ def main() -> None:
     ap.add_argument("--records", nargs="+", required=True)
     ap.add_argument("--split-file", required=True)
     ap.add_argument("--exclude-families", default="")
+    ap.add_argument("--exclude-bases", default="", help="comma list of experience bases to leave out (DS-1: the stream bases)")
     ap.add_argument("--thresholds", required=True, help="to reconstruct each dev instance's true deviation (post-mortem)")
     ap.add_argument("--rounds", type=int, default=1, help="revision rounds")
     ap.add_argument("--source", choices=["live", "scripted"], default="live")
@@ -39,7 +40,7 @@ def main() -> None:
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     split = json.load(open(a.split_file, encoding="utf-8"))
-    exp_bases = set(split["experience_bases"])
+    exp_bases = set(split["experience_bases"]) - {b for b in a.exclude_bases.split(",") if b}
     excl = {f for f in a.exclude_families.split(",") if f}
     th = json.load(open(a.thresholds, encoding="utf-8"))
     bases = {b["base_id"]: b for b in hb.load_bases("dev")}
@@ -76,6 +77,7 @@ def main() -> None:
         r.append(con.revise_each(summaries, mem))
         mem.refresh_support(summaries)
     meta = {"records": a.records, "n_summaries": len(summaries), "skipped": skipped, "excluded_families": sorted(excl),
+            "excluded_bases": sorted(b for b in a.exclude_bases.split(",") if b),
             "experience_bases": len(exp_bases), "write": w, "revise": r, "support_after_write": support_after_write,
             "consolidator": con.record()}
     mem.frozen = True
