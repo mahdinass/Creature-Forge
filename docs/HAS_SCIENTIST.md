@@ -455,3 +455,12 @@ Rules:
     - Used as a correction to the engine's ranking, experience gains about +4 points offline (optimistic).
     - Likelihood tempering (T ≈ 4–8) fixes single-mechanism overconfidence but not compositions.
   - Proposal awaiting approval: `docs/DUAL_SIGNAL_PLAN.md` (DS-1; BiCAM no-go before 29 Oct, with a go criterion).
+- **2026-10-20 — DS-1 complete** (`docs/DS1_PROTOCOL.md`, report `docs/DS1_REPORT.md`, tables
+  `experiments/causal_engineer/dev/hdb/DS1_RESULTS.md`).
+  - Built: engine v6 (tempering T = 6, misfit → composite pairs under a hard twin budget, open-world reserve, relative
+    assimilation of repair checks, budget guard), displacement evidence and stop map v2, R-head and shared case store,
+    agent v5 (constraint feedback, registered P(success)).
+  - Gates: G-a fail, G-b pass, equivalence pass, G-m fail (amendment 2), G-c fail (A4x deviated in 3/36 < 15 %).
+  - v6 diagnosis is better calibrated than v5 but repairs no better; Nemotron adds nothing on top of v6 (8 vs 8);
+    experience 10 vs 8 (p = 0.31) with Nemotron mostly delegating; updating vs frozen memory 7 vs 7; cross-feedback inert.
+  - Recommendation: no registered Nemotron evaluation now; next step is informative interventions.

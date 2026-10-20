@@ -3,8 +3,8 @@
 Date: 2026-10-20. Branch `feature/has-scientist`. Protocol: `docs/DS1_PROTOCOL.md` (pre-declared, amendments 1 and 2).
 Plan: `docs/DUAL_SIGNAL_PLAN.md`. Raw tables: `experiments/causal_engineer/dev/hdb/DS1_RESULTS.md`.
 
-Status: **DRAFT — LLM dev-eval and learning stream still running on the main VM; sections marked PENDING are filled from
-their records when they finish.**
+Status: **DS-1 complete.** All 72 non-LLM and 72 LLM dev-eval-2 episodes and the 20 × 2 learning-stream episodes finished;
+records are in the VM archive `artifacts/hdb/ds1_all.tgz` (pulled to `artifacts/vm/hdb/artifacts/hdb/`).
 
 Everything below is development evidence on dev mechanisms and dev-side robots. It is not a registered result and supports no
 claim. The sealed test split, the held-out families and Stage 3 were not touched. The frozen HDB v2 modules, `verdict_v1`,
@@ -114,7 +114,27 @@ seeds, plant budget 700 and twin cap 2,800. Batch VM, no inference key used.
   episodes FULL 6/21 and 1/5.
 - Nemotron's extra twin use left the cross-feedback step short of budget more often (42 skipped vs 7).
 
-## 6. Experience contrast: A4x vs A3v5 and A4x vs A1e6 (M_final memory) — PENDING
+## 6. Experience contrast: A4x vs A3v5 and A4x vs A1e6 (M_final memory, complete)
+
+| measure | singles (n 30): A4x / A3v5 / A1e6 | compositions (n 6): A4x / A3v5 / A1e6 |
+|---|---|---|
+| FULL recovery | 10 / 8 / 8 | 1 / 2 / 1 |
+| paired vs A4x (discordant: other better / A4x better) | A3v5 1/3 (p(A4x >) = 0.31); A1e6 1/3 (p = 0.31) | A3v5 1/0; A1e6 0/0 |
+| mean validation walking | 0.70 / 0.64 / 0.70 | 0.78 / 0.76 / 0.76 |
+| mean log P(true structure) | **−2.25** / −2.84 / −2.54 | −4.61 / −4.61 / −4.61 |
+| leading correct; confidently wrong | 18; 4 / 15; 6 / 19; 4 | 3; 1 / 3; 1 / 3; 0 |
+| Nemotron P(success): registered, mean, Brier | 30/30, 0.61, 0.293 / 30/30, 0.52, 0.329 / – | 6/6, 0.58, 0.299 / 6/6, 0.58, 0.283 / – |
+| deviated from the engine default (FULL when deviated) | 3 (2) / 9 (2) / – | 0 / 1 (1) / – |
+| plant / twin rollouts per episode | 585 / 2,573 vs 540 / 2,632 vs 621 / 2,508 | 582 / 2,615 vs 567 / 2,689 vs 584 / 2,575 |
+
+- **Repair signal: no detectable experience effect.** A4x has 2 more FULL than either comparator on singles, from 3 vs 1
+  discordant pairs (p = 0.31); on compositions it is level with A1e6 and one behind A3v5.
+- **With experience, Nemotron mostly hands the repair back to the engine:** it deviated in 3 of 36 episodes (A3v5: 10 of
+  36). A4x's repairs are therefore largely the engine's, and its FULL difference cannot be credited to Nemotron.
+- **Diagnostic signal:** A4x has the best mean log P(truth) on singles (−2.25), but the leading-explanation counts equal
+  A1e6's; on compositions all v6 arms are identical.
+- **Success forecasts** remain worse than a constant base-rate forecast (Brier 0.293 vs 0.222 for the constant at 10/30).
+- Cross-feedback changed the leader once (1 of 51 assimilations), with no re-screen.
 
 ## 7. Learning stream: A4x-updating vs A4x-frozen (20 instances, 4 rounds, stream bases, complete)
 
@@ -138,13 +158,26 @@ and track record refreshed); the frozen arm keeps the init memory.
 - In round 0 both arms use the identical init memory, so its differences are LLM run-to-run variation alone; they are
   as large as the differences in later rounds.
 
-## 8. Gate G-c (Stage-3 eligibility of A4x) — PENDING
+## 8. Gate G-c (Stage-3 eligibility of A4x): NOT PASSED
+
+| clause | result |
+|---|---|
+| Nemotron registered P(success) on ≥ 80 % of repair decisions | 36/36 episodes — pass |
+| deviated from the default in ≥ 15 % of episodes | 3/36 = 8 % — **FAIL** |
+| A4x not worse than A1x (here A1e6) by more than 2 discordant pairs | A1e6 better on 1, A4x better on 3 (singles); 0/0 (compositions) — pass |
+
+A4x is not eligible for Stage 3 under the pre-declared rule.
 
 A1x was not run (G-a failed). With G-a failed the R-head never orders tools, so A1x would be the A1e6 engine; the
 equivalence check showed A4x without a scientist reproduces A1e6 exactly. A1e6 is therefore the comparator for the
 "not worse than A1x by more than 2 discordant pairs" clause.
 
-## 9. Costs — PENDING
+## 9. Costs
+
+- **Infra:** ledger $88.43 at 14:05 UTC (DS-1 limit $93.30, cap $96), i.e. about $5.1 of the $10 DS-1 allowance plus the
+  main VM's running time until it is stopped. The extra $5 allowed for the overnight run was not used.
+- **Inference:** $2.44 over 1,441 requests since 2026-10-20 (the FINALIZE sum of the VM ledger; DS-1 limit $4.60).
+- No cap was changed.
 
 ## 10. Operational notes
 
@@ -161,4 +194,37 @@ equivalence check showed A4x without a scientist reproduces A1e6 exactly. A1e6 i
 - R-head rows are missing not at random (offline §3).
 - Arm comparisons share instances and seeds but LLM episodes are not deterministic.
 
-## 12. Recommendation and Stage-3 decision — PENDING
+## 12. Recommendation and Stage-3 decision
+
+**DS-1 outcome, per signal:**
+
+| | diagnostic signal | repair signal |
+|---|---|---|
+| engine v6 vs v5 | better calibrated (confidently wrong 4 vs 9 and 0 vs 6) | no change (8 vs 9, 1 vs 1) |
+| composite mechanism (G-m) | fails its gate | – |
+| cross-feedback | inert (1 leader change in 183 dev-eval assimilations) | – |
+| Nemotron (A3v5 vs A1e6) | slightly worse | no effect (8 vs 8, 2 vs 1) |
+| learned repair model (G-a) | – | null offline; no ordering used |
+| experience (A4x vs A3v5 / A1e6) | small, not distinguishable from noise | no detectable effect (3 vs 1 discordant) |
+| learning over the stream | no trend | 7 vs 7 |
+| Nemotron P(success) | – | worse than a constant base-rate forecast in every LLM arm |
+
+**Stage 3: do not request a registered Nemotron evaluation now.** No DS-1 contrast gives a development signal that
+Nemotron or its experience improves repair on top of engine v6, and A4x fails G-c. A registered A3 > A1 test would be
+expected to return a null, at the Stage-3 cost.
+
+**If a registered result before 29 Oct is wanted,** the only candidate with a consistent development signal is
+engine-level and non-LLM: engine v6's diagnostic calibration (tempering + open-world reserve, composite enumeration off,
+stop map v2) against v5 on log P(truth) and the confidently-wrong rate. It costs batch-VM time only (no inference) and
+would need its own pre-registration and owner approval; it makes no claim about repair or about Nemotron.
+
+**Next development step (after DS-1):**
+1. **Make interventions informative.** Repair checks rarely discriminate between hypotheses (§4), so cross-feedback has
+   nothing to use. Choose repair candidates partly by how differently the competing hypotheses predict their outcome
+   (expected information of a repair), and measure the change in leader switches and FULL.
+2. **Stop using Nemotron's P(success) for decisions.** It is miscalibrated in every arm. The stop map (Brier 0.16–0.18 on
+   the same single-mechanism designs) is the calibrated signal; Nemotron's role should be judged on hypotheses and experiment choice.
+3. **Experience needs a different form to matter.** Twenty new outcomes on top of 947 cases do not move the repair model;
+   per-mechanism repair priors learned from the init store failed G-a. Experience should be tested where it can carry
+   information the engine lacks (e.g. which tool families fail for a mechanism class), with a gate fixed before any run.
+4. **Composite diagnosis** needs a new design and a new gate on independent compositions (amendment 2) before any use.

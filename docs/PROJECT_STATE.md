@@ -475,30 +475,24 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Failure analysis and the DS-1 plan are in `docs/DUAL_SIGNAL_PLAN.md`. They await owner approval before any run. No VM is
   running.
 
-## DS-1 dual-signal iteration — status 2026-10-20 06:20 UTC (in progress)
-- **Done:**
-  - code and tests;
-  - offline stage: G-a FAILED, so no A1x and the R-head never orders tools;
-  - final stop map v2 (`ds1/stopmap_v2_report.json`);
-  - pilot gates (`experiments/causal_engineer/dev/hdb/ds1/PILOT.md`): G-b pass, equivalence pass, G-m FAILED (v6 5/13 vs
-    v5 7/13 on 13 init-base compositions);
-  - amendment 2 in `docs/DS1_PROTOCOL.md`;
-  - non-LLM dev-eval-2 (A1e, A1e6; 72 episodes) on the batch VM, which is STOPPED (verified).
-- **Running on the main VM** (tmux; resumable):
-  - `STREAM`: A4x updating vs frozen, 4 rounds of 5;
-  - `E_A3v5_*`: dev-eval-2;
-  - `CHAIN_A4x`: launches the A4x dev-eval-2 with M_final when the stream ends;
-  - `FINALIZE`: when everything ends, writes `artifacts/hdb/ds1/DS1_RESULTS_vm.md`, `ds1_all.tgz` and the inference
-    total, then powers the VM off. The deadman deadline is 2026-10-20 ~19:00 UTC.
-- **To resume:**
-  1. `python infra/nebius/forge_cloud.py start` if the VM is stopped.
-  2. Pull `artifacts/hdb/ds1/` and `logs/FINALIZE.log`.
-  3. Run `scripts/ds1_report.py`.
-  4. Write `docs/DS1_REPORT.md`.
-  5. Stop the VM and verify STOPPED.
-- **Interim non-LLM finding (dev-eval-2, 30 singles + 6 compositions, new transfer instances):**
-  - v6 diagnosis is better calibrated than v5:
-    - confidently wrong: singles 4 vs 9, compositions 0 vs 6;
-    - mean log P(truth): singles −2.54 vs −2.93, compositions −4.61 vs −9.21.
-  - Repair is unchanged: FULL 8 vs 9 (singles), 1 vs 1 (compositions).
-  - Cross-feedback: 88 plant checks were assimilated and the leading explanation never changed.
+## DS-1 dual-signal iteration — complete 2026-10-20 (report `docs/DS1_REPORT.md`)
+- **Gates:** G-a FAILED (R-head; no A1x, R-head never orders tools); G-b pass; equivalence pass; G-m FAILED (composite
+  mechanism, amendment 2); **G-c FAILED** (A4x deviated from the engine default in 3/36 episodes < 15 %), so A4x is not
+  Stage-3 eligible.
+- **Engine v6 vs v5 (non-LLM, 30 + 6):** diagnosis better calibrated (confidently wrong 4 vs 9 and 0 vs 6); repair
+  unchanged (FULL 8 vs 9, 1 vs 1). Stop map v2 beats v1 (LOBO Brier 0.099 vs 0.166).
+- **Nemotron (A3v5 vs A1e6):** FULL 8 vs 8 and 2 vs 1; diagnosis slightly worse; registered P(success) worse than a
+  constant base-rate forecast.
+- **Experience (A4x, M_final):** FULL 10 vs 8 (A3v5) and 10 vs 8 (A1e6), discordant 3 vs 1 each (p = 0.31); Nemotron
+  mostly delegated. **Learning stream:** updating vs frozen 7 vs 7 of 20.
+- **Cross-feedback:** inert (1 leader change in 183 dev-eval assimilations); repair checks barely discriminate hypotheses.
+- **Recommendation:** no registered Nemotron evaluation (Stage 3) now; optional non-LLM registered study of engine-v6
+  diagnostic calibration needs its own registration and owner approval. Next development step: informative interventions
+  (report §12).
+- **Costs:** infra ledger $88.43 at 14:05 UTC (DS-1 limit $93.30); inference $2.44 / 1,441 requests since 2026-10-20
+  (limit $4.60). No cap changed.
+- **Data:** `artifacts/vm/hdb/artifacts/hdb/ds1_all.tgz` (VM archive), `artifacts/vm/ds1/eval/` (72 + 72 episodes), tables
+  `experiments/causal_engineer/dev/hdb/DS1_RESULTS.md`.
+- **Ops:** the main VM powered itself off at 13:42 UTC after finalisation but was running again at 13:45 UTC (cause not
+  identified); Nebius CLI auth blocked since 11:43 UTC, so the control-plane stop/verify waits for `forge_cloud.py login`.
+  The batch VM's pre-existing `~/dev/.env` key line (2026-10-16) is untouched; removal is the owner's decision.
