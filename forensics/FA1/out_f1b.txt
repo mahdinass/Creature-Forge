@@ -1,0 +1,115 @@
+## instance profile: #FULL arms | family sev mult strength | faulty walking/8 | max val walking | best robust16 (v6 arms) | best mappedP | categories
+  4 hdb-v1-gen-0103:devcomp:pitch_sensor_bias.++actuator_weakness:0 sev0 m0.8 s0.8 faulty 0/8 maxval 0.88 best16 15 bestP 0.79 {'FULL': 4}
+  1 hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 sev0 m0.8 s0.8 faulty 0/8 maxval 0.92 best16 12 bestP 0.00 {'long-run confirmation': 1, 'walking robustness (+displacement)': 1, 'FULL': 1, 'walking robustness only (displacement verified)': 1}
+  0 hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 sev0 m0.8 s0.8 faulty 0/8 maxval 0.50 best16 14 bestP 0.00 {'walking robustness (+displacement)': 4}
+  0 hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 sev0 m0.8 s0.8 faulty 0/8 maxval 0.96 best16 16 bestP 0.06 {'walking robustness (+displacement)': 1, 'displacement only (walks >=80%)': 3}
+  0 hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 sev0 m0.8 s0.8 faulty 0/8 maxval 0.79 best16 16 bestP 0.05 {'walking robustness (+displacement)': 4}
+  0 hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0 sev0 m0.8 s0.8 faulty 2/8 maxval 0.79 best16 12 bestP 0.00 {'walking robustness (+displacement)': 3, 'walking robustness only (displacement verified)': 1}
+  4 hdb-v1-gen-0096:feedback_gain_loss:0                           sev0 m1.0 s0.428 faulty 0/8 maxval 1.00 best16 16 bestP 0.95 {'FULL': 4}
+  4 hdb-v1-gen-0222:clock_fault:0                                  sev0 m1.0 s0.63 faulty 2/8 maxval 0.96 best16 14 bestP 0.36 {'FULL': 4}
+  4 hdb-v1-gen-0143:pitch_sensor_bias:3                            sev3 m1.0 s0.062 faulty 0/8 maxval 1.00 best16 16 bestP 0.95 {'FULL': 4}
+  4 hdb-v1-gen-0108:payload_offset:0                               sev0 m1.0 s0.094 faulty 0/8 maxval 0.92 best16 16 bestP 0.86 {'FULL': 4}
+  4 hdb-v1-gen-0137:pitch_sensor_bias:5                            sev5 m1.7 s0.032 faulty 0/8 maxval 1.00 best16 15 bestP 0.79 {'FULL': 4}
+  3 hdb-v1-gen-0070:pitch_sensor_bias:3                            sev3 m1.0 s0.081 faulty 0/8 maxval 1.00 best16 15 bestP 0.79 {'FULL': 3, 'walking robustness only (displacement verified)': 1}
+  3 hdb-v1-gen-0142:pitch_sensor_bias:5                            sev5 m1.7 s0.032 faulty 0/8 maxval 1.00 best16 16 bestP 0.95 {'long-run confirmation': 1, 'FULL': 3}
+  2 hdb-v1-gen-0142:short_feet:2                                   sev2 m1.7 s0.576 faulty 1/8 maxval 1.00 best16 14 bestP 0.66 {'long-run confirmation': 1, 'displacement only (walks >=80%)': 1, 'FULL': 2}
+  2 hdb-v1-gen-0103:payload_offset:0                               sev0 m1.0 s0.129 faulty 0/8 maxval 0.96 best16 16 bestP 0.79 {'FULL': 2, 'long-run confirmation': 2}
+  1 hdb-v1-gen-0073:heavy_torso:2                                  sev2 m1.7 s0.184 faulty 0/8 maxval 0.96 best16 16 bestP 0.87 {'displacement only (walks >=80%)': 2, 'walking robustness (+displacement)': 1, 'FULL': 1}
+  1 hdb-v1-gen-0104:clock_fault:3                                  sev3 m1.0 s0.902 faulty 1/8 maxval 0.83 best16 13 bestP 0.00 {'FULL': 1, 'walking robustness only (displacement verified)': 3}
+  1 hdb-v1-gen-0142:pitch_sensor_bias:3                            sev3 m1.0 s0.019 faulty 0/8 maxval 0.92 best16 14 bestP 0.65 {'FULL': 1, 'walking robustness only (displacement verified)': 3}
+  1 hdb-v1-gen-0070:feedback_gain_loss:2                           sev2 m1.7 s0.416 faulty 0/8 maxval 0.88 best16 15 bestP 0.79 {'walking robustness only (displacement verified)': 3, 'FULL': 1}
+  1 hdb-v1-gen-0073:heavy_torso:0                                  sev0 m1.0 s0.108 faulty 0/8 maxval 1.00 best16 16 bestP 0.95 {'displacement only (walks >=80%)': 3, 'FULL': 1}
+  0 hdb-v1-gen-0104:short_feet:2                                   sev2 m1.7 s0.831 faulty 0/8 maxval 0.79 best16 13 bestP 0.00 {'walking robustness (+displacement)': 3, 'walking robustness only (displacement verified)': 1}
+  0 hdb-v1-gen-0073:low_ground_friction:2                          sev2 m1.7 s0.623 faulty 0/8 maxval 1.00 best16 16 bestP 0.06 {'displacement only (walks >=80%)': 4}
+  0 hdb-v1-gen-0103:feedback_gain_loss:0                           sev0 m1.0 s1.345 faulty 0/8 maxval 0.71 best16 10 bestP 0.00 {'walking robustness (+displacement)': 3, 'walking robustness only (displacement verified)': 1}
+  0 hdb-v1-gen-0137:one_side_weakness:5                            sev5 m1.7 s2.228 faulty 0/8 maxval 0.62 best16 13 bestP 0.00 {'walking robustness only (displacement verified)': 4}
+  0 hdb-v1-gen-0099:payload_offset:3                               sev3 m1.0 s0.199 faulty 0/8 maxval 0.25 best16 3 bestP 0.00 {'walking robustness (+displacement)': 4}
+  0 hdb-v1-gen-0126:low_ground_friction:0                          sev0 m1.0 s1.956 faulty 1/8 maxval 0.92 best16 16 bestP 0.03 {'displacement only (walks >=80%)': 4}
+  0 hdb-v1-gen-0073:low_ground_friction:0                          sev0 m1.0 s0.367 faulty 1/8 maxval 0.96 best16 16 bestP 0.06 {'displacement only (walks >=80%)': 3, 'walking robustness (+displacement)': 1}
+  0 hdb-v1-gen-0137:low_ground_friction:0                          sev0 m1.0 s2.567 faulty 2/8 maxval 0.79 best16 15 bestP 0.59 {'walking robustness only (displacement verified)': 4}
+  0 hdb-v1-gen-0142:payload_offset:5                               sev5 m1.7 s0.179 faulty 0/8 maxval 1.00 best16 16 bestP 0.95 {'walking robustness only (displacement verified)': 3, 'long-run confirmation': 1}
+  0 hdb-v1-gen-0070:pitch_sensor_bias:0                            sev0 m1.0 s0.288 faulty 2/8 maxval 0.75 best16 9 bestP 0.00 {'walking robustness only (displacement verified)': 4}
+  0 hdb-v1-gen-0096:payload_offset:2                               sev2 m1.7 s0.637 faulty 0/8 maxval 0.00 best16 0 bestP 0.00 {'walking robustness (+displacement)': 3, 'walking robustness only (displacement verified)': 1}
+  0 hdb-v1-gen-0096:low_ground_friction:2                          sev2 m1.7 s3.429 faulty 0/8 maxval 0.25 best16 7 bestP 0.00 {'walking robustness (+displacement)': 4}
+  0 hdb-v1-gen-0105:pitch_sensor_bias:5                            sev5 m1.7 s0.128 faulty 0/8 maxval 0.50 best16 8 bestP 0.00 {'walking robustness (+displacement)': 3, 'walking robustness only (displacement verified)': 1}
+  0 hdb-v1-gen-0105:pitch_sensor_bias:2                            sev2 m1.7 s0.308 faulty 0/8 maxval 0.00 best16 0 bestP 0.00 {'walking robustness (+displacement)': 4}
+  0 hdb-v1-gen-0136:pitch_sensor_bias:5                            sev5 m1.7 s0.106 faulty 0/8 maxval 0.50 best16 10 bestP 0.00 {'walking robustness only (displacement verified)': 4}
+  0 hdb-v1-gen-0136:one_side_weakness:3                            sev3 m1.0 s0.749 faulty 0/8 maxval 0.75 best16 14 bestP 0.00 {'walking robustness (+displacement)': 2, 'walking robustness only (displacement verified)': 2}
+
+## group summaries (kind, outcome group): n, faulty walking>0 count, median maxval, best16>=15 count, bestP>=0.5 count, families, severities, mults
+  ('composition', 'all'): n 1; faulty walks>0 0; median maxval 0.88; best16>=15 1; bestP>=0.5 1; fams {'devcomp:pitch_sensor_bias.++actuator_weakness': 1}; sev {0: 1}; mult {0.8: 1}
+  ('composition', 'mixed'): n 1; faulty walks>0 0; median maxval 0.92; best16>=15 0; bestP>=0.5 0; fams {'devcomp:low_ground_friction+feedback_gain_loss': 1}; sev {0: 1}; mult {0.8: 1}
+  ('composition', 'none'): n 4; faulty walks>0 1; median maxval 0.79; best16>=15 2; bestP>=0.5 0; fams {'devcomp:low_ground_friction+feedback_gain_loss': 2, 'devcomp:pitch_sensor_bias.++actuator_weakness': 1, 'devcomp:low_ground_friction+actuator_weakness': 1}; sev {0: 4}; mult {0.8: 4}
+  ('single', 'all'): n 5; faulty walks>0 1; median maxval 1.00; best16>=15 4; bestP>=0.5 4; fams {'feedback_gain_loss': 1, 'clock_fault': 1, 'pitch_sensor_bias': 2, 'payload_offset': 1}; sev {0: 3, 3: 1, 5: 1}; mult {1.0: 4, 1.7: 1}
+  ('single', 'mixed'): n 9; faulty walks>0 2; median maxval 0.96; best16>=15 6; bestP>=0.5 8; fams {'pitch_sensor_bias': 3, 'short_feet': 1, 'payload_offset': 1, 'heavy_torso': 2, 'clock_fault': 1, 'feedback_gain_loss': 1}; sev {3: 3, 5: 1, 2: 3, 0: 2}; mult {1.0: 5, 1.7: 4}
+  ('single', 'none'): n 16; faulty walks>0 4; median maxval 0.73; best16>=15 5; bestP>=0.5 2; fams {'short_feet': 1, 'low_ground_friction': 5, 'feedback_gain_loss': 1, 'one_side_weakness': 2, 'payload_offset': 3, 'pitch_sensor_bias': 4}; sev {2: 5, 0: 5, 5: 4, 3: 2}; mult {1.7: 9, 1.0: 7}
+
+## near-miss validation walking: counts of validation walking seeds (of 24) among non-FULL, by category
+  FULL: n 40 hist {20: 2, 21: 8, 22: 8, 23: 13, 24: 9}
+  displacement only (walks >=80%): n 20 hist {20: 2, 21: 2, 22: 6, 23: 6, 24: 4}
+  long-run confirmation: n 6 hist {20: 3, 21: 1, 22: 1, 24: 1}
+  walking robustness (+displacement): n 41 hist {0: 14, 1: 4, 2: 1, 5: 1, 6: 3, 7: 1, 12: 2, 16: 1, 17: 5, 18: 4, 19: 5}
+  walking robustness only (displacement verified): n 37 hist {0: 1, 11: 4, 12: 3, 13: 1, 14: 1, 15: 3, 17: 7, 18: 6, 19: 11}
+
+## displacement-only failures: faulty robot walking/8 on robust check, verdict
+  A1e   hdb-v1-gen-0073:heavy_torso:2                      faulty 0/8 verdict NOT_VERIFIED val 0.9166666666666666 sub repair:leg_length
+  A1e   hdb-v1-gen-0073:low_ground_friction:2              faulty 0/8 verdict WORSE val 1.0 sub twin:cma:placement
+  A1e   hdb-v1-gen-0126:low_ground_friction:0              faulty 1/8 verdict NOT_VERIFIED val 0.875 sub twin:cma:feedback
+  A1e   hdb-v1-gen-0073:low_ground_friction:0              faulty 1/8 verdict WORSE val 0.9166666666666666 sub twin:cma:leg_length
+  A1e   hdb-v1-gen-0073:heavy_torso:0                      faulty 0/8 verdict WORSE val 1.0 sub twin:cma:leg_length
+  A1e6  hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 faulty 0/8 verdict WORSE val 0.9166666666666666 sub repair:timing
+  A1e6  hdb-v1-gen-0073:heavy_torso:2                      faulty 0/8 verdict WORSE val 0.875 sub repair:placement
+  A1e6  hdb-v1-gen-0073:low_ground_friction:2              faulty 0/8 verdict WORSE val 0.9583333333333334 sub repair:posture
+  A1e6  hdb-v1-gen-0126:low_ground_friction:0              faulty 1/8 verdict NOT_VERIFIED val 0.8333333333333334 sub twin:cma:timing
+  A1e6  hdb-v1-gen-0142:short_feet:2                       faulty 1/8 verdict NOT_VERIFIED val 1.0 sub twin:cma:foot_length
+  A1e6  hdb-v1-gen-0073:low_ground_friction:0              faulty 1/8 verdict WORSE val 0.9583333333333334 sub twin:cma:leg_length
+  A1e6  hdb-v1-gen-0073:heavy_torso:0                      faulty 0/8 verdict WORSE val 0.9583333333333334 sub repair:placement
+  A3v5  hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 faulty 0/8 verdict WORSE val 0.9583333333333334 sub repair:posture
+  A3v5  hdb-v1-gen-0073:low_ground_friction:2              faulty 0/8 verdict WORSE val 1.0 sub repair:posture
+  A3v5  hdb-v1-gen-0126:low_ground_friction:0              faulty 1/8 verdict NOT_VERIFIED val 0.8333333333333334 sub repair:posture
+  A4x   hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 faulty 0/8 verdict WORSE val 0.9166666666666666 sub repair:timing
+  A4x   hdb-v1-gen-0073:low_ground_friction:2              faulty 0/8 verdict WORSE val 0.9583333333333334 sub repair:posture
+  A4x   hdb-v1-gen-0126:low_ground_friction:0              faulty 1/8 verdict NOT_VERIFIED val 0.9166666666666666 sub repair:feedback
+  A4x   hdb-v1-gen-0073:low_ground_friction:0              faulty 1/8 verdict WORSE val 0.9583333333333334 sub twin:cma:leg_length
+  A4x   hdb-v1-gen-0073:heavy_torso:0                      faulty 0/8 verdict WORSE val 0.9166666666666666 sub twin:cma:posture
+
+## faulty-walks>0 vs FULL (all episodes)
+  {(False, False): 79, (False, True): 33, (True, False): 25, (True, True): 7}
+  {(False, 'long-run confirmation'): 5, (False, 'walking robustness (+displacement)'): 37, (False, 'FULL'): 33, (True, 'walking robustness (+displacement)'): 4, (False, 'displacement only (walks >=80%)'): 12, (True, 'FULL'): 7, (False, 'walking robustness only (displacement verified)'): 25, (True, 'displacement only (walks >=80%)'): 8, (True, 'long-run confirmation'): 1, (True, 'walking robustness only (displacement verified)'): 12}
+
+## FULL by severity and mult (singles, all arms)
+  {(0, 1.0): '15/40', (2, 1.7): '4/32', (3, 1.0): '9/24', (5, 1.7): '7/24'}
+
+## FULL by family (singles, all arms; episodes)
+  {'clock_fault': '5/8', 'feedback_gain_loss': '5/12', 'heavy_torso': '2/8', 'low_ground_friction': '0/20', 'one_side_weakness': '0/8', 'payload_offset': '6/20', 'pitch_sensor_bias': '15/36', 'short_feet': '2/8'}
+
+## warm start (twin step) ran vs FULL, LLM arms
+  A3v5: {(False, True): 3, (False, False): 13, (True, True): 7, (True, False): 13}
+  A4x: {(True, False): 24, (True, True): 8, (False, True): 3, (False, False): 1}
+  A1e6: {(True, False): 27, (True, True): 9}
+
+## episodes reaching any checked design with mapped P(FULL) >= 0.5 / >= 0.75 (v6 arms), and FULL among them
+  A1e6 single: P>=0.5 9/30 (FULL 6), P>=0.75 5 (FULL 4), FULL without P>=0.5: 2
+  A1e6 composition: P>=0.5 1/6 (FULL 1), P>=0.75 1 (FULL 1), FULL without P>=0.5: 0
+  A3v5 single: P>=0.5 12/30 (FULL 7), P>=0.75 8 (FULL 6), FULL without P>=0.5: 1
+  A3v5 composition: P>=0.5 1/6 (FULL 1), P>=0.75 1 (FULL 1), FULL without P>=0.5: 1
+  A4x single: P>=0.5 12/30 (FULL 9), P>=0.75 6 (FULL 5), FULL without P>=0.5: 1
+  A4x composition: P>=0.5 1/6 (FULL 1), P>=0.75 1 (FULL 1), FULL without P>=0.5: 0
+
+## repair tool (submitted design) success rates per arm (episodes)
+  {'posture': '7/31', 'feedback': '8/21', 'leg_length': '8/20', 'timing': '7/18', 'placement': '3/18', 'foot_length': '4/13', 'torso_mass': '2/11', 'stride': '1/8', 'initial': '0/2', 'foot_friction': '0/1', 'torque_limit': '0/1'}
+
+## submitted design origin: twin warm start vs plant optimisation vs other, and FULL
+  ('A1e', 'plant CMA (1st tool)'): FULL 3/9
+  ('A1e', 'plant CMA (2nd tool)'): FULL 5/20
+  ('A1e', 'twin warm start'): FULL 2/7
+  ('A1e6', 'plant CMA (1st tool)'): FULL 0/7
+  ('A1e6', 'plant CMA (2nd tool)'): FULL 4/19
+  ('A1e6', 'twin warm start'): FULL 5/10
+  ('A3v5', 'initial'): FULL 0/2
+  ('A3v5', 'plant CMA (1st tool)'): FULL 1/3
+  ('A3v5', 'plant CMA (2nd tool)'): FULL 4/23
+  ('A3v5', 'twin warm start'): FULL 5/8
+  ('A4x', 'plant CMA (1st tool)'): FULL 1/9
+  ('A4x', 'plant CMA (2nd tool)'): FULL 4/17
+  ('A4x', 'twin warm start'): FULL 6/10

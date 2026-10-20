@@ -1,0 +1,33 @@
+## H3 twin warm start: twin walking (of 8, ensemble) vs plant robust8 of the same design
+  {('twin<7', 'plant 4-6'): 7, ('twin<7', 'plant<=3'): 38, ('twin<7', 'plant>=7'): 4, ('twin>=7', 'plant 4-6'): 20, ('twin>=7', 'plant<=3'): 11, ('twin>=7', 'plant>=7'): 44}
+  twin minus plant walking (of 8): median 1.0 mean 1.6 share >=3: 0.31 n 124
+
+## H2/H7 plant CMA: train walking (of 4) -> plant robust16 -> FULL (submitted designs only, all arms)
+  ('train 0/4', 'r16<12'): FULL 0/13
+  ('train 1/4', 'r16<12'): FULL 0/5
+  ('train 2/4', 'r16 12-14'): FULL 0/2
+  ('train 2/4', 'r16<12'): FULL 0/3
+  ('train 3/4', 'r16 12-14'): FULL 1/9
+  ('train 3/4', 'r16<12'): FULL 0/7
+  ('train 3/4', 'r16>=15'): FULL 1/2
+  ('train 4/4', 'r16 12-14'): FULL 9/16
+  ('train 4/4', 'r16<12'): FULL 1/17
+  ('train 4/4', 'r16>=15'): FULL 10/33
+  plant steps reaching 4/4 on train seeds: 138 of 241 | of those robust16>=15: 52
+
+## early acceptance by the stop map (v6 arms): FULL among accepted
+  A1e: accepted 4, FULL 2
+  A1e6: accepted 6, FULL 5
+  A3v5: accepted 8, FULL 6
+  A4x: accepted 5, FULL 4
+
+## base-cluster bootstrap of paired FULL differences, singles (descriptive; 14 bases, 1-4 instances each)
+  A4x - A1e6: observed +2 of 30; 90% base-bootstrap [-1, +5]; bases contributing a non-zero difference: 4
+  A3v5 - A1e6: observed +0 of 30; 90% base-bootstrap [-3, +3]; bases contributing a non-zero difference: 4
+  A1e6 - A1e: observed -1 of 30; 90% base-bootstrap [-3, +0]; bases contributing a non-zero difference: 1
+  A4x - A3v5: observed +2 of 30; 90% base-bootstrap [+0, +6]; bases contributing a non-zero difference: 1
+
+## same instance, all four arms: outcome concordance (singles + comps)
+  instances with identical outcome in all 4 arms: 26 of 36
+  share of FULL variance between instances (eta^2): 0.72
+  share of FULL variance between arms (eta^2): 0.002

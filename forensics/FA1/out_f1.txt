@@ -1,0 +1,167 @@
+## F1.1 diagnosis x FULL (Wilson 95% CI; episodes, not independent bases)
+  single      A1e   exact     correct: FULL 4/18 (0.09-0.45) | wrong: FULL 5/12 (0.19-0.68)
+  single      A1e   primitive correct: FULL 4/18 (0.09-0.45) | wrong: FULL 5/12 (0.19-0.68)
+  single      A1e   kind      correct: FULL 4/19 (0.09-0.43) | wrong: FULL 5/11 (0.21-0.72)
+  single      A1e6  exact     correct: FULL 6/19 (0.15-0.54) | wrong: FULL 2/11 (0.05-0.48)
+  single      A1e6  primitive correct: FULL 7/21 (0.17-0.55) | wrong: FULL 1/9 (0.02-0.44)
+  single      A1e6  kind      correct: FULL 7/21 (0.17-0.55) | wrong: FULL 1/9 (0.02-0.44)
+  single      A3v5  exact     correct: FULL 4/15 (0.11-0.52) | wrong: FULL 4/15 (0.11-0.52)
+  single      A3v5  primitive correct: FULL 5/21 (0.11-0.45) | wrong: FULL 3/9 (0.12-0.65)
+  single      A3v5  kind      correct: FULL 5/21 (0.11-0.45) | wrong: FULL 3/9 (0.12-0.65)
+  single      A4x   exact     correct: FULL 4/18 (0.09-0.45) | wrong: FULL 6/12 (0.25-0.75)
+  single      A4x   primitive correct: FULL 4/20 (0.08-0.42) | wrong: FULL 6/10 (0.31-0.83)
+  single      A4x   kind      correct: FULL 4/20 (0.08-0.42) | wrong: FULL 6/10 (0.31-0.83)
+  composition A1e   exact     correct: FULL 0/0 (nan-nan) | wrong: FULL 1/6 (0.03-0.56)
+  composition A1e   primitive correct: FULL 1/3 (0.06-0.79) | wrong: FULL 0/3 (0.00-0.56)
+  composition A1e   kind      correct: FULL 1/3 (0.06-0.79) | wrong: FULL 0/3 (0.00-0.56)
+  composition A1e6  exact     correct: FULL 1/3 (0.06-0.79) | wrong: FULL 0/3 (0.00-0.56)
+  composition A1e6  primitive correct: FULL 1/4 (0.05-0.70) | wrong: FULL 0/2 (0.00-0.66)
+  composition A1e6  kind      correct: FULL 1/4 (0.05-0.70) | wrong: FULL 0/2 (0.00-0.66)
+  composition A3v5  exact     correct: FULL 1/3 (0.06-0.79) | wrong: FULL 1/3 (0.06-0.79)
+  composition A3v5  primitive correct: FULL 1/4 (0.05-0.70) | wrong: FULL 1/2 (0.09-0.91)
+  composition A3v5  kind      correct: FULL 1/5 (0.04-0.62) | wrong: FULL 1/1 (0.21-1.00)
+  composition A4x   exact     correct: FULL 1/3 (0.06-0.79) | wrong: FULL 0/3 (0.00-0.56)
+  composition A4x   primitive correct: FULL 1/4 (0.05-0.70) | wrong: FULL 0/2 (0.00-0.66)
+  composition A4x   kind      correct: FULL 1/4 (0.05-0.70) | wrong: FULL 0/2 (0.00-0.66)
+
+## pooled singles (4 arms x 30, clustered by instance)
+  true_structure_match: correct 18/70 (0.17-0.37); wrong 17/50 (0.22-0.48)
+  true_primitive_overlap: correct 20/80 (0.17-0.35); wrong 15/40 (0.24-0.53)
+
+## F1.3 failure categories (non-FULL) per arm and kind
+  single      A1e   {'FULL': 9, 'displacement only (walks >=80%)': 5, 'walking robustness (+displacement)': 8, 'walking robustness only (displacement verified)': 6, 'long-run confirmation': 2}
+  single      A1e6  {'FULL': 8, 'displacement only (walks >=80%)': 6, 'walking robustness (+displacement)': 7, 'walking robustness only (displacement verified)': 9}
+  single      A3v5  {'walking robustness only (displacement verified)': 10, 'walking robustness (+displacement)': 8, 'displacement only (walks >=80%)': 2, 'FULL': 8, 'long-run confirmation': 2}
+  single      A4x   {'FULL': 10, 'walking robustness only (displacement verified)': 10, 'displacement only (walks >=80%)': 4, 'walking robustness (+displacement)': 5, 'long-run confirmation': 1}
+  composition A1e   {'long-run confirmation': 1, 'walking robustness (+displacement)': 4, 'FULL': 1}
+  composition A1e6  {'walking robustness (+displacement)': 4, 'FULL': 1, 'displacement only (walks >=80%)': 1}
+  composition A3v5  {'FULL': 2, 'walking robustness (+displacement)': 2, 'displacement only (walks >=80%)': 1, 'walking robustness only (displacement verified)': 1}
+  composition A4x   {'walking robustness only (displacement verified)': 1, 'walking robustness (+displacement)': 3, 'FULL': 1, 'displacement only (walks >=80%)': 1}
+  ALL {'long-run confirmation': 6, 'walking robustness (+displacement)': 41, 'FULL': 40, 'displacement only (walks >=80%)': 20, 'walking robustness only (displacement verified)': 37}
+  singles category x exact-correct {('FULL', False): 17, ('displacement only (walks >=80%)', False): 6, ('walking robustness (+displacement)', True): 16, ('FULL', True): 18, ('displacement only (walks >=80%)', True): 11, ('walking robustness only (displacement verified)', True): 21, ('walking robustness (+displacement)', False): 12, ('long-run confirmation', False): 1, ('long-run confirmation', True): 4, ('walking robustness only (displacement verified)', False): 14}
+  verdicts among non-FULL: Counter({'': 43, 'NOT_VERIFIED': 37, 'WORSE': 20, 'INCONCLUSIVE': 4})
+  val walking frac among walking-robustness failures: n 78 quartiles [0.0, 0.083, 0.625, 0.75, 0.792] n>=0.6: 42 n<0.2: 20
+
+## F1.4 per-instance outcome pattern across the 4 arms
+  (kind, #arms FULL) -> [(('composition', 0), 4), (('composition', 1), 1), (('composition', 4), 1), (('single', 0), 16), (('single', 1), 5), (('single', 2), 2), (('single', 3), 2), (('single', 4), 5)]
+
+  instances with mixed outcomes:
+   hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0: A1e:- feedback [twin:torso_mass>plant:torso_mass>plant:feedback] dx=n | A1e6:- foot_length [twin:leg_length>plant:leg_length>plant:foot_length] dx=n | A3v5:F posture [plant:posture] dx=n | A4x:- posture [twin:torso_mass>plant:torso_mass>plant:posture] dx=n
+   hdb-v1-gen-0070:feedback_gain_loss:2: A1e:- torso_mass [twin:placement>plant:placement>plant:torso_mass] dx=n | A1e6:- foot_length [twin:foot_length>plant:foot_length] dx=n | A3v5:- posture [plant:posture] dx=n | A4x:F placement [twin:foot_length>plant:foot_length>plant:placement] dx=n
+   hdb-v1-gen-0070:pitch_sensor_bias:3: A1e:F placement [twin:placement>plant:placement>plant:torso_mass] dx=n | A1e6:F leg_length [twin:placement>plant:placement>plant:leg_length] dx=Y | A3v5:- stride [twin:stride>plant:stride>plant:placement] dx=n | A4x:F leg_length [twin:placement>plant:placement>plant:leg_length] dx=n
+   hdb-v1-gen-0073:heavy_torso:0: A1e:- leg_length [twin:leg_length] dx=n | A1e6:- placement [twin:leg_length>plant:leg_length>plant:placement] dx=n | A3v5:F leg_length [twin:leg_length] dx=n | A4x:- posture [twin:posture>plant:posture>plant:feedback] dx=n
+   hdb-v1-gen-0073:heavy_torso:2: A1e:- leg_length [twin:leg_length>plant:leg_length>plant:timing] dx=n | A1e6:- placement [twin:leg_length>plant:leg_length>plant:placement] dx=n | A3v5:- initial [] dx=n | A4x:F torso_mass [] dx=n
+   hdb-v1-gen-0103:payload_offset:0: A1e:F placement [twin:placement] dx=Y | A1e6:F posture [twin:posture] dx=Y | A3v5:- torso_mass [twin:torso_mass] dx=Y | A4x:- torso_mass [twin:torso_mass] dx=Y
+   hdb-v1-gen-0104:clock_fault:3: A1e:F foot_length [twin:feedback>plant:feedback>plant:foot_length] dx=Y | A1e6:- feedback [twin:feedback>plant:feedback>plant:leg_length] dx=Y | A3v5:- feedback [twin:leg_length>plant:leg_length>plant:feedback] dx=n | A4x:- feedback [twin:leg_length>plant:leg_length>plant:feedback] dx=n
+   hdb-v1-gen-0142:pitch_sensor_bias:3: A1e:F feedback [twin:feedback>plant:feedback>plant:placement] dx=n | A1e6:- placement [twin:placement>plant:placement>plant:posture] dx=n | A3v5:- placement [twin:placement>plant:placement>plant:feedback] dx=n | A4x:- placement [twin:placement>plant:placement>plant:posture] dx=n
+   hdb-v1-gen-0142:pitch_sensor_bias:5: A1e:- placement [twin:placement>plant:placement>plant:posture] dx=n | A1e6:F stride [twin:posture>plant:posture>plant:stride] dx=Y | A3v5:F timing [plant:posture>plant:timing] dx=n | A4x:F feedback [] dx=n
+   hdb-v1-gen-0142:short_feet:2: A1e:- foot_length [twin:feedback>plant:feedback>plant:foot_length] dx=Y | A1e6:- foot_length [twin:foot_length>plant:foot_length>plant:feedback] dx=Y | A3v5:F feedback [twin:foot_length>plant:foot_length>plant:feedback] dx=Y | A4x:F feedback [plant:feedback>plant:foot_length] dx=Y
+
+## F1.6/7 same instance, same submitted-design tool, different outcome
+  (instance, tool) groups with >=2 arms: consistent outcome 33, conflicting outcome 2
+    ('hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0', 'posture', [('A3v5', True), ('A4x', False)])
+    ('hdb-v1-gen-0073:heavy_torso:0', 'leg_length', [('A1e', False), ('A3v5', True)])
+
+## first plant-optimisation tool agreement vs A1e6 (same instance)
+  A1e vs A1e6: (same first tool, A1e FULL, A1e6 FULL) -> {(False, False, False): 15, (False, False, True): 1, (False, True, False): 1, (False, True, True): 1, (True, False, False): 10, (True, True, False): 1, (True, True, True): 7}
+  A3v5 vs A1e6: (same first tool, A3v5 FULL, A1e6 FULL) -> {(False, False, False): 16, (False, False, True): 2, (False, True, False): 1, (False, True, True): 2, (True, False, False): 8, (True, True, False): 2, (True, True, True): 5}
+  A4x vs A1e6: (same first tool, A4x FULL, A1e6 FULL) -> {(False, False, False): 9, (False, False, True): 1, (False, True, False): 2, (False, True, True): 1, (True, False, False): 15, (True, True, False): 1, (True, True, True): 7}
+
+## F1.5 discordant pairs vs A1e6 with the decisions that differed
+  A1e vs A1e6 hdb-v1-gen-0104:clock_fault:3 [single]: A1e FULL seq=twin:feedback>plant:feedback>plant:foot_length sub=repair:foot_length dx=clock_scale:clock plant=700 twin=1860 || A1e6 walking robustness only (displacement verified) seq=twin:feedback>plant:feedback>plant:leg_length sub=repair:feedback dx=clock_scale:clock plant=692
+  A1e vs A1e6 hdb-v1-gen-0142:pitch_sensor_bias:3 [single]: A1e FULL seq=twin:feedback>plant:feedback>plant:placement sub=repair:feedback dx=joint_damping:hips plant=688 twin=2164 || A1e6 walking robustness only (displacement verified) seq=twin:placement>plant:placement>plant:posture sub=twin:cma:placement dx=joint_damping:hips plant=693
+  A1e vs A1e6 hdb-v1-gen-0142:pitch_sensor_bias:5 [single]: A1e long-run confirmation seq=twin:placement>plant:placement>plant:posture sub=repair:placement dx=joint_damping:hips plant=676 twin=2492 || A1e6 FULL seq=twin:posture>plant:posture>plant:stride sub=repair:stride dx=sensor_bias:pitch plant=684
+  A3v5 vs A1e6 hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 [composition]: A3v5 FULL seq=plant:posture sub=repair:posture dx=payload:torso plant=589 twin=2800 || A1e6 walking robustness (+displacement) seq=twin:leg_length>plant:leg_length>plant:foot_length sub=repair:foot_length dx=joint_damping:hips plant=685
+  A3v5 vs A1e6 hdb-v1-gen-0070:pitch_sensor_bias:3 [single]: A3v5 walking robustness only (displacement verified) seq=twin:stride>plant:stride>plant:placement sub=twin:cma:stride dx=unmodelled:any plant=696 twin=2790 || A1e6 FULL seq=twin:placement>plant:placement>plant:leg_length sub=repair:leg_length dx=sensor_bias:pitch plant=692
+  A3v5 vs A1e6 hdb-v1-gen-0073:heavy_torso:0 [single]: A3v5 FULL seq=twin:leg_length sub=twin:cma:leg_length dx=payload:torso plant=69 twin=2782 || A1e6 displacement only (walks >=80%) seq=twin:leg_length>plant:leg_length>plant:placement sub=repair:placement dx=payload:torso plant=693
+  A3v5 vs A1e6 hdb-v1-gen-0103:payload_offset:0 [single]: A3v5 long-run confirmation seq=twin:torso_mass sub=twin:cma:torso_mass dx=payload:torso plant=61 twin=2522 || A1e6 FULL seq=twin:posture sub=twin:cma:posture dx=payload:torso plant=52
+  A3v5 vs A1e6 hdb-v1-gen-0142:short_feet:2 [single]: A3v5 FULL seq=twin:foot_length>plant:foot_length>plant:feedback sub=repair:feedback dx=segment_length:feet plant=688 twin=2796 || A1e6 displacement only (walks >=80%) seq=twin:foot_length>plant:foot_length>plant:feedback sub=twin:cma:foot_length dx=segment_length:feet plant=696
+  A4x vs A1e6 hdb-v1-gen-0070:feedback_gain_loss:2 [single]: A4x FULL seq=twin:foot_length>plant:foot_length>plant:placement sub=repair:placement dx=unmodelled:any plant=685 twin=2774 || A1e6 walking robustness only (displacement verified) seq=twin:foot_length>plant:foot_length sub=repair:foot_length dx=payload:torso plant=457
+  A4x vs A1e6 hdb-v1-gen-0073:heavy_torso:2 [single]: A4x FULL seq= sub=twin:cma:torso_mass dx=payload:torso plant=53 twin=1556 || A1e6 displacement only (walks >=80%) seq=twin:leg_length>plant:leg_length>plant:placement sub=repair:placement dx=payload:torso plant=689
+  A4x vs A1e6 hdb-v1-gen-0103:payload_offset:0 [single]: A4x long-run confirmation seq=twin:torso_mass sub=twin:cma:torso_mass dx=payload:torso plant=69 twin=2776 || A1e6 FULL seq=twin:posture sub=twin:cma:posture dx=payload:torso plant=52
+  A4x vs A1e6 hdb-v1-gen-0142:short_feet:2 [single]: A4x FULL seq=plant:feedback>plant:foot_length sub=repair:feedback dx=segment_length:feet plant=696 twin=2722 || A1e6 displacement only (walks >=80%) seq=twin:foot_length>plant:foot_length>plant:feedback sub=twin:cma:foot_length dx=segment_length:feet plant=696
+
+## exact McNemar (two-sided and one-sided) on paired FULL
+  single      A1e6 vs A1e: n 30, A1e6-only 1, A1e-only 2, p1(A1e6>A1e) 0.875, p2 1.000, diff -0.033
+  single      A3v5 vs A1e6: n 30, A3v5-only 2, A1e6-only 2, p1(A3v5>A1e6) 0.688, p2 1.000, diff +0.000
+  single      A4x vs A1e6: n 30, A4x-only 3, A1e6-only 1, p1(A4x>A1e6) 0.312, p2 0.625, diff +0.067
+  single      A4x vs A3v5: n 30, A4x-only 3, A3v5-only 1, p1(A4x>A3v5) 0.312, p2 0.625, diff +0.067
+  single      A3v5 vs A1e: n 30, A3v5-only 3, A1e-only 4, p1(A3v5>A1e) 0.773, p2 1.000, diff -0.033
+  single      A4x vs A1e: n 30, A4x-only 4, A1e-only 3, p1(A4x>A1e) 0.500, p2 1.000, diff +0.033
+  composition A1e6 vs A1e: n 6, A1e6-only 0, A1e-only 0, p1(A1e6>A1e) 1.000, p2 1.000, diff +0.000
+  composition A3v5 vs A1e6: n 6, A3v5-only 1, A1e6-only 0, p1(A3v5>A1e6) 0.500, p2 1.000, diff +0.167
+  composition A4x vs A1e6: n 6, A4x-only 0, A1e6-only 0, p1(A4x>A1e6) 1.000, p2 1.000, diff +0.000
+  composition A4x vs A3v5: n 6, A4x-only 0, A3v5-only 1, p1(A4x>A3v5) 1.000, p2 1.000, diff -0.167
+  composition A3v5 vs A1e: n 6, A3v5-only 1, A1e-only 0, p1(A3v5>A1e) 0.500, p2 1.000, diff +0.167
+  composition A4x vs A1e: n 6, A4x-only 0, A1e-only 0, p1(A4x>A1e) 1.000, p2 1.000, diff +0.000
+  all         A1e6 vs A1e: n 36, A1e6-only 1, A1e-only 2, p1(A1e6>A1e) 0.875, p2 1.000, diff -0.028
+  all         A3v5 vs A1e6: n 36, A3v5-only 3, A1e6-only 2, p1(A3v5>A1e6) 0.500, p2 1.000, diff +0.028
+  all         A4x vs A1e6: n 36, A4x-only 3, A1e6-only 1, p1(A4x>A1e6) 0.312, p2 0.625, diff +0.056
+  all         A4x vs A3v5: n 36, A4x-only 3, A3v5-only 2, p1(A4x>A3v5) 0.500, p2 1.000, diff +0.028
+  all         A3v5 vs A1e: n 36, A3v5-only 4, A1e-only 4, p1(A3v5>A1e) 0.637, p2 1.000, diff +0.000
+  all         A4x vs A1e: n 36, A4x-only 4, A1e-only 3, p1(A4x>A1e) 0.500, p2 1.000, diff +0.028
+
+## independent bases
+  single: 14 bases {'hdb-v1-gen-0070': 3, 'hdb-v1-gen-0073': 4, 'hdb-v1-gen-0104': 2, 'hdb-v1-gen-0142': 4, 'hdb-v1-gen-0096': 3, 'hdb-v1-gen-0103': 2, 'hdb-v1-gen-0137': 3, 'hdb-v1-gen-0222': 1, 'hdb-v1-gen-0099': 1, 'hdb-v1-gen-0126': 1, 'hdb-v1-gen-0143': 1, 'hdb-v1-gen-0108': 1, 'hdb-v1-gen-0105': 2, 'hdb-v1-gen-0136': 2}; families {'pitch_sensor_bias': 9, 'heavy_torso': 2, 'short_feet': 2, 'clock_fault': 2, 'low_ground_friction': 5, 'feedback_gain_loss': 3, 'one_side_weakness': 2, 'payload_offset': 5}
+  composition: 5 bases {'hdb-v1-gen-0070': 1, 'hdb-v1-gen-0103': 2, 'hdb-v1-gen-0137': 1, 'hdb-v1-gen-0143': 1, 'hdb-v1-gen-0170': 1}; families {'devcomp:low_ground_friction+feedback_gain_loss': 3, 'devcomp:pitch_sensor_bias.++actuator_weakness': 2, 'devcomp:low_ground_friction+actuator_weakness': 1}
+  total distinct bases 15
+
+## base-level FULL rates (singles), per arm: bases with any FULL / bases
+  A1e: bases with >=1 FULL 9/14; per-base {0070:1/3, 0073:0/4, 0096:1/3, 0099:0/1, 0103:1/2, 0104:1/2, 0105:0/2, 0108:1/1, 0126:0/1, 0136:0/2, 0137:1/3, 0142:1/4, 0143:1/1, 0222:1/1}
+  A1e6: bases with >=1 FULL 8/14; per-base {0070:1/3, 0073:0/4, 0096:1/3, 0099:0/1, 0103:1/2, 0104:0/2, 0105:0/2, 0108:1/1, 0126:0/1, 0136:0/2, 0137:1/3, 0142:1/4, 0143:1/1, 0222:1/1}
+  A3v5: bases with >=1 FULL 7/14; per-base {0070:0/3, 0073:1/4, 0096:1/3, 0099:0/1, 0103:0/2, 0104:0/2, 0105:0/2, 0108:1/1, 0126:0/1, 0136:0/2, 0137:1/3, 0142:2/4, 0143:1/1, 0222:1/1}
+  A4x: bases with >=1 FULL 8/14; per-base {0070:2/3, 0073:1/4, 0096:1/3, 0099:0/1, 0103:0/2, 0104:0/2, 0105:0/2, 0108:1/1, 0126:0/1, 0136:0/2, 0137:1/3, 0142:2/4, 0143:1/1, 0222:1/1}
+
+## budgets (median [IQR]) per arm and kind
+  single      A1e   plant 692 [685-696] twin 1888 [1869-2131] plant_diag 4 [4-7] twin_diag 356 [340-424] twin_remaining 912 [669-931] plant_remaining 8 [4-15] diag_exps 0 [0-1]
+      twin mean/episode by op: {warm_start_cma: 800, tool_cma_screen: 750, generic_screen: 244, particle_scoring: 144, eig_ranking: 53, tool_probe_screen: 46, twin_cma_other: -57}
+      plant mean/episode by op: {repair: 550, robustness_check: 42, stress_test: 8, observe: 4, counterfactual: 1, floor_test: 0, weigh_test: 0, select: 0}
+      warm start ran 30/30; screen unavailable 0; twin-exhausted(update) episodes 0; termination {'budget spent, best mapped design': 26, 'accepted by stop map': 4}
+  single      A1e6  plant 692 [685-696] twin 2558 [2281-2717] plant_diag 9 [4-12] twin_diag 536 [362-676] twin_remaining 242 [83-519] plant_remaining 8 [4-15] diag_exps 2 [0-2]
+      twin mean/episode by op: {warm_start_cma: 800, tool_cma_screen: 750, particle_scoring: 299, assimilation: 246, generic_screen: 244, eig_ranking: 142, tool_probe_screen: 81, twin_cma_other: -54}
+      plant mean/episode by op: {repair: 544, robustness_check: 44, baseline_check: 16, stress_test: 8, counterfactual: 4, observe: 4, floor_test: 1, weigh_test: 0, select: 0}
+      warm start ran 30/30; screen unavailable 0; twin-exhausted(update) episodes 0; termination {'accepted by stop map': 5, 'budget spent, best mapped design': 25}
+  single      A3v5  plant 688 [628-696] twin 2773 [2628-2794] plant_diag 16 [12-21] twin_diag 930 [636-1298] twin_remaining 27 [6-172] plant_remaining 12 [4-72] diag_exps 4 [2-5]
+      twin mean/episode by op: {particle_scoring: 823, tool_cma_screen: 615, warm_start_cma: 439, eig_ranking: 274, generic_screen: 244, assimilation: 112, nemotron_twin_repair: 103, tool_probe_screen: 65, refused:twin_observe: 0, refused:twin_cma: 0, refused:twin_walk: 0, twin_cma_other: -45}
+      plant mean/episode by op: {repair: 462, robustness_check: 37, baseline_check: 15, counterfactual: 13, stress_test: 7, observe: 4, floor_test: 1, weigh_test: 0, select: 0}
+      warm start ran 19/30; screen unavailable 3; twin-exhausted(update) episodes 4; termination {'budget spent, best mapped design': 20, 'no repair (concluded by Nemotron)': 3, 'accepted by stop map': 7}
+  single      A4x   plant 688 [680-696] twin 2649 [2450-2772] plant_diag 9 [8-16] twin_diag 564 [440-910] twin_remaining 151 [28-350] plant_remaining 12 [4-20] diag_exps 2 [1-3]
+      twin mean/episode by op: {tool_cma_screen: 790, warm_start_cma: 604, particle_scoring: 469, generic_screen: 244, eig_ranking: 239, assimilation: 167, tool_probe_screen: 67, nemotron_twin_repair: 53, refused:twin_cma: 0, twin_cma_other: -58}
+      plant mean/episode by op: {repair: 509, robustness_check: 41, baseline_check: 16, stress_test: 7, counterfactual: 7, observe: 4, floor_test: 1, weigh_test: 0, select: 0}
+      warm start ran 26/30; screen unavailable 0; twin-exhausted(update) episodes 0; termination {'accepted by stop map': 4, 'no repair (concluded by Nemotron)': 2, 'budget spent, best mapped design': 24}
+  composition A1e   plant 696 [696-699] twin 1996 [1892-2141] plant_diag 6 [4-8] twin_diag 388 [340-484] twin_remaining 804 [659-908] plant_remaining 4 [1-4] diag_exps 0 [0-1]
+      twin mean/episode by op: {warm_start_cma: 800, tool_cma_screen: 750, generic_screen: 244, particle_scoring: 177, eig_ranking: 68, tool_probe_screen: 41, twin_cma_other: -54}
+      plant mean/episode by op: {repair: 648, robustness_check: 40, observe: 4, stress_test: 3, counterfactual: 2, weigh_test: 0, select: 0}
+      warm start ran 6/6; screen unavailable 0; twin-exhausted(update) episodes 0; termination {'budget spent, best mapped design': 6}
+  composition A1e6  plant 688 [685-692] twin 2692 [2404-2735] plant_diag 12 [9-13] twin_diag 658 [507-722] twin_remaining 108 [65-396] plant_remaining 12 [8-15] diag_exps 2 [1-3]
+      twin mean/episode by op: {warm_start_cma: 800, tool_cma_screen: 750, particle_scoring: 385, generic_screen: 244, assimilation: 192, eig_ranking: 174, tool_probe_screen: 83, twin_cma_other: -53}
+      plant mean/episode by op: {repair: 509, robustness_check: 40, baseline_check: 16, stress_test: 8, counterfactual: 5, observe: 4, floor_test: 1, weigh_test: 0, select: 0}
+      warm start ran 6/6; screen unavailable 0; twin-exhausted(update) episodes 0; termination {'budget spent, best mapped design': 5, 'accepted by stop map': 1}
+  composition A3v5  plant 684 [613-690] twin 2773 [2748-2790] plant_diag 14 [9-20] twin_diag 994 [606-1205] twin_remaining 27 [10-52] plant_remaining 16 [10-87] diag_exps 4 [2-5]
+      twin mean/episode by op: {tool_cma_screen: 975, particle_scoring: 913, eig_ranking: 284, generic_screen: 244, warm_start_cma: 133, assimilation: 97, tool_probe_screen: 87, refused:twin_observe: 0, refused:twin_walk: 0, refused:twin_cma: 0, twin_cma_other: -44}
+      plant mean/episode by op: {repair: 496, robustness_check: 33, baseline_check: 16, counterfactual: 12, observe: 5, stress_test: 4, floor_test: 1, weigh_test: 0, select: 0}
+      warm start ran 1/6; screen unavailable 1; twin-exhausted(update) episodes 0; termination {'budget spent, best mapped design': 5, 'accepted by stop map': 1}
+  composition A4x   plant 688 [679-692] twin 2727 [2524-2744] plant_diag 12 [9-13] twin_diag 664 [510-803] twin_remaining 73 [56-276] plant_remaining 12 [8-21] diag_exps 2 [1-3]
+      twin mean/episode by op: {tool_cma_screen: 750, warm_start_cma: 742, particle_scoring: 459, eig_ranking: 266, generic_screen: 244, assimilation: 128, tool_probe_screen: 83, twin_cma_other: -57}
+      plant mean/episode by op: {repair: 507, robustness_check: 40, baseline_check: 16, stress_test: 8, counterfactual: 7, observe: 4, weigh_test: 0, select: 0}
+      warm start ran 6/6; screen unavailable 0; twin-exhausted(update) episodes 0; termination {'budget spent, best mapped design': 5, 'accepted by stop map': 1}
+
+## F1.8 / H5: submitted vs best non-submitted checked design (plant evidence only)
+  episodes where a non-submitted design had more robust16 walking than the submitted one: 5
+    ('hdb-v1-gen-0137:one_side_weakness:5', 'A1e', 'leg_length', -1, '', 'leg_length', '9', '', 'False')
+    ('hdb-v1-gen-0137:one_side_weakness:5', 'A1e', 'leg_length', -1, '', 'posture', '9', '', 'False')
+    ('hdb-v1-gen-0070:pitch_sensor_bias:3', 'A3v5', 'stride', -1, '', 'stride', '1', '', 'False')
+    ('hdb-v1-gen-0070:pitch_sensor_bias:3', 'A3v5', 'stride', -1, '', 'placement', '1', '', 'False')
+    ('hdb-v1-gen-0073:low_ground_friction:0', 'A3v5', 'timing', 15, '0.012882489984531158', 'placement', '16', '0.06', 'False')
+
+## submitted-design plant evidence vs FULL (v6 arms, singles+comps)
+  robust16 16: FULL 11/24
+  robust16 15: FULL 10/21
+  robust16 13-14: FULL 7/23
+  robust16 8-12: FULL 2/21
+  robust16 <8: FULL 0/16
+  mapped P(FULL) band of the submitted design -> verification category
+    >=0.75 {'FULL': 18, 'walking robustness only (displacement verified)': 1, 'long-run confirmation': 3}
+    0.5-0.75 {'walking robustness only (displacement verified)': 7, 'FULL': 7}
+    0.25-0.5 {'FULL': 3}
+    <0.25 {'walking robustness (+displacement)': 7, 'displacement only (walks >=80%)': 15}

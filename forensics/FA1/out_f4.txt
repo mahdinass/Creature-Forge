@@ -1,0 +1,33 @@
+
+######## A3v5: 36 episodes
+action counts: {'fallback:propose': 3, 'nemotron:check': 2, 'nemotron:conclude': 3, 'nemotron:delegate_diagnosis': 19, 'nemotron:delegate_repair': 33, 'nemotron:experiment': 129, 'nemotron:propose': 30, 'nemotron:repair': 6, 'nemotron:screen_tools': 10}
+experiments: ok 129 refused 0 | engine's top-EIG pick 66 | other pick 63 | with registered prediction 84
+experiments run after the engine's own stopping rule had fired: 86 (plant 348, twin 12924) in 31 episodes
+delegate_diagnosis experiments: 8 | repair started before the engine would stop: 1
+hypotheses: turns with hypotheses 33 added 64 ranked 1 on arrival 10 | episodes whose final leading particle came from Nemotron/dossier: 4
+repair: delegate plain 30 with tool_order 3 with start_edits 0 | direct repair ok/refused 6 0 | conclude 3 (faulty design 0: 2 )
+knock-on: screen unavailable 4 | warm start missing 16 | twin exhausted during belief update 4
+   tool_order ['feedback', 'posture', 'timing'] engine-probe-order ['posture', 'leg_length', 'placement'] FULL False (A1e6 False) hdb-v1-gen-0103:feedback_gain_loss:0
+   tool_order ['posture', 'feedback', 'timing'] engine-probe-order ['foot_length', 'feedback', 'leg_length'] FULL False (A1e6 False) hdb-v1-gen-0142:payload_offset:5
+   tool_order ['feedback', 'stride', 'placement'] engine-probe-order ['placement', 'posture', 'timing'] FULL False (A1e6 False) hdb-v1-gen-0136:one_side_weakness:3
+FUNNEL: episodes 36 -> with >=1 non-default Nemotron action 33 -> repair tool sequence differs from A1e6 28 (first tool differs 21) -> FULL differs from A1e6 5 (Nemotron arm better 3, worse 2)
+  has_cases 'deviated' (repair-level only): 10; among non-deviated, sequence still differs from A1e6 in 19 of 26; FULL differs in 3
+  episodes with experiments after engine stop: FULL 6/31 (A1e6 on same instances 6); others FULL 4/5 (A1e6 3)
+  warm start missing: FULL 3/16 (A1e6 same instances 2)
+  same diagnosis as A1e6 (exact leading structure): 26/36
+  P(success): n 36 mean 0.53; FULL when P>=0.5: 8/28, P<0.5: 2/8; Brier 0.321 vs constant 0.201
+
+######## A4x: 36 episodes
+action counts: {'fallback:propose': 1, 'nemotron:conclude': 2, 'nemotron:delegate_diagnosis': 6, 'nemotron:delegate_repair': 34, 'nemotron:experiment': 76, 'nemotron:propose': 10, 'nemotron:repair': 2, 'nemotron:screen_tools': 4}
+experiments: ok 76 refused 0 | engine's top-EIG pick 46 | other pick 30 | with registered prediction 41
+experiments run after the engine's own stopping rule had fired: 34 (plant 130, twin 5224) in 16 episodes
+delegate_diagnosis experiments: 2 | repair started before the engine would stop: 2
+hypotheses: turns with hypotheses 10 added 17 ranked 1 on arrival 2 | episodes whose final leading particle came from Nemotron/dossier: 2
+repair: delegate plain 33 with tool_order 0 with start_edits 1 | direct repair ok/refused 2 0 | conclude 2 (faulty design 0: 0 )
+knock-on: screen unavailable 0 | warm start missing 4 | twin exhausted during belief update 0
+FUNNEL: episodes 36 -> with >=1 non-default Nemotron action 25 -> repair tool sequence differs from A1e6 15 (first tool differs 13) -> FULL differs from A1e6 4 (Nemotron arm better 3, worse 1)
+  has_cases 'deviated' (repair-level only): 3; among non-deviated, sequence still differs from A1e6 in 12 of 33; FULL differs in 3
+  episodes with experiments after engine stop: FULL 5/16 (A1e6 on same instances 4); others FULL 6/20 (A1e6 5)
+  warm start missing: FULL 3/4 (A1e6 same instances 1)
+  same diagnosis as A1e6 (exact leading structure): 26/36
+  P(success): n 36 mean 0.61; FULL when P>=0.5: 11/36, P<0.5: 0/0; Brier 0.294 vs constant 0.212

@@ -1,0 +1,119 @@
+assimilated 183, skipped 98; per arm: {'A1e6': (88, 11), 'A3v5': (36, 50), 'A4x': (59, 37)}
+episodes with >=1 assimilation 80 events/episode {1: 24, 2: 9, 3: 47} distinct bases 15
+raw nats per disagreeing seed 2.56 tempered (T=6) 0.427 -> max shift with 8 seeds 3.41 nats (likelihood ratio 30.4 )
+
+## predicted-count disagreement among the top-4 modelled structures
+  events with < 2 modelled structures predicted (no competitor in top 4): 0
+  spread distribution: {0: 63, 1: 26, 2: 12, 3: 17, 4: 13, 5: 10, 6: 15, 7: 10, 8: 17}
+  identical (spread 0): 63 | <=1: 89 | >=2: 94 | >=4: 65
+  observed inside predicted range: 160 of 183
+  n_distinct_predictions: {'2': 83, '3': 36, '1': 63, '4': 1}
+
+## posterior shift
+  TV (top-8 snapshots): n 183 min 0 p25 0 median 0.0004 p75 0.0109 p90 0.0853 max 0.945
+  TV (top-4 event record): n 183 min 0 p25 0 median 0.0004 p75 0.012 p90 0.0842 max 0.464
+  TV8 bands: {'0.01-0.05': 17, '0.05-0.1': 15, '<0.01': 136, '0.1-0.3': 12, '>=0.3': 3}
+  leader changes: 1 [('hdb-v1-gen-0137:low_ground_friction:0', 'A4x', 'actuator_strength:knees+contact_friction:feet', 'contact_friction:feet+sensor_delay:pitch', '0.4637')]
+
+## does larger predicted disagreement give larger shifts? (TV8 by spread)
+  spread 0: n 63 min 0 p25 0 median 0 p75 0.0001 p90 0.00186 max 0.037
+  spread 1: n 26 min 0 p25 0 median 0.0009 p75 0.0043 p90 0.0542 max 0.945
+  spread 2: n 12 min 0 p25 0.0016 median 0.00375 p75 0.021 p90 0.145 max 0.169
+  spread 3: n 17 min 0 p25 0.0003 median 0.0048 p75 0.0395 p90 0.076 max 0.122
+  spread 4+: n 65 min 0 p25 0.0003 median 0.0092 p75 0.0574 p90 0.144 max 0.464
+  Spearman(spread, TV8) = 0.535 (p nan, n 183, events not independent)
+
+## belief inertia: log-odds gap between top-2 modelled structures before the event vs. the 8-seed ceiling (3.41 nats)
+  gap: n 126 min 0.122 p25 2.38 median 4.21 p75 6.22 p90 7.41 max 9.21
+  gap > ceiling (no 8-seed outcome could reorder the top-2 modelled structures): 76 of 126
+  leader is the unmodelled reserve before the event: 12 of 183
+  seeds of disagreement needed to switch top-2 (count bound; true per-seed disagreement may exceed count spread): n 126 min 1 p25 6 median 10.5 p75 15 p90 18 max 22
+  events where count spread >= seeds needed: 15 of 126
+
+## leader prediction error (observed vs leader's predicted count)
+  |obs - leader pred|: {0: 119, 1: 39, 2: 2, 3: 8, 4: 5, 6: 5, 7: 4, 8: 1}
+  leader over-predicted walking by >=3 (repair failed though belief predicted success): 11
+
+## decision reachability (could a leader change have altered any later decision?)
+  decision-reachable events (first assimilation, of the twin warm-start design, no Nemotron tool preference): 67 of 183
+  assimilated design origin: {'twin': 74, 'repair': 109}
+  rescreen events: 0
+
+## skips
+  reasons: Counter({('A3v5', 'needs'): 50, ('A4x', 'needs'): 37, ('A1e6', 'needs'): 11})
+  episodes with skips per arm: Counter({'A3v5': 22, 'A4x': 14, 'A1e6': 9})
+
+## per-arm distributions
+  A1e6: n 88; TV8 n 88 min 0 p25 0 median 0.00275 p75 0.0358 p90 0.0923 max 0.301; spread>=2 49
+  A3v5: n 36; TV8 n 36 min 0 p25 0 median 0 p75 0.0005 p90 0.0058 max 0.945; spread>=2 16
+  A4x: n 59; TV8 n 59 min 0 p25 0 median 0.0005 p75 0.0083 p90 0.0809 max 0.464; spread>=2 29
+
+## episode-level max TV8 (cluster-robust view): n 80 min 0 p25 0 median 0.0039 p75 0.0398 p90 0.155 max 0.945
+   episodes with any TV8 >= 0.1: 13 of 80
+
+## events with spread >= 4 (strongly discriminating predictions)
+  A1e6 hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0 ev1 d4 obs 6/8 pred {"joint_damping:hips": 8, "payload:torso": 0, "segment_length:feet": 7} leader joint_damping:hips(0.58)->joint_damping:hips TV8 0.0908 gap 1.491941532935621 reach False
+  A1e6 hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 ev0 d3 obs 5/8 pred {"contact_friction:feet": 0, "contact_friction:feet+gain_scale:balance_feedback": 6} leader contact_friction:feet+gain_scale:balance_feedback(1.00)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0 gap  reach True
+  A1e6 hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 ev1 d4 obs 3/8 pred {"contact_friction:feet": 0, "contact_friction:feet+gain_scale:balance_feedback": 6} leader contact_friction:feet+gain_scale:balance_feedback(1.00)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0 gap  reach False
+  A1e6 hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 ev0 d1 obs 7/8 pred {"contact_friction:feet+gain_scale:balance_feedback": 8, "contact_friction:feet+sensor_bias:pitch": 0} leader contact_friction:feet+gain_scale:balance_feedback(0.99)->contact_friction:feet+gain_scale:balance_feedback TV8 0.005 gap 5.1759479365888845 reach True
+  A1e6 hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 ev1 d2 obs 8/8 pred {"contact_friction:feet+gain_scale:balance_feedback": 8, "contact_friction:feet+sensor_bias:pitch": 0} leader contact_friction:feet+gain_scale:balance_feedback(0.99)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0025 gap 7.413065722060018 reach False
+  A1e6 hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 ev2 d3 obs 8/8 pred {"contact_friction:feet+gain_scale:balance_feedback": 8, "contact_friction:feet+sensor_bias:pitch": 0} leader contact_friction:feet+gain_scale:balance_feedback(0.99)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0013 gap  reach False
+  A1e6 hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 ev0 d2 obs 0/8 pred {"gain_scale:placement": 1, "segment_length:feet": 0, "sensor_bias:pitch": 7} leader sensor_bias:pitch(0.63)->sensor_bias:pitch TV8 0.035 gap 5.570568491969275 reach True
+  A1e6 hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 ev1 d3 obs 2/8 pred {"gain_scale:placement": 0, "segment_length:feet": 3, "sensor_bias:pitch": 6} leader sensor_bias:pitch(0.61)->sensor_bias:pitch TV8 0.0958 gap 3.0464977470076775 reach False
+  A1e6 hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 ev2 d4 obs 8/8 pred {"gain_scale:placement": 1, "segment_length:feet": 6, "sensor_bias:pitch": 7} leader sensor_bias:pitch(0.55)->sensor_bias:pitch TV8 0.114 gap 1.5604303333274057 reach False
+  A1e6 hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0 ev0 d3 obs 0/8 pred {"actuator_strength:left": 4, "actuator_strength:right": 6, "payload:torso": 8} leader payload:torso(0.96)->payload:torso TV8 0.0574 gap 4.356396082355533 reach True
+  A1e6 hdb-v1-gen-0070:pitch_sensor_bias:3 ev0 d3 obs 3/8 pred {"actuator_strength:all+sensor_bias:pitch": 6, "joint_damping:left": 2, "sensor_bias:pitch": 6} leader sensor_bias:pitch(0.38)->sensor_bias:pitch TV8 0.0134 gap 1.0254799263478687 reach True
+  A1e6 hdb-v1-gen-0104:short_feet:2 ev0 d4 obs 0/8 pred {"payload:torso": 0, "payload:torso+segment_length:feet": 0, "segment_length:feet": 6} leader unmodelled:any(1.00)->unmodelled:any TV8 0.0001 gap  reach True
+  A1e6 hdb-v1-gen-0104:short_feet:2 ev1 d5 obs 0/8 pred {"payload:torso": 0, "payload:torso+segment_length:feet": 0, "segment_length:feet": 6} leader unmodelled:any(1.00)->unmodelled:any TV8 0.0002 gap  reach False
+  A1e6 hdb-v1-gen-0104:clock_fault:3 ev0 d1 obs 5/8 pred {"clock_scale:clock": 5, "joint_damping:ankles": 8, "joint_damping:right": 0} leader clock_scale:clock(0.93)->clock_scale:clock TV8 0.0137 gap 3.991687773945387 reach True
+  A1e6 hdb-v1-gen-0104:clock_fault:3 ev1 d2 obs 5/8 pred {"clock_scale:clock": 5, "joint_damping:ankles": 8, "joint_damping:right": 0} leader clock_scale:clock(0.93)->clock_scale:clock TV8 0.0078 gap 5.054949488865599 reach False
+  A1e6 hdb-v1-gen-0104:clock_fault:3 ev2 d3 obs 5/8 pred {"clock_scale:clock": 6, "joint_damping:ankles": 8, "payload:torso": 0} leader clock_scale:clock(0.92)->clock_scale:clock TV8 0.0002 gap 6.238541615384289 reach False
+  A1e6 hdb-v1-gen-0142:pitch_sensor_bias:3 ev0 d3 obs 8/8 pred {"joint_damping:all": 5, "joint_damping:hips": 8, "segment_length:legs": 0, "sensor_bias:pitch": 8} leader joint_damping:hips(0.81)->joint_damping:hips TV8 0.1683 gap 1.9876037820546268 reach True
+  A1e6 hdb-v1-gen-0142:pitch_sensor_bias:3 ev1 d4 obs 8/8 pred {"joint_damping:all": 1, "joint_damping:hips": 5, "segment_length:legs": 0, "sensor_bias:pitch": 8} leader joint_damping:hips(0.98)->joint_damping:hips TV8 0.1671 gap 4.5526497721092 reach False
+  A1e6 hdb-v1-gen-0103:feedback_gain_loss:0 ev0 d1 obs 3/8 pred {"gain_scale:balance_feedback": 3, "payload:torso": 7, "torso_mass:torso": 5} leader gain_scale:balance_feedback(0.92)->gain_scale:balance_feedback TV8 0.0525 gap 2.7787102979806106 reach True
+  A1e6 hdb-v1-gen-0137:one_side_weakness:5 ev2 d5 obs 4/8 pred {"actuator_strength:all": 8, "actuator_strength:left": 4, "actuator_strength:right": 5} leader actuator_strength:right(0.83)->actuator_strength:right TV8 0.1271 gap 3.5075654540802814 reach False
+  A1e6 hdb-v1-gen-0142:pitch_sensor_bias:5 ev0 d3 obs 5/8 pred {"joint_damping:hips": 5, "joint_damping:left": 0, "joint_damping:right": 0, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.60)->sensor_bias:pitch TV8 0.1808 gap 0.9265593180210036 reach True
+  A1e6 hdb-v1-gen-0142:pitch_sensor_bias:5 ev1 d4 obs 5/8 pred {"joint_damping:hips": 5, "joint_damping:left": 0, "joint_damping:right": 0, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.78)->sensor_bias:pitch TV8 0.0593 gap 1.3758069904123311 reach False
+  A1e6 hdb-v1-gen-0142:pitch_sensor_bias:5 ev2 d5 obs 5/8 pred {"joint_damping:hips": 5, "joint_damping:left": 0, "joint_damping:right": 0, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.84)->sensor_bias:pitch TV8 0.0354 gap 1.6572728526503022 reach False
+  A1e6 hdb-v1-gen-0142:short_feet:2 ev0 d1 obs 7/8 pred {"clock_scale:clock": 0, "joint_damping:hips": 0, "segment_length:feet": 7} leader segment_length:feet(0.99)->segment_length:feet TV8 0.0051 gap 5.591188654404855 reach True
+  A1e6 hdb-v1-gen-0142:short_feet:2 ev1 d2 obs 7/8 pred {"clock_scale:clock": 0, "joint_damping:hips": 0, "segment_length:feet": 7} leader segment_length:feet(1.00)->segment_length:feet TV8 0.0003 gap 8.51398806046729 reach False
+  A1e6 hdb-v1-gen-0142:short_feet:2 ev2 d3 obs 7/8 pred {"clock_scale:clock": 0, "joint_damping:hips": 1, "segment_length:feet": 7} leader segment_length:feet(1.00)->segment_length:feet TV8 0.0003 gap  reach False
+  A1e6 hdb-v1-gen-0073:low_ground_friction:0 ev2 d3 obs 7/8 pred {"actuator_strength:hips": 5, "contact_friction:feet": 7, "joint_damping:right": 3} leader contact_friction:feet(1.00)->contact_friction:feet TV8 0.0 gap  reach False
+  A1e6 hdb-v1-gen-0137:pitch_sensor_bias:5 ev1 d3 obs 3/8 pred {"joint_damping:ankles": 2, "joint_damping:hips": 6} leader joint_damping:ankles(0.92)->joint_damping:ankles TV8 0.0398 gap 2.417593296216266 reach False
+  A1e6 hdb-v1-gen-0137:low_ground_friction:0 ev2 d5 obs 6/8 pred {"actuator_strength:knees+contact_friction:feet": 0, "contact_friction:feet+sensor_delay:pitch": 5} leader actuator_strength:knees+contact_friction:feet(0.91)->actuator_strength:knees+contact_friction:feet TV8 0.3015 gap 2.313305204497751 reach False
+  A1e6 hdb-v1-gen-0142:payload_offset:5 ev1 d2 obs 5/8 pred {"joint_damping:ankles": 0, "payload:torso": 5, "sensor_bias:pitch": 5} leader payload:torso(0.96)->payload:torso TV8 0.0092 gap 3.622211559817262 reach False
+  A1e6 hdb-v1-gen-0142:payload_offset:5 ev2 d3 obs 4/8 pred {"joint_damping:ankles": 0, "payload:torso": 5, "sensor_bias:pitch": 6} leader payload:torso(0.96)->payload:torso TV8 0.0063 gap 3.7572471302069697 reach False
+  A1e6 hdb-v1-gen-0103:payload_offset:0 ev0 d1 obs 7/8 pred {"gain_scale:balance_feedback": 3, "payload:torso": 7, "segment_length:thigh_r": 0} leader payload:torso(0.97)->payload:torso TV8 0.0132 gap 4.062299638207131 reach True
+  A1e6 hdb-v1-gen-0070:feedback_gain_loss:2 ev1 d4 obs 8/8 pred {"joint_damping:hips": 8, "payload:torso": 8, "torso_mass:torso": 0} leader payload:torso(0.74)->payload:torso TV8 0.0851 gap 1.6004584243699989 reach False
+  A1e6 hdb-v1-gen-0136:pitch_sensor_bias:5 ev0 d1 obs 5/8 pred {"joint_damping:ankles": 0, "segment_length:feet": 5, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.91)->sensor_bias:pitch TV8 0.029 gap 3.3888925495433027 reach True
+  A1e6 hdb-v1-gen-0136:pitch_sensor_bias:5 ev1 d2 obs 5/8 pred {"joint_damping:ankles": 0, "segment_length:feet": 5, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.94)->sensor_bias:pitch TV8 0.0039 gap 4.974077698362458 reach False
+  A1e6 hdb-v1-gen-0136:one_side_weakness:3 ev1 d4 obs 8/8 pred {"actuator_strength:ankles": 0, "actuator_strength:right": 8, "payload:torso": 8} leader actuator_strength:right(0.97)->actuator_strength:right TV8 0.0256 gap 3.59957563604029 reach False
+  A3v5 hdb-v1-gen-0103:feedback_gain_loss:0 ev1 d3 obs 5/8 pred {"gain_scale:balance_feedback": 5, "payload:torso": 2, "torso_mass:torso": 8} leader gain_scale:balance_feedback(1.00)->gain_scale:balance_feedback TV8 0.0008 gap 7.263029242005241 reach False
+  A3v5 hdb-v1-gen-0103:feedback_gain_loss:0 ev2 d4 obs 5/8 pred {"gain_scale:balance_feedback": 5, "payload:torso": 2, "torso_mass:torso": 8} leader gain_scale:balance_feedback(1.00)->gain_scale:balance_feedback TV8 0.0002 gap 8.516593011344204 reach False
+  A3v5 hdb-v1-gen-0142:short_feet:2 ev0 d2 obs 7/8 pred {"joint_damping:hips": 0, "segment_length:feet": 7, "sensor_bias:pitch": 0} leader segment_length:feet(0.88)->segment_length:feet TV8 0.1093 gap 2.0481454856724066 reach False
+  A3v5 hdb-v1-gen-0137:low_ground_friction:0 ev1 d5 obs 7/8 pred {"actuator_strength:knees+contact_friction:feet": 3, "contact_friction:feet+sensor_delay:pitch": 7} leader actuator_strength:knees+contact_friction:feet(1.00)->actuator_strength:knees+contact_friction:feet TV8 0.0022 gap 7.263729977806476 reach False
+  A3v5 hdb-v1-gen-0137:low_ground_friction:0 ev2 d6 obs 6/8 pred {"actuator_strength:knees+contact_friction:feet": 0, "contact_friction:feet+sensor_delay:pitch": 4} leader actuator_strength:knees+contact_friction:feet(1.00)->actuator_strength:knees+contact_friction:feet TV8 0.0129 gap 5.840140328842319 reach False
+  A3v5 hdb-v1-gen-0142:payload_offset:5 ev0 d3 obs 1/8 pred {"joint_damping:ankles": 0, "payload:torso": 1, "sensor_bias:pitch": 6} leader payload:torso(1.00)->payload:torso TV8 0.0002 gap 8.11142803829907 reach False
+  A3v5 hdb-v1-gen-0142:payload_offset:5 ev2 d5 obs 8/8 pred {"joint_damping:ankles": 0, "payload:torso": 8, "sensor_bias:pitch": 7} leader payload:torso(1.00)->payload:torso TV8 0.0 gap  reach False
+  A3v5 hdb-v1-gen-0070:pitch_sensor_bias:0 ev1 d4 obs 3/8 pred {"gain_scale:balance_feedback": 0, "sensor_bias:pitch": 4} leader sensor_bias:pitch(1.00)->sensor_bias:pitch TV8 0.0 gap  reach False
+  A4x hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0 ev0 d3 obs 5/8 pred {"contact_friction:feet": 0, "contact_friction:feet+gain_scale:balance_feedback": 6} leader contact_friction:feet+gain_scale:balance_feedback(1.00)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0 gap  reach True
+  A4x hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 ev0 d1 obs 7/8 pred {"contact_friction:feet+gain_scale:balance_feedback": 8, "contact_friction:feet+sensor_bias:pitch": 0} leader contact_friction:feet+gain_scale:balance_feedback(0.99)->contact_friction:feet+gain_scale:balance_feedback TV8 0.005 gap 5.1759479365888845 reach True
+  A4x hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 ev1 d2 obs 8/8 pred {"contact_friction:feet+gain_scale:balance_feedback": 8, "contact_friction:feet+sensor_bias:pitch": 0} leader contact_friction:feet+gain_scale:balance_feedback(0.99)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0025 gap 7.413065722060018 reach False
+  A4x hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0 ev2 d3 obs 8/8 pred {"contact_friction:feet+gain_scale:balance_feedback": 8, "contact_friction:feet+sensor_bias:pitch": 0} leader contact_friction:feet+gain_scale:balance_feedback(0.99)->contact_friction:feet+gain_scale:balance_feedback TV8 0.0013 gap  reach False
+  A4x hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 ev0 d3 obs 0/8 pred {"gain_scale:placement": 1, "segment_length:feet": 8, "sensor_bias:pitch": 7} leader sensor_bias:pitch(1.00)->sensor_bias:pitch TV8 0.0 gap  reach True
+  A4x hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 ev1 d4 obs 2/8 pred {"gain_scale:placement": 0, "segment_length:feet": 5, "sensor_bias:pitch": 6} leader sensor_bias:pitch(1.00)->sensor_bias:pitch TV8 0.0 gap  reach False
+  A4x hdb-v1-gen-0143:devcomp:pitch_sensor_bias.++actuator_weakness:0 ev2 d5 obs 8/8 pred {"gain_scale:placement": 0, "segment_length:feet": 0, "sensor_bias:pitch": 7} leader sensor_bias:pitch(1.00)->sensor_bias:pitch TV8 0.0 gap  reach False
+  A4x hdb-v1-gen-0104:clock_fault:3 ev0 d2 obs 0/8 pred {"clock_scale:clock": 0, "clock_scale:clock+joint_damping:ankles": 4, "clock_scale:clock+joint_damping:right": 7} leader clock_scale:clock+joint_damping:right(0.94)->clock_scale:clock+joint_damping:right TV8 0.0798 gap 3.483649406523112 reach True
+  A4x hdb-v1-gen-0142:pitch_sensor_bias:3 ev0 d4 obs 8/8 pred {"joint_damping:all": 0, "joint_damping:hips": 8, "segment_length:legs": 0, "sensor_bias:pitch": 8} leader joint_damping:hips(0.79)->joint_damping:hips TV8 0.1923 gap 1.753991005122645 reach True
+  A4x hdb-v1-gen-0142:pitch_sensor_bias:3 ev1 d5 obs 8/8 pred {"joint_damping:all": 5, "joint_damping:hips": 7, "segment_length:legs": 0, "sensor_bias:pitch": 7} leader joint_damping:hips(0.98)->joint_damping:hips TV8 0.0853 gap 4.507189777627888 reach False
+  A4x hdb-v1-gen-0096:feedback_gain_loss:0 ev0 d2 obs 8/8 pred {"actuator_strength:ankles+gain_scale:balance_feedback": 0, "actuator_strength:left": 8, "gain_scale:balance_feedback": 8} leader unmodelled:any(0.40)->unmodelled:any TV8 0.0228 gap 0.48655452970233026 reach True
+  A4x hdb-v1-gen-0103:feedback_gain_loss:0 ev0 d1 obs 3/8 pred {"gain_scale:balance_feedback": 3, "payload:torso": 7, "torso_mass:torso": 5} leader gain_scale:balance_feedback(0.92)->gain_scale:balance_feedback TV8 0.0525 gap 2.7787102979806106 reach True
+  A4x hdb-v1-gen-0073:low_ground_friction:0 ev2 d3 obs 7/8 pred {"actuator_strength:hips": 5, "contact_friction:feet": 7, "joint_damping:right": 3} leader contact_friction:feet(1.00)->contact_friction:feet TV8 0.0 gap  reach False
+  A4x hdb-v1-gen-0137:pitch_sensor_bias:5 ev1 d3 obs 3/8 pred {"joint_damping:ankles": 2, "joint_damping:hips": 6} leader joint_damping:ankles(0.92)->joint_damping:ankles TV8 0.0398 gap 2.417593296216266 reach False
+  A4x hdb-v1-gen-0137:low_ground_friction:0 ev1 d3 obs 7/8 pred {"actuator_strength:knees+contact_friction:feet": 3, "contact_friction:feet+sensor_delay:pitch": 7} leader actuator_strength:knees+contact_friction:feet(0.96)->actuator_strength:knees+contact_friction:feet TV8 0.156 gap 3.0952326962377525 reach False
+  A4x hdb-v1-gen-0137:low_ground_friction:0 ev2 d4 obs 6/8 pred {"actuator_strength:knees+contact_friction:feet": 0, "contact_friction:feet+sensor_delay:pitch": 6} leader actuator_strength:knees+contact_friction:feet(0.80)->contact_friction:feet+sensor_delay:pitch TV8 0.4637 gap 1.3905502193397241 reach False
+  A4x hdb-v1-gen-0142:payload_offset:5 ev1 d2 obs 5/8 pred {"joint_damping:ankles": 0, "payload:torso": 5, "sensor_bias:pitch": 5} leader payload:torso(0.98)->payload:torso TV8 0.0092 gap 4.946223749023867 reach False
+  A4x hdb-v1-gen-0142:payload_offset:5 ev2 d3 obs 4/8 pred {"joint_damping:ankles": 0, "payload:torso": 5, "sensor_bias:pitch": 6} leader payload:torso(0.98)->payload:torso TV8 0.003 gap 5.109227191541757 reach False
+  A4x hdb-v1-gen-0073:heavy_torso:0 ev2 d5 obs 5/8 pred {"actuator_strength:left": 2, "gain_scale:balance_feedback": 8, "payload:torso": 6, "torso_mass:torso": 6} leader payload:torso(0.80)->payload:torso TV8 0.0541 gap 1.8970362993759786 reach False
+  A4x hdb-v1-gen-0136:pitch_sensor_bias:5 ev0 d2 obs 5/8 pred {"joint_damping:ankles": 0, "segment_length:feet": 5, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.99)->sensor_bias:pitch TV8 0.0004 gap 7.593071880426894 reach True
+  A4x hdb-v1-gen-0136:pitch_sensor_bias:5 ev1 d3 obs 5/8 pred {"joint_damping:ankles": 0, "segment_length:feet": 5, "sensor_bias:pitch": 5} leader sensor_bias:pitch(0.99)->sensor_bias:pitch TV8 0.0001 gap 9.202912856147385 reach False

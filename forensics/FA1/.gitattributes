@@ -1,0 +1,2 @@
+# FA-1 forensic evidence: store byte-for-byte (no EOL conversion) so FA1_MANIFEST.json and the originals match exactly.
+* -text

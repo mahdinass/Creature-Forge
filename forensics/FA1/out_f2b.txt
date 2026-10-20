@@ -1,0 +1,17 @@
+events replayed 183
+expected TV (count-bound replay): median 0.0000 p75 0.0050 p90 0.0559 max 0.564
+realised TV (same structures):    median 0.0004 p75 0.0109 p90 0.0842 max 0.464
+Spearman(expected, realised) 0.850; mean ratio realised/expected over events with expected>0.02: 1.43 (n 37)
+events with expected TV > 0.1: 12 realised TV for them: [0.091, 0.114, 0.014, 0.186, 0.168, 0.181, 0.302, 0.171, 0.109, 0.19, 0.156, 0.464]
+expected leader flips (count bound): 1 [('A4x', 'hdb-v1-gen-0137:low_ground_friction:0', '2', 0.564, 0.464, 'True')]
+
+mass-weighted disagreement (seeds, competitor mass-weighted |pred - leader pred|):
+  median 0.000 p75 0.032 p90 0.251 max 1.601; events >= 1 seed: 5; >= 2 seeds: 0
+  modelled competitor mass (top-4 minus leader): median 0.003 p25 0.000 p75 0.039
+  leader (modelled) mass before: median 0.973 p25 0.886 p75 0.996; >=0.9: 136 of 183
+
+sensitivity: replay without tempering (T=1) - how many leader flips would the same counts imply?
+  T=1 replay: leader flips 1, median TV 0.0000 p90 0.0000
+
+leader prediction vs observation, among events where the leader carried >=0.5 modelled mass:
+  {'leader over-predicts >=3': 8, 'within 2': 145, 'leader under-predicts >=3': 12}

@@ -1,0 +1,120 @@
+## F5a  G-a data (cases_init.json): 947 rows, 231 instances, 20 bases
+   FULL rate by procedure: {'engine_final': '107/231 = 0.46', 'engine_old': '112/304 = 0.37', 'a0': '67/219 = 0.31', 'diverse': '39/193 = 0.20'}
+   comparable-support instances: 194 (OFFLINE.md: 194)
+   expected FULL: engine 89.3 (OFFLINE.md 89.3) | random among known 70.6 (70.6) | best known tool (oracle among observed, not a ceiling) 101.9 | worst 37.0
+   instances where known tools disagree in outcome: 71/194; engine's tool is (one of) the best known: 177/194
+   engine_final FULL on these: 91/194; alternatives' FULL by procedure: a0 53/176 = 0.30, engine_old 64/190 = 0.34, diverse 30/154 = 0.19
+   -> the maximum any chooser could gain over the engine on this support is 12.7 expected FULL; R-head got -3.6
+   bases: 20 | instances per base: median 12.0
+
+## F5b stream: pairs 20 complete 20 | order entries 20
+   round 0: n 5 FULL upd 1 frz 1 | discordant 0 | same leader 4 | same tool seq 2 | same first tool 4 | same final design 4 | first-turn case evidence text identical 5 | deviated upd/frz 1/0
+   round 1: n 5 FULL upd 2 frz 2 | discordant 4 | same leader 4 | same tool seq 2 | same first tool 3 | same final design 2 | first-turn case evidence text identical 0 | deviated upd/frz 0/1
+   round 2: n 5 FULL upd 1 frz 1 | discordant 0 | same leader 4 | same tool seq 2 | same first tool 4 | same final design 3 | first-turn case evidence text identical 0 | deviated upd/frz 2/0
+   round 3: n 5 FULL upd 3 frz 3 | discordant 0 | same leader 5 | same tool seq 2 | same first tool 3 | same final design 3 | first-turn case evidence text identical 0 | deviated upd/frz 0/1
+   round 0 (identical memory) vs rounds 1-3: tool-seq differs 3/5 vs 9/15; FULL discordant 0/5 vs 4/15; leader differs 1/5 vs 2/15
+   whole stream: FULL upd 7 frz 7; discordant 2/2; exact two-sided p 1.000; bases 7
+   sample R-head lines (upd | frz) and track records:
+    r0 hdb-v1-gen-0004:devcomp:pitch_sensor_bias.++actu FULL 0/0 seq twin:leg_length>plant:leg_length>plant:p | twin:leg_length>plant:leg_length>plant:t
+        RH upd: torso_mass 0.73, posture 0.70, leg_length 0.69, placement 0.64, foot_length 0.62
+        RH frz: torso_mass 0.73, posture 0.70, leg_length 0.69, placement 0.64, foot_length 0.62
+        TR upd: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r0 hdb-v1-gen-0004:payload_offset:2                 FULL 1/1 seq twin:torque_limit                        | twin:torque_limit                       
+        RH upd: torso_mass 0.74, posture 0.74, leg_length 0.69, placement 0.69, foot_length 0.66
+        RH frz: torso_mass 0.74, posture 0.74, leg_length 0.69, placement 0.69, foot_length 0.66
+        TR upd: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r0 hdb-v1-gen-0013:low_ground_friction:2            FULL 0/0 seq twin:torso_mass>plant:torso_mass>plant:p | twin:torso_mass>plant:torso_mass>plant:p
+        RH upd: foot_length 0.67, leg_length 0.21, feedback 0.19, stride 0.18, timing 0.15
+        RH frz: foot_length 0.67, leg_length 0.21, feedback 0.19, stride 0.18, timing 0.15
+        TR upd: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r0 hdb-v1-gen-0064:one_side_weakness:3              FULL 0/0 seq twin:torso_mass>plant:torso_mass>plant:t | twin:timing>plant:timing>plant:leg_lengt
+        RH upd: feedback 0.72, foot_length 0.68, posture 0.62, leg_length 0.53, timing 0.47
+        RH frz: feedback 0.72, foot_length 0.68, posture 0.62, leg_length 0.53, timing 0.47
+        TR upd: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r0 stilts-drawn:one_side_weakness:0                 FULL 0/0 seq twin:foot_length>plant:foot_length>plant | plant:foot_length>plant:placement       
+        RH upd: feedback 0.85, leg_length 0.80, foot_length 0.79, timing 0.70, posture 0.70
+        RH frz: feedback 0.85, leg_length 0.80, foot_length 0.79, timing 0.70, posture 0.70
+        TR upd: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r1 hdb-v1-gen-0013:devcomp:low_ground_friction+actu FULL 0/1 seq twin:torso_mass                          | twin:timing                             
+        RH upd: torso_mass 0.71, posture 0.68, placement 0.67, leg_length 0.67, foot_length 0.65
+        RH frz: torso_mass 0.70, leg_length 0.68, posture 0.68, placement 0.66, foot_length 0.66
+        TR upd: 34 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 17/26 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r1 hdb-v1-gen-0028:one_side_weakness:5              FULL 1/0 seq twin:timing>plant:timing                 | twin:timing                             
+        RH upd: feedback 0.85, foot_length 0.81, posture 0.80, leg_length 0.75, timing 0.70
+        RH frz: feedback 0.85, foot_length 0.83, posture 0.79, leg_length 0.75, timing 0.69
+        TR upd: 34 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 17/26 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r1 hdb-v1-gen-0038:low_ground_friction:0            FULL 0/0 seq twin:foot_friction>plant:foot_friction>p | twin:foot_friction>plant:foot_friction>p
+        RH upd: foot_length 0.69, leg_length 0.25, feedback 0.22, stride 0.20, timing 0.18
+        RH frz: foot_length 0.69, leg_length 0.24, feedback 0.21, stride 0.20, timing 0.17
+        TR upd: 34 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 17/26 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r1 hdb-v1-gen-0064:pitch_sensor_bias:2              FULL 1/0 seq twin:foot_length>plant:foot_length>plant | twin:timing>plant:timing>plant:leg_lengt
+        RH upd: feedback 0.69, leg_length 0.34, posture 0.17, torque_limit 0.15, placement 0.15
+        RH frz: feedback 0.69, leg_length 0.34, posture 0.17, foot_length 0.15, placement 0.15
+        TR upd: 34 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 17/26 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r1 stilts-drawn:clock_fault:3                       FULL 0/1 seq twin:foot_length>plant:foot_length>plant | twin:foot_length>plant:foot_length>plant
+        RH upd: posture 0.71, feedback 0.65, placement 0.58, leg_length 0.57, foot_length 0.54
+        RH frz: posture 0.70, feedback 0.64, placement 0.57, leg_length 0.57, foot_length 0.55
+        TR upd: 34 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 17/26 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r2 hdb-v1-gen-0004:feedback_gain_loss:2             FULL 0/0 seq                                          | plant:timing>plant:leg_length           
+        RH upd: torso_mass 0.71, leg_length 0.68, posture 0.67, placement 0.63, foot_length 0.60
+        RH frz: leg_length 0.70, torso_mass 0.69, posture 0.66, placement 0.62, foot_length 0.61
+        TR upd: 39 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 19/31 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r2 hdb-v1-gen-0013:low_ground_friction:0            FULL 0/0 seq twin:torso_mass>plant:torso_mass>plant:p | twin:torso_mass>plant:torso_mass>plant:p
+        RH upd: foot_length 0.71, leg_length 0.32, feedback 0.28, stride 0.26, timing 0.21
+        RH frz: foot_length 0.71, leg_length 0.32, feedback 0.27, stride 0.25, timing 0.20
+        TR upd: 39 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 19/31 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r2 hdb-v1-gen-0028:devcomp:pitch_sensor_bias.++actu FULL 0/0 seq twin:timing>plant:timing>plant:leg_lengt | plant:timing>plant:leg_length           
+        RH upd: torso_mass 0.72, leg_length 0.66, posture 0.64, placement 0.62, foot_length 0.55
+        RH frz: torso_mass 0.71, leg_length 0.68, posture 0.63, placement 0.61, foot_length 0.55
+        TR upd: 39 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 19/31 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r2 hdb-v1-gen-0036:pitch_sensor_bias:2              FULL 1/1 seq twin:torque_limit                        | twin:torque_limit                       
+        RH upd: leg_length 0.70, torso_mass 0.70, posture 0.64, placement 0.63, feedback 0.58
+        RH frz: leg_length 0.71, torso_mass 0.67, posture 0.63, placement 0.63, feedback 0.57
+        TR upd: 39 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 19/31 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r2 hdb-v1-gen-0038:short_feet:2                     FULL 0/0 seq twin:posture                             | twin:posture                            
+        RH upd: leg_length 0.54, feedback 0.46, torso_mass 0.24, foot_length 0.19, stride 0.18
+        RH frz: leg_length 0.53, feedback 0.44, torso_mass 0.23, foot_length 0.18, stride 0.17
+        TR upd: 39 earlier investigations: when you overrode the engine's default repair, 1/8 verified; when you delegated it, 19/31 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r3 hdb-v1-gen-0028:devcomp:pitch_sensor_bias.++cloc FULL 1/1 seq plant:foot_length>plant:placement        | twin:leg_length>plant:leg_length>plant:p
+        RH upd: feedback 0.83, leg_length 0.79, foot_length 0.62, posture 0.58, timing 0.54
+        RH frz: feedback 0.83, leg_length 0.78, foot_length 0.64, posture 0.59, timing 0.53
+        TR upd: 44 earlier investigations: when you overrode the engine's default repair, 1/10 verified; when you delegated it, 20/34 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r3 hdb-v1-gen-0036:one_side_weakness:3              FULL 1/1 seq twin:torque_limit                        | twin:torque_limit                       
+        RH upd: feedback 0.80, foot_length 0.69, leg_length 0.67, posture 0.60, timing 0.58
+        RH frz: feedback 0.80, foot_length 0.73, leg_length 0.67, posture 0.59, timing 0.56
+        TR upd: 44 earlier investigations: when you overrode the engine's default repair, 1/10 verified; when you delegated it, 20/34 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r3 hdb-v1-gen-0036:payload_offset:2                 FULL 1/1 seq twin:torso_mass                          | twin:posture                            
+        RH upd: torso_mass 0.69, placement 0.64, posture 0.63, leg_length 0.62, foot_length 0.54
+        RH frz: torso_mass 0.69, leg_length 0.64, placement 0.63, posture 0.63, foot_length 0.54
+        TR upd: 44 earlier investigations: when you overrode the engine's default repair, 1/10 verified; when you delegated it, 20/34 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r3 hdb-v1-gen-0064:clock_fault:2                    FULL 0/0 seq twin:foot_length>plant:foot_length>plant | twin:foot_length>plant:foot_length>plant
+        RH upd: posture 0.64, feedback 0.53, placement 0.51, leg_length 0.50, timing 0.44
+        RH frz: posture 0.64, feedback 0.51, placement 0.50, leg_length 0.50, foot_length 0.43
+        TR upd: 44 earlier investigations: when you overrode the engine's default repair, 1/10 verified; when you delegated it, 20/34 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+    r3 hdb-v1-gen-0064:feedback_gain_loss:0             FULL 0/0 seq twin:foot_length>plant:foot_length>plant | twin:foot_length>plant:foot_length      
+        RH upd: feedback 0.76, leg_length 0.63, foot_length 0.53, timing 0.44, placement 0.42
+        RH frz: feedback 0.75, leg_length 0.63, foot_length 0.59, timing 0.42, placement 0.41
+        TR upd: 44 earlier investigations: when you overrode the engine's default repair, 1/10 verified; when you delegated it, 20/34 verified.
+        TR frz: 29 earlier investigations: when you overrode the engine's default repair, 1/7 verified; when you delegated it, 16/22 verified.
+
+## F5d deviation (has_cases definition): A3v5 10/36, A4x 3/36; paired discordant A3v5-only 9, A4x-only 2, exact two-sided p 0.065
+   reasoning text mentions (episodes): {('A4x', 'mentions override/deviation'): 35, ('A4x', "mentions 'track record'"): 8, ('A4x', 'mentions case evidence / repair model'): 1}
