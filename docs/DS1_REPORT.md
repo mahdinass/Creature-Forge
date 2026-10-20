@@ -90,11 +90,53 @@ seeds, plant budget 700 and twin cap 2,800. Batch VM, no inference key used.
 - This does not contradict G-m: the 6 dev-eval compositions are a different, smaller set, and the composite mechanism is
   given no credit (amendment 2).
 
-## 5. Nemotron contrast: A3v5 vs A1e6 (identical engine v6) — PENDING
+## 5. Nemotron contrast: A3v5 vs A1e6 (identical engine v6, complete)
+
+| measure | single mechanism (n 30): A3v5 / A1e6 | compositions (n 6): A3v5 / A1e6 |
+|---|---|---|
+| FULL recovery | 8 / 8 (discordant 2 vs 2, p = 0.69 either way) | 2 / 1 (discordant 1 vs 0, p = 0.50) |
+| mean validation walking | 0.64 / 0.70 (Wilcoxon p(A1e6 > A3v5) = 0.11) | 0.76 / 0.76 |
+| mean log P(true structure) | −2.84 / −2.54 | −4.61 / −4.61 |
+| leading explanation correct | 15 / 19 | 3 / 3 |
+| confidently wrong | 6 / 4 | 1 / 0 |
+| shares a true primitive | 21 / 21 | 4 / 4 |
+| plant / twin rollouts per episode | 540 / 2,632 vs 621 / 2,508 | 567 / 2,689 vs 584 / 2,575 |
+| assimilated checks (skipped for twin budget) | 33 (42) vs 76 (7) | 3 (8) vs 12 (4) |
+
+- **Repair signal: no Nemotron effect.** FULL is equal on singles and differs by one discordant pair on compositions;
+  validation walking is slightly lower with Nemotron. A3v5 spends fewer plant rollouts and more twin rollouts.
+- **Diagnostic signal: Nemotron's experiments and hypotheses made the engine's belief slightly worse on singles**
+  (lower log P(truth), fewer correct leaders, more confidently wrong) and left compositions unchanged.
+- **Registered P(success):** present on 30/30 single and 6/6 composition repair decisions; mean 0.52 on singles, Brier
+  0.329. A constant forecast at the observed base rate (8/30) would score 0.196, so Nemotron's success forecasts were
+  worse than uninformative. The stop map on the same submitted designs: Brier 0.157.
+- **Deviations from the engine default:** 9 of 30 singles (FULL 2/9) and 1 of 6 compositions (FULL 1/1); delegated
+  episodes FULL 6/21 and 1/5.
+- Nemotron's extra twin use left the cross-feedback step short of budget more often (42 skipped vs 7).
 
 ## 6. Experience contrast: A4x vs A3v5 and A4x vs A1e6 (M_final memory) — PENDING
 
-## 7. Learning stream: A4x-updating vs A4x-frozen (20 instances, 4 rounds, stream bases) — PENDING
+## 7. Learning stream: A4x-updating vs A4x-frozen (20 instances, 4 rounds, stream bases, complete)
+
+Same instances in the same order; the updating arm appends its verified outcomes after each round (R-head, dossier support
+and track record refreshed); the frozen arm keeps the init memory.
+
+| round | n | FULL upd / frz | mean log P(truth) upd / frz | Nemotron P(success) Brier upd / frz | repair-model Brier on the round, store before the round: upd / init |
+|---|---|---|---|---|---|
+| 0 | 5 | 1 / 1 | −2.10 / −2.61 | 0.348 / 0.229 | 0.290 / 0.290 |
+| 1 | 5 | 2 / 2 | −3.62 / −1.86 | 0.187 / 0.213 | 0.231 / 0.231 |
+| 2 | 5 | 1 / 1 | −2.15 / −1.92 | 0.430 / 0.451 | 0.264 / 0.267 |
+| 3 | 5 | 3 / 3 | −1.89 / −1.86 | 0.149 / 0.251 | 0.369 / 0.393 |
+
+- **No learning effect.** Over the stream FULL is 7 vs 7 (discordant 2 vs 2, p = 0.69 either way); validation walking
+  differs by 0.04 in favour of the frozen arm (Wilcoxon p = 0.21).
+- **Repair signal:** the refreshed repair-outcome model scored the next round no better than the init model (differences
+  ≤ 0.03 Brier). Twenty new outcomes on top of 947 init cases barely move it.
+- **Diagnostic signal:** no trend; the updating arm's log P(truth) was lower in 3 of 4 rounds.
+- **Nemotron's success forecasts:** Brier lower for the updating arm in rounds 1–3, higher in round 0; with 5 episodes per
+  round this is not distinguishable from noise.
+- In round 0 both arms use the identical init memory, so its differences are LLM run-to-run variation alone; they are
+  as large as the differences in later rounds.
 
 ## 8. Gate G-c (Stage-3 eligibility of A4x) — PENDING
 
