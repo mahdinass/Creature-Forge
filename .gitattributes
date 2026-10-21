@@ -17,3 +17,4 @@ experiments/walk_recovery/**/results*/** -text
 experiments/causal_engineer/heldout/**/*.jsonl -text
 experiments/causal_engineer/heldout/**/*.json -text
 docs/archive/*.SHA256SUMS -text
+experiments/do1/** -text

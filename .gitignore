@@ -24,6 +24,9 @@ artifacts/
 runs/
 checkpoints/
 *.log
+# run logs inside the tracked TA-1 / DO-1 run records are evidence, not scratch output
+!experiments/do1/**/*.log
+!experiments/ta1/**/*.log
 # Editor/OS
 .idea/
 .vscode/
