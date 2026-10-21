@@ -498,3 +498,79 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   14:15 UTC; **both VMs verified STOPPED via the control plane** (infra ledger $88.47). Future finalisation must stop via
   the API, not rely on poweroff or the in-VM deadman.
   The batch VM's pre-existing `~/dev/.env` key line (2026-10-16) is untouched; removal is the owner's decision.
+
+## 2026-10-20/21 - FA-1C (TA-1 / RV-1) and DO-1: summary, now recorded in the repository
+Until now these results were recorded only in the Notion FA-1C page, in script docstrings and in local memory.
+
+**TA-1 / RV-1.** Harness `scripts/ta1_tool_access.py`, branch `experiment/ta1-harness`. Raw records in `experiments/ta1/`.
+- Phase 1A (re-verification): PASS on the stored **summary** fields (status, walking fraction, verdict, reasons, rollouts) for all 8 designs on 7 instances, on Windows. The DS-1 records had no per-seed rows, so this was not a per-seed physics check (see W1a below).
+- Phase 1B (L1, paired): both arms NOT_RECOVERED.
+- X1: d3 is NOT_RECOVERED.
+- A1 L4 pilot: both arms PARTIAL 19/24. Friction priority did not change the outcome.
+
+**DO-1.** Objective v2 `scripts/do1_objective.py` and runner `scripts/do1_repair_ablation.py`, branch
+`experiment/do1-objective` @ `e9d2379`. Raw records in `experiments/do1/l4_r0/`.
+- DO1-L4-r0, one paired technical replicate on L4 (`hdb-v1-gen-0137:low_ground_friction:0`):
+
+  | Arm | Status | Walking | Paired displacement | Confirmation |
+  |---|---|---|---|---|
+  | Frozen | PARTIAL | 19/24 | +1.082 m | — |
+  | DO-1 | FULL_RECOVERY | 21/24 | +0.710 m | 22/24 |
+
+- ChatGPT independently audited the raw JSONL (sha256 `00a8db20…`).
+- Both arms are A1e6 (NO_AI): no Nemotron involvement.
+- One replicate (McNemar 1/0, p = 0.5). Not a rate.
+
+**2026-10-21, Step 1 of the post-DO-1 plan.** Plan of record: `~/.claude/plans/pasted-content-id-3fc3-creature-cozy-parasol.md`.
+Branch `feature/do1-demo` from `e9d2379`, worktree `cf-do1-demo`. No physics, Nebius or inference.
+- **Preserved the runs.** The 76 raw files were copied to the git-ignored `artifacts/runs/2026-10-20_21/` and verified 76/76. The evidence is tracked byte-exact in `experiments/do1/l4_r0/` and `experiments/ta1/`. `docs/ARTIFACT_ARCHIVE_2026-10-21.md`; `docs/archive/runs_2026-10-21.SHA256SUMS`.
+- **Frozen-path guard.** `tests/test_frozen_paths.py` pins 87 `creature_forge/*.py` modules, `scripts/do1_objective.py` and the 4 DS-1 inputs at their `e9d2379` blobs. A negative probe confirmed it fails on a change.
+- **Demo exporter.** `scripts/do1_demo_export.py` takes the faulty, frozen and DO-1 designs on the hidden plant through a two-layer fail-closed fidelity gate:
+  1. the verifier's own per-seed path must equal the stored rows exactly;
+  2. frames come from `plant_rollout` traces, with a forward-kinematics check (≤ 1e-9 m).
+  - The dry run reproduces the recorded aggregates from the record (frozen 19/24, DO-1 21/24, confirmation 22/24, faulty 5/24).
+  - Default seed by the pre-declared rule: 66645963.
+  - `--execute` (about 240 rollout-equivalents, local) **awaits owner approval**.
+- **Tests.** 11 no-physics tests. 138 TA-1/DO-1/guard tests pass.
+- **Open items:**
+  - Publication (owner decision 2026-10-21): pinned TA-1/DO-1 commits keep their AI co-author trailers and hashes; AI assistance is to be disclosed.
+  - Local account paths in 7 tracked run files are redacted in the tracked copies (`docs/archive/redactions_2026-10-21.json`); originals archived byte-exact.
+- **Notion.** Project HQ snapshot v1.9 written (21 Oct).
+
+## 2026-10-21 - W1a local replay: fidelity gate FAILED CLOSED (Windows does not reproduce the Linux per-seed physics)
+Owner-approved local replay of the DO-1 demo export (`scripts/do1_demo_export.py --execute`, 2 workers). **Nothing was exported.**
+
+**Result 1 — Windows ≠ Linux per-seed physics.** The verifier's own per-seed path (`recovery.run_walk_seeds` + `hidden_plant.seed_job`, exact L4 plant and stored conditions) on Windows did not reproduce any of the 96 audited Linux rows bitwise.
+- Windows environment: Python 3.11.9, numpy 2.4.6, MuJoCo 3.15.0.
+- Recorded environment: main VM, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0.
+- Windows is deterministic: today's values equal the RV-1 Phase 1A Windows values of 20 Oct.
+- Every outcome-level quantity matched:
+
+  | Check | Matched |
+  |---|---|
+  | Labels and walking flags | 96/96 |
+  | Walking counts | faulty 5, frozen 19, DO-1 21, confirmation 22 |
+  | Verdicts | frozen 20/1/3, DO-1 21/0/3, both VERIFIED |
+
+- Distances differed:
+
+  | Rows | Max abs diff | Median abs diff |
+  |---|---|---|
+  | Faulty | 7.2 mm | 0.36 mm |
+  | Frozen | 0.9 µm | — |
+  | DO-1 | 0.37 mm | — |
+  | 20 s confirmation | 9.0 mm | — |
+
+  Median paired gain: frozen 1.08219 vs 1.08186 m; DO-1 0.70993 vs 0.71001 m.
+- Under the exact-equality gate this is a failure, and it was not loosened. The cause cannot be split between OS/build and the Python/numpy versions without a second environment.
+
+**Result 2 — an exporter frame-reconstruction defect, found and diagnosed.** `plant_rollout` logs torso/foot positions from `mj_step`'s pre-integration kinematics, but pitch and joint angles from the post-integration `qpos`.
+- Forward kinematics of the **pre-step** `qpos` reproduces the logged positions exactly: 0.0 m on 2000/2000 samples.
+- Mixing the two states, as exporter v1 did, gives 1.4 mm.
+- The fix: record the pre-step `qpos` by observing `mujoco.mj_step` during the traced rollout, with no frozen code changed. Not yet implemented.
+
+**Rollouts, all local, about 206 rollout-equivalents:** 158 × 10 s + 24 × 20 s, including 4 instance-eligibility checks of 8. No cloud and no inference.
+
+Diagnostics and outputs are in the git-ignored `artifacts/runs/w1a_windows_check_2026-10-21/` (SHA256SUMS).
+
+**Next (needs approval):** fix the exporter frames, then run the export on the main VM, which is the recorded Linux environment.

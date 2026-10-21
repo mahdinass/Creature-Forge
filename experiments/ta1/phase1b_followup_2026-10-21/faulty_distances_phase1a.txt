@@ -1,0 +1,8 @@
+R1 L1                         faulty median  6.88 m (max 7.19) [('contact_chatter', 22), ('fall', 2)] | submitted median  4.11 m | needed for +0.5 m median gain ~7.38 m
+R2 L2                         faulty median  6.97 m (max 7.24) [('contact_chatter', 24)] | submitted median  4.73 m | needed for +0.5 m median gain ~7.47 m
+R3 L3                         faulty median  4.08 m (max 4.33) [('contact_chatter', 18), ('fall', 3)] | submitted median  4.07 m | needed for +0.5 m median gain ~4.58 m
+R4 L4                         faulty median  2.34 m (max 2.44) [('contact_chatter', 16), ('walking', 5)] | submitted median  3.43 m | needed for +0.5 m median gain ~2.84 m
+R5 L5                         faulty median  3.85 m (max 4.11) [('contact_chatter', 21), ('fall', 3)] | submitted median  4.33 m | needed for +0.5 m median gain ~4.35 m
+R6 heavy_torso:0 (A1e6)       faulty median  6.04 m (max 6.16) [('falling_forward', 23), ('fall', 1)] | submitted median  4.43 m | needed for +0.5 m median gain ~6.54 m
+R7 heavy_torso:0 (A3v5 FULL)  faulty median  6.04 m (max 6.16) [('falling_forward', 23), ('fall', 1)] | submitted median  7.43 m | needed for +0.5 m median gain ~6.54 m
+R8 pitch_sensor_bias:3 FULL   faulty median  2.57 m (max 2.72) [('slow_or_few_steps', 14), ('contact_chatter', 9)] | submitted median  4.23 m | needed for +0.5 m median gain ~3.07 m

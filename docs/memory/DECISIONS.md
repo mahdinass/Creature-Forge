@@ -135,3 +135,14 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - **Spending:** staged. Stage 1 approved: infra $35 (cap 38 → 72) and inference ≤ $5 within the $40 cap. Real credit on
   2026-10-18 was Cloud $66, Token Factory $52. Later stages need owner approval with advance notice.
 - **Elicit:** API access was denied; no Elicit result is used anywhere.
+
+## 2026-10-21 Post-DO-1 plan: demo first, fail-closed replays, staged replication (owner-approved, revision 2)
+- **Plan of record:** `~/.claude/plans/pasted-content-id-3fc3-creature-cozy-parasol.md`. Each step needs separate approval.
+  - Workstreams: W0 preservation and integration; W1 L4 demo; W2 Nemotron audit; W3 replication `DO1-L4-rep`; W4 cross-family `DO1-X`; W5 submission.
+  - W3: r1–r5 paired, plus a frozen r0 sentinel. The cap is 39,644.
+  - W4: B1 `gen-0142:payload_offset:5` and C1 `gen-0070:feedback_gain_loss:2`, by a pre-declared eligibility rule.
+- **Demo integrity.** Replays must reproduce the hidden plant and the stored verification rows exactly. Otherwise nothing is exported. The existing Scientist/Causal replays use the generic preset **without** the hidden fault, and must be relabelled or replaced before filming.
+- **Attribution.** DO-1 is NO_AI and is never credited to Nemotron. Nemotron's demonstrated contributions are:
+  - the pre-registered Forge Loop push scoreboard (6/12 vs 1/12);
+  - recorded HaS traces, such as the `gen-0137 one_side_weakness` experiment choice, with deterministic replay attribution.
+- **Records.** TA-1/DO-1 raw records are frozen under `experiments/do1/` and `experiments/ta1/`. Source and inputs that decided DO1-L4-r0 are pinned by `tests/test_frozen_paths.py`.

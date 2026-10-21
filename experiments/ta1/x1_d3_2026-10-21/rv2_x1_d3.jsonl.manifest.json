@@ -1,0 +1,137 @@
+{
+ "harness_version": "ta1_harness_v2",
+ "created_utc": "2026-10-20T22:40:13+00:00",
+ "git_commit": "bc85004f1d6c9a5fb034ed42a954148ddaf3dcc6",
+ "git_branch": "experiment/ta1-harness",
+ "git_dirty": false,
+ "git_status_porcelain": "",
+ "inputs": {
+  "v6_settings": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\ds1\\engine_v6_settings.json",
+   "sha256": "a0b037ef292886cf6311e41e275b8d492832de3cc3b1a68d8a1c8fb3fb5f8df1",
+   "git_blob_at_head": "805c72ce0218a23d414c1ca05975f52356292b18"
+  },
+  "stop_model": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\ds1\\stopmap_dev_v2.json",
+   "sha256": "7a829bb31cb88a6d0f38bf046326ab0b657f92423bc2807203c5f5dfc4f3ce73",
+   "git_blob_at_head": "99590dc7d362dc9f5abc0f448bf058529ebe70b5"
+  },
+  "split_file": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\stage2_split.json",
+   "sha256": "8ce0c7d0fc128f0385092a0574c4045542f7e1cfee37096e15e5544afa609394",
+   "git_blob_at_head": "c357bed7ca762fe38dde2323b86b32613d82deb6"
+  },
+  "eval_instances": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\ds1\\ds1_eval_instances.json",
+   "sha256": "dbd502de456234d70a69bebc69522a7640c4163608f82528d65c72ae8f65e97e",
+   "git_blob_at_head": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "thresholds": {
+   "path": "C:\\Users\\<user>\\.vscode\\Creature-Forge\\artifacts\\vm\\hdb\\artifacts\\hdb\\thresholds_dev.json",
+   "sha256": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "git_blob_at_head": null
+  },
+  "walkers": {
+   "path": "C:\\Users\\<user>\\.vscode\\Creature-Forge\\artifacts\\vm\\hdb\\artifacts\\hdb\\walkers_all.jsonl",
+   "sha256": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd",
+   "git_blob_at_head": null
+  }
+ },
+ "reference": {
+  "implementation_commit": "ea9e7291e8b718f1936120fcd844bd236175a16d",
+  "tracked_inputs_git_blob": {
+   "v6_settings": "805c72ce0218a23d414c1ca05975f52356292b18",
+   "stop_model": "99590dc7d362dc9f5abc0f448bf058529ebe70b5",
+   "split_file": "c357bed7ca762fe38dde2323b86b32613d82deb6",
+   "eval_instances": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "artifact_inputs_sha256": {
+   "thresholds": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "walkers": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd"
+  },
+  "stored_records_sha256": {
+   "eval_A1e6_s1.jsonl": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d",
+   "eval_A1e6_s2.jsonl": "2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d",
+   "eval_A1e6_s3.jsonl": "f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27",
+   "eval_A1e6_s4.jsonl": "7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102",
+   "eval_A1e6_s5.jsonl": "5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97",
+   "eval_A3v5_s5.jsonl": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0"
+  }
+ },
+ "python": "3.11.9",
+ "numpy": "2.4.6",
+ "mujoco": "3.15.0",
+ "platform": "Windows-10-10.0.26200-SP0",
+ "engine_version": "belief_engine_v6",
+ "agent_version": "has_agent_v4",
+ "argv": [
+  "scripts/rv2_d3_reverify.py",
+  "--execute",
+  "--phase",
+  "X1",
+  "--approved-by",
+  "owner X1 authorization 2026-10-21",
+  "--harness-commit",
+  "bc85004f1d6c9a5fb034ed42a954148ddaf3dcc6",
+  "--max-rollouts",
+  "104",
+  "--ta1-record",
+  "C:/Users/<user>/.vscode/creature_forge_runs/fa1c_phase1b_2026-10-20/ta1_phase1b.jsonl",
+  "--phase1a-record",
+  "C:/Users/<user>/.vscode/creature_forge_runs/fa1c_phase1a_2026-10-20/rv1_phase1a.jsonl",
+  "--artifacts-root",
+  "C:/Users/<user>/.vscode/Creature-Forge/artifacts/vm/hdb/artifacts/hdb",
+  "--records-root",
+  "C:/Users/<user>/.vscode/Creature-Forge/artifacts/vm/ds1/eval",
+  "--workers",
+  "6",
+  "--out",
+  "C:/Users/<user>/.vscode/creature_forge_runs/fa1c_x1_d3_2026-10-21/rv2_x1_d3.jsonl"
+ ],
+ "phase": "X1",
+ "study": {
+  "id": "FA-1C X1",
+  "label": "post-hoc exploratory verification of a discarded candidate",
+  "not": "not an independent generalisation test; not a preregistered TA-1 outcome; not evidence for the policy",
+  "design_selected_after_results": true,
+  "n_designs": 1,
+  "n_instances": 1
+ },
+ "approved_by": "owner X1 authorization 2026-10-21",
+ "cap": 104,
+ "rv2_version": "rv2_d3_reverify_v1",
+ "harness_commit_approved": "bc85004f1d6c9a5fb034ed42a954148ddaf3dcc6",
+ "ta1_record": {
+  "file": "ta1_phase1b.jsonl",
+  "sha256": "ebcf29eddbeffdf9b22234180957f25bc8ddd12bd6f6616a607b365c1c5aae67",
+  "line": 2,
+  "ta1_arm": "treatment",
+  "replicate": 0,
+  "instance_id": "hdb-v1-gen-0073:low_ground_friction:2",
+  "harness_commit_of_run": "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+  "design_index": 3,
+  "design_hash": "84835bc636",
+  "source": "repair:foot_friction",
+  "parent": 2,
+  "original_design_hash": "639747be8c",
+  "path": "C:\\Users\\<user>\\.vscode\\creature_forge_runs\\fa1c_phase1b_2026-10-20\\ta1_phase1b.jsonl",
+  "actual_sha256": "ebcf29eddbeffdf9b22234180957f25bc8ddd12bd6f6616a607b365c1c5aae67"
+ },
+ "phase1a_record": {
+  "file": "rv1_phase1a.jsonl",
+  "sha256": "0ca0ff3239e525cef02e742425bbe52dd9e2a3fe6bfc66a300ef9810647eb10e",
+  "row_id": "R1",
+  "instance_id": "hdb-v1-gen-0073:low_ground_friction:2",
+  "path": "C:\\Users\\<user>\\.vscode\\creature_forge_runs\\fa1c_phase1a_2026-10-20\\rv1_phase1a.jsonl",
+  "actual_sha256": "0ca0ff3239e525cef02e742425bbe52dd9e2a3fe6bfc66a300ef9810647eb10e"
+ },
+ "ds1_record": {
+  "file": "eval_A1e6_s1.jsonl",
+  "line": 1,
+  "sha256": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d"
+ },
+ "preregistered_reading": {
+  "FULL_RECOVERY": "one candidate generated by the friction-first policy and rejected by stop-map selection passes the frozen verifier on L1 (exploratory, single design)",
+  "other": "no verified recovery for this discarded candidate under the frozen verifier; on L1 the selection between d3 and d4 did not cost a recovery"
+ }
+}

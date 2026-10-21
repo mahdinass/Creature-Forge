@@ -1,0 +1,41 @@
+
+=== FROZEN r0 wall 369s submitted d4 66053dae8e
+  PARTIAL_IMPROVEMENT | walking 19/24 aggregate POOR | verdict VERIFIED_IMPROVEMENT W/L/T 20/1/3 median +1.082 m p_better 1.049e-05 | confirmation run=False passed=None
+  reasons: ['candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)']
+  validation distances: faulty median 2.34 m, submitted median 3.43 m; candidate labels {'walking': 19, 'fall': 4, 'slow_or_few_steps': 1}
+  hook: ranking ['leg_length', 'posture', 'timing', 'torque_limit', 'feedback', 'torso_mass', 'stride', 'placement', 'foot_length'] | plan {} | fingerprint beeaeb58bf3968f4 | prehook plant 28 twin 1450
+  d3 <- d0 twin:cma:leg_length        fric x1.000 | r8 6 r16 None stress4 None disp None None P None
+      changes: thigh_length 0.2764->0.4792; shank_length 0.278->0.3851; thigh_length_r 0.2764->0.4792; shank_length_r 0.278->0.3851
+  d4 <- d3 repair:leg_length          fric x1.000 | r8 None r16 15 stress4 3 disp VERIFIED_IMPROVEMENT 1.1279 P 0.5883532228270734 | robust W/L/T 15/0/1 med +1.128 -> VERIFIED_IMPROVEMENT | robust dist median 3.47 vs faulty 2.31
+      changes: thigh_length 0.4792->0.5237; shank_length 0.3851->0.3832; thigh_length_r 0.4792->0.5237; shank_length_r 0.3851->0.3832
+  d5 <- d4 repair:posture             fric x1.000 | r8 None r16 14 stress4 3 disp VERIFIED_IMPROVEMENT 1.1835 P 0.3886577649324444 | robust W/L/T 15/0/1 med +1.183 -> VERIFIED_IMPROVEMENT | robust dist median 3.53 vs faulty 2.31
+      changes: stance_knee -0.04193->-0.05793; hip_bias +0.1797->+0.1987; pitch_ref +0.1123->+0.1402; start_lean +0.01687->+0.02182
+  accepted False selection pmap {'4': 0.5884, '5': 0.3887} -> d4 | resources plant {'used': 700, 'budget': 700, 'prehook': 28, 'posthook': 672} twin {'used': 2514, 'budget': 2800, 'prehook': 1450, 'posthook': 1064} total 3270.0
+  rescreen no re-screen | complete True | arm_checks {'valid': True, 'problems': [], 'exposed': None}
+  FROZEN reproduction exact True (21/21) failing []
+
+=== DO1 r0 wall 342s submitted d4 9aa66e0f04
+  FULL_RECOVERY | walking 21/24 aggregate PASS | verdict VERIFIED_IMPROVEMENT W/L/T 21/0/3 median +0.710 m p_better 4.768e-07 | confirmation run=True passed=True
+  confirmation checks: {'walking_frac': (0.9166666666666666, True), 'median_speed_upright': (0.32429947733468123, True), 'body_contact': (None, True)}
+  reasons: []
+  validation distances: faulty median 2.34 m, submitted median 3.05 m; candidate labels {'walking': 21, 'fall': 3}
+  hook: ranking ['leg_length', 'posture', 'timing', 'torque_limit', 'feedback', 'torso_mass', 'stride', 'placement', 'foot_length'] | plan {} | fingerprint beeaeb58bf3968f4 | prehook plant 28 twin 1450
+  d3 <- d0 twin:cma:leg_length        fric x1.000 | r8 6 r16 None stress4 None disp None None P None
+      changes: thigh_length 0.2764->0.4792; shank_length 0.278->0.3851; thigh_length_r 0.2764->0.4792; shank_length_r 0.278->0.3851
+  d4 <- d3 repair:leg_length          fric x1.000 | r8 None r16 15 stress4 4 disp VERIFIED_IMPROVEMENT 0.7286 P 0.832060555534061 | robust W/L/T 15/0/1 med +0.729 -> VERIFIED_IMPROVEMENT | robust dist median 3.13 vs faulty 2.31
+      changes: thigh_length 0.4792->0.3781; shank_length 0.3851->0.3219; thigh_length_r 0.4792->0.3781; shank_length_r 0.3851->0.3219
+  accepted True selection pmap None -> d4 | resources plant {'used': 428, 'budget': 700, 'prehook': 28, 'posthook': 400} twin {'used': 2418, 'budget': 2800, 'prehook': 1450, 'posthook': 968} total 2950.0
+  rescreen no re-screen | complete True | arm_checks {'valid': True, 'problems': [], 'exposed': True}
+  DO1 stored-prefix True {'plant_lines': True, 'twin_lines': True, 'events': True, 'history': True, 'eligibility_labels': True, 'eligibility_walking': True, 'eligibility_n': True, 'eligibility_rollouts': True}
+  PAIRED {'equal': True, 'same_unit': True, 'n_calls': [1, 1], 'differing_components': []}
+  DO-1 train baseline (faulty, train seeds [34204352, 34204353, 34204354, 34204355]): scores [2.362, 2.192, 0.0, 2.278] pass [False, False, False, False]
+  DO-1 repair #0 leg_length: budget 388 (baseline 4, cma 384, used 364) -> d4 | 91 candidates, 71 walk 4/4, 54 feasible | restarts 0 errors 0
+      init: W 4 S 4 feasible True med gain +1.168 m margin +0.084 fit_v1 5.322 J 44100.848
+      selected (log #90): W 4 S 4 feasible True med gain +0.825 m (wins 4 losses 0) margin +0.284 fit_v1 5.299 J 44102.845
+      selected per seed: s34204352 walking gain +0.84 margin +0.373 (speed); s34204353 walking gain +0.67 margin +0.225 (speed); s34204354 walking gain +3.12 margin +0.339 (speed); s34204355 walking gain +0.81 margin +0.200 (touchdown)
+      feasible margins: max +0.284 median +0.182; binding gates of selected: Counter({'speed': 3, 'touchdown': 1})
+      median gain over all candidates: median +0.831 max +1.337
+
+component fingerprints equal: True ['bench', 'engine_flags', 'engine_trace', 'experiments', 'ledgers', 'particles', 'ranking', 'session', 'state']
+same submitted design in both arms: False
+manifest: {'git_commit': 'e9d2379def2546cedcc9ce5c3cc2aa22b9746392', 'git_dirty': False, 'harness_commit_approved': 'e9d2379def2546cedcc9ce5c3cc2aa22b9746392', 'runner_version': 'do1_ablation_v1', 'python': '3.12.3', 'numpy': '2.5.4', 'mujoco': '3.15.0', 'platform': 'Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39', 'created_utc': '2026-10-21T00:17:25+00:00', 'phase': 'DO1-L4-r0'} objective do1_objective_v2
