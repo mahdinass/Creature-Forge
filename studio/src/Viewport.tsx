@@ -125,9 +125,12 @@ function Scene({ run }: { run: RunPayload }) {
       <ambientLight intensity={0.6} />
       <directionalLight position={[3, 6, 4]} intensity={1.6} castShadow shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-6} shadow-camera-right={6} shadow-camera-top={6} shadow-camera-bottom={-6} />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      {/* Backdrop floor: drawn first and writes no depth. Its two 400 m triangles, clipped at the near plane, get depth
+          errors larger than the grid's 1 mm offset on some rasterisers (all of SwiftShader, intermittently Intel), which
+          hid the grid; with no depth from the floor, the grid and robot never have to win against it. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow renderOrder={-1}>
         <planeGeometry args={[400, 400]} />
-        <meshStandardMaterial color="#1b2230" />
+        <meshStandardMaterial color="#1b2230" depthWrite={false} />
       </mesh>
       <Grid args={[400, 400]} cellSize={0.25} sectionSize={1} cellColor="#2b3548" sectionColor="#4a5a78"
         fadeDistance={25} position={[0, 0.001, 0]} infiniteGrid />
