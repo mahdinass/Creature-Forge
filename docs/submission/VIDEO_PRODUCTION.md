@@ -7,7 +7,7 @@ The storyboard and narration are in `STORYBOARD.md`. The cut list (picture plus 
 
 | Tool | Version | Source | Use |
 |---|---|---|---|
-| FFmpeg / ffprobe | 8.1 full build (gyan.dev) | already installed, `C:\Users\mbnas\ffmpeg-8.1-full_build\…\bin`, on `PATH` | screencast → H.264, trims, cards, captions, MKV remux, checks |
+| FFmpeg / ffprobe | 8.1 full build (gyan.dev) | already installed, `%USERPROFILE%\ffmpeg-8.1-full_build\…\bin`, on `PATH` | screencast → H.264, trims, cards, captions, MKV remux, checks |
 | Playwright | `playwright-core` 1.49.1 (`studio/node_modules`) | existing project dependency | deterministic choreography plus CDP screencast |
 | Browser | Microsoft Edge (system) | existing | headless, **real GPU** (ANGLE D3D11, Intel Iris Xe) |
 | OBS Studio | 32.2.2 | **installed** with `winget install --id OBSProject.OBSStudio --exact --source winget`; the installer hash was verified by winget | optional manual capture; voice-over recording |

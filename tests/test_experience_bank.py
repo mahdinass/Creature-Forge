@@ -308,8 +308,8 @@ class TestNoLeakage(unittest.TestCase):
             self.assertNotIn("severity", ep)
 
 
-REAL_EP = Path("C:/Users/mbnas/.vscode/Creature-Forge/artifacts/vm/ce2/ce")
-REAL_INST = Path("C:/Users/mbnas/.vscode/Creature-Forge/artifacts/vm/ce/ce/dev_shard0.jsonl")
+REAL_EP = Path(__file__).resolve().parents[1] / "artifacts/vm/ce2/ce"
+REAL_INST = Path(__file__).resolve().parents[1] / "artifacts/vm/ce/ce/dev_shard0.jsonl"
 
 
 @unittest.skipUnless(REAL_EP.exists() and REAL_INST.exists(), "real example files absent")

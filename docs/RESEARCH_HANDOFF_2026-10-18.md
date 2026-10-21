@@ -34,7 +34,7 @@ the scientist and its memory/learner arms.
 | `feature/walk-recovery` | `f96b9d9` | 65 commits ahead of `main`, 0 behind | none |
 | **`feature/causal-engineer`** | `192c000` before this handoff; the handoff commit sits on top | contains all of `feature/walk-recovery` plus 51 commits; 116 ahead of `main`, 0 behind; **does not** contain `feature/demo-capture` | none |
 | `feature/demo-capture` | `29e8e50` | 4 ahead of `main` | **PR #17, Draft, open** ("submission PR"); CI failing on `test_license` (fixed by PR #18) |
-| `fix/ci-license-and-workflow` | `e583f41` | 1 ahead of `main`; worktree `C:/Users/mbnas/.vscode/cf-ci-fix` | **PR #18, open**, CI green 2026-10-17, mergeable, awaiting owner review |
+| `fix/ci-license-and-workflow` | `e583f41` | 1 ahead of `main`; worktree `cf-ci-fix` (sibling of the main checkout) | **PR #18, open**, CI green 2026-10-17, mergeable, awaiting owner review |
 
 - The repository is **PRIVATE**. Default branch `main`.
 - Stale refs: `origin/wip/s8-engineering-memory-UNVERIFIED` and `origin/wip/s9-security-hardening-UNVERIFIED` (content

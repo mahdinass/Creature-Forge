@@ -52,7 +52,7 @@ Not archived:
   checked against `protocol.json`). VM-only logs and tmux output were not inventoried.
 
 ## Locations
-1. **Local, outside the repository:** `C:\Users\mbnas\CreatureForge-archive\2026-10-18\`. It holds the archive,
+1. **Local, outside the repository:** `%USERPROFILE%\CreatureForge-archive\2026-10-18\` (owner's laptop). It holds the archive,
    `.tar.gz.sha256`, `MANIFEST.json`, `SHA256SUMS` and `RECOVERY.md` (a copy of this file).
 2. **Off-machine:** a **draft** GitHub release in the private repository `mahdinass/Creature-Forge`. Tag name
    `archive-ce-artifacts-2026-10-18`, release title "Causal-engineer artifact archive 2026-10-18".
@@ -66,7 +66,7 @@ Not archived:
 D=$(mktemp -d)
 # 1) fetch: off-machine copy (or copy the files from the local archive folder instead)
 gh release download archive-ce-artifacts-2026-10-18 --repo mahdinass/Creature-Forge --dir "$D"
-#    local alternative: cp /c/Users/mbnas/CreatureForge-archive/2026-10-18/* "$D"/
+#    local alternative: cp ~/CreatureForge-archive/2026-10-18/* "$D"/
 # 2) verify the archive, then every file
 ( cd "$D" && sha256sum -c creature-forge-ce-artifacts-2026-10-18.tar.gz.sha256 )
 tar -xzf "$D/creature-forge-ce-artifacts-2026-10-18.tar.gz" -C "$D"

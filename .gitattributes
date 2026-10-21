@@ -20,3 +20,4 @@ docs/archive/*.SHA256SUMS -text
 experiments/do1/** -text
 experiments/ta1/** -text
 experiments/w2/** -text
+docs/archive/*.tsv -text

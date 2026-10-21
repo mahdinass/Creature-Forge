@@ -531,10 +531,10 @@ export const isModelFailed = (rec: InvestigationRecord): boolean => rec.status =
 export function budgetLine(b: InvestigationRecord['budget']): string {
   if (!b) return 'No budget was recorded.'
   const parts: string[] = []
-  if (b.rollouts !== undefined) parts.push(`${b.rollouts.toLocaleString()} physics rollouts`)
+  if (b.rollouts !== undefined) parts.push(`${b.rollouts.toLocaleString('en-US')} physics rollouts`)
   if (b.wall_s !== undefined) parts.push(`${b.wall_s.toFixed(0)} s`)
   if (b.calls !== undefined) parts.push(`${b.calls} model call${b.calls === 1 ? '' : 's'}`)
-  if (b.tokens !== undefined) parts.push(`${b.tokens.toLocaleString()} tokens`)
+  if (b.tokens !== undefined) parts.push(`${b.tokens.toLocaleString('en-US')} tokens`)
   if (b.usd !== undefined) parts.push(`$${b.usd.toFixed(4)}`)
   return parts.join(', ')
 }

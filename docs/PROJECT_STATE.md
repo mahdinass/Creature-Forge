@@ -378,7 +378,7 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   All 27 inputs pinned in `protocol.json` are included. Archive SHA-256
   `b81ea8be8d8e40a32a33e02992e66ef0832650abc0423fd7ab292ceb53c20611`.
 - Locations:
-  - `C:\Users\mbnas\CreatureForge-archive\2026-10-18\`;
+  - `%USERPROFILE%\CreatureForge-archive\2026-10-18\` (owner's laptop);
   - a draft (unpublished, untagged) release `archive-ce-artifacts-2026-10-18` of the private repo.
 
   Procedure: `docs/ARTIFACT_ARCHIVE_2026-10-18.md`; checksums: `docs/archive/ce_artifacts_2026-10-18.SHA256SUMS`.
@@ -669,7 +669,7 @@ biped, unrelated to DO-1).
 
 ### W1 status: COMPLETE (local, unpushed)
 **Where things are**
-- **Branch:** `feature/do1-demo` in worktree `C:\Users\mbnas\.vscode\cf-do1-demo`, from `e9d2379`. Commits:
+- **Branch:** `feature/do1-demo` in worktree `cf-do1-demo` (a sibling of the main checkout), from `e9d2379`. Commits:
   - `bc79038` evidence, guard, exporter v1
   - `dd5d5ea` exporter v2
   - `2d2fbfb` run logs
@@ -732,7 +732,7 @@ biped, unrelated to DO-1).
 
 **Fresh-session start:**
 1. Read this section and `docs/DO1_DEMO.md`.
-2. `git -C C:\Users\mbnas\.vscode\cf-do1-demo log --oneline -8`.
+2. `git -C ..\cf-do1-demo log --oneline -8` (from the main checkout).
 3. Run tests with `..\Creature-Forge\.venv\Scripts\python.exe -m unittest discover -s tests` from the worktree.
 4. Studio: `studio/node_modules` is a junction to the main checkout's install; `npm run build`; start uvicorn `creature_forge.studio.app:app` on 127.0.0.1; run `BASE_URL=… node studio/e2e/do1-flow.mjs`.
 
