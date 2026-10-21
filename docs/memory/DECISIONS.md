@@ -154,3 +154,10 @@ This is the Git-visible decision index. Add one dated section per consequential 
   exported aggregates is shown as an error, not hidden.
 - **Visible caveats.** The default seed is the pre-declared one and is labelled illustrative. The attribution caption
   (no Nemotron) and the scope caption (one replicate) always stay visible.
+
+## 2026-10-21 - The viewer's floor is a backdrop (grid fix)
+- **Rule.** In `studio/src/Viewport.tsx`, the floor plane is drawn first (`renderOrder={-1}`) with `depthWrite={false}`.
+- **Why.** A huge coplanar ground plane clipped at the near plane has depth errors larger than mm offsets on some
+  rasterisers, and it hid the grid. Polygon offset and larger offsets did not help.
+- **Do not reintroduce it.** Don't use depth-writing ground planes under overlays. Verify viewer changes with a
+  camera-position sweep, not only the t = 0 frame.

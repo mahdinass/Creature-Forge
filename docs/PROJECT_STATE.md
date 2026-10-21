@@ -2,6 +2,8 @@
 
 > **Current state (2026-10-18): read `docs/RESEARCH_HANDOFF_2026-10-18.md` first.** This file is an append-only log; the
 > header and early sections below describe 2026-10-13 and are historical.
+>
+> **Latest (2026-10-21, branch `feature/do1-demo`): W1 (DO-1 demo) complete; read the final section "W1b grid fix; W1 COMPLETE (handoff)".**
 
 Updated: 2026-10-13. Local environment audit **reported by Claude Code and relayed by project owner**; ChatGPT has not executed these checks on the Windows machine. Facts may change; always rerun the preflight.
 
@@ -640,3 +642,96 @@ It is documented, not fixed.
 
 **Note:** browser checks need the Studio server, whose start-up computes the existing Phase 0 demo rollouts (nominal
 biped, unrelated to DO-1).
+
+## 2026-10-21 - W1b grid fix; W1 COMPLETE (handoff)
+**Grid fix** (`3fe9add`, `studio/src/Viewport.tsx`, shared viewer, all tabs).
+- **Symptom:** the floor grid was missing in some viewports.
+- **Reproduced:**
+  - SwiftShader: missing in every frame.
+  - Real GPU (Intel Iris Xe, D3D11): missing in 12/162 frames of a sweep over 3 window sizes × 3 seeds × 6 playback times. The misses were deterministic per camera position.
+- **Root cause:** the floor (400 m) and the drei infinite grid (scaled to 10,400 m) are each a pair of huge triangles. Clipped at the 0.1 m near plane, they rasterise with depth errors larger than the grid's 1 mm offset, so the floor won the depth test.
+- **Evidence:**
+  - Hiding the floor, or lowering it 0.3 m, restores the grid.
+  - A 10 mm grid offset, polygon offset up to (4,4), and a camera far of 100 do not.
+  - Shrinking both planes to 40 m restores it.
+- **Fix:** the floor is drawn first (`renderOrder={-1}`) and writes no depth (`depthWrite={false}`). The grid and the robot never have to beat its imprecise depth.
+- **Verification:**
+  - After the fix: 0/162 missing on GPU (also against the real Studio), 0/162 on SwiftShader.
+  - `do1-flow` 48/48 PASS, `overview-flow` 23/23 PASS.
+  - `npm run build` and tsc OK; vitest 189/190 (the same pre-existing locale failure).
+  - Guard and API tests 12/12.
+- **Side effect:** robot geometry below y = 0 (mm-scale MuJoCo contact penetration) is no longer hidden by the floor.
+- **Captures:** git-ignored, in `artifacts/capture/do1_w1b_gridfix_2026-10-21/`. `gpu-3views-t7.5.png` is a frame that previously lost the grid.
+- **Physics disclosure:**
+  - The investigation used a physics-free scratch server: `/api/do1` plus stub shell endpoints, with a MuJoCo tripwire.
+  - The final browser flows ran against the real Studio: its existing Phase 0 start-up rollouts, and the Overview hero's cached deterministic walking replays (incumbent and r2_winner, seed 8004).
+  - No new experiment, no Nebius, no inference.
+
+### W1 status: COMPLETE (local, unpushed)
+**Where things are**
+- **Branch:** `feature/do1-demo` in worktree `C:\Users\mbnas\.vscode\cf-do1-demo`, from `e9d2379`. Commits:
+  - `bc79038` evidence, guard, exporter v1
+  - `dd5d5ea` exporter v2
+  - `2d2fbfb` run logs
+  - `0414360` export
+  - `a30458d` W1b page
+  - `3fe9add` grid fix
+  - this docs commit on top
+
+  Nothing is pushed or merged.
+- **Other worktrees:**
+  - main checkout `feature/has-scientist` @ `ea9e729` (published);
+  - `cf-ta1-harness` = `experiment/do1-objective` @ `e9d2379` (pinned DO-1 commit; not on GitHub; keep for W3/W4).
+- **Verified evidence and demo artifacts (tracked):**
+  - `experiments/do1/l4_r0/do1_l4_r0.jsonl` sha256 `00a8db20b9b3ab186b935f2062a9a78d411a4d2a512e289e8aa1e4c39a5e263b` (audited), with its manifest.
+  - `experiments/do1/demo/`:
+    - `index.json` `e7a0712d06c4f752eb0065bc652241db1d86aa482829387d9c40047a48385264`;
+    - `SHA256SUMS` `73078ae5075c7a0897ef2cbefae0a373817d1816330e8a7ebdcb7585e1782ec4`, pinned in `do1_api.py`;
+    - 96 payloads, exported on the main VM at `2d2fbfb`: 96/96 rows exact, FK error 0.0 m.
+  - Frozen-path guard: `tests/test_frozen_paths.py`.
+- **Demo:** Studio tab `?tab=recovery` ("Verified repair"):
+  - faulty 5/24, frozen PARTIAL 19/24, DO-1 FULL 21/24 with 22/24 confirmation;
+  - three synchronised replays and all 24 seeds;
+  - captions "No Nemotron in this repair" and "One technical replicate on one robot; not a recovery rate."
+
+  Docs: `docs/DO1_DEMO.md`.
+- **Captures (git-ignored):** `artifacts/capture/do1_w1b_2026-10-21/` and `artifacts/capture/do1_w1b_gridfix_2026-10-21/`.
+
+**Known limitations**
+- **Evidence scope:** DO-1 is one technical replicate on one robot (McNemar 1/0, p = 0.5). Both arms are NO_AI.
+- **Reproduction:** Windows does not reproduce the Linux per-seed rows (≤ 9 mm; outcomes identical). The export is valid only from the recorded Linux environment.
+- **Demo:**
+  - No video yet: Playwright needs `ffmpeg-1010`, which is not installed.
+  - The Studio start-up computes the Phase 0 demo rollouts.
+  - vitest has one pre-existing locale failure (`forgeLogic.test.ts`).
+- **Integrity issue:** the Scientist/Causal replays (`causal_api.default_replayer`) simulate the nominal arena **without the hidden plant fault**, so they must not be filmed as "the damaged robot" until fixed or relabelled (W2).
+- **Unavailable this session:** the Basic Memory MCP (timeout) and GitHub MCP (HTTP 400). The `gh` CLI works.
+
+**Pointers**
+- Plan of record: `~/.claude/plans/pasted-content-id-3fc3-creature-cozy-parasol.md`.
+- Notion **Project HQ** ("Creature Forge — Project HQ | Strategy, State & Findings"): https://app.notion.com/p/3fe5d357b5ad812186d1fe1ded3757fc
+  - Its latest snapshot is v1.9 (Step 1). It does not yet record W1a recovery, W1b or this fix.
+- Notion **FA-1C journal** ("FA-1C Plan Review and Approval Gates — 20 October 2026"; full DO-1 record and ChatGPT audit): https://app.notion.com/p/3ff5d357b5ad810fb547dd5cb8acf247
+
+**W2 priorities (not started; each needs owner approval)**
+1. **W2a (read-only):** `docs/NEMOTRON_CONTRIBUTION.md`. One row per study, every number traced to a file or record:
+   - registration, n, comparator, outcome, what Nemotron decided vs what deterministic tools did;
+   - DO-1 listed as NO_AI;
+   - only the pre-registered Forge Loop push scoreboard (6/12 vs 1/12, p = 0.031) is a superiority claim.
+2. **W2b demonstration:** the recorded Stage 2 A3 one_side_weakness trace on `gen-0137` (`stage2_final/s2_transfer_A3.jsonl`):
+   - show Nemotron's hypotheses, its discriminating gait-frequency experiment, the posterior shift, delegation and verification;
+   - contrast with the engine-only A1e record (wrong side);
+   - add a deterministic attribution replay (`hdb_replay.replay`, no model calls);
+   - captions: "single instance", "the engine alone won 3 instances Nemotron lost", "the repair itself was run by the optimizer".
+3. **Fix the Scientist replay integrity:**
+   - either export the one_side_weakness designs through the fidelity-gated exporter (recorded Linux environment, so a VM slot), or relabel the generic replays "nominal design, no hidden damage";
+   - then re-run `scientist-flow`.
+4. **Secondary:** the push scoreboard with live take `live1`. State that nothing verified on walking.
+
+**Pending owner decisions:** W0b push (trailers kept and disclosed); merge order; the W3/W4 VM session (`DO1-L4-rep` cap 39,644, `DO1-X` cap 14,416); repository visibility; the Nebius §4.1.10(c) question; the Playwright ffmpeg install.
+
+**Fresh-session start:**
+1. Read this section and `docs/DO1_DEMO.md`.
+2. `git -C C:\Users\mbnas\.vscode\cf-do1-demo log --oneline -8`.
+3. Run tests with `..\Creature-Forge\.venv\Scripts\python.exe -m unittest discover -s tests` from the worktree.
+4. Studio: `studio/node_modules` is a junction to the main checkout's install; `npm run build`; start uvicorn `creature_forge.studio.app:app` on 127.0.0.1; run `BASE_URL=… node studio/e2e/do1-flow.mjs`.

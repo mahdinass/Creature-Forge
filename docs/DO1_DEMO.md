@@ -58,11 +58,14 @@ recovery rate**. The page states both.
   - A regression pass renders every other tab with simulation-backed requests aborted.
 - Real-GPU check (Edge, Intel Iris Xe): 1× playback runs in real time.
 
-## Known visual issue, not yet fixed
-On first mount with several canvases, the existing `Viewport`'s floor grid (drei `Grid`) is sometimes not drawn in one
-of the viewports. It was seen once in 1 of 3 viewports on GPU and was absent on a reload; in headless SwiftShader it is
-missing in all three. The DO-1 data is not involved. Fixing it needs a root cause in the shared viewer (candidates: a
-shared-canvas `View` setup, or Grid material compile on simultaneous mounts). It is left for a separate, approved change.
+## Floor grid visual issue: fixed (`3fe9add`)
+- **Symptom:** the shared `Viewport`'s floor grid was missing in some viewports.
+  - Real GPU (Intel Iris Xe): 12/162 frames of a size × seed × time sweep, depending on camera position.
+  - SwiftShader: every frame.
+- **Cause:** the floor (400 m) and the infinite grid (10,400 m) are each two huge triangles. Clipped at the 0.1 m near
+  plane, their depth errors exceed the grid's 1 mm offset, so the floor won the depth test.
+- **Fix:** the floor is a backdrop, drawn first (`renderOrder={-1}`) with no depth write.
+- **After the fix:** 0/162 frames missing on GPU and on SwiftShader. The investigation details are in `docs/PROJECT_STATE.md`.
 
 ## Run locally
 `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1`, then open `http://127.0.0.1:8000/?tab=recovery`.
