@@ -574,3 +574,39 @@ Owner-approved local replay of the DO-1 demo export (`scripts/do1_demo_export.py
 Diagnostics and outputs are in the git-ignored `artifacts/runs/w1a_windows_check_2026-10-21/` (SHA256SUMS).
 
 **Next (needs approval):** fix the exporter frames, then run the export on the main VM, which is the recorded Linux environment.
+
+## 2026-10-21 - W1a recovery: DO-1 demo export on the main VM, exact fidelity PASSED
+Owner-approved: exporter fix, a standalone Linux export (≤ 2 workers, < $0.30), and the publication redaction of the
+unpushed commits. No W3/W4, no inference, no push.
+
+**Exporter v2** (`dd5d5ea`): frames from one consistent pre-step state, step-alignment checks, recorded-environment gate,
+smoke mode, verified transactional write.
+
+**Attempt 1** (09:18–09:21 UTC) stopped in the no-physics pre-flight before any physics.
+- Cause: the repository-wide `*.log` ignore rule had left 18 run logs out of the tracked evidence. Local tests passed only because the files were on disk.
+- The VM was stopped via the API.
+- Fix: `2d2fbfb` (scoped `.gitignore` exception, the 18 logs verified against the archive and added, new guard `tests/test_evidence_tracked.py`). A clean-clone rehearsal passed. The exporter code is unchanged.
+
+**Attempt 2** (VM 09:27:47–09:31:47 UTC; run 09:28:56–09:30:21) at `2d2fbfb`.
+- Environment: Linux x86_64, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0, an exact match with the record.
+- **No-physics tests:** pass.
+- **Smoke test:** 8/8 rows exact, FK error 0.0 m.
+- **Full export:**
+  - 96/96 rows exact on the verifier's production path;
+  - 96/96 rows exact on the trace path;
+  - max FK error 0.0 m (tolerance 1e-9 m).
+- Export wall time 1:14; peak RSS 219 MB; 2 workers.
+
+**Output.** `experiments/do1/demo/`: `index.json` (sha256 `e7a0712d…`), 96 payloads (12.7 MB; 10–230 KB each), `SHA256SUMS` (`73078ae5…`).
+- A local cross-check found every row identical to the audited JSONL. The default seed is 66645963.
+- Run logs of both attempts are in `experiments/do1/demo_export_run_2026-10-21/`.
+- The full VM copy and tgz (`40d927f1…`) are in the git-ignored `artifacts/runs/do1_demo_export_2026-10-21/`, listed in `docs/archive/do1_demo_export_2026-10-21.SHA256SUMS`.
+
+**Ops and cost.**
+- Before the start: auth verified (control plane plus the watchdog code path).
+- The watchdog task does not start on battery; it was verified running on AC.
+- Deadline 0.75 h per session.
+- Both VMs were confirmed STOPPED via the control plane at 09:21:09 and 09:31:47 UTC.
+- Infra ledger $88.858 → $88.888: **+$0.030** for both sessions, including disk accrual.
+
+**Next:** W1b, the Studio comparison view from these static files. It needs approval.

@@ -1,0 +1,17 @@
+.........E......................
+======================================================================
+ERROR: test_tracked_copies_match_the_record_and_originals (tests.test_redactions.RedactionTests.test_tracked_copies_match_the_record_and_originals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/forge/dev/do1-demo-export/tests/test_redactions.py", line 41, in test_tracked_copies_match_the_record_and_originals
+    self.assertEqual(rl.check(self.record), [])
+                     ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/forge/dev/do1-demo-export/scripts/redact_local_paths.py", line 60, in check
+    with open(os.path.join(ROOT, e["tracked"]), "rb") as fh:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/forge/dev/do1-demo-export/experiments/ta1/phase1a_2026-10-20/rv1_phase1a.log'
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.924s
+
+FAILED (errors=1)
