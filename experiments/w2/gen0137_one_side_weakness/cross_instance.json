@@ -1,0 +1,1088 @@
+{
+ "schema": "w2_cross_instance_v1",
+ "built_by": "scripts/w2_case_build.py --full-root",
+ "population": "Stage 2 transfer, 36 single-mechanism dev instances, paired arms (development evidence)",
+ "sources": {
+  "A3": {
+   "file": "stage2_final/s2_transfer_A3.jsonl",
+   "sha256": "540b9415921b205a80ad62fe6ae9565f5c6d6027bae63e2fb1dee8dca374ea98"
+  },
+  "A1e": {
+   "file": "s2T_A1e.jsonl",
+   "sha256": "2014fa80f8f333b1b2f8d4ba561da024516fb49b0334ef7a696acbfa535cdf56"
+  },
+  "A4": {
+   "file": "stage2_final/s2_transfer_A4.jsonl",
+   "sha256": "cb34a780d76f9325718e53f3d8345672ab642aa005a334cd96bf614dec7ec77a"
+  }
+ },
+ "ledger": {
+  "file": "stage2_final/inference_ledger_main_20261020.jsonl",
+  "sha256": "729e37ffb0e6e594f0a374a40c4e0194b59d9b79dbb50b78c60b8d7a2e0f4d9a",
+  "this_case": {
+   "A3": [
+    {
+     "request_id": "ed3d9b53dc41ec9eb45a5a9828370e8a",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0029997
+    },
+    {
+     "request_id": "4d38f0c7e0273a0ecaa3fcaec13d8899",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0038355
+    },
+    {
+     "request_id": "10f73e2cdd356c3f84712549b8302d88",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0030543
+    },
+    {
+     "request_id": "0a27c5ea10b6dd3e1dd29aea91e402e9",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0019112999999999999
+    }
+   ],
+   "A4": [
+    {
+     "request_id": "2973b75da1fa595eebce093f59ec0bbe",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0031611
+    },
+    {
+     "request_id": "3102a1db0117bc46f193770e6cf610b2",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0027846
+    },
+    {
+     "request_id": "62b87630da5d4ab99f9313f258f551d7",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0029186999999999998
+    },
+    {
+     "request_id": "c8b8120ef4d5bb33a868a28330e8c5b7",
+     "in_ledger": 1,
+     "ledger_model": "nvidia/nemotron-3-super-120b-a12b",
+     "ledger_cost_usd": 0.0023961
+    }
+   ]
+  }
+ },
+ "aggregates": {
+  "n": 36,
+  "full": {
+   "A1e": 14,
+   "A3": 15,
+   "A4": 14
+  },
+  "map_correct": {
+   "A1e": 29,
+   "A3": 28,
+   "A4": 29
+  },
+  "full_discordant_A3_vs_A1e": {
+   "A3_only": 4,
+   "A1e_only": 3
+  },
+  "map_discordant_A3_vs_A1e": {
+   "A3_only": 3,
+   "A1e_only": 4
+  },
+  "first_experiment_differs": 22,
+  "map_and_full_both_favour_A3": [
+   "hdb-v1-gen-0137:one_side_weakness:4"
+  ],
+  "A3_full_only": [
+   "hdb-v1-gen-0099:pitch_sensor_bias:1",
+   "hdb-v1-gen-0137:clock_fault:4",
+   "hdb-v1-gen-0137:one_side_weakness:4",
+   "hdb-v1-gen-0170:heavy_torso:1"
+  ],
+  "A1e_full_only": [
+   "hdb-v1-gen-0096:payload_offset:4",
+   "hdb-v1-gen-0142:low_ground_friction:1",
+   "hdb-v1-gen-0143:short_feet:1"
+  ],
+  "A3_map_wrong_A1e_right": [
+   "hdb-v1-gen-0073:low_ground_friction:1",
+   "hdb-v1-gen-0073:short_feet:1",
+   "hdb-v1-gen-0142:pitch_sensor_bias:1",
+   "hdb-v1-gen-0143:actuator_weakness:1"
+  ],
+  "mcnemar_one_sided_p_A3_gt_A1e": 0.5
+ },
+ "rows": [
+  {
+   "instance_id": "hdb-v1-gen-0070:clock_fault:4",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x1.2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x1.2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0073:actuator_weakness:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x0.7",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x0.7",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:pitch_ref@-0.1R",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0073:feedback_gain_loss:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0073:heavy_torso:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.5",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0073:low_ground_friction:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "floor_test@x3",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "floor_test@x3",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0073:short_feet:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x0.7",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0096:payload_offset:4",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0099:pitch_sensor_bias:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:kp@x2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0104:clock_fault:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0104:one_side_weakness:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:pitch_ref@+0.1R",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0104:payload_offset:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0104:pitch_sensor_bias:4",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0136:pitch_sensor_bias:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0137:clock_fault:4",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x1.2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x1.2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0137:one_side_weakness:4",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:freq@x1.2",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0142:clock_fault:4",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:torque_limit@x2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0142:low_ground_friction:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "floor_test@x3",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "floor_test@x2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0142:one_side_weakness:4",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:torso_mass@x0.7",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:torso_mass@x0.7",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0142:payload_offset:4",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": false,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:torque_limit@x2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "floor_test@x2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0142:pitch_sensor_bias:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:freq@x0.85",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:pitch_ref@+0.1R",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0142:short_feet:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0143:actuator_weakness:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:hip_bias@-0.1R",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0143:feedback_gain_loss:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:pitch_ref@-0.1R",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0143:heavy_torso:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.5",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.5",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0143:one_side_weakness:4",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0143:payload_offset:4",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": false,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:torque_limit@x1.2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0143:short_feet:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:torso_mass@x0.7",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0167:actuator_weakness:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:torque_limit@x2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0167:feedback_gain_loss:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": false,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "cf:pitch_ref@-0.1R",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0167:heavy_torso:1",
+   "A1e": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": false,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0167:low_ground_friction:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_friction@x2",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_friction@x2",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0170:actuator_weakness:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0170:feedback_gain_loss:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.5",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": null
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0170:heavy_torso:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": true,
+    "status": "FULL_RECOVERY",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0170:low_ground_friction:1",
+   "A1e": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": null
+   },
+   "A3": {
+    "full": false,
+    "status": "NOT_RECOVERED",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.5",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "cf:foot_length@x1.5",
+     "actor": "nemotron"
+    }
+   }
+  },
+  {
+   "instance_id": "hdb-v1-gen-0170:short_feet:1",
+   "A1e": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "engine"
+    }
+   },
+   "A3": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   },
+   "A4": {
+    "full": false,
+    "status": "PARTIAL_IMPROVEMENT",
+    "map_correct": true,
+    "first_experiment": {
+     "experiment": "weigh_test",
+     "actor": "nemotron"
+    }
+   }
+  }
+ ]
+}

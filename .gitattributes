@@ -19,3 +19,4 @@ experiments/causal_engineer/heldout/**/*.json -text
 docs/archive/*.SHA256SUMS -text
 experiments/do1/** -text
 experiments/ta1/** -text
+experiments/w2/** -text

@@ -1,0 +1,35 @@
+{
+ "schema": "w2_sources_v1",
+ "instance_id": "hdb-v1-gen-0137:one_side_weakness:4",
+ "note": "Byte-exact copies of one line each (without its newline) of the Stage 2 transfer records. The full source files are git-ignored; their SHA-256 values are the ones pinned in experiments/causal_engineer/dev/hdb/STAGE2_TRANSFER_agent_v4.md (commit 9bb9a6c). Copied 2026-10-21 for W2; no physics, no model call.",
+ "pin_document": "experiments/causal_engineer/dev/hdb/STAGE2_TRANSFER_agent_v4.md",
+ "sources": [
+  {
+   "arm": "A3",
+   "file": "A3.jsonl",
+   "source": "artifacts/vm/hdb/artifacts/hdb/stage2_final/s2_transfer_A3.jsonl",
+   "source_line": 24,
+   "source_sha256": "540b9415921b205a80ad62fe6ae9565f5c6d6027bae63e2fb1dee8dca374ea98",
+   "line_sha256": "6cce94f8ca15f1ef9f6f0eb5afc66e1d8d937f08c6323f64c6e730c3f6afbb67",
+   "bytes": 239829
+  },
+  {
+   "arm": "A1e",
+   "file": "A1e.jsonl",
+   "source": "artifacts/vm/hdb/artifacts/hdb/s2T_A1e.jsonl",
+   "source_line": 24,
+   "source_sha256": "2014fa80f8f333b1b2f8d4ba561da024516fb49b0334ef7a696acbfa535cdf56",
+   "line_sha256": "b19c1fcfa78aa61fc39d23c3097cf2bed2a414abde80d9d9071e5ada288976f5",
+   "bytes": 62524
+  },
+  {
+   "arm": "A4",
+   "file": "A4.jsonl",
+   "source": "artifacts/vm/hdb/artifacts/hdb/stage2_final/s2_transfer_A4.jsonl",
+   "source_line": 24,
+   "source_sha256": "cb34a780d76f9325718e53f3d8345672ab642aa005a334cd96bf614dec7ec77a",
+   "line_sha256": "1a9138ca5cae915bd134b89007adfb35f036de529fbcd3c48b8b8cb32d74e170",
+   "bytes": 222072
+  }
+ ]
+}
