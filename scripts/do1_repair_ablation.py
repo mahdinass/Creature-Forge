@@ -27,8 +27,9 @@ Validity gates (fail closed, stop at the first invalid result; outcomes are neve
   * complete verification record; the hook called exactly once;
   * frozen r0 reproduces the stored A1e6 record exactly (TA-1 gate 1); do1 r0's pre-hook prefix equals the stored record's;
   * each (case, replicate) pair has equal pre-hook fingerprints;
-  * do1: the train baseline charged exactly once (4 rollouts), plant used <= 700, every completed repair's reported best found
-    in the candidate log; frozen: no DO-1 ledger lines.
+  * do1: exactly one train-baseline line of 4 rollouts, plant used <= 700, at least one completed DO-1 repair (otherwise the
+    episode is NOT_EXPOSED and invalid, never a null result), and every completed repair's selected candidate equal to its
+    logged candidate and to the design it registered; frozen: no DO-1 ledger lines.
 Re-screens are recorded, never invalidating.
 
 Usage:
@@ -113,23 +114,51 @@ def run_do1_episode(inst: dict, arm: str, replicate: int, inputs: dict, pool=Non
     return ta1.jsonable(rec)
 
 
+def selection_problems(rec: dict, rep: dict) -> list[str]:
+    """A completed DO-1 repair is consistent when its selected candidate is the logged candidate at `selected_log_index`
+    (same components) and that candidate's vector is the design the repair registered."""
+    k = rep.get("selected_log_index")
+    cands = rep.get("candidates") or []
+    tag = f"DO-1 repair {rep.get('repair_index')} ({rep.get('tool')})"
+    if not isinstance(k, int) or isinstance(k, bool) or not 0 <= k < len(cands):
+        return [f"{tag}: reported best is not in its candidate log (selected_log_index {k!r}, {len(cands)} candidates)"]
+    logged = cands[k]
+    sel = rep.get("selected")
+    if not isinstance(sel, dict) or sel != {key: v for key, v in logged.items() if key != "vector"}:
+        return [f"{tag}: selected components differ from logged candidate {k}"]
+    designs = rec.get("designs") or []
+    j = rep.get("design_index")
+    if not isinstance(j, int) or not 0 <= j < len(designs):
+        return [f"{tag}: registered design {j!r} is missing from the record"]
+    if designs[j].get("vector") != logged.get("vector") or designs[j].get("source") != f"repair:{rep.get('tool')}":
+        return [f"{tag}: registered design {j} is not logged candidate {k}"]
+    return []
+
+
 def arm_checks(rec: dict) -> list[str]:
-    """Arm-specific validity problems (empty = valid)."""
+    """Arm-specific validity problems (empty = valid). A do1 episode is a valid objective ablation only if it was EXPOSED to
+    the DO-1 objective: exactly one 4-rollout train-baseline line, at least one completed DO-1 repair, and every completed
+    repair's selected candidate consistent with its logged evidence. An unexposed episode is invalid, never a null result."""
     d = rec["harness"]["do1"]
     lines = rec["engine"]["ledger"]["lines"]
     base_lines = [ln for ln in lines if ln["item"] == "do1_train_baseline"]
     obj_lines = [ln for ln in lines if (ln.get("detail") or {}).get("objective") == do1.VERSION]
     problems = []
     if d["arm"] == "frozen":
-        if d["bench_class"] != "EvidenceWorkbench" or obj_lines:
+        if d["bench_class"] != "EvidenceWorkbench" or obj_lines or base_lines:
             problems.append("frozen arm used a DO-1 bench or charged DO-1 ledger lines")
         return problems
     if d["bench_class"] != "Do1Workbench" or d.get("version") != do1.VERSION:
         problems.append(f"do1 arm ran on {d['bench_class']} / {d.get('version')}")
-    if [ln["n"] for ln in base_lines] not in ([4], []):
-        problems.append(f"DO-1 train baseline charged {[ln['n'] for ln in base_lines]} (expected one line of 4)")
-    if any(r.get("refused") is None and r.get("selected_log_index") is None for r in d.get("repairs") or []):
-        problems.append("a DO-1 repair's reported best is not in its candidate log")
+    if len(base_lines) != 1 or base_lines[0]["n"] != 4 or (base_lines[0].get("detail") or {}).get("objective") != do1.VERSION:
+        problems.append(f"DO-1 train baseline lines {[ln['n'] for ln in base_lines]} (expected exactly one line of 4)")
+    repairs = d.get("repairs") or []
+    completed = [r for r in repairs if r.get("refused") is None]
+    if not completed:
+        problems.append(f"NOT_EXPOSED: no DO-1 repair completed ({len(repairs)} attempted); the episode is invalid as an "
+                        f"objective ablation")
+    for r in completed:
+        problems += selection_problems(rec, r)
     if rec["engine"]["ledger"]["used"] > ta1.A1E6["budget"]:
         problems.append(f"plant used {rec['engine']['ledger']['used']} > {ta1.A1E6['budget']}")
     return problems
@@ -224,7 +253,11 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
                 problems.append(f"incomplete verification record: {rec['harness'].get('verification_problems')}")
             if len(rec["harness"]["hook_calls"]) != 1:
                 problems.append(f"engineer hook called {len(rec['harness']['hook_calls'])} times (expected once)")
-            problems += arm_checks(rec)
+            arm_problems = arm_checks(rec)
+            rec["harness"]["arm_checks"] = {"valid": not arm_problems, "problems": arm_problems,
+                                            "exposed": None if arm == "frozen" else
+                                            not any(p.startswith("NOT_EXPOSED") for p in arm_problems)}
+            problems += arm_problems
             if r == 0:
                 f, line, _, _ = ta1.CASES[c]["stored"]
                 stored = ta1.load_stored(a.records_root, f, line)

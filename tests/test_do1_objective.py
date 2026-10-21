@@ -372,27 +372,77 @@ def _ledger(lines, used=700):
     return {"used": used, "lines": lines, "twin": {"used": 0, "lines": []}}
 
 
-def _arm_rec(arm, lines, repairs=None, used=700, cls=None, version=None):
+VEC = [0.5] * 17
+
+
+def _repair(k=0, design_index=1, tool="leg_length", vec=None, refused=None, sel_override=None):
+    if refused is not None:
+        return {"tool": tool, "parent": 0, "refused": refused, "train_baseline_rollouts": 4}
+    cand = {"vector": list(vec or VEC), "J": 40100.0, "walking_count": 4, "survival_count": 4, "margin": 0.3}
+    sel = {key: v for key, v in cand.items() if key != "vector"}
+    sel.update(sel_override or {})
+    return {"repair_index": 0, "tool": tool, "design_index": design_index, "selected_log_index": k, "selected": sel,
+            "candidates": [cand]}
+
+
+def _arm_rec(arm, lines, repairs=None, used=700, cls=None, version=None, designs=None):
     return {"engine": {"ledger": _ledger(lines, used)},
+            "designs": designs if designs is not None else [{"index": 0, "source": "initial", "vector": [0.0] * 17},
+                                                            {"index": 1, "source": "repair:leg_length", "vector": list(VEC)}],
             "harness": {"do1": {"arm": arm, "bench_class": cls or ("Do1Workbench" if arm == "do1" else "EvidenceWorkbench"),
                                 "version": version if version is not None else (do1.VERSION if arm == "do1" else None),
-                                "repairs": repairs or []}}}
+                                "repairs": repairs if repairs is not None else []}}}
 
 
 class ArmChecks(unittest.TestCase):
     BASE = {"item": "do1_train_baseline", "n": 4, "detail": {"objective": do1.VERSION}}
 
     def test_valid(self):
-        self.assertEqual(abl.arm_checks(_arm_rec("do1", [self.BASE], [{"selected_log_index": 3}])), [])
+        self.assertEqual(abl.arm_checks(_arm_rec("do1", [self.BASE], [_repair()])), [])
+        self.assertEqual(abl.arm_checks(_arm_rec("do1", [self.BASE], [_repair(), _repair(refused="out of bounds")])), [])
         self.assertEqual(abl.arm_checks(_arm_rec("frozen", [{"item": "repair", "n": 300, "detail": {}}])), [])
 
-    def test_invalid(self):
+    def test_missing_or_wrong_baseline(self):
+        for lines in ([], [self.BASE, self.BASE], [dict(self.BASE, n=8)], [dict(self.BASE, detail={})]):
+            probs = abl.arm_checks(_arm_rec("do1", lines, [_repair()]))
+            self.assertTrue(any("train baseline" in p for p in probs), lines)
+
+    def test_no_completed_repair_is_not_exposed(self):
+        for repairs in ([], [_repair(refused="out of bounds")], [_repair(refused="a"), _repair(refused="b")]):
+            probs = abl.arm_checks(_arm_rec("do1", [self.BASE], repairs))
+            self.assertTrue(any(p.startswith("NOT_EXPOSED") for p in probs), repairs)
+        # missing baseline AND no repair: both reported
+        probs = abl.arm_checks(_arm_rec("do1", [], []))
+        self.assertTrue(any(p.startswith("NOT_EXPOSED") for p in probs))
+        self.assertTrue(any("train baseline" in p for p in probs))
+
+    def test_selected_candidate_must_match_logged_evidence(self):
+        bad = [_repair(k=None), _repair(k=1), _repair(k=True), _repair(sel_override={"J": 1.0}),
+               _repair(vec=[0.4] * 17), _repair(design_index=5), _repair(tool="posture")]
+        for rep in bad:
+            self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], [rep])), rep)
+        no_sel = _repair()
+        no_sel["selected"] = None
+        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], [no_sel])))
+
+    def test_other_invalid(self):
         self.assertTrue(abl.arm_checks(_arm_rec("frozen", [self.BASE])))
-        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE, self.BASE])))
-        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], [{"selected_log_index": None}])))
-        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], used=701)))
-        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], cls="EvidenceWorkbench")))
-        self.assertEqual(abl.arm_checks(_arm_rec("do1", [self.BASE], [{"refused": "x", "selected_log_index": None}])), [])
+        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], [_repair()], used=701)))
+        self.assertTrue(abl.arm_checks(_arm_rec("do1", [self.BASE], [_repair()], cls="EvidenceWorkbench")))
+
+    def test_real_do1_bench_record_passes_and_tampering_fails(self):
+        _, d = _benches()
+        with _guard(), mock.patch.object(hp, "walk_seeds", _fake_walk_seeds), mock.patch.object(do1, "do1_walk_job", fake_job):
+            self.assertTrue(d.repair("leg_length", 200, n_train=4, init={"index": 0})["ok"])
+            self.assertTrue(d.repair("posture", 150, n_train=4, init={"index": 1})["ok"])
+        rec = ta1.jsonable({"engine": {"ledger": d.ledger()},
+                            "designs": [{k: x[k] for k in ("index", "source", "body", "vector")} for x in d.designs],
+                            "harness": {"do1": {"arm": "do1", "bench_class": "Do1Workbench", **d.do1_record()}}})
+        self.assertEqual(abl.arm_checks(rec), [])
+        t = copy.deepcopy(rec)
+        k = t["harness"]["do1"]["repairs"][1]["selected_log_index"]
+        t["harness"]["do1"]["repairs"][1]["candidates"][k]["vector"][0] += 1e-9
+        self.assertTrue(abl.arm_checks(t))
 
 
 class Phases(unittest.TestCase):
@@ -461,15 +511,22 @@ class Phases(unittest.TestCase):
 class ExecuteGates(unittest.TestCase):
     """_execute with fake episodes built from the stored L1 record (no physics)."""
 
-    def _fake_run(self, fp_do1="f" * 16, ref=("eval_A1e6_s1.jsonl", 1)):
+    def _fake_run(self, fp_do1="f" * 16, ref=("eval_A1e6_s1.jsonl", 1), do1_repairs=None, baseline=True):
         stored = _stored(*ref)
 
         def run(inst, arm, r, inputs, pool=None):
             rec = copy.deepcopy(stored)
             rec["verification"] = {"summary": copy.deepcopy(stored["verification"]), "full": {}}
             lines = rec["engine"]["ledger"]["lines"]
+            repairs = []
             if arm == "do1":
-                lines.append({"item": "do1_train_baseline", "n": 4, "detail": {"objective": do1.VERSION}, "cumulative": 0})
+                if baseline:
+                    lines.append({"item": "do1_train_baseline", "n": 4, "detail": {"objective": do1.VERSION},
+                                  "cumulative": 0})
+                j = next(x["index"] for x in rec["designs"] if x["source"].startswith("repair:"))
+                tool = rec["designs"][j]["source"].split(":", 1)[1]
+                repairs = do1_repairs if do1_repairs is not None else [
+                    _repair(design_index=j, tool=tool, vec=rec["designs"][j]["vector"])]
             rec["engine"]["ledger"]["used"] = min(rec["engine"]["ledger"]["used"], 700)
             rec["harness"] = {"verification_complete": True, "replicate": r, "noise_seed": 1,
                               "hook_calls": [{"prehook_fingerprint": fp_do1 if arm == "do1" else "f" * 16,
@@ -477,7 +534,7 @@ class ExecuteGates(unittest.TestCase):
                                               "prehook_n_twin_lines": 1, "prehook_n_events": 1, "prehook_n_history": 1}],
                               "resources": {"total_rollout_equivalents": 10.0}, "rescreen": {"classification": "none"},
                               "do1": {"arm": arm, "bench_class": "Do1Workbench" if arm == "do1" else "EvidenceWorkbench",
-                                      "version": do1.VERSION if arm == "do1" else None, "repairs": []}}
+                                      "version": do1.VERSION if arm == "do1" else None, "repairs": repairs}}
             return rec
         return run
 
@@ -515,6 +572,17 @@ class ExecuteGates(unittest.TestCase):
         self.assertTrue(recs[0]["harness"]["reproduction"]["exact"])
         self.assertTrue(recs[1]["harness"]["stored_prefix"]["match"])
         self.assertTrue(recs[1]["harness"]["paired_prehook"]["equal"])
+
+    def test_pilot_not_exposed_pauses_and_is_recorded(self):
+        for kw in ({"do1_repairs": []}, {"do1_repairs": [_repair(refused="out of bounds")]}, {"baseline": False}):
+            rc, recs, _ = self._execute(self._fake_run(ref=("eval_A1e6_s3.jsonl", 4), **kw), phase="DO1-L4-r0")
+            self.assertEqual(rc, ta1.PAUSE_EXIT, kw)
+            self.assertEqual(len(recs), 2)                                       # persisted before pausing
+            ac = recs[1]["harness"]["arm_checks"]
+            self.assertFalse(ac["valid"])
+            self.assertEqual(ac["exposed"], "baseline" in kw)                    # missing baseline only: still exposed
+            self.assertTrue(recs[0]["harness"]["arm_checks"]["valid"])
+            self.assertIsNone(recs[0]["harness"]["arm_checks"]["exposed"])
 
     def test_prehook_mismatch_pauses(self):
         rc, recs, _ = self._execute(self._fake_run(fp_do1="0" * 16))
