@@ -33,6 +33,7 @@ from ..sandbox import POSE_RANGES, SANDBOX_BOUNDS, SandboxBody, SandboxError, bu
 from ..sketch import SketchError, compile_sketch, default_sketch, normalize_sketch, support_info
 from ..trial_view import trial_view
 from .causal_api import SCIENTIST_DIR, SCIENTIST_ID_RE, create_causal_router
+from .do1_api import create_do1_router
 from .forge_api import create_forge_router
 from .security import RequestGuard
 
@@ -416,6 +417,8 @@ def create_app(investigations_dir: Path = INVESTIGATIONS_DIR, dist_dir: Path = D
     # Autonomous HaS scientist (/api/scientist/*): recorded Stage-2 investigations and replays of their designs (read-only).
     app.include_router(create_causal_router(SCIENTIST_DIR, prefix="/api/scientist", id_re=SCIENTIST_ID_RE,
                                             schema="scientist_record_v1"))
+    # DO-1 L4 recovery (/api/do1/*): the verified static replays of the faulty, frozen and DO-1 designs (read-only).
+    app.include_router(create_do1_router())
 
     @app.api_route("/api", methods=["GET", "HEAD"], include_in_schema=False)
     @app.api_route("/api/{rest:path}", methods=["GET", "HEAD"], include_in_schema=False)

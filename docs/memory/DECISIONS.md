@@ -146,3 +146,11 @@ This is the Git-visible decision index. Add one dated section per consequential 
   - the pre-registered Forge Loop push scoreboard (6/12 vs 1/12);
   - recorded HaS traces, such as the `gen-0137 one_side_weakness` experiment choice, with deterministic replay attribution.
 - **Records.** TA-1/DO-1 raw records are frozen under `experiments/do1/` and `experiments/ta1/`. Source and inputs that decided DO1-L4-r0 are pinned by `tests/test_frozen_paths.py`.
+
+## 2026-10-21 W1b: the Verified repair page shows only hash-pinned evidence
+- **Pinned evidence.** `/api/do1` serves the DO-1 export only if its `SHA256SUMS` equals the pinned hash, and every
+  file is checked before it is served. Verdicts and reasons are read from the audited record, never restated.
+- **Derived numbers.** The UI derives every number from rows or recorded verification. A mismatch between rows and
+  exported aggregates is shown as an error, not hidden.
+- **Visible caveats.** The default seed is the pre-declared one and is labelled illustrative. The attribution caption
+  (no Nemotron) and the scope caption (one replicate) always stay visible.

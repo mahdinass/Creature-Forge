@@ -610,3 +610,33 @@ smoke mode, verified transactional write.
 - Infra ledger $88.858 → $88.888: **+$0.030** for both sessions, including disk accrual.
 
 **Next:** W1b, the Studio comparison view from these static files. It needs approval.
+
+## 2026-10-21 - W1b: Studio "Verified repair" tab (three-way DO-1 comparison), local
+Owner-approved W1b. No push, no Nebius, no inference, no physics. Details in `docs/DO1_DEMO.md`.
+
+**Built:**
+- `creature_forge/studio/do1_api.py`: read-only `/api/do1/*` serving the pinned, hash-verified export plus the recorded verifier outcome.
+- `studio/src/do1/*`, with nav tab `recovery` under Investigate.
+- `studio/e2e/do1-flow.mjs`.
+- `Timeline.tsx`: time-axis ticks now scale beyond 5 s.
+
+**Verification:**
+- Python: 95 tests pass under a physics tripwire (0 hits).
+- `npm run build`: OK.
+- vitest: 189/190. The one failure is a pre-existing locale issue that also fails on `main`.
+- Browser flow: 48/48 PASS. It covers:
+  - numbers matched against the API;
+  - only `GET /api/do1/*` from the page;
+  - a regression render of all other tabs, with simulation requests aborted.
+- Real-GPU Edge: 1× playback is real time.
+
+**Captures:** git-ignored, in `artifacts/capture/do1_w1b_2026-10-21/`.
+- full page, the stage at t = 5.8 s, confirmation mode;
+- frames at t = 0/1/2/4/6/10 s, plus one GPU render.
+- Video was not recorded: Playwright needs `ffmpeg-1010`, which is not installed.
+
+**Known issue:** the floor grid is intermittently missing in one of several viewports on first mount (shared viewer).
+It is documented, not fixed.
+
+**Note:** browser checks need the Studio server, whose start-up computes the existing Phase 0 demo rollouts (nominal
+biped, unrelated to DO-1).
