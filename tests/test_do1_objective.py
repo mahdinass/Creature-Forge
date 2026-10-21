@@ -866,6 +866,9 @@ class W3W4Execute(unittest.TestCase):
     _execute = ExecuteGates._execute
 
     def _multi_run(self, mutate=None, do1_repairs=None, raise_at=None):
+        for ref in X_STORED.values():       # skip up front: a SkipTest inside an episode would be caught by the runner
+            _stored(*ref)
+
         def run(inst, arm, r, inputs, pool=None):
             if raise_at == (inst["instance_id"], arm, r):
                 raise RuntimeError("simulated worker crash")
