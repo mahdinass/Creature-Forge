@@ -843,3 +843,56 @@ no push or merge.
 - Review the narration wording.
 - Upload and visibility decisions.
 - W3/W4, push and merge all await approval.
+
+## 2026-10-21: GitHub checkpoint of W1/W2 (owner-authorized push, private repository)
+**Remote state, verified with `git ls-remote` after the push. All pushes were normal; there was no force push and no rewrite.**
+
+| Ref | Commit | Notes |
+|---|---|---|
+| tag `checkpoint/w2-demo-2026-10-21` (annotated) | `5e02df5742d2409b527440a696670148c677af46` | the W2 milestone |
+| tag `checkpoint/do1-l4-r0-harness-e9d2379` (annotated) | `e9d2379def2546cedcc9ce5c3cc2aa22b9746392` | the frozen DO-1 harness of the r0 pilot |
+| `feature/do1-demo` | `827b84c` and later | 5e02df5 + hygiene `1c0b76e` + CI test fix `827b84c` + this record |
+| `experiment/do1-objective` | `e9d2379` | the frozen DO-1 harness |
+| `experiment/ta1-harness` | `86d0a2b` | TA-1 amendment A1 |
+| `main` | `e58dbdf` | unchanged; an ancestor of every ref above, so it can be fast-forwarded |
+
+**Audit (A1).**
+- The history is linear: `main` ⊂ `ea9e729` ⊂ `86d0a2b` ⊂ `e9d2379` ⊂ `5e02df5`. 20 commits were unpushed.
+- The unpushed commits contain no credentials, `.env` contents, keys or tokens.
+- Already present in pushed history, and not credentials:
+  - Nebius project and instance ids;
+  - the Windows user folder name;
+  - the author e-mail.
+- No blob is larger than 0.51 MB (24 MB added in total), and no evidence file is ignored.
+- `FROZEN_MANIFEST.json`: 563/563 blob ids match. Every entry that existed at e9d2379 is unchanged there.
+- No broken relative links (101 Markdown files).
+- **Trailers:** `main` has none. 22 pushed commits on `feature/has-scientist` and all 20 new commits carry `Co-Authored-By`
+  trailers, against the submission checklist. Removing them would mean rewriting history and changing the frozen
+  hashes, so that is an owner decision (for example, squash-merge to `main`).
+
+**Cleanup (A2).**
+- `budgetLine` now formats with en-US. The vitest locale failure is fixed: 199/199.
+- The Windows user folder is no longer named in any tracked file.
+- The checklist video row now points to the W1/W2 cut list. `DEVPOST.md` is still Forge Loop-centred (owner).
+- `tests/test_do1_objective.py` skips its 14 stored-record tests when the git-ignored DS-1 records are absent, so a clean
+  clone and CI no longer error.
+
+**Checks.**
+- In the worktree:
+  - Python 1591 OK (skipped 6);
+  - vitest 199/199; build OK;
+  - `do1-flow` 48/48, `nemotron-flow` 40/40, `tabs-smoke` 23/23, `overview-flow` 23/23.
+- **Clean GitHub clone** of `feature/do1-demo`:
+  - the manifest and all four SHA256SUMS files (DO-1 demo, W2, W2 plant replays, L4 r0) verified;
+  - evidence, license and W1/W2 tests pass;
+  - `npm ci`, vitest 199/199 and the build pass;
+  - `do1-flow` 48/48;
+  - `nemotron-flow`: 40/40 in 4 of 5 runs, 39/40 once (intermittent, check not captured).
+
+**Note.** `experiment/do1-objective` and both tags point at code before the test fix, so CI on those refs may error on the
+missing records. They are frozen and are not changed.
+
+**Git-ignored assets (A4).**
+- The inventory and backup procedure are in `docs/NONGIT_ASSETS_2026-10-21.md`.
+- Both archives are local only. The upload to a draft release was blocked by the tool permission policy.
+- **Owner:** copy `%USERPROFILE%\CreatureForge-archive\2026-10-21\` off the machine.

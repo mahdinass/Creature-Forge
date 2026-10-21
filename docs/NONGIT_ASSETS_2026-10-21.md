@@ -37,13 +37,17 @@ They live on the owner's laptop, outside every repository, at `%USERPROFILE%\Cre
 
 The same folder holds `INVENTORY.tsv`, `INVENTORY_SUMMARY.json` and `ARCHIVES.sha256`.
 
-## Off-machine copies
-The status of each copy is recorded in `docs/PROJECT_STATE.md` (the 2026-10-21 GitHub checkpoint section).
-- **Scientific archive:** a draft release of the private repository, in the same pattern as `ARTIFACT_ARCHIVE_2026-10-18.md`.
-  Drafts are visible only to collaborators with write access. Never publish it.
-- **Capture/video archive:** it is not uploaded to any service, and the owner chooses where it goes. Copy the
-  `creature-forge-capture-2026-10-21.tar` file and `ARCHIVES.sha256` to a private personal drive or an external disk, then
-  run `sha256sum -c` on the copy.
+## Off-machine copies: OWNER ACTION, not done yet
+On 2026-10-21 the agent's attempt to upload the scientific archive as a private draft release was blocked by the
+tool-permission policy, so nothing was uploaded. No other storage destination is configured or approved, so the owner
+copies both archives.
+1. Copy the whole folder `%USERPROFILE%\CreatureForge-archive\2026-10-21\` (about 395 MB, 5 files) to a private
+   destination the owner controls, such as an external disk or a personal private cloud drive. The video is in
+   `creature-forge-capture-2026-10-21.tar`; do not put it anywhere public.
+2. On the copy, run `sha256sum -c ARCHIVES.sha256` (Git Bash); both lines must print `OK`.
+3. Optional, for the scientific archive only: a draft release of the private repository, as in
+   `ARTIFACT_ARCHIVE_2026-10-18.md`. Run `gh release create archive-raw-2026-10-21 --draft -R mahdinass/Creature-Forge
+   creature-forge-science-raw-2026-10-21.tar.gz ARCHIVES.sha256 INVENTORY.tsv`, and never publish it.
 
 ## Recovery (Git Bash, from the main checkout)
 ```bash
