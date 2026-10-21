@@ -30,7 +30,11 @@ from creature_forge import walk_opt as wo             # noqa: E402
 from creature_forge.hdb_evidence import EvidenceWorkbench  # noqa: E402
 from creature_forge.hdb_workbench import HDBWorkbench, min_budget  # noqa: E402
 
-RECORDS = os.path.join(os.path.dirname(ROOT), "Creature-Forge", "artifacts", "vm", "ds1", "eval")
+# the stored DS-1 records are git-ignored raw data (see docs/NONGIT_ASSETS_2026-10-21.md); tests that read them skip without
+# them, as tests/test_ta1_harness.py does
+RECORDS = next((p for p in (os.environ.get("TA1_RECORDS_ROOT"), os.path.join(ROOT, "artifacts", "vm", "ds1", "eval"),
+                            os.path.join(os.path.dirname(ROOT), "Creature-Forge", "artifacts", "vm", "ds1", "eval"))
+                if p and os.path.isdir(p)), os.path.join(ROOT, "artifacts", "vm", "ds1", "eval"))
 CRIT = loc.DEFAULT_CRITERIA
 
 
@@ -46,6 +50,8 @@ def _guard():
 
 
 def _stored(fname, line):
+    if not os.path.isfile(os.path.join(RECORDS, fname)):
+        raise unittest.SkipTest(f"stored DS-1 record {fname} not available locally")
     return ta1.load_stored(RECORDS, fname, line)
 
 
