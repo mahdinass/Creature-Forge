@@ -943,3 +943,18 @@ missing records. They are frozen and are not changed.
   - the integration PR into `main`;
   - PR #18;
   - the off-machine backup of `%USERPROFILE%\CreatureForge-archive\2026-10-21\`.
+
+## V1 frozen: exact record (written on the development line; release/v1 itself is not modified)
+- **Tag:** `v1.0.0-rc1` (tag object `a037194`) → commit **`3a740a74af4bdcafbc0b3dd7a012bc78d0fc0322`** on `release/v1`.
+- **CI:** GitHub Actions run 39680004319, green.
+  - Python 1,614 tests OK (38 skipped);
+  - vitest 199/199; build OK;
+  - 11 browser flows: 407 checks, 0 failures, including `do1-flow` and `nemotron-flow`.
+- **Integration PR:** #19, `release/v1` → `main`, open. The owner reviews and merges.
+- **GitHub rulesets (active):**
+  - 25595215: tags `v1.*` and `checkpoint/*`, no deletion, update or force;
+  - 25595223: `release/v1`, no deletion or force, changes only through a PR.
+- **Local guard:** the hook `.git/hooks/pre-push` in the main checkout (shared by all worktrees) refuses pushes to
+  `release/v1` and moving or deleting `v1.*` and `checkpoint/*` tags.
+- **This branch:** `feature/experience-learning`, from `v1.0.0-rc1`. It holds the proposal only
+  (`docs/plans/EXPERIENCE_LEARNING_PLAN.md`) and awaits approval of P0.
