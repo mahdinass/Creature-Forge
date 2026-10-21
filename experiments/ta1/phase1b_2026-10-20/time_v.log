@@ -1,0 +1,23 @@
+	Command being timed: "/home/forge/dev/venvs/hdb/bin/python -u scripts/ta1_tool_access.py --phase 1B --execute --approved-by owner FA-1C Phase 1B Nebius amendment 2026-10-20 --harness-commit 33a6e6f05aa0a0af968811156b44755f3c7381f9 --max-rollouts 7208 --artifacts-root /home/forge/dev/hdb/artifacts/hdb --records-root /home/forge/dev/runs/fa1c_phase1b_inputs/records --workers 6 --out /home/forge/dev/runs/fa1c_phase1b_2026-10-20/ta1_phase1b.jsonl"
+	User time (seconds): 3424.51
+	System time (seconds): 1.56
+	Percent of CPU this job got: 459%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:25.79
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 87240
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 68
+	Minor (reclaiming a frame) page faults: 127646
+	Voluntary context switches: 31218
+	Involuntary context switches: 13847
+	Swaps: 0
+	File system inputs: 17832
+	File system outputs: 3592
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

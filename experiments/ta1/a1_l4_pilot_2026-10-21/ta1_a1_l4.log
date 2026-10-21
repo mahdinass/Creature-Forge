@@ -1,0 +1,13 @@
+ta1_harness_v3: phase 2a-L4-pilot: 2 episodes; caps plant 1608, twin 5600, total 7208 rollout-equivalents
+  PROTOCOL AMENDMENT A1 (2026-10-21): amends the Phase 2a execution order (preregistered: treatment r0 on L2, L3, L4, L5, with the stored A1e6 records as the r0 controls); run a paired control + treatment r0 on L4 first, with the Phase 1B gates: the control must reproduce the stored A1e6 record exactly and both arms must reach the hook with equal pre-hook fingerprints. Unchanged: engine, optimizer, verifier, frozen inputs, seeds, budgets, replicate seed rule; phases 1B, 2a, 2a-contingency and 2b remain as preregistered and are not authorised by this amendment.
+  L4 hdb-v1-gen-0137:low_ground_friction:0 arm=control replicate=0 noise_seed=1751409197
+  L4 hdb-v1-gen-0137:low_ground_friction:0 arm=treatment replicate=0 noise_seed=1751409197
+  input v6_settings: /home/forge/dev/ta1-a1-l4/experiments/causal_engineer/dev/hdb/ds1/engine_v6_settings.json sha256=f6e9eef6affd3253e9ef9e7bbe8156b39927d2ed394155f2453611e68f8393ff
+  input stop_model: /home/forge/dev/ta1-a1-l4/experiments/causal_engineer/dev/hdb/ds1/stopmap_dev_v2.json sha256=c20b6c4b064c359b8c9df5f99611e3fbd14d1fd304bac402feb88a46bb5d9df9
+  input split_file: /home/forge/dev/ta1-a1-l4/experiments/causal_engineer/dev/hdb/stage2_split.json sha256=79bc3b254e6eca584fbc167c699f67a466dae8bb3891261b3138e36da2b66c1e
+  input eval_instances: /home/forge/dev/ta1-a1-l4/experiments/causal_engineer/dev/hdb/ds1/ds1_eval_instances.json sha256=bac394ea850f39ab119d19cf57f0d0336cf21c9e09d52bfb84414179ae77891e
+  input thresholds: /home/forge/dev/hdb/artifacts/hdb/thresholds_dev.json sha256=12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89
+  input walkers: /home/forge/dev/hdb/artifacts/hdb/walkers_all.jsonl sha256=151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd
+L4 hdb-v1-gen-0137:low_ground_friction:0 control 0 PARTIAL_IMPROVEMENT 19 rescreen: no re-screen spent 3270
+L4 hdb-v1-gen-0137:low_ground_friction:0 treatment 0 PARTIAL_IMPROVEMENT 19 rescreen: no re-screen spent 6540
+DONE: every run passed its validity checks (outcomes are not interpreted here).
