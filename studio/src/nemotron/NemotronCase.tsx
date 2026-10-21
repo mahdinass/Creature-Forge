@@ -4,9 +4,10 @@ import { Chip } from '../causal/Investigation'
 import { statusInfo } from '../causal/causalLogic'
 import {
   beliefShift, crossCheck, experimentName, explanationName, fmtUsd, fmtW, followed, forkOf, hypothesisName, LANE_COLOR, LANE_NAME,
-  shortId, studyTone, verifiedWalking, walkingOf, type Lane,
+  illustrativeSeed, outcomeOfFeatures, outcomeOfRow, shortId, studyTone, verifiedWalking, walkingOf, type Lane,
 } from './nemotronLogic'
-import type { ArmView, Experiment, NemotronCaseResponse, SeedFeatures, W2Case } from './nemotronTypes'
+import type { ArmView, Experiment, NemotronCaseResponse, ReplayStatus, SeedFeatures, W2Case } from './nemotronTypes'
+import { PlantReplay, type ReplayLane } from './PlantReplay'
 import '../causal/causal.css'
 import './nemotron.css'
 
@@ -210,6 +211,19 @@ function Studies({ d }: { d: NemotronCaseResponse }) {
   )
 }
 
+type Slot = 'failure' | 'experiment' | 'verify'
+
+/** One damaged-plant viewer at a time (the playback clock is shared): the others show a "watch" button. */
+function ReplaySlot({ id, active, onWatch, status, label, children }: {
+  id: Slot; active: Slot | null; onWatch: (s: Slot) => void; status: ReplayStatus; label: string; children: () => ReactNode
+}) {
+  if (!status.available) return <p className="nm-small" data-testid={`nm-slot-${id}-unavailable`}>No damaged-robot replay: {status.reason}</p>
+  if (active !== id) {
+    return <button type="button" className="nm-watch" onClick={() => onWatch(id)} data-testid={`nm-watch-${id}`}>▶ {label}</button>
+  }
+  return <>{children()}</>
+}
+
 function CaseView({ d }: { d: NemotronCaseResponse }) {
   const c = d.case
   const a3 = c.arms.A3, a1 = c.arms.A1e
@@ -224,6 +238,27 @@ function CaseView({ d }: { d: NemotronCaseResponse }) {
   const check = a3.model?.calls.find((k) => k.model_check.some((l) => l.startsWith('X1:')))?.model_check ?? []
   const rule = /;\s*(.+?)\):?$/.exec(check[0] ?? '')?.[1] ?? 'n/a'
   const residual = check.find((l) => l.startsWith('X1:')) ?? 'n/a'
+  const rp = d.replays
+  const [active, setActive] = useState<Slot | null>(rp.available ? 'experiment' : null)
+  const [obsSeed, setObsSeed] = useState(c.shared.observation.seeds[0])
+  const [x1Seed, setX1Seed] = useState(x1n.seeds[0])
+  const valRows = rp.validation
+  const defaultVal = valRows ? illustrativeSeed(valRows.a3_submitted.rows, valRows.a1e_submitted.rows) : null
+  const [valSeed, setValSeed] = useState<number | null>(defaultVal)
+  const env = rp.environment
+  const expNote = rp.available ? `Reconstructed MuJoCo replay (${env?.system} ${env?.machine}, MuJoCo ${env?.mujoco}) of the recorded designs on the hidden plant. `
+    + `Every per-seed measurement of this experiment was reproduced exactly from the recorded run; frame error ${rp.fidelity?.fk_max_err_m} m. Playback only; nothing is simulated here.` : ''
+  const valNote = rp.available ? 'Reconstructed simulation replay, not an archived original: Stage 2 stored no per-seed verification rows. This re-run reproduced the recorded '
+    + "verification of both designs exactly at the level the record allows (status, walking fraction, reasons); the per-seed trajectories are this re-run's. " + (valSeed === defaultVal
+      ? "Illustrative seed by a pre-declared rule (first validation seed where Nemotron's design walks and the engine's does not); the counts above are the result." : '') : ''
+  const obsLane: ReplayLane[] = [{ name: 'observe', label: 'Damaged robot, nominal design', color: 'var(--bad)', outcome: (s) => outcomeOfFeatures(c.shared.observation, s) }]
+  const x1Lanes: ReplayLane[] = [
+    { name: 'x1_nem', label: `Nemotron's experiment ${x1n.id.replace(/^X\d+:cf:/, '')}`, color: LANE_COLOR.A3, outcome: (s) => outcomeOfFeatures(x1n, s) },
+    { name: 'x1_eng', label: `Engine's experiment ${x1e.id.replace(/^X\d+:cf:/, '')}`, color: LANE_COLOR.A1e, outcome: (s) => outcomeOfFeatures(x1e, s) }]
+  const valLanes: ReplayLane[] = valRows ? [
+    { name: 'nominal', label: 'Faulty robot (no repair)', color: 'var(--bad)', outcome: (s) => outcomeOfRow(valRows.nominal.rows, s) },
+    { name: 'a3_submitted', label: "Nemotron's lane: submitted design", color: LANE_COLOR.A3, outcome: (s) => outcomeOfRow(valRows.a3_submitted.rows, s) },
+    { name: 'a1e_submitted', label: 'Engine alone: submitted design', color: LANE_COLOR.A1e, outcome: (s) => outcomeOfRow(valRows.a1e_submitted.rows, s) }] : []
   return (
     <div className="nm-case">
       <Stage n={1} title="The failure: a robot with hidden damage" testid="nm-stage-failure">
@@ -231,6 +266,9 @@ function CaseView({ d }: { d: NemotronCaseResponse }) {
           measurements. On four trials of its normal gait the real robot stays upright but barely moves. It fails the eligibility check on {c.eligibility_check.n - c.eligibility_check.walking} of {c.eligibility_check.n} starts.</p>
         <SeedTiles e={c.shared.observation} testid="nm-observe" />
         <p className="nm-small">Measured during the recorded run by MuJoCo on the hidden plant ({c.shared.identical_in_all_arms ? 'identical in all three arms' : 'arms differ'}). The plant numbers are recorded; no simulation runs on this page.</p>
+        <ReplaySlot id="failure" active={active} onWatch={setActive} status={rp} label="Watch the damaged robot">
+          {() => <PlantReplay lanes={obsLane} seeds={c.shared.observation.seeds} seed={obsSeed} onSeed={setObsSeed} note={expNote} testid="nm-replay-failure" />}
+        </ReplaySlot>
       </Stage>
 
       <Stage n={2} title="Hypotheses: which side is weak?" testid="nm-stage-hypotheses">
@@ -248,6 +286,9 @@ function CaseView({ d }: { d: NemotronCaseResponse }) {
           <div className="nm-lane" style={{ ['--c' as string]: LANE_COLOR.A1e }}><LaneTag lane="A1e" /><SeedTiles e={x1e} testid="nm-x1-A1e" />
             <p className="nm-small">Predicted: walks {pe?.[0]}/{po} if the right side is weak, {pe?.[1]}/{po} if the left. Observed {walkingOf(x1e)}/{x1e.per_seed.length}.</p></div>
         </div>
+        <ReplaySlot id="experiment" active={active} onWatch={setActive} status={rp} label="Watch both experiments on the damaged robot">
+          {() => <PlantReplay lanes={x1Lanes} seeds={x1n.seeds} seed={x1Seed} onSeed={setX1Seed} note={expNote} testid="nm-replay-experiment" />}
+        </ReplaySlot>
       </Stage>
 
       <Stage n={5} title="Updated belief" testid="nm-stage-belief">
@@ -286,6 +327,9 @@ function CaseView({ d }: { d: NemotronCaseResponse }) {
       <Stage n={7} title="Independent verification (hidden starts the agents never saw)" testid="nm-stage-verify">
         <div className="nm-lanes"><Verification a={a3} testid="nm-verify-A3" /><Verification a={a1} testid="nm-verify-A1e" /></div>
         <p className="nm-small">Rule <code>full_recovery_v1</code>: at least 80% of the {a3.verification.n} validation starts walk, a verified gain over the faulty robot, then a 20 s confirmation.</p>
+        <ReplaySlot id="verify" active={active} onWatch={setActive} status={rp} label="Watch the faulty robot and both repairs on the hidden starts">
+          {() => valSeed == null ? null : <PlantReplay lanes={valLanes} seeds={valRows?.a3_submitted.rows.map((r) => r.seed) ?? []} seed={valSeed} onSeed={setValSeed} note={valNote} testid="nm-replay-verify" />}
+        </ReplaySlot>
       </Stage>
 
       <Stage n={8} title="How representative is this?" testid="nm-stage-scope"><Representative d={d} /></Stage>
@@ -296,8 +340,13 @@ function CaseView({ d }: { d: NemotronCaseResponse }) {
       </Stage>
 
       <section className="nm-replays" data-testid="nm-replays">
-        <h2>Replay of the damaged robot</h2>
-        <p className="nm-p">{d.replays.reason}</p>
+        <h2>About the damaged-robot replays</h2>
+        {rp.available ? <>
+          <p className="nm-p" data-testid="nm-replay-fidelity">Exported by <code>{rp.exporter}</code> in the recorded environment ({env?.system} {env?.machine}, Python {env?.python},
+            numpy {env?.numpy}, MuJoCo {env?.mujoco}) from the recorded designs on the hidden plant. Experiments: {rp.fidelity?.experiments}. Verification: {rp.fidelity?.validation}.
+            Frames are the {rp.frame_state} simulation state; forward-kinematics error {rp.fidelity?.fk_max_err_m} m (tolerance {rp.fidelity?.fk_tol_m}).</p>
+          <p className="nm-small">These are reconstructions of the recorded runs, not frames archived at the time. The model is not called again: Nemotron's decisions are the recorded ones.</p>
+        </> : <p className="nm-p">{rp.reason}</p>}
         <p className="nm-small">The "AI scientist" tab's animations show designs on the <b>nominal</b> robot, without this hidden damage, and are labelled so.</p>
       </section>
 
@@ -307,6 +356,35 @@ function CaseView({ d }: { d: NemotronCaseResponse }) {
         {c.sources.map((s) => <p key={s.arm}>{s.arm}: <code>{s.source}</code> line {s.source_line} · file sha256 <code>{s.source_sha256.slice(0, 12)}…</code> · line sha256 <code>{s.line_sha256.slice(0, 12)}…</code></p>)}
       </footer>
     </div>
+  )
+}
+
+/** Who decides and which deterministic instrument does what in the recorded investigation (has_agent.py and its tools). */
+function Laboratory({ d }: { d: NemotronCaseResponse }) {
+  const a3 = d.case.arms.A3
+  return (
+    <section className="nm-lab" data-testid="nm-lab" aria-label="How the laboratory works">
+      <div className="nm-lab-node nm-lab-model">
+        <b>Nemotron</b>
+        <span>{a3.model?.name} on Nebius Token Factory · {a3.costs.llm_calls} recorded calls in this run</span>
+        <small>Reads the lab notebook; picks the next action: an experiment, new hypotheses, a tool screen, delegate the repair, stop.</small>
+      </div>
+      <span className="nm-lab-arrow" aria-hidden="true">→</span>
+      <div className="nm-lab-tools">
+        <div className="nm-lab-node"><b>MuJoCo experiments</b><small>run on the damaged robot (the hidden plant)</small></div>
+        <div className="nm-lab-node"><b>Bayesian belief engine</b><small>simulates each hypothesis, weighs it against the measurements, scores experiments by EIG</small></div>
+        <div className="nm-lab-node"><b>CMA-ES optimiser</b><small>repairs in the simulator twin and on the robot</small></div>
+        <div className="nm-lab-node"><b>Memory</b><small>dossiers from earlier cases (A4 arm only)</small></div>
+      </div>
+      <span className="nm-lab-arrow" aria-hidden="true">→</span>
+      <div className="nm-lab-node nm-lab-verify">
+        <b>Independent verifier</b>
+        <span><code>full_recovery_v1</code> on hidden starts</span>
+        <small>The agent never sees these trials. It decides FULL / PARTIAL / NOT.</small>
+      </div>
+      <p className="nm-small nm-lab-note">Deterministic code does the inference, the optimisation and the judging; Nemotron decides what to do with them. Simulation and the export ran on a
+        Nebius AI Cloud VM. The engine-alone arm (A1e) runs the same laboratory with the engine's own recommendation at every step.</p>
+    </section>
   )
 }
 
@@ -333,6 +411,7 @@ export function NemotronCase() {
           <li className="nm-flag nm-flag-attr" data-testid="nm-flag-do1">{d.case.captions.do1}</li>
         </ul>
       </section>
+      <Laboratory d={d} />
       <CaseView d={d} />
     </main>
   )

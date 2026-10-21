@@ -1,5 +1,6 @@
 // Real-browser flow for "Nemotron's experiment" (W2). Needs a running Studio server (BASE_URL) with the built frontend and the
-// pinned files in experiments/w2. The page must only read GET /api/nemotron/case (playback; no model call, no simulation).
+// pinned files in experiments/w2. The page may only read GET /api/nemotron/case and the verified damaged-plant replays
+// GET /api/nemotron/replay/<name>/<seed> (playback of static files; no model call, no simulation).
 // Every number checked on screen is compared with the API response, which the backend reads from the hash-pinned case files.
 // Usage: BASE_URL=http://127.0.0.1:8000 [SHOT_DIR=dir] node e2e/nemotron-flow.mjs
 import { chromium } from 'playwright-core'
@@ -80,14 +81,51 @@ try {
   const studyRows = await page.$$('[data-testid^="nm-study-"]')
   ok(studyRows.length === d.studies.studies.length, `all ${d.studies.studies.length} studies are listed`)
   ok((await txt('[data-testid="nm-study-do1"]')).includes('NO_AI'), 'the DO-1 row is credited NO_AI')
-  ok((await txt('[data-testid="nm-replays"]')).includes('awaits owner approval') === !d.replays.available, 'damaged-plant replay status is stated')
+  ok(d.replays.available ? (await txt('[data-testid="nm-replay-fidelity"]')).includes('reproduced') || (await txt('[data-testid="nm-replay-fidelity"]')).includes('equal to the record')
+    : (await txt('[data-testid="nm-replays"]')).includes('awaits owner approval'), 'damaged-plant replay status / fidelity is stated')
+
+  // damaged-plant replays: one viewer at a time; captions = recorded outcomes; reconstruction labelled
+  if (d.replays.available) {
+    const x1 = { x1_nem: c.arms.A3.experiments[1], x1_eng: c.arms.A1e.experiments[1] }
+    const outcome = (e, s) => { const f = e.per_seed.find((x) => x.seed === s); return f.walking === 1 ? 'walks' : f.time_upright < 10 ? `falls at ${f.time_upright.toFixed(1)} s` : 'upright, not walking' }
+    await page.waitForSelector('[data-testid="nm-replay-experiment"] canvas')
+    ok((await page.$$('[data-testid="nm-replay-experiment"] canvas')).length === 2, 'the experiment replay shows both experiments side by side')
+    ok((await txt('[data-testid="nm-replay-experiment"]')).includes('Reconstructed MuJoCo replay'), 'the experiment replay is labelled as a reconstruction')
+    for (const s of x1.x1_nem.seeds) {
+      await page.click(`[data-testid="nm-replay-experiment-seed-${s}"]`)
+      await page.waitForFunction((s) => [...document.querySelectorAll('[data-testid="nm-replay-experiment"] .vp-label')].every((e) => e.textContent.endsWith(`seed ${s}`)), s)
+      const caps = await page.$$eval('[data-testid="nm-replay-experiment"] figcaption', (els) => els.map((e) => e.textContent.trim()))
+      ok(caps[0] === outcome(x1.x1_nem, s) && caps[1] === outcome(x1.x1_eng, s), `seed ${s}: captions are the recorded outcomes (${caps.join(' | ')})`)
+    }
+    const p = await page.evaluate((s) => fetch(`/api/nemotron/replay/x1_nem/${s}`).then((r) => r.json()), x1.x1_nem.seeds[0])
+    ok(p.w2_demo.plant.includes('hidden') && p.w2_demo.fk_max_err_m === 0, 'payloads are the hidden-plant export with exact frames')
+    await page.click('[data-testid="nm-watch-verify"]')
+    await page.waitForSelector('[data-testid="nm-replay-verify"] canvas')
+    ok((await page.$$('[data-testid="nm-replay-experiment"]')).length === 0, 'only one replay viewer is mounted at a time')
+    ok((await page.$$('[data-testid="nm-replay-verify"] canvas')).length === 3, 'verification replay: faulty robot and both submitted designs')
+    const v = d.replays.validation
+    const want = v.a3_submitted.rows.find((r) => r.walking && !v.a1e_submitted.rows.find((x) => x.seed === r.seed).walking).seed
+    ok((await txt('[data-testid="nm-replay-verify"] .vp-label')).endsWith(`seed ${want}`), `the verification replay opens on the pre-declared illustrative seed ${want}`)
+    ok((await txt('[data-testid="nm-replay-verify-note"]')).includes('not an archived original'), 'validation replays are labelled reconstructed, not archived originals')
+    ok((await page.$$('[data-testid^="nm-replay-verify-seed-"]')).length === v.a3_submitted.rows.length, `all ${v.a3_submitted.rows.length} validation seeds are selectable`)
+    if (SHOT) {
+      await page.waitForTimeout(2500)
+      await page.locator('[data-testid="nm-stage-verify"]').screenshot({ path: `${SHOT}/nemotron-verify-replay.png` })
+      await page.click('[data-testid="nm-watch-experiment"]')
+      await page.waitForSelector('[data-testid="nm-replay-experiment"] canvas')
+      await page.click(`[data-testid="nm-replay-experiment-seed-${x1.x1_nem.seeds[2]}"]`)
+      await page.waitForTimeout(3000)
+      await page.locator('[data-testid="nm-stage-measure"]').screenshot({ path: `${SHOT}/nemotron-experiment-replay.png` })
+    }
+  }
   if (SHOT) {
     await page.screenshot({ path: `${SHOT}/nemotron-full.png`, fullPage: true })
     for (const s of ['fork', 'measure', 'belief', 'verify', 'scope']) {
       await page.locator(`[data-testid="nm-stage-${s}"]`).screenshot({ path: `${SHOT}/nemotron-${s}.png` })
     }
   }
-  ok(apiCalls.every((x) => x === 'GET /api/nemotron/case'), `the page only issued GET /api/nemotron/case (${[...new Set(apiCalls)].join(', ')})`)
+  ok(apiCalls.every((x) => x === 'GET /api/nemotron/case' || /^GET \/api\/nemotron\/replay\/[a-z0-9_]+\/\d+$/.test(x)),
+    `the page only issued GET /api/nemotron/case and /api/nemotron/replay/* (${[...new Set(apiCalls.map((x) => x.replace(/\/\d+$/, '/<seed>')))].join(', ')})`)
 
   // narrow layout
   await page.setViewportSize({ width: 390, height: 900 })

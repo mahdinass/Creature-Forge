@@ -191,14 +191,40 @@ evaluation, Stage 2 compositions and A4, and DS-1 A3v5.
   - A banner and the API note state this.
 - **Causal tab unchanged.** Its faults are part of the replayed body and vector (`fault_bench.inject`), so "INITIAL DESIGN
   (the faulty robot)" is accurate there.
-- **Damaged-plant replays: not yet exported.** `scripts/w2_damaged_plant_export.py` is prepared: dry run, plus 9
-  no-physics gate tests.
-  - **Gate:** the instance rebuild must match the record, and so must the per-seed experiment features (exact). The
-    verification aggregates must match too.
-  - **Caveat:** Stage 2 stored no per-seed verification rows, so the validation replays can only be aggregate-matched.
-  - **Cost:** about 296 plant rollout-equivalents in the recorded Linux environment (main VM, under $0.10). It needs owner
-    approval.
-  - Until it runs, the page animates nothing of the damaged robot.
+- **Damaged-plant replays: exported and verified (2026-10-21, owner-authorized VM run).**
+  `scripts/w2_damaged_plant_export.py` ran on the main VM at `c8816c6`.
+  - **Environment:** Linux x86_64, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0, the recorded one. 2 workers, 1:32 wall
+    time, 210 MB peak.
+  - **Attempt 1 failed closed in the instance check, before any experiment rollout.** The exporter compared all 8 of
+    the instance's obs seeds, but the bench observes on the first `n_obs` = 4. The fix is in the exporter; nothing in the
+    gate was loosened. Its logs are in `experiments/w2/export_run_2026-10-21/attempt1/`.
+  - **Gates passed:**
+
+    | Gate | What was checked | Result |
+    |---|---|---|
+    | Instance rebuild | eligibility labels 0/8, nominal design, strength, obs seeds | equal to the record |
+    | Experiments X0, X1 (Nemotron, `freq@x0.85`), X1 (engine, `freq@x1.2`) | every per-seed feature, on the production path and on the traced frame path | **exact** |
+    | Verification of both submitted designs | status, walking fraction and reasons | equal to the record: A3 FULL_RECOVERY 23/24; A1e PARTIAL_IMPROVEMENT 20/24, "confirmation: walking on 79% of seeds at 20 s" |
+    | Frames | forward-kinematics error of the pre-step state | 0.0 m (tolerance 1e-9 m) |
+
+  - **Limitation.** Stage 2 kept no per-seed verification rows. The 72 validation replays (faulty robot, A3 design,
+    A1e design × 24 starts) are therefore reconstructed simulations. They match the record at the level it allows, and
+    each trace matches this run's own production row. They are not archived original frames, and the page and the video
+    say so. The 12 experiment replays reproduce the recorded per-seed measurements exactly.
+  - **Output.**
+    - `experiments/w2/gen0137_one_side_weakness/plant_replays/`: 84 payloads, 9.2 MB. `SHA256SUMS` is `7c05c8de…`,
+      pinned in `creature_forge/studio/nemotron_api.py`; every served file is checked against it.
+    - Run logs, the run script and the archive hashes are in `experiments/w2/export_run_2026-10-21/`.
+  - **Cost and shutdown.** Infra ledger $88.939 → $88.971 (+$0.032). Both VMs were confirmed STOPPED through the control
+    plane.
+  - **The page.** Stages 1, 4 and 7 have a "watch" button. One viewer is mounted at a time, because the playback clock is
+    shared.
+    - Stage 1 shows the damaged robot.
+    - Stage 4 shows both experiments side by side, on all 4 starts, including the start where Nemotron's own
+      experiment fell.
+    - Stage 7 shows the faulty robot and both submitted designs, on any of the 24 hidden starts. It opens on a
+      pre-declared illustrative seed: the first where A3's design walks and A1e's does not.
+    - Captions are the recorded outcomes.
 
 ## 6. Reproduce
 

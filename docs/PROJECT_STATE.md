@@ -784,3 +784,62 @@ Owner-approved W2 (auto mode). No physics, Nebius, inference, push or merge.
 - `hdb_replay` hypothesis attribution (twin physics). It is not needed for this case, and agent-v4 logs are not read by
   it (`docs/NEMOTRON_CONTRIBUTION.md` §3.3).
 
+## 2026-10-21 - W2 complete (damaged-plant replays) and W5 video workflow with a draft rough cut (local, unpushed)
+Owner-authorized: the bounded W2 export on the main VM; local video tooling; a capture workflow. No W3/W4, no inference,
+no push or merge.
+
+**W2 damaged-plant export** (`dc83cdf`; details in `docs/NEMOTRON_CONTRIBUTION.md` §5).
+- **Pre-flight:** control-plane auth OK; watchdog task running every 15 min (last result 0) on AC power; infra ledger
+  $88.939 of the $96 cap; VM deadline set to 0.75 h; snapshot tree equal to the local commit; inputs equal to their
+  pinned hashes; environment Linux x86_64, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0.
+- **Attempt 1** failed closed in the instance check, before any experiment rollout. Cause: an exporter bug (all 8 obs
+  seeds were compared with the bench's first 4), fixed in `c8816c6`.
+- **Attempt 2:** smoke passed (3 experiments exact, FK 0.0 m). The full export wrote 84 payloads.
+  - The X0 and both X1 experiments were per-seed exact.
+  - Verification equals the record (A3 FULL 23/24, A1e PARTIAL 20/24), at aggregate level only, because Stage 2 kept no
+    per-seed rows.
+  - Wall time 1:32, 2 workers.
+- **Cost:** +$0.032 (ledger $88.971). Both VMs were confirmed STOPPED via the control plane.
+- **Archive:** `artifacts/runs/w2_plant_export_2026-10-21/`. The tgz SHA-256 values are in
+  `experiments/w2/export_run_2026-10-21/archive_sha256.txt`.
+
+**Studio.** `?tab=nemotron` now plays the verified export.
+- Stages 1, 4 and 7 have watch buttons; one viewer is mounted at a time.
+- Every replay is labelled "Reconstructed MuJoCo replay". The validation replays are additionally labelled "not an
+  archived original".
+- A new "laboratory" strip shows who decides and what each instrument does.
+- The page width was raised to 1760 px.
+- W1's Verified repair page is unchanged (`do1-flow` 48/48).
+
+**Video toolchain (W5).** See `docs/submission/VIDEO_PRODUCTION.md`.
+- **Already present:** FFmpeg 8.1 (gyan.dev full build), Clipchamp 4.7.10020.0, Edge, `playwright-core` 1.49.1.
+- **Installed:** OBS Studio 32.2.2 (`winget OBSProject.OBSStudio`, hash verified).
+- **Not needed:** Playwright's `ffmpeg-1010`. The CDP screencast plus system FFmpeg replaces Playwright video.
+- **`studio/e2e/demo-video-capture.mjs`:**
+  - Headless Edge on the real GPU (ANGLE D3D11, Intel Iris Xe; software renderers are refused).
+  - A 2400×1350 CSS layout at 0.8 scale, so frames are exactly 1920×1080 and uncropped. This fixes the owner-reported
+    cropping: the display is 2560×1600 at 200 %, so the earlier 1936×1176 headed window overflowed it.
+  - A fresh profile, and an API allow-list (0 blocked).
+  - Chapters keyed to the storyboard.
+- **`scripts/video_rough_cut.py`** reads `docs/submission/video/cutlist.json` (shots plus narration) and writes
+  `rough_cut.mp4`, `rough_cut_clean.mp4`, `narration.srt` and `report.json`.
+- **Storyboard:** `docs/submission/STORYBOARD.md`, generated from the cut list. The old Forge Loop storyboard and capture
+  plan are in `docs/submission/archive/`.
+- **Draft:** take 3 (3:55 raw, 27.4 fps screencast, 0 errors). Rough cut v1 is 2:53.5, 1920×1080, 30 fps, with a silent
+  AAC track. It is git-ignored under `artifacts/capture/video_2026-10-21/`; hashes are in
+  `docs/submission/video/media_SHA256SUMS.txt`.
+
+**Verification.**
+- **Python:** 105 tests under the MuJoCo tripwire, 0 hits.
+- **Frontend:** build OK; vitest 198/199 (pre-existing `forgeLogic` locale failure).
+- **Browser flows:** `nemotron-flow` 40/40, `do1-flow` 48/48, `scientist-flow` 11/11 (UI fixture).
+- **Capture:** the smoke take (SwiftShader) and the real-GPU takes all passed their checks.
+- **Frames reviewed by eye:** a contact sheet of the rough cut plus a full-resolution crop. The grid renders on the real
+  GPU in every viewport, and text is legible at 1080p.
+
+**Owner next.**
+- Record the voice-over (OBS or Clipchamp) over `rough_cut_clean.mp4`, then export in Clipchamp. Steps are in
+  `VIDEO_PRODUCTION.md` §4.
+- Review the narration wording.
+- Upload and visibility decisions.
+- W3/W4, push and merge all await approval.

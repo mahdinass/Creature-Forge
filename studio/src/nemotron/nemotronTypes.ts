@@ -1,4 +1,5 @@
 // W2 case files served by /api/nemotron/case (scripts/w2_case_build.py, schema w2_case_v1). Read-only playback.
+import type { RunPayload } from '../types'
 
 export type Structure = string[][]
 export interface Weighted { structure: Structure; w: number }
@@ -104,5 +105,24 @@ export interface Study {
 
 export interface NemotronCaseResponse {
   case: W2Case; cross: W2Cross; studies: { schema: string; note: string; studies: Study[] }
-  replays: { available: boolean; reason: string }; playback: 'RECORDED_LIVE'
+  replays: ReplayStatus; playback: 'RECORDED_LIVE'
+}
+
+export type ReplayName = 'observe' | 'x1_nem' | 'x1_eng' | 'nominal' | 'a3_submitted' | 'a1e_submitted'
+
+export interface ValidationRow { seed: number; outcome: string; score: number | null; walking: boolean; fell: boolean | null; label: string | null; fall_time: number | null }
+
+/** /api/nemotron/case `replays`: the export's index (scripts/w2_damaged_plant_export.py) when it is present and verified. */
+export interface ReplayStatus {
+  available: boolean; reason: string | null
+  exporter?: string; environment?: Record<string, string>; frame_state?: string; plant?: string; approved_by?: string
+  fidelity?: { experiments: string; validation: string; fk_tol_m: number; fk_max_err_m: number }
+  experiments?: Record<'observe' | 'x1_nem' | 'x1_eng', { arm: string; id: string; seeds: number[]; design_hash: string }>
+  validation?: Record<'nominal' | 'a3_submitted' | 'a1e_submitted', { design_hash: string; rows: ValidationRow[] }>
+  available_keys?: string[]
+}
+
+export interface W2Payload extends RunPayload {
+  w2_demo: { design: ReplayName; design_hash: string; frame_state: string; fk_max_err_m: number; plant: string
+    evidence: { features?: Record<string, number | null>; row?: ValidationRow } }
 }

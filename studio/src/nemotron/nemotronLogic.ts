@@ -1,5 +1,5 @@
 import { structureLabel } from '../scientist/scientistLogic'
-import type { ArmView, Candidate, Experiment, Structure, Study, W2Case, W2Cross } from './nemotronTypes'
+import type { ArmView, Candidate, Experiment, Structure, Study, ValidationRow, W2Case, W2Cross } from './nemotronTypes'
 
 export type Lane = 'A3' | 'A1e'
 export const LANE_COLOR: Record<Lane | 'A4', string> = { A3: 'var(--investigate)', A1e: 'var(--simulate)', A4: 'var(--create)' }
@@ -105,3 +105,30 @@ export function crossCheck(x: W2Cross): { a3: number; a1: number; a4: number; a3
 export const shortId = (id: string): string => id.replace(/^hdb-v1-/, '').replace(/:(\d+)$/, ' · sev $1').replace(/_/g, ' ')
 
 export const favourable = (s: Study[]): Study[] => s.filter((r) => studyTone(r.direction) === 'ok')
+
+/** Recorded outcome of one experiment seed (from its per-seed features). */
+export function outcomeOfFeatures(e: Experiment, seed: number): { text: string; ok: boolean } {
+  const f = e.per_seed.find((x) => x.seed === seed)
+  if (!f) throw new Error(`${e.id}: no recorded features for seed ${seed}`)
+  if (f.walking === 1) return { text: 'walks', ok: true }
+  const t = f.time_upright ?? 10
+  return t < 10 ? { text: `falls at ${t.toFixed(1)} s`, ok: false } : { text: 'upright, not walking', ok: false }
+}
+
+/** Outcome of one validation seed in the reconstructed verification rows. */
+export function outcomeOfRow(rows: ValidationRow[], seed: number): { text: string; ok: boolean } {
+  const r = rows.find((x) => x.seed === seed)
+  if (!r) throw new Error(`no validation row for seed ${seed}`)
+  if (r.walking) return { text: 'walks', ok: true }
+  if (r.fell) return { text: `falls${r.fall_time != null ? ` at ${r.fall_time.toFixed(1)} s` : ''}`, ok: false }
+  return { text: (r.label ?? 'not walking').replace(/_/g, ' '), ok: false }
+}
+
+/** Pre-declared: the first validation seed (stored order) where Nemotron's design walks and the engine's does not. */
+export function illustrativeSeed(a3: ValidationRow[], a1: ValidationRow[]): number | null {
+  for (const r of a3) {
+    const o = a1.find((x) => x.seed === r.seed)
+    if (r.walking && o && !o.walking) return r.seed
+  }
+  return a3[0]?.seed ?? null
+}
