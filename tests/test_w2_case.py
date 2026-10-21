@@ -149,8 +149,10 @@ class NemotronApiTests(unittest.TestCase):
         j = r.json()
         self.assertEqual(j["playback"], "RECORDED_LIVE")
         self.assertEqual(j["case"]["instance_id"], wb.INSTANCE_ID)
-        self.assertFalse(j["replays"]["available"])
-        self.assertIn("approval", j["replays"]["reason"])
+        self.assertTrue(j["replays"]["available"])
+        unpinned = self._client(replay_sums_sha256=None).get("/api/nemotron/case").json()["replays"]
+        self.assertFalse(unpinned["available"])                    # never served without the pinned export hash
+        self.assertIn("approval", unpinned["reason"])
         self.assertEqual(j["cross"]["aggregates"]["full"]["A3"], 15)
 
     def test_tampered_file_is_refused(self):
@@ -160,6 +162,38 @@ class NemotronApiTests(unittest.TestCase):
             p.write_text(p.read_text(encoding="utf-8").replace("p = 0.031", "p = 0.001"), encoding="utf-8")
             r = self._client(w2_dir=Path(d)).get("/api/nemotron/case")
             self.assertEqual(r.status_code, 503)
+
+    def test_damaged_plant_replays_are_served_and_match_the_record(self):
+        c = self._client()
+        st = c.get("/api/nemotron/case").json()["replays"]
+        self.assertTrue(st["available"], st.get("reason"))
+        self.assertEqual(st["fidelity"]["fk_max_err_m"], 0.0)
+        self.assertEqual(st["environment"]["mujoco"], "3.15.0")
+        walk = {k: sum(r["walking"] for r in v["rows"]) for k, v in st["validation"].items()}
+        self.assertEqual(walk, {"nominal": 0, "a3_submitted": 23, "a1e_submitted": 20})     # = case.json verification
+        case = json.loads((CASE / "case.json").read_text(encoding="utf-8"))
+        self.assertEqual(st["experiments"]["x1_nem"]["seeds"], case["arms"]["A3"]["experiments"][1]["seeds"])
+        r = c.get(f"/api/nemotron/replay/x1_nem/{st['experiments']['x1_nem']['seeds'][2]}")
+        self.assertEqual(r.status_code, 200)
+        p = r.json()
+        rec = next(s for s in case["arms"]["A3"]["experiments"][1]["per_seed"] if s["seed"] == p["seed"])
+        ev = p["w2_demo"]["evidence"]["features"]
+        shared = [k for k in rec if k != "seed" and k in ev]
+        self.assertGreaterEqual(len(shared), 8)
+        self.assertEqual({k: ev[k] for k in shared}, {k: rec[k] for k in shared})   # the replay carries the recorded features
+        self.assertEqual(len(p["events"]), 1)                       # this start falls (recorded time upright 1.726 s)
+        self.assertEqual(c.get("/api/nemotron/replay/x1_nem/1").status_code, 404)
+        self.assertEqual(c.get("/api/nemotron/replay/../etc/1").status_code, 404)
+        self.assertEqual(c.get("/api/nemotron/replay/bogus/1").status_code, 422)
+
+    def test_tampered_replay_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            shutil.copytree(CASE / "plant_replays", d, dirs_exist_ok=True)
+            p = next((Path(d) / "payloads").glob("a3_submitted_*.json"))
+            p.write_bytes(p.read_bytes().replace(b'"seed":', b'"seed": ', 1))
+            c = self._client(replay_dir=Path(d))
+            seed = p.stem.rsplit("_", 1)[1]
+            self.assertEqual(c.get(f"/api/nemotron/replay/a3_submitted/{seed}").status_code, 503)
 
     def test_wrong_sums_pin_is_refused(self):
         self.assertEqual(self._client(sums_sha256="0" * 64).get("/api/nemotron/case").status_code, 503)

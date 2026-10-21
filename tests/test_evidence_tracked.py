@@ -13,7 +13,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ("experiments/do1", "experiments/ta1")
+EVIDENCE = ("experiments/do1", "experiments/ta1", "experiments/w2")
 
 
 def _git(*args: str) -> str:

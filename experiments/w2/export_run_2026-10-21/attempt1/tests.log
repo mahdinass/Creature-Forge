@@ -1,0 +1,6 @@
+.............refusing: --execute/--smoke need --approved-by and --artifacts-root
+......
+----------------------------------------------------------------------
+Ran 19 tests in 2.084s
+
+OK

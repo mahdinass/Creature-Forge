@@ -43,3 +43,5 @@ infra/nebius/state_batch.json
 infra/nebius/spend_ledger_batch.jsonl
 infra/nebius/tunnel.pid
 infra/nebius/AUTH_BLOCKED
+!experiments/w2/export_run_2026-10-21/**/*.log
+!experiments/w2/export_run_2026-10-21/*.log
