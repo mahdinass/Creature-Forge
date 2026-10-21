@@ -1,0 +1,998 @@
+{
+ "files": {
+  "w3": [
+   "experiments/do1/w3w4_2026-10-21/do1_l4_rep.jsonl",
+   "4f9c7295bd771cf26c8dab2a8a1db433ed2f2460dd6e1b3a3340d90571114714"
+  ],
+  "w4": [
+   "experiments/do1/w3w4_2026-10-21/do1_x.jsonl",
+   "f484ac6b19ce0f54c8071e4566b42770920734e6553f21c691fb9e936899bc9d"
+  ]
+ },
+ "w3": {
+  "sentinel": [
+   {
+    "case": "L4",
+    "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+    "arm": "frozen",
+    "replicate": 0,
+    "role": "sentinel",
+    "noise_seed": 1751409197,
+    "status": "PARTIAL_IMPROVEMENT",
+    "walking_k": 19,
+    "reasons": [
+     "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+    ],
+    "aggregate": "POOR",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "wins": 20,
+    "losses": 1,
+    "ties": 3,
+    "median_diff_m": 1.0818607738435522,
+    "p_better": 1.049041748046875e-05,
+    "confirmation_run": false,
+    "confirmation_passed": null,
+    "confirmation_checks": {},
+    "plant_used": 700,
+    "twin_used": 2514,
+    "rollout_equivalents": 3270.0,
+    "stop_map_accepted": false,
+    "submitted": 4,
+    "valid": true,
+    "exposed": null,
+    "arm_problems": [],
+    "reproduction_exact": true,
+    "stored_prefix_match": null,
+    "paired_prehook_equal": null,
+    "rescreen": "no re-screen",
+    "wall_s": 370.24421527
+   }
+  ],
+  "pairs": [
+   {
+    "replicate": 1,
+    "noise_seed": 1751419204,
+    "frozen": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "frozen",
+     "replicate": 1,
+     "role": "primary",
+     "noise_seed": 1751419204,
+     "status": "PARTIAL_IMPROVEMENT",
+     "walking_k": 19,
+     "reasons": [
+      "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+     ],
+     "aggregate": "POOR",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 20,
+     "losses": 1,
+     "ties": 3,
+     "median_diff_m": 1.0807631056481735,
+     "p_better": 1.049041748046875e-05,
+     "confirmation_run": false,
+     "confirmation_passed": null,
+     "confirmation_checks": {},
+     "plant_used": 700,
+     "twin_used": 2514,
+     "rollout_equivalents": 3270.0,
+     "stop_map_accepted": false,
+     "submitted": 5,
+     "valid": true,
+     "exposed": null,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": null,
+     "rescreen": "no re-screen",
+     "wall_s": 371.190416938
+    },
+    "do1": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "do1",
+     "replicate": 1,
+     "role": "primary",
+     "noise_seed": 1751419204,
+     "status": "FULL_RECOVERY",
+     "walking_k": 21,
+     "reasons": [],
+     "aggregate": "PASS",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 21,
+     "losses": 0,
+     "ties": 3,
+     "median_diff_m": 0.7753653475488915,
+     "p_better": 4.76837158203125e-07,
+     "confirmation_run": true,
+     "confirmation_passed": true,
+     "confirmation_checks": {
+      "walking_frac": [
+       0.875,
+       true
+      ],
+      "median_speed_upright": [
+       0.3327750773759277,
+       true
+      ],
+      "body_contact": [
+       null,
+       true
+      ]
+     },
+     "plant_used": 428,
+     "twin_used": 2418,
+     "rollout_equivalents": 2950.0,
+     "stop_map_accepted": true,
+     "submitted": 4,
+     "valid": true,
+     "exposed": true,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": true,
+     "rescreen": "no re-screen",
+     "wall_s": 345.4162921600001,
+     "do1_repairs": [
+      {
+       "tool": "leg_length",
+       "design_index": 4,
+       "n_candidates": 91,
+       "selected_log_index": 63,
+       "selected_is_last": false,
+       "selected_walking": 4,
+       "selected_margin": 0.24701305926912506,
+       "selected_median_gain_m": 0.8760528814258584,
+       "binding_gates": [
+        "speed",
+        "speed",
+        "speed",
+        "touchdown"
+       ]
+      }
+     ],
+     "do1_refused": []
+    },
+    "full_frozen": false,
+    "full_do1": true,
+    "walking_diff": 2,
+    "do1_exposed": true
+   },
+   {
+    "replicate": 2,
+    "noise_seed": 1751429211,
+    "frozen": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "frozen",
+     "replicate": 2,
+     "role": "primary",
+     "noise_seed": 1751429211,
+     "status": "PARTIAL_IMPROVEMENT",
+     "walking_k": 19,
+     "reasons": [
+      "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+     ],
+     "aggregate": "POOR",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 20,
+     "losses": 1,
+     "ties": 3,
+     "median_diff_m": 1.0840788424091254,
+     "p_better": 1.049041748046875e-05,
+     "confirmation_run": false,
+     "confirmation_passed": null,
+     "confirmation_checks": {},
+     "plant_used": 692,
+     "twin_used": 2514,
+     "rollout_equivalents": 3262.0,
+     "stop_map_accepted": false,
+     "submitted": 4,
+     "valid": true,
+     "exposed": null,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": null,
+     "rescreen": "no re-screen",
+     "wall_s": 374.70000491400015
+    },
+    "do1": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "do1",
+     "replicate": 2,
+     "role": "primary",
+     "noise_seed": 1751429211,
+     "status": "FULL_RECOVERY",
+     "walking_k": 21,
+     "reasons": [],
+     "aggregate": "PASS",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 21,
+     "losses": 0,
+     "ties": 3,
+     "median_diff_m": 0.8141080853552543,
+     "p_better": 4.76837158203125e-07,
+     "confirmation_run": true,
+     "confirmation_passed": true,
+     "confirmation_checks": {
+      "walking_frac": [
+       0.875,
+       true
+      ],
+      "median_speed_upright": [
+       0.3369571948941058,
+       true
+      ],
+      "body_contact": [
+       null,
+       true
+      ]
+     },
+     "plant_used": 428,
+     "twin_used": 2418,
+     "rollout_equivalents": 2950.0,
+     "stop_map_accepted": true,
+     "submitted": 4,
+     "valid": true,
+     "exposed": true,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": true,
+     "rescreen": "no re-screen",
+     "wall_s": 344.2390831680002,
+     "do1_repairs": [
+      {
+       "tool": "leg_length",
+       "design_index": 4,
+       "n_candidates": 91,
+       "selected_log_index": 69,
+       "selected_is_last": false,
+       "selected_walking": 4,
+       "selected_margin": 0.2621151268709783,
+       "selected_median_gain_m": 0.9100063772884921,
+       "binding_gates": [
+        "touchdown",
+        "speed",
+        "touchdown",
+        "touchdown"
+       ]
+      }
+     ],
+     "do1_refused": []
+    },
+    "full_frozen": false,
+    "full_do1": true,
+    "walking_diff": 2,
+    "do1_exposed": true
+   },
+   {
+    "replicate": 3,
+    "noise_seed": 1751439218,
+    "frozen": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "frozen",
+     "replicate": 3,
+     "role": "primary",
+     "noise_seed": 1751439218,
+     "status": "PARTIAL_IMPROVEMENT",
+     "walking_k": 19,
+     "reasons": [
+      "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+     ],
+     "aggregate": "POOR",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 20,
+     "losses": 1,
+     "ties": 3,
+     "median_diff_m": 1.0844307093878145,
+     "p_better": 1.049041748046875e-05,
+     "confirmation_run": false,
+     "confirmation_passed": null,
+     "confirmation_checks": {},
+     "plant_used": 700,
+     "twin_used": 2514,
+     "rollout_equivalents": 3270.0,
+     "stop_map_accepted": false,
+     "submitted": 5,
+     "valid": true,
+     "exposed": null,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": null,
+     "rescreen": "no re-screen",
+     "wall_s": 375.7628177890001
+    },
+    "do1": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "do1",
+     "replicate": 3,
+     "role": "primary",
+     "noise_seed": 1751439218,
+     "status": "FULL_RECOVERY",
+     "walking_k": 20,
+     "reasons": [],
+     "aggregate": "PASS",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 22,
+     "losses": 0,
+     "ties": 2,
+     "median_diff_m": 0.8746211488341427,
+     "p_better": 2.384185791015625e-07,
+     "confirmation_run": true,
+     "confirmation_passed": true,
+     "confirmation_checks": {
+      "walking_frac": [
+       0.875,
+       true
+      ],
+      "median_speed_upright": [
+       0.34146865451776903,
+       true
+      ],
+      "body_contact": [
+       null,
+       true
+      ]
+     },
+     "plant_used": 428,
+     "twin_used": 2418,
+     "rollout_equivalents": 2950.0,
+     "stop_map_accepted": true,
+     "submitted": 4,
+     "valid": true,
+     "exposed": true,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": true,
+     "rescreen": "no re-screen",
+     "wall_s": 345.3150769069998,
+     "do1_repairs": [
+      {
+       "tool": "leg_length",
+       "design_index": 4,
+       "n_candidates": 91,
+       "selected_log_index": 87,
+       "selected_is_last": false,
+       "selected_walking": 4,
+       "selected_margin": 0.24205213728276181,
+       "selected_median_gain_m": 0.9517939263886397,
+       "binding_gates": [
+        "touchdown",
+        "speed",
+        "speed",
+        "speed"
+       ]
+      }
+     ],
+     "do1_refused": []
+    },
+    "full_frozen": false,
+    "full_do1": true,
+    "walking_diff": 1,
+    "do1_exposed": true
+   },
+   {
+    "replicate": 4,
+    "noise_seed": 1751449225,
+    "frozen": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "frozen",
+     "replicate": 4,
+     "role": "primary",
+     "noise_seed": 1751449225,
+     "status": "PARTIAL_IMPROVEMENT",
+     "walking_k": 19,
+     "reasons": [
+      "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+     ],
+     "aggregate": "POOR",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 20,
+     "losses": 1,
+     "ties": 3,
+     "median_diff_m": 1.0850977248784839,
+     "p_better": 1.049041748046875e-05,
+     "confirmation_run": false,
+     "confirmation_passed": null,
+     "confirmation_checks": {},
+     "plant_used": 692,
+     "twin_used": 2514,
+     "rollout_equivalents": 3262.0,
+     "stop_map_accepted": false,
+     "submitted": 4,
+     "valid": true,
+     "exposed": null,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": null,
+     "rescreen": "no re-screen",
+     "wall_s": 373.87830517700013
+    },
+    "do1": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "do1",
+     "replicate": 4,
+     "role": "primary",
+     "noise_seed": 1751449225,
+     "status": "FULL_RECOVERY",
+     "walking_k": 21,
+     "reasons": [],
+     "aggregate": "PASS",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 21,
+     "losses": 0,
+     "ties": 3,
+     "median_diff_m": 0.7167278059456335,
+     "p_better": 4.76837158203125e-07,
+     "confirmation_run": true,
+     "confirmation_passed": true,
+     "confirmation_checks": {
+      "walking_frac": [
+       0.9166666666666666,
+       true
+      ],
+      "median_speed_upright": [
+       0.32435054887300285,
+       true
+      ],
+      "body_contact": [
+       null,
+       true
+      ]
+     },
+     "plant_used": 428,
+     "twin_used": 2418,
+     "rollout_equivalents": 2950.0,
+     "stop_map_accepted": true,
+     "submitted": 4,
+     "valid": true,
+     "exposed": true,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": true,
+     "rescreen": "no re-screen",
+     "wall_s": 344.1279298069999,
+     "do1_repairs": [
+      {
+       "tool": "leg_length",
+       "design_index": 4,
+       "n_candidates": 91,
+       "selected_log_index": 52,
+       "selected_is_last": false,
+       "selected_walking": 4,
+       "selected_margin": 0.2783671023056686,
+       "selected_median_gain_m": 0.8161932543517947,
+       "binding_gates": [
+        "touchdown",
+        "speed",
+        "speed",
+        "touchdown"
+       ]
+      }
+     ],
+     "do1_refused": []
+    },
+    "full_frozen": false,
+    "full_do1": true,
+    "walking_diff": 2,
+    "do1_exposed": true
+   },
+   {
+    "replicate": 5,
+    "noise_seed": 1751459232,
+    "frozen": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "frozen",
+     "replicate": 5,
+     "role": "primary",
+     "noise_seed": 1751459232,
+     "status": "PARTIAL_IMPROVEMENT",
+     "walking_k": 19,
+     "reasons": [
+      "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+     ],
+     "aggregate": "POOR",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 20,
+     "losses": 1,
+     "ties": 3,
+     "median_diff_m": 1.0544441295915978,
+     "p_better": 1.049041748046875e-05,
+     "confirmation_run": false,
+     "confirmation_passed": null,
+     "confirmation_checks": {},
+     "plant_used": 700,
+     "twin_used": 2514,
+     "rollout_equivalents": 3270.0,
+     "stop_map_accepted": false,
+     "submitted": 5,
+     "valid": true,
+     "exposed": null,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": null,
+     "rescreen": "no re-screen",
+     "wall_s": 375.77573665599994
+    },
+    "do1": {
+     "case": "L4",
+     "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+     "arm": "do1",
+     "replicate": 5,
+     "role": "primary",
+     "noise_seed": 1751459232,
+     "status": "FULL_RECOVERY",
+     "walking_k": 21,
+     "reasons": [],
+     "aggregate": "PASS",
+     "verdict": "VERIFIED_IMPROVEMENT",
+     "wins": 21,
+     "losses": 0,
+     "ties": 3,
+     "median_diff_m": 0.7283466461625607,
+     "p_better": 4.76837158203125e-07,
+     "confirmation_run": true,
+     "confirmation_passed": true,
+     "confirmation_checks": {
+      "walking_frac": [
+       0.9166666666666666,
+       true
+      ],
+      "median_speed_upright": [
+       0.32734006703532453,
+       true
+      ],
+      "body_contact": [
+       null,
+       true
+      ]
+     },
+     "plant_used": 428,
+     "twin_used": 2418,
+     "rollout_equivalents": 2950.0,
+     "stop_map_accepted": true,
+     "submitted": 4,
+     "valid": true,
+     "exposed": true,
+     "arm_problems": [],
+     "reproduction_exact": null,
+     "stored_prefix_match": true,
+     "paired_prehook_equal": true,
+     "rescreen": "no re-screen",
+     "wall_s": 345.18400837299987,
+     "do1_repairs": [
+      {
+       "tool": "leg_length",
+       "design_index": 4,
+       "n_candidates": 91,
+       "selected_log_index": 75,
+       "selected_is_last": false,
+       "selected_walking": 4,
+       "selected_margin": 0.2694740514413513,
+       "selected_median_gain_m": 0.8196187733642482,
+       "binding_gates": [
+        "touchdown",
+        "speed",
+        "touchdown",
+        "touchdown"
+       ]
+      }
+     ],
+     "do1_refused": []
+    },
+    "full_frozen": false,
+    "full_do1": true,
+    "walking_diff": 2,
+    "do1_exposed": true
+   }
+  ],
+  "incomplete_pairs": [],
+  "infrastructure_errors": [],
+  "itt": {
+   "n_pairs": 5,
+   "full_frozen": 0,
+   "full_do1": 5,
+   "cp95_frozen": [
+    0.0,
+    0.5218237501049814
+   ],
+   "cp95_do1": [
+    0.4781762498950183,
+    1.0
+   ],
+   "discordant_for_do1": 5,
+   "discordant_against_do1": 0,
+   "mcnemar_one_sided_p": 0.03125,
+   "reading": "every discordant pair favours do1, p <= 0.05 (instance-specific; technical replicates)",
+   "status_counts": {
+    "frozen": {
+     "FULL_RECOVERY": 0,
+     "PARTIAL_IMPROVEMENT": 5,
+     "NOT_RECOVERED": 0,
+     "WORSE": 0
+    },
+    "do1": {
+     "FULL_RECOVERY": 5,
+     "PARTIAL_IMPROVEMENT": 0,
+     "NOT_RECOVERED": 0,
+     "WORSE": 0
+    }
+   },
+   "walking_diff": [
+    2,
+    2,
+    1,
+    2,
+    2
+   ],
+   "walking_sign_for": 5,
+   "walking_sign_against": 0,
+   "walking_sign_test_p": 0.03125,
+   "median_walking_diff": 2
+  },
+  "per_protocol": {
+   "n_pairs": 5,
+   "full_frozen": 0,
+   "full_do1": 5,
+   "cp95_frozen": [
+    0.0,
+    0.5218237501049814
+   ],
+   "cp95_do1": [
+    0.4781762498950183,
+    1.0
+   ],
+   "discordant_for_do1": 5,
+   "discordant_against_do1": 0,
+   "mcnemar_one_sided_p": 0.03125,
+   "reading": "every discordant pair favours do1, p <= 0.05 (instance-specific; technical replicates)",
+   "status_counts": {
+    "frozen": {
+     "FULL_RECOVERY": 0,
+     "PARTIAL_IMPROVEMENT": 5,
+     "NOT_RECOVERED": 0,
+     "WORSE": 0
+    },
+    "do1": {
+     "FULL_RECOVERY": 5,
+     "PARTIAL_IMPROVEMENT": 0,
+     "NOT_RECOVERED": 0,
+     "WORSE": 0
+    }
+   },
+   "walking_diff": [
+    2,
+    2,
+    1,
+    2,
+    2
+   ],
+   "walking_sign_for": 5,
+   "walking_sign_against": 0,
+   "walking_sign_test_p": 0.03125,
+   "median_walking_diff": 2
+  },
+  "per_protocol_excluded": []
+ },
+ "w4": {
+  "B1": {
+   "frozen": {
+    "case": "B1",
+    "instance_id": "hdb-v1-gen-0142:payload_offset:5",
+    "arm": "frozen",
+    "replicate": 0,
+    "role": "exploratory",
+    "noise_seed": 1751409197,
+    "status": "PARTIAL_IMPROVEMENT",
+    "walking_k": 17,
+    "reasons": [
+     "candidate aggregate is POOR, not PASS (walking on 17 of 24 seeds; PASS needs >= 80%)"
+    ],
+    "aggregate": "POOR",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "wins": 22,
+    "losses": 0,
+    "ties": 2,
+    "median_diff_m": 2.7642831181713428,
+    "p_better": 2.384185791015625e-07,
+    "confirmation_run": false,
+    "confirmation_passed": null,
+    "confirmation_checks": {},
+    "plant_used": 692,
+    "twin_used": 2260,
+    "rollout_equivalents": 3008.0,
+    "stop_map_accepted": false,
+    "submitted": 2,
+    "valid": true,
+    "exposed": null,
+    "arm_problems": [],
+    "reproduction_exact": true,
+    "stored_prefix_match": null,
+    "paired_prehook_equal": null,
+    "rescreen": "no re-screen",
+    "wall_s": 249.75455068199972
+   },
+   "do1": {
+    "case": "B1",
+    "instance_id": "hdb-v1-gen-0142:payload_offset:5",
+    "arm": "do1",
+    "replicate": 0,
+    "role": "exploratory",
+    "noise_seed": 1751409197,
+    "status": "PARTIAL_IMPROVEMENT",
+    "walking_k": 20,
+    "reasons": [
+     "confirmation: walking on 62% of seeds at 20 s, needs >= 80%"
+    ],
+    "aggregate": "PASS",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "wins": 23,
+    "losses": 0,
+    "ties": 1,
+    "median_diff_m": 2.5408153450283057,
+    "p_better": 1.1920928955078125e-07,
+    "confirmation_run": true,
+    "confirmation_passed": false,
+    "confirmation_checks": {
+     "walking_frac": [
+      0.625,
+      false
+     ],
+     "median_speed_upright": [
+      0.27426510311251145,
+      true
+     ],
+     "body_contact": [
+      null,
+      true
+     ]
+    },
+    "plant_used": 696,
+    "twin_used": 2260,
+    "rollout_equivalents": 3060.0,
+    "stop_map_accepted": false,
+    "submitted": 2,
+    "valid": true,
+    "exposed": true,
+    "arm_problems": [],
+    "reproduction_exact": null,
+    "stored_prefix_match": true,
+    "paired_prehook_equal": true,
+    "rescreen": "no re-screen",
+    "wall_s": 258.3408373909997,
+    "do1_repairs": [
+     {
+      "tool": "feedback",
+      "design_index": 2,
+      "n_candidates": 97,
+      "selected_log_index": 91,
+      "selected_is_last": false,
+      "selected_walking": 3,
+      "selected_margin": 0.07143449385477957,
+      "selected_median_gain_m": 2.4550947725398036,
+      "binding_gates": [
+       "speed",
+       "speed",
+       "speed",
+       "speed"
+      ]
+     },
+     {
+      "tool": "foot_length",
+      "design_index": 3,
+      "n_candidates": 61,
+      "selected_log_index": 38,
+      "selected_is_last": false,
+      "selected_walking": 4,
+      "selected_margin": 0.1709318692605839,
+      "selected_median_gain_m": 2.6612075163693403,
+      "binding_gates": [
+       "speed",
+       "speed",
+       "speed",
+       "speed"
+      ]
+     }
+    ],
+    "do1_refused": []
+   },
+   "direction": "same status; walking +3/24",
+   "gates": {
+    "status": [
+     "PARTIAL_IMPROVEMENT",
+     "PARTIAL_IMPROVEMENT"
+    ],
+    "walking_k": [
+     17,
+     20
+    ],
+    "aggregate": [
+     "POOR",
+     "PASS"
+    ],
+    "verdict": [
+     "VERIFIED_IMPROVEMENT",
+     "VERIFIED_IMPROVEMENT"
+    ],
+    "median_diff_m": [
+     2.7642831181713428,
+     2.5408153450283057
+    ],
+    "confirmation": [
+     [
+      false,
+      null
+     ],
+     [
+      true,
+      false
+     ]
+    ],
+    "reasons_frozen_only": [
+     "candidate aggregate is POOR, not PASS (walking on 17 of 24 seeds; PASS needs >= 80%)"
+    ],
+    "reasons_do1_only": [
+     "confirmation: walking on 62% of seeds at 20 s, needs >= 80%"
+    ]
+   },
+   "infrastructure_errors": []
+  },
+  "C1": {
+   "frozen": {
+    "case": "C1",
+    "instance_id": "hdb-v1-gen-0070:feedback_gain_loss:2",
+    "arm": "frozen",
+    "replicate": 0,
+    "role": "exploratory",
+    "noise_seed": 1751409197,
+    "status": "PARTIAL_IMPROVEMENT",
+    "walking_k": 19,
+    "reasons": [
+     "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+    ],
+    "aggregate": "POOR",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "wins": 20,
+    "losses": 0,
+    "ties": 4,
+    "median_diff_m": 2.1713935776079487,
+    "p_better": 9.5367431640625e-07,
+    "confirmation_run": false,
+    "confirmation_passed": null,
+    "confirmation_checks": {},
+    "plant_used": 457,
+    "twin_used": 2704,
+    "rollout_equivalents": 3217.0,
+    "stop_map_accepted": true,
+    "submitted": 4,
+    "valid": true,
+    "exposed": null,
+    "arm_problems": [],
+    "reproduction_exact": true,
+    "stored_prefix_match": null,
+    "paired_prehook_equal": null,
+    "rescreen": "no re-screen",
+    "wall_s": 319.27016781600014
+   },
+   "do1": {
+    "case": "C1",
+    "instance_id": "hdb-v1-gen-0070:feedback_gain_loss:2",
+    "arm": "do1",
+    "replicate": 0,
+    "role": "exploratory",
+    "noise_seed": 1751409197,
+    "status": "FULL_RECOVERY",
+    "walking_k": 20,
+    "reasons": [],
+    "aggregate": "PASS",
+    "verdict": "VERIFIED_IMPROVEMENT",
+    "wins": 20,
+    "losses": 0,
+    "ties": 4,
+    "median_diff_m": 2.1893048950689007,
+    "p_better": 9.5367431640625e-07,
+    "confirmation_run": true,
+    "confirmation_passed": true,
+    "confirmation_checks": {
+     "walking_frac": [
+      0.875,
+      true
+     ],
+     "median_speed_upright": [
+      0.5064638741959502,
+      true
+     ],
+     "body_contact": [
+      null,
+      true
+     ]
+    },
+    "plant_used": 445,
+    "twin_used": 2704,
+    "rollout_equivalents": 3253.0,
+    "stop_map_accepted": true,
+    "submitted": 4,
+    "valid": true,
+    "exposed": true,
+    "arm_problems": [],
+    "reproduction_exact": null,
+    "stored_prefix_match": true,
+    "paired_prehook_equal": true,
+    "rescreen": "no re-screen",
+    "wall_s": 326.1009052600002,
+    "do1_repairs": [
+     {
+      "tool": "foot_length",
+      "design_index": 4,
+      "n_candidates": 89,
+      "selected_log_index": 73,
+      "selected_is_last": false,
+      "selected_walking": 4,
+      "selected_margin": 0.375,
+      "selected_median_gain_m": 2.371863350632758,
+      "binding_gates": [
+       "touchdown",
+       "touchdown",
+       "touchdown",
+       "touchdown"
+      ]
+     }
+    ],
+    "do1_refused": []
+   },
+   "direction": "do1 better status",
+   "gates": {
+    "status": [
+     "PARTIAL_IMPROVEMENT",
+     "FULL_RECOVERY"
+    ],
+    "walking_k": [
+     19,
+     20
+    ],
+    "aggregate": [
+     "POOR",
+     "PASS"
+    ],
+    "verdict": [
+     "VERIFIED_IMPROVEMENT",
+     "VERIFIED_IMPROVEMENT"
+    ],
+    "median_diff_m": [
+     2.1713935776079487,
+     2.1893048950689007
+    ],
+    "confirmation": [
+     [
+      false,
+      null
+     ],
+     [
+      true,
+      true
+     ]
+    ],
+    "reasons_frozen_only": [
+     "candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"
+    ],
+    "reasons_do1_only": []
+   },
+   "infrastructure_errors": []
+  }
+ },
+ "pilot": null
+}

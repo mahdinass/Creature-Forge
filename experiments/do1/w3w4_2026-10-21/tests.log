@@ -1,0 +1,32 @@
+.................ss....................................s.................................F................E...........s..........
+======================================================================
+ERROR: test_preregistered_designs_resolve (tests.test_ta1_harness.StoredInputs.test_preregistered_designs_resolve)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/forge/dev/do1-w3w4/tests/test_ta1_harness.py", line 430, in test_preregistered_designs_resolve
+    r = rv1.resolve(root, e)
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/home/forge/dev/do1-w3w4/scripts/rv1_reverify.py", line 59, in resolve
+    rec = ta1.load_stored(records_root, fname, line)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/forge/dev/do1-w3w4/scripts/ta1_tool_access.py", line 619, in load_stored
+    with open(os.path.join(records_root, fname), encoding="utf-8") as fh:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/forge/dev/runs/do1_w3w4_inputs/records/eval_A1e6_s1.jsonl'
+
+======================================================================
+FAIL: test_frozen_reference_matches_the_local_inputs (tests.test_ta1_harness.ProvenancePreflight.test_frozen_reference_matches_the_local_inputs)
+The frozen values equal the real files (read-only; git blob ids at HEAD equal those at the implementation commit).
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/forge/dev/do1-w3w4/tests/test_ta1_harness.py", line 604, in test_frozen_reference_matches_the_local_inputs
+    self.assertEqual(ta1.sha256_file(os.path.join(art, ta1.A1E6[name])), want, name)
+AssertionError: None != '12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89' : thresholds
+
+----------------------------------------------------------------------
+Ran 129 tests in 2.287s
+
+FAILED (failures=1, errors=1, skipped=4)
+Ran 67 tests in 1.173s
+
+OK (skipped=3)

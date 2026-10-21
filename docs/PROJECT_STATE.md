@@ -896,3 +896,28 @@ missing records. They are frozen and are not changed.
 - The inventory and backup procedure are in `docs/NONGIT_ASSETS_2026-10-21.md`.
 - Both archives are local only. The upload to a draft release was blocked by the tool permission policy.
 - **Owner:** copy `%USERPROFILE%\CreatureForge-archive\2026-10-21\` off the machine.
+## 2026-10-21: W3/W4 DO-1 replication and cross-family pilot (owner-authorized, NO_AI)
+- **Branch:** `experiment/do1-replication-w3w4`, from the frozen harness `e9d2379`.
+- **Pre-registration:** commit `3b8a8b1`, pushed before any run. Protocol `docs/DO1_REPLICATION_PROTOCOL.md`; results
+  `docs/DO1_REPLICATION_REPORT.md`; evidence `experiments/do1/w3w4_2026-10-21/`.
+
+**W3 (L4, 5 fresh paired replicates).**
+- DO-1 FULL_RECOVERY 5/5 vs frozen 0/5 (frozen PARTIAL 19/24 every time).
+- Exact one-sided McNemar 5/0, p = 0.031, meeting the pre-registered criterion.
+- This is instance-specific: technical replicates of optimizer randomness on one robot, with the same validation seeds.
+- The margins are thin (20–21/24 against a threshold of 20).
+- The sentinel reproduced the stored record exactly.
+
+**W4 (exploratory, one pair each).**
+- C1 `feedback_gain_loss:2`: DO-1 FULL 20/24 vs frozen PARTIAL 19/24.
+- B1 `payload_offset:5`: both PARTIAL. DO-1 reached 20/24 validation, but its 20 s confirmation failed (62 %).
+
+**Gates and cost.**
+- All gates passed; 15/15 episodes ran; no exclusions and no infrastructure errors.
+- Infra ledger $88.999 → $89.405 (+$0.41). Both VMs STOPPED via the API at 19:17 UTC.
+- Rollout-equivalents: 34,354 (cap 39,644) + 12,538 (cap 14,416).
+
+**Next (owner).**
+- An independent review of the raw JSONL and the report, before any Studio or submission wording uses W3/W4.
+- Do not merge this branch into `main`. Its preflight now refuses re-execution at HEAD, because `experiments/` changed; for
+  re-execution, use `3b8a8b1`.

@@ -728,5 +728,230 @@ class ObjectiveV2Behaviour(unittest.TestCase):
             do1.objective([_row()] * 9, [1.0] * 9)
 
 
+# ------------------------------------------------------------------------------------------------ W3 / W4 (2026-10-21)
+X_STORED = {"hdb-v1-gen-0137:low_ground_friction:0": ("eval_A1e6_s3.jsonl", 4),
+            "hdb-v1-gen-0142:payload_offset:5": ("eval_A1e6_s3.jsonl", 5),
+            "hdb-v1-gen-0070:feedback_gain_loss:2": ("eval_A1e6_s5.jsonl", 1)}
+
+
+class W3W4Phases(unittest.TestCase):
+    def test_run_lists_caps_and_roles(self):
+        rep = abl.PHASES["DO1-L4-rep"]
+        self.assertEqual(len(rep), 11)
+        self.assertEqual(rep[0], ("L4", "frozen", 0))                          # the sentinel runs first
+        self.assertEqual(rep[1:], [("L4", arm, r) for r in range(1, 6) for arm in ("frozen", "do1")])
+        self.assertEqual(ta1.phase_cap(rep)["total"], 39644)
+        self.assertEqual([abl.run_role("DO1-L4-rep", *x) for x in rep], ["sentinel"] + ["primary"] * 10)
+        x = abl.PHASES["DO1-X"]
+        self.assertEqual(x, [("B1", "frozen", 0), ("B1", "do1", 0), ("C1", "frozen", 0), ("C1", "do1", 0)])
+        self.assertEqual(ta1.phase_cap(x)["total"], 14416)
+        self.assertEqual({abl.run_role("DO1-X", *y) for y in x}, {"exploratory"})
+        self.assertEqual(abl.PHASES["DO1-L4"][:2], abl.PHASES["DO1-L4-r0"])        # v1 phases unchanged
+        self.assertEqual(len(abl.PHASES["DO1-L4"]), 10)
+        self.assertNotIn("B1", ta1.CASES)                                        # TA-1 case list untouched
+        self.assertEqual(set(ta1.CASES) | {"B1", "C1"}, set(abl.CASES))
+        self.assertEqual(abl.stored_record_files(x), ["eval_A1e6_s3.jsonl", "eval_A1e6_s5.jsonl"])
+        for f in abl.stored_record_files(rep + x):
+            self.assertIn(f, ta1.REFERENCE["stored_records_sha256"])            # frozen hashes exist for every input
+
+    def test_noise_seeds_vary_only_with_the_replicate(self):
+        iid = abl.CASES["L4"]["instance_id"]
+        seeds = [ta1.replicate_noise_seed(iid, r) for r in range(6)]
+        self.assertEqual(seeds[0], 1751409197)
+        self.assertEqual([b - a for a, b in zip(seeds, seeds[1:])], [10007] * 5)
+        for c in ("B1", "C1"):                                                  # DS-1 rule: first 4 bytes "hdb-"
+            self.assertEqual(ta1.replicate_noise_seed(abl.CASES[c]["instance_id"], 0), 1751409197)
+
+    def test_preregistration(self):
+        for ph in ("DO1-L4-rep", "DO1-X"):
+            pre = abl.PHASE_PREREGISTRATION[ph]
+            self.assertEqual(pre["null_wording"], abl.PREREGISTRATION["null_wording"])
+        w3 = abl.PHASE_PREREGISTRATION["DO1-L4-rep"]
+        for k in ("hypothesis", "primary_outcome", "primary_analysis", "secondary", "stopping", "limits", "varies", "fixed"):
+            self.assertTrue(w3[k], k)
+        self.assertIn("McNemar", w3["primary_analysis"])
+        self.assertIn("Clopper-Pearson", w3["primary_analysis"])
+        self.assertIn("intention to treat", w3["primary_analysis"])
+        self.assertIn("never pooled", w3["limits"])
+        self.assertIn("No hypothesis test", abl.PHASE_PREREGISTRATION["DO1-X"]["analysis"])
+
+    def test_pausing_problems(self):
+        ne = "NOT_EXPOSED: no DO-1 repair completed (0 attempted); the episode is invalid as an objective ablation"
+        self.assertEqual(abl.pausing_problems("DO1-L4-rep", [ne]), [])
+        self.assertEqual(abl.pausing_problems("DO1-X", [ne, "x"]), ["x"])
+        self.assertEqual(abl.pausing_problems("DO1-L4-r0", [ne]), [ne])             # the pilot rule is unchanged
+        self.assertEqual(abl.pausing_problems("DO1-L4", [ne]), [ne])
+
+    def test_dry_runs_simulate_nothing(self):
+        with _guard(), mock.patch.object(ta1, "build_instance", _no_physics), \
+                mock.patch.object(abl, "run_do1_episode", _no_physics), contextlib.redirect_stdout(io.StringIO()) as buf:
+            for phase in ("DO1-L4-rep", "DO1-X"):
+                self.assertEqual(abl.main(["--phase", phase, "--records-root", RECORDS]), 0)
+        out = buf.getvalue()
+        self.assertIn("role=sentinel", out)
+        self.assertEqual(out.count("role=primary"), 10)
+        self.assertIn("hdb-v1-gen-0142:payload_offset:5", out)
+        self.assertIn("total 39644", out)
+        self.assertIn("total 14416", out)
+
+
+class W4Selection(unittest.TestCase):
+    """The pre-declared W4 eligibility rule, evaluated over all 30 stored A1e6 records, selects exactly B1 and C1."""
+    BODY = {"mass properties", "geometry"}
+    CONTROLLER = {"control", "control timing"}
+
+    def _records(self):
+        out = []
+        for s in range(6):
+            fname = f"eval_A1e6_s{s}.jsonl"
+            if not os.path.isfile(os.path.join(RECORDS, fname)):
+                self.skipTest(f"stored DS-1 record {fname} not available locally")
+            with open(os.path.join(RECORDS, fname), encoding="utf-8") as fh:
+                out += [(fname, i + 1, json.loads(x)) for i, x in enumerate(fh) if x.strip()]
+        return out
+
+    def _select(self, controller):
+        from creature_forge import hdb_bench as hb
+        with open(os.path.join(ROOT, ta1.A1E6["split_file"]), encoding="utf-8") as fh:
+            split = json.load(fh)
+        recs = self._records()
+        self.assertEqual(len(recs), 30)
+        elig = []
+        for fname, line, r in recs:
+            base, fam, _ = ta1.parse_instance_id(r["instance_id"])
+            s = r["verification"].get("summary", r["verification"])
+            k = round(s["walking_frac"] * 24)
+            reasons = s.get("reasons") or []
+            if (base in split["transfer_bases"] and r["instance_id"] not in split["excluded_from_transfer_eval"]
+                    and fam != "low_ground_friction" and base != "hdb-v1-gen-0137"
+                    and s["status"] == "PARTIAL_IMPROVEMENT" and 17 <= k <= 19 and len(reasons) == 1
+                    and "walking on" in reasons[0]
+                    and any(d["source"].startswith("repair:") for d in r["designs"])):
+                elig.append((hb.FAMILY_SPECS[fam]["taxonomy"], -k, base, r["instance_id"], fname, line, r))
+        picked = {}
+        for cls, tax in (("B1", self.BODY), ("C1", controller)):
+            cands = sorted(e for e in elig if e[0] in tax)
+            picked[cls] = cands[0] if cands else None
+        return picked
+
+    def test_rule_selects_b1_and_c1(self):
+        for controller in (self.CONTROLLER, self.CONTROLLER | {"sensing"}):     # either reading gives the same pick
+            picked = self._select(controller)
+            for c in ("B1", "C1"):
+                e = picked[c]
+                self.assertIsNotNone(e, c)
+                f, line, idx, h = abl.CASES[c]["stored"]
+                r = e[6]
+                self.assertEqual((e[3], e[4], e[5]), (abl.CASES[c]["instance_id"], f, line))
+                self.assertEqual(r["submitted"], idx)
+                self.assertEqual(ta1.design_hash(r["designs"][idx])[:10], h)
+
+    def test_l4_prehook_trace_has_no_plant_repair(self):
+        """The no-physics basis of the r >= 1 stored-prefix gate: the noise seed enters only the plant repair, and the
+        stored L4 trace (and the pilot's) reaches the hook before any plant repair."""
+        stored = _stored("eval_A1e6_s3.jsonl", 4)
+        lines = stored["engine"]["ledger"]["lines"]
+        first_repair = next(i for i, ln in enumerate(lines) if ln["item"] == "repair")
+        self.assertTrue(all(ln["item"] in ("baseline_check", "counterfactual", "observe", "select", "robustness_check",
+                                            "weigh_test", "floor_test") for ln in lines[:first_repair]))
+        import inspect
+        from creature_forge import belief_engine as be_mod
+        src = inspect.getsource(be_mod)
+        self.assertIn("noise_seed=11", src)                                    # twin CMA seeds are fixed, not r-dependent
+        self.assertIn("noise_seed=0", src)
+
+
+class W3W4Execute(unittest.TestCase):
+    """_execute for the W3/W4 phases with fake episodes built from each instance's stored record (no physics)."""
+    _fake_run = ExecuteGates._fake_run
+    _execute = ExecuteGates._execute
+
+    def _multi_run(self, mutate=None, do1_repairs=None, raise_at=None):
+        for ref in X_STORED.values():       # skip up front: a SkipTest inside an episode would be caught by the runner
+            _stored(*ref)
+
+        def run(inst, arm, r, inputs, pool=None):
+            if raise_at == (inst["instance_id"], arm, r):
+                raise RuntimeError("simulated worker crash")
+            rec = self._fake_run(ref=X_STORED[inst["instance_id"]], do1_repairs=do1_repairs)(inst, arm, r, inputs)
+            rec["instance_id"] = inst["instance_id"]
+            if mutate:
+                mutate(rec, arm, r)
+            return rec
+        return run
+
+    def test_w3_valid_run(self):
+        rc, recs, man = self._execute(self._multi_run(), phase="DO1-L4-rep")
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(recs), 11)
+        self.assertEqual([r["harness"]["role"] for r in recs], ["sentinel"] + ["primary"] * 10)
+        self.assertTrue(recs[0]["harness"]["reproduction"]["exact"])
+        for r in recs[1:]:
+            self.assertTrue(r["harness"]["stored_prefix"]["match"])              # both arms, every r >= 1
+            self.assertEqual(r["harness"]["phase"], "DO1-L4-rep")
+        for r in recs[2::2]:
+            self.assertTrue(r["harness"]["paired_prehook"]["equal"])
+        self.assertNotIn("paired_prehook", recs[0]["harness"])                   # the sentinel has no pair
+        self.assertEqual(man["phase_preregistration"], abl.PHASE_PREREGISTRATION["DO1-L4-rep"])
+        self.assertEqual(man["cases"]["L4"]["instance_id"], abl.CASES["L4"]["instance_id"])
+
+    def test_w3_sentinel_mismatch_stops_before_r1(self):
+        def mutate(rec, arm, r):
+            if r == 0:
+                rec["engine"]["ledger"]["used"] -= 1
+        rc, recs, _ = self._execute(self._multi_run(mutate), phase="DO1-L4-rep")
+        self.assertEqual(rc, ta1.PAUSE_EXIT)
+        self.assertEqual(len(recs), 1)
+        self.assertFalse(recs[0]["harness"]["reproduction"]["exact"])
+
+    def test_w3_stored_prefix_mismatch_pauses(self):
+        def mutate(rec, arm, r):
+            if r == 2 and arm == "frozen":
+                rec["engine"]["ledger"]["lines"][0] = {**rec["engine"]["ledger"]["lines"][0], "n": -1}
+        rc, recs, _ = self._execute(self._multi_run(mutate), phase="DO1-L4-rep")
+        self.assertEqual(rc, ta1.PAUSE_EXIT)
+        self.assertEqual(len(recs), 4)                                          # sentinel, pair r1, frozen r2: persisted
+        self.assertFalse(recs[-1]["harness"]["stored_prefix"]["match"])
+
+    def test_w3_not_exposed_is_kept_and_the_phase_continues(self):
+        rc, recs, _ = self._execute(self._multi_run(do1_repairs=[]), phase="DO1-L4-rep")
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(recs), 11)
+        for r in recs[2::2]:
+            self.assertFalse(r["harness"]["arm_checks"]["exposed"])
+            self.assertFalse(r["harness"]["arm_checks"]["valid"])
+
+    def test_w3_other_do1_defect_still_pauses(self):
+        rc, recs, _ = self._execute(self._multi_run(do1_repairs=[_repair(sel_override={"J": -1.0})]), phase="DO1-L4-rep")
+        self.assertEqual(rc, ta1.PAUSE_EXIT)
+        self.assertEqual(len(recs), 3)
+
+    def test_infrastructure_error_is_recorded_and_pauses(self):
+        iid = abl.CASES["L4"]["instance_id"]
+        rc, recs, _ = self._execute(self._multi_run(raise_at=(iid, "do1", 3)), phase="DO1-L4-rep")
+        self.assertEqual(rc, ta1.PAUSE_EXIT)
+        self.assertEqual(len(recs), 7)
+        self.assertTrue(recs[-1]["infrastructure_error"])
+        self.assertEqual((recs[-1]["arm"], recs[-1]["replicate"]), ("do1", 3))
+        self.assertIn("simulated worker crash", recs[-1]["error"])
+
+    def test_w4_valid_run(self):
+        rc, recs, man = self._execute(self._multi_run(), phase="DO1-X")
+        self.assertEqual(rc, 0)
+        self.assertEqual([(r["instance_id"], r["harness"]["do1"]["arm"]) for r in recs],
+                         [(abl.CASES[c]["instance_id"], arm) for c, arm, _ in abl.PHASES["DO1-X"]])
+        self.assertTrue(recs[0]["harness"]["reproduction"]["exact"])
+        self.assertTrue(recs[2]["harness"]["reproduction"]["exact"])
+        self.assertTrue(recs[1]["harness"]["stored_prefix"]["match"])
+        self.assertTrue(recs[3]["harness"]["stored_prefix"]["match"])
+        self.assertEqual({r["harness"]["role"] for r in recs}, {"exploratory"})
+        self.assertEqual(sorted(man["cases"]), ["B1", "C1"])
+
+    def test_w4_not_exposed_continues(self):
+        rc, recs, _ = self._execute(self._multi_run(do1_repairs=[]), phase="DO1-X")
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(recs), 4)
+
+
 if __name__ == "__main__":
     unittest.main()

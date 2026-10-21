@@ -16,6 +16,15 @@ Phases (each needs its own owner execution approval; nothing here authorises a r
              defined; never run automatically. Its r0 pair is re-executed (deterministic, expected identical to the pilot)
              and the pilot is not pooled into it unless the owner approves that explicitly.
   DO1-L1     L1 (hdb-v1-gen-0073:low_ground_friction:2), replicate 0, frozen and do1: 2 episodes. Complementary, descriptive.
+  DO1-L4-rep W3 replication (preregistered 2026-10-21, docs/DO1_REPLICATION_PROTOCOL.md): a frozen r0 SENTINEL first (an
+             environment-reproduction check against the stored A1e6 record, excluded from every analysis), then fresh
+             replicates r1-r5, frozen and do1 interleaved: 11 episodes, cap 39,644. The DO1-L4-r0 pilot is not pooled.
+  DO1-X      W4 exploratory cross-family pilot: B1 (hdb-v1-gen-0142:payload_offset:5) and C1
+             (hdb-v1-gen-0070:feedback_gain_loss:2), replicate 0, frozen then do1: 4 episodes, cap 14,416. Descriptive only.
+  In DO1-L4-rep and DO1-X a NOT_EXPOSED do1 episode is recorded, verified, kept and the phase CONTINUES (intention to
+  treat); only validity defects pause. An exception inside an episode is written to the output as an infrastructure-
+  error line and the phase pauses. DO1-L4-rep replicates r >= 1 must also match the stored record's pre-hook prefix (the
+  bench noise seed enters only the plant repair, which no stored L4 trace reaches before the hook).
 
 Statistics (PAIRED design): replicate r of both arms shares the bench noise seed, so the unit is the (replicate) pair. The
 primary DO1-L4 analysis is the exact one-sided McNemar (sign) test on discordant pairs (FULL in one arm only): with 5 pairs
@@ -52,14 +61,25 @@ sys.path.insert(0, SCRIPTS)
 import ta1_tool_access as ta1      # noqa: E402  (puts the repository root on sys.path)
 import do1_objective as do1        # noqa: E402
 
-RUNNER_VERSION = "do1_ablation_v1"
+RUNNER_VERSION = "do1_ablation_v2"   # v2: W3/W4 phases (DO1-L4-rep, DO1-X); the v1 phases behave as before
 ARMS = ("frozen", "do1")
 L4_REPLICATES = 5
+# W4 cases (pre-declared eligibility rule, plan of record 2026-10-21 section 6). They live here rather than in ta1.CASES,
+# so the TA-1 preregistered case list stays unchanged. stored = (file, 1-based line, submitted design, design hash prefix).
+X_CASES = {
+    "B1": {"instance_id": "hdb-v1-gen-0142:payload_offset:5", "stored": ("eval_A1e6_s3.jsonl", 5, 2, "73146bcf6e")},
+    "C1": {"instance_id": "hdb-v1-gen-0070:feedback_gain_loss:2", "stored": ("eval_A1e6_s5.jsonl", 1, 4, "9823aeddda")},
+}
+CASES = {**ta1.CASES, **X_CASES}
 PHASES = {
     "DO1-L4-r0": [("L4", arm, 0) for arm in ARMS],
     "DO1-L4": [("L4", arm, r) for r in range(L4_REPLICATES) for arm in ARMS],
     "DO1-L1": [("L1", arm, 0) for arm in ARMS],
+    "DO1-L4-rep": [("L4", "frozen", 0)] + [("L4", arm, r) for r in range(1, L4_REPLICATES + 1) for arm in ARMS],
+    "DO1-X": [(c, arm, 0) for c in ("B1", "C1") for arm in ARMS],
 }
+CONTINUE_NOT_EXPOSED = frozenset({"DO1-L4-rep", "DO1-X"})   # ITT: a NOT_EXPOSED do1 episode is kept and the phase goes on
+STORED_PREFIX_ALL_REPLICATES = frozenset({"DO1-L4-rep"})   # r >= 1 must also match the stored pre-hook prefix
 PREREGISTRATION = {
     "hypothesis": "On L4 the frozen objective saturates (4/4 train walking, validity 1 inside the gates) and rewards speed up "
                   "to 0.4 m/s, so the submitted designs sit near the walking gates (15/16 robust, 19/24 validation). Ranking "
@@ -86,6 +106,48 @@ PREREGISTRATION = {
     "null_wording": "No verified recovery was found under the tested intervention, optimizer configuration and "
                     "computational budget.",
     "no_outcome_based_stopping": True,
+}
+PHASE_PREREGISTRATION = {
+    "DO1-L4-rep": {
+        "study": "W3: replication of DO1-L4-r0 on fresh optimizer randomness, one development instance (L4)",
+        "runs": "frozen r0 sentinel (role sentinel, excluded from every analysis), then r1-r5 x (frozen, do1) interleaved",
+        "varies": "only the bench noise seed (plant-CMA streams): replicate_noise_seed(L4, r) = 1751409197 + 10007 r, and "
+                  "+ 7919 k for the k-th plant repair; identical in both arms of a replicate",
+        "fixed": "instance, physical seeds, twin-CMA seeds (11 and 0), train/robust/validation/confirmation seeds, verifier "
+                 "full_recovery_v1, stop map v2, tau 0.75, budgets plant 700 / twin 2,800, objective do1_objective_v2",
+        "hypothesis": "do1 reaches FULL_RECOVERY on more L4 replicates than the frozen objective under matched randomness",
+        "primary_outcome": "FULL_RECOVERY per episode (unchanged full_recovery_v1)",
+        "primary_analysis": "intention to treat over the 5 pairs r1-r5: FULL count per arm k/5 with exact Clopper-Pearson "
+                            "95% intervals; exact one-sided McNemar (sign) test on discordant pairs, alpha 0.05 (5/0 -> "
+                            "p = 0.031; 4/0 -> 0.0625, inconclusive; fewer discordant pairs -> descriptive only)",
+        "secondary": ["PARTIAL_IMPROVEMENT and NOT_RECOVERED counts per arm",
+                      "paired validation walking difference k/24 (do1 - frozen) per replicate; exact sign test",
+                      "validation verdict and median paired displacement per episode",
+                      "20 s confirmation run/passed and its checks",
+                      "plant and twin rollouts; stop-map acceptance; binding gates; selected = last candidate evaluated",
+                      "per-protocol analysis excluding NOT_EXPOSED pairs, shown next to ITT with counts and reasons"],
+        "stopping": "no outcome-based stopping, no extra replicates; a validity defect (sentinel mismatch, unequal pre-hook "
+                    "fingerprints, stored-prefix mismatch, incomplete verification, hook calls != 1, inconsistent DO-1 "
+                    "selection, an infrastructure error) pauses fail-closed; completed pairs are reported with the defect "
+                    "and nothing is re-run without owner approval; NOT_EXPOSED continues",
+        "limits": "technical replicates of optimizer randomness on ONE physical instance, evaluated on the same, already "
+                  "studied L4 validation seeds: no claim about unseen robots, fault families or validation conditions; the "
+                  "r0 pilot is exploratory and is never pooled",
+        "null_wording": PREREGISTRATION["null_wording"],
+    },
+    "DO1-X": {
+        "study": "W4: exploratory cross-family pilot, two development instances chosen by the pre-declared rule "
+                 "(stored A1e6 PARTIAL with walking-only failure, at least one stored plant repair, one body/mass and "
+                 "one controller family, highest stored walking count, ties by lowest base id)",
+        "runs": "B1 r0 frozen, B1 r0 do1, C1 r0 frozen, C1 r0 do1",
+        "gates": "frozen r0 reproduces the stored A1e6 record exactly; do1 r0 matches the stored pre-hook prefix; equal "
+                 "pre-hook fingerprints; hook once; verification complete; do1 exposure recorded (NOT_EXPOSED continues)",
+        "analysis": "descriptive per instance and arm: status, validation k/24, verdict and median paired displacement, "
+                    "confirmation, plant/twin use, which recovery gates changed. No hypothesis test, no pooling with L4, "
+                    "no family- or population-level claim; cases were selected on the baseline's partial failure, so "
+                    "regression to the mean is possible",
+        "null_wording": PREREGISTRATION["null_wording"],
+    },
 }
 
 
@@ -170,6 +232,24 @@ def planned_runs(phase: str) -> list[tuple]:
     return list(PHASES[phase])
 
 
+def run_role(phase: str, case: str, arm: str, replicate: int) -> str:
+    """sentinel (DO1-L4-rep frozen r0: reproduction check only), primary (DO1-L4-rep r >= 1), exploratory otherwise."""
+    if phase == "DO1-L4-rep":
+        return "sentinel" if replicate == 0 else "primary"
+    return "exploratory"
+
+
+def stored_record_files(runs: list) -> list[str]:
+    return sorted({CASES[c]["stored"][0] for c, _, _ in runs})
+
+
+def pausing_problems(phase: str, problems: list[str]) -> list[str]:
+    """The problems that pause the phase: all of them, except NOT_EXPOSED in the phases that keep it (ITT)."""
+    if phase in CONTINUE_NOT_EXPOSED:
+        return [p for p in problems if not p.startswith("NOT_EXPOSED")]
+    return list(problems)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--phase", choices=sorted(PHASES))
@@ -194,11 +274,12 @@ def main(argv=None) -> int:
           f"twin {cap['twin']}, total {cap['total']} rollout-equivalents")
     print(f"  objective: {json.dumps(do1.OBJECTIVE_SPEC)}")
     for c, arm, r in runs:
-        iid = ta1.CASES[c]["instance_id"]
-        print(f"  {c} {iid} arm={arm} replicate={r} noise_seed={ta1.replicate_noise_seed(iid, r)}")
+        iid = CASES[c]["instance_id"]
+        print(f"  {c} {iid} arm={arm} replicate={r} role={run_role(a.phase, c, arm, r)} "
+              f"noise_seed={ta1.replicate_noise_seed(iid, r)}")
     for name, p in inputs.items():
         print(f"  input {name}: {p} sha256={ta1.sha256_file(p) or 'MISSING'}")
-    pre = ta1.preflight_refusals(ta1.ROOT, inputs, a.records_root, ta1.stored_record_files(runs), a.harness_commit)
+    pre = ta1.preflight_refusals(ta1.ROOT, inputs, a.records_root, stored_record_files(runs), a.harness_commit)
     if not a.execute:
         print("  preflight: " + ("ok" if not pre else "would refuse: " + "; ".join(pre)))
         print("Dry run: nothing was simulated. Pass --execute only with the owner's approval for this phase.")
@@ -229,6 +310,7 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     manifest = ta1.provenance_manifest(ta1.ROOT, inputs, {
         "runner_version": RUNNER_VERSION, "objective": do1.OBJECTIVE_SPEC, "preregistration": PREREGISTRATION,
+        "phase_preregistration": PHASE_PREREGISTRATION.get(a.phase), "cases": {c: CASES[c] for c in sorted({x[0] for x in runs})},
         "phase": a.phase, "approved_by": a.approved_by, "runs": runs, "cap": cap, "max_rollouts": a.max_rollouts,
         "max_wall_s": a.max_wall_s, "harness_commit_approved": a.harness_commit, "records_root": os.path.abspath(a.records_root)})
     with open(ta1.manifest_path(a.out), "x", encoding="utf-8") as fh:
@@ -237,7 +319,7 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
     with pool_cm as pool, open(a.out, "x", encoding="utf-8") as out:
         instances = {}
         for c, arm, r in runs:
-            iid = ta1.CASES[c]["instance_id"]
+            iid = CASES[c]["instance_id"]
             if a.max_wall_s and time.perf_counter() - t0 > a.max_wall_s:
                 print("STOP: wall-clock cap reached before", c, arm, r)
                 return ta1.PAUSE_EXIT
@@ -246,8 +328,18 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
                 return ta1.PAUSE_EXIT
             if iid not in instances:
                 instances[iid] = build_fn(iid, inputs, pool=pool)
-            rec = run_fn(instances[iid], arm, r, inputs, pool=pool)
+            try:
+                rec = run_fn(instances[iid], arm, r, inputs, pool=pool)
+            except Exception as exc:   # recorded, never silently dropped; the phase pauses
+                import traceback
+                out.write(json.dumps({"infrastructure_error": True, "phase": a.phase, "case": c, "instance_id": iid,
+                                      "arm": arm, "replicate": r, "error": f"{type(exc).__name__}: {exc}",
+                                      "traceback": traceback.format_exc()}) + "\n")
+                out.flush()
+                return ta1._pause(f"{c} {arm} r{r} raised an infrastructure error", [f"{type(exc).__name__}: {exc}"])
             rec["harness"]["case"] = c
+            rec["harness"]["phase"] = a.phase
+            rec["harness"]["role"] = run_role(a.phase, c, arm, r)
             problems = []
             if not rec["harness"].get("verification_complete"):
                 problems.append(f"incomplete verification record: {rec['harness'].get('verification_problems')}")
@@ -258,8 +350,15 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
                                             "exposed": None if arm == "frozen" else
                                             not any(p.startswith("NOT_EXPOSED") for p in arm_problems)}
             problems += arm_problems
+            if r != 0 and a.phase in STORED_PREFIX_ALL_REPLICATES:
+                f, line, _, _ = CASES[c]["stored"]
+                pm = ta1.prehook_prefix_matches(rec, ta1.load_stored(a.records_root, f, line))
+                rec["harness"]["stored_prefix"] = pm
+                if not pm["match"]:
+                    problems.append(f"{arm} r{r} pre-hook prefix differs from the stored record: "
+                                    f"{[k for k, v in pm.get('checks', {}).items() if not v] or pm.get('reason')}")
             if r == 0:
-                f, line, _, _ = ta1.CASES[c]["stored"]
+                f, line, _, _ = CASES[c]["stored"]
                 stored = ta1.load_stored(a.records_root, f, line)
                 if arm == "frozen":
                     rep = ta1.compare_to_stored(rec, stored)
@@ -286,9 +385,13 @@ def _execute(a, runs, inputs, cap, *, build_fn=None, run_fn=None, pool_cm=None) 
             s = rec["verification"]["summary"]
             print(c, iid, arm, r, s["status"], round(s["walking_frac"] * 24), "rescreen:",
                   rec["harness"]["rescreen"]["classification"], "spent", round(spent), flush=True)
-            if problems:
-                return ta1._pause(f"{c} {arm} r{r} is invalid for the matched comparison", problems)
-    print("DONE: every run passed its validity checks (outcomes are not interpreted here).")
+            kept = [p for p in problems if p not in pausing_problems(a.phase, problems)]
+            if kept:
+                print(f"  {c} {arm} r{r}: recorded and kept (intention to treat): {kept}", flush=True)
+            if pausing_problems(a.phase, problems):
+                return ta1._pause(f"{c} {arm} r{r} is invalid for the matched comparison", pausing_problems(a.phase, problems))
+    print("DONE: every run passed its validity checks, apart from any NOT_EXPOSED episode kept above "
+          "(outcomes are not interpreted here).")
     return 0
 
 

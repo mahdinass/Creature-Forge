@@ -1,0 +1,21 @@
+== do1_l4_rep: 11 lines; manifest phase DO1-L4-rep git_commit 3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5 dirty False approved 3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5 runner do1_ablation_v2 objective do1_objective_v2 python 3.12.3 numpy 2.5.4 mujoco 3.15.0
+  L4 frozen r0 sentinel    noise 1751409197 submitted d4 66053dae8e | repro (True, 21, 21) | prefix None | pair_fp None | hook_calls 1 fp beeaeb58bf39 | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3270.0
+  L4 frozen r1 primary     noise 1751419204 submitted d5 413634051a | repro None | prefix True | pair_fp None | hook_calls 1 fp 3f6079a998af | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3270.0
+  L4 do1    r1 primary     noise 1751419204 submitted d4 69b1677dc6 | repro None | prefix True | pair_fp True | hook_calls 1 fp 3f6079a998af | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 2950.0
+  L4 frozen r2 primary     noise 1751429211 submitted d4 19f5767d96 | repro None | prefix True | pair_fp None | hook_calls 1 fp a32d2950d933 | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3262.0
+  L4 do1    r2 primary     noise 1751429211 submitted d4 ac422e9388 | repro None | prefix True | pair_fp True | hook_calls 1 fp a32d2950d933 | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 2950.0
+  L4 frozen r3 primary     noise 1751439218 submitted d5 ebe5d2bf8b | repro None | prefix True | pair_fp None | hook_calls 1 fp 458f73d06d15 | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3270.0
+  L4 do1    r3 primary     noise 1751439218 submitted d4 b221ba2ad4 | repro None | prefix True | pair_fp True | hook_calls 1 fp 458f73d06d15 | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 2950.0
+  L4 frozen r4 primary     noise 1751449225 submitted d4 7882895fc7 | repro None | prefix True | pair_fp None | hook_calls 1 fp bf04b739d5ae | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3262.0
+  L4 do1    r4 primary     noise 1751449225 submitted d4 206e625ddd | repro None | prefix True | pair_fp True | hook_calls 1 fp bf04b739d5ae | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 2950.0
+  L4 frozen r5 primary     noise 1751459232 submitted d5 eb3aca53ef | repro None | prefix True | pair_fp None | hook_calls 1 fp 187d0efe528b | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3270.0
+  L4 do1    r5 primary     noise 1751459232 submitted d4 bcd7b20e17 | repro None | prefix True | pair_fp True | hook_calls 1 fp 187d0efe528b | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 2950.0
+  validation seed sets used: 1 distinct (24 seeds each: [24]); total rollout-eq 34354.0
+  distinct submitted designs per (case, arm): {'L4/frozen': 6, 'L4/do1': 5}
+== do1_x: 4 lines; manifest phase DO1-X git_commit 3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5 dirty False approved 3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5 runner do1_ablation_v2 objective do1_objective_v2 python 3.12.3 numpy 2.5.4 mujoco 3.15.0
+  B1 frozen r0 exploratory noise 1751409197 submitted d2 73146bcf6e | repro (True, 21, 21) | prefix None | pair_fp None | hook_calls 1 fp e667c80332e0 | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3008.0
+  B1 do1    r0 exploratory noise 1751409197 submitted d2 6cfb9bf386 | repro None | prefix True | pair_fp True | hook_calls 1 fp e667c80332e0 | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 3060.0
+  C1 frozen r0 exploratory noise 1751409197 submitted d4 9823aeddda | repro (True, 21, 21) | prefix None | pair_fp None | hook_calls 1 fp 8a7307e0a92c | verif_complete True | arm_checks True [] | conf seeds 0 | rollout-eq 3217.0
+  C1 do1    r0 exploratory noise 1751409197 submitted d4 fc1177c2ae | repro None | prefix True | pair_fp True | hook_calls 1 fp 8a7307e0a92c | verif_complete True | arm_checks True [] | conf seeds 24 | rollout-eq 3253.0
+  validation seed sets used: 2 distinct (24 seeds each: [24, 24]); total rollout-eq 12538.0
+  distinct submitted designs per (case, arm): {'B1/frozen': 1, 'B1/do1': 1, 'C1/frozen': 1, 'C1/do1': 1}
