@@ -1,0 +1,17 @@
+do1_ablation_v2 (do1_objective_v2): phase DO1-X: 4 episodes; caps plant 3216, twin 11200, total 14416 rollout-equivalents
+  objective: {"version": "do1_objective_v2", "tau_d_m": 0.75, "w_step": 10000.0, "s_step": 1000.0, "feasible_offset": 100.0, "margin_weight": 10.0, "infeasible_margin_weight": 0.1, "short_weight": 10.0, "short_cap": 50.0, "fit_weight": 0.001, "gates": ["speed", "step_rate", "alternation", "touchdown", "flight", "slip", "body_contact", "saturation", "pitch"], "baseline": "faulty design 0, same train seeds"}
+  B1 hdb-v1-gen-0142:payload_offset:5 arm=frozen replicate=0 role=exploratory noise_seed=1751409197
+  B1 hdb-v1-gen-0142:payload_offset:5 arm=do1 replicate=0 role=exploratory noise_seed=1751409197
+  C1 hdb-v1-gen-0070:feedback_gain_loss:2 arm=frozen replicate=0 role=exploratory noise_seed=1751409197
+  C1 hdb-v1-gen-0070:feedback_gain_loss:2 arm=do1 replicate=0 role=exploratory noise_seed=1751409197
+  input v6_settings: /home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/ds1/engine_v6_settings.json sha256=f6e9eef6affd3253e9ef9e7bbe8156b39927d2ed394155f2453611e68f8393ff
+  input stop_model: /home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/ds1/stopmap_dev_v2.json sha256=c20b6c4b064c359b8c9df5f99611e3fbd14d1fd304bac402feb88a46bb5d9df9
+  input split_file: /home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/stage2_split.json sha256=79bc3b254e6eca584fbc167c699f67a466dae8bb3891261b3138e36da2b66c1e
+  input eval_instances: /home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/ds1/ds1_eval_instances.json sha256=bac394ea850f39ab119d19cf57f0d0336cf21c9e09d52bfb84414179ae77891e
+  input thresholds: /home/forge/dev/hdb/artifacts/hdb/thresholds_dev.json sha256=12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89
+  input walkers: /home/forge/dev/hdb/artifacts/hdb/walkers_all.jsonl sha256=151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd
+B1 hdb-v1-gen-0142:payload_offset:5 frozen 0 PARTIAL_IMPROVEMENT 17 rescreen: no re-screen spent 3008
+B1 hdb-v1-gen-0142:payload_offset:5 do1 0 PARTIAL_IMPROVEMENT 20 rescreen: no re-screen spent 6068
+C1 hdb-v1-gen-0070:feedback_gain_loss:2 frozen 0 PARTIAL_IMPROVEMENT 19 rescreen: no re-screen spent 9285
+C1 hdb-v1-gen-0070:feedback_gain_loss:2 do1 0 FULL_RECOVERY 20 rescreen: no re-screen spent 12538
+DONE: every run passed its validity checks, apart from any NOT_EXPOSED episode kept above (outcomes are not interpreted here).
