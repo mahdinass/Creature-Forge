@@ -107,6 +107,20 @@ class W2ExporterTests(unittest.TestCase):
         with self.assertRaises(wx.FidelityError):
             wx.replay(self.recs, self.pl, inst, pool=None, **self._fakes())
 
+    def test_smoke_passes_and_fails_closed(self):
+        f = self._fakes()
+        kw = {k: f[k] for k in ("production_fn", "traced_obs_fn", "frames_fn")}
+        self.assertTrue(wx.smoke(self.recs, self.pl, self._inst(), pool=None, **kw)["passed"])
+        bad = self._fakes(bad_feature=True)
+        res = wx.smoke(self.recs, self.pl, self._inst(), pool=None, **{k: bad[k] for k in ("production_fn", "traced_obs_fn", "frames_fn")})
+        self.assertFalse(res["passed"])
+
+    def test_experiment_fall_event_comes_from_the_record(self):
+        feats = self.pl["experiments"]["x1_nem"]["features"]
+        falls = [wx.fall_of(f) for f in feats.values()]
+        self.assertEqual(sum(x["fell"] for x in falls), 1)
+        self.assertAlmostEqual(next(x["fall_time"] for x in falls if x["fell"]), 1.726, places=3)
+
     def test_environment_gate(self):
         self.assertEqual(wx.environment_problems(dict(wx.RECORDED_ENV)), [])
         self.assertTrue(wx.environment_problems({**wx.RECORDED_ENV, "system": "Windows"}))

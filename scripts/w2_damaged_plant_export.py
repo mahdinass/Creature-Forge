@@ -26,6 +26,7 @@ Fidelity gate (fail-closed; nothing is written unless every check passes):
 No model is called. Nemotron's decisions are read from the record; the physics is MuJoCo's.
 
   python scripts/w2_damaged_plant_export.py                     # dry run (default): plan from the record; nothing simulated
+  python scripts/w2_damaged_plant_export.py --smoke   --approved-by "<owner, date>" --artifacts-root <dir> [--workers 2]
   python scripts/w2_damaged_plant_export.py --execute --approved-by "<owner, date>" --artifacts-root <dir> [--workers 2]
       <dir> holds thresholds_dev.json and walkers_all.jsonl (the pinned TA-1 inputs).
 """
@@ -304,6 +305,40 @@ def replay(recs: dict, pl: dict, inst: dict, *, pool, production_fn=production_f
     return problems, payloads, fresh_v
 
 
+def fall_of(features: dict) -> dict:
+    """Fall event of an experiment rollout from its recorded features (time upright < 10 s means it fell then)."""
+    t = features.get("time_upright")
+    fell = t is not None and t < 10.0 - 1e-9
+    return {"fell": fell, "fall_time": t if fell else None}
+
+
+def smoke(recs: dict, pl: dict, inst: dict, *, pool, production_fn=production_features, traced_obs_fn=traced_observe,
+          frames_fn=None, max_hz: int = 30) -> dict:
+    """Exact diagnostic smoke test, nothing written: instance gate, all three experiments on the production path
+    (per-seed features ==), and one traced seed of Nemotron's experiment with the frame/FK checks."""
+    import do1_demo_export as dx
+    frames_fn = frames_fn or (lambda body, tr, states: dx.frames_from_states(inst, body, tr, states, max_hz))
+    check_instance(inst, recs, pl)
+    problems = []
+    for name, (arm, i) in EXPERIMENTS.items():
+        e = pl["experiments"][name]
+        fresh = production_fn(inst, experiment_design(recs[arm], i), e["seeds"], pool)
+        if fresh != e["features"]:
+            problems.append(f"production {name}: features differ on seeds {[s for s in e['seeds'] if fresh.get(s) != e['features'].get(s)]}")
+    e = pl["experiments"]["x1_nem"]
+    design = experiment_design(recs["A3"], 1)
+    tr, feat, states, body = traced_obs_fn(inst, design, e["seeds"], e["seeds"][0])
+    fk = None
+    if feat != e["features"][e["seeds"][0]]:
+        problems.append("trace x1_nem: features differ from the record")
+    else:
+        try:
+            fk = frames_fn(body, tr, states)["fk_max_err_m"]
+        except Exception as exc:  # noqa: BLE001
+            problems.append(f"frames x1_nem: {exc}")
+    return {"passed": not problems, "problems": problems, "experiments_checked": len(EXPERIMENTS), "fk_max_err_m": fk}
+
+
 def write_export(pl: dict, payloads: dict, fresh_v: dict, out_dir: str, environment: dict, approved_by: str, max_hz: int) -> dict:
     """Transactional, as the DO-1 exporter: temporary sibling directory, verified against its own SHA256SUMS, then renamed."""
     import do1_demo_export as dx
@@ -329,7 +364,7 @@ def write_export(pl: dict, payloads: dict, fresh_v: dict, out_dir: str, environm
     try:
         os.makedirs(os.path.join(tmp, "payloads"))
         for (name, seed), (design, body, tr, fr, ev) in sorted(payloads.items()):
-            p = dx.payload(name, design, body, seed, 10.0, tr, fr, ev.get("row") or {"fell": False, "fall_time": None})
+            p = dx.payload(name, design, body, seed, 10.0, tr, fr, ev.get("row") or fall_of(ev["features"]))
             p["w2_demo"] = {**p.pop("do1_demo"), "evidence": ev, "plant": index["plant"]}
             rel = f"payloads/{name}_{seed}.json"
             with open(os.path.join(tmp, rel), "w", encoding="utf-8", newline="\n") as fh:
@@ -351,6 +386,7 @@ def write_export(pl: dict, payloads: dict, fresh_v: dict, out_dir: str, environm
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--execute", action="store_true", help="run the physics and write the export (needs owner approval)")
+    ap.add_argument("--smoke", action="store_true", help="exact diagnostic smoke test with physics; writes nothing")
     ap.add_argument("--approved-by", default=None)
     ap.add_argument("--artifacts-root", default=None)
     ap.add_argument("--out", default=DEFAULT_OUT)
@@ -358,13 +394,13 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     _, recs = wcb.load_excerpt()
     pl = plan(recs)
-    if not a.execute:
+    if not (a.execute or a.smoke):
         print(json.dumps({k: v for k, v in pl.items() if k != "experiments"} |
                          {"experiments": {k: {kk: v[kk] for kk in ("arm", "id", "seeds", "design_hash")} for k, v in pl["experiments"].items()},
                           "out": a.out, "mode": "dry run: nothing simulated"}, indent=1))
         return 0
     if not a.approved_by or not a.artifacts_root:
-        print("refusing: --execute needs --approved-by and --artifacts-root", file=sys.stderr)
+        print("refusing: --execute/--smoke need --approved-by and --artifacts-root", file=sys.stderr)
         return 2
     env = current_environment()
     probs = environment_problems(env)
@@ -374,6 +410,10 @@ def main(argv=None) -> int:
     from creature_forge.forge_pool import ForgePool
     with ForgePool(a.workers) as pool:
         inst = build_instance(a.artifacts_root, pool=pool)
+        if a.smoke:
+            res = smoke(recs, pl, inst, pool=pool)
+            print(json.dumps(res, indent=1))
+            return 0 if res["passed"] else 1
         problems, payloads, fresh_v = replay(recs, pl, inst, pool=pool)
     if problems:
         print(f"FIDELITY FAILED ({len(problems)}); nothing written:\n  " + "\n  ".join(problems[:40]), file=sys.stderr)
