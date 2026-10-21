@@ -122,7 +122,8 @@ try {
     await page.click(T('recover-btn'))
     await page.waitForSelector(T('rec-progress'), { timeout: 60000 })
     ok((await page.locator(`${T('rec-stages')} li`).count()) === 6, 'progress shows the six phases (diagnostics, probes, plans, screening, validation, confirmation)')
-    ok(await page.isVisible(T('rec-budget-bar')), 'a budget bar shows rollouts used / total')
+    // the bar renders once the first job poll has returned (it is null before any progress is known)
+    ok(await page.waitForSelector(T('rec-budget-bar'), { timeout: 15000 }).then(() => true, () => false), 'a budget bar shows rollouts used / total')
     const aiChip = live ? 'LIVE' : 'SCRIPTED MOCK'
     const aiStatus = await checkRecord({ chip: aiChip, model: live ? '' : 'scripted-fixture', title: live ? 'How the AI reasoned' : 'Scripted decisions (fixed rule in the AI layout, not a model)', ai: true })
     await shot('recovery-ai-1440')
