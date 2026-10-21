@@ -55,6 +55,7 @@ RECORDED_ENV = {"system": "Linux", "machine": "x86_64", "python": "3.12.3", "num
 EXPERIMENTS = {"observe": ("A3", 0), "x1_nem": ("A3", 1), "x1_eng": ("A1e", 1)}     # name -> (arm, experiment index)
 VALIDATION = {"nominal": ("A3", 0), "a3_submitted": ("A3", None), "a1e_submitted": ("A1e", None)}  # None = submitted
 FK_TOL_M = 1e-9
+N_OBS = 4                # eng_tools.Workbench n_obs default, as the Stage 2 runs used (obs_seeds = seeds["obs"][:n_obs])
 
 
 class FidelityError(RuntimeError):
@@ -150,8 +151,9 @@ def check_instance(inst: dict, recs: dict, pl: dict) -> None:
         problems.append(f"eligibility check {inst['check']} != recorded {pl['check']}")
     if wcb.design_hash({"body": inst["robot"]["body"], "vector": inst["robot"]["vector"]}) != wcb.design_hash(_design(a3, 0)):
         problems.append("the rebuilt nominal design is not the recorded designs[0]")
-    if [int(s) for s in inst["seeds"]["obs"]] != pl["experiments"]["observe"]["seeds"]:
-        problems.append("the rebuilt obs seeds differ from the recorded experiment seeds")
+    rec_obs = pl["experiments"]["observe"]["seeds"]
+    if [int(s) for s in inst["seeds"]["obs"][:N_OBS]] != rec_obs:      # the bench observes on seeds["obs"][:n_obs]
+        problems.append(f"the bench's obs seeds {inst['seeds']['obs'][:N_OBS]} differ from the recorded experiment seeds {rec_obs}")
     for k in ("injected_structure", "strength"):
         if inst.get(k) is not None and inst[k] != pl[k]:
             problems.append(f"{k} {inst[k]} != recorded {pl[k]}")

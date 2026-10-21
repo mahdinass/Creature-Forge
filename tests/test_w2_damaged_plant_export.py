@@ -31,7 +31,9 @@ class W2ExporterTests(unittest.TestCase):
 
     def _inst(self):
         a3 = self.recs["A3"]
-        return {"check": a3["check"], "robot": wx._design(a3, 0), "seeds": {"obs": self.pl["experiments"]["observe"]["seeds"]},
+        from creature_forge import hdb_bench as hb    # pure seed derivation: 8 obs seeds, the bench uses the first 4
+        obs = hb.instance_seeds(*wcb.INSTANCE_ID.rsplit(":", 2)[:2], 4)["obs"]
+        return {"check": a3["check"], "robot": wx._design(a3, 0), "seeds": {"obs": obs},
                 "strength": a3["strength"], "plant": {}}
 
     def _fakes(self, *, bad_feature=False, bad_status=False, bad_trace=False):
@@ -120,6 +122,12 @@ class W2ExporterTests(unittest.TestCase):
         falls = [wx.fall_of(f) for f in feats.values()]
         self.assertEqual(sum(x["fell"] for x in falls), 1)
         self.assertAlmostEqual(next(x["fall_time"] for x in falls if x["fell"]), 1.726, places=3)
+
+    def test_wrong_obs_seeds_are_refused(self):
+        inst = self._inst()
+        inst["seeds"] = {"obs": inst["seeds"]["obs"][1:]}
+        with self.assertRaises(wx.FidelityError):
+            wx.smoke(self.recs, self.pl, inst, pool=None, **{k: self._fakes()[k] for k in ("production_fn", "traced_obs_fn", "frames_fn")})
 
     def test_environment_gate(self):
         self.assertEqual(wx.environment_problems(dict(wx.RECORDED_ENV)), [])
