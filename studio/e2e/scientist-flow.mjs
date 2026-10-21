@@ -2,7 +2,7 @@
 // built frontend and the committed records in experiments/causal_engineer/dev/scientist_records.
 // Usage: BASE_URL=http://127.0.0.1:8000 node e2e/scientist-flow.mjs   (set SHOT_DIR to save screenshots)
 import { chromium } from 'playwright-core'
-import { existsSync, mkdirSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 
 const BASE = process.env.BASE_URL
 if (!BASE) throw new Error('BASE_URL is required')
@@ -26,6 +26,14 @@ const browser = await chromium.launch({
   args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'],
 })
 const page = await browser.newPage({ viewport: { width: 1360, height: 1000 } })
+// REPLAY_FIXTURE=<RunPayload json>: answer /api/scientist replay requests with that file instead of running MuJoCo (a label/UI
+// check only; the fixture is not the record's design). Without it the replays are fresh nominal-robot simulations.
+if (process.env.REPLAY_FIXTURE) {
+  const fx = JSON.parse(readFileSync(process.env.REPLAY_FIXTURE, 'utf-8'))
+  fx.locomotion ??= { walking: false, fell: false, fall_time: null, label: 'ui fixture (not this record)' }   // CausalReplay fields
+  const body = JSON.stringify(fx)
+  await page.route((u) => /\/api\/scientist\/records\/[^/]+\/replay$/.test(u.pathname), (r) => r.fulfill({ status: 200, contentType: 'application/json', body }))
+}
 page.setDefaultNavigationTimeout(150000)
 const pageErrors = []
 page.on('pageerror', (e) => pageErrors.push(e.message))
@@ -42,7 +50,11 @@ try {
   ok((await page.$('[data-testid="sc-belief"]')) !== null, 'the belief-over-time panel renders')
   ok((await page.$('[data-testid="sc-eval"]')) !== null, 'evaluation-only ground truth is separated')
   await page.waitForSelector('[data-testid="cz-duo"]', { timeout: 150000 })
-  ok((await page.$$('[data-testid="cz-duo"] canvas')).length >= 1, 'the replay of the faulty and the submitted design renders')
+  ok((await page.$$('[data-testid="cz-duo"] canvas')).length >= 1, 'the replay of the nominal and the submitted design renders')
+  ok(/NOMINAL robot/.test((await page.textContent('[data-testid="sc-nominal-banner"]')) || ''), 'the banner says the hidden damage is not simulated')
+  const labels = await page.$$eval('[data-testid="cz-duo"] .vp-label', (els) => els.map((e) => e.textContent || ''))
+  ok(labels.length === 2 && labels.every((l) => /no hidden damage/.test(l)) && !labels.some((l) => /faulty robot/.test(l)),
+    `viewport labels say nominal, no hidden damage (${labels.join(' | ')})`)
   await shot(page, 'scientist')
   if (cards.length > 1) {
     await cards[1].click()

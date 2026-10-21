@@ -1,12 +1,12 @@
 // Information architecture: Create -> Simulate -> Investigate (plus Home). Every legacy ?tab= value still resolves.
-export type Tab = 'overview' | 'studio' | 'compare' | 'lab' | 'locomotion' | 'demo' | 'causal' | 'scientist' | 'recovery' | 'sketch' | 'forge'
+export type Tab = 'overview' | 'studio' | 'compare' | 'lab' | 'locomotion' | 'demo' | 'causal' | 'scientist' | 'nemotron' | 'recovery' | 'sketch' | 'forge'
 export type Stage = 'home' | 'create' | 'simulate' | 'investigate'
 
-export const ALL_TABS: Tab[] = ['overview', 'sketch', 'studio', 'compare', 'forge', 'demo', 'scientist', 'recovery', 'causal', 'locomotion', 'lab']
+export const ALL_TABS: Tab[] = ['overview', 'sketch', 'studio', 'compare', 'forge', 'demo', 'scientist', 'nemotron', 'recovery', 'causal', 'locomotion', 'lab']
 
 export const TAB_LABEL: Record<Tab, string> = {
   overview: 'Home', sketch: 'Draw', studio: 'Playground', compare: 'Compare designs',
-  demo: 'AI investigation', scientist: 'AI scientist', recovery: 'Verified repair', causal: 'Causal engineer', locomotion: 'Walking lab', lab: 'Experiment history', forge: 'My creature',
+  demo: 'AI investigation', scientist: 'AI scientist', nemotron: "Nemotron's experiment", recovery: 'Verified repair', causal: 'Causal engineer', locomotion: 'Walking lab', lab: 'Experiment history', forge: 'My creature',
 }
 
 export const TAB_PURPOSE: Record<Tab, string> = {
@@ -16,6 +16,7 @@ export const TAB_PURPOSE: Record<Tab, string> = {
   compare: 'The same push on two creatures that differ in one thing: foot length.',
   demo: 'Watch an AI model look at a real failure, propose a change, and let the simulator judge it.',
   scientist: 'Nemotron directs a full investigation of a hidden failure, using a simulator, a Bayesian belief engine and an optimiser as its instruments.',
+  nemotron: 'A recorded Nemotron investigation and the engine alone on the same evidence: one different experiment, two different diagnoses, then independent verification.',
   recovery: 'One robot with a hidden slippery-floor fault and two optimizer repairs, replayed exactly as the independent verifier measured them.',
   causal: 'Follow an AI scientist as it investigates why a robot falls: hypotheses, experiments with predictions made in advance, repairs, and an independent check.',
   locomotion: 'See a walking robot before and after it was tuned, then check the numbers.',
@@ -27,7 +28,7 @@ export const GROUPS: { id: Stage; label: string; color: string; tabs: Tab[] }[] 
   { id: 'home', label: 'Home', color: 'var(--simulate)', tabs: ['overview'] },
   { id: 'create', label: 'Create', color: 'var(--create)', tabs: ['sketch'] },
   { id: 'simulate', label: 'Simulate', color: 'var(--simulate)', tabs: ['studio', 'compare', 'forge'] },
-  { id: 'investigate', label: 'Investigate', color: 'var(--investigate)', tabs: ['demo', 'scientist', 'recovery', 'causal', 'locomotion', 'lab'] },
+  { id: 'investigate', label: 'Investigate', color: 'var(--investigate)', tabs: ['demo', 'scientist', 'nemotron', 'recovery', 'causal', 'locomotion', 'lab'] },
 ]
 
 export const stageOf = (t: Tab): Stage => GROUPS.find((g) => g.tabs.includes(t))!.id

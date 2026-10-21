@@ -8,6 +8,7 @@ import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
 import type { CausalIndex, CausalRecord, CausalReplay, DesignKey } from './causal/causalTypes'
 import type { ScientistIndex, ScientistRecord } from './scientist/scientistTypes'
 import type { DesignId, Do1Index, Do1Payload } from './do1/do1Types'
+import type { NemotronCaseResponse } from './nemotron/nemotronTypes'
 import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, RecoveryRecord, RecoverySummary, StartedChallenge, StartedInvestigation, StartedRecovery } from './forge/forgeTypes'
 
 export const STALE_HINT =
@@ -181,3 +182,6 @@ export const getScientistReplay = (id: string, design: DesignKey, seed: number) 
 export const getDo1Index = () => fetch('/api/do1/index').then((r) => j<Do1Index>(r))
 export const getDo1Payload = (design: DesignId, duration: 10 | 20, seed: number) =>
   fetch(`/api/do1/payload/${design}/${duration}/${seed}`).then((r) => j<Do1Payload>(r))
+
+// Nemotron's recorded gen-0137 investigation (/api/nemotron/*): pinned W2 case files; playback, no model call, no simulation
+export const getNemotronCase = () => fetch('/api/nemotron/case').then((r) => j<NemotronCaseResponse>(r))

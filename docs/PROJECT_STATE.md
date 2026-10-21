@@ -735,3 +735,52 @@ biped, unrelated to DO-1).
 2. `git -C C:\Users\mbnas\.vscode\cf-do1-demo log --oneline -8`.
 3. Run tests with `..\Creature-Forge\.venv\Scripts\python.exe -m unittest discover -s tests` from the worktree.
 4. Studio: `studio/node_modules` is a junction to the main checkout's install; `npm run build`; start uvicorn `creature_forge.studio.app:app` on 127.0.0.1; run `BASE_URL=… node studio/e2e/do1-flow.mjs`.
+
+## 2026-10-21 - W2: Nemotron attribution audit and "Nemotron's experiment" demo (local, unpushed)
+Owner-approved W2 (auto mode). No physics, Nebius, inference, push or merge.
+
+**W2a: attribution.** See `docs/NEMOTRON_CONTRIBUTION.md`.
+- The demo case was verified against the raw Stage 2 records: A3 line 24 `540b9415…`, A1e `2014fa80…`, A4 `cb34a780…`.
+- Up to turn 0 the arms are bit-identical: observation and belief, right 0.895 / left 0.105.
+- At turn 0 all 7 candidates have EIG 0.34.
+  - **The engine** took `cf:freq@x1.2` (predicted walking 1/1). It measured 2/4 and its belief went to **left 0.998**
+    (wrong).
+  - **Nemotron** took `cf:freq@x0.85` (predicted 2/0). It measured 3/4 and its belief went to **right 1.000** (correct).
+- Its registered prediction was empty. Its 4 hypotheses ended at weight 0. The repair was delegated to the engine.
+- The twin design against the correct belief checked 6/8 on the robot, against 3/8 for the wrong belief.
+- Verification: **A3 FULL 23/24** vs **A1e PARTIAL 20/24** (confirmation 79%).
+- **The A4 replicate** made the same choice and reached the same correct belief, but verified only PARTIAL, 19/24.
+- Across the 36 instances: 15 vs 14 (4/3, p = 0.50); MAP 28 vs 29. This instance is the only one with that pattern.
+- All 8 request ids are in the inference ledger.
+
+**W2b: demo.**
+- **New tab** `?tab=nemotron`: `studio/src/nemotron/*` and `creature_forge/studio/nemotron_api.py`. It serves only
+  `experiments/w2/*`, pinned by the SHA256SUMS hash.
+- **Scientist tab relabelled** "nominal design, no hidden damage" (labels, banner, API note).
+- **Damaged-plant exporter prepared:** `scripts/w2_damaged_plant_export.py`.
+  - Dry run plus 9 no-physics gate tests.
+  - About 296 plant rollout-eq, to run on the main VM. **Awaiting approval.**
+
+**New files.**
+- `experiments/w2/` (frozen; manifest 459 entries).
+- `scripts/w2_case_build.py`, `scripts/w2_pin_sums.sh`.
+- Tests: `tests/test_w2_case.py` (11), `tests/test_w2_damaged_plant_export.py` (9), `studio/src/nemotron/nemotronLogic.test.ts` (7).
+- Browser flow: `studio/e2e/nemotron-flow.mjs`. `scientist-flow.mjs` now takes an optional `REPLAY_FIXTURE` (a UI fixture).
+
+**Verification.**
+- **Python:** 108 tests under a MuJoCo tripwire: 106 pass. The 2 tripwire hits are `test_studio_api`'s own physics tests
+  (`/api/simulate`, Phase 0), which the tripwire blocked; no physics ran.
+- **Frontend:**
+  - `npm run build` OK.
+  - vitest 196/197; the failure is the pre-existing `forgeLogic` locale test.
+- **Browser flows** (physics-free scratch server, tripwire 0 hits):
+  - `nemotron-flow` 28/28 PASS;
+  - `scientist-flow` 11/11 with a UI replay fixture;
+  - `do1-flow` 48/48, so there is no W1 regression.
+
+**Not done; needs approval.**
+- The damaged-plant export on the VM.
+- Re-running `scientist-flow` with real nominal replays (fresh MuJoCo rollouts).
+- `hdb_replay` hypothesis attribution (twin physics). It is not needed for this case, and agent-v4 logs are not read by
+  it (`docs/NEMOTRON_CONTRIBUTION.md` §3.3).
+

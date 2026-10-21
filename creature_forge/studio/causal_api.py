@@ -29,6 +29,10 @@ MAX_SEED = 2 ** 31 - 1
 REPLAY_DURATION_S = 10.0
 MAX_CONCURRENT_REPLAYS = 2
 REPLAY_CACHE_SIZE = 16
+REPLAY_NOTE = "Fresh MuJoCo rollouts on seeds that are not the hidden verification seeds; no model call."
+# HaS records: the damage lives in the hidden plant, never in the recorded body/vector, so these replays show the nominal robot.
+SCIENTIST_REPLAY_NOTE = ("Fresh MuJoCo rollouts of the designs on the NOMINAL robot: the hidden damage is not simulated, so these are not "
+                         "replays of the damaged robot. Seeds are not the hidden verification seeds; no model call.")
 
 
 def default_replayer(body: dict, vector: list[float], seed: int) -> dict:
@@ -46,7 +50,8 @@ def default_replayer(body: dict, vector: list[float], seed: int) -> dict:
 
 
 def create_causal_router(records_dir: str | Path | None = None, replayer: Callable[[dict, list, int], dict] | None = None, *,
-                         prefix: str = "/api/causal", id_re: re.Pattern = ID_RE, schema: str = "causal_record_v1") -> APIRouter:
+                         prefix: str = "/api/causal", id_re: re.Pattern = ID_RE, schema: str = "causal_record_v1",
+                         replay_note: str = REPLAY_NOTE) -> APIRouter:
     """Router for `/api/causal` (or, with prefix/id_re/schema, the Stage-2 scientist records at `/api/scientist`). Nothing is read
     or imported until first use."""
     root = Path(records_dir) if records_dir is not None else RECORDS_DIR
@@ -81,7 +86,7 @@ def create_causal_router(records_dir: str | Path | None = None, replayer: Callab
     @router.get("/records")
     def records():
         return {**index(), "replay": {"seeds": list(REPLAY_SEEDS), "duration_s": REPLAY_DURATION_S, "designs": ["initial", "submitted"],
-                                      "note": "Fresh MuJoCo rollouts on seeds that are not the hidden verification seeds; no model call."}}
+                                      "note": replay_note}}
 
     @router.get("/records/{rid}")
     def record(rid: str):

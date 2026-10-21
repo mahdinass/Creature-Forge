@@ -161,3 +161,19 @@ This is the Git-visible decision index. Add one dated section per consequential 
   rasterisers, and it hid the grid. Polygon offset and larger offsets did not help.
 - **Do not reintroduce it.** Don't use depth-writing ground planes under overlays. Verify viewer changes with a
   camera-position sweep, not only the t = 0 frame.
+
+## 2026-10-21 - W2: how Nemotron's contribution is presented
+- **Attribution doc.** `docs/NEMOTRON_CONTRIBUTION.md` plus `experiments/w2/studies.json`: one row per study, each
+  with a source file and a verbatim quote that a test checks. Only the Forge Loop scoreboard is a pre-registered result
+  in Nemotron's favour. DO-1 is listed as NO_AI and is presented separately from Nemotron's work.
+- **Demo case = pinned excerpt.** The gen-0137 one_side_weakness case is three byte-exact lines of the Stage 2 records
+  (A3, A1e, A4), pinned by line and source SHA-256. `case.json` must rebuild exactly from them. The page must show the
+  A4 replicate that did not verify, the 36-instance parity, and that the case was selected post hoc.
+- **Wording that must stay.** EIG was tied across all 7 candidates. No prediction was registered. Nemotron's
+  hypotheses got weight 0. The repair was the engine's delegated procedure.
+- **HaS replays are nominal.** `/api/scientist` replays never include the hidden plant. They are labelled "nominal
+  design, no hidden damage" (labels, banner, API note). The causal-engineer replays are unchanged, because those faults
+  live in the replayed body and vector.
+- **Damaged-robot animation only via the gated exporter** (`scripts/w2_damaged_plant_export.py`).
+  - Gate: per-seed experiment features exact, verification aggregates exact, FK.
+  - It must run in the recorded Linux environment, and only with owner approval.

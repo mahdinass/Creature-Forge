@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { getCausalRecord, getCausalRecords, getCausalReplay } from '../api'
 import { Notice } from '../lab/Badges'
 import { usePlayback } from '../store'
@@ -18,10 +18,16 @@ const outcomeChip = (r: CausalReplay) =>
     : r.locomotion.fell ? { t: `falls at ${r.locomotion.fall_time?.toFixed(1)} s`, tone: 'bad' }
       : { t: r.locomotion.label.replace(/_/g, ' '), tone: 'warn' }
 
+const CAUSAL_LABELS = { initial: 'INITIAL DESIGN (the faulty robot)', submitted: 'DESIGN THE AI SUBMITTED' }
+
 /** The robot first: the faulty design and the design the AI submitted, on the same start, as fresh MuJoCo rollouts. */
-export function ReplaySection({ id, seeds, note, status, getReplay = getCausalReplay }: {
+export function ReplaySection({ id, seeds, note, status, getReplay = getCausalReplay, labels = CAUSAL_LABELS, banner }: {
   id: string; seeds: number[]; note: string; status: string | null
   getReplay?: (id: string, design: DesignKey, seed: number) => Promise<CausalReplay>
+  /** Viewport captions. Causal-engineer faults are part of the replayed body and vector; the HaS scientist's hidden damage is not. */
+  labels?: { initial: string; submitted: string }
+  /** Always-visible notice above the viewports. */
+  banner?: ReactNode
 }) {
   const [seed, setSeed] = useState(seeds[0] ?? 1)
   const [view, setView] = useState<View>('side')
@@ -50,7 +56,7 @@ export function ReplaySection({ id, seeds, note, status, getReplay = getCausalRe
   }, [id, seed, attempt])
 
   const ready = pair.status === 'ready' ? pair : null
-  const cells = ready ? ([['initial', 'INITIAL DESIGN (the faulty robot)', ready.initial], ['submitted', 'DESIGN THE AI SUBMITTED', ready.submitted]] as const).filter(([d]) => view === 'side' || view === d) : []
+  const cells = ready ? ([['initial', labels.initial, ready.initial], ['submitted', labels.submitted, ready.submitted]] as const).filter(([d]) => view === 'side' || view === d) : []
   const color = { initial: '#ff5d6c', submitted: '#4fd18b' } as const
   return (
     <section className="cz-panel cz-replay" data-testid="cz-replay">
@@ -65,6 +71,7 @@ export function ReplaySection({ id, seeds, note, status, getReplay = getCausalRe
           {seeds.map((s) => <option key={s} value={s}>seed {s}</option>)}
         </select></label>
       </div>
+      {banner}
       {ready ? (
         <>
           <div className={`cz-duo ${view === 'side' ? '' : 'single'}`} data-testid="cz-duo">

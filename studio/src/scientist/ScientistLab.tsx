@@ -9,6 +9,10 @@ import type { BeliefSnapshot, ScientistIndex, ScientistRecord, Step } from './sc
 import '../causal/causal.css'
 import './scientist.css'
 
+// The HaS robot's damage is hidden in the plant; /api/scientist replays run the designs on the nominal robot (no hidden damage).
+const NOMINAL_LABELS = { initial: 'NOMINAL DESIGN — no hidden damage', submitted: 'SUBMITTED DESIGN — on the nominal robot, no hidden damage' }
+const NOMINAL_BANNER = 'These animations are fresh simulations of the designs on the NOMINAL robot. The hidden damage the scientist investigated is not simulated here, so they do not show the damaged robot or how the repair performed on it. The verified outcome is the independent verification below.'
+
 function Words({ s }: { s: Step }) {
   if (!s.scientist) return null
   return (
@@ -98,7 +102,8 @@ function RecordView({ id, index }: { id: string; index: ScientistIndex }) {
   return (
     <div className="cz-record" data-testid="sc-record">
       <p className={`cz-headline cz-head-${st.tone}`} data-testid="sc-headline">{scientistHeadline(rec)}</p>
-      <ReplaySection id={rec.id} seeds={index.replay.seeds} note={index.replay.note} status={rec.verification.status} getReplay={getScientistReplay} />
+      <ReplaySection id={rec.id} seeds={index.replay.seeds} note={index.replay.note} status={rec.verification.status} getReplay={getScientistReplay}
+        labels={NOMINAL_LABELS} banner={<Notice tone="warn" testid="sc-nominal-banner">{NOMINAL_BANNER}</Notice>} />
       <section className="cz-panel">
         <h2>The investigation, decision by decision</h2>
         <p className="dim">Dashed text is Nemotron's own reasoning, recorded before each action. Everything else is an instrument result: measurements on the robot, simulations, information-gain estimates, optimiser output.</p>
@@ -145,7 +150,7 @@ export function ScientistLab() {
       <section className="cz-hero">
         <h1>The AI scientist</h1>
         <p>Nemotron investigates a robot whose hidden damage nobody knows. It decides what it does not yet understand, writes executable explanations, orders experiments, notices when the physics contradicts it, engineers a repair with an optimiser, and decides when the evidence is strong enough. The simulator, a Bayesian belief engine and the optimiser are its instruments; an independent verification it never sees judges the result.</p>
-        <p className="dim">Recorded development runs, including failures. Nothing here calls a model; replays are fresh simulations.</p>
+        <p className="dim">Recorded development runs, including failures. Nothing here calls a model; replays are fresh simulations of the designs on the nominal robot, without the hidden damage.</p>
       </section>
       <ul className="cz-list" aria-label="Recorded investigations">
         {index.records.map((r, i) => {
