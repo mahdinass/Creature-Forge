@@ -1,59 +1,121 @@
-# Devpost submission text (draft for review; English)
+# Devpost submission text (V1, for the owner's final review; English)
 
-**Project name:** Creature Forge
-**Tagline:** You draw a robot. Nemotron investigates why it fails. MuJoCo verifies the fix.
-**Track:** Physical AI (simulation-only; no hardware).
-**Repository:** *(public GitHub URL, only if and when the owner makes the repository public)* · **Licence:** Apache-2.0 · **Video:** *(YouTube URL)*
+**Paste fields:**
+- **Project name:** Creature Forge
+- **Tagline:** An AI scientist for physical failures. Nemotron chooses the experiments; physics decides.
+- **Track:** Physical AI (simulation only; no hardware).
+- **Repository:** *(GitHub URL, only once the owner makes the repository public or grants judge access)*
+- **Licence:** Apache-2.0
+- **Video:** *(YouTube URL, after the owner's upload)*
 
 ## Inspiration
-Most "AI designs robots" demos show a generated story or a reward curve. We wanted real AI-driven engineering: a model that reads measured physical failures, forms a hypothesis, and then has that hypothesis checked by a simulator that does not take its word for anything.
+When a robot fails, trying another design is easy. Finding out *why* it failed is hard. We wanted an AI that does science
+on physical failures:
+- it forms explanations;
+- it chooses experiments that tell them apart;
+- it repairs the robot;
+- it accepts a repair only when an independent check says so.
+
+A simulator that does not take the model's word for anything does the checking.
 
 ## What it does
-A user draws a robot. NVIDIA Nemotron investigates its physical failures, proposes structural and controller redesigns, and MuJoCo independently verifies whether the changes work. Verified improvements become new creature versions.
+Creature Forge is a laboratory for simulated two-legged robots with hidden faults: a slippery floor, a weak side, a
+payload, lost feedback gain.
+- **MuJoCo** is the instrument; every measurement and replay comes from it.
+- **A Bayesian belief engine** keeps the competing explanations and their weights.
+- **An optimiser** searches for repairs.
+- **A pre-registered verifier** judges every repair on 24 held-out starts plus a 20-second endurance run. It returns
+  FULL_RECOVERY, PARTIAL_IMPROVEMENT or NOT_RECOVERED.
+- **NVIDIA Nemotron 3 Super**, through Nebius Token Factory, sits inside this laboratory as the scientist. It reads a
+  notebook of measurements, writes executable hypotheses, chooses the next experiment, and decides when to hand the repair
+  to the optimiser.
 
-The loop is Draw, Challenge, AI Redesign, Verify, Evolve:
-1. **Draw** a side-view biped in the Studio and save it as version 1.
-2. **Challenge** it (stand, push or walk) in MuJoCo; per-seed failures and replays are recorded.
-3. **Investigate with AI.** Nemotron reads a compact evidence pack, may request up to 3 diagnostic probes (counterfactual simulations such as "longer feet" or "stronger motors") that the code reports as CONFIRMED or REFUTED, then proposes up to 3 bounded edits. A deterministic validator accepts or rejects each one with a named reason.
-4. **Verify.** The Counterfactual Arena tests the original, each proposal, a size-matched random twin of each proposal and a non-AI heuristic on held-out seeds. A fixed rule (`verdict_v1`) returns VERIFIED, NOT_VERIFIED, WORSE or INCONCLUSIVE.
-5. **Evolve.** The user accepts a VERIFIED redesign as version 2 (the server refuses anything else) and re-challenges it.
-
-The model proposes, the physics measures, the rule judges, the user decides. Model confidence never enters a verdict.
+The video shows two recorded results from the Studio. They are kept separate on purpose:
+1. **Verified repair (no AI).** A robot on a slippery floor.
+   - The standard optimiser's repair walks farther, but only on 19 of 24 starts: a partial improvement.
+   - Our DO-1 objective, a deterministic change to what the optimiser rewards, walks on 21 of 24 and passes the endurance
+     run: a full recovery.
+   - We then pre-registered a replication with five fresh optimizer seeds on the same robot. DO-1 recovered in 5 of 5; the
+     standard objective in 0 of 5 (exact McNemar p = 0.031).
+2. **Nemotron's experiment (recorded live run).** The same robot body has a different hidden fault, a weak side.
+   - The belief engine's experiments all look equally informative to it. It picks a faster gait, and its belief ends
+     99.8 % on the wrong side.
+   - Nemotron picks a slower gait, where the explanations predict opposite outcomes, and its belief moves to the correct
+     side.
+   - Verification: Nemotron's lane fully recovers (23/24); the engine alone recovers partly (20/24).
 
 ## How we built it
-- **NVIDIA Nemotron-3-Super-120B on Nebius Token Factory:** strict JSON-schema replies whose enums list every editable parameter and every citable evidence value; thinking disabled; diagnostic probes; hard request, token and dollar caps in a ledger.
-- **MuJoCo:** planar biped, challenges, probes, and a deterministic verdict. Replays are fresh deterministic rollouts.
-- **Counterfactual Arena:** every AI result is shown beside its matched-random twin.
-- **Nebius AI Cloud:** all simulation and testing ran on a Nebius CPU VM, driven by our own start/stop/sync tooling with a spend cap.
-- **Studio:** React and React Three Fiber frontend, FastAPI backend.
+- **NVIDIA Nemotron 3 Super on Nebius Token Factory:**
+  - one validated tool call per turn, with a strict JSON schema, a whitelist and bounds;
+  - an invalid reply is never repaired, and the code falls back to the engine's recommendation, which is recorded;
+  - every call's request id, tokens and cost are written to a ledger with hard caps.
+- **Deterministic laboratory:** MuJoCo plant and twin simulations, a Bayesian belief engine with expected-information-gain
+  experiment ranking, CMA-ES repair, and a pre-registered verifier.
+- **Nebius AI Cloud:** every heavy experiment ran on CPU VMs driven by our own start, stop, sync and watchdog tooling,
+  with a spend cap and stops through the API.
+- **Studio:** a React + three.js frontend and a FastAPI backend.
+  - The two demo pages play back hash-pinned files that were exported from the exact recorded simulations.
+  - The export is fail-closed: every row was reproduced exactly on Linux before export.
+- **Scientific hygiene:**
+  - pre-registered protocols committed before any run;
+  - frozen record manifests and SHA-256 hashes;
+  - reproduction gates;
+  - intention-to-treat reporting, with nothing dropped.
 
 ## Challenges
-- Our earlier Nemotron Nano experiment returned empty replies (hidden reasoning used the whole token budget), so that comparison was never completed. We ran a model calibration (30 requests, $0.31) and chose Super with thinking off.
-- The first calibration produced 0 of 12 valid replies because of contract defects (ids, citation paths); schema enums fixed them.
-- Push measurements were too coarse to see small gains; we refined the resolution to 0.625 N.
-- In one run the model proposed a mechanism its own probes had refuted; we added an explicit method rule.
-- A matched-random twin once copied the AI's edit; we fixed the twin generator (`matched_random_v2`) and always validate the selected arm's own twin.
+- **Our first Nemotron calibration failed.** An earlier Nano setup returned empty replies, because hidden reasoning used
+  the whole token budget. We recalibrated and moved to Super.
+- **The optimiser's objective was the real bottleneck.** It kept proposing repairs that walked far but not reliably.
+  Changing what it rewards (DO-1) fixed this instance, and the fix replicated.
+- **Exact replay was hard.** Windows does not reproduce the Linux physics bit for bit. So demo exports run on the recorded
+  Linux environment and are checked row by row; the Studio only plays them back.
 
-## Accomplishments (with limits)
-- A real end-to-end live browser test passed 15 of 15 checks: a drawn creature, a real Nemotron call, a VERIFIED redesign (+6.25 N push resistance, 12 wins, 0 losses on 12 held-out seeds) accepted as v2 and re-challenged.
-- A pre-registered scoreboard (protocol committed before any run, 12 investigations, no exclusions): the Nemotron-selected redesign was verified in 6 of 12, its matched-random twin in 1 of 12 (discordant pairs 5 vs 0, exact one-sided p = 0.03125). We read this as encouraging evidence **limited to the tested creatures and challenges**, not as a general result. Limits: only 12 investigations; six starter shapes, each repeated twice; 5 of the 6 successes were on the push challenge, where the pipeline was developed; the AI arm picks the best of up to 3 proposals while the twin is a single edit (a post-hoc check against the best baseline also gave 5 vs 0); one more twin-only success would have removed the p-value. Cost: 24 model calls, $0.05.
-- Honest negatives: walking investigations verified nothing. The probes confirmed the feet, but gains were small and consistent and stayed below the 0.5 m bar, and the model never chose controller co-design. A separate classical optimiser (no language model) reached 150/150 walking seeds; that result is not Nemotron's. The earlier recorded demo did not beat matched random edits.
+## Accomplishments, with their limits
+- **DO-1 replicated (NO_AI):** 5/5 vs 0/5 on one robot under fresh optimizer randomness.
+  - It is reliable on that robot, but the margins are thin: 20–21 of 24 against a threshold of 20.
+  - On two other fault families, an exploratory pilot gave one recovery. In the other case DO-1 passed validation but
+    failed the endurance run.
+- **Nemotron took a decision that mattered:** on identical evidence, its experiment choice turned a wrong diagnosis into a
+  right one, and the episode verified.
+  - This is one recorded instance, chosen afterwards. A second run made the same choice and only partly recovered.
+  - Across 36 paired instances Nemotron and the engine alone are level (15 vs 14).
+- **Nemotron's pre-registered win** is in our Forge Loop redesign scoreboard: AI-selected redesigns verified in 6 of 12
+  investigations vs 1 of 12 for size-matched random edits (p = 0.031), mostly on push challenges.
+- **Negative results are reported, not dropped.** Walking redesigns by the AI never verified, and several registered
+  comparisons were null.
 
 ## What we learned
-Random edits are a strong baseline (about 15% of random push edits verified in our null pilot), so a single VERIFIED proposal says little about model skill; the matched-twin comparison does. Calibrate output format and contracts before judging reasoning.
+- A good scientist-agent does not need to out-compute the engine. It has to choose the right question when the numbers
+  cannot tell options apart.
+- Random edits are a strong baseline, so a single VERIFIED result says little until it stands next to its matched-random
+  twin.
 
 ## What's next
-A pre-registered paired evaluation of engineering memory (lessons from other creatures, memory on versus off) is running; its result is pending and not claimed here. Next: walking co-design and more creature families.
+Learning from past experiments: keeping hypotheses, failed experiments and repair outcomes, and testing, with a
+memory-on vs memory-off design that prevents leakage, when a lesson from one robot really applies to another. Our first
+attempt, retrieved text lessons in Forge Loop, showed no benefit (p = 0.773). So the next design stores measured causal
+evidence, not prose.
 
 ## Built with
-Python, MuJoCo, NumPy, FastAPI, React, React Three Fiber, TypeScript, Vite, **NVIDIA Nemotron**, **Nebius Token Factory**, **Nebius AI Cloud**.
+Python, MuJoCo, NumPy, FastAPI, React, three.js / React Three Fiber, TypeScript, Vite, **NVIDIA Nemotron 3 Super**,
+**Nebius Token Factory**, **Nebius AI Cloud**.
 
 ## How Nemotron and Nebius are used (for judges)
-1. Runtime inference: *Investigate with AI* in the "My creature" tab calls Nemotron-3-Super through Token Factory (needs a key; archived real calls are bundled).
-2. Cloud execution: all heavy simulation, tests and the scoreboard ran on a Nebius CPU VM.
+1. **Runtime inference:** the HaS scientist calls Nemotron 3 Super through Token Factory.
+   - The *Nemotron's experiment* and *AI scientist* pages play back recorded real calls. Request ids are in the
+     records.
+   - In the Studio, *My creature → Investigate with AI* makes live calls when a key is configured.
+2. **Cloud execution:** all heavy simulation (the scientist studies and the DO-1 replication) ran on Nebius CPU VMs.
 
 ## Testing instructions
-See `docs/submission/SETUP_AND_REPRODUCTION.md`. No key is needed for the scripted mode or the committed records; live mode needs a Nebius key.
+See the README *Quick start for judges*: Python 3.11+, Node 22+, then `pip install -e ".[studio]"`,
+`npm --prefix studio ci`, `npm --prefix studio run build` and `python scripts/run_studio.py`. Then open `?tab=recovery`
+and `?tab=nemotron`.
+- No key is needed: both demo pages are recorded playback.
+- Live mode needs a Nebius key; see `docs/submission/SETUP_AND_REPRODUCTION.md`.
 
 ## Attribution and independence
-Built for the Nebius x NVIDIA Global AI Hackathon. Not endorsed by, or affiliated with, NVIDIA or Nebius beyond participation. Licences: `THIRD_PARTY_NOTICES.md`; model and service terms: `docs/MODEL_AND_SERVICE_TERMS.md`.
+- Built for the Nebius × NVIDIA Global AI Hackathon. Not endorsed by, or affiliated with, NVIDIA or Nebius beyond
+  participation.
+- Licences are in `THIRD_PARTY_NOTICES.md`; model and service terms in `docs/MODEL_AND_SERVICE_TERMS.md`.
+- Code was written with an AI coding assistant; those commits carry a `Co-Authored-By` disclosure.

@@ -3,6 +3,15 @@
 The storyboard and narration are in `STORYBOARD.md`. The cut list (picture plus words, the single source) is
 `video/cutlist.json`.
 
+**Current V1 assets (use these for the final edit).** Captions and narration are rough cut v2, made from the same take 3 in
+`artifacts/capture/video_2026-10-21/rough_cut_v2/` (git-ignored; hashes in `video/media_SHA256SUMS.txt`). Rough cut v2
+(2026-10-21):
+- **Same picture.** `rough_cut_clean.mp4` is byte-identical to v1: 173.5 s, 1920×1080, 30 fps (`video/rough_cut_v2_report.json`).
+- **Corrected narration in two shots.** Shot 2 now cites the pre-registered W3 replication (DO-1 recovered in five fresh
+  repeats on the same robot; the frozen optimiser in none). Shot 9 says "Nemotron's one pre-registered win", because W3,
+  which is NO_AI, is also pre-registered.
+- **Voice-over:** read the narration column of `STORYBOARD.md`, which equals `video/cutlist.json` and `video/narration.srt`.
+
 ## Tools on this machine (checked 2026-10-21; nothing was installed twice)
 
 | Tool | Version | Source | Use |

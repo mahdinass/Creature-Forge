@@ -6,7 +6,7 @@
   {"shot": 1, "clips": [{"chapter": "hook", "from": 1.0, "dur": 14}],
    "narration": "A walking robot with a hidden fault, and two repairs, side by side in MuJoCo. What if an AI could investigate why a robot fails, instead of just trying another design?"},
   {"shot": 2, "clips": [{"chapter": "do1", "from": 0.5, "dur": 22}, {"chapter": "why", "from": 0.5, "dur": 14}],
-   "narration": "First, how a repair is judged. Every design runs on twenty-four held-out starts the optimiser never saw. The frozen optimiser's repair goes farther on the median, but only nineteen of twenty-four starts walk: a partial improvement. DO-1 changes the optimiser's objective. Twenty-one walk, and a twenty-second confirmation passes. Full recovery, verified. This is purely deterministic optimisation, with no language model, and one replicate on one robot."},
+   "narration": "First, how a repair is judged. Every design runs on twenty-four held-out starts the optimiser never saw. The frozen optimiser's repair goes farther on the median, but only nineteen of twenty-four starts walk: a partial improvement. DO-1 changes the optimiser's objective. Twenty-one walk, and a twenty-second confirmation passes. Full recovery, verified. This is deterministic optimisation, no language model. In five fresh repeats on this robot, DO-1 recovered all five; the frozen optimiser, none."},
   {"shot": 3, "clips": [{"chapter": "nemo-intro", "from": 1.0, "dur": 4}, {"chapter": "failure", "from": 4.0, "dur": 8}],
    "narration": "Now the scientist: a recorded live investigation by NVIDIA Nemotron, played back, with no new model call. Same robot, a different hidden fault. It barely moves."},
   {"shot": 4, "clips": [{"chapter": "hypotheses", "from": 0.2, "dur": 5.5}, {"chapter": "fork", "from": 0.1, "dur": 16.5}],
@@ -20,7 +20,7 @@
   {"shot": 8, "clips": [{"chapter": "lab", "from": 0.5, "dur": 18}],
    "narration": "Nemotron 3 Super, on Nebius Token Factory, decides what to do next. Deterministic instruments do the rest: experiments, Bayesian inference, optimisation and memory. A hidden verifier decides. The simulation ran on Nebius AI Cloud."},
   {"shot": 9, "clips": [{"chapter": "scope", "from": 0.5, "dur": 11}, {"chapter": "studies", "from": 0.5, "dur": 14}],
-   "narration": "Is Nemotron better? Not overall. A second run made the same choice and only partly recovered. Across thirty-six robots it is level with the engine. Our one pre-registered win is small: six of twelve redesigns verified, against one in twelve random edits, mostly on push tests. AI proposes; physics decides."}
+   "narration": "Is Nemotron better? Not overall. A second run made the same choice and only partly recovered. Across thirty-six robots it is level with the engine. Nemotron's one pre-registered win is small: six of twelve redesigns verified, against one in twelve random edits, mostly on push tests. AI proposes; physics decides."}
  ],
  "end": {"text": "Creature Forge", "sub": "Built for the Nebius × NVIDIA Global AI Hackathon", "seconds": 4}
 }

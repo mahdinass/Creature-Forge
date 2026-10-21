@@ -921,3 +921,25 @@ missing records. They are frozen and are not changed.
 - An independent review of the raw JSONL and the report, before any Studio or submission wording uses W3/W4.
 - Do not merge this branch into `main`. Its preflight now refuses re-execution at HEAD, because `experiments/` changed; for
   re-execution, use `3b8a8b1`.
+
+## V1 release candidate (submission-ready; frozen)
+- **Branch and tag:** `release/v1`, tag `v1.0.0-rc1` (annotated; the exact commit is in the tag message). Release record:
+  `docs/RELEASE_V1.md`.
+- **Base:** `feature/do1-demo` @ `28766c6` (W1/W2, tag `checkpoint/w2-demo-2026-10-21` → `5e02df5`), plus the merge
+  `0e96779` of `experiment/do1-replication-w3w4` @ `920a7b0`. The W3/W4 raw-data review is reported by the owner as
+  complete. Nothing was rewritten, and the AI `Co-Authored-By` disclosures are kept.
+- **V1 changes** (no physics, verifier, optimizer or record change):
+  - Home gains an entry to the two demo pages, and the Verified repair page cites the replication report;
+  - the CI browser check also runs `do1-flow` and `nemotron-flow`;
+  - narration shots 2 and 9 are corrected for W3, with rough cut v2 captions (same picture, 173.5 s);
+  - README, setup, Devpost, checklist and `NEMOTRON_CONTRIBUTION.md` are rewritten for V1.
+- **Freeze:** never move the tag. A fix becomes `v1.0.0-rc2`, through a reviewed PR to `release/v1`. New work goes on new
+  branches; next is the proposal `feature/experience-learning`.
+- **Owner actions:** see `docs/submission/SUBMISSION_CHECKLIST.md`.
+  - voice-over and export;
+  - YouTube upload and visibility;
+  - Devpost paste and submit;
+  - repository visibility and judge access;
+  - the integration PR into `main`;
+  - PR #18;
+  - the off-machine backup of `%USERPROFILE%\CreatureForge-archive\2026-10-21\`.

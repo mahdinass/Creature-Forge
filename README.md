@@ -1,100 +1,127 @@
 # Creature Forge
 
-**Machines that learn from falling.** A physics-grounded failure-investigation workbench for a simulated biped, built for the Nebius × NVIDIA Global AI Hackathon 2026 (**Physical AI** track).
+**An AI scientist for physical failures.** Creature Forge investigates why a simulated robot fails. It tests explanations
+by experiment in MuJoCo, and it accepts a repair only when an independent verifier confirms it. Built for the
+Nebius × NVIDIA Global AI Hackathon 2026, **Physical AI** track (simulation only).
 
-A robot fails in MuJoCo → Creature Forge records measured evidence about the failure → **NVIDIA Nemotron** (hosted on **Nebius Token Factory**) proposes bounded physical interventions → MuJoCo tests each proposal beside a **matched random edit** → you see synchronized replays and an honest measured verdict.
+**NVIDIA Nemotron** (on **Nebius Token Factory**) takes scientific decisions inside a deterministic laboratory: which
+experiment to run, which hypotheses to write, when to hand a repair to the optimiser. MuJoCo, a Bayesian belief engine,
+an optimiser and a pre-registered verifier do the measuring and the judging. Heavy simulation ran on **Nebius AI Cloud**.
 
-> **Two separate results — please do not mix them**
->
-> | | What it shows | Who found it |
-> |---|---|---|
-> | **Classical optimisation (R2)** | A controller that walks on **150/150** untouched seeds vs **91/150** for the starting controller (non-inferiority and superiority both confirmed, exact McNemar p = 3.5e-18). | A classical local optimiser. **No language model.** |
-> | **Nemotron investigation demo** | Real Nemotron proposals, verified by MuJoCo next to matched random edits. In the bundled live recording the model's edits improved the controller **and so did random edits of the same size** (25/32 and 30/32 vs the model's 28/32 and 25/32). | Nemotron proposes; MuJoCo decides. **No claim that the model beats random.** |
->
-> The systematic Nemotron-vs-random comparison (experiment R3) was **not completed**: no generation setting passed our preregistered calibration (the evidence prompt returned empty replies because hidden reasoning used the whole token budget). It is reported as such in `experiments/phase2a_r3/REPORT_V2.md`.
+> **V1 release candidate.** Release record, tests and reproduction: [`docs/RELEASE_V1.md`](docs/RELEASE_V1.md).
 
-## Forge Loop (new): Draw, Challenge, AI Redesign, Verify, Evolve
+## What the demo shows (two separate results; please do not mix them)
+| Studio page | What you see | Who did it | Evidence |
+|---|---|---|---|
+| **Verified repair** (`?tab=recovery`) | One robot with a hidden slippery-floor fault (faulty: 5/24 starts walk). Two optimizer repairs, replayed side by side. **Frozen** objective: PARTIAL_IMPROVEMENT, 19/24 walk. **DO-1** objective: FULL_RECOVERY, 21/24, and the 20 s confirmation passes. | A deterministic change to the optimizer's objective. **NO_AI: no language model.** | [`docs/DO1_DEMO.md`](docs/DO1_DEMO.md); replays hash-pinned in `experiments/do1/demo/` |
+| **Nemotron's experiment** (`?tab=nemotron`) | A recorded LIVE investigation, played back. Both lanes have the same evidence. The engine's experiment (freq ×1.2) leaves its belief 99.8 % on the wrong side. Nemotron's experiment (freq ×0.85) moves it to the right side. The repair is then verified: Nemotron's lane is FULL 23/24, the engine alone PARTIAL 20/24. | **Nemotron 3 Super** chose the experiment. The engine and the optimiser did the rest. | [`docs/NEMOTRON_CONTRIBUTION.md`](docs/NEMOTRON_CONTRIBUTION.md); `experiments/w2/` |
 
-Forge Loop runs a creature you drew through a stand, push or walk challenge in MuJoCo. Nemotron reads the measured failure
-evidence and proposes bounded edits. Deterministic code validates each proposal. Each AI proposal is then tested beside a
-matched-random twin (a random edit of the same size) on held-out seeds, and `verdict_v1` gives a verdict. You decide whether
-to accept a verified version. The model never decides a score, and the loop never accepts a design on its own.
+**How strong is each result?**
+- **DO-1 was replicated.** In a pre-registered replication on the same robot, with 5 fresh optimizer seeds (W3), DO-1
+  recovered in **5/5** and the frozen objective in **0/5** (exact one-sided McNemar p = 0.031).
+  - This shows reliability on **one** robot, on its already studied validation seeds, with thin margins (20–21/24 against
+    a threshold of 20).
+  - In a two-instance cross-family pilot (W4), DO-1 recovered one case. In the other it passed validation but failed the
+    20 s confirmation.
+  - Full details: [`docs/DO1_REPLICATION_REPORT.md`](docs/DO1_REPLICATION_REPORT.md), with raw records and audit in
+    `experiments/do1/w3w4_2026-10-21/`.
+- **The Nemotron case is one selected, recorded instance.** A second Nemotron run made the same choice and only partly
+  recovered.
+  - Across 36 paired instances, Nemotron and the engine alone verified **15 vs 14** (p = 0.50): parity, not superiority.
+  - Nemotron's one pre-registered favourable result is the Forge Loop scoreboard: 6/12 verified redesigns vs 1/12 for
+    matched random edits (p = 0.031), mostly on push challenges
+    ([`experiments/forge_loop/scoreboard/REPORT.md`](experiments/forge_loop/scoreboard/REPORT.md)).
+- **R2 is classical optimisation, not Nemotron.** An earlier controller walks on 150/150 untouched seeds vs 91/150.
 
-Full guide for judges and developers: [`docs/FORGE_LOOP.md`](docs/FORGE_LOOP.md). Contracts: [`docs/FORGE_LOOP_CONTRACTS.md`](docs/FORGE_LOOP_CONTRACTS.md).
-
-**Headline results (honest, development stage):**
-
-- Most live Nemotron investigations so far ended NOT_VERIFIED or INCONCLUSIVE. The archived records are in
-  [`experiments/forge_loop/dev_live_records/`](experiments/forge_loop/dev_live_records/README.md).
-- Three records on one balanced creature (push) reached VERIFIED_IMPROVEMENT on 12 held-out seeds each: `i-f9873480e42a`
-  (rear foot x1.25, +3.125 N median) and, with diagnostic probes, `i-47bc91e407c2` (+3.125 N) and `i-172b6a48a0ad`
-  (+4.375 N). These are worked cases on one creature and one challenge, not statistics.
-- A null pilot found that about 15% of random push edits on standing creatures also verify. A single VERIFIED arm is
-  therefore not evidence of model skill, and every AI verdict is shown beside its matched-random twin.
-- Pre-registered scoreboard (12 fresh drawn creatures, 6 starters x 2): the AI's selected redesign verified in 6/12
-  investigations, its own size-matched random twin in 1/12 (discordant 5 vs 0, exact one-sided McNemar p = 0.031). The
-  effect is concentrated in the push challenge; on creatures that cannot stand the AI verified once and its twin did
-  better. Small study, one zoo; see [`experiments/forge_loop/scoreboard/REPORT.md`](experiments/forge_loop/scoreboard/REPORT.md).
-- The R2 result (150/150 vs 91/150) is classical optimisation, not Nemotron. The earlier recorded Nemotron demo did not
-  beat matched random edits. R3 produced no statistical result.
-
-**Run it:** locally, `python scripts/run_studio.py` (scripted mock only, no key). Live Nemotron needs `NEBIUS_API_KEY` in
-`.env` and `CREATURE_FORGE_ENABLE_LIVE=1`. Commands for the Nebius VM are in the guide.
-
-## Try it (no API key needed)
+## Quick start for judges (no API key, no cloud, about 10 minutes)
+Prerequisites: Python 3.11 or 3.12, Node 22+, Git, and Chrome or Edge.
 
 ```sh
-# 1. Python 3.11+ (CI uses 3.12) and Node 22+ required
-python -m venv .venv && .venv/bin/pip install -e ".[studio]"          # Windows: .venv\Scripts\pip
-npm --prefix studio install && npm --prefix studio run build
-# 2. Run the Studio
-.venv/bin/python scripts/run_studio.py                               # http://127.0.0.1:8000
+git clone https://github.com/mahdinass/Creature-Forge.git && cd Creature-Forge
+python -m venv .venv
+.venv/bin/pip install -e ".[studio]"            # Windows: .venv\Scripts\pip install -e ".[studio]"
+npm --prefix studio ci && npm --prefix studio run build
+.venv/bin/python scripts/run_studio.py          # Windows: .venv\Scripts\python scripts\run_studio.py
 ```
 
-**Windows, one command (recommended):** `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1`. It replaces an older Studio left on port 8000, rebuilds a stale frontend, starts the current server, verifies that every API route the UI needs exists, and opens the browser. `GET /api/version` shows which commit is being served.
+Then open:
+- <http://127.0.0.1:8000/?tab=recovery> (Verified repair);
+- <http://127.0.0.1:8000/?tab=nemotron> (Nemotron's experiment);
+- or Home, then *Shown in the demo video*.
 
-Open **Home**: the hero is a real MuJoCo replay of the walking controllers. Navigation follows the journey **Create → Simulate → Investigate**:
+Both pages play back recorded, hash-pinned files. They make no model call and no simulation, so they need no key.
 
-- **Create → Draw:** draw a side-view biped freehand (mouse, touch or pen; undo, redo, erase, zoom, pan). Deterministic stroke interpretation shows the torso, joints and feet it found, a live MuJoCo preview, and what it assumed. **Guided constraints ON** (default) snaps gently and keeps the creature inside the verified design range; **OFF (experimental)** uses your strokes exactly as drawn and runs bad-but-buildable creatures through MuJoCo so they can fall. Drawings the model cannot represent are refused with the exact reason, with an optional consent-gated approximation. *Refine* keeps the older joint-handle editor.
-- **Simulate → Playground / Compare designs:** push a creature and read, in plain words, why it fell.
-- **Investigate → AI investigation / Walking lab / Experiment history:** the recorded Nemotron investigation (failure → evidence → proposal → verification → verdict, with synchronized before/after simulations), the tuned walking robot next to the starting one, and an archive of earlier experiments sorted by outcome.
+**Windows, one command:** `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1`. It frees port 8000,
+rebuilds a stale frontend, checks the API and opens the browser.
 
-Old `?tab=` links (`overview`, `studio`, `compare`, `lab`, `locomotion`, `demo`, `sketch`) keep working.
+**Also in the Studio:**
+- **Create → Draw** (sketch a biped);
+- **Simulate → Playground / Compare / My creature** (live MuJoCo on your machine);
+- **Investigate → AI investigation, AI scientist, Causal engineer, Walking lab, Experiment history** (recorded runs).
 
-## Where NVIDIA Nemotron and Nebius are used
+Without a key, every AI action runs as a clearly labelled **SCRIPTED MOCK** and is never presented as a model.
 
-| Component | How |
+## Live Nemotron (optional; needs a Nebius Token Factory key; costs money)
+Put `NEBIUS_API_KEY=<key>` and `CREATURE_FORGE_ENABLE_LIVE=1` in a git-ignored `.env` (see `.env.example`) and restart
+the Studio. Live calls are then allowed in three places:
+- **My creature → Investigate with AI:** `nvidia/nemotron-3-super-120b-a12b`, settings in
+  `experiments/forge_loop/model_config.json`. About 1–2 calls and fractions of a cent per investigation, plus MuJoCo
+  verification.
+- **My creature → Recover walking (AI director):** the same model.
+- **AI investigation → Run live:** the original Nano demo path, `creature_forge/demo.py`.
+
+Every call goes through `creature_forge/nebius.py`, which has request, token and dollar caps, no blind retries, and never
+logs the key. Each call is recorded in an inference ledger. Replies are validated against a schema, a whitelist and bounds,
+and are never clipped or repaired. The **Nemotron's experiment** and **AI scientist** pages show recorded runs of the HaS
+scientist (`scripts/hdb_agent_run.py`), which we ran on a Nebius VM; the Studio does not start those runs.
+
+## Where NVIDIA and Nebius are used
+| Component | Role |
 |---|---|
-| **NVIDIA Nemotron** `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` | Runtime calls from `creature_forge/demo.py` (and the R3 tooling) through **Nebius Token Factory**'s OpenAI-compatible API (`creature_forge/nebius.py`: no retries, hard request/token caps, key never logged). It receives measured evidence and proposes bounded parameter edits under a strict JSON schema; invalid output is shown as invalid, never repaired. |
-| **Nebius AI Cloud** | All heavy MuJoCo experiments (R1 and R2, about 15,000 rollouts) ran on a Nebius CPU VM (`cpu-d3`, 8 vCPU / 32 GiB, Ubuntu) controlled by `infra/nebius/forge_cloud.py` (CLI in WSL, SSH, deadline watchdog, stop/delete safeguards). No GPU was needed. |
-| **MuJoCo** | Authoritative physics for every measurement and replay. |
+| NVIDIA Nemotron 3 Super (Token Factory) | Experiment choice, executable hypotheses and delegation in the HaS scientist; redesign proposals and diagnostic probes in Forge Loop. |
+| NVIDIA Nemotron 3 Nano (Token Factory) | The original AI-investigation demo (recorded) and the R3 calibration. |
+| Nebius AI Cloud | All heavy MuJoCo experiments (DS-1, W3/W4, R1/R2, scoreboard) on CPU VMs controlled by `infra/nebius/` (spend cap, deadline watchdog, API stop). |
+| MuJoCo | Every measurement, verdict and replay. |
 
-Live mode (optional): set `NEBIUS_API_KEY` (environment or a git-ignored `.env`, see `.env.example`) and `CREATURE_FORGE_ENABLE_LIVE=1`, then use *Run live with Nemotron* in the AI Investigation tab (one model call, then ~1–4 minutes of MuJoCo verification). Live calls draw on a shared budget (41 requests / 300,000 tokens; 13 used).
-
-## Reproduce the evidence
-
+## Reproduce
 ```sh
-.venv/bin/python -m unittest discover -s tests -v                    # 300+ tests (physics, statistics, guards, demo, overview)
-npm --prefix studio test                                              # frontend unit tests
-.venv/bin/python scripts/smoke_test.py                                # MuJoCo rollout, determinism, fall detection
-.venv/bin/python scripts/lab_browser_check.py                         # real-browser flows (needs Chrome/Edge)
-.venv/bin/python scripts/verify_demo_trials.py --full                 # recorded Phase 1 trials reproduce bit-for-bit
+.venv/bin/python -m unittest discover -s tests          # about 1,600 tests (some skip without git-ignored raw records)
+npm --prefix studio test && npm --prefix studio run build
+.venv/bin/python scripts/smoke_test.py                  # MuJoCo rollout, determinism, fall detection
+.venv/bin/python scripts/lab_browser_check.py           # real-browser flows incl. both demo-video pages (needs Chrome/Edge)
+.venv/bin/python scripts/do1_replication_analysis.py \
+  --w3 experiments/do1/w3w4_2026-10-21/do1_l4_rep.jsonl --w4 experiments/do1/w3w4_2026-10-21/do1_x.jsonl
 ```
-
-Every experiment is **preregistered** (an immutable `protocol.json` committed before the first rollout), runs under a hash-chained rollout ledger, and reports null and failed outcomes: `experiments/phase1`, `phase2a`, `phase2a_r1` (null), `phase2a_r2` (confirmed), `phase2a_r3` (aborted/not completed). Re-running R2 end to end on a cloud VM is documented in [`docs/NEBIUS_CLOUD_R1.md`](docs/NEBIUS_CLOUD_R1.md) and [`docs/submission/SETUP_AND_REPRODUCTION.md`](docs/submission/SETUP_AND_REPRODUCTION.md).
+- The last command recomputes the W3/W4 statistics from the raw records, with no physics.
+- Re-running physics experiments needs Linux and the recorded environment. Windows reproduces labels and verdicts but not
+  every row bit-for-bit.
+- Everything else is covered in [`docs/submission/SETUP_AND_REPRODUCTION.md`](docs/submission/SETUP_AND_REPRODUCTION.md).
 
 ## Honest limits
-
-One planar biped, one controller family, simulation only. The 150/150 result is for the registered scenario family (fresh initial poses), not general robustness. The Nemotron demo is a verifiable loop, not a statistical claim. Replays are fresh simulations of stored controller parameters. See [`docs/INVESTIGATION_DEMO.md`](docs/INVESTIGATION_DEMO.md).
+- **Scope:** simulation only, with one planar biped family.
+- **DO-1:** reliable on one robot under different optimizer randomness. W4 has only two examples.
+- **Nemotron:** the recorded case is one instance, chosen afterwards. The broad comparison shows parity with the engine
+  alone.
+- **Replays:** they are exact playbacks of stored records. Large raw archives are kept out of Git and documented in
+  [`docs/NONGIT_ASSETS_2026-10-21.md`](docs/NONGIT_ASSETS_2026-10-21.md).
 
 ## Repository map
-
-`creature_forge/` physics, controllers, statistics, Nebius client, demo · `studio/` React + three.js frontend · `experiments/` preregistered protocols, ledgers, results, reports · `infra/nebius/` cloud VM controller · `docs/` specification, state, decisions, reproducibility, submission package · `tests/`, `scripts/`.
+- `creature_forge/`: physics, controllers, belief engine, optimiser, verifier, Nebius client, Studio API.
+- `studio/`: React and three.js frontend, with `studio/e2e/` real-browser flows.
+- `experiments/`: pre-registered protocols, raw records, reports and `FROZEN_MANIFEST.json`.
+- `scripts/`: runners, analyses, exporters.
+- `infra/nebius/`: cloud VM control.
+- `docs/`: specification, state, reports, `submission/` (Devpost text, storyboard, video production, checklist).
 
 ## License
-
-Apache License 2.0: [`LICENSE`](LICENSE), [`NOTICE`](NOTICE); third-party inventory in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). NVIDIA Nemotron is used only as a hosted service under its own license (NVIDIA Nemotron Open Model License); no weights are distributed. Model and service terms: [`docs/MODEL_AND_SERVICE_TERMS.md`](docs/MODEL_AND_SERVICE_TERMS.md). Creature Forge is an independent hackathon project: it is not endorsed by, or affiliated with, NVIDIA or Nebius beyond participation in the hackathon.
+- Apache License 2.0: [`LICENSE`](LICENSE), [`NOTICE`](NOTICE). Third-party inventory:
+  [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+- NVIDIA Nemotron is used only as a hosted service under its own licence; no weights are distributed. Terms:
+  [`docs/MODEL_AND_SERVICE_TERMS.md`](docs/MODEL_AND_SERVICE_TERMS.md).
+- This is an independent hackathon project, not endorsed by NVIDIA or Nebius.
+- Commits made with an AI coding assistant carry a `Co-Authored-By` disclosure.
 
 ## For contributors and coding agents
-
-Read [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md), `docs/PROJECT_STATE.md`, and run `python scripts/context_preflight.py` first. The full specification is [`docs/PROJECT_SPEC.md`](docs/PROJECT_SPEC.md); the free local memory setup is [`docs/FREE_MEMORY_QUICKSTART.md`](docs/FREE_MEMORY_QUICKSTART.md).
+Read [`AGENTS.md`](AGENTS.md), [`CLAUDE.md`](CLAUDE.md) and `docs/PROJECT_STATE.md`, and run
+`python scripts/context_preflight.py` first. The V1 release is frozen; develop on new branches (see
+[`docs/RELEASE_V1.md`](docs/RELEASE_V1.md)).

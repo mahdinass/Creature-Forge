@@ -189,7 +189,8 @@ export function Do1Recovery() {
         <blockquote data-testid="do1-why-reason">Recorded verifier reason for the frozen repair: “{why.frozenReasons.join('; ')}”</blockquote>
         <p className="do1-note">DO-1 travels less far but walks on more seeds and passes the long run. It is a deterministic change to the optimizer's objective;
           the recorded provenance of both arms is {idx.provenance.arms_provenance_recorded.join(' and ')}{noModel ? ', and no Nemotron call was made in either' : ''}.
-          This is one exploratory technical replicate on one robot: it shows that the objective can recover this instance, not how often it would.</p>
+          This is one exploratory technical replicate on one robot: it shows that the objective can recover this instance, not how often it would.
+          A later pre-registered replication on this same robot with fresh optimizer seeds, and a pilot on two other fault families, is reported with its limits in <code>docs/DO1_REPLICATION_REPORT.md</code>.</p>
       </section>
 
       <footer className="do1-prov" data-testid="do1-provenance">

@@ -19,7 +19,9 @@ Machine-readable companions (hash-pinned, served by `/api/nemotron/case`):
 - **The strongest effects in the programme are deterministic** and are not Nemotron's:
   - the belief engine vs exhaustive screening, 109 vs 62 of 211;
   - R2's classical optimiser, 150/150 vs 91/150;
-  - the DO-1 objective (NO_AI): FULL 21/24 vs PARTIAL 19/24, one technical replicate.
+  - the DO-1 objective (NO_AI): FULL 21/24 vs PARTIAL 19/24 in the exploratory replicate; in the pre-registered
+    replication on the same robot (W3) FULL 5/5 vs 0/5 (exact McNemar p = 0.031), and in a two-instance cross-family
+    pilot (W4) one recovery and one partial (`docs/DO1_REPLICATION_REPORT.md`).
 - **What Nemotron demonstrably does** is take real scientific decisions inside a deterministic laboratory. It chooses
   experiments, proposes executable hypotheses and decides when to delegate. In one recorded instance (gen-0137
   one_side_weakness, §3) its experiment choice changed the diagnosis from wrong to right on identical evidence, and the

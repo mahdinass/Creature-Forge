@@ -1,54 +1,54 @@
-# Final submission checklist
+# Final submission checklist (V1)
 
-Official deadline **Fri 2026-10-30, 18:00 Europe/Oslo**; internal deadline **Thu 2026-10-29**. Status as of 2026-10-15 (done = verified in the repository records; open = not done; OWNER = needs the owner). The repository is **private**; nothing has been published.
+- **Deadlines:** the official deadline is **Fri 2026-10-30, 18:00 Europe/Oslo**; the internal target is **Tue 2026-10-27**,
+  with 28–29 October as buffer.
+- **Status as of the V1 release candidate.** The release record is `docs/RELEASE_V1.md`. Status values: done = verified in
+  the repository; OWNER = needs the owner.
+- **The repository is private.** Nothing has been uploaded, published or submitted.
 
 ## Hackathon deliverables (docs/PROJECT_SPEC.md §1.2)
-| item | status | notes |
+| Item | Status | Notes |
 |---|---|---|
-| Functional application matching what is filmed | done (branch) / OWNER | Forge Loop on `feature/forge-loop`; live end-to-end browser test 15/15 archived (`dev_live_records/README.md`); **PR #16 is not merged** (owner decides) |
-| Uses an NVIDIA open model at runtime | done | Nemotron-3-Super-120B (default) via Token Factory; scoreboard 24 calls, $0.05; earlier Nano demo recorded |
-| Runs on Nebius Token Factory / AI Cloud | done | live inference on Token Factory; all simulation and tests on a Nebius CPU VM |
-| Public source repository | OWNER | stays private until the publication audit below is complete |
-| Open-source licence visible | done | Apache-2.0 `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md` (OFL fonts added 2026-10-15, hand-edited) |
-| README: install, prerequisites, env vars, run, demo scenario, evaluation reproduction | draft updated | `README.md`, `docs/submission/SETUP_AND_REPRODUCTION.md` (rewritten 2026-10-15, commands not re-run) |
-| Where NVIDIA / Nebius are used | done | README table; `docs/submission/DEVPOST.md` |
-| YouTube video < 3 min, >= 1 min of modules operating | open / OWNER | **Current (2026-10-21):** W1 Verified Repair + W2 Nemotron's experiment, rough cut v1 2:53.5. Shots and narration: `video/cutlist.json` (source) → `STORYBOARD.md`, `video/narration.srt`; workflow `VIDEO_PRODUCTION.md`. The 2026-10-15 Forge Loop storyboard and capture plan are historical (`archive/`). Voice-over and final export are owner tasks |
-| Text description, track, feedback on Nebius/NVIDIA technologies | draft | `DEVPOST.md` (2026-10-15, still Forge Loop-centred: align it with the W1/W2 video before submitting), `FEEDBACK.md` (review, update for Super/Forge Loop, paste) |
-| Judging access | open / OWNER | local reproduction needs no key; hosting decision below |
-| English material | done | |
-| Available through 2026-12-15 | open / OWNER | depends on the visibility decision; no always-on VM planned |
-| Submit before the deadline | OWNER | |
+| Functional application matching what is filmed | done | Branch `release/v1`, tag `v1.0.0-rc1`. The filmed pages are *Verified repair* (`?tab=recovery`) and *Nemotron's experiment* (`?tab=nemotron`). Both are recorded playback, so they need no key. CI runs both flows on a clean Ubuntu checkout |
+| Uses an NVIDIA open model at runtime | done | Nemotron 3 Super via Token Factory: the recorded HaS scientist calls (request ids in `experiments/w2/`) and live Forge Loop calls when a key is set |
+| Runs on Nebius Token Factory / AI Cloud | done | Inference on Token Factory; all heavy simulation on Nebius CPU VMs (`infra/nebius/`) |
+| Open-source licence visible | done | Apache-2.0 `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md` |
+| README: install, prerequisites, env vars, run, demo, reproduction | done | `README.md` (judge quick start), `docs/submission/SETUP_AND_REPRODUCTION.md`. Commands verified in a fresh-venv clean clone; see the release record |
+| Where NVIDIA / Nebius are used | done | README table; `DEVPOST.md` |
+| Video < 3 min, ≥ 1 min of the application operating | **OWNER** | Picture done: rough cut v2 is 173.5 s at 1920×1080 (`video/rough_cut_v2_report.json`). The narration is corrected for W3 (`STORYBOARD.md` = `video/cutlist.json` = `video/narration.srt`). **To do: record the voice-over, export, check < 180 s** (`VIDEO_PRODUCTION.md` §4) |
+| Text description, track, feedback | draft ready / **OWNER** | `DEVPOST.md` (V1, matches the app and video); `FEEDBACK.md` (review and paste) |
+| Public repository or judge access | **OWNER** | Private. Before any visibility change, run the pre-publication checks below |
+| Available through 2026-12-15 | **OWNER** | Depends on the visibility decision; no always-on VM is planned (the demo runs locally) |
+| Submit before the deadline | **OWNER** | |
 
-## Owner decisions (do not act without them)
-1. **Repository visibility** (private now): make public or give judges access another way.
-2. **Publication audit**: re-run the full reachable-history secret scan and trailer check on the final refs (last recorded 2026-10-14; not re-run since).
-3. **Benchmarking-clause question**: does publishing the Nemotron-vs-random-twin comparison fall under Nebius §4.1.10(c)? (`MODEL_AND_SERVICE_TERMS.md` §1b, `LICENSE_REVIEW.md` §3c). Also send or waive the §18.7 clarification (`NEBIUS_CLARIFICATION_REQUEST.md`, drafted, not sent).
-4. **Git-history email exposure**: history contains author/committer `@gmail.com` addresses (`LICENSE_REVIEW.md` §4c); accept or rewrite.
-5. **PR #16 merge**: approved in principle; the owner wants to be asked before merging.
-6. **Video recording and voice-over**, and the final choice of honest-negative clip.
-7. Read the NVIDIA licences for Super and Ultra (not verified offline), the Nemotron appendix, and the Nebius AUP and Service-Specific Terms.
-8. Keep the immutable preregistered records in the public repository (recommended) and decide whether the raw model-reply files stay.
+## Owner decisions (none are taken without the owner)
+1. **Visibility:** make the repository public, or give judges access another way.
+2. **YouTube:** upload the final video, with the visibility of your choice (unlisted or public), and paste the URL into
+   Devpost.
+3. **Devpost:** review `DEVPOST.md`, paste it and submit.
+4. **Integration PR into `main`:** review and merge (PR link in the release record). A merge commit keeps every frozen
+   commit; a squash would not keep them on `main` but leaves the release tag intact.
+5. **PR #18 (`fix/ci-license-and-workflow`):** not part of V1. It overlaps the V1 workflow change. Close it, or rebase it
+   after V1.
+6. **AI co-author disclosures:** kept, as the owner instructed. The earlier "zero AI trailers" item is withdrawn: the
+   `Co-Authored-By` lines are a deliberate disclosure.
+7. **Git-history e-mail exposure:** the author e-mail is in history. Accept it, or decide before publication; any rewrite
+   would break the frozen hashes.
+8. **Benchmarking clause and §18.7 clarification:** open (`MODEL_AND_SERVICE_TERMS.md` §1b, `LICENSE_REVIEW.md` §3c,
+   `NEBIUS_CLARIFICATION_REQUEST.md`, not sent).
+9. **Off-machine backup:** copy `%USERPROFILE%\CreatureForge-archive\2026-10-21\`, which holds the raw archives and the
+   video, to a private disk or drive. Then run `sha256sum -c ARCHIVES.sha256` on the copy
+   (`docs/NONGIT_ASSETS_2026-10-21.md`). Afterwards, also copy `artifacts/capture/video_2026-10-21/rough_cut_v2/` and your
+   final export.
 
 ## Pre-publication checks (before any visibility change)
-- [ ] Reachable-history secret scan on the final refs (snippet in `docs/MODEL_AND_SERVICE_TERMS.md` §3).
-- [ ] Zero AI co-author trailers on any ref. Note: new commits made with tool-supplied attribution trailers would break this; check before publishing. **Status 2026-10-21:** `main` has none; 22 commits already pushed to `feature/has-scientist` and all 20 TA-1/DO-1/W1/W2 commits carry `Co-Authored-By` trailers. Removing them needs a history rewrite that changes the frozen DO-1 hash `e9d2379` and the W2 tag; owner decision (e.g. squash-merge to `main` instead).
-- [ ] `.env` untracked and ignored; `.env.example` has no value; no key in logs or records.
-- [ ] `THIRD_PARTY_NOTICES.md` regenerated by the script (the fonts were added by hand). Done: `pydantic` declared in the `studio` extra; `webgl-constants` confirmed MIT (`LICENSE_REVIEW.md` section 1).
-- [x] Local Windows paths removed from `docs/PROJECT_STATE.md` (2026-10-15); re-grep for the Windows username before publishing (0 tracked hits on 2026-10-15 after the audit docs stopped quoting it).
-- [ ] No third-party binary assets tracked; screenshots/video in the repo are original.
-- [ ] README renders correctly; no private paths; CI green on the final head.
-- [x] Fresh-clone test (2026-10-15/16): clean GitHub clone of `feature/forge-loop` @ `ce48810` on a new VM slot, installed from scratch; Python 894 OK, vitest 137 + build, 237 browser checks, smoke and demo-trial verification all pass. Repeat on the final head only if code changes.
-- [x] Memory evaluation (`experiments/forge_loop/memory_eval/`) finished and written up honestly (2026-10-16: no evidence of a benefit, p = 0.773; the model never cited a lesson). Submission text may mention it only as tried with a null result.
-
-## Unresolved questions (record, do not guess)
-1. Does hackathon participation constitute Nebius's consent under Services Agreement §18.7?
-2. NVIDIA Nemotron licence for Super and Ultra; hosted/API-only use not addressed by the Nano text read.
-3. Nebius AUP, Service-Specific Terms and DPA not read.
-4. Hosted judging access (local reproduction, small hosted instance, or video only).
-5. Tavily bonus: not pursued.
-
-## Plan to the internal deadline
-Review drafts and decide the items above; capture footage from the live flow and record voice-over; final cut under 3:00 and unlisted YouTube upload; repository audit and fresh-clone test on a VM slot (start, test, stop); owner makes any visibility change; submit by Thu 29 Oct. This supersedes the earlier dated table, which predates the Forge Loop.
-
-## Cost status
-Latest recorded (2026-10-15 checkpoint): VM stopped; infra spend $3.86 of the $10 cap; inference 86 requests, $0.42 of the $15 cap. Figures may have grown since (later live runs and the running memory evaluation); check `forge_cloud.py spend` and the ledger.
+- [ ] **Reachable-history secret scan** on the final refs (snippet in `docs/MODEL_AND_SERVICE_TERMS.md` §3). The V1 release
+      audit scanned the new commits only.
+- [x] **No secrets in tracked files:** `.env` is untracked and ignored, and `.env.example` has no value.
+- [x] **No local Windows paths** in tracked docs (re-checked for V1).
+- [x] **Third-party notices are current.** The dependency files are unchanged since they were generated. `--check` reports
+      "stale" on this Windows venv only because its versions are older (numpy 2.4.6 vs the recorded 2.5.4). The committed
+      file matches the recorded environment and keeps the verified `webgl-constants` licence note.
+- [ ] **Nebius resource ids** (project and instance ids in `infra/nebius/` and some docs): decide whether to redact them
+      before going public. They are not credentials.
+- [ ] **CI green on the final head:** check the release record before publishing.

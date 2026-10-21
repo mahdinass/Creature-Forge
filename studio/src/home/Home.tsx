@@ -117,6 +117,11 @@ export function Home({ go }: { go: (t: Tab) => void }) {
             <button className="btn btn-create btn-lg" data-testid="cta-draw" onClick={() => go('sketch')}>Draw a creature</button>
             <button className="btn btn-investigate btn-lg" data-testid="cta-ai" onClick={() => go('demo')}>Watch an AI investigation</button>
           </div>
+          <div className="hero-actions hero-featured" data-testid="cta-featured">
+            <span>Shown in the demo video (recorded playback, no key needed):</span>
+            <button className="btn btn-ghost" data-testid="cta-recovery" onClick={() => go('recovery')}>Verified repair</button>
+            <button className="btn btn-ghost" data-testid="cta-nemotron" onClick={() => go('nemotron')}>Nemotron's experiment</button>
+          </div>
         </div>
       </section>
 
