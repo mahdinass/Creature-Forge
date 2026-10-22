@@ -1,0 +1,5634 @@
+{
+ "version": "experience_p0_analysis_v1",
+ "seed": 20261022,
+ "n_boot": 2000,
+ "k_grid": [
+  1,
+  3,
+  5,
+  9,
+  15,
+  25
+ ],
+ "inventory_sha256": "73fb8553bf8466554bf1009e202af97aa4e292ccca09f947d4608dd8e6153687",
+ "gates": {
+  "HDB FULL_VERIFIED level S (assigned tool)": {
+   "D1": false,
+   "D2": false,
+   "assigned": true,
+   "tier": "FULL_VERIFIED"
+  },
+  "HDB FULL_VERIFIED level P (policy-chosen)": {
+   "D1": false,
+   "D2": false,
+   "assigned": false,
+   "tier": "FULL_VERIFIED"
+  },
+  "HDB FULL_VERIFIED level X (cross-procedure)": {
+   "D1": false,
+   "D2": false,
+   "assigned": false,
+   "tier": "FULL_VERIFIED"
+  },
+  "CE STANDARDIZED_DEV_PROXY (complete matrix)": {
+   "D1": true,
+   "D2": false,
+   "assigned": true,
+   "tier": "STANDARDIZED_DEV_PROXY"
+  }
+ },
+ "decision_proxy": {
+  "n": 165,
+  "bases": 12,
+  "faults": [
+   "cadence_fast",
+   "feedback_loss",
+   "heavy_torso",
+   "placement_loss",
+   "posture_lean",
+   "short_feet",
+   "slippery",
+   "weak_motors"
+  ],
+  "tools": [
+   "feedback",
+   "foot_friction",
+   "foot_length",
+   "leg_length",
+   "placement",
+   "posture",
+   "stride",
+   "timing",
+   "torque_limit",
+   "torso_mass"
+  ],
+  "cf_catalogue": [
+   "feedback_gains_x2",
+   "foot_friction_x2.5",
+   "foot_length_x1.3",
+   "freq_x0.85",
+   "leg_length_x0.85",
+   "pitch_ref_-0.08",
+   "placement_gains_0.5",
+   "torque_limit_x1.6",
+   "torso_mass_x0.75"
+  ],
+  "missing_nominal_morph": 0,
+  "n_features": {
+   "morph": 7,
+   "obs": 14,
+   "cf": 72,
+   "faulty": 7
+  },
+  "instances_with_a_repairing_tool": 109,
+  "tool_repair_rates": {
+   "feedback": 0.297,
+   "foot_friction": 0.012,
+   "foot_length": 0.079,
+   "leg_length": 0.291,
+   "placement": 0.321,
+   "posture": 0.255,
+   "stride": 0.103,
+   "timing": 0.291,
+   "torque_limit": 0.085,
+   "torso_mass": 0.206
+  },
+  "information_cost_rollouts": {
+   "obs": 4,
+   "cf": 36
+  },
+  "faulty_body_equals_nominal_by_fault": {
+   "cadence_fast": "8/8",
+   "feedback_loss": "42/42",
+   "heavy_torso": "0/10",
+   "placement_loss": "20/20",
+   "posture_lean": "15/15",
+   "short_feet": "0/4",
+   "slippery": "0/35",
+   "weak_motors": "0/31"
+  },
+  "LOBO": {
+   "prior": {
+    "k": {},
+    "all": {
+     "n": 165,
+     "value_mem": 0.2606,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0,
+     "p_minus": 0.0
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3945,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6055,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0,
+     "p_minus": 0.0
+    },
+    "log_loss": 0.4603,
+    "brier": 0.1486,
+    "calibration": {
+     "intercept": -0.248,
+     "slope": 0.796,
+     "reliability": [
+      [
+       0.077,
+       0.091,
+       705
+      ],
+      [
+       0.28,
+       0.271,
+       945
+      ]
+     ]
+    }
+   },
+   "morph": {
+    "k": {
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2485,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4121,
+     "delta_vs_pi0": -0.0121,
+     "p_plus": 0.0606,
+     "p_minus": 0.0727
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3761,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6239,
+     "delta_vs_pi0": -0.0183,
+     "p_plus": 0.0917,
+     "p_minus": 0.1101
+    },
+    "log_loss": 0.4914,
+    "brier": 0.157,
+    "calibration": {
+     "intercept": -0.773,
+     "slope": 0.402,
+     "reliability": [
+      [
+       0.087,
+       0.121,
+       843
+      ],
+      [
+       0.299,
+       0.269,
+       659
+      ],
+      [
+       0.469,
+       0.277,
+       148
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2364,
+      "delta_vs_pi0": -0.0242,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2364,
+      "delta_vs_pi0": -0.0242,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2364,
+      "delta_vs_pi0": -0.0242,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2242,
+      "delta_vs_pi0": -0.0364,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2242,
+      "delta_vs_pi0": -0.0364,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2242,
+      "delta_vs_pi0": -0.0364,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2242,
+      "delta_vs_pi0": -0.0364,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2424,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2424,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2303,
+      "delta_vs_pi0": -0.0303,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2303,
+      "delta_vs_pi0": -0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0606
+     }
+    ]
+   },
+   "obs_only": {
+    "k": {
+     "stilts-drawn": 15,
+     "tiny-feet": 15,
+     "top-heavy": 15,
+     "walkrec-dev-m1-gen-0000": 15,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 15,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 15,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3455,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3152,
+     "delta_vs_pi0": 0.0848,
+     "p_plus": 0.1394,
+     "p_minus": 0.0545
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.5229,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.4771,
+     "delta_vs_pi0": 0.1284,
+     "p_plus": 0.211,
+     "p_minus": 0.0826
+    },
+    "log_loss": 0.4231,
+    "brier": 0.1373,
+    "calibration": {
+     "intercept": -0.379,
+     "slope": 0.731,
+     "reliability": [
+      [
+       0.071,
+       0.076,
+       903
+      ],
+      [
+       0.3,
+       0.29,
+       493
+      ],
+      [
+       0.499,
+       0.397,
+       194
+      ],
+      [
+       0.675,
+       0.5,
+       58
+      ],
+      [
+       0.865,
+       1.0,
+       2
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2909,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.303,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1091
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3212,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1394
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2545,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3212,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1394
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1394
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1394
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1394
+     }
+    ]
+   },
+   "obs_morph": {
+    "k": {
+     "stilts-drawn": 15,
+     "tiny-feet": 15,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 15,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3333,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3273,
+     "delta_vs_pi0": 0.0727,
+     "p_plus": 0.1576,
+     "p_minus": 0.0848
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.5046,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.4954,
+     "delta_vs_pi0": 0.1101,
+     "p_plus": 0.2385,
+     "p_minus": 0.1284
+    },
+    "log_loss": 0.4407,
+    "brier": 0.142,
+    "calibration": {
+     "intercept": -0.428,
+     "slope": 0.686,
+     "reliability": [
+      [
+       0.078,
+       0.079,
+       873
+      ],
+      [
+       0.296,
+       0.299,
+       575
+      ],
+      [
+       0.499,
+       0.359,
+       167
+      ],
+      [
+       0.67,
+       0.531,
+       32
+      ],
+      [
+       0.832,
+       0.667,
+       3
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2545,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2303,
+      "delta_vs_pi0": -0.0303,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2909,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.103
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3212,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1576
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2848,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.303,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1576
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1576
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1576
+     }
+    ]
+   },
+   "cf_only": {
+    "k": {
+     "stilts-drawn": 25,
+     "tiny-feet": 5,
+     "top-heavy": 3,
+     "walkrec-dev-m1-gen-0000": 5,
+     "walkrec-dev-m1-gen-0001": 3,
+     "walkrec-dev-m1-gen-0002": 3,
+     "walkrec-dev-m1-gen-0003": 3,
+     "walkrec-dev-m1-gen-0004": 3,
+     "walkrec-dev-m1-gen-0005": 9,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 3,
+     "weak-slippery": 3
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3818,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.2788,
+     "delta_vs_pi0": 0.1212,
+     "p_plus": 0.1636,
+     "p_minus": 0.0424
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.578,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.422,
+     "delta_vs_pi0": 0.1835,
+     "p_plus": 0.2477,
+     "p_minus": 0.0642
+    },
+    "log_loss": 0.4071,
+    "brier": 0.1237,
+    "calibration": {
+     "intercept": -0.117,
+     "slope": 0.684,
+     "reliability": [
+      [
+       0.042,
+       0.094,
+       1132
+      ],
+      [
+       0.292,
+       0.26,
+       300
+      ],
+      [
+       0.546,
+       0.54,
+       137
+      ],
+      [
+       0.725,
+       0.844,
+       32
+      ],
+      [
+       0.832,
+       0.714,
+       49
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.0909,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3576,
+      "delta_vs_pi0": 0.097,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.1091
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3758,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1576
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1636
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.3636,
+      "delta_vs_pi0": 0.103,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3758,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1636
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1636
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1636
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1636
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3818,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1636
+     }
+    ]
+   },
+   "interv": {
+    "k": {
+     "stilts-drawn": 25,
+     "tiny-feet": 15,
+     "top-heavy": 15,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 15,
+     "walkrec-dev-m1-gen-0002": 15,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 15,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 15,
+     "walkrec-dev-m1-gen-0007": 15,
+     "weak-slippery": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3273,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3333,
+     "delta_vs_pi0": 0.0667,
+     "p_plus": 0.1212,
+     "p_minus": 0.0545
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4954,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5046,
+     "delta_vs_pi0": 0.1009,
+     "p_plus": 0.1835,
+     "p_minus": 0.0826
+    },
+    "log_loss": 0.4059,
+    "brier": 0.1312,
+    "calibration": {
+     "intercept": -0.181,
+     "slope": 0.82,
+     "reliability": [
+      [
+       0.061,
+       0.071,
+       896
+      ],
+      [
+       0.291,
+       0.288,
+       586
+      ],
+      [
+       0.494,
+       0.43,
+       114
+      ],
+      [
+       0.69,
+       0.723,
+       47
+      ],
+      [
+       0.841,
+       0.571,
+       7
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2545,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.303,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3212,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.103
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1212
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.303,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1212
+     }
+    ]
+   },
+   "faulty_body (leak probe)": {
+    "k": {
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3152,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3455,
+     "delta_vs_pi0": 0.0545,
+     "p_plus": 0.1455,
+     "p_minus": 0.0909
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4771,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5229,
+     "delta_vs_pi0": 0.0826,
+     "p_plus": 0.2202,
+     "p_minus": 0.1376
+    },
+    "log_loss": 0.484,
+    "brier": 0.1572,
+    "calibration": {
+     "intercept": -0.709,
+     "slope": 0.442,
+     "reliability": [
+      [
+       0.084,
+       0.121,
+       845
+      ],
+      [
+       0.298,
+       0.275,
+       688
+      ],
+      [
+       0.504,
+       0.248,
+       117
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2545,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2424,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2424,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2485,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2424,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0909,
+      "positive_transfer": 0.1455
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2545,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2545,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2909,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0848,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0909,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0909,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0909,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0909,
+      "positive_transfer": 0.1455
+     }
+    ]
+   },
+   "faulty_body+obs+cf (leak probe)": {
+    "k": {
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 15,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3879,
+     "value_pi0": 0.2606,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.2727,
+     "delta_vs_pi0": 0.1273,
+     "p_plus": 0.1697,
+     "p_minus": 0.0424
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.5872,
+     "value_pi0": 0.3945,
+     "oracle_best": 1.0,
+     "regret_mem": 0.4128,
+     "delta_vs_pi0": 0.1927,
+     "p_plus": 0.2569,
+     "p_minus": 0.0642
+    },
+    "log_loss": 0.407,
+    "brier": 0.1321,
+    "calibration": {
+     "intercept": -0.146,
+     "slope": 0.868,
+     "reliability": [
+      [
+       0.067,
+       0.072,
+       904
+      ],
+      [
+       0.293,
+       0.298,
+       568
+      ],
+      [
+       0.491,
+       0.406,
+       133
+      ],
+      [
+       0.684,
+       0.711,
+       45
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.0909,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3576,
+      "delta_vs_pi0": 0.097,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3758,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3939,
+      "delta_vs_pi0": 0.1333,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1636
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3879,
+      "delta_vs_pi0": 0.1273,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1697
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2848,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.0909,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3758,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3879,
+      "delta_vs_pi0": 0.1273,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1697
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3879,
+      "delta_vs_pi0": 0.1273,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1697
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3879,
+      "delta_vs_pi0": 0.1273,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1697
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3879,
+      "delta_vs_pi0": 0.1273,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1697
+     }
+    ]
+   }
+  },
+  "LOFO (fault family held out)": {
+   "prior": {
+    "k": {},
+    "all": {
+     "n": 165,
+     "value_mem": 0.1939,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4667,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0,
+     "p_minus": 0.0
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.2936,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.7064,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0,
+     "p_minus": 0.0
+    },
+    "log_loss": 0.4879,
+    "brier": 0.1566,
+    "calibration": {
+     "intercept": -0.73,
+     "slope": 0.463,
+     "reliability": [
+      [
+       0.083,
+       0.118,
+       712
+      ],
+      [
+       0.298,
+       0.252,
+       938
+      ]
+     ]
+    }
+   },
+   "morph": {
+    "k": {
+     "cadence_fast": 25,
+     "feedback_loss": 25,
+     "heavy_torso": 25,
+     "placement_loss": 25,
+     "posture_lean": 25,
+     "short_feet": 25,
+     "slippery": 25,
+     "weak_motors": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2061,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4545,
+     "delta_vs_pi0": 0.0121,
+     "p_plus": 0.0727,
+     "p_minus": 0.0606
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3119,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6881,
+     "delta_vs_pi0": 0.0183,
+     "p_plus": 0.1101,
+     "p_minus": 0.0917
+    },
+    "log_loss": 0.4953,
+    "brier": 0.1587,
+    "calibration": {
+     "intercept": -0.829,
+     "slope": 0.393,
+     "reliability": [
+      [
+       0.09,
+       0.11,
+       808
+      ],
+      [
+       0.303,
+       0.297,
+       622
+      ],
+      [
+       0.474,
+       0.217,
+       212
+      ],
+      [
+       0.631,
+       0.0,
+       8
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.1758,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.1636,
+      "delta_vs_pi0": -0.0303,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.1636,
+      "delta_vs_pi0": -0.0303,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.1636,
+      "delta_vs_pi0": -0.0303,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.1697,
+      "delta_vs_pi0": -0.0242,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.1818,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.1879,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.1879,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     }
+    ]
+   },
+   "obs_only": {
+    "k": {
+     "cadence_fast": 25,
+     "feedback_loss": 9,
+     "heavy_torso": 25,
+     "placement_loss": 15,
+     "posture_lean": 25,
+     "short_feet": 25,
+     "slippery": 25,
+     "weak_motors": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3091,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3515,
+     "delta_vs_pi0": 0.1152,
+     "p_plus": 0.1333,
+     "p_minus": 0.0182
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4679,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5321,
+     "delta_vs_pi0": 0.1743,
+     "p_plus": 0.2018,
+     "p_minus": 0.0275
+    },
+    "log_loss": 0.4706,
+    "brier": 0.1545,
+    "calibration": {
+     "intercept": -0.729,
+     "slope": 0.518,
+     "reliability": [
+      [
+       0.057,
+       0.078,
+       747
+      ],
+      [
+       0.309,
+       0.25,
+       492
+      ],
+      [
+       0.493,
+       0.353,
+       343
+      ],
+      [
+       0.662,
+       0.304,
+       56
+      ],
+      [
+       0.843,
+       0.083,
+       12
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2848,
+      "delta_vs_pi0": 0.0909,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.303,
+      "delta_vs_pi0": 0.1091,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.1091
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.303,
+      "delta_vs_pi0": 0.1091,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.1333
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.1333
+     }
+    ]
+   },
+   "obs_morph": {
+    "k": {
+     "cadence_fast": 25,
+     "feedback_loss": 25,
+     "heavy_torso": 25,
+     "placement_loss": 25,
+     "posture_lean": 25,
+     "short_feet": 25,
+     "slippery": 25,
+     "weak_motors": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2242,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4364,
+     "delta_vs_pi0": 0.0303,
+     "p_plus": 0.0909,
+     "p_minus": 0.0606
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3394,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6606,
+     "delta_vs_pi0": 0.0459,
+     "p_plus": 0.1376,
+     "p_minus": 0.0917
+    },
+    "log_loss": 0.462,
+    "brier": 0.1501,
+    "calibration": {
+     "intercept": -0.645,
+     "slope": 0.628,
+     "reliability": [
+      [
+       0.086,
+       0.092,
+       750
+      ],
+      [
+       0.306,
+       0.236,
+       573
+      ],
+      [
+       0.49,
+       0.368,
+       310
+      ],
+      [
+       0.674,
+       0.118,
+       17
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.1879,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.1818,
+      "delta_vs_pi0": -0.0121,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.1758,
+      "delta_vs_pi0": -0.0182,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.1879,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     }
+    ]
+   },
+   "cf_only": {
+    "k": {
+     "cadence_fast": 3,
+     "feedback_loss": 1,
+     "heavy_torso": 3,
+     "placement_loss": 25,
+     "posture_lean": 25,
+     "short_feet": 3,
+     "slippery": 5,
+     "weak_motors": 9
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2606,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4,
+     "delta_vs_pi0": 0.0667,
+     "p_plus": 0.0848,
+     "p_minus": 0.0182
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3945,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6055,
+     "delta_vs_pi0": 0.1009,
+     "p_plus": 0.1284,
+     "p_minus": 0.0275
+    },
+    "log_loss": 0.4444,
+    "brier": 0.1383,
+    "calibration": {
+     "intercept": -0.338,
+     "slope": 0.595,
+     "reliability": [
+      [
+       0.069,
+       0.099,
+       1116
+      ],
+      [
+       0.275,
+       0.341,
+       328
+      ],
+      [
+       0.51,
+       0.485,
+       134
+      ],
+      [
+       0.695,
+       0.318,
+       44
+      ],
+      [
+       0.823,
+       0.679,
+       28
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0848
+     }
+    ]
+   },
+   "interv": {
+    "k": {
+     "cadence_fast": 15,
+     "feedback_loss": 15,
+     "heavy_torso": 25,
+     "placement_loss": 25,
+     "posture_lean": 25,
+     "short_feet": 15,
+     "slippery": 25,
+     "weak_motors": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2485,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4121,
+     "delta_vs_pi0": 0.0545,
+     "p_plus": 0.097,
+     "p_minus": 0.0424
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3761,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6239,
+     "delta_vs_pi0": 0.0826,
+     "p_plus": 0.1468,
+     "p_minus": 0.0642
+    },
+    "log_loss": 0.4328,
+    "brier": 0.1391,
+    "calibration": {
+     "intercept": -0.408,
+     "slope": 0.696,
+     "reliability": [
+      [
+       0.069,
+       0.075,
+       852
+      ],
+      [
+       0.299,
+       0.284,
+       577
+      ],
+      [
+       0.495,
+       0.4,
+       185
+      ],
+      [
+       0.666,
+       0.514,
+       35
+      ],
+      [
+       0.836,
+       0.0,
+       1
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.1879,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2121,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     }
+    ]
+   },
+   "faulty_body (leak probe)": {
+    "k": {
+     "cadence_fast": 25,
+     "feedback_loss": 25,
+     "heavy_torso": 25,
+     "placement_loss": 25,
+     "posture_lean": 25,
+     "short_feet": 25,
+     "slippery": 25,
+     "weak_motors": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2727,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3879,
+     "delta_vs_pi0": 0.0788,
+     "p_plus": 0.1333,
+     "p_minus": 0.0545
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4128,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5872,
+     "delta_vs_pi0": 0.1193,
+     "p_plus": 0.2018,
+     "p_minus": 0.0826
+    },
+    "log_loss": 0.502,
+    "brier": 0.1619,
+    "calibration": {
+     "intercept": -0.878,
+     "slope": 0.367,
+     "reliability": [
+      [
+       0.086,
+       0.109,
+       760
+      ],
+      [
+       0.308,
+       0.277,
+       649
+      ],
+      [
+       0.471,
+       0.256,
+       219
+      ],
+      [
+       0.63,
+       0.045,
+       22
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1333
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0727,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1333
+     }
+    ]
+   },
+   "faulty_body+obs+cf (leak probe)": {
+    "k": {
+     "cadence_fast": 25,
+     "feedback_loss": 15,
+     "heavy_torso": 25,
+     "placement_loss": 25,
+     "posture_lean": 25,
+     "short_feet": 25,
+     "slippery": 25,
+     "weak_motors": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2545,
+     "value_pi0": 0.1939,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4061,
+     "delta_vs_pi0": 0.0606,
+     "p_plus": 0.103,
+     "p_minus": 0.0424
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3853,
+     "value_pi0": 0.2936,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6147,
+     "delta_vs_pi0": 0.0917,
+     "p_plus": 0.156,
+     "p_minus": 0.0642
+    },
+    "log_loss": 0.4452,
+    "brier": 0.1431,
+    "calibration": {
+     "intercept": -0.499,
+     "slope": 0.613,
+     "reliability": [
+      [
+       0.068,
+       0.081,
+       843
+      ],
+      [
+       0.3,
+       0.278,
+       575
+      ],
+      [
+       0.487,
+       0.407,
+       199
+      ],
+      [
+       0.669,
+       0.355,
+       31
+      ],
+      [
+       0.837,
+       0.0,
+       2
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.1879,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2182,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.103
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.1939,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2061,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2242,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.103
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.103
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.103
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.103
+     }
+    ]
+   }
+  },
+  "LOGO (generator group held out)": {
+   "prior": {
+    "k": {},
+    "all": {
+     "n": 165,
+     "value_mem": 0.2303,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4303,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0,
+     "p_minus": 0.0
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3486,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6514,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0,
+     "p_minus": 0.0
+    },
+    "log_loss": 0.4719,
+    "brier": 0.1513,
+    "calibration": {
+     "intercept": -0.5,
+     "slope": 0.568,
+     "reliability": [
+      [
+       0.087,
+       0.121,
+       825
+      ],
+      [
+       0.282,
+       0.267,
+       825
+      ]
+     ]
+    }
+   },
+   "morph": {
+    "k": {
+     "hand": 25,
+     "walkrec-m1": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2364,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4242,
+     "delta_vs_pi0": 0.0061,
+     "p_plus": 0.0182,
+     "p_minus": 0.0121
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3578,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6422,
+     "delta_vs_pi0": 0.0092,
+     "p_plus": 0.0275,
+     "p_minus": 0.0183
+    },
+    "log_loss": 0.4943,
+    "brier": 0.157,
+    "calibration": {
+     "intercept": -0.788,
+     "slope": 0.368,
+     "reliability": [
+      [
+       0.093,
+       0.132,
+       916
+      ],
+      [
+       0.311,
+       0.275,
+       628
+      ],
+      [
+       0.49,
+       0.245,
+       106
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0182
+     }
+    ]
+   },
+   "obs_only": {
+    "k": {
+     "hand": 25,
+     "walkrec-m1": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3515,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3091,
+     "delta_vs_pi0": 0.1212,
+     "p_plus": 0.1818,
+     "p_minus": 0.0606
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.5321,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.4679,
+     "delta_vs_pi0": 0.1835,
+     "p_plus": 0.2752,
+     "p_minus": 0.0917
+    },
+    "log_loss": 0.4486,
+    "brier": 0.1448,
+    "calibration": {
+     "intercept": -0.567,
+     "slope": 0.592,
+     "reliability": [
+      [
+       0.074,
+       0.09,
+       865
+      ],
+      [
+       0.29,
+       0.264,
+       519
+      ],
+      [
+       0.49,
+       0.358,
+       176
+      ],
+      [
+       0.707,
+       0.472,
+       89
+      ],
+      [
+       0.833,
+       0.0,
+       1
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2909,
+      "delta_vs_pi0": 0.0606,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.097,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.103,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3394,
+      "delta_vs_pi0": 0.1091,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1697
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3455,
+      "delta_vs_pi0": 0.1152,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1758
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1818
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.103
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.103,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1394
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.103,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.1576
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1818
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1818
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1818
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1818
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3515,
+      "delta_vs_pi0": 0.1212,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1818
+     }
+    ]
+   },
+   "obs_morph": {
+    "k": {
+     "hand": 25,
+     "walkrec-m1": 5
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.3152,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3455,
+     "delta_vs_pi0": 0.0848,
+     "p_plus": 0.1515,
+     "p_minus": 0.0667
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4771,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5229,
+     "delta_vs_pi0": 0.1284,
+     "p_plus": 0.2294,
+     "p_minus": 0.1009
+    },
+    "log_loss": 0.4987,
+    "brier": 0.1572,
+    "calibration": {
+     "intercept": -0.733,
+     "slope": 0.396,
+     "reliability": [
+      [
+       0.07,
+       0.127,
+       983
+      ],
+      [
+       0.323,
+       0.258,
+       430
+      ],
+      [
+       0.525,
+       0.34,
+       162
+      ],
+      [
+       0.721,
+       0.305,
+       59
+      ],
+      [
+       0.89,
+       0.688,
+       16
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.097,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.1212
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.103,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.1333
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3333,
+      "delta_vs_pi0": 0.103,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.1394
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3273,
+      "delta_vs_pi0": 0.097,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3091,
+      "delta_vs_pi0": 0.0788,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1455
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2061,
+      "delta_vs_pi0": -0.0242,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0545,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2545,
+      "delta_vs_pi0": 0.0242,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1091
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.3152,
+      "delta_vs_pi0": 0.0848,
+      "negative_transfer": 0.0667,
+      "positive_transfer": 0.1515
+     }
+    ]
+   },
+   "cf_only": {
+    "k": {
+     "hand": 15,
+     "walkrec-m1": 15
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.297,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3636,
+     "delta_vs_pi0": 0.0667,
+     "p_plus": 0.0727,
+     "p_minus": 0.0061
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4495,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5505,
+     "delta_vs_pi0": 0.1009,
+     "p_plus": 0.1101,
+     "p_minus": 0.0092
+    },
+    "log_loss": 0.4548,
+    "brier": 0.1361,
+    "calibration": {
+     "intercept": -0.2,
+     "slope": 0.538,
+     "reliability": [
+      [
+       0.05,
+       0.11,
+       1138
+      ],
+      [
+       0.288,
+       0.337,
+       359
+      ],
+      [
+       0.502,
+       0.444,
+       126
+      ],
+      [
+       0.689,
+       0.667,
+       27
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2485,
+      "delta_vs_pi0": 0.0182,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0424
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2848,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.297,
+      "delta_vs_pi0": 0.0667,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0727
+     }
+    ]
+   },
+   "interv": {
+    "k": {
+     "hand": 25,
+     "walkrec-m1": 9
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2667,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3939,
+     "delta_vs_pi0": 0.0364,
+     "p_plus": 0.097,
+     "p_minus": 0.0606
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.4037,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.5963,
+     "delta_vs_pi0": 0.055,
+     "p_plus": 0.1468,
+     "p_minus": 0.0917
+    },
+    "log_loss": 0.4499,
+    "brier": 0.1424,
+    "calibration": {
+     "intercept": -0.526,
+     "slope": 0.537,
+     "reliability": [
+      [
+       0.057,
+       0.087,
+       913
+      ],
+      [
+       0.284,
+       0.264,
+       459
+      ],
+      [
+       0.466,
+       0.431,
+       174
+      ],
+      [
+       0.678,
+       0.414,
+       87
+      ],
+      [
+       0.851,
+       0.529,
+       17
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0545
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2848,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0727
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.0848
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.097
+     }
+    ]
+   },
+   "faulty_body (leak probe)": {
+    "k": {
+     "hand": 25,
+     "walkrec-m1": 25
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2303,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.4303,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.0364,
+     "p_minus": 0.0364
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.3486,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.6514,
+     "delta_vs_pi0": 0.0,
+     "p_plus": 0.055,
+     "p_minus": 0.055
+    },
+    "log_loss": 0.4749,
+    "brier": 0.1523,
+    "calibration": {
+     "intercept": -0.626,
+     "slope": 0.471,
+     "reliability": [
+      [
+       0.089,
+       0.125,
+       914
+      ],
+      [
+       0.297,
+       0.283,
+       650
+      ],
+      [
+       0.454,
+       0.26,
+       77
+      ],
+      [
+       0.628,
+       0.222,
+       9
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0,
+      "positive_transfer": 0.0
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0061
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0121,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0303
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2242,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2364,
+      "delta_vs_pi0": 0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0242
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2303,
+      "delta_vs_pi0": 0.0,
+      "negative_transfer": 0.0364,
+      "positive_transfer": 0.0364
+     }
+    ]
+   },
+   "faulty_body+obs+cf (leak probe)": {
+    "k": {
+     "hand": 25,
+     "walkrec-m1": 5
+    },
+    "all": {
+     "n": 165,
+     "value_mem": 0.2788,
+     "value_pi0": 0.2303,
+     "oracle_best": 0.6606,
+     "regret_mem": 0.3818,
+     "delta_vs_pi0": 0.0485,
+     "p_plus": 0.1273,
+     "p_minus": 0.0788
+    },
+    "with_repairing_tool": {
+     "n": 109,
+     "value_mem": 0.422,
+     "value_pi0": 0.3486,
+     "oracle_best": 1.0,
+     "regret_mem": 0.578,
+     "delta_vs_pi0": 0.0734,
+     "p_plus": 0.1927,
+     "p_minus": 0.1193
+    },
+    "log_loss": 0.4596,
+    "brier": 0.1448,
+    "calibration": {
+     "intercept": -0.516,
+     "slope": 0.498,
+     "reliability": [
+      [
+       0.058,
+       0.108,
+       1042
+      ],
+      [
+       0.312,
+       0.289,
+       374
+      ],
+      [
+       0.527,
+       0.385,
+       148
+      ],
+      [
+       0.714,
+       0.441,
+       59
+      ],
+      [
+       0.887,
+       0.593,
+       27
+      ]
+     ]
+    },
+    "risk_coverage_sim": [
+     {
+      "coverage": 0.1,
+      "value": 0.2424,
+      "delta_vs_pi0": 0.0121,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0182
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0061,
+      "positive_transfer": 0.0485
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0606
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2848,
+      "delta_vs_pi0": 0.0545,
+      "negative_transfer": 0.0242,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0788
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0424,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0485,
+      "positive_transfer": 0.097
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.1091
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1091
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     }
+    ],
+    "risk_coverage_benefit": [
+     {
+      "coverage": 0.1,
+      "value": 0.2242,
+      "delta_vs_pi0": -0.0061,
+      "negative_transfer": 0.0182,
+      "positive_transfer": 0.0121
+     },
+     {
+      "coverage": 0.2,
+      "value": 0.2667,
+      "delta_vs_pi0": 0.0364,
+      "negative_transfer": 0.0303,
+      "positive_transfer": 0.0667
+     },
+     {
+      "coverage": 0.3,
+      "value": 0.2606,
+      "delta_vs_pi0": 0.0303,
+      "negative_transfer": 0.0606,
+      "positive_transfer": 0.0909
+     },
+     {
+      "coverage": 0.4,
+      "value": 0.2727,
+      "delta_vs_pi0": 0.0424,
+      "negative_transfer": 0.0727,
+      "positive_transfer": 0.1152
+     },
+     {
+      "coverage": 0.5,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.6,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.7,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.8,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 0.9,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     },
+     {
+      "coverage": 1.0,
+      "value": 0.2788,
+      "delta_vs_pi0": 0.0485,
+      "negative_transfer": 0.0788,
+      "positive_transfer": 0.1273
+     }
+    ]
+   }
+  },
+  "bootstrap": {
+   "LOBO": {
+    "interv_minus_obs_morph_value": {
+     "est": -0.0061,
+     "ci90": [
+      -0.052,
+      0.0343
+     ],
+     "ci95": [
+      -0.0616,
+      0.0414
+     ],
+     "n_groups": 12
+    },
+    "interv_delta_vs_pi0": {
+     "est": 0.0667,
+     "ci90": [
+      0.0235,
+      0.1104
+     ],
+     "ci95": [
+      0.0164,
+      0.12
+     ],
+     "n_groups": 12
+    },
+    "obs_morph_delta_vs_pi0": {
+     "est": 0.0727,
+     "ci90": [
+      0.006,
+      0.1462
+     ],
+     "ci95": [
+      -0.006,
+      0.1611
+     ],
+     "n_groups": 12
+    },
+    "interv_minus_obs_morph_logloss": {
+     "est": -0.0348,
+     "ci90": [
+      -0.0514,
+      -0.0198
+     ],
+     "ci95": [
+      -0.0541,
+      -0.0173
+     ],
+     "n_groups": 12
+    }
+   },
+   "LOFO (fault family held out)": {
+    "interv_minus_obs_morph_value": {
+     "est": 0.0242,
+     "ci90": [
+      -0.011,
+      0.0641
+     ],
+     "ci95": [
+      -0.0166,
+      0.0706
+     ],
+     "n_groups": 12
+    },
+    "interv_delta_vs_pi0": {
+     "est": 0.0545,
+     "ci90": [
+      -0.0055,
+      0.1193
+     ],
+     "ci95": [
+      -0.0118,
+      0.133
+     ],
+     "n_groups": 12
+    },
+    "obs_morph_delta_vs_pi0": {
+     "est": 0.0303,
+     "ci90": [
+      -0.0194,
+      0.0864
+     ],
+     "ci95": [
+      -0.0296,
+      0.0964
+     ],
+     "n_groups": 12
+    },
+    "interv_minus_obs_morph_logloss": {
+     "est": -0.0292,
+     "ci90": [
+      -0.0369,
+      -0.0225
+     ],
+     "ci95": [
+      -0.0384,
+      -0.0214
+     ],
+     "n_groups": 12
+    }
+   },
+   "LOGO (generator group held out)": {
+    "interv_minus_obs_morph_value": {
+     "est": -0.0485,
+     "ci90": [
+      -0.1042,
+      0.0065
+     ],
+     "ci95": [
+      -0.1157,
+      0.0169
+     ],
+     "n_groups": 12
+    },
+    "interv_delta_vs_pi0": {
+     "est": 0.0364,
+     "ci90": [
+      -0.0235,
+      0.0919
+     ],
+     "ci95": [
+      -0.037,
+      0.1023
+     ],
+     "n_groups": 12
+    },
+    "obs_morph_delta_vs_pi0": {
+     "est": 0.0848,
+     "ci90": [
+      0.0142,
+      0.1529
+     ],
+     "ci95": [
+      0.0,
+      0.1649
+     ],
+     "n_groups": 12
+    },
+    "interv_minus_obs_morph_logloss": {
+     "est": -0.0488,
+     "ci90": [
+      -0.0785,
+      -0.0216
+     ],
+     "ci95": [
+      -0.0852,
+      -0.0169
+     ],
+     "n_groups": 12
+    }
+   }
+  },
+  "matched_coverage_LOBO": {
+   "obs_morph/sim": [
+    {
+     "coverage": 0.1,
+     "value": 0.2545,
+     "delta_vs_pi0": -0.0061,
+     "negative_transfer": 0.0182,
+     "positive_transfer": 0.0121
+    },
+    {
+     "coverage": 0.2,
+     "value": 0.2303,
+     "delta_vs_pi0": -0.0303,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.0121
+    },
+    {
+     "coverage": 0.3,
+     "value": 0.2485,
+     "delta_vs_pi0": -0.0121,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.0303
+    },
+    {
+     "coverage": 0.4,
+     "value": 0.2485,
+     "delta_vs_pi0": -0.0121,
+     "negative_transfer": 0.0606,
+     "positive_transfer": 0.0485
+    },
+    {
+     "coverage": 0.5,
+     "value": 0.2606,
+     "delta_vs_pi0": 0.0,
+     "negative_transfer": 0.0667,
+     "positive_transfer": 0.0667
+    },
+    {
+     "coverage": 0.6,
+     "value": 0.2727,
+     "delta_vs_pi0": 0.0121,
+     "negative_transfer": 0.0667,
+     "positive_transfer": 0.0788
+    },
+    {
+     "coverage": 0.7,
+     "value": 0.2909,
+     "delta_vs_pi0": 0.0303,
+     "negative_transfer": 0.0727,
+     "positive_transfer": 0.103
+    },
+    {
+     "coverage": 0.8,
+     "value": 0.3212,
+     "delta_vs_pi0": 0.0606,
+     "negative_transfer": 0.0727,
+     "positive_transfer": 0.1333
+    },
+    {
+     "coverage": 0.9,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0788,
+     "positive_transfer": 0.1455
+    },
+    {
+     "coverage": 1.0,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0848,
+     "positive_transfer": 0.1576
+    }
+   ],
+   "obs_morph/benefit": [
+    {
+     "coverage": 0.1,
+     "value": 0.2788,
+     "delta_vs_pi0": 0.0182,
+     "negative_transfer": 0.0061,
+     "positive_transfer": 0.0242
+    },
+    {
+     "coverage": 0.2,
+     "value": 0.2788,
+     "delta_vs_pi0": 0.0182,
+     "negative_transfer": 0.0121,
+     "positive_transfer": 0.0303
+    },
+    {
+     "coverage": 0.3,
+     "value": 0.2848,
+     "delta_vs_pi0": 0.0242,
+     "negative_transfer": 0.0242,
+     "positive_transfer": 0.0485
+    },
+    {
+     "coverage": 0.4,
+     "value": 0.303,
+     "delta_vs_pi0": 0.0424,
+     "negative_transfer": 0.0364,
+     "positive_transfer": 0.0788
+    },
+    {
+     "coverage": 0.5,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.1152
+    },
+    {
+     "coverage": 0.6,
+     "value": 0.3091,
+     "delta_vs_pi0": 0.0485,
+     "negative_transfer": 0.0788,
+     "positive_transfer": 0.1273
+    },
+    {
+     "coverage": 0.7,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0848,
+     "positive_transfer": 0.1515
+    },
+    {
+     "coverage": 0.8,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0848,
+     "positive_transfer": 0.1576
+    },
+    {
+     "coverage": 0.9,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0848,
+     "positive_transfer": 0.1576
+    },
+    {
+     "coverage": 1.0,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0848,
+     "positive_transfer": 0.1576
+    }
+   ],
+   "interv/sim": [
+    {
+     "coverage": 0.1,
+     "value": 0.2545,
+     "delta_vs_pi0": -0.0061,
+     "negative_transfer": 0.0061,
+     "positive_transfer": 0.0
+    },
+    {
+     "coverage": 0.2,
+     "value": 0.2788,
+     "delta_vs_pi0": 0.0182,
+     "negative_transfer": 0.0061,
+     "positive_transfer": 0.0242
+    },
+    {
+     "coverage": 0.3,
+     "value": 0.2606,
+     "delta_vs_pi0": 0.0,
+     "negative_transfer": 0.0303,
+     "positive_transfer": 0.0303
+    },
+    {
+     "coverage": 0.4,
+     "value": 0.2727,
+     "delta_vs_pi0": 0.0121,
+     "negative_transfer": 0.0303,
+     "positive_transfer": 0.0424
+    },
+    {
+     "coverage": 0.5,
+     "value": 0.2667,
+     "delta_vs_pi0": 0.0061,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.0485
+    },
+    {
+     "coverage": 0.6,
+     "value": 0.2788,
+     "delta_vs_pi0": 0.0182,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.0606
+    },
+    {
+     "coverage": 0.7,
+     "value": 0.303,
+     "delta_vs_pi0": 0.0424,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.0848
+    },
+    {
+     "coverage": 0.8,
+     "value": 0.3212,
+     "delta_vs_pi0": 0.0606,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.103
+    },
+    {
+     "coverage": 0.9,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.1152
+    },
+    {
+     "coverage": 1.0,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0545,
+     "positive_transfer": 0.1212
+    }
+   ],
+   "interv/benefit": [
+    {
+     "coverage": 0.1,
+     "value": 0.2606,
+     "delta_vs_pi0": 0.0,
+     "negative_transfer": 0.0121,
+     "positive_transfer": 0.0121
+    },
+    {
+     "coverage": 0.2,
+     "value": 0.2667,
+     "delta_vs_pi0": 0.0061,
+     "negative_transfer": 0.0182,
+     "positive_transfer": 0.0242
+    },
+    {
+     "coverage": 0.3,
+     "value": 0.303,
+     "delta_vs_pi0": 0.0424,
+     "negative_transfer": 0.0182,
+     "positive_transfer": 0.0606
+    },
+    {
+     "coverage": 0.4,
+     "value": 0.3152,
+     "delta_vs_pi0": 0.0545,
+     "negative_transfer": 0.0242,
+     "positive_transfer": 0.0788
+    },
+    {
+     "coverage": 0.5,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0424,
+     "positive_transfer": 0.1152
+    },
+    {
+     "coverage": 0.6,
+     "value": 0.3333,
+     "delta_vs_pi0": 0.0727,
+     "negative_transfer": 0.0485,
+     "positive_transfer": 0.1212
+    },
+    {
+     "coverage": 0.7,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0545,
+     "positive_transfer": 0.1212
+    },
+    {
+     "coverage": 0.8,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0545,
+     "positive_transfer": 0.1212
+    },
+    {
+     "coverage": 0.9,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0545,
+     "positive_transfer": 0.1212
+    },
+    {
+     "coverage": 1.0,
+     "value": 0.3273,
+     "delta_vs_pi0": 0.0667,
+     "negative_transfer": 0.0545,
+     "positive_transfer": 0.1212
+    }
+   ]
+  },
+  "shuffled_LOBO": {
+   "obs_morph": {
+    "real": 0.3333,
+    "pi0": 0.2606,
+    "shuffled_mean": 0.2733,
+    "shuffled_range": [
+     0.2182,
+     0.3212
+    ],
+    "advantage_retained_by_shuffle": 0.175
+   },
+   "interv": {
+    "real": 0.3273,
+    "pi0": 0.2606,
+    "shuffled_mean": 0.2694,
+    "shuffled_range": [
+     0.1879,
+     0.3212
+    ],
+    "advantage_retained_by_shuffle": 0.132
+   }
+  },
+  "hard_negative_LOBO": {
+   "n_queries": 105,
+   "interv": {
+    "est": 0.5143,
+    "ci90": [
+     0.4528,
+     0.5856
+    ],
+    "ci95": [
+     0.44,
+     0.6
+    ],
+    "n_groups": 12
+   },
+   "obs_morph": {
+    "est": 0.4667,
+    "ci90": [
+     0.4091,
+     0.5294
+    ],
+    "ci95": [
+     0.3983,
+     0.5408
+    ],
+    "n_groups": 12
+   },
+   "interv_minus_obs_morph": {
+    "est": 0.0476,
+    "ci90": [
+     0.0177,
+     0.0806
+    ],
+    "ci95": [
+     0.0104,
+     0.0853
+    ],
+    "n_groups": 12
+   }
+  },
+  "primary_contrast": {
+   "statistic": "LOBO decision value (repairs by the top tool, proxy) of interv minus obs_morph",
+   "estimate": -0.0061,
+   "ci90": [
+    -0.052,
+    0.0343
+   ],
+   "ci90_excludes_0": false,
+   "shuffle_loses_half_of_advantage_over_pi0": true,
+   "lofo_same_sign": false,
+   "interventional_decision_signal_present": false
+  }
+ },
+ "diagnostic_hdb": {
+  "n": 302,
+  "bases": 24,
+  "families": [
+   "pitch_sensor_bias",
+   "payload_offset",
+   "low_ground_friction",
+   "short_feet",
+   "feedback_gain_loss",
+   "actuator_weakness",
+   "one_side_weakness",
+   "clock_fault",
+   "heavy_torso"
+  ],
+  "cf_catalogue": [
+   "cf:balance_gain@x0.5",
+   "cf:balance_gain@x2",
+   "cf:foot_friction@x2",
+   "cf:foot_length@x0.7",
+   "cf:foot_length@x1.5",
+   "cf:fp_kd@+0.2R",
+   "cf:freq@x0.85",
+   "cf:freq@x1.2",
+   "cf:hip_bias@+0.1R",
+   "cf:hip_bias@-0.1R",
+   "cf:pitch_ref@+0.1R",
+   "cf:pitch_ref@-0.1R",
+   "cf:torque_limit@x2",
+   "cf:torso_mass@x0.7"
+  ],
+  "cf_missing_fraction": 0.233,
+  "n_features": {
+   "morph": 7,
+   "obs": 14,
+   "cond": 16,
+   "cf": 70,
+   "belief": 9
+  },
+  "LOBO": {
+   "prior": {
+    "k": {},
+    "n": 302,
+    "log_loss": 2.1499,
+    "brier": 0.8777,
+    "top1": 0.1424,
+    "ece": 0.0269,
+    "selective_acc": {
+     "0.25": 0.0526,
+     "0.5": 0.0927,
+     "0.75": 0.1195,
+     "1.0": 0.1424
+    }
+   },
+   "morph": {
+    "k": {
+     "hdb-v1-gen-0004": 25,
+     "hdb-v1-gen-0008": 25,
+     "hdb-v1-gen-0011": 25,
+     "hdb-v1-gen-0013": 25,
+     "hdb-v1-gen-0024": 25,
+     "hdb-v1-gen-0028": 25,
+     "hdb-v1-gen-0030": 25,
+     "hdb-v1-gen-0034": 25,
+     "hdb-v1-gen-0036": 25,
+     "hdb-v1-gen-0037": 25,
+     "hdb-v1-gen-0038": 25,
+     "hdb-v1-gen-0039": 25,
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "n": 302,
+    "log_loss": 2.3673,
+    "brier": 0.8984,
+    "top1": 0.1556,
+    "ece": 0.0567,
+    "selective_acc": {
+     "0.25": 0.1447,
+     "0.5": 0.1523,
+     "0.75": 0.1681,
+     "1.0": 0.1556
+    }
+   },
+   "obs_morph": {
+    "k": {
+     "hdb-v1-gen-0004": 25,
+     "hdb-v1-gen-0008": 25,
+     "hdb-v1-gen-0011": 25,
+     "hdb-v1-gen-0013": 25,
+     "hdb-v1-gen-0024": 25,
+     "hdb-v1-gen-0028": 25,
+     "hdb-v1-gen-0030": 25,
+     "hdb-v1-gen-0034": 25,
+     "hdb-v1-gen-0036": 25,
+     "hdb-v1-gen-0037": 25,
+     "hdb-v1-gen-0038": 25,
+     "hdb-v1-gen-0039": 25,
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "n": 302,
+    "log_loss": 2.1806,
+    "brier": 0.8475,
+    "top1": 0.2914,
+    "ece": 0.0412,
+    "selective_acc": {
+     "0.25": 0.3553,
+     "0.5": 0.3444,
+     "0.75": 0.3186,
+     "1.0": 0.2914
+    }
+   },
+   "obs_cond_morph": {
+    "k": {
+     "hdb-v1-gen-0004": 1,
+     "hdb-v1-gen-0008": 25,
+     "hdb-v1-gen-0011": 25,
+     "hdb-v1-gen-0013": 1,
+     "hdb-v1-gen-0024": 25,
+     "hdb-v1-gen-0028": 1,
+     "hdb-v1-gen-0030": 1,
+     "hdb-v1-gen-0034": 25,
+     "hdb-v1-gen-0036": 1,
+     "hdb-v1-gen-0037": 25,
+     "hdb-v1-gen-0038": 25,
+     "hdb-v1-gen-0039": 25,
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 1,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 1,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "n": 302,
+    "log_loss": 2.1022,
+    "brier": 0.8384,
+    "top1": 0.3212,
+    "ece": 0.0821,
+    "selective_acc": {
+     "0.25": 0.3421,
+     "0.5": 0.4305,
+     "0.75": 0.3761,
+     "1.0": 0.3212
+    }
+   },
+   "interv": {
+    "k": {
+     "hdb-v1-gen-0004": 25,
+     "hdb-v1-gen-0008": 25,
+     "hdb-v1-gen-0011": 25,
+     "hdb-v1-gen-0013": 25,
+     "hdb-v1-gen-0024": 25,
+     "hdb-v1-gen-0028": 25,
+     "hdb-v1-gen-0030": 25,
+     "hdb-v1-gen-0034": 25,
+     "hdb-v1-gen-0036": 25,
+     "hdb-v1-gen-0037": 25,
+     "hdb-v1-gen-0038": 25,
+     "hdb-v1-gen-0039": 25,
+     "stilts-drawn": 25,
+     "tiny-feet": 25,
+     "top-heavy": 25,
+     "walkrec-dev-m1-gen-0000": 25,
+     "walkrec-dev-m1-gen-0001": 25,
+     "walkrec-dev-m1-gen-0002": 25,
+     "walkrec-dev-m1-gen-0003": 25,
+     "walkrec-dev-m1-gen-0004": 25,
+     "walkrec-dev-m1-gen-0005": 25,
+     "walkrec-dev-m1-gen-0006": 25,
+     "walkrec-dev-m1-gen-0007": 25,
+     "weak-slippery": 25
+    },
+    "n": 302,
+    "log_loss": 1.986,
+    "brier": 0.8018,
+    "top1": 0.3278,
+    "ece": 0.0568,
+    "selective_acc": {
+     "0.25": 0.6447,
+     "0.5": 0.4238,
+     "0.75": 0.3894,
+     "1.0": 0.3278
+    }
+   },
+   "belief_knn": {
+    "k": {
+     "hdb-v1-gen-0004": 15,
+     "hdb-v1-gen-0008": 15,
+     "hdb-v1-gen-0011": 15,
+     "hdb-v1-gen-0013": 15,
+     "hdb-v1-gen-0024": 15,
+     "hdb-v1-gen-0028": 15,
+     "hdb-v1-gen-0030": 15,
+     "hdb-v1-gen-0034": 15,
+     "hdb-v1-gen-0036": 15,
+     "hdb-v1-gen-0037": 15,
+     "hdb-v1-gen-0038": 15,
+     "hdb-v1-gen-0039": 15,
+     "stilts-drawn": 15,
+     "tiny-feet": 15,
+     "top-heavy": 15,
+     "walkrec-dev-m1-gen-0000": 15,
+     "walkrec-dev-m1-gen-0001": 15,
+     "walkrec-dev-m1-gen-0002": 15,
+     "walkrec-dev-m1-gen-0003": 15,
+     "walkrec-dev-m1-gen-0004": 15,
+     "walkrec-dev-m1-gen-0005": 15,
+     "walkrec-dev-m1-gen-0006": 15,
+     "walkrec-dev-m1-gen-0007": 15,
+     "weak-slippery": 15
+    },
+    "n": 302,
+    "log_loss": 0.3652,
+    "brier": 0.1177,
+    "top1": 0.9338,
+    "ece": 0.0256,
+    "selective_acc": {
+     "0.25": 0.9868,
+     "0.5": 0.9934,
+     "0.75": 0.9823,
+     "1.0": 0.9338
+    }
+   },
+   "model_posterior[obs] (no memory)": {
+    "n": 302,
+    "log_loss": 0.6554,
+    "brier": 0.2817,
+    "top1": 0.8113,
+    "ece": 0.0773,
+    "selective_acc": {
+     "0.25": 1.0,
+     "0.5": 0.9536,
+     "0.75": 0.9115,
+     "1.0": 0.8113
+    }
+   },
+   "model_posterior[obs+conditions] (no memory)": {
+    "n": 302,
+    "log_loss": 0.4888,
+    "brier": 0.1532,
+    "top1": 0.894,
+    "ece": 0.0471,
+    "selective_acc": {
+     "0.25": 1.0,
+     "0.5": 1.0,
+     "0.75": 0.9735,
+     "1.0": 0.894
+    }
+   },
+   "model_posterior[all] (no memory)": {
+    "n": 302,
+    "log_loss": 0.56,
+    "brier": 0.1282,
+    "top1": 0.9338,
+    "ece": 0.0636,
+    "selective_acc": {
+     "0.25": 1.0,
+     "0.5": 0.9934,
+     "0.75": 0.9912,
+     "1.0": 0.9338
+    }
+   }
+  },
+  "LOGO (generator group held out)": {
+   "prior": {
+    "k": {},
+    "n": 302,
+    "log_loss": 2.1403,
+    "brier": 0.8754,
+    "top1": 0.1589,
+    "ece": 0.015,
+    "selective_acc": {
+     "0.25": 0.1447,
+     "0.5": 0.1589,
+     "0.75": 0.1549,
+     "1.0": 0.1589
+    }
+   },
+   "morph": {
+    "k": {
+     "hand": 25,
+     "hdb-v1": 25,
+     "walkrec-m1": 25
+    },
+    "n": 302,
+    "log_loss": 2.4316,
+    "brier": 0.9002,
+    "top1": 0.1689,
+    "ece": 0.056,
+    "selective_acc": {
+     "0.25": 0.1842,
+     "0.5": 0.1854,
+     "0.75": 0.1726,
+     "1.0": 0.1689
+    }
+   },
+   "obs_morph": {
+    "k": {
+     "hand": 25,
+     "hdb-v1": 1,
+     "walkrec-m1": 25
+    },
+    "n": 302,
+    "log_loss": 2.1189,
+    "brier": 0.8809,
+    "top1": 0.2848,
+    "ece": 0.161,
+    "selective_acc": {
+     "0.25": 0.2895,
+     "0.5": 0.3046,
+     "0.75": 0.3053,
+     "1.0": 0.2848
+    }
+   },
+   "obs_cond_morph": {
+    "k": {
+     "hand": 25,
+     "hdb-v1": 25,
+     "walkrec-m1": 25
+    },
+    "n": 302,
+    "log_loss": 1.9647,
+    "brier": 0.816,
+    "top1": 0.3278,
+    "ece": 0.085,
+    "selective_acc": {
+     "0.25": 0.5263,
+     "0.5": 0.4901,
+     "0.75": 0.3894,
+     "1.0": 0.3278
+    }
+   },
+   "interv": {
+    "k": {
+     "hand": 25,
+     "hdb-v1": 9,
+     "walkrec-m1": 25
+    },
+    "n": 302,
+    "log_loss": 2.0648,
+    "brier": 0.8125,
+    "top1": 0.3344,
+    "ece": 0.0614,
+    "selective_acc": {
+     "0.25": 0.4868,
+     "0.5": 0.4238,
+     "0.75": 0.3717,
+     "1.0": 0.3344
+    }
+   },
+   "belief_knn": {
+    "k": {
+     "hand": 9,
+     "hdb-v1": 9,
+     "walkrec-m1": 9
+    },
+    "n": 302,
+    "log_loss": 0.3781,
+    "brier": 0.1231,
+    "top1": 0.9338,
+    "ece": 0.0445,
+    "selective_acc": {
+     "0.25": 0.9868,
+     "0.5": 0.9934,
+     "0.75": 0.9779,
+     "1.0": 0.9338
+    }
+   },
+   "model_posterior[obs] (no memory)": {
+    "n": 302,
+    "log_loss": 0.6554,
+    "brier": 0.2817,
+    "top1": 0.8113,
+    "ece": 0.0773,
+    "selective_acc": {
+     "0.25": 1.0,
+     "0.5": 0.9536,
+     "0.75": 0.9115,
+     "1.0": 0.8113
+    }
+   },
+   "model_posterior[obs+conditions] (no memory)": {
+    "n": 302,
+    "log_loss": 0.4888,
+    "brier": 0.1532,
+    "top1": 0.894,
+    "ece": 0.0471,
+    "selective_acc": {
+     "0.25": 1.0,
+     "0.5": 1.0,
+     "0.75": 0.9735,
+     "1.0": 0.894
+    }
+   },
+   "model_posterior[all] (no memory)": {
+    "n": 302,
+    "log_loss": 0.56,
+    "brier": 0.1282,
+    "top1": 0.9338,
+    "ece": 0.0636,
+    "selective_acc": {
+     "0.25": 1.0,
+     "0.5": 0.9934,
+     "0.75": 0.9912,
+     "1.0": 0.9338
+    }
+   }
+  },
+  "bootstrap_LOBO": {
+   "interv_minus_obs_morph_logp": {
+    "est": 0.1946,
+    "ci90": [
+     0.083,
+     0.3276
+    ],
+    "ci95": [
+     0.0655,
+     0.353
+    ],
+    "n_groups": 24
+   },
+   "interv_minus_obs_morph_top1": {
+    "est": 0.0364,
+    "ci90": [
+     -0.0265,
+     0.0951
+    ],
+    "ci95": [
+     -0.0388,
+     0.1078
+    ],
+    "n_groups": 24
+   },
+   "interv_minus_model_posterior_all_logp": {
+    "est": -1.426,
+    "ci90": [
+     -1.788,
+     -0.9862
+    ],
+    "ci95": [
+     -1.8426,
+     -0.9012
+    ],
+    "n_groups": 24
+   },
+   "obs_morph_minus_prior_logp": {
+    "est": -0.0307,
+    "ci90": [
+     -0.1486,
+     0.0818
+    ],
+    "ci95": [
+     -0.1724,
+     0.0987
+    ],
+    "n_groups": 24
+   }
+  },
+  "shuffled_interv_LOBO_log_loss": {
+   "mean": 2.393,
+   "range": [
+    2.2722,
+    2.5956
+   ]
+  }
+ },
+ "stored_amortized": {
+  "hdb/artifacts/hdb/s2T_A2.jsonl": {
+   "n": 36,
+   "amortized_mean_logp_truth": -1.928,
+   "amortized_top1": 0.306,
+   "engine_mean_log_mass_on_truth": -1.089,
+   "sha256": "84f5fd06975ce490ea57aec298b1792c2ff11ad0d6cdc009c1c9beac9f334ea0"
+  },
+  "hdb/artifacts/hdb/stage2_final/s2_transfer_A4.jsonl": {
+   "n": 0,
+   "amortized_mean_logp_truth": null,
+   "amortized_top1": null,
+   "engine_mean_log_mass_on_truth": null,
+   "sha256": "cb34a780d76f9325718e53f3d8345672ab642aa005a334cd96bf614dec7ec77a"
+  }
+ },
+ "cited": {
+  "level_c_lobo": {
+   "path": "experiments/causal_engineer/dev/level_c_lobo.json",
+   "sha256": "2b4398888858ac9e2a0fb6eb9b7f2ce4f7f1ad24100340cf50a9bc8fa8373ef7",
+   "keys": [
+    "meta",
+    "settings"
+   ]
+  },
+  "ds1_offline": {
+   "path": "experiments/causal_engineer/dev/hdb/ds1/offline_report.json",
+   "sha256": "61c9bfd65ce32f10cdd4054ee3eb096c2cef66fcf0c92a0846d730b86255f2b0",
+   "lobo": {
+    "b0": {
+     "log_loss": 0.6539430365081605,
+     "brier": 0.23020457072765194,
+     "ece": 0.00023671975935707357
+    },
+    "b1": {
+     "log_loss": 0.6089169505762733,
+     "brier": 0.2105315146166743,
+     "ece": 0.02538867700897373
+    },
+    "b2": {
+     "log_loss": 0.6394770180150151,
+     "brier": 0.22564805405145605,
+     "ece": 0.05652755910362692
+    },
+    "full": {
+     "log_loss": 0.567926444439601,
+     "brier": 0.19139366076993045,
+     "ece": 0.030052640499020296
+    },
+    "case_attention": {
+     "log_loss": 0.6116861687213857,
+     "brier": 0.21332625135096245,
+     "ece": 0.02419025703374595
+    }
+   },
+   "decision": {
+    "n_instances": 194,
+    "engine": 89.26428571428572,
+    "full": 85.66428571428571,
+    "b1": 83.93095238095239,
+    "case_attention": 74.44999999999999,
+    "random": 70.64845238095236,
+    "rhead_minus_engine_ci90": [
+     -9.336666666666668,
+     1.9333333333333318
+    ]
+   },
+   "gate_G_a": {
+    "passed": false,
+    "rule": "R-head LOBO log loss < B1 AND comparable-support FULL >= engine"
+   }
+  }
+ }
+}

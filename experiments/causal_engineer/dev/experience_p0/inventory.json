@@ -1,0 +1,2767 @@
+{
+ "version": "experience_audit_v1",
+ "manifest": [
+  {
+   "path": "hdb/artifacts/hdb/vs_a1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v1, HDB v1 bench",
+   "sha256": "0f05ae9699ba642520cadba1b7ac10bbab5b1b44a822831262a2c122d9e9f279",
+   "lines": 24,
+   "bytes": 673630
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs2_a1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v2",
+   "sha256": "62c2514373dc6eccf6aac41fd7f025e117e2ea2b9fab03c3ff111e833647ffd7",
+   "lines": 136,
+   "bytes": 4232944
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs4_A0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "A0 generic exhaustive",
+   "sha256": "bf5d252bbd4f106a4cfaf58c1355fcffad08391aa3df090d681547d38671570d",
+   "lines": 136,
+   "bytes": 1758678
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs4_A1c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v4, calibrated stop",
+   "sha256": "01e772697370e67a4b72499d782cddce33c7836c137b4289dc7d7f2995e6fdf1",
+   "lines": 136,
+   "bytes": 5080187
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs4_A1f.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v4, spend all",
+   "sha256": "0ae492fe57640a2debbdc476c8b41130ff069766023973aa84ecc7f038537ea5",
+   "lines": 136,
+   "bytes": 5117256
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs4_a1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v4, provisional stop",
+   "sha256": "e589653649a1fd3c8c1018df7977adf445502741e345de4163185624b7de91d9",
+   "lines": 136,
+   "bytes": 4966257
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs5_A1c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v5, calibrated stop",
+   "sha256": "e2ee1d53cdf81f2395a065c1b017ffc885b045fb533467b04a661429834ea520",
+   "lines": 136,
+   "bytes": 5309815
+  },
+  {
+   "path": "hdb/artifacts/hdb/fresh_A0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "A0 on fresh dev bases",
+   "sha256": "6724e57cea57f9707d4e58b36a5f15cbee0655901aa8eeb62a50ced1810a9502",
+   "lines": 220,
+   "bytes": 3310373
+  },
+  {
+   "path": "hdb/artifacts/hdb/fresh_A1c5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage1",
+   "note": "engine v5 on fresh dev bases",
+   "sha256": "3bde2b77676fd3d46592bb9ad50250ecfc8614376d6676b87d59f2a97d2149cb",
+   "lines": 220,
+   "bytes": 10779305
+  },
+  {
+   "path": "hdb/artifacts/hdb/mkv_dev_v1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "mkv",
+   "note": "MKV conditions, HDB v1 bench",
+   "sha256": "21118f59f5b55418dc9f375519963ead4c8fff7f8ca4ba62c5350256c42c80c9",
+   "lines": 46,
+   "bytes": 776701
+  },
+  {
+   "path": "hdb/artifacts/hdb/mkv4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "mkv",
+   "note": "MKV conditions, engine v4",
+   "sha256": "3ab40f7f553e9dc22999adcb2d3ee44f99759e8cc9446242a181314fe72fbe66",
+   "lines": 126,
+   "bytes": 2429555
+  },
+  {
+   "path": "hdb/artifacts/hdb/mkv5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "mkv",
+   "note": "MKV conditions, engine v5",
+   "sha256": "fd2dd81c847cb34be4071a8262ddf43b1dfbecf1cefc51b6a00ccafc9af65920",
+   "lines": 126,
+   "bytes": 2666227
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_equiv_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "A1e = A1c5 equivalence",
+   "sha256": "9de9b65459da1a54bcd6cd22df0374bd1392045cd028face6a9dc943decbdf9f",
+   "lines": 4,
+   "bytes": 168614
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "pilot",
+   "sha256": "f1ed0a44ecdce2db313760317f6def0601bc4f19538b89214ec5f57c7d2c80ac",
+   "lines": 2,
+   "bytes": 91772
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_actuator_weakness.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "08bae803cd0882a94a4aa6cab5bac00162ae82c40a44a85d9586d4b865c0fe10",
+   "lines": 1,
+   "bytes": 258419
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_clock_fault.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "52ffb042d6bf5519ce8f8d90d8be02b0a10c2dd7c443ed5ef41d9d95265ed465",
+   "lines": 1,
+   "bytes": 176248
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_feedback_gain_loss.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "8640e734bae98be0dc7431b76e549dbbe77fc704625f7b91a12e1fba22748db9",
+   "lines": 1,
+   "bytes": 185473
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_heavy_torso.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "d8e6fdf8c40959aa3734a91ba4e5c5c4d77294f3f424da8a7ff108af490d0406",
+   "lines": 1,
+   "bytes": 259806
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_low_ground_friction.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "c0f4f703ef368fc123c12be17844249bd64e6fc594975b4293aea5fc54f2804c",
+   "lines": 1,
+   "bytes": 219648
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_one_side_weakness.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "1c01a208544056bfe282b7f87ee10a69399b7ed6fcfe5f5029628957b40ff0a1",
+   "lines": 1,
+   "bytes": 265033
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_payload_offset.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "60f6f6ff4e7f734a0e9d65949bf8b75302498e662cb5cc3dd9eadde3fb639a16",
+   "lines": 1,
+   "bytes": 233782
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_pitch_sensor_bias.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "0ddd3372f20195e65f3aea01a8198d8bc5935ee967b2e2780e5f378dc974fbec",
+   "lines": 1,
+   "bytes": 224660
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot1_A3_short_feet.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "6647a47d717540df24980579d96f3858cac1e3a449eebb870af70ed1b599696b",
+   "lines": 1,
+   "bytes": 205876
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_actuator_weakness.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "9181698ea4482763e1b0f2a7de9aac6688ea570d6e711931199bfd9fd19057b2",
+   "lines": 1,
+   "bytes": 550533
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_clock_fault.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "80501117f9349dcdf53bb6a2e49465e24cb7746367f2b753d1eb903e462d875c",
+   "lines": 1,
+   "bytes": 151507
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_feedback_gain_loss.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "ade01cff0b22b8d33455017b2811f73c2240d60636540515aa15053e5dc32303",
+   "lines": 1,
+   "bytes": 384111
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_heavy_torso.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "39fb99c1c7a7dce114d520345acb91776361ec64bd12d1479899e347bf93e96d",
+   "lines": 1,
+   "bytes": 123041
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_low_ground_friction.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "21c2e4a036968ca82498132e904fd3380fec0e41fbe4b6d7aad3bcc07dc07ad0",
+   "lines": 1,
+   "bytes": 256066
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_one_side_weakness.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "c94a1bd0cde7e9d9eb21490c3aa48cbfcde7cc23ba23f68568987d631f084f15",
+   "lines": 1,
+   "bytes": 133062
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_payload_offset.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "ee4ab7426aff718adc828488a699060cfbf4eba4d385caf7fe158e34acba303f",
+   "lines": 1,
+   "bytes": 253516
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot2_A3_short_feet.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "1619e77867b8d97ba0ecfb4850a28fc142d5ff203efb15032cb701a4e09d478d",
+   "lines": 1,
+   "bytes": 136294
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_actuator_weakness.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "9a4ac24b2f23723c587c7fc4d0277fe0f503993b8fecfe6958e74c13dfd7958f",
+   "lines": 1,
+   "bytes": 95416
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_clock_fault.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "05dd92b14575f87413f79ab3a3bfa3cfb9ed2e3541a4e8c19e6aab5d2725fd3e",
+   "lines": 1,
+   "bytes": 381246
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_feedback_gain_loss.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "b76eb793c9bdc1465cff7ed4f22cb03730845968fdba4f2d90c15d5fe63f63ca",
+   "lines": 1,
+   "bytes": 147111
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_heavy_torso.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "ce8540e79f229bd87779edf98b37b94b870f5953f86f03e8f39a592a5d4df474",
+   "lines": 1,
+   "bytes": 135356
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_low_ground_friction.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "501f9fe1c326dd6306e28da79bb94ddf406ce123065b8c767415e6d4d8fd4fb4",
+   "lines": 1,
+   "bytes": 175398
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_one_side_weakness.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "23bcb89d2b7f3e7c48f93d460ff08dce5da815184e867daea12cbc6a847f8b56",
+   "lines": 1,
+   "bytes": 136353
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_payload_offset.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "f62ffbceb4e91d4dc0c77de73dce17817fb3f5e1de9c7c8cfe42035bb0b165fd",
+   "lines": 1,
+   "bytes": 234117
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_pitch_sensor_bias.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "bd6ffd1b69ac353998bc1a867dc14c47b994f73039489f96a4e45ffea38c30f1",
+   "lines": 1,
+   "bytes": 90229
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_pilot3_A4_short_feet.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "Nemotron pilots (init bases)",
+   "sha256": "38b78bdc4a4a7ace1e225b49f53eaa2f0e1eb0865ddcc3463c829285b722ffc0",
+   "lines": 1,
+   "bytes": 152529
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2_smoke_A3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "smoke",
+   "sha256": "8987f712d2e2668e03a01586522318724036f6c31feeede8fc24f1123b791c6b",
+   "lines": 1,
+   "bytes": 184069
+  },
+  {
+   "path": "hdb/artifacts/hdb/smoke_a3_live.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "live smoke",
+   "sha256": "9be4f80e80db0d9b19acacaabfb2715b8a6bae468ec785c003e23963f5c05390",
+   "lines": 3,
+   "bytes": 295877
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2T_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, engine",
+   "sha256": "2014fa80f8f333b1b2f8d4ba561da024516fb49b0334ef7a696acbfa535cdf56",
+   "lines": 36,
+   "bytes": 1897806
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2T_A2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, engine + amortized posterior",
+   "sha256": "84f5fd06975ce490ea57aec298b1792c2ff11ad0d6cdc009c1c9beac9f334ea0",
+   "lines": 36,
+   "bytes": 2165993
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2TDC_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer compositions, engine",
+   "sha256": "51200c3db225153441406856fafeacfcfb41ccf62c4932bcd1473a00705c475d",
+   "lines": 16,
+   "bytes": 848780
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2DC_exp_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "experience compositions, engine",
+   "sha256": "0d774b3cfc336333b89684a5ffc94a1972e4a63153cb5c7be86e672da8ec5305",
+   "lines": 16,
+   "bytes": 850312
+  },
+  {
+   "path": "hdb/artifacts/hdb/s2DC_exp_A3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "experience compositions, Nemotron",
+   "sha256": "3216a6116f6917f75eae1bd4aef3c430ab303b8c434d200371b8299534522d89",
+   "lines": 4,
+   "bytes": 1658918
+  },
+  {
+   "path": "hdb/artifacts/hdb/stage2_final/s2_transfer_A3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, Nemotron arms",
+   "sha256": "540b9415921b205a80ad62fe6ae9565f5c6d6027bae63e2fb1dee8dca374ea98",
+   "lines": 36,
+   "bytes": 10259202
+  },
+  {
+   "path": "hdb/artifacts/hdb/stage2_final/s2_transfer_A4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, Nemotron arms",
+   "sha256": "cb34a780d76f9325718e53f3d8345672ab642aa005a334cd96bf614dec7ec77a",
+   "lines": 36,
+   "bytes": 11167258
+  },
+  {
+   "path": "hdb/artifacts/hdb/stage2_final/s2_transfer_A4bad.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, Nemotron arms",
+   "sha256": "d0f4d9a528f51e89b080ae3331f51e3e8ea2e201841c51d5eab005be925087fd",
+   "lines": 12,
+   "bytes": 4810219
+  },
+  {
+   "path": "hdb/artifacts/hdb/stage2_final/s2_transfer_A4lfo.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, Nemotron arms",
+   "sha256": "6de56287d0eec10a4ecae2731c6659f4b7ada6422f39194fac40e3b822a8849a",
+   "lines": 8,
+   "bytes": 2305687
+  },
+  {
+   "path": "hdb/artifacts/hdb/stage2_final/s2_transfer_devcomp_A3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, Nemotron arms",
+   "sha256": "75cb303c6d54d6c4915d6af8e85e4a7682a590f50075e124a6e7dc2e88b1dda7",
+   "lines": 16,
+   "bytes": 7790118
+  },
+  {
+   "path": "hdb/artifacts/hdb/stage2_final/s2_transfer_devcomp_A4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "stage2",
+   "note": "transfer, Nemotron arms",
+   "sha256": "7c3f9c18ee225278022975614ee472c54ca1358f00c2b7d1c7ab9f31c4ac2dc8",
+   "lines": 16,
+   "bytes": 7857208
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1_equiv_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "equivalence",
+   "sha256": "24ed59e078a8d141286071e9b7f051e05953b13b928e2ed802d5068c425c4977",
+   "lines": 1,
+   "bytes": 42915
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1_smoke_A1e6.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "smoke",
+   "sha256": "0c38215a6d5fa10666a08963e73924154afcc4bcf444a2cfe81fd2948d886e94",
+   "lines": 1,
+   "bytes": 137952
+  },
+  {
+   "path": "ds1/pilot_A1e.c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "7887dbc86751d74759d8c80955f6bde5913ecd696438a7337c781886c24ca18c",
+   "lines": 1,
+   "bytes": 38246
+  },
+  {
+   "path": "ds1/pilot_A1e.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "357a66faadcab7c24ee1d71e185b4c723f7469d98197ce56f344e7b69ada96b3",
+   "lines": 2,
+   "bytes": 83690
+  },
+  {
+   "path": "ds1/pilot_A1e6.c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "5f92e0f69209a2268972bf014e6d0e95d8933499844424311fd9162229e60a7b",
+   "lines": 1,
+   "bytes": 87723
+  },
+  {
+   "path": "ds1/pilot_A1e6.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "dd8ac21f6e7254bcc64ace03634d83dc78839121309c1f61130f7823bfe5f845",
+   "lines": 3,
+   "bytes": 275925
+  },
+  {
+   "path": "ds1/pilot_A3v5.c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "2ede9373fa0e56bb5b985d7800ace9492f9df32c30fe209ac5c3e43c40589ffc",
+   "lines": 1,
+   "bytes": 365328
+  },
+  {
+   "path": "ds1/pilot_A3v5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "1847ad2384109c8f013348ae9bd83f980faf08a468222fe70c82099e98b7ab07",
+   "lines": 2,
+   "bytes": 668835
+  },
+  {
+   "path": "ds1/pilot_A4x.c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "b933176388e7034d70ad5847b0f28276e62ae41627286683635d87f9c9b9fcee",
+   "lines": 1,
+   "bytes": 231603
+  },
+  {
+   "path": "ds1/pilot_A4x.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "0c36c3915d251bbec755eb4514c4c830766fadd062f8e50825ba947ba978993a",
+   "lines": 2,
+   "bytes": 485314
+  },
+  {
+   "path": "ds1/pilot_A4x_noscientist.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "pilot (init bases)",
+   "sha256": "21be48f442c49e9137771085e12a5da1baecad0f62fcf3b619f8b11fc9b95e8a",
+   "lines": 1,
+   "bytes": 60928
+  },
+  {
+   "path": "ds1/gm_A1e6.c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "G-m compositions",
+   "sha256": "70bc2c3aa836f3c926e6e651cf362f3a1dff9b25e182cb7c1a619af687cde9e5",
+   "lines": 12,
+   "bytes": 1186421
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "8e3854eeda1f126ac8eda936187ac7d84ffecbb0afb75f79dea2d3f57d117576",
+   "lines": 6,
+   "bytes": 553684
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_s0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "8b7b8bbf191759dd27dd38a4aca9cd632f5f2ddde3b6a377f7975a716c93bcd1",
+   "lines": 5,
+   "bytes": 468331
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_s1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d",
+   "lines": 5,
+   "bytes": 429454
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_s2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d",
+   "lines": 5,
+   "bytes": 465194
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_s3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27",
+   "lines": 5,
+   "bytes": 396416
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_s4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102",
+   "lines": 5,
+   "bytes": 396172
+  },
+  {
+   "path": "ds1/eval/eval_A1e6_s5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97",
+   "lines": 5,
+   "bytes": 418212
+  },
+  {
+   "path": "ds1/eval/eval_A1e_c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "17be63b0933c7ac7c242efbab39f9d2e3e5683f43765c844b794c7f1a3575a09",
+   "lines": 6,
+   "bytes": 322451
+  },
+  {
+   "path": "ds1/eval/eval_A1e_s0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "bde50474978da0a96cbf2ee7971a2288d268e8792b5cd94deeff35cce62ade58",
+   "lines": 5,
+   "bytes": 273242
+  },
+  {
+   "path": "ds1/eval/eval_A1e_s1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "3e82f22f5e82e726d43adc1c6366823ec5db3282a76aa80aab0566afccd6455b",
+   "lines": 5,
+   "bytes": 204883
+  },
+  {
+   "path": "ds1/eval/eval_A1e_s2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "52c6da55201fc4fda98994e061829f5a657604b099ecd460ef0acb99725960de",
+   "lines": 5,
+   "bytes": 300825
+  },
+  {
+   "path": "ds1/eval/eval_A1e_s3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "dd76d5f7a51948647ad30d31998a150edcddaa00483c06435124478f356b2cc8",
+   "lines": 5,
+   "bytes": 240315
+  },
+  {
+   "path": "ds1/eval/eval_A1e_s4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "a2f7133d3d38eab86ee8ef1eda73c2108d5e18ba06044de7f2f65cebea179c0b",
+   "lines": 5,
+   "bytes": 210041
+  },
+  {
+   "path": "ds1/eval/eval_A1e_s5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "da9e3b0d560682b97d1043720c49b67aa0927083093c0f5cef1a68ee423cb79e",
+   "lines": 5,
+   "bytes": 266169
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "afddac43502188efec03ffe54c889851c3e5556b56764102dd639ede3d34fa5e",
+   "lines": 6,
+   "bytes": 2649167
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_s0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "6d7a2d371c37a06d04069a35ccca01d3627cf842f78c3cd355d50ed71666d41b",
+   "lines": 5,
+   "bytes": 2709440
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_s1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "d0808c7ca1c89276365de2493199db986d36fe41ab3424586d22629e2e7d87ff",
+   "lines": 5,
+   "bytes": 1501033
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_s2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "98ff2ba300b593bf82c098e6c6169f29bef9bb3f882187e1226117ce46b1e4e5",
+   "lines": 5,
+   "bytes": 2257977
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_s3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "1cf16158270682812148d399fab717b338779ae0b7ca4efc57f2c3893efa2fc5",
+   "lines": 5,
+   "bytes": 1807386
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_s4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "a0e9f5b2ea3972db5328163bc598b2a8492add86ac80d52149a7f03879e2c01a",
+   "lines": 5,
+   "bytes": 1553679
+  },
+  {
+   "path": "ds1/eval/eval_A3v5_s5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0",
+   "lines": 5,
+   "bytes": 1935155
+  },
+  {
+   "path": "ds1/eval/eval_A4x_c.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "a4c8b096ada8c1421673d47a16c75bfc66341cca8e652e7c9a0c13395ad2b365",
+   "lines": 6,
+   "bytes": 1567339
+  },
+  {
+   "path": "ds1/eval/eval_A4x_s0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "3d0c319f337285882effaaefcbbb82adb126dbff546b086874dc76ee79ff181f",
+   "lines": 5,
+   "bytes": 1529900
+  },
+  {
+   "path": "ds1/eval/eval_A4x_s1.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "dc146e385289947aa12e093ac169a8785067dcdba6cb4934f460dba008cd7e2d",
+   "lines": 5,
+   "bytes": 1087671
+  },
+  {
+   "path": "ds1/eval/eval_A4x_s2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "1726000c7cc03794060510f3e6ee6feeb01a6126e8c492ad0ce65dd2863db1c8",
+   "lines": 5,
+   "bytes": 1902994
+  },
+  {
+   "path": "ds1/eval/eval_A4x_s3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "d41970a915b8587218405990d605152f8593a1d4ab01dc1de07a2141e1a0f9f3",
+   "lines": 5,
+   "bytes": 943997
+  },
+  {
+   "path": "ds1/eval/eval_A4x_s4.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "91dcffe003eecbd9d054671bfc8d8b66eb3399a55bfacfc0972ae3230fe64f21",
+   "lines": 5,
+   "bytes": 1307753
+  },
+  {
+   "path": "ds1/eval/eval_A4x_s5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "dev-eval-2",
+   "sha256": "278c65dd43f9e8dc9a2df826116bfeb15f1323c9a53b6b8471c2a745d1b1db7f",
+   "lines": 5,
+   "bytes": 1393700
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0004_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "b04c7cd0e011377ecc8391f6af02a22eee931f0da13e2101ac3e8a8452d6c28a",
+   "lines": 1,
+   "bytes": 281863
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0004_payload_offset_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "e7b4a01a81985b141ef20360a667a276f4d978af1b7d6fb48025509c6d6f5d95",
+   "lines": 1,
+   "bytes": 301176
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0013_low_ground_friction_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "b51ee1e88edfd0db9f4b4c772c82f359abcb51ca71e0bc2948ec663f1c0717e1",
+   "lines": 1,
+   "bytes": 116135
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0064_one_side_weakness_3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "698da701ce6e9119d317b19667715cbbd3579693bbe131137affd2716c13c869",
+   "lines": 1,
+   "bytes": 285327
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_frz_stilts-drawn_one_side_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "efc4f4e19b5a981117b03f395664be5c028b6946457d2685b51e778c8f22924c",
+   "lines": 1,
+   "bytes": 508937
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0004_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "0f6c688f13075abbba6c43853ce7160487f89bac519e275334cc9f103909fa15",
+   "lines": 1,
+   "bytes": 272490
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0004_payload_offset_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "6e3ff3a210a0e914515d2243aee20aca1a3b9dce4ff9d2dff9c18a6482a7736c",
+   "lines": 1,
+   "bytes": 250927
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0013_low_ground_friction_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "0d47925a6f4e53d5c4ef8f53f2d9ec699e7e1071bccd9243debc2aee138c5fcb",
+   "lines": 1,
+   "bytes": 108300
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0064_one_side_weakness_3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "fcb955450b973207e4566b20cc4aca575f9e5aab93a65657c60d0a3eaadf031d",
+   "lines": 1,
+   "bytes": 399464
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r0_upd_stilts-drawn_one_side_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "a8b12e08bc68b79dfa7272ee269b44109bde31c86cd59ead3f64c792b202d24d",
+   "lines": 1,
+   "bytes": 272037
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0013_devcomp_low_ground_friction+actuator_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "34f431dd671461abb743341b291476f6df33e652aaf619b5a1b26ec6cf727a8f",
+   "lines": 1,
+   "bytes": 282980
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0028_one_side_weakness_5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "2c53b3f4cb60906881d81d5dea1c8cc3b686f4f8fc28e437405a093df2e02df9",
+   "lines": 1,
+   "bytes": 168146
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0038_low_ground_friction_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "2a41c1d86186c3ae1acd0c9f2dd472d012933c98e747490cd9a4c90178be7de1",
+   "lines": 1,
+   "bytes": 167119
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0064_pitch_sensor_bias_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "70a579e6af1c3866be0531bf2fa3eba25546a820d89de25e63d58abf94290caa",
+   "lines": 1,
+   "bytes": 197376
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_frz_stilts-drawn_clock_fault_3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "ebfb9147177eba33e528e7a68274a351207e4a3ef5c7facb3d5821bc1c7e56c3",
+   "lines": 1,
+   "bytes": 230549
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0013_devcomp_low_ground_friction+actuator_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "8e3e531354fad7e3aec98e5920f994ea59b06620debe4cf8eeb6530d3365b1aa",
+   "lines": 1,
+   "bytes": 382870
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0028_one_side_weakness_5.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "b2eb6a5b9d04898e53fb61cc2041b0aab7e9f15e36ba2eac25e0ee4e18dbaccd",
+   "lines": 1,
+   "bytes": 224246
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0038_low_ground_friction_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "990f068128a7209567151c08f6e588b7b63100536b37d43b70c9ebd6abe47450",
+   "lines": 1,
+   "bytes": 338386
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0064_pitch_sensor_bias_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "8396ebdb1b1113dbd86885541c9bcab62c0fc29e93327ef2abf7c02a3618037e",
+   "lines": 1,
+   "bytes": 109878
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r1_upd_stilts-drawn_clock_fault_3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "cef7be59524e944d2b7b659cce0e36c5c85f12697b71da031bf033da58b9db40",
+   "lines": 1,
+   "bytes": 231978
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0004_feedback_gain_loss_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "975e38fdebf370b8c2f5cfc3c11a566510ed49ccddff2878c29119e6ccd0e2da",
+   "lines": 1,
+   "bytes": 638979
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0013_low_ground_friction_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "20245ecf7da910ed1bb8a14a3b9097f3d8503d16280d09c6948a9c76ac6270dd",
+   "lines": 1,
+   "bytes": 164765
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "7739518eaf62da44971991dab2b454ed20de850b8d10ae1923285f1de47ffa84",
+   "lines": 1,
+   "bytes": 521386
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0036_pitch_sensor_bias_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "e3406b2cfabdb0fa35b25e95071ccfdabb409c180f52509195344670b2c21bb9",
+   "lines": 1,
+   "bytes": 334461
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0038_short_feet_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "be81ce0eb343f3b1dd589d8c9690e09d2e22e3d28df4d0f780fdcf609482df4b",
+   "lines": 1,
+   "bytes": 372462
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0004_feedback_gain_loss_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "6ebe6ced6c90665cd84cf321e996d6c118b6ca7696dff6fc822283ce3a259eb0",
+   "lines": 1,
+   "bytes": 315177
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0013_low_ground_friction_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "52e21b454be2e3726de8c31bbf4cad41c935775c540922b72512ff5925a6fa29",
+   "lines": 1,
+   "bytes": 152002
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "326685f654317d6ad1bd580b7a3c061c11c0b12c5c7fe75c981f908fd328aa1f",
+   "lines": 1,
+   "bytes": 300218
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0036_pitch_sensor_bias_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "1b5d85ea8d94832c7b9d89c1b7b7bb9a7f6c6583722356cfce5ba8f514841f2a",
+   "lines": 1,
+   "bytes": 211504
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0038_short_feet_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "2aad92884d4feb160929c0ddc0e6ffe71f25fae931675a7eded7ba1b860d68df",
+   "lines": 1,
+   "bytes": 149780
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++clock_fault.fast_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "14aa388cbeb09f2ccc93989112f44d82308ce284296161aada3d73b30e5cb734",
+   "lines": 1,
+   "bytes": 338765
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0036_one_side_weakness_3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "baa110d6d958d3b910681dac6524378da1913818cbfb993bde4e5ae4c1b8d1e5",
+   "lines": 1,
+   "bytes": 214123
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0036_payload_offset_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "cc9e3fa0d4b0ae31dc095c05c043e3903e036dea763462267e2cff6205e5d963",
+   "lines": 1,
+   "bytes": 214852
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0064_clock_fault_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "1bf7f4e890e70444c94e0425439a6a485f48f43e389a2f277fd316b01fdf3600",
+   "lines": 1,
+   "bytes": 279538
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0064_feedback_gain_loss_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "a072af307a08200b15ccb5c52515af0ae0b9e5c2ee13895a4f94b2b659eb35bc",
+   "lines": 1,
+   "bytes": 406443
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++clock_fault.fast_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "ccf2cff62d57244a46c57108ea605c5c4e87f22308c3090a78bbd41f3c951c40",
+   "lines": 1,
+   "bytes": 846817
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0036_one_side_weakness_3.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "b4e008add864ad9b8400de0db7a87b6a1c282b86b418518908be4aa384b751c3",
+   "lines": 1,
+   "bytes": 170709
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0036_payload_offset_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "37a363f9f79a2711d5a9cef41301470b403fcd7815460d4ca042d662da9bf958",
+   "lines": 1,
+   "bytes": 477645
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0064_clock_fault_2.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "e1f505e1b08f6816dff3a27680b468aa5e6af823016f60d68c054860cfdf7ec2",
+   "lines": 1,
+   "bytes": 547873
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0064_feedback_gain_loss_0.jsonl",
+   "root": "vm",
+   "kind": "episode",
+   "corpus": "ds1",
+   "note": "learning stream",
+   "sha256": "09efe98ac07f9cedd4df1991dba2b794dc9e5340267898d2a1557d925a7ccf55",
+   "lines": 1,
+   "bytes": 334170
+  },
+  {
+   "path": "experiments/ta1/phase1b_2026-10-20/ta1_phase1b.jsonl",
+   "root": "repo",
+   "kind": "harness",
+   "corpus": "ta1",
+   "note": "forced tool order, L1",
+   "sha256": "ebcf29eddbeffdf9b22234180957f25bc8ddd12bd6f6616a607b365c1c5aae67",
+   "lines": 2,
+   "bytes": 226652
+  },
+  {
+   "path": "experiments/ta1/a1_l4_pilot_2026-10-21/ta1_a1_l4.jsonl",
+   "root": "repo",
+   "kind": "harness",
+   "corpus": "ta1",
+   "note": "forced tool order, L4",
+   "sha256": "c43601b22ccc1940f00786ec64ebd29735b0bd266ef45dc713bf14cecbb2f4e1",
+   "lines": 2,
+   "bytes": 255616
+  },
+  {
+   "path": "experiments/do1/l4_r0/do1_l4_r0.jsonl",
+   "root": "repo",
+   "kind": "harness",
+   "corpus": "do1",
+   "note": "objective change, L4 r0",
+   "sha256": "00a8db20b9b3ab186b935f2062a9a78d411a4d2a512e289e8aa1e4c39a5e263b",
+   "lines": 2,
+   "bytes": 507277
+  },
+  {
+   "path": "experiments/do1/w3w4_2026-10-21/do1_l4_rep.jsonl",
+   "root": "repo",
+   "kind": "harness",
+   "corpus": "do1",
+   "note": "objective change, L4 r1-r5 + sentinel",
+   "sha256": "4f9c7295bd771cf26c8dab2a8a1db433ed2f2460dd6e1b3a3340d90571114714",
+   "lines": 11,
+   "bytes": 2660336
+  },
+  {
+   "path": "experiments/do1/w3w4_2026-10-21/do1_x.jsonl",
+   "root": "repo",
+   "kind": "harness",
+   "corpus": "do1",
+   "note": "objective change, B1/C1",
+   "sha256": "f484ac6b19ce0f54c8071e4566b42770920734e6553f21c691fb9e936899bc9d",
+   "lines": 4,
+   "bytes": 1113204
+  },
+  {
+   "path": "hdb/artifacts/hdb/stopcal.jsonl",
+   "root": "vm",
+   "kind": "stopcal",
+   "corpus": "stage1",
+   "note": "stop calibration: designs re-verified by full_recovery_v1",
+   "sha256": "8d3b01c0802f01f5b27081a8ff70ccb2d5043737b55c29340f7128c13f7becf3",
+   "lines": 668,
+   "bytes": 218798
+  },
+  {
+   "path": "ds1/ds1_stopdata.jsonl",
+   "root": "vm",
+   "kind": "stopdata",
+   "corpus": "ds1",
+   "note": "stop-map v2 evidence, shard a",
+   "sha256": "f5b805302cc16963ced6b7c51b5fb691d03650373b2eeba677efea2e423a1d99",
+   "lines": 231,
+   "bytes": 68726
+  },
+  {
+   "path": "ds1/ds1_stopdata_b.jsonl",
+   "root": "vm",
+   "kind": "stopdata",
+   "corpus": "ds1",
+   "note": "stop-map v2 evidence, shard b",
+   "sha256": "41bfb610fb34642dd5a17b4eac1ea8358b3ceb95a5f9f519343641e66dab5a87",
+   "lines": 219,
+   "bytes": 102712
+  },
+  {
+   "path": "hdb/artifacts/hdb/ident_v2_all.jsonl",
+   "root": "vm",
+   "kind": "ident",
+   "corpus": "stage1",
+   "note": "identifiability panel, every instrument on every instance",
+   "sha256": "a87d6d3794e5a0536249610e94e126d3cdf64ee162f866f3641aaed304bbbf47",
+   "lines": 340,
+   "bytes": 8440246
+  },
+  {
+   "path": "ce3/ce/probe_dev.jsonl",
+   "root": "vm",
+   "kind": "ce_probe",
+   "corpus": "ce",
+   "note": "fault bench: fixed counterfactual catalogue + complete 10-tool matrix",
+   "sha256": "25cfd983cc32f63809f9561432ecb9d648d48c13f3c24c21ffd46f747da2e62c",
+   "lines": 165,
+   "bytes": 7136595
+  },
+  {
+   "path": "ce/ce/dev_mild_shard0.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "95cc155fe1205e83935b215d24d77ccb6968142b2d3ac60b94db837d7c2d63e3",
+   "lines": 24,
+   "bytes": 59849
+  },
+  {
+   "path": "ce/ce/dev_mild_shard1.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "3a5c6a11220aa0b8dd4b45d393a775f62b2be7f0e22e4205cba9866b93bb11a3",
+   "lines": 24,
+   "bytes": 49641
+  },
+  {
+   "path": "ce/ce/dev_mild_shard2.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "8dc02d5598b6e40a4f034bdf40ec670cf7051cd46106cb92ba551bdb6307a420",
+   "lines": 24,
+   "bytes": 69068
+  },
+  {
+   "path": "ce/ce/dev_mild_shard3.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "1ca18525596427e87d4a76288560ed5c8158ae5426a44a63c15cf4b821450cab",
+   "lines": 24,
+   "bytes": 77318
+  },
+  {
+   "path": "ce/ce/dev_mild_shard4.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "463f6eaac729ec4dc20e4564fffa1ba9ba69264d102c8cdbb66979cad4b8ea27",
+   "lines": 24,
+   "bytes": 83420
+  },
+  {
+   "path": "ce/ce/dev_mild_shard5.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "71e8a01db885fb842b0dbeeaf590f216af43aee90073c40885123b1ed1c91f6f",
+   "lines": 24,
+   "bytes": 87272
+  },
+  {
+   "path": "ce/ce/dev_shard0.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "342a3c6419f4aa1043ca6628275aff64adec459ed805b09820e3d71bd511f0b7",
+   "lines": 16,
+   "bytes": 45834
+  },
+  {
+   "path": "ce/ce/dev_shard1.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "6a8b875fd37224109ccdf0ad3c75e57492e2584ae9e5d202542e035f764ca10b",
+   "lines": 16,
+   "bytes": 43593
+  },
+  {
+   "path": "ce/ce/dev_shard10.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "8ae86b94a40a0fb5d61f58bcbbfbffe4a1bb16f7d72ca5b1251a3ad4d96b0e7b",
+   "lines": 16,
+   "bytes": 50211
+  },
+  {
+   "path": "ce/ce/dev_shard11.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "f330c36e52395638fb9bf631e0d6ecc655a7144fd25cdb231138f3eed2cbd761",
+   "lines": 16,
+   "bytes": 46129
+  },
+  {
+   "path": "ce/ce/dev_shard2.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "95b99a1685bfac5200d1547beda2778c8e86287903792a5a40ec9dc241cdc6fc",
+   "lines": 16,
+   "bytes": 46511
+  },
+  {
+   "path": "ce/ce/dev_shard3.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "dfdf7d8a15cc296d6cfe3e585522d83e6662411cb4c5dad82f3a4967b293403f",
+   "lines": 16,
+   "bytes": 43172
+  },
+  {
+   "path": "ce/ce/dev_shard4.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "2e5ef325458aecd0318fd468db10beee6393bea9f023accfcb58d8f705c19b3d",
+   "lines": 16,
+   "bytes": 52317
+  },
+  {
+   "path": "ce/ce/dev_shard5.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "a83fbf73b848a183e3373120265e7aca2e9d10a8f28e2bd45a4c76064e93c6fb",
+   "lines": 16,
+   "bytes": 46951
+  },
+  {
+   "path": "ce/ce/dev_shard6.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "0a421a85ea16a9bdb92ece62f4387f2f607912097628e13d8f1b5063e2035a78",
+   "lines": 16,
+   "bytes": 46464
+  },
+  {
+   "path": "ce/ce/dev_shard7.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "ffdb82e269484ca9a440eeea6c98fbd0bed23151cf3bd8f2da7d71769ba301b5",
+   "lines": 16,
+   "bytes": 46467
+  },
+  {
+   "path": "ce/ce/dev_shard8.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "e33417b4a935d4f640a68dfd1d0ab826fda1f463b45381febd3111a64c5f9589",
+   "lines": 16,
+   "bytes": 49760
+  },
+  {
+   "path": "ce/ce/dev_shard9.jsonl",
+   "root": "vm",
+   "kind": "ce_instances",
+   "corpus": "ce",
+   "note": "fault-bench dev instance builds",
+   "sha256": "f828117047edb0e016effe1233f96b7075056b7aa5c3bbefa679424045c86431",
+   "lines": 16,
+   "bytes": 42635
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs4_a1_partial.jsonl",
+   "root": "vm",
+   "kind": "superseded",
+   "corpus": "stage1",
+   "note": "partial pull of vs4_a1",
+   "sha256": "e625de77eab12accecde6f70a195f23629a454d10ddf23d0e392fa6fce1675f9",
+   "lines": 65,
+   "bytes": 2002906
+  },
+  {
+   "path": "hdb/artifacts/hdb/vs5_A1c_partial.jsonl",
+   "root": "vm",
+   "kind": "superseded",
+   "corpus": "stage1",
+   "note": "partial pull of vs5_A1c",
+   "sha256": "ddcad9fcecc7036153d77a31fce9d5e25d1973553adbfd136243074eab1d869e",
+   "lines": 59,
+   "bytes": 1974567
+  },
+  {
+   "path": "hdb/artifacts/hdb/mkv2_partial.jsonl",
+   "root": "vm",
+   "kind": "superseded",
+   "corpus": "mkv",
+   "note": "partial MKV v2 (engine v2)",
+   "sha256": "0282c5cbc372d2b9f4c50763510c258e71e71b933eba85d8f11350a57dac374c",
+   "lines": 118,
+   "bytes": 2088518
+  },
+  {
+   "path": "hdb/artifacts/hdb/stopcal_partial.jsonl",
+   "root": "vm",
+   "kind": "superseded",
+   "corpus": "stage1",
+   "note": "partial stopcal",
+   "sha256": "03e3779adf492f7b3577f4db2d9e29c2158085283c7905947c60073aecf4354e",
+   "lines": 566,
+   "bytes": 185974
+  },
+  {
+   "path": "hdb/artifacts/hdb/ident.jsonl",
+   "root": "vm",
+   "kind": "superseded",
+   "corpus": "stage1",
+   "note": "identifiability v1",
+   "sha256": "39259d4f0c04f9088dbbfb14e2ddbe03c877ed34939a67a2913c760a710905a0",
+   "lines": 138,
+   "bytes": 3458493
+  },
+  {
+   "path": "hdb/artifacts/hdb/ident_v1_partial.jsonl",
+   "root": "vm",
+   "kind": "superseded",
+   "corpus": "stage1",
+   "note": "identifiability v1 partial",
+   "sha256": "071df245f40b7391b01a94c217e58d8674a27f6b2f2aafcbf5cf2a6d808dd1bd",
+   "lines": 111,
+   "bytes": 2798553
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1_stopdata.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copy of ds1/ds1_stopdata.jsonl",
+   "sha256": "f5b805302cc16963ced6b7c51b5fb691d03650373b2eeba677efea2e423a1d99",
+   "lines": 231,
+   "bytes": 68726,
+   "canonical": "ds1/ds1_stopdata.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_c.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "afddac43502188efec03ffe54c889851c3e5556b56764102dd639ede3d34fa5e",
+   "lines": 6,
+   "bytes": 2649167,
+   "canonical": "ds1/eval/eval_A3v5_c.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_s0.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "6d7a2d371c37a06d04069a35ccca01d3627cf842f78c3cd355d50ed71666d41b",
+   "lines": 5,
+   "bytes": 2709440,
+   "canonical": "ds1/eval/eval_A3v5_s0.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_s1.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "d0808c7ca1c89276365de2493199db986d36fe41ab3424586d22629e2e7d87ff",
+   "lines": 5,
+   "bytes": 1501033,
+   "canonical": "ds1/eval/eval_A3v5_s1.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_s2.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "98ff2ba300b593bf82c098e6c6169f29bef9bb3f882187e1226117ce46b1e4e5",
+   "lines": 5,
+   "bytes": 2257977,
+   "canonical": "ds1/eval/eval_A3v5_s2.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_s3.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "1cf16158270682812148d399fab717b338779ae0b7ca4efc57f2c3893efa2fc5",
+   "lines": 5,
+   "bytes": 1807386,
+   "canonical": "ds1/eval/eval_A3v5_s3.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_s4.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "a0e9f5b2ea3972db5328163bc598b2a8492add86ac80d52149a7f03879e2c01a",
+   "lines": 5,
+   "bytes": 1553679,
+   "canonical": "ds1/eval/eval_A3v5_s4.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A3v5_s5.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0",
+   "lines": 5,
+   "bytes": 1935155,
+   "canonical": "ds1/eval/eval_A3v5_s5.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_c.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "a4c8b096ada8c1421673d47a16c75bfc66341cca8e652e7c9a0c13395ad2b365",
+   "lines": 6,
+   "bytes": 1567339,
+   "canonical": "ds1/eval/eval_A4x_c.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_s0.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "3d0c319f337285882effaaefcbbb82adb126dbff546b086874dc76ee79ff181f",
+   "lines": 5,
+   "bytes": 1529900,
+   "canonical": "ds1/eval/eval_A4x_s0.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_s1.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "dc146e385289947aa12e093ac169a8785067dcdba6cb4934f460dba008cd7e2d",
+   "lines": 5,
+   "bytes": 1087671,
+   "canonical": "ds1/eval/eval_A4x_s1.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_s2.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "1726000c7cc03794060510f3e6ee6feeb01a6126e8c492ad0ce65dd2863db1c8",
+   "lines": 5,
+   "bytes": 1902994,
+   "canonical": "ds1/eval/eval_A4x_s2.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_s3.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "d41970a915b8587218405990d605152f8593a1d4ab01dc1de07a2141e1a0f9f3",
+   "lines": 5,
+   "bytes": 943997,
+   "canonical": "ds1/eval/eval_A4x_s3.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_s4.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "91dcffe003eecbd9d054671bfc8d8b66eb3399a55bfacfc0972ae3230fe64f21",
+   "lines": 5,
+   "bytes": 1307753,
+   "canonical": "ds1/eval/eval_A4x_s4.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/eval_A4x_s5.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "278c65dd43f9e8dc9a2df826116bfeb15f1323c9a53b6b8471c2a745d1b1db7f",
+   "lines": 5,
+   "bytes": 1393700,
+   "canonical": "ds1/eval/eval_A4x_s5.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A1e.c.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "7887dbc86751d74759d8c80955f6bde5913ecd696438a7337c781886c24ca18c",
+   "lines": 1,
+   "bytes": 38246,
+   "canonical": "ds1/pilot_A1e.c.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A1e.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "07f31b02310b9e9026eaa871057c2ff4d28cbb8014ab82d9d03411ca3e946377",
+   "lines": 3,
+   "bytes": 152150,
+   "canonical": "ds1/pilot_A1e.jsonl",
+   "identical_to_canonical": false
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A1e6.c.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "5f92e0f69209a2268972bf014e6d0e95d8933499844424311fd9162229e60a7b",
+   "lines": 1,
+   "bytes": 87723,
+   "canonical": "ds1/pilot_A1e6.c.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A1e6.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "dd8ac21f6e7254bcc64ace03634d83dc78839121309c1f61130f7823bfe5f845",
+   "lines": 3,
+   "bytes": 275925,
+   "canonical": "ds1/pilot_A1e6.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A3v5.c.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "2ede9373fa0e56bb5b985d7800ace9492f9df32c30fe209ac5c3e43c40589ffc",
+   "lines": 1,
+   "bytes": 365328,
+   "canonical": "ds1/pilot_A3v5.c.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A3v5.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "1847ad2384109c8f013348ae9bd83f980faf08a468222fe70c82099e98b7ab07",
+   "lines": 2,
+   "bytes": 668835,
+   "canonical": "ds1/pilot_A3v5.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A4x.c.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "b933176388e7034d70ad5847b0f28276e62ae41627286683635d87f9c9b9fcee",
+   "lines": 1,
+   "bytes": 231603,
+   "canonical": "ds1/pilot_A4x.c.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A4x.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "0c36c3915d251bbec755eb4514c4c830766fadd062f8e50825ba947ba978993a",
+   "lines": 2,
+   "bytes": 485314,
+   "canonical": "ds1/pilot_A4x.jsonl",
+   "identical_to_canonical": true
+  },
+  {
+   "path": "hdb/artifacts/hdb/ds1/pilot_A4x_noscientist.jsonl",
+   "root": "vm",
+   "kind": "mirror",
+   "corpus": "ds1",
+   "note": "copies of ds1/ (canonical root used by the TA-1 harness)",
+   "sha256": "21be48f442c49e9137771085e12a5da1baecad0f62fcf3b619f8b11fc9b95e8a",
+   "lines": 1,
+   "bytes": 60928,
+   "canonical": "ds1/pilot_A4x_noscientist.jsonl",
+   "identical_to_canonical": true
+  }
+ ],
+ "excluded_not_opened": [
+  [
+   "hdb/artifacts/hdb/walkers_all.jsonl",
+   "contains test-split walker designs (sealed split); not used"
+  ],
+  [
+   "cehb/**/*.jsonl",
+   "causal-engineer held-out evaluation shards (registered evaluation set); not used"
+  ],
+  [
+   "experiments/causal_engineer/heldout/**",
+   "causal-engineer held-out evaluation (registered evaluation set); not used"
+  ],
+  [
+   "hdb/artifacts/hdb/stage2_final/inference_ledger_*.jsonl",
+   "inference ledger; no outcomes"
+  ],
+  [
+   "hdb/artifacts/hdb/noise_cal.jsonl",
+   "noise calibration of the twin; no repair outcomes"
+  ],
+  [
+   "ce2/**, ce3/ce/pilot*, ce3/ce/demo_src.jsonl",
+   "causal-engineer scientist episodes (adaptive LLM runs, older bench); the standardised probe set covers this bench"
+  ]
+ ],
+ "dropped_off_split": {},
+ "outcome_rows": 2587,
+ "plants_by_bench": {
+  "hdb_v1": 20,
+  "hdb_v2": 413,
+  "hdb_v2_devcomp": 43
+ },
+ "bases_with_outcomes": 46,
+ "outcomes_by_corpus": {
+  "stage1": {
+   "outcomes": 1120,
+   "full": 393,
+   "oracle": 0,
+   "with_tool": 1108
+  },
+  "mkv": {
+   "outcomes": 298,
+   "full": 61,
+   "oracle": 201,
+   "with_tool": 298
+  },
+  "stage2": {
+   "outcomes": 268,
+   "full": 112,
+   "oracle": 0,
+   "with_tool": 265
+  },
+  "ds1": {
+   "outcomes": 212,
+   "full": 65,
+   "oracle": 0,
+   "with_tool": 209
+  },
+  "ta1": {
+   "outcomes": 4,
+   "full": 0,
+   "oracle": 0,
+   "with_tool": 4
+  },
+  "do1": {
+   "outcomes": 17,
+   "full": 7,
+   "oracle": 0,
+   "with_tool": 17
+  },
+  "stage1/stopcal": {
+   "outcomes": 668,
+   "full": 79,
+   "oracle": 123,
+   "with_tool": 554
+  }
+ },
+ "procedures": {
+  "engine": 1050,
+  "a0_generic": 371,
+  "mkv_oracle:K2": 51,
+  "mkv_oracle:K1": 51,
+  "mkv_oracle:K3": 51,
+  "mkv_oracle:K4": 48,
+  "nemotron": 276,
+  "ta1:control": 2,
+  "ta1:treatment": 2,
+  "do1:frozen": 9,
+  "do1:do1": 8,
+  "diverse:twin": 186,
+  "diverse:initial": 113,
+  "diverse:repair": 300,
+  "diverse:counterfactual": 69
+ },
+ "engines": {
+  "belief_engine_v1": 61,
+  "belief_engine_v2": 113,
+  "None": 371,
+  "belief_engine_v4": 444,
+  "belief_engine_v5": 734,
+  "belief_engine_v3": 3,
+  "belief_engine_v6": 193
+ },
+ "stopcal_by_bench": {
+  "hdb_v2": 668
+ },
+ "support": {
+  "S": {
+   "instances_ge2_tools": 1,
+   "bases_ge2_tools": 1,
+   "informative_instances": 0,
+   "informative_bases": 0,
+   "fault_families_informative": 0,
+   "families_on_ge2_bases": 0,
+   "generator_groups": [],
+   "kish_neff_bases": 0.0
+  },
+  "P": {
+   "instances_ge2_tools": 124,
+   "bases_ge2_tools": 35,
+   "informative_instances": 39,
+   "informative_bases": 22,
+   "fault_families_informative": 13,
+   "families_on_ge2_bases": 8,
+   "generator_groups": [
+    "hand",
+    "hdb-v1",
+    "walkrec-m1"
+   ],
+   "kish_neff_bases": 18.78
+  },
+  "X": {
+   "instances_ge2_tools": 385,
+   "bases_ge2_tools": 46,
+   "informative_instances": 150,
+   "informative_bases": 41,
+   "fault_families_informative": 14,
+   "families_on_ge2_bases": 12,
+   "generator_groups": [
+    "hand",
+    "hdb-v1",
+    "walkrec-m1"
+   ],
+   "kish_neff_bases": 32.42
+  }
+ },
+ "support_level_P_by_engine": {
+  "belief_engine_v1": {
+   "instances_ge2_tools": 4,
+   "bases_ge2_tools": 3,
+   "informative_instances": 0,
+   "informative_bases": 0,
+   "fault_families_informative": 0,
+   "families_on_ge2_bases": 0,
+   "generator_groups": [],
+   "kish_neff_bases": 0.0
+  },
+  "belief_engine_v2": {
+   "instances_ge2_tools": 0,
+   "bases_ge2_tools": 0,
+   "informative_instances": 0,
+   "informative_bases": 0,
+   "fault_families_informative": 0,
+   "families_on_ge2_bases": 0,
+   "generator_groups": [],
+   "kish_neff_bases": 0.0
+  },
+  "belief_engine_v4": {
+   "instances_ge2_tools": 39,
+   "bases_ge2_tools": 12,
+   "informative_instances": 9,
+   "informative_bases": 6,
+   "fault_families_informative": 3,
+   "families_on_ge2_bases": 2,
+   "generator_groups": [
+    "hand",
+    "walkrec-m1"
+   ],
+   "kish_neff_bases": 4.76
+  },
+  "belief_engine_v5": {
+   "instances_ge2_tools": 51,
+   "bases_ge2_tools": 22,
+   "informative_instances": 19,
+   "informative_bases": 11,
+   "fault_families_informative": 9,
+   "families_on_ge2_bases": 6,
+   "generator_groups": [
+    "hdb-v1",
+    "walkrec-m1"
+   ],
+   "kish_neff_bases": 9.76
+  },
+  "belief_engine_v6": {
+   "instances_ge2_tools": 30,
+   "bases_ge2_tools": 19,
+   "informative_instances": 11,
+   "informative_bases": 8,
+   "fault_families_informative": 9,
+   "families_on_ge2_bases": 1,
+   "generator_groups": [
+    "hand",
+    "hdb-v1",
+    "walkrec-m1"
+   ],
+   "kish_neff_bases": 6.37
+  }
+ },
+ "ce_proxy": {
+  "tier": "STANDARDIZED_DEV_PROXY",
+  "instances": 165,
+  "bases": 12,
+  "fault_families": 8,
+  "complete_10_tool_matrices": 165,
+  "informative_instances": 109,
+  "informative_bases": 12,
+  "families_on_ge2_bases": 8,
+  "outcome": "walking fraction on 8 check seeds after each tool at budget 160; repairs = >= 0.75"
+ },
+ "gates": {
+  "HDB FULL_VERIFIED level S (assigned tool)": {
+   "D1": false,
+   "D2": false,
+   "assigned": true,
+   "tier": "FULL_VERIFIED"
+  },
+  "HDB FULL_VERIFIED level P (policy-chosen)": {
+   "D1": false,
+   "D2": false,
+   "assigned": false,
+   "tier": "FULL_VERIFIED"
+  },
+  "HDB FULL_VERIFIED level X (cross-procedure)": {
+   "D1": false,
+   "D2": false,
+   "assigned": false,
+   "tier": "FULL_VERIFIED"
+  },
+  "CE STANDARDIZED_DEV_PROXY (complete matrix)": {
+   "D1": true,
+   "D2": false,
+   "assigned": true,
+   "tier": "STANDARDIZED_DEV_PROXY"
+  }
+ },
+ "families": {
+  "pitch_sensor_bias": 478,
+  "payload_offset": 478,
+  "low_ground_friction": 254,
+  "short_feet": 190,
+  "feedback_gain_loss": 73,
+  "one_side_weakness": 107,
+  "heavy_torso": 66,
+  "actuator_weakness": 65,
+  "clock_fault": 92,
+  "devcomp:pitch_sensor_bias.++heavy_torso": 15,
+  "devcomp:one_side_weakness.left+clock_fault.fast": 11,
+  "devcomp:payload_offset.fwd+short_feet": 22,
+  "devcomp:low_ground_friction+actuator_weakness": 9,
+  "devcomp:short_feet+clock_fault.fast": 9,
+  "devcomp:low_ground_friction+feedback_gain_loss": 25,
+  "devcomp:pitch_sensor_bias.++clock_fault.fast": 10,
+  "devcomp:pitch_sensor_bias.++actuator_weakness": 15
+ },
+ "generator_groups": {
+  "hand": 862,
+  "walkrec-m1": 843,
+  "hdb-v1": 882
+ },
+ "morphology": {
+  "bases": 46,
+  "bases_with_inconsistent_nominal_body": [],
+  "near_duplicate_groups_z0.5": []
+ },
+ "experiments": {
+  "episodes_with_experiments": 1548,
+  "first_kind": {
+   "observe": 1548
+  },
+  "kind_present_in_episodes": {
+   "counterfactual": 465,
+   "observe": 1548,
+   "weigh": 239,
+   "floor": 79,
+   "check": 151
+  },
+  "n_experiments_median": 1.0,
+  "n_experiments_range": [
+   1,
+   11
+  ],
+  "n_experiments_median_by_engine": {
+   "belief_engine_v1": 1.0,
+   "belief_engine_v2": 1.0,
+   "belief_engine_v3": 1.0,
+   "belief_engine_v4": 1.0,
+   "belief_engine_v5": 1.0,
+   "belief_engine_v6": 5.0
+  }
+ },
+ "x0_consistency": {
+  "plants_with_ge2_records": 476,
+  "plants_inconsistent": 0
+ },
+ "fields_by_corpus": {
+  "stage1": {
+   "n": 1120,
+   "has_settings": 796,
+   "has_v6_settings": 0,
+   "has_stop_rule": 550,
+   "has_commit": 0,
+   "per_seed_validation": 0,
+   "has_noise_seed": 0,
+   "has_x0_observe": 796,
+   "has_repair_log": 796
+  },
+  "mkv": {
+   "n": 298,
+   "has_settings": 251,
+   "has_v6_settings": 0,
+   "has_stop_rule": 0,
+   "has_commit": 0,
+   "per_seed_validation": 0,
+   "has_noise_seed": 0,
+   "has_x0_observe": 251,
+   "has_repair_log": 0
+  },
+  "stage2": {
+   "n": 268,
+   "has_settings": 268,
+   "has_v6_settings": 0,
+   "has_stop_rule": 265,
+   "has_commit": 0,
+   "per_seed_validation": 0,
+   "has_noise_seed": 0,
+   "has_x0_observe": 268,
+   "has_repair_log": 259
+  },
+  "ds1": {
+   "n": 212,
+   "has_settings": 212,
+   "has_v6_settings": 172,
+   "has_stop_rule": 212,
+   "has_commit": 0,
+   "per_seed_validation": 0,
+   "has_noise_seed": 0,
+   "has_x0_observe": 212,
+   "has_repair_log": 206
+  },
+  "ta1": {
+   "n": 4,
+   "has_settings": 4,
+   "has_v6_settings": 4,
+   "has_stop_rule": 4,
+   "has_commit": 0,
+   "per_seed_validation": 4,
+   "has_noise_seed": 4,
+   "has_x0_observe": 4,
+   "has_repair_log": 4
+  },
+  "do1": {
+   "n": 17,
+   "has_settings": 17,
+   "has_v6_settings": 17,
+   "has_stop_rule": 17,
+   "has_commit": 0,
+   "per_seed_validation": 17,
+   "has_noise_seed": 17,
+   "has_x0_observe": 17,
+   "has_repair_log": 17
+  }
+ },
+ "ident": {
+  "instances": 313,
+  "bases": 24,
+  "families": {
+   "clock_fault": 38,
+   "one_side_weakness": 50,
+   "feedback_gain_loss": 28,
+   "payload_offset": 52,
+   "pitch_sensor_bias": 52,
+   "actuator_weakness": 24,
+   "short_feet": 24,
+   "low_ground_friction": 24,
+   "heavy_torso": 21
+  }
+ },
+ "morphology_table": {
+  "hdb-v1-gen-0004": {
+   "L": 0.7759315232464963,
+   "foot_to_leg": 0.17984158927810937,
+   "torso_mass": 3.0888797173049114,
+   "leg_density": 599.677359,
+   "foot_friction": 1.383402,
+   "tau_proxy": 1.420422111363113,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0008": {
+   "L": 0.5546745805974838,
+   "foot_to_leg": 0.3343969496506425,
+   "torso_mass": 6.314760099510081,
+   "leg_density": 344.807944,
+   "foot_friction": 1.234332,
+   "tau_proxy": 0.6268721426599891,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0011": {
+   "L": 0.6251686958848246,
+   "foot_to_leg": 0.17818835517305842,
+   "torso_mass": 12.563663372945273,
+   "leg_density": 2308.319725,
+   "foot_friction": 0.985576,
+   "tau_proxy": 1.2581813202952448,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0013": {
+   "L": 0.9335874365533154,
+   "foot_to_leg": 0.19731632874225374,
+   "torso_mass": 13.582645481063558,
+   "leg_density": 645.664368,
+   "foot_friction": 1.066409,
+   "tau_proxy": 0.9498145190727825,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0024": {
+   "L": 0.35102897612877026,
+   "foot_to_leg": 0.8465156786045452,
+   "torso_mass": 10.387979127938124,
+   "leg_density": 465.605639,
+   "foot_friction": 0.470737,
+   "tau_proxy": 0.4721339304990883,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0028": {
+   "L": 0.7943543172156465,
+   "foot_to_leg": 0.16124080137019806,
+   "torso_mass": 1.304963926500418,
+   "leg_density": 813.247433,
+   "foot_friction": 1.054425,
+   "tau_proxy": 5.490022581877338,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0030": {
+   "L": 0.5477816070655834,
+   "foot_to_leg": 0.20903916841920955,
+   "torso_mass": 8.046376058353507,
+   "leg_density": 1055.631497,
+   "foot_friction": 1.415278,
+   "tau_proxy": 3.6110642916036046,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0034": {
+   "L": 0.685122250773959,
+   "foot_to_leg": 0.14136271690561814,
+   "torso_mass": 4.545344000937613,
+   "leg_density": 459.206675,
+   "foot_friction": 1.487044,
+   "tau_proxy": 5.53726670053895,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0036": {
+   "L": 0.5547753457983873,
+   "foot_to_leg": 0.2586399970799885,
+   "torso_mass": 4.168878684953821,
+   "leg_density": 936.503791,
+   "foot_friction": 1.205873,
+   "tau_proxy": 1.1952485142017693,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0037": {
+   "L": 0.6492009024566083,
+   "foot_to_leg": 0.19775343818954705,
+   "torso_mass": 11.927553789575702,
+   "leg_density": 399.083147,
+   "foot_friction": 0.529186,
+   "tau_proxy": 0.8337982500361684,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0038": {
+   "L": 0.5831736789013453,
+   "foot_to_leg": 0.4567169390904351,
+   "torso_mass": 5.102062709708699,
+   "leg_density": 671.383531,
+   "foot_friction": 0.635481,
+   "tau_proxy": 2.500200476229244,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0039": {
+   "L": 0.432643,
+   "foot_to_leg": 0.1818681915574735,
+   "torso_mass": 7.243732,
+   "leg_density": 492.929862,
+   "foot_friction": 1.260642,
+   "tau_proxy": 5.956567312033257,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0040": {
+   "L": 0.632393,
+   "foot_to_leg": 0.15734203256519283,
+   "torso_mass": 11.052653,
+   "leg_density": 1504.923665,
+   "foot_friction": 0.451368,
+   "tau_proxy": 0.6616907527445623,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0044": {
+   "L": 0.6624272151407236,
+   "foot_to_leg": 0.1328924287431575,
+   "torso_mass": 1.2863375995791633,
+   "leg_density": 955.12188,
+   "foot_friction": 0.872258,
+   "tau_proxy": 9.49441060099129,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0052": {
+   "L": 0.5969399949786569,
+   "foot_to_leg": 0.39391958646969805,
+   "torso_mass": 3.684873250253106,
+   "leg_density": 569.866214,
+   "foot_friction": 1.281218,
+   "tau_proxy": 1.4129463919429108,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0054": {
+   "L": 0.6479986106219886,
+   "foot_to_leg": 0.27905853559877236,
+   "torso_mass": 3.735592151941121,
+   "leg_density": 749.777984,
+   "foot_friction": 1.198904,
+   "tau_proxy": 1.5568334160588144,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0062": {
+   "L": 0.6731973372049624,
+   "foot_to_leg": 0.2823862616114072,
+   "torso_mass": 7.146141723638078,
+   "leg_density": 1002.064432,
+   "foot_friction": 0.65198,
+   "tau_proxy": 2.8857600986267897,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0064": {
+   "L": 0.6938866511484257,
+   "foot_to_leg": 0.18091222314733843,
+   "torso_mass": 6.898153529543925,
+   "leg_density": 342.312073,
+   "foot_friction": 1.480636,
+   "tau_proxy": 3.1295630614806726,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0070": {
+   "L": 0.49037596036667563,
+   "foot_to_leg": 0.2291452507820445,
+   "torso_mass": 5.723110263134508,
+   "leg_density": 811.827754,
+   "foot_friction": 1.38293,
+   "tau_proxy": 3.569107651099908,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0073": {
+   "L": 0.8706882880599704,
+   "foot_to_leg": 0.18922800048710314,
+   "torso_mass": 3.49838585729141,
+   "leg_density": 341.433324,
+   "foot_friction": 1.31946,
+   "tau_proxy": 2.855338274066,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0096": {
+   "L": 0.624235,
+   "foot_to_leg": 0.26258059865275096,
+   "torso_mass": 8.38571,
+   "leg_density": 546.183647,
+   "foot_friction": 1.060497,
+   "tau_proxy": 3.06153530648781,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0099": {
+   "L": 0.3676496282349696,
+   "foot_to_leg": 0.3465079457011072,
+   "torso_mass": 7.216196735249385,
+   "leg_density": 352.529813,
+   "foot_friction": 1.099076,
+   "tau_proxy": 0.6402033945479385,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0103": {
+   "L": 0.4691526280166688,
+   "foot_to_leg": 0.16055364913277897,
+   "torso_mass": 3.8092373074170585,
+   "leg_density": 2266.542765,
+   "foot_friction": 0.777515,
+   "tau_proxy": 6.872743776950417,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0104": {
+   "L": 0.4473488930974535,
+   "foot_to_leg": 0.41097036665949344,
+   "torso_mass": 6.07647825180398,
+   "leg_density": 796.546766,
+   "foot_friction": 1.247547,
+   "tau_proxy": 5.104480534264396,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0105": {
+   "L": 0.6558196500845372,
+   "foot_to_leg": 0.3168585733982793,
+   "torso_mass": 12.277051461720976,
+   "leg_density": 480.343916,
+   "foot_friction": 1.204881,
+   "tau_proxy": 1.0714792751020097,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0108": {
+   "L": 0.6505112693109876,
+   "foot_to_leg": 0.23181140631116293,
+   "torso_mass": 5.341803563189968,
+   "leg_density": 1350.841589,
+   "foot_friction": 1.169232,
+   "tau_proxy": 1.361182076755751,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0126": {
+   "L": 0.7814250104641502,
+   "foot_to_leg": 0.1550652762519148,
+   "torso_mass": 1.5026096388943389,
+   "leg_density": 336.338557,
+   "foot_friction": 1.459922,
+   "tau_proxy": 15.916873233540366,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0136": {
+   "L": 0.40633219164713036,
+   "foot_to_leg": 0.22954042576595085,
+   "torso_mass": 12.96996562351027,
+   "leg_density": 1761.298233,
+   "foot_friction": 0.802032,
+   "tau_proxy": 0.6069858790341437,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0137": {
+   "L": 0.5543999009320344,
+   "foot_to_leg": 0.21087402459869575,
+   "torso_mass": 1.7185947930865344,
+   "leg_density": 1367.829438,
+   "foot_friction": 1.126641,
+   "tau_proxy": 10.631233769583094,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0142": {
+   "L": 0.6827849784834654,
+   "foot_to_leg": 0.15484911075597593,
+   "torso_mass": 9.223046642810374,
+   "leg_density": 491.206284,
+   "foot_friction": 0.750495,
+   "tau_proxy": 1.2238248576294575,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0143": {
+   "L": 0.803923,
+   "foot_to_leg": 0.1480564680945812,
+   "torso_mass": 1.667811,
+   "leg_density": 1450.426233,
+   "foot_friction": 0.429676,
+   "tau_proxy": 10.122087324820713,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0167": {
+   "L": 0.7374108463766511,
+   "foot_to_leg": 0.2832746691740581,
+   "torso_mass": 1.0898540731023725,
+   "leg_density": 1175.734171,
+   "foot_friction": 0.654422,
+   "tau_proxy": 2.236729611210715,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0170": {
+   "L": 0.3335153832804373,
+   "foot_to_leg": 0.2511154826038064,
+   "torso_mass": 3.0682763486210236,
+   "leg_density": 1569.070627,
+   "foot_friction": 0.953795,
+   "tau_proxy": 1.5314930865083505,
+   "leg_asym": 0.0
+  },
+  "hdb-v1-gen-0222": {
+   "L": 0.5675218025784043,
+   "foot_to_leg": 0.13748249311994087,
+   "torso_mass": 2.7602075638903116,
+   "leg_density": 2567.820415,
+   "foot_friction": 1.109013,
+   "tau_proxy": 2.7812743443334855,
+   "leg_asym": 0.0
+  },
+  "stilts-drawn": {
+   "L": 0.6627640407795565,
+   "foot_to_leg": 0.10004312060237087,
+   "torso_mass": 6.351141877560075,
+   "leg_density": 1000.0,
+   "foot_friction": 1.0,
+   "tau_proxy": 1.4530196628308574,
+   "leg_asym": 0.0
+  },
+  "tiny-feet": {
+   "L": 0.6204463102247926,
+   "foot_to_leg": 0.13174128953417164,
+   "torso_mass": 5.0071,
+   "leg_density": 1000.0,
+   "foot_friction": 1.0,
+   "tau_proxy": 2.325834011575226,
+   "leg_asym": 0.005818767019893542
+  },
+  "top-heavy": {
+   "L": 0.601502,
+   "foot_to_leg": 0.13410262975019202,
+   "torso_mass": 15.0,
+   "leg_density": 1000.0,
+   "foot_friction": 1.0,
+   "tau_proxy": 0.6778816973809271,
+   "leg_asym": 0.005818767019893631
+  },
+  "walkrec-dev-m1-gen-0000": {
+   "L": 0.670678,
+   "foot_to_leg": 0.11799701197892282,
+   "torso_mass": 4.979833,
+   "leg_density": 1147.272654,
+   "foot_friction": 0.436298,
+   "tau_proxy": 3.4705661893359605,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0001": {
+   "L": 0.671913,
+   "foot_to_leg": 0.11291938093175753,
+   "torso_mass": 1.509811,
+   "leg_density": 1012.540284,
+   "foot_friction": 0.960053,
+   "tau_proxy": 3.770279354803297,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0002": {
+   "L": 0.450637,
+   "foot_to_leg": 0.24798451969101518,
+   "torso_mass": 9.39048,
+   "leg_density": 2341.886839,
+   "foot_friction": 0.634176,
+   "tau_proxy": 4.697466561866678,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0003": {
+   "L": 0.5198672359446942,
+   "foot_to_leg": 0.27779888040772704,
+   "torso_mass": 8.499331374187545,
+   "leg_density": 2556.568105,
+   "foot_friction": 1.137679,
+   "tau_proxy": 0.6129629010253992,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0004": {
+   "L": 0.487278,
+   "foot_to_leg": 0.17881168450042892,
+   "torso_mass": 11.009542,
+   "leg_density": 1253.06356,
+   "foot_friction": 0.924053,
+   "tau_proxy": 0.8894607098712309,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0005": {
+   "L": 1.081294,
+   "foot_to_leg": 0.11502792025110654,
+   "torso_mass": 11.057383,
+   "leg_density": 383.772263,
+   "foot_friction": 1.057631,
+   "tau_proxy": 0.35538285497979766,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0006": {
+   "L": 1.0459521215855347,
+   "foot_to_leg": 0.16342717460229494,
+   "torso_mass": 1.89746,
+   "leg_density": 387.199594,
+   "foot_friction": 0.492657,
+   "tau_proxy": 2.044605811086244,
+   "leg_asym": 0.0
+  },
+  "walkrec-dev-m1-gen-0007": {
+   "L": 0.8516647225018747,
+   "foot_to_leg": 0.16586104398575585,
+   "torso_mass": 4.490257851023917,
+   "leg_density": 1415.222262,
+   "foot_friction": 1.258302,
+   "tau_proxy": 1.1416271610732034,
+   "leg_asym": 0.0
+  },
+  "weak-slippery": {
+   "L": 0.37926667426214355,
+   "foot_to_leg": 0.44025388108840197,
+   "torso_mass": 4.219068139554291,
+   "leg_density": 1000.0,
+   "foot_friction": 0.05,
+   "tau_proxy": 0.31852224942928214,
+   "leg_asym": 0.0
+  }
+ }
+}
