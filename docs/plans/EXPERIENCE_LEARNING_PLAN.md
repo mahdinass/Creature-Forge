@@ -1,127 +1,223 @@
-# Plan: `feature/experience-learning`: does Creature Forge learn from past experiments? (proposal, not started)
+# Plan: `feature/experience-learning` — can measured interventions tell us when past repair experience applies? (revision 2)
 
-- **Status:** a proposal for owner review, with nothing implemented.
-- **Branch:** `feature/experience-learning`, from `v1.0.0-rc1`.
-- **Freeze:** V1 is frozen and this work never modifies `release/v1`.
-- **Spend:** none until each phase is approved.
+- **Status:** revision 2, 2026-10-22. It **supersedes revision 1** (`8cae193`). Revision 1's P0 ("does memory predict the
+  verified repair tool?") is withdrawn. Its engineering controls (§9) are kept.
+- **Why it was revised:** the research review "Causal Experience Learning for Creature Forge: forskningsrapport og anbefalt
+  studiedesign" (owner-supplied, 2026-10-22).
+  - Predicting the historically chosen or historically successful tool mostly learns the old repair **policy**.
+  - In the historical records, tool choice, repair procedure and budget are confounded, and most alternative repairs were never
+    run.
+  - Creature Forge has already shown that better prediction is not better recovery:
+    - the R-head beat B1 on log loss but chose worse repairs (G-a failed);
+    - engine v6 diagnosed better but repaired no better (8 vs 9).
+- **Branch:** `feature/experience-learning`, from `v1.0.0-rc1` (`3a740a7`); worktree `cf-experience`. V1, `release/v1` and the
+  submission materials are not touched.
+- **Spend:** none. P0 is offline. Every later phase needs its own owner approval, and none auto-advances.
 
-## 0. Why this design, and not a chat history or vector database
-Four earlier memory attempts were null or weak:
-- **Forge Loop text lessons:** p = 0.773, and the model never cited a lesson.
-- **Held-out scientist + memory:** 16 vs 14 of 40.
-- **Stage-2 dossiers:** used in 1 of 36 episodes.
-- **DS-1 shared case store:** 10 vs 8, p = 0.31; updating vs frozen, 7 vs 7.
+## 1. Research question and estimands
 
-The consistent pattern is that **the LLM does not use prose memory**, and the leverage is in **repair-tool choice and
-stopping**, not diagnosis (`docs/DS1_REPORT.md`, `docs/DUAL_SIGNAL_PLAN.md`).
+**Central hypothesis.** Experimentally measured intervention and repair outcomes can tell us whether a previous repair strategy
+applies to a new robot, and selective reuse can avoid negative transfer.
 
-So V2 memory is a **deterministic instrument**. It stores **measured causal evidence**, and its consumers are the belief
-engine and the repair planner. Nemotron may read it, but the primary test does not depend on the model choosing to use it.
+Notation:
+- x is the information legally available at the repair decision point.
+- A is the repair tool, with a standardised repair procedure.
+- Y = 1 only under the unchanged independent verifier `full_recovery_v1` (FULL_RECOVERY).
+- π0 is the frozen no-memory policy; π_M is the memory policy with a frozen store S.
 
-The scientific question:
-> Do structured records of past investigations (hypotheses, experiments and their measured outcomes, repairs and their
-> verifier outcomes, including failures) improve recovery on **new robots**, and can the system **predict when a lesson
-> applies**, abstaining when it does not?
-
-## 1. What one "experience record" is (no free text)
-One record per completed, verified episode. All of it is already present in the HaS/DS-1 episode records.
-- **Pre-intervention signature** (the retrieval key):
-  - the observation features from the first floor/observe test;
-  - the nominal-body morphology features.
-
-  Instance ids, base ids, seeds, verifier outcomes and any post-hoc labels are never part of the key.
-- **Causal trace:** the posterior over mechanisms after each experiment; each experiment, with its predicted and measured
-  outcome (the model-check residuals); and the hypotheses refuted.
-- **Repair outcomes:** for each repair, the tool, the parent design, the plant rollouts used, the train/robust evidence and
-  the verifier label. That label is stored **only for experience-split episodes**, and only after their verification is
-  complete.
-- **Provenance:** the source record path and SHA-256, the arm, and the commit.
-
-**Reuse:**
-- `creature_forge/has_cases.py`, the shared case store (DS-1), is the base. It is extended, not duplicated.
-- `experience_bank.py` (kNN) and `has_memory.py` (dossiers) serve as baselines.
-- `amortized_posterior.py` serves as the learned-prior comparator.
-
-## 2. Consumers (what memory is allowed to change), each ablated separately
-| Channel | Effect | Budget accounting |
+| Object | Definition | Role |
 |---|---|---|
-| **M-prior** | Retrieved cases give an informative prior over mechanism structures for the belief engine, weighted by an applicability score | No rollouts |
-| **M-repair** | Retrieved cases reorder the repair tools and warm-start the CMA from a verified past repair delta | Every rollout counts inside the same 700 plant / 2,800 twin budget |
-| **M-abstain** | If the applicability score is below a threshold calibrated on development data only, memory is not used at all | No rollouts |
+| Interventional repair value | Q(x, a) = P(Y = 1 \| do(A = a), x) | What a repair memory must learn. Historical tool frequencies estimate P(A_hist \| x) instead. |
+| Policy benefit (primary, eventual) | Δ = E[Y(π_M(x, S)) − Y(π0(x))] | The eventual target: **verified repair-decision benefit** |
+| Positive / negative transfer | p₊ = P(Y_M = 1, Y_0 = 0); p₋ = P(Y_M = 0, Y_0 = 1) | p₋ is the negative-transfer rate; net = p₊ − p₋ |
+| Applicability | a(x) = P(Δ(x) > 0 \| x, S), or a conservative lower bound on Δ(x) | Not "two cases look alike", and not "they share a mechanism label" |
 
-**Applicability model.**
-- Predicts P(the lesson transfers) from signature distance and mechanism agreement.
-- Calibrated only on the experience split, by leave-base-out.
-- Reported with a Brier score and ECE against a constant forecast and against plain kNN.
+The eventual target is **verified repair-decision benefit, not historical repair-tool accuracy**. A model can reach 100 %
+historical-tool accuracy and still never improve recovery.
 
-## 3. Experiment arms (paired on identical instances, seeds and budgets)
-| Arm | Description |
-|---|---|
-| **M0** | Engine v6 + repair; no memory. This is the baseline, identical to the frozen DS-1 A1e6 configuration |
-| **M1** | M0 + experience memory (M-prior + M-repair + M-abstain), with the store frozen before the evaluation |
-| **M1-shuffled (placebo)** | M1 with each signature→record link permuted within the store (same amount of "prior information", wrong case). Controls for "any prior helps" |
-| **M1-oracle (diagnostic only)** | Memory restricted to the case with the true mechanism. An upper bound, labelled, never a comparator |
-| Secondary | **M1-update** (the store grows during evaluation, in a fixed order) vs M1-frozen; and **Nemotron + M1** vs M1 (does the scientist add anything once memory is an instrument?) |
+## 2. What the records can and cannot identify
 
-## 4. Leakage controls (fail-closed checks in code, each with a test)
-1. **Disjoint bases.**
-   - The store is built only from experience-split bases. Evaluation bases are disjoint, and an assertion checks every
-     retrieval.
-   - Confirmatory evaluation uses a **fresh slice of the sealed test split**, which only the owner can release. The 18
-     transfer bases are already spent (Stage 2, DS-1, W4).
-2. **Signature purity.** Signatures contain only pre-intervention observables. A test checks the feature list against a
-   whitelist, and none of these can enter: base or instance id, seeds, severity, injected structure, verifier fields.
-3. **Seeds.** Validation and confirmation seeds are never stored, and the verifier is unchanged (`full_recovery_v1`).
-4. **Frozen store.** The store snapshot is hashed and committed **before** any evaluation episode. The runner refuses a
-   store with a different hash.
-5. **Placebo arm.** M1-shuffled must not beat M0. If it does, the effect is an artefact of the prior, not of
-   case-specific knowledge.
-6. **No outcome-based tuning.** Thresholds and weights are fixed on experience bases. A held-out "transfer-dev" fold is
-   used once for the gates, then frozen.
+| Class | Examples in Creature Forge | What it supports |
+|---|---|---|
+| **Observed association** | historical tool → FULL; posterior → FULL; Nemotron deviation → FULL; diagnosis correct → FULL | Hypotheses only. Missing not at random, with procedure, budget and policy confounding |
+| **Controlled intervention: within-instance measurement** | each experiment the engine ran: observe, counterfactual edit, floor test, weigh test, plant robustness check | The **measured response** is interventional. The **choice** of experiment is adaptive, so the same experiment is not exchangeable across episodes |
+| **Controlled intervention: standardised panel** | the identifiability panel (`ident_v2_all`: every instrument on every instance); the causal-engineer probe catalogue (`probe_dev`: 9 fixed counterfactuals on every instance) | Comparable interventional fingerprints across robots (no selection) |
+| **Controlled intervention: assigned repair** | causal-engineer repair matrix: all 10 tools, fixed budget 160, same train seeds | Q_proxy(x, a) for a **proxy** outcome on an older, different bench |
+| **Controlled intervention: information or policy** | MKV K0n/K1/K2/K3/K4 (same pipeline and compute, assigned belief); TA-1 (forced tool order, 2 instances); DO-1/W3/W4 (objective change) | Effects of the assigned information or policy; the tool is a mediator, not the assigned factor |
+| **Not identifiable from the records** | FULL under unchosen tools on HDB; tool effect separated from procedure and budget; the recovery effect of memory; transport of proxy repair effects to FULL | Needs new randomised physics data (§7) |
 
-## 5. Objective evaluation
-- **Primary:** FULL_RECOVERY under `full_recovery_v1`, M1 vs M0, paired by instance; exact one-sided McNemar on the
-  discordant pairs.
-  - The pre-registered N comes from a power check on the development effect.
-  - The effects seen so far are small, so N is planned for a meaningful minimum (e.g. ≥ 8 discordant pairs expected), or
-    the study is labelled exploratory.
-- **Secondary:**
-  - plant rollouts to the first verified repair (efficiency);
-  - posterior mass on the injected mechanism after the first experiment;
-  - applicability calibration (Brier/ECE);
-  - the **negative-transfer rate**: instances where M0 is FULL and M1 is not. It is reported with its examples.
-- **Placebo and oracle** results are reported alongside. The null wording is pre-set.
-- **Reporting:** intention to treat, every assigned episode counted, NOT_EXPOSED (memory abstained) kept and reported.
+## 3. Outcome hierarchy
+- **FULL_VERIFIED:** `full_recovery_v1` on the instance's validation and confirmation seeds (HDB episode records,
+  `stopcal` re-verifications).
+- **STANDARDIZED_DEV_PROXY:** the same assigned procedure for every tool, measured on a fixed seed set. It is not the verifier.
+  The causal-engineer repair matrix (walking fraction on 8 check seeds) is the one example.
+- **NON_COMPARABLE:** in-episode robustness checks (sequential, budget-dependent), different bench versions (HDB v1 vs v2),
+  oracle-informed conditions (MKV K1–K4), and outcomes from a different verifier.
 
-## 6. Phases, gates, cost (each phase needs its own approval; none auto-advances)
-| Phase | What | Physics / model | Gate to continue | Cost / time |
-|---|---|---|---|---|
-| **P0 Offline replay** | Build the store from **existing** recorded episodes (DS-1, Stage 2, CE dev). Then, by leave-base-out replay, measure whether memory predicts the verified repair tool and the mechanism better than a frequency prior, plain kNN and the amortized posterior; also measure calibration | None, $0 | Applicability beats kNN and the frequency prior on dev, with calibration better than constant | ~1 day local |
-| **P1 Harness** | Arms M0/M1/M1-shuffled behind a fail-closed runner; leakage tests; frozen-store hash; dry runs | None | All no-physics tests pass; M0 reproduces the stored A1e6 records exactly (sentinel) | ~1 day |
-| **P2 Dev pilot** | ~12 experience-split instances × 3 arms = 36 episodes, paired | ~130k rollout-eq; no paid model calls | Exposure > 0; no leakage alarms; the placebo does not beat M0 | Main VM ≈ 4 h ≈ $1.2 |
-| **P3 Registered study** | Fresh sealed slice (owner releases N bases), M0 vs M1 (+ placebo); protocol and analysis committed and pushed before running | ~N × 3 × 3.6k rollout-eq | — | E.g. N = 40 → ~430k rollout-eq; batch VM ≈ 3–4 h ≈ $8–10 |
-| P4 (optional) | Nemotron + M1 vs M1 | Paid inference | Only if P3 shows a memory effect | To be estimated |
+**Comparable repair outcomes.** Two outcomes on one instance are comparable at level:
+- **S (strict):** same plant (bench version and instance), same verifier, the same repair procedure and budget accounting, no
+  oracle information, different tools, with the tool **assigned** (forced, randomised or exhaustive) and not chosen by the
+  policy.
+- **P (policy-comparable):** same plant, same verifier, same engine version and budget caps, but the tool was **chosen** by
+  different policies (e.g. A1e6, A3v5, A4x). The repair budget left is endogenous.
+- **X (cross-procedure):** anything else (A0 vs engine, different engine versions, diverse/stop-calibration designs).
 
-**Parallelism.** P0 and P1 run in parallel locally. P2 needs P1. P3 needs owner approval of P2 and of the sealed slice.
+Several rows on one robot base are one independent group, never several robots.
 
-## 7. Files (planned)
-- **Extend:**
-  - `creature_forge/has_cases.py`: signature, record schema, frozen-store hash;
-  - a new `creature_forge/experience_applicability.py`: the calibrated applicability model;
-  - a new `scripts/exp_memory_replay.py` (P0) and `scripts/exp_memory_ablation.py` (P1–P3; a runner in the
-    `do1_repair_ablation.py` pattern).
-- **Tests:** `tests/test_exp_memory_leakage.py`, `tests/test_exp_memory_ablation.py`.
-- **Docs:** `docs/EXPERIENCE_LEARNING_PROTOCOL.md` (pre-registration) and a report after the run.
-- **No change** to `creature_forge` frozen modules used by V1 evidence. New behaviour lives in new modules, or behind
-  arm-specific subclasses, as `Do1Workbench` did.
+## 4. P0 (revised): offline identifiability and decision-signal audit
+P0 replaces revision 1's P0. It runs no MuJoCo, makes no paid model calls, opens no sealed data and uses no Nebius spend.
 
-## 8. Exact scope of the first implementation step (only after approval)
-**P0 only.** It is offline and uses no physics and no model calls:
-1. Build the experience store from existing recorded episodes on the experience split, with a hash-pinned manifest.
-2. Implement the signature with its whitelist and leakage tests.
-3. Run the leave-base-out replay metrics:
-   - tool and mechanism prediction accuracy vs the frequency prior, kNN and the amortized posterior;
-   - Brier/ECE.
-4. Write a short P0 report.
+**Phase 2: inventory.** A provenance- and hash-checked inventory of the development archives (DS-1, Stage 2, Stage 1/MKV/
+identifiability, and the causal-engineer dev probe set). It covers:
+- independent bases, morphology and generator groups, and fault families;
+- pre-intervention observations, and the diagnostic experiments in their actual temporal order;
+- measured outcomes, the tools selected and the alternatives actually tested;
+- procedure, budget, engine/optimizer configuration and seeds;
+- outcome and verifier definitions, and missing or non-comparable fields.
 
-**Then stop for review.**
+Excluded are any record on a base outside the 48 declared development bases (`stage2_split.json`), the test-split walker file
+and the causal-engineer held-out shards.
+
+**Pre-declared adequacy criteria (decision target).**
+- **Timing:** written after a preliminary *feasibility count* of HDB support, made while locating the archives and reported in
+  the P0 report, but **before any Phase-3 predictive model was fitted or any Phase-3 metric was computed**.
+- **D1: decision-signal test (exploratory).** A tier qualifies only if it has:
+  - complete or randomised multi-action outcomes (level S), with no outcome missing because of the policy's choice;
+  - ≥ 10 independent bases;
+  - ≥ 30 instances on which the comparable tools' outcomes differ (only those carry decision information).
+- **D2: a FULL-verified GO.** A GO for building a FULL-targeted transfer model needs a FULL_VERIFIED tier with:
+  - level-S support on ≥ 20 independent bases;
+  - ≥ 40 informative instances;
+  - ≥ 3 fault families, each present on ≥ 2 bases.
+- **Level P never qualifies** for fitting a decision predictor, because it is missing not at random and procedure-confounded.
+  It is reported descriptively, as discordance rates for planning.
+- **Proxy-tier limit:** a proxy-tier result can at most justify "run a randomised FULL-verified campaign". It never justifies a
+  GO for a FULL transfer model.
+
+**Phase 3 protocol** (run only on tiers that meet D1; descriptive elsewhere).
+- **Comparators:**
+  - frequency prior (π0 = the training-fold best tool);
+  - morphology-only kNN on the *nominal* design;
+  - observation + morphology kNN, the `experience_bank` signature: the pre-intervention observation only;
+  - structured interventional retrieval: observation + standardised counterfactual responses;
+  - a learned logistic ranking (Level C) where it exists.
+  - **Not evaluable on the decision target:** belief-space case attention (`has_cases`) and the amortized posterior
+    (`amortized_posterior`) exist only on HDB, where no tier meets D1. They are assessed on the HDB diagnostic precondition,
+    as far as stored outputs allow (below).
+- **Grouping and fitting:**
+  - outer leave-one-base-out;
+  - separate leave-one-fault-family-out and leave-one-generator-group-out holdouts where supported;
+  - k and standardisation fitted inside the training fold, with k chosen by inner leave-one-base-out;
+  - near-duplicate morphologies grouped and reported.
+- **Leakage:**
+  - instance/base ids, fault truth, severity, the injected design changes, outcomes, validation seeds and future experiments
+    never enter a feature;
+  - an interventional feature is legal only if its experiment has occurred by the decision point (standardised panels are run
+    before the decision by design, and their rollout cost is reported);
+  - a whitelist test enforces this.
+- **Metrics:**
+  - per (instance, tool) repair probability: log loss, Brier, calibration intercept and slope, reliability;
+  - decision value of the top-1 tool on the measured matrix, regret, and Δ against π0;
+  - negative-transfer rate, i.e. the memory pick fails where π0's succeeds;
+  - risk–coverage of an abstention gate at matched coverage. Gates:
+    - similarity distance;
+    - predicted decision benefit, from the method's own estimates;
+  - base-cluster bootstrap CIs (2,000 resamples, seed 20261022).
+- **Controls:**
+  - shuffled memory: 20 pre-registered permutations of the signature→outcome link in the training store;
+  - hard-negative memory: the observationally nearest training case whose top tool fails on the query, against the nearest
+    case whose top tool succeeds. The gate should separate them (AUROC);
+  - a leakage probe using the faulty-body features of the older bench.
+- **Primary P0 contrast (D1 tiers):** decision value of structured interventional retrieval minus observation + morphology kNN,
+  leave-one-base-out. "Interventional decision signal present" requires all three:
+  - the 90 % base-bootstrap CI excludes 0;
+  - shuffled memory loses at least half of the interventional method's advantage over π0;
+  - the sign is unchanged under leave-one-fault-family-out.
+- **HDB diagnostic precondition (prognostic, not a decision claim).** On the standardised identifiability panel: fault-family
+  prediction, by leave-one-base-out and leave-one-generator-out. Methods:
+  - frequency prior;
+  - morphology kNN;
+  - observe-only kNN;
+  - observe + conditions kNN;
+  - full-panel kNN;
+  - belief-space kNN on the stored model-based posterior;
+  - the stored model-based twin posterior itself (the no-memory instrument baseline).
+
+  A diagnostic gain is never reported as a recovery or decision gain.
+- **No physics claim.** Offline predictions never support a claim of recovery improvement.
+
+**Phase 4 decision rules.**
+- **GO** (to a FULL-targeted selective-transfer harness): D2 holds, and the interventional decision signal is present on a
+  FULL_VERIFIED tier.
+- **NO-GO / redesign:** an adequate tier shows no interventional decision signal beyond observation kNN, or the signal is
+  explained by shuffled memory, base or procedure identity, or leakage.
+- **INSUFFICIENT-DATA:** no FULL_VERIFIED tier meets D2. Then no FULL counterfactual labels are invented and no FULL transfer
+  predictor is built. The report proposes, and does not run, a minimal randomised multi-repair campaign (§7).
+
+## 5. Report contents
+The P0 report contains:
+- the complete availability and comparability matrix;
+- independent groups and effective sample sizes;
+- source SHA-256 hashes;
+- baselines and protocol;
+- results with uncertainty, including negative findings;
+- an evidence-leakage and procedure-confounding assessment;
+- identifiability of the applicability target;
+- GO / NO-GO / INSUFFICIENT-DATA.
+
+Then **stop for independent review.**
+
+## 6. When future randomised multi-repair simulations are justified
+A development campaign (P0.5) is justified only if all hold:
+1. P0 finds no FULL_VERIFIED tier meeting D2. The question is then not identifiable from logs, so new data are the only route.
+2. There is at least one of:
+   - an interventional decision signal on a proxy tier meeting D1;
+   - a clear repair-heterogeneity signal (tools differ in outcome within instances on level-P support).
+
+   Without either, the hypothesis has no support worth buying data for.
+3. The campaign can deliver level-S FULL_VERIFIED support meeting D2 within an approved budget.
+4. The design measures the costs the review identifies: optimizer stochasticity (technical replicates are not robots),
+   heterogeneity across bases, and transport across fault families.
+
+## 7. Phases (each needs separate owner approval; none auto-advances)
+| Phase | What | Physics / model | Cost |
+|---|---|---|---|
+| **P0 audit (this revision)** | §4–5 | none | $0, local |
+| P0.5 randomised repair-effect campaign | Standardised multi-tool FULL-verified matrices on development bases (design in the P0 report) | MuJoCo, no paid model calls | proposed in the P0 report |
+| P1 harness | M0 / MK / MS / MSG / MS-shuffled / warm-start control behind a fail-closed runner; M-prior and M-repair ablated separately | none (tests, dry runs) | local |
+| P2 prospective development pilot | new dev robots and faults; MSG vs MS (negative transfer) and vs MK | MuJoCo | to be estimated |
+| P3 decision-aware diagnosis | only if P2 shows transfer signal: repair-regret-driven vs mechanism-EIG experiment selection | MuJoCo | to be estimated |
+| P4 sealed confirmatory study | fresh sealed robot/fault families, M0 vs frozen MSG; preregistered | MuJoCo | to be estimated |
+| P5 Nemotron extension | only after a positive deterministic study | paid inference | to be estimated |
+
+**Revised later-phase arms** (from the review; not authorised):
+- M0: no memory;
+- MK: plain similarity retrieval;
+- MS: structured interventional memory, ungated;
+- MSG: MS with an applicability gate;
+- MS-shuffled;
+- a generic warm-start control (the same initialisation effect without the relevant case).
+
+M-prior, M-repair and the gate are ablated separately in development before one configuration is frozen. Statistics are
+paired by instance, with all discordant pairs reported and family-clustered inference. Power is fixed from a pilot discordance
+estimate, not assumed.
+
+## 8. Files (P0)
+- `creature_forge/experience_audit.py`: source registry, hashing, record normalisation, comparability, support counting,
+  morphology and generator groups, the feature whitelist, decision-point legality. Pure Python + numpy; no simulation.
+- `creature_forge/experience_p0.py`: grouped/nested kNN estimators, proper scores, calibration, decision value,
+  risk–coverage, shuffled and hard-negative controls, cluster bootstrap.
+- `scripts/exp_p0_audit.py`: `inventory` and `analyse`. It writes to `experiments/causal_engineer/dev/experience_p0/`, a
+  living development directory.
+- `tests/test_experience_audit.py`: whitelist and leakage, grouping, comparability rules, decision-point legality, the sealed
+  exclusion, and a MuJoCo tripwire.
+- `docs/EXPERIENCE_P0_REPORT.md`: the decision report.
+
+## 9. Engineering controls kept from revision 1 (for P1 and later)
+- Frozen, hash-pinned store before any evaluation; the runner refuses a different hash.
+- Feature whitelist: no ids, seeds, severity, injected structure or verifier fields.
+- Disjoint bases; the sealed split released only by the owner; the 18 transfer bases are spent.
+- Shuffled placebo and oracle as a labelled upper bound only.
+- Intention to treat: abstentions (NOT_EXPOSED) kept and reported.
+- Thresholds and weights fixed on development data only.
+- Identical instances, seeds and budgets across arms; every rollout counted.
