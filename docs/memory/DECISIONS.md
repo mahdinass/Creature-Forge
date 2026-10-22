@@ -177,3 +177,19 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - **Damaged-robot animation only via the gated exporter** (`scripts/w2_damaged_plant_export.py`).
   - Gate: per-seed experiment features exact, verification aggregates exact, FK.
   - It must run in the recorded Linux environment, and only with owner approval.
+
+## 2026-10-22 - Experience learning: do not fit a FULL repair-applicability model from historical logs
+- **Decision.** Revised P0 returned INSUFFICIENT-DATA (`docs/EXPERIENCE_P0_REPORT.md`). Historical HDB records identify no
+  FULL-verified tool effect: there is only one assigned-tool instance (TA-1 L4), with no outcome difference. Policy-chosen
+  outcomes are missing not at random and procedure-confounded.
+- **Do not:**
+  - train or report a repair-tool or applicability predictor on historical HDB outcomes as if it estimated
+    P(FULL | do(tool), x);
+  - treat several rows on one base as independent robots;
+  - use the causal-engineer bench's faulty-body features as transportable morphology (the fault is visible in the body
+    there).
+- **Interventional fingerprints.** For cross-robot use, record them as predicted-vs-measured residuals against the robot's own
+  nominal twin. Raw panel responses do not transport fault identity across robots: top-1 0.33 against 0.93 for the
+  model posterior.
+- **Next data.** Only a randomised, standardised multi-repair campaign (proposal P0.5, report §8) can create level-S
+  FULL support. It needs owner approval and a cap decision.

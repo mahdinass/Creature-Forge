@@ -958,3 +958,31 @@ missing records. They are frozen and are not changed.
   `release/v1` and moving or deleting `v1.*` and `checkpoint/*` tags.
 - **This branch:** `feature/experience-learning`, from `v1.0.0-rc1`. It holds the proposal only
   (`docs/plans/EXPERIENCE_LEARNING_PLAN.md`) and awaits approval of P0.
+
+## 2026-10-22 - Experience learning: revised P0 (offline identifiability and decision-signal audit) - STOPPED for review
+- **Branch:** `feature/experience-learning` (worktree `cf-experience`), from `v1.0.0-rc1`. V1 and the submission are untouched.
+  No simulation, no Nebius spend, no model calls, no sealed or held-out data.
+- **Commits:**
+  - `85aef4f` plan revision 2 (`docs/plans/EXPERIENCE_LEARNING_PLAN.md`): the target is verified repair-decision benefit;
+    adequacy criteria D1/D2 were declared before any Phase-3 metric;
+  - `8aa3a16` audit code (`creature_forge/experience_audit.py`, `experience_p0.py`, `scripts/exp_p0_audit.py`), 22 tests
+    (`tests/test_experience_audit.py`) and generated tables in `experiments/causal_engineer/dev/experience_p0/`;
+  - the report commit: `docs/EXPERIENCE_P0_REPORT.md`.
+- **Result: INSUFFICIENT-DATA.**
+  - **HDB FULL-verified support with an assigned tool:** 1 instance (TA-1 L4), with 0 outcome differences. Level P
+    (policy-chosen) has 124 instances, 39 informative, on 22 bases; it is not identifiable (missing not at random,
+    procedure-confounded).
+  - **Proxy tier:** only the causal-engineer complete 10-tool matrix (165 instances, 12 bases) met D1. Retrieval beats π0, and
+    the shuffle control removes most of the gain. But the pre-declared contrast, interventional minus observational kNN, is
+    −0.006 with 90 % CI [−0.052, 0.034]: null. Interventional features improve log loss, not decisions.
+  - **HDB diagnostic precondition:** raw-panel cross-robot retrieval reaches top-1 0.33, against 0.93 for the no-memory
+    model posterior.
+- **Proposed, not run:** P0.5, a randomised multi-repair campaign.
+  - Pilot: about 73 k rollout-eq, about $0.65.
+  - Campaign: about 720 k rollout-eq, about $6–15. It does not fit the current $96 infra cap ($89.405 used) with a reserve.
+  - It needs separate approvals and a cap/top-up decision.
+- **Provenance notes:**
+  - historical HDB records store no source commit, no per-seed validation and no optimizer seeds;
+  - the archive copy `hdb/artifacts/hdb/ds1/pilot_A1e.jsonl` has 1 more record (`hdb-v1-gen-0040:short_feet:2`, FULL) than the
+    canonical `ds1/pilot_A1e.jsonl`.
+- **Next:** independent review of `docs/EXPERIENCE_P0_REPORT.md`. Nothing auto-advances.
