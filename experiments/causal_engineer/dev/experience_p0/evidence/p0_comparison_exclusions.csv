@@ -1,0 +1,457 @@
+file,line,iid,arm,reason
+hdb/artifacts/hdb/vs_a1.jsonl,4,stilts-drawn:pitch_sensor_bias:7,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,5,tiny-feet:pitch_sensor_bias:7,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,6,top-heavy:pitch_sensor_bias:7,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,7,stilts-drawn:payload_offset:3,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,9,top-heavy:payload_offset:3,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,10,stilts-drawn:payload_offset:5,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,11,tiny-feet:payload_offset:5,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,12,top-heavy:payload_offset:5,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,15,top-heavy:low_ground_friction:2,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,16,stilts-drawn:low_ground_friction:4,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,17,tiny-feet:low_ground_friction:4,A1,no resolvable tool
+hdb/artifacts/hdb/vs_a1.jsonl,22,stilts-drawn:short_feet:3,A1,no resolvable tool
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,1,stilts-drawn:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,2,stilts-drawn:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,3,stilts-drawn:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,5,stilts-drawn:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,7,stilts-drawn:payload_offset:3,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,8,stilts-drawn:payload_offset:3,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,9,stilts-drawn:payload_offset:3,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,11,stilts-drawn:payload_offset:3,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,13,top-heavy:low_ground_friction:2,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,14,top-heavy:low_ground_friction:2,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,15,top-heavy:low_ground_friction:2,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,17,top-heavy:short_feet:2,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,18,top-heavy:short_feet:2,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,19,top-heavy:short_feet:2,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,21,top-heavy:short_feet:2,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,23,stilts-drawn:low_ground_friction:2,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,24,stilts-drawn:low_ground_friction:2,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,25,stilts-drawn:low_ground_friction:2,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,27,stilts-drawn:low_ground_friction:2,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,28,stilts-drawn:short_feet:2,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,29,stilts-drawn:short_feet:2,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,30,stilts-drawn:short_feet:2,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,32,stilts-drawn:short_feet:2,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,34,tiny-feet:payload_offset:3,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,35,tiny-feet:payload_offset:3,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,36,tiny-feet:payload_offset:3,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,38,tiny-feet:low_ground_friction:2,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,39,tiny-feet:low_ground_friction:2,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,40,tiny-feet:low_ground_friction:2,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,41,top-heavy:payload_offset:3,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,42,top-heavy:payload_offset:3,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,43,top-heavy:payload_offset:3,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv_dev_v1.jsonl,45,top-heavy:payload_offset:3,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,1,stilts-drawn:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,2,stilts-drawn:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,3,stilts-drawn:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,5,stilts-drawn:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,7,tiny-feet:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,8,tiny-feet:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,9,tiny-feet:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,11,tiny-feet:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,13,top-heavy:low_ground_friction:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,14,top-heavy:low_ground_friction:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,15,top-heavy:low_ground_friction:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,17,top-heavy:low_ground_friction:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,19,stilts-drawn:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,20,stilts-drawn:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,21,stilts-drawn:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,23,stilts-drawn:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,25,tiny-feet:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,26,tiny-feet:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,27,tiny-feet:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,29,tiny-feet:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,31,top-heavy:short_feet:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,32,top-heavy:short_feet:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,33,top-heavy:short_feet:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,35,top-heavy:short_feet:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,37,stilts-drawn:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,38,stilts-drawn:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,39,stilts-drawn:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,41,stilts-drawn:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,43,tiny-feet:low_ground_friction:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,44,tiny-feet:low_ground_friction:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,45,tiny-feet:low_ground_friction:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,47,tiny-feet:low_ground_friction:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,49,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,50,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,51,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,53,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,55,stilts-drawn:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,56,stilts-drawn:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,57,stilts-drawn:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,59,stilts-drawn:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,61,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,62,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,63,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,65,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,67,stilts-drawn:low_ground_friction:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,68,stilts-drawn:low_ground_friction:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,69,stilts-drawn:low_ground_friction:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,71,stilts-drawn:low_ground_friction:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,73,top-heavy:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,74,top-heavy:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,75,top-heavy:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,77,top-heavy:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,79,walkrec-dev-m1-gen-0000:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,80,walkrec-dev-m1-gen-0000:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,81,walkrec-dev-m1-gen-0000:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,83,walkrec-dev-m1-gen-0000:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,85,stilts-drawn:short_feet:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,86,stilts-drawn:short_feet:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,87,stilts-drawn:short_feet:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,89,stilts-drawn:short_feet:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,91,top-heavy:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,92,top-heavy:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,93,top-heavy:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,95,top-heavy:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,97,walkrec-dev-m1-gen-0000:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,98,walkrec-dev-m1-gen-0000:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,99,walkrec-dev-m1-gen-0000:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,101,walkrec-dev-m1-gen-0000:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,103,tiny-feet:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,104,tiny-feet:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,105,tiny-feet:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,107,tiny-feet:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,109,top-heavy:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,110,top-heavy:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,111,top-heavy:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,113,top-heavy:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,115,tiny-feet:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,116,tiny-feet:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,117,tiny-feet:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,119,tiny-feet:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,121,top-heavy:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,122,top-heavy:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,123,top-heavy:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv4.jsonl,125,top-heavy:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,1,stilts-drawn:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,2,stilts-drawn:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,3,stilts-drawn:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,5,stilts-drawn:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,7,tiny-feet:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,8,tiny-feet:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,9,tiny-feet:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,11,tiny-feet:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,13,top-heavy:low_ground_friction:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,14,top-heavy:low_ground_friction:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,15,top-heavy:low_ground_friction:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,17,top-heavy:low_ground_friction:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,19,stilts-drawn:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,20,stilts-drawn:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,21,stilts-drawn:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,23,stilts-drawn:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,25,tiny-feet:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,26,tiny-feet:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,27,tiny-feet:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,29,tiny-feet:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,31,top-heavy:short_feet:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,32,top-heavy:short_feet:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,33,top-heavy:short_feet:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,35,top-heavy:short_feet:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,37,stilts-drawn:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,38,stilts-drawn:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,39,stilts-drawn:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,41,stilts-drawn:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,43,tiny-feet:low_ground_friction:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,44,tiny-feet:low_ground_friction:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,45,tiny-feet:low_ground_friction:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,47,tiny-feet:low_ground_friction:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,49,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,50,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,51,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,53,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,55,stilts-drawn:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,56,stilts-drawn:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,57,stilts-drawn:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,59,stilts-drawn:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,61,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,62,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,63,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,65,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,67,stilts-drawn:low_ground_friction:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,68,stilts-drawn:low_ground_friction:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,69,stilts-drawn:low_ground_friction:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,71,stilts-drawn:low_ground_friction:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,73,top-heavy:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,74,top-heavy:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,75,top-heavy:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,77,top-heavy:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,79,walkrec-dev-m1-gen-0000:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,80,walkrec-dev-m1-gen-0000:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,81,walkrec-dev-m1-gen-0000:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,83,walkrec-dev-m1-gen-0000:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,85,stilts-drawn:short_feet:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,86,stilts-drawn:short_feet:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,87,stilts-drawn:short_feet:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,89,stilts-drawn:short_feet:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,91,top-heavy:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,92,top-heavy:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,93,top-heavy:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,95,top-heavy:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,97,walkrec-dev-m1-gen-0000:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,98,walkrec-dev-m1-gen-0000:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,99,walkrec-dev-m1-gen-0000:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,101,walkrec-dev-m1-gen-0000:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,103,tiny-feet:pitch_sensor_bias:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,104,tiny-feet:pitch_sensor_bias:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,105,tiny-feet:pitch_sensor_bias:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,107,tiny-feet:pitch_sensor_bias:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,109,top-heavy:payload_offset:1,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,110,top-heavy:payload_offset:1,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,111,top-heavy:payload_offset:1,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,113,top-heavy:payload_offset:1,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,115,tiny-feet:pitch_sensor_bias:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,116,tiny-feet:pitch_sensor_bias:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,117,tiny-feet:pitch_sensor_bias:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,119,tiny-feet:pitch_sensor_bias:4,K4,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,121,top-heavy:payload_offset:4,K2,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,122,top-heavy:payload_offset:4,K1,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,123,top-heavy:payload_offset:4,K3,oracle-informed condition
+hdb/artifacts/hdb/mkv5.jsonl,125,top-heavy:payload_offset:4,K4,oracle-informed condition
+hdb/artifacts/hdb/stage2_final/s2_transfer_A3.jsonl,17,hdb-v1-gen-0073:low_ground_friction:1,A3,no resolvable tool
+hdb/artifacts/hdb/stage2_final/s2_transfer_A3.jsonl,25,hdb-v1-gen-0142:payload_offset:4,A3,no resolvable tool
+hdb/artifacts/hdb/stage2_final/s2_transfer_A4bad.jsonl,4,hdb-v1-gen-0143:heavy_torso:1,A4bad,no resolvable tool
+ds1/eval/eval_A3v5_s0.jsonl,2,hdb-v1-gen-0073:heavy_torso:2,A3v5,no resolvable tool
+ds1/eval/eval_A3v5_s0.jsonl,3,hdb-v1-gen-0104:short_feet:2,A3v5,no resolvable tool
+hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0004_feedback_gain_loss_2.jsonl,1,hdb-v1-gen-0004:feedback_gain_loss:2,A4x,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,2,stilts-drawn:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,3,tiny-feet:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,7,walkrec-dev-m1-gen-0002:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,9,top-heavy:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,15,walkrec-dev-m1-gen-0005:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,19,walkrec-dev-m1-gen-0006:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,21,walkrec-dev-m1-gen-0003:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,23,stilts-drawn:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,30,tiny-feet:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,31,walkrec-dev-m1-gen-0007:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,34,walkrec-dev-m1-gen-0001:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,36,top-heavy:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,39,walkrec-dev-m1-gen-0002:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,45,walkrec-dev-m1-gen-0003:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,47,walkrec-dev-m1-gen-0005:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,50,walkrec-dev-m1-gen-0006:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,54,walkrec-dev-m1-gen-0007:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,56,stilts-drawn:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,64,top-heavy:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,69,walkrec-dev-m1-gen-0003:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,71,walkrec-dev-m1-gen-0004:payload_offset:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,74,walkrec-dev-m1-gen-0005:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,80,stilts-drawn:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,82,walkrec-dev-m1-gen-0007:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,84,top-heavy:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,88,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,97,walkrec-dev-m1-gen-0001:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,100,walkrec-dev-m1-gen-0004:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,102,walkrec-dev-m1-gen-0003:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,110,walkrec-dev-m1-gen-0007:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,111,weak-slippery:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,117,top-heavy:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,118,walkrec-dev-m1-gen-0002:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,122,walkrec-dev-m1-gen-0000:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,125,walkrec-dev-m1-gen-0003:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,128,walkrec-dev-m1-gen-0004:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,129,walkrec-dev-m1-gen-0007:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,130,tiny-feet:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,139,walkrec-dev-m1-gen-0002:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,140,top-heavy:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,147,walkrec-dev-m1-gen-0003:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,150,walkrec-dev-m1-gen-0004:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,151,walkrec-dev-m1-gen-0006:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,156,walkrec-dev-m1-gen-0007:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,161,tiny-feet:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,164,walkrec-dev-m1-gen-0000:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,165,walkrec-dev-m1-gen-0003:payload_offset:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,168,walkrec-dev-m1-gen-0004:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,172,walkrec-dev-m1-gen-0006:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,176,walkrec-dev-m1-gen-0007:payload_offset:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,178,tiny-feet:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,181,top-heavy:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,188,walkrec-dev-m1-gen-0003:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,190,walkrec-dev-m1-gen-0002:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,191,walkrec-dev-m1-gen-0004:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,192,walkrec-dev-m1-gen-0006:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,199,weak-slippery:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,201,walkrec-dev-m1-gen-0007:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,207,stilts-drawn:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,208,top-heavy:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,214,walkrec-dev-m1-gen-0005:pitch_sensor_bias:3,stopcal:counterfactual,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,216,walkrec-dev-m1-gen-0005:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,221,walkrec-dev-m1-gen-0006:payload_offset:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,223,walkrec-dev-m1-gen-0007:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,226,stilts-drawn:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,227,tiny-feet:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,233,top-heavy:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,236,walkrec-dev-m1-gen-0001:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,243,walkrec-dev-m1-gen-0006:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,244,walkrec-dev-m1-gen-0005:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,250,walkrec-dev-m1-gen-0007:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,251,stilts-drawn:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,261,tiny-feet:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,263,walkrec-dev-m1-gen-0001:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,266,walkrec-dev-m1-gen-0000:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,269,walkrec-dev-m1-gen-0005:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,274,stilts-drawn:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,276,walkrec-dev-m1-gen-0006:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,277,weak-slippery:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,285,tiny-feet:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,288,walkrec-dev-m1-gen-0001:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,292,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,295,walkrec-dev-m1-gen-0004:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,297,walkrec-dev-m1-gen-0005:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,301,walkrec-dev-m1-gen-0006:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,306,weak-slippery:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,307,stilts-drawn:payload_offset:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,315,walkrec-dev-m1-gen-0002:short_feet:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,316,walkrec-dev-m1-gen-0000:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,318,walkrec-dev-m1-gen-0005:payload_offset:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,322,stilts-drawn:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,324,weak-slippery:pitch_sensor_bias:3,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,332,walkrec-dev-m1-gen-0002:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,333,walkrec-dev-m1-gen-0001:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,337,walkrec-dev-m1-gen-0004:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,338,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,341,walkrec-dev-m1-gen-0005:payload_offset:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,347,walkrec-dev-m1-gen-0006:short_feet:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,354,weak-slippery:pitch_sensor_bias:4,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,356,stilts-drawn:low_ground_friction:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,362,walkrec-dev-m1-gen-0000:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,364,walkrec-dev-m1-gen-0004:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,366,walkrec-dev-m1-gen-0003:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,368,walkrec-dev-m1-gen-0007:pitch_sensor_bias:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,377,weak-slippery:payload_offset:0,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,378,top-heavy:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,379,stilts-drawn:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,387,walkrec-dev-m1-gen-0000:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,389,walkrec-dev-m1-gen-0001:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,391,walkrec-dev-m1-gen-0004:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,395,walkrec-dev-m1-gen-0003:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,397,walkrec-dev-m1-gen-0005:low_ground_friction:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,400,walkrec-dev-m1-gen-0007:pitch_sensor_bias:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,406,weak-slippery:payload_offset:1,stopcal:initial,no resolvable tool
+hdb/artifacts/hdb/stopcal.jsonl,407,stilts-drawn:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,408,stilts-drawn:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,409,stilts-drawn:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,412,stilts-drawn:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,413,stilts-drawn:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,420,tiny-feet:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,424,tiny-feet:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,426,tiny-feet:payload_offset:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,427,tiny-feet:payload_offset:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,429,tiny-feet:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,432,top-heavy:low_ground_friction:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,433,top-heavy:low_ground_friction:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,434,top-heavy:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,438,top-heavy:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,439,top-heavy:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,442,top-heavy:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,446,stilts-drawn:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,447,stilts-drawn:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,448,stilts-drawn:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,449,stilts-drawn:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,451,stilts-drawn:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,452,stilts-drawn:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,455,tiny-feet:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,457,tiny-feet:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,461,tiny-feet:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,463,tiny-feet:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,466,tiny-feet:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,467,top-heavy:short_feet:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,469,top-heavy:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,471,top-heavy:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,472,top-heavy:short_feet:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,474,top-heavy:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,475,top-heavy:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,477,top-heavy:short_feet:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,484,stilts-drawn:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,487,stilts-drawn:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,492,tiny-feet:low_ground_friction:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,493,tiny-feet:low_ground_friction:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,494,tiny-feet:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,498,tiny-feet:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,503,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,504,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,505,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,506,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,507,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,508,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,509,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,510,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,511,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,517,stilts-drawn:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,518,stilts-drawn:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,520,stilts-drawn:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,521,stilts-drawn:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,522,stilts-drawn:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,524,stilts-drawn:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,532,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,533,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,534,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,535,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,536,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,541,stilts-drawn:low_ground_friction:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,544,stilts-drawn:low_ground_friction:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,545,stilts-drawn:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,546,stilts-drawn:low_ground_friction:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,554,top-heavy:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,555,top-heavy:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,556,top-heavy:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,557,top-heavy:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,558,top-heavy:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,559,top-heavy:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,560,top-heavy:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,561,top-heavy:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,563,top-heavy:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,568,walkrec-dev-m1-gen-0000:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,569,walkrec-dev-m1-gen-0000:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,570,walkrec-dev-m1-gen-0000:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,572,walkrec-dev-m1-gen-0000:payload_offset:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,574,walkrec-dev-m1-gen-0000:payload_offset:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,577,stilts-drawn:short_feet:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,582,stilts-drawn:short_feet:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,583,stilts-drawn:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,584,stilts-drawn:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,585,stilts-drawn:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,586,stilts-drawn:short_feet:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,587,stilts-drawn:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,588,stilts-drawn:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,593,stilts-drawn:short_feet:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,595,top-heavy:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,597,top-heavy:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,598,top-heavy:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,599,top-heavy:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,600,top-heavy:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,602,top-heavy:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,605,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,607,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,611,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,612,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,613,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,614,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,618,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,621,walkrec-dev-m1-gen-0000:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,622,tiny-feet:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,623,tiny-feet:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,627,tiny-feet:pitch_sensor_bias:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,629,tiny-feet:pitch_sensor_bias:1,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,636,top-heavy:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,637,tiny-feet:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,638,top-heavy:payload_offset:1,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,639,tiny-feet:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,642,tiny-feet:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,644,tiny-feet:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,645,tiny-feet:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,646,tiny-feet:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,647,tiny-feet:pitch_sensor_bias:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,648,tiny-feet:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,649,tiny-feet:pitch_sensor_bias:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,657,top-heavy:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,658,top-heavy:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,659,top-heavy:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,660,top-heavy:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,661,top-heavy:payload_offset:4,stopcal:twin,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,664,top-heavy:payload_offset:4,stopcal:repair,oracle-informed condition
+hdb/artifacts/hdb/stopcal.jsonl,665,top-heavy:payload_offset:4,stopcal:repair,oracle-informed condition

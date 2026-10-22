@@ -986,3 +986,14 @@ missing records. They are frozen and are not changed.
   - the archive copy `hdb/artifacts/hdb/ds1/pilot_A1e.jsonl` has 1 more record (`hdb-v1-gen-0040:short_feet:2`, FULL) than the
     canonical `ds1/pilot_A1e.jsonl`.
 - **Next:** independent review of `docs/EXPERIENCE_P0_REPORT.md`. Nothing auto-advances.
+
+## 2026-10-22 - Experience-learning P0: evidence publication for independent audit
+- **Handoff:** `docs/EXPERIENCE_P0_HANDOFF.md`. Row-level evidence is in `experiments/causal_engineer/dev/experience_p0/evidence/`
+  (`scripts/exp_p0_evidence.py`, fail-closed against the committed outputs; passed).
+- **Determinism:** a re-run of `inventory` / `analyse` is byte-identical.
+- **DS-1 `cases_init.json`:** rebuilt row by row (947/947), with every row and every instance id present in the P0 corpus.
+- **Correction (append-only log):** the "1 instance (TA-1 L4)" in the entry above is **TA-1 L1**
+  (`hdb-v1-gen-0073:low_ground_friction:2`, NOT_RECOVERED in both arms). This is report erratum E1; counts and verdict are
+  unchanged.
+- **Incident:** the session parsed `walkers_all.jsonl` once during schema profiling (`docs/memory/INCIDENTS.md`, 2026-10-22).
+  No influence on P0.

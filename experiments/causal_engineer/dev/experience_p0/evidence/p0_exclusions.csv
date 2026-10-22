@@ -1,0 +1,217 @@
+level,path,line,iid,arm,reason,sha256,records
+record,hdb/artifacts/hdb/vs_a1.jsonl,2,tiny-feet:pitch_sensor_bias:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs_a1.jsonl,3,top-heavy:pitch_sensor_bias:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs_a1.jsonl,20,tiny-feet:short_feet:2,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs_a1.jsonl,23,tiny-feet:short_feet:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,4,walkrec-dev-m1-gen-0001:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,21,walkrec-dev-m1-gen-0000:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,22,walkrec-dev-m1-gen-0001:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,27,weak-slippery:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,34,walkrec-dev-m1-gen-0005:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,37,tiny-feet:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,43,walkrec-dev-m1-gen-0006:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,47,walkrec-dev-m1-gen-0000:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,54,top-heavy:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,56,walkrec-dev-m1-gen-0002:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,61,weak-slippery:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,64,walkrec-dev-m1-gen-0000:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,72,tiny-feet:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,74,walkrec-dev-m1-gen-0001:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,75,walkrec-dev-m1-gen-0002:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,83,walkrec-dev-m1-gen-0002:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,91,walkrec-dev-m1-gen-0004:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,105,walkrec-dev-m1-gen-0001:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,107,walkrec-dev-m1-gen-0004:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,109,walkrec-dev-m1-gen-0006:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,120,top-heavy:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,122,walkrec-dev-m1-gen-0001:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs2_a1.jsonl,125,walkrec-dev-m1-gen-0005:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,4,top-heavy:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,7,walkrec-dev-m1-gen-0001:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,8,walkrec-dev-m1-gen-0001:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,14,walkrec-dev-m1-gen-0005:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,39,tiny-feet:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,42,walkrec-dev-m1-gen-0000:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,43,walkrec-dev-m1-gen-0001:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,44,walkrec-dev-m1-gen-0001:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,45,walkrec-dev-m1-gen-0002:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,53,weak-slippery:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,62,walkrec-dev-m1-gen-0002:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,66,walkrec-dev-m1-gen-0005:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,72,tiny-feet:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,80,walkrec-dev-m1-gen-0004:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,83,walkrec-dev-m1-gen-0006:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,92,walkrec-dev-m1-gen-0000:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,105,top-heavy:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,108,walkrec-dev-m1-gen-0001:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,109,walkrec-dev-m1-gen-0002:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,112,walkrec-dev-m1-gen-0004:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,116,walkrec-dev-m1-gen-0006:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,119,weak-slippery:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A0.jsonl,124,walkrec-dev-m1-gen-0000:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,4,walkrec-dev-m1-gen-0001:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,21,walkrec-dev-m1-gen-0000:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,22,walkrec-dev-m1-gen-0001:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,27,weak-slippery:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,34,walkrec-dev-m1-gen-0005:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,37,tiny-feet:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,43,walkrec-dev-m1-gen-0006:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,47,walkrec-dev-m1-gen-0000:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,54,top-heavy:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,56,walkrec-dev-m1-gen-0002:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,61,weak-slippery:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,64,walkrec-dev-m1-gen-0000:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,72,tiny-feet:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,74,walkrec-dev-m1-gen-0001:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,75,walkrec-dev-m1-gen-0002:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,83,walkrec-dev-m1-gen-0002:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,91,walkrec-dev-m1-gen-0004:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,105,walkrec-dev-m1-gen-0001:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,107,walkrec-dev-m1-gen-0004:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,109,walkrec-dev-m1-gen-0006:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,120,top-heavy:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,122,walkrec-dev-m1-gen-0001:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1c.jsonl,125,walkrec-dev-m1-gen-0005:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,4,top-heavy:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,7,walkrec-dev-m1-gen-0001:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,8,walkrec-dev-m1-gen-0001:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,14,walkrec-dev-m1-gen-0005:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,39,tiny-feet:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,42,walkrec-dev-m1-gen-0000:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,43,walkrec-dev-m1-gen-0001:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,44,walkrec-dev-m1-gen-0001:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,45,walkrec-dev-m1-gen-0002:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,53,weak-slippery:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,62,walkrec-dev-m1-gen-0002:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,66,walkrec-dev-m1-gen-0005:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,72,tiny-feet:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,80,walkrec-dev-m1-gen-0004:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,83,walkrec-dev-m1-gen-0006:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,92,walkrec-dev-m1-gen-0000:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,105,top-heavy:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,108,walkrec-dev-m1-gen-0001:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,109,walkrec-dev-m1-gen-0002:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,112,walkrec-dev-m1-gen-0004:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,116,walkrec-dev-m1-gen-0006:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,119,weak-slippery:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_A1f.jsonl,124,walkrec-dev-m1-gen-0000:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,4,walkrec-dev-m1-gen-0001:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,21,walkrec-dev-m1-gen-0000:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,22,walkrec-dev-m1-gen-0001:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,27,weak-slippery:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,34,walkrec-dev-m1-gen-0005:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,37,tiny-feet:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,43,walkrec-dev-m1-gen-0006:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,47,walkrec-dev-m1-gen-0000:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,54,top-heavy:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,56,walkrec-dev-m1-gen-0002:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,61,weak-slippery:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,64,walkrec-dev-m1-gen-0000:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,72,tiny-feet:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,74,walkrec-dev-m1-gen-0001:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,75,walkrec-dev-m1-gen-0002:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,83,walkrec-dev-m1-gen-0002:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,91,walkrec-dev-m1-gen-0004:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,105,walkrec-dev-m1-gen-0001:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,107,walkrec-dev-m1-gen-0004:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,109,walkrec-dev-m1-gen-0006:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,120,top-heavy:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,122,walkrec-dev-m1-gen-0001:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs4_a1.jsonl,125,walkrec-dev-m1-gen-0005:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,4,walkrec-dev-m1-gen-0001:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,21,walkrec-dev-m1-gen-0000:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,22,walkrec-dev-m1-gen-0001:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,27,weak-slippery:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,34,walkrec-dev-m1-gen-0005:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,37,tiny-feet:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,43,walkrec-dev-m1-gen-0006:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,47,walkrec-dev-m1-gen-0000:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,54,top-heavy:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,56,walkrec-dev-m1-gen-0002:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,61,weak-slippery:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,64,walkrec-dev-m1-gen-0000:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,72,tiny-feet:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,74,walkrec-dev-m1-gen-0001:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,75,walkrec-dev-m1-gen-0002:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,83,walkrec-dev-m1-gen-0002:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,91,walkrec-dev-m1-gen-0004:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,105,walkrec-dev-m1-gen-0001:payload_offset:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,107,walkrec-dev-m1-gen-0004:pitch_sensor_bias:3,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,109,walkrec-dev-m1-gen-0006:short_feet:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,120,top-heavy:pitch_sensor_bias:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,122,walkrec-dev-m1-gen-0001:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/vs5_A1c.jsonl,125,walkrec-dev-m1-gen-0005:low_ground_friction:0,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,1,hdb-v1-gen-0004:pitch_sensor_bias:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,36,hdb-v1-gen-0037:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,78,hdb-v1-gen-0044:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,87,hdb-v1-gen-0034:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,140,hdb-v1-gen-0028:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,169,hdb-v1-gen-0030:one_side_weakness:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,187,hdb-v1-gen-0038:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,208,hdb-v1-gen-0004:one_side_weakness:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A0.jsonl,211,hdb-v1-gen-0024:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,1,hdb-v1-gen-0004:pitch_sensor_bias:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,36,hdb-v1-gen-0037:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,78,hdb-v1-gen-0044:low_ground_friction:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,87,hdb-v1-gen-0034:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,140,hdb-v1-gen-0028:payload_offset:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,169,hdb-v1-gen-0030:one_side_weakness:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,187,hdb-v1-gen-0038:short_feet:1,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,208,hdb-v1-gen-0004:one_side_weakness:4,,plant not eligible (physics eligibility false),,
+record,hdb/artifacts/hdb/fresh_A1c5.jsonl,211,hdb-v1-gen-0024:short_feet:1,,plant not eligible (physics eligibility false),,
+file,ds1/ds1_stopdata.jsonl,,,,re-measured evidence; labels are copies of recorded statuses,f5b805302cc16963ced6b7c51b5fb691d03650373b2eeba677efea2e423a1d99,231
+file,ds1/ds1_stopdata_b.jsonl,,,,re-measured evidence; labels are copies of recorded statuses,41bfb610fb34642dd5a17b4eac1ea8358b3ceb95a5f9f519343641e66dab5a87,219
+file,ce/ce/dev_mild_shard0.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,95cc155fe1205e83935b215d24d77ccb6968142b2d3ac60b94db837d7c2d63e3,24
+file,ce/ce/dev_mild_shard1.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,3a5c6a11220aa0b8dd4b45d393a775f62b2be7f0e22e4205cba9866b93bb11a3,24
+file,ce/ce/dev_mild_shard2.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,8dc02d5598b6e40a4f034bdf40ec670cf7051cd46106cb92ba551bdb6307a420,24
+file,ce/ce/dev_mild_shard3.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,1ca18525596427e87d4a76288560ed5c8158ae5426a44a63c15cf4b821450cab,24
+file,ce/ce/dev_mild_shard4.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,463f6eaac729ec4dc20e4564fffa1ba9ba69264d102c8cdbb66979cad4b8ea27,24
+file,ce/ce/dev_mild_shard5.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,71e8a01db885fb842b0dbeeaf590f216af43aee90073c40885123b1ed1c91f6f,24
+file,ce/ce/dev_shard0.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,342a3c6419f4aa1043ca6628275aff64adec459ed805b09820e3d71bd511f0b7,16
+file,ce/ce/dev_shard1.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,6a8b875fd37224109ccdf0ad3c75e57492e2584ae9e5d202542e035f764ca10b,16
+file,ce/ce/dev_shard10.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,8ae86b94a40a0fb5d61f58bcbbfbffe4a1bb16f7d72ca5b1251a3ad4d96b0e7b,16
+file,ce/ce/dev_shard11.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,f330c36e52395638fb9bf631e0d6ecc655a7144fd25cdb231138f3eed2cbd761,16
+file,ce/ce/dev_shard2.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,95b99a1685bfac5200d1547beda2778c8e86287903792a5a40ec9dc241cdc6fc,16
+file,ce/ce/dev_shard3.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,dfdf7d8a15cc296d6cfe3e585522d83e6662411cb4c5dad82f3a4967b293403f,16
+file,ce/ce/dev_shard4.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,2e5ef325458aecd0318fd468db10beee6393bea9f023accfcb58d8f705c19b3d,16
+file,ce/ce/dev_shard5.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,a83fbf73b848a183e3373120265e7aca2e9d10a8f28e2bd45a4c76064e93c6fb,16
+file,ce/ce/dev_shard6.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,0a421a85ea16a9bdb92ece62f4387f2f607912097628e13d8f1b5063e2035a78,16
+file,ce/ce/dev_shard7.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,ffdb82e269484ca9a440eeea6c98fbd0bed23151cf3bd8f2da7d71769ba301b5,16
+file,ce/ce/dev_shard8.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,e33417b4a935d4f640a68dfd1d0ab826fda1f463b45381febd3111a64c5f9589,16
+file,ce/ce/dev_shard9.jsonl,,,,fault-bench instance builds; the probe set carries the same matrices,f828117047edb0e016effe1233f96b7075056b7aa5c3bbefa679424045c86431,16
+file,hdb/artifacts/hdb/vs4_a1_partial.jsonl,,,,superseded partial / older version of a registered file,e625de77eab12accecde6f70a195f23629a454d10ddf23d0e392fa6fce1675f9,65
+file,hdb/artifacts/hdb/vs5_A1c_partial.jsonl,,,,superseded partial / older version of a registered file,ddcad9fcecc7036153d77a31fce9d5e25d1973553adbfd136243074eab1d869e,59
+file,hdb/artifacts/hdb/mkv2_partial.jsonl,,,,superseded partial / older version of a registered file,0282c5cbc372d2b9f4c50763510c258e71e71b933eba85d8f11350a57dac374c,118
+file,hdb/artifacts/hdb/stopcal_partial.jsonl,,,,superseded partial / older version of a registered file,03e3779adf492f7b3577f4db2d9e29c2158085283c7905947c60073aecf4354e,566
+file,hdb/artifacts/hdb/ident.jsonl,,,,superseded partial / older version of a registered file,39259d4f0c04f9088dbbfb14e2ddbe03c877ed34939a67a2913c760a710905a0,138
+file,hdb/artifacts/hdb/ident_v1_partial.jsonl,,,,superseded partial / older version of a registered file,071df245f40b7391b01a94c217e58d8674a27f6b2f2aafcbf5cf2a6d808dd1bd,111
+file,hdb/artifacts/hdb/ds1_stopdata.jsonl,,,,mirror copy; canonical copy used (identical),f5b805302cc16963ced6b7c51b5fb691d03650373b2eeba677efea2e423a1d99,231
+file,hdb/artifacts/hdb/ds1/eval_A3v5_c.jsonl,,,,mirror copy; canonical copy used (identical),afddac43502188efec03ffe54c889851c3e5556b56764102dd639ede3d34fa5e,6
+file,hdb/artifacts/hdb/ds1/eval_A3v5_s0.jsonl,,,,mirror copy; canonical copy used (identical),6d7a2d371c37a06d04069a35ccca01d3627cf842f78c3cd355d50ed71666d41b,5
+file,hdb/artifacts/hdb/ds1/eval_A3v5_s1.jsonl,,,,mirror copy; canonical copy used (identical),d0808c7ca1c89276365de2493199db986d36fe41ab3424586d22629e2e7d87ff,5
+file,hdb/artifacts/hdb/ds1/eval_A3v5_s2.jsonl,,,,mirror copy; canonical copy used (identical),98ff2ba300b593bf82c098e6c6169f29bef9bb3f882187e1226117ce46b1e4e5,5
+file,hdb/artifacts/hdb/ds1/eval_A3v5_s3.jsonl,,,,mirror copy; canonical copy used (identical),1cf16158270682812148d399fab717b338779ae0b7ca4efc57f2c3893efa2fc5,5
+file,hdb/artifacts/hdb/ds1/eval_A3v5_s4.jsonl,,,,mirror copy; canonical copy used (identical),a0e9f5b2ea3972db5328163bc598b2a8492add86ac80d52149a7f03879e2c01a,5
+file,hdb/artifacts/hdb/ds1/eval_A3v5_s5.jsonl,,,,mirror copy; canonical copy used (identical),701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0,5
+file,hdb/artifacts/hdb/ds1/eval_A4x_c.jsonl,,,,mirror copy; canonical copy used (identical),a4c8b096ada8c1421673d47a16c75bfc66341cca8e652e7c9a0c13395ad2b365,6
+file,hdb/artifacts/hdb/ds1/eval_A4x_s0.jsonl,,,,mirror copy; canonical copy used (identical),3d0c319f337285882effaaefcbbb82adb126dbff546b086874dc76ee79ff181f,5
+file,hdb/artifacts/hdb/ds1/eval_A4x_s1.jsonl,,,,mirror copy; canonical copy used (identical),dc146e385289947aa12e093ac169a8785067dcdba6cb4934f460dba008cd7e2d,5
+file,hdb/artifacts/hdb/ds1/eval_A4x_s2.jsonl,,,,mirror copy; canonical copy used (identical),1726000c7cc03794060510f3e6ee6feeb01a6126e8c492ad0ce65dd2863db1c8,5
+file,hdb/artifacts/hdb/ds1/eval_A4x_s3.jsonl,,,,mirror copy; canonical copy used (identical),d41970a915b8587218405990d605152f8593a1d4ab01dc1de07a2141e1a0f9f3,5
+file,hdb/artifacts/hdb/ds1/eval_A4x_s4.jsonl,,,,mirror copy; canonical copy used (identical),91dcffe003eecbd9d054671bfc8d8b66eb3399a55bfacfc0972ae3230fe64f21,5
+file,hdb/artifacts/hdb/ds1/eval_A4x_s5.jsonl,,,,mirror copy; canonical copy used (identical),278c65dd43f9e8dc9a2df826116bfeb15f1323c9a53b6b8471c2a745d1b1db7f,5
+file,hdb/artifacts/hdb/ds1/pilot_A1e.c.jsonl,,,,mirror copy; canonical copy used (identical),7887dbc86751d74759d8c80955f6bde5913ecd696438a7337c781886c24ca18c,1
+file,hdb/artifacts/hdb/ds1/pilot_A1e.jsonl,,,,mirror copy; canonical copy used (DIFFERS),07f31b02310b9e9026eaa871057c2ff4d28cbb8014ab82d9d03411ca3e946377,3
+file,hdb/artifacts/hdb/ds1/pilot_A1e6.c.jsonl,,,,mirror copy; canonical copy used (identical),5f92e0f69209a2268972bf014e6d0e95d8933499844424311fd9162229e60a7b,1
+file,hdb/artifacts/hdb/ds1/pilot_A1e6.jsonl,,,,mirror copy; canonical copy used (identical),dd8ac21f6e7254bcc64ace03634d83dc78839121309c1f61130f7823bfe5f845,3
+file,hdb/artifacts/hdb/ds1/pilot_A3v5.c.jsonl,,,,mirror copy; canonical copy used (identical),2ede9373fa0e56bb5b985d7800ace9492f9df32c30fe209ac5c3e43c40589ffc,1
+file,hdb/artifacts/hdb/ds1/pilot_A3v5.jsonl,,,,mirror copy; canonical copy used (identical),1847ad2384109c8f013348ae9bd83f980faf08a468222fe70c82099e98b7ab07,2
+file,hdb/artifacts/hdb/ds1/pilot_A4x.c.jsonl,,,,mirror copy; canonical copy used (identical),b933176388e7034d70ad5847b0f28276e62ae41627286683635d87f9c9b9fcee,1
+file,hdb/artifacts/hdb/ds1/pilot_A4x.jsonl,,,,mirror copy; canonical copy used (identical),0c36c3915d251bbec755eb4514c4c830766fadd062f8e50825ba947ba978993a,2
+file,hdb/artifacts/hdb/ds1/pilot_A4x_noscientist.jsonl,,,,mirror copy; canonical copy used (identical),21be48f442c49e9137771085e12a5da1baecad0f62fcf3b619f8b11fc9b95e8a,1
+file (never opened),hdb/artifacts/hdb/walkers_all.jsonl,,,,contains test-split walker designs (sealed split); not used,,
+file (never opened),cehb/**/*.jsonl,,,,causal-engineer held-out evaluation shards (registered evaluation set); not used,,
+file (never opened),experiments/causal_engineer/heldout/**,,,,causal-engineer held-out evaluation (registered evaluation set); not used,,
+file (never opened),hdb/artifacts/hdb/stage2_final/inference_ledger_*.jsonl,,,,inference ledger; no outcomes,,
+file (never opened),hdb/artifacts/hdb/noise_cal.jsonl,,,,noise calibration of the twin; no repair outcomes,,
+file (never opened),"ce2/**, ce3/ce/pilot*, ce3/ce/demo_src.jsonl",,,,"causal-engineer scientist episodes (adaptive LLM runs, older bench); the standardised probe set covers this bench",,

@@ -125,3 +125,29 @@ Append one incident per significant recurring failure. Mark everything here as `
   - No test ran, so this is not a code failure.
 - Impact: there is no CI signal on any branch or PR (including PR #18) until the owner fixes GitHub billing.
 - Not done: no workaround, and no workflow change on this branch. PR #18 already reduces Actions usage once merged.
+
+## 2026-10-22 - Experience-learning P0: one parse of the sealed-side walker file during schema profiling
+- **What happened.** Around 14:18 CEST (file mtime 14:18:20 +02:00), while locating the archives and before the audit code
+  existed, a throw-away profiling script parsed `walkers_all.jsonl` once. Exact source in
+  `docs/EXPERIENCE_P0_HANDOFF.md` §5. The file lives in the git-ignored VM pull at
+  `<VM_ROOT>/hdb/artifacts/hdb/walkers_all.jsonl` and is presumed to hold walker designs of both HDB splits, test included. That is inferred from `hdb_bench.load_bases`, which filters walker records by `hdb_split`; it was not verified by inspection.
+- **How it was read.** The script's glob `hdb/artifacts/hdb/*.jsonl` matched the file. It `json.loads`-ed all 250 rows into
+  process memory and accessed only these fields:
+  - `instance_id` (absent, so "");
+  - `arm` / `condition` / `source` (all absent);
+  - `bench` (absent, so None);
+  - whether a `verification` dict or a `status` key exists (presence only; the value was never read).
+- **The only output** was one line:
+  `hdb\artifacts\hdb\walkers_all.jsonl  n= 250 ver= 250 off=250 bench={None: 250} arms={'': 250}`.
+  No base id, design parameter, region, split label or outcome value was printed or stored.
+- **Effect on P0.** None on splitting, thresholds or features:
+  - the split is the pre-existing `stage2_split.json` (2026-10-19);
+  - D1/D2 were set from HDB/causal-engineer support counts;
+  - features come from development records.
+
+  The only consequence was the decision to exclude the file explicitly. The audit code never registers or opens it, a test
+  enforces this, and the file has not been accessed since.
+- **Contamination assessment.** No P0 population is treated as contaminated. For the sealed HDB test split, record a
+  schema-level exposure: row count 250, and absence or presence of the listed keys.
+- **Rule.** Never glob a whole archive directory that contains sealed files. Enumerate allowed sources explicitly (as
+  `experience_audit.SOURCES` does).

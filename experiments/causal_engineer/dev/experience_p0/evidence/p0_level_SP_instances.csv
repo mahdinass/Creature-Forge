@@ -1,0 +1,126 @@
+level,bench,iid,base,engine,tools,informative
+P,hdb_v1,stilts-drawn:low_ground_friction:2,stilts-drawn,belief_engine_v1,"{""foot_length"": [0], ""timing"": [0]}",False
+P,hdb_v1,stilts-drawn:pitch_sensor_bias:4,stilts-drawn,belief_engine_v1,"{""foot_length"": [0], ""placement"": [0]}",False
+P,hdb_v1,tiny-feet:payload_offset:3,tiny-feet,belief_engine_v1,"{""feedback"": [0], ""leg_length"": [0]}",False
+P,hdb_v1,top-heavy:short_feet:2,top-heavy,belief_engine_v1,"{""feedback"": [0], ""leg_length"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0036:payload_offset:2,hdb-v1-gen-0036,belief_engine_v6,"{""posture"": [1], ""torso_mass"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0037:actuator_weakness:1,hdb-v1-gen-0037,belief_engine_v5,"{""leg_length"": [1, 1, 1], ""torso_mass"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0037:feedback_gain_loss:1,hdb-v1-gen-0037,belief_engine_v5,"{""posture"": [0, 0, 0], ""torque_limit"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0037:heavy_torso:1,hdb-v1-gen-0037,belief_engine_v5,"{""posture"": [1, 1, 1], ""timing"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0037:low_ground_friction:1,hdb-v1-gen-0037,belief_engine_v5,"{""foot_length"": [0, 0], ""timing"": [1, 1]}",True
+P,hdb_v2,hdb-v1-gen-0039:clock_fault:2,hdb-v1-gen-0039,belief_engine_v6,"{""foot_length"": [0], ""placement"": [0], ""timing"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0064:clock_fault:2,hdb-v1-gen-0064,belief_engine_v6,"{""foot_length"": [0], ""leg_length"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0064:one_side_weakness:3,hdb-v1-gen-0064,belief_engine_v6,"{""timing"": [0], ""torso_mass"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0064:pitch_sensor_bias:2,hdb-v1-gen-0064,belief_engine_v6,"{""leg_length"": [0], ""torso_mass"": [1]}",True
+P,hdb_v2,hdb-v1-gen-0070:clock_fault:4,hdb-v1-gen-0070,belief_engine_v5,"{""leg_length"": [0, 0], ""torque_limit"": [0], ""torso_mass"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0070:feedback_gain_loss:2,hdb-v1-gen-0070,belief_engine_v6,"{""foot_length"": [0], ""placement"": [1], ""posture"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0070:pitch_sensor_bias:0,hdb-v1-gen-0070,belief_engine_v6,"{""foot_length"": [0, 0], ""torso_mass"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0070:pitch_sensor_bias:3,hdb-v1-gen-0070,belief_engine_v6,"{""leg_length"": [1, 1], ""stride"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0073:actuator_weakness:1,hdb-v1-gen-0073,belief_engine_v5,"{""leg_length"": [0, 0, 0, 0], ""posture"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0073:feedback_gain_loss:1,hdb-v1-gen-0073,belief_engine_v5,"{""leg_length"": [0], ""placement"": [0, 0], ""timing"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0073:heavy_torso:0,hdb-v1-gen-0073,belief_engine_v6,"{""leg_length"": [1], ""placement"": [0], ""posture"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0073:heavy_torso:1,hdb-v1-gen-0073,belief_engine_v5,"{""leg_length"": [0, 0, 0, 0], ""posture"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0073:heavy_torso:2,hdb-v1-gen-0073,belief_engine_v6,"{""placement"": [0], ""torso_mass"": [1]}",True
+P,hdb_v2,hdb-v1-gen-0073:low_ground_friction:0,hdb-v1-gen-0073,belief_engine_v6,"{""leg_length"": [0, 0], ""timing"": [0]}",False
+S,hdb_v2,hdb-v1-gen-0073:low_ground_friction:2,hdb-v1-gen-0073,harness,"{""placement"": [0], ""posture"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0073:short_feet:1,hdb-v1-gen-0073,belief_engine_v5,"{""leg_length"": [0], ""placement"": [0, 0], ""timing"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0096:payload_offset:2,hdb-v1-gen-0096,belief_engine_v6,"{""leg_length"": [0, 0], ""timing"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0096:payload_offset:4,hdb-v1-gen-0096,belief_engine_v5,"{""foot_length"": [0, 0], ""posture"": [0], ""timing"": [1]}",True
+P,hdb_v2,hdb-v1-gen-0099:payload_offset:3,hdb-v1-gen-0099,belief_engine_v6,"{""feedback"": [0], ""foot_length"": [0], ""torque_limit"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0099:pitch_sensor_bias:1,hdb-v1-gen-0099,belief_engine_v5,"{""leg_length"": [0, 0, 1], ""posture"": [1], ""stride"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0103:payload_offset:0,hdb-v1-gen-0103,belief_engine_v6,"{""posture"": [1], ""torso_mass"": [0, 0]}",True
+P,hdb_v2,hdb-v1-gen-0104:one_side_weakness:1,hdb-v1-gen-0104,belief_engine_v5,"{""placement"": [0], ""posture"": [0], ""stride"": [1], ""timing"": [1, 1]}",True
+P,hdb_v2,hdb-v1-gen-0104:payload_offset:1,hdb-v1-gen-0104,belief_engine_v5,"{""placement"": [1, 0, 1, 1], ""timing"": [1]}",True
+P,hdb_v2,hdb-v1-gen-0105:pitch_sensor_bias:5,hdb-v1-gen-0105,belief_engine_v6,"{""placement"": [0], ""torso_mass"": [0, 0]}",False
+P,hdb_v2,hdb-v1-gen-0108:payload_offset:0,hdb-v1-gen-0108,belief_engine_v6,"{""posture"": [1], ""timing"": [1, 1]}",False
+P,hdb_v2,hdb-v1-gen-0126:low_ground_friction:0,hdb-v1-gen-0126,belief_engine_v6,"{""feedback"": [0], ""posture"": [0], ""timing"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0136:one_side_weakness:3,hdb-v1-gen-0136,belief_engine_v6,"{""placement"": [0, 0], ""stride"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0136:pitch_sensor_bias:5,hdb-v1-gen-0136,belief_engine_v6,"{""feedback"": [0], ""posture"": [0, 0]}",False
+P,hdb_v2,hdb-v1-gen-0137:clock_fault:4,hdb-v1-gen-0137,belief_engine_v5,"{""feedback"": [0], ""posture"": [0, 1, 0], ""timing"": [1]}",True
+P,hdb_v2,hdb-v1-gen-0137:pitch_sensor_bias:5,hdb-v1-gen-0137,belief_engine_v6,"{""feedback"": [1, 1], ""leg_length"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0142:clock_fault:4,hdb-v1-gen-0142,belief_engine_v5,"{""placement"": [0, 0, 0, 0], ""posture"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0142:low_ground_friction:1,hdb-v1-gen-0142,belief_engine_v5,"{""foot_friction"": [1, 0, 1], ""posture"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0142:payload_offset:4,hdb-v1-gen-0142,belief_engine_v5,"{""feedback"": [0, 1, 1], ""timing"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0142:pitch_sensor_bias:5,hdb-v1-gen-0142,belief_engine_v6,"{""feedback"": [1], ""stride"": [1], ""timing"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0142:short_feet:1,hdb-v1-gen-0142,belief_engine_v5,"{""feedback"": [1], ""foot_length"": [1, 1], ""torso_mass"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0142:short_feet:2,hdb-v1-gen-0142,belief_engine_v6,"{""feedback"": [1, 1], ""foot_length"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0143:actuator_weakness:1,hdb-v1-gen-0143,belief_engine_v5,"{""placement"": [1, 1, 1, 1, 1], ""timing"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0143:feedback_gain_loss:1,hdb-v1-gen-0143,belief_engine_v5,"{""leg_length"": [0, 0, 0], ""posture"": [0]}",False
+P,hdb_v2,hdb-v1-gen-0143:one_side_weakness:4,hdb-v1-gen-0143,belief_engine_v5,"{""posture"": [0], ""timing"": [1, 1, 1, 1]}",True
+P,hdb_v2,hdb-v1-gen-0143:payload_offset:4,hdb-v1-gen-0143,belief_engine_v5,"{""foot_length"": [0, 0, 0], ""timing"": [0, 0]}",False
+P,hdb_v2,hdb-v1-gen-0143:short_feet:1,hdb-v1-gen-0143,belief_engine_v5,"{""foot_friction"": [0, 0], ""leg_length"": [1], ""timing"": [1]}",True
+P,hdb_v2,hdb-v1-gen-0167:actuator_weakness:1,hdb-v1-gen-0167,belief_engine_v5,"{""stride"": [1], ""timing"": [1, 1, 1, 1]}",False
+P,hdb_v2,hdb-v1-gen-0167:feedback_gain_loss:1,hdb-v1-gen-0167,belief_engine_v5,"{""posture"": [1], ""timing"": [1, 1, 1]}",False
+P,hdb_v2,hdb-v1-gen-0167:heavy_torso:1,hdb-v1-gen-0167,belief_engine_v5,"{""posture"": [1, 1], ""timing"": [1, 1], ""torque_limit"": [1]}",False
+P,hdb_v2,hdb-v1-gen-0170:feedback_gain_loss:1,hdb-v1-gen-0170,belief_engine_v5,"{""feedback"": [0], ""posture"": [0, 0, 0]}",False
+P,hdb_v2,hdb-v1-gen-0170:heavy_torso:1,hdb-v1-gen-0170,belief_engine_v5,"{""foot_length"": [1, 1], ""posture"": [0], ""torso_mass"": [0]}",True
+P,hdb_v2,hdb-v1-gen-0170:low_ground_friction:1,hdb-v1-gen-0170,belief_engine_v5,"{""placement"": [0], ""timing"": [0], ""torque_limit"": [0, 0]}",False
+P,hdb_v2,hdb-v1-gen-0170:short_feet:1,hdb-v1-gen-0170,belief_engine_v5,"{""foot_length"": [0, 0, 0], ""torso_mass"": [1]}",True
+P,hdb_v2,stilts-drawn:clock_fault:3,stilts-drawn,belief_engine_v6,"{""foot_length"": [0], ""leg_length"": [1]}",True
+P,hdb_v2,stilts-drawn:low_ground_friction:1,stilts-drawn,belief_engine_v4,"{""foot_length"": [0, 0], ""placement"": [0], ""timing"": [0]}",False
+P,hdb_v2,stilts-drawn:payload_offset:1,stilts-drawn,belief_engine_v4,"{""placement"": [1, 1], ""timing"": [0], ""torso_mass"": [1]}",True
+P,hdb_v2,stilts-drawn:payload_offset:4,stilts-drawn,belief_engine_v4,"{""feedback"": [0, 0, 0], ""posture"": [0]}",False
+P,hdb_v2,stilts-drawn:pitch_sensor_bias:1,stilts-drawn,belief_engine_v4,"{""timing"": [0, 0, 0], ""torque_limit"": [0]}",False
+P,hdb_v2,stilts-drawn:pitch_sensor_bias:4,stilts-drawn,belief_engine_v4,"{""foot_length"": [0], ""posture"": [0, 0], ""torso_mass"": [0]}",False
+P,hdb_v2,stilts-drawn:short_feet:1,stilts-drawn,belief_engine_v4,"{""foot_length"": [0, 0, 0], ""torso_mass"": [0]}",False
+P,hdb_v2,tiny-feet:low_ground_friction:1,tiny-feet,belief_engine_v4,"{""leg_length"": [0], ""stride"": [0, 0, 0]}",False
+P,hdb_v2,tiny-feet:payload_offset:1,tiny-feet,belief_engine_v4,"{""feedback"": [1, 1, 1], ""leg_length"": [0]}",True
+P,hdb_v2,tiny-feet:payload_offset:4,tiny-feet,belief_engine_v5,"{""feedback"": [0], ""leg_length"": [0]}",False
+P,hdb_v2,tiny-feet:pitch_sensor_bias:1,tiny-feet,belief_engine_v4,"{""foot_length"": [1, 1], ""placement"": [0], ""timing"": [0]}",True
+P,hdb_v2,tiny-feet:pitch_sensor_bias:3,tiny-feet,belief_engine_v4,"{""posture"": [1, 1], ""timing"": [1]}",False
+P,hdb_v2,tiny-feet:pitch_sensor_bias:4,tiny-feet,belief_engine_v4,"{""feedback"": [1, 0], ""leg_length"": [0, 0]}",True
+P,hdb_v2,top-heavy:low_ground_friction:1,top-heavy,belief_engine_v4,"{""leg_length"": [0], ""timing"": [0, 0, 0]}",False
+P,hdb_v2,top-heavy:payload_offset:1,top-heavy,belief_engine_v4,"{""feedback"": [1], ""timing"": [1, 1], ""torso_mass"": [1]}",False
+P,hdb_v2,top-heavy:pitch_sensor_bias:1,top-heavy,belief_engine_v4,"{""feedback"": [0], ""posture"": [0, 0, 0]}",False
+P,hdb_v2,top-heavy:pitch_sensor_bias:4,top-heavy,belief_engine_v4,"{""posture"": [0], ""torso_mass"": [0, 0, 0]}",False
+P,hdb_v2,top-heavy:short_feet:1,top-heavy,belief_engine_v4,"{""feedback"": [1], ""foot_length"": [0, 0, 0]}",True
+P,hdb_v2,walkrec-dev-m1-gen-0000:actuator_weakness:2,walkrec-dev-m1-gen-0000,belief_engine_v6,"{""leg_length"": [0], ""torso_mass"": [1, 1, 1]}",True
+P,hdb_v2,walkrec-dev-m1-gen-0000:low_ground_friction:0,walkrec-dev-m1-gen-0000,belief_engine_v4,"{""foot_friction"": [0], ""torso_mass"": [0, 0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0000:payload_offset:1,walkrec-dev-m1-gen-0000,belief_engine_v4,"{""foot_length"": [0], ""posture"": [0, 0], ""timing"": [0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0000:payload_offset:4,walkrec-dev-m1-gen-0000,belief_engine_v4,"{""placement"": [0, 0, 0], ""timing"": [0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0000:pitch_sensor_bias:1,walkrec-dev-m1-gen-0000,belief_engine_v5,"{""foot_friction"": [0], ""posture"": [0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0000:pitch_sensor_bias:4,walkrec-dev-m1-gen-0000,belief_engine_v4,"{""foot_friction"": [0, 0, 0], ""timing"": [1]}",True
+P,hdb_v2,walkrec-dev-m1-gen-0000:short_feet:0,walkrec-dev-m1-gen-0000,belief_engine_v4,"{""foot_length"": [1, 1], ""posture"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0001:low_ground_friction:1,walkrec-dev-m1-gen-0001,belief_engine_v4,"{""foot_friction"": [0, 0], ""stride"": [0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0001:payload_offset:1,walkrec-dev-m1-gen-0001,belief_engine_v4,"{""foot_length"": [1], ""placement"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0001:payload_offset:4,walkrec-dev-m1-gen-0001,belief_engine_v4,"{""foot_length"": [1, 1], ""leg_length"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0002:payload_offset:0,walkrec-dev-m1-gen-0002,belief_engine_v4,"{""posture"": [1], ""torso_mass"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0002:payload_offset:1,walkrec-dev-m1-gen-0002,belief_engine_v4,"{""placement"": [1], ""torso_mass"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0002:short_feet:1,walkrec-dev-m1-gen-0002,belief_engine_v5,"{""timing"": [0, 0], ""torso_mass"": [0, 0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0003:clock_fault:1,walkrec-dev-m1-gen-0003,belief_engine_v5,"{""leg_length"": [1, 1, 1], ""timing"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0003:low_ground_friction:0,walkrec-dev-m1-gen-0003,belief_engine_v4,"{""timing"": [0], ""torso_mass"": [0, 0]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0003:one_side_weakness:1,walkrec-dev-m1-gen-0003,belief_engine_v5,"{""leg_length"": [1], ""timing"": [1, 1, 0]}",True
+P,hdb_v2,walkrec-dev-m1-gen-0003:payload_offset:0,walkrec-dev-m1-gen-0003,belief_engine_v4,"{""timing"": [1, 1], ""torso_mass"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0003:payload_offset:1,walkrec-dev-m1-gen-0003,belief_engine_v5,"{""leg_length"": [1, 1], ""torque_limit"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0004:payload_offset:0,walkrec-dev-m1-gen-0004,belief_engine_v4,"{""foot_length"": [1], ""placement"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0005:payload_offset:0,walkrec-dev-m1-gen-0005,belief_engine_v4,"{""timing"": [0], ""torque_limit"": [1, 1]}",True
+P,hdb_v2,walkrec-dev-m1-gen-0006:payload_offset:1,walkrec-dev-m1-gen-0006,belief_engine_v4,"{""placement"": [1], ""posture"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0007:payload_offset:0,walkrec-dev-m1-gen-0007,belief_engine_v4,"{""timing"": [1, 1], ""torso_mass"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0007:payload_offset:3,walkrec-dev-m1-gen-0007,belief_engine_v4,"{""posture"": [1], ""timing"": [1, 1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0007:pitch_sensor_bias:1,walkrec-dev-m1-gen-0007,belief_engine_v4,"{""feedback"": [1, 1], ""posture"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0007:pitch_sensor_bias:3,walkrec-dev-m1-gen-0007,belief_engine_v4,"{""posture"": [1, 1], ""torso_mass"": [1]}",False
+P,hdb_v2,walkrec-dev-m1-gen-0007:short_feet:0,walkrec-dev-m1-gen-0007,belief_engine_v4,"{""feedback"": [1, 1], ""foot_length"": [1]}",False
+P,hdb_v2,weak-slippery:payload_offset:1,weak-slippery,belief_engine_v4,"{""torque_limit"": [0], ""torso_mass"": [0, 1]}",True
+P,hdb_v2,weak-slippery:pitch_sensor_bias:0,weak-slippery,belief_engine_v4,"{""feedback"": [1, 1], ""torque_limit"": [0]}",True
+P,hdb_v2,weak-slippery:pitch_sensor_bias:1,weak-slippery,belief_engine_v4,"{""posture"": [1], ""torso_mass"": [1, 1]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0013:devcomp:low_ground_friction+actuator_weakness:0,hdb-v1-gen-0013,belief_engine_v6,"{""timing"": [1], ""torso_mass"": [0]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0044:devcomp:payload_offset.fwd+short_feet:0,hdb-v1-gen-0044,belief_engine_v5,"{""foot_length"": [1], ""placement"": [0]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0052:devcomp:low_ground_friction+feedback_gain_loss:0,hdb-v1-gen-0052,belief_engine_v5,"{""placement"": [0], ""torque_limit"": [0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0052:devcomp:one_side_weakness.left+clock_fault.fast:0,hdb-v1-gen-0052,belief_engine_v6,"{""stride"": [1, 1], ""timing"": [1]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0070:devcomp:low_ground_friction+feedback_gain_loss:0,hdb-v1-gen-0070,belief_engine_v6,"{""foot_length"": [0], ""posture"": [1, 0]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0099:devcomp:low_ground_friction+feedback_gain_loss:0,hdb-v1-gen-0099,belief_engine_v5,"{""foot_length"": [0], ""stride"": [0], ""timing"": [0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0099:devcomp:payload_offset.fwd+short_feet:0,hdb-v1-gen-0099,belief_engine_v5,"{""feedback"": [0], ""placement"": [0], ""posture"": [1]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0103:devcomp:low_ground_friction+actuator_weakness:0,hdb-v1-gen-0103,belief_engine_v5,"{""leg_length"": [0], ""posture"": [0], ""timing"": [0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0103:devcomp:low_ground_friction+feedback_gain_loss:0,hdb-v1-gen-0103,belief_engine_v6,"{""foot_friction"": [0], ""posture"": [0, 0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0105:devcomp:low_ground_friction+feedback_gain_loss:0,hdb-v1-gen-0105,belief_engine_v5,"{""placement"": [0], ""timing"": [0, 0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0108:devcomp:payload_offset.fwd+short_feet:0,hdb-v1-gen-0108,belief_engine_v5,"{""leg_length"": [1], ""timing"": [1, 0]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0108:devcomp:pitch_sensor_bias.++clock_fault.fast:0,hdb-v1-gen-0108,belief_engine_v5,"{""leg_length"": [1, 0], ""timing"": [0]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0136:devcomp:short_feet+clock_fault.fast:0,hdb-v1-gen-0136,belief_engine_v5,"{""timing"": [0, 0], ""torso_mass"": [0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0137:devcomp:low_ground_friction+feedback_gain_loss:0,hdb-v1-gen-0137,belief_engine_v6,"{""posture"": [0], ""timing"": [0, 0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0137:devcomp:pitch_sensor_bias.++clock_fault.fast:0,hdb-v1-gen-0137,belief_engine_v5,"{""feedback"": [1], ""stride"": [1], ""timing"": [1]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0143:devcomp:payload_offset.fwd+short_feet:0,hdb-v1-gen-0143,belief_engine_v5,"{""posture"": [0, 0], ""timing"": [1]}",True
+P,hdb_v2_devcomp,hdb-v1-gen-0167:devcomp:pitch_sensor_bias.++heavy_torso:0,hdb-v1-gen-0167,belief_engine_v5,"{""posture"": [1], ""timing"": [1, 1]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0170:devcomp:low_ground_friction+actuator_weakness:0,hdb-v1-gen-0170,belief_engine_v6,"{""feedback"": [0], ""timing"": [0, 0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0170:devcomp:one_side_weakness.left+clock_fault.fast:0,hdb-v1-gen-0170,belief_engine_v5,"{""timing"": [0], ""torque_limit"": [0, 0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0170:devcomp:pitch_sensor_bias.++heavy_torso:0,hdb-v1-gen-0170,belief_engine_v5,"{""feedback"": [0], ""torso_mass"": [0, 0]}",False
+P,hdb_v2_devcomp,hdb-v1-gen-0222:devcomp:payload_offset.fwd+short_feet:0,hdb-v1-gen-0222,belief_engine_v5,"{""leg_length"": [0], ""placement"": [0], ""posture"": [0]}",False

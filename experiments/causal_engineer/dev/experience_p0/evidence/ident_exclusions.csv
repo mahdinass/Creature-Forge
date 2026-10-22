@@ -1,0 +1,39 @@
+iid,reason
+tiny-feet:clock_fault:4,plant not eligible
+top-heavy:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0001:clock_fault:4,skipped record
+hdb-v1-gen-0028:clock_fault:4,skipped record
+hdb-v1-gen-0028:payload_offset:4,plant not eligible
+walkrec-dev-m1-gen-0003:clock_fault:4,skipped record
+tiny-feet:short_feet:1,skipped record
+walkrec-dev-m1-gen-0006:clock_fault:1,skipped record
+hdb-v1-gen-0036:clock_fault:4,skipped record
+tiny-feet:short_feet:1,skipped record
+walkrec-dev-m1-gen-0000:heavy_torso:1,skipped record
+walkrec-dev-m1-gen-0000:low_ground_friction:1,plant not eligible
+walkrec-dev-m1-gen-0003:short_feet:1,skipped record
+weak-slippery:low_ground_friction:1,skipped record
+hdb-v1-gen-0038:short_feet:1,plant not eligible
+walkrec-dev-m1-gen-0000:heavy_torso:1,skipped record
+walkrec-dev-m1-gen-0000:low_ground_friction:1,plant not eligible
+walkrec-dev-m1-gen-0002:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0002:payload_offset:4,plant not eligible
+hdb-v1-gen-0004:pitch_sensor_bias:1,plant not eligible
+hdb-v1-gen-0037:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0002:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0001:clock_fault:4,skipped record
+hdb-v1-gen-0028:clock_fault:4,skipped record
+hdb-v1-gen-0028:payload_offset:4,plant not eligible
+top-heavy:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0004:clock_fault:4,plant not eligible
+hdb-v1-gen-0013:clock_fault:4,skipped record
+hdb-v1-gen-0037:short_feet:1,plant not eligible
+walkrec-dev-m1-gen-0000:low_ground_friction:1,plant not eligible
+walkrec-dev-m1-gen-0006:clock_fault:1,skipped record
+hdb-v1-gen-0036:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0001:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0003:clock_fault:4,skipped record
+walkrec-dev-m1-gen-0006:heavy_torso:1,skipped record
+hdb-v1-gen-0011:clock_fault:4,skipped record
+hdb-v1-gen-0038:payload_offset:4,skipped record
+hdb-v1-gen-0038:clock_fault:4,skipped record

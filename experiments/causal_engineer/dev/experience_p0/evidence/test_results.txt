@@ -1,0 +1,53 @@
+P0 evidence test run 2026-10-22T15:35:08+02:00 HEAD a181ddfe567b44bc63995ac91f46e863c1f22ceb (+ uncommitted evidence-export changes) python 3.11.9
+command: python -m unittest tests.test_experience_audit tests.test_frozen_records tests.test_frozen_paths tests.test_ds1 -v (run under a global MuJoCo tripwire: mj_step / mj_forward / MjModel.from_xml_* raise)
+test_assigned_level_s_within_one_replicate (tests.test_experience_audit.Comparability.test_assigned_level_s_within_one_replicate) ... ok
+test_bench_versions_are_different_plants (tests.test_experience_audit.Comparability.test_bench_versions_are_different_plants) ... ok
+test_engine_versions_are_not_pooled_at_level_p (tests.test_experience_audit.Comparability.test_engine_versions_are_not_pooled_at_level_p) ... ok
+test_levels (tests.test_experience_audit.Comparability.test_levels) ... ok
+test_support_counts_groups_not_rows (tests.test_experience_audit.Comparability.test_support_counts_groups_not_rows) ... ok
+test_cluster_bootstrap_resamples_groups (tests.test_experience_audit.FoldIsolationAndArithmetic.test_cluster_bootstrap_resamples_groups) ... ok
+test_decision_and_coverage (tests.test_experience_audit.FoldIsolationAndArithmetic.test_decision_and_coverage) ... ok
+test_hard_negative_control_runs (tests.test_experience_audit.FoldIsolationAndArithmetic.test_hard_negative_control_runs) ... ok
+test_prior_and_k_come_from_training_folds (tests.test_experience_audit.FoldIsolationAndArithmetic.test_prior_and_k_come_from_training_folds) ... ok
+test_shuffled_control_uses_the_real_k (tests.test_experience_audit.FoldIsolationAndArithmetic.test_shuffled_control_uses_the_real_k) ... ok
+test_test_rows_do_not_change_training_standardisation (tests.test_experience_audit.FoldIsolationAndArithmetic.test_test_rows_do_not_change_training_standardisation) ... ok
+test_d1_d2_thresholds (tests.test_experience_audit.Gates.test_d1_d2_thresholds) ... ok
+test_generator_groups (tests.test_experience_audit.Groups.test_generator_groups) ... ok
+test_morphology_needs_no_model (tests.test_experience_audit.Groups.test_morphology_needs_no_model) ... ok
+test_near_duplicates (tests.test_experience_audit.Groups.test_near_duplicates) ... ok
+test_off_split_records_are_dropped_and_excluded_files_never_registered (tests.test_experience_audit.InventoryOnSyntheticTree.test_off_split_records_are_dropped_and_excluded_files_never_registered) ... ok
+test_registry_never_globs_excluded_files (tests.test_experience_audit.InventoryOnSyntheticTree.test_registry_never_globs_excluded_files) ... ok
+test_tripwire (tests.test_experience_audit.NoSimulation.test_tripwire) ... ok
+test_gates (tests.test_experience_audit.RecordedGates.test_gates) ... ok
+test_dataset_feature_names_are_whitelisted (tests.test_experience_audit.WhitelistAndLegality.test_dataset_feature_names_are_whitelisted) ... ok
+test_forbidden_names_raise (tests.test_experience_audit.WhitelistAndLegality.test_forbidden_names_raise) ... ok
+test_interventional_feature_only_after_its_experiment (tests.test_experience_audit.WhitelistAndLegality.test_interventional_feature_only_after_its_experiment) ... ok
+test_manifest_is_not_empty (tests.test_frozen_records.FrozenRecordTests.test_manifest_is_not_empty) ... ok
+test_manifest_lists_exactly_the_tracked_frozen_files (tests.test_frozen_records.FrozenRecordTests.test_manifest_lists_exactly_the_tracked_frozen_files) ... ok
+test_working_tree_matches_committed_blobs (tests.test_frozen_records.FrozenRecordTests.test_working_tree_matches_committed_blobs) ... ok
+test_pins_cover_the_experiment_core (tests.test_frozen_paths.FrozenPathTests.test_pins_cover_the_experiment_core) ... ok
+test_working_tree_matches_pinned_blobs (tests.test_frozen_paths.FrozenPathTests.test_working_tree_matches_pinned_blobs) ... ok
+test_constraint_feedback (tests.test_ds1.AgentV5.test_constraint_feedback) ... ok
+test_schema_and_p_success (tests.test_ds1.AgentV5.test_schema_and_p_success) ... ok
+test_v5_prompt_names_no_benchmark_family (tests.test_ds1.AgentV5.test_v5_prompt_names_no_benchmark_family) ... ok
+test_agent_decision (tests.test_ds1.Cases.test_agent_decision) ... ok
+test_dual_status_separates_signals (tests.test_ds1.Cases.test_dual_status_separates_signals) ... ok
+test_store_retrieval_track_record_and_freeze (tests.test_ds1.Cases.test_store_retrieval_track_record_and_freeze) ... ok
+test_stream_split_is_the_declared_one (tests.test_ds1.Cases.test_stream_split_is_the_declared_one) ... ok
+test_verdict_statistics_on_robust_seeds (tests.test_ds1.Displacement.test_verdict_statistics_on_robust_seeds) ... ok
+test_walk_score_rule (tests.test_ds1.Displacement.test_walk_score_rule) ... ok
+test_assimilation_is_relative (tests.test_ds1.EngineV6.test_assimilation_is_relative) ... ok
+test_misfit_excludes_repair_checks (tests.test_ds1.EngineV6.test_misfit_excludes_repair_checks) ... ok
+test_open_world_reserve (tests.test_ds1.EngineV6.test_open_world_reserve) ... ok
+test_options_validated_and_v5_default (tests.test_ds1.EngineV6.test_options_validated_and_v5_default) ... ok
+test_stop_map_v2 (tests.test_ds1.EngineV6.test_stop_map_v2) ... ok
+test_tempering_divides_log_likelihood (tests.test_ds1.EngineV6.test_tempering_divides_log_likelihood) ... ok
+test_baseline_feature_sets_exclude_situation (tests.test_ds1.RepairLearning.test_baseline_feature_sets_exclude_situation) ... ok
+test_learns_situation_tool_interaction_and_roundtrip (tests.test_ds1.RepairLearning.test_learns_situation_tool_interaction_and_roundtrip) ... ok
+test_situation_ignores_unmodelled (tests.test_ds1.RepairLearning.test_situation_ignores_unmodelled) ... ok
+
+----------------------------------------------------------------------
+Ran 45 tests in 10.330s
+
+OK
+RESULT: OK tests 45 failures 0 errors 0 skipped 0 mujoco tripwire calls 0

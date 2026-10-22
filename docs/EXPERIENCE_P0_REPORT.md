@@ -8,6 +8,18 @@
 - **Scope:** development evidence only. No MuJoCo simulation, no Nebius spend, no model calls and no sealed or held-out data
   were used. V1, `release/v1` and the submission materials are untouched.
 
+## Errata (2026-10-22, evidence review before publication; conclusions unchanged)
+- **E1.** The single level-S instance was mislabelled "TA-1 L4, PARTIAL in both arms".
+  - It is **TA-1 L1**, `hdb-v1-gen-0073:low_ground_friction:2`: control `posture`, treatment `placement`, both
+    NOT_RECOVERED (`experiments/ta1/phase1b_2026-10-20/ta1_phase1b.jsonl` lines 1–2).
+  - TA-1 L4 has one resolved tool (`leg_length`) in both arms, so it is not a multi-tool instance.
+  - The count (1 instance, 0 informative) and every gate are unchanged.
+- **E2.** The committed `experience_p0/outcomes.csv` leaves `plant_used` / `twin_used` empty for A0 and MKV records, whose
+  ledger is stored at record top level. No gate or analysis used these fields.
+  `experience_p0/evidence/p0_outcome_rows.csv` carries them.
+- **Tool attribution (clarification, not a change).** A row's tool is `has_cases.final_tool`: the tool of the repair step that
+  produced the submitted design. Multi-step designs (e.g. friction, then legs) are attributed to the last step.
+
 ## 0. Recommendation
 
 **INSUFFICIENT-DATA** (pre-declared rule, plan §4).
@@ -115,7 +127,7 @@ outcome content was used, and the audit code never registers the file (a test en
 
 | level (FULL_VERIFIED, HDB) | instances with ≥ 2 tools | bases | informative instances (tool outcomes differ) | informative bases | families on ≥ 2 bases | Kish n_eff (bases) |
 |---|---|---|---|---|---|---|
-| **S: assigned tool** | **1** (TA-1 L4) | 1 | **0** | 0 | 0 | 0 |
+| **S: assigned tool** | **1** (TA-1 L1) [E1] | 1 | **0** | 0 | 0 | 0 |
 | P: same engine version, policy-chosen | 124 | 35 | 39 | 22 | 8 | 18.8 |
 | — P, engine v4 / v5 / v6 | 39 / 51 / 30 | 12 / 22 / 19 | 9 / 19 / 11 | 6 / 11 / 8 | 2 / 6 / 1 | 4.8 / 9.8 / 6.4 |
 | X: cross-procedure | 385 | 46 | 150 | 41 | 12 | 32.4 |
@@ -123,7 +135,7 @@ outcome content was used, and the audit code never registers the file (a test en
 
 - **How many instances truly have two or more comparable repair outcomes?**
   - Under the strict definition (same plant, procedure, budget and verifier, tool assigned): **one HDB instance**, with
-    identical outcomes (PARTIAL in both arms).
+    identical outcomes (NOT_RECOVERED in both arms) [E1].
   - The 124 level-P instances are policy-chosen, with endogenous remaining budget.
   - The 385 level-X instances mix procedures.
 - **Groups:** several rows on one base are never treated as independent robots. Outcomes span 46 bases (Kish n_eff 19.6 by

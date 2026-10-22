@@ -1,0 +1,200 @@
+location,committed_to_git,kind,corpus,records,bytes,sha256,note
+<VM_ROOT>/hdb/artifacts/hdb/vs_a1.jsonl,False,episode,stage1,24,673630,0f05ae9699ba642520cadba1b7ac10bbab5b1b44a822831262a2c122d9e9f279,"engine v1, HDB v1 bench"
+<VM_ROOT>/hdb/artifacts/hdb/vs2_a1.jsonl,False,episode,stage1,136,4232944,62c2514373dc6eccf6aac41fd7f025e117e2ea2b9fab03c3ff111e833647ffd7,engine v2
+<VM_ROOT>/hdb/artifacts/hdb/vs4_A0.jsonl,False,episode,stage1,136,1758678,bf5d252bbd4f106a4cfaf58c1355fcffad08391aa3df090d681547d38671570d,A0 generic exhaustive
+<VM_ROOT>/hdb/artifacts/hdb/vs4_A1c.jsonl,False,episode,stage1,136,5080187,01e772697370e67a4b72499d782cddce33c7836c137b4289dc7d7f2995e6fdf1,"engine v4, calibrated stop"
+<VM_ROOT>/hdb/artifacts/hdb/vs4_A1f.jsonl,False,episode,stage1,136,5117256,0ae492fe57640a2debbdc476c8b41130ff069766023973aa84ecc7f038537ea5,"engine v4, spend all"
+<VM_ROOT>/hdb/artifacts/hdb/vs4_a1.jsonl,False,episode,stage1,136,4966257,e589653649a1fd3c8c1018df7977adf445502741e345de4163185624b7de91d9,"engine v4, provisional stop"
+<VM_ROOT>/hdb/artifacts/hdb/vs5_A1c.jsonl,False,episode,stage1,136,5309815,e2ee1d53cdf81f2395a065c1b017ffc885b045fb533467b04a661429834ea520,"engine v5, calibrated stop"
+<VM_ROOT>/hdb/artifacts/hdb/fresh_A0.jsonl,False,episode,stage1,220,3310373,6724e57cea57f9707d4e58b36a5f15cbee0655901aa8eeb62a50ced1810a9502,A0 on fresh dev bases
+<VM_ROOT>/hdb/artifacts/hdb/fresh_A1c5.jsonl,False,episode,stage1,220,10779305,3bde2b77676fd3d46592bb9ad50250ecfc8614376d6676b87d59f2a97d2149cb,engine v5 on fresh dev bases
+<VM_ROOT>/hdb/artifacts/hdb/mkv_dev_v1.jsonl,False,episode,mkv,46,776701,21118f59f5b55418dc9f375519963ead4c8fff7f8ca4ba62c5350256c42c80c9,"MKV conditions, HDB v1 bench"
+<VM_ROOT>/hdb/artifacts/hdb/mkv4.jsonl,False,episode,mkv,126,2429555,3ab40f7f553e9dc22999adcb2d3ee44f99759e8cc9446242a181314fe72fbe66,"MKV conditions, engine v4"
+<VM_ROOT>/hdb/artifacts/hdb/mkv5.jsonl,False,episode,mkv,126,2666227,fd2dd81c847cb34be4071a8262ddf43b1dfbecf1cefc51b6a00ccafc9af65920,"MKV conditions, engine v5"
+<VM_ROOT>/hdb/artifacts/hdb/s2_equiv_A1e.jsonl,False,episode,stage2,4,168614,9de9b65459da1a54bcd6cd22df0374bd1392045cd028face6a9dc943decbdf9f,A1e = A1c5 equivalence
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot_A1e.jsonl,False,episode,stage2,2,91772,f1ed0a44ecdce2db313760317f6def0601bc4f19538b89214ec5f57c7d2c80ac,pilot
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_actuator_weakness.jsonl,False,episode,stage2,1,258419,08bae803cd0882a94a4aa6cab5bac00162ae82c40a44a85d9586d4b865c0fe10,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_clock_fault.jsonl,False,episode,stage2,1,176248,52ffb042d6bf5519ce8f8d90d8be02b0a10c2dd7c443ed5ef41d9d95265ed465,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_feedback_gain_loss.jsonl,False,episode,stage2,1,185473,8640e734bae98be0dc7431b76e549dbbe77fc704625f7b91a12e1fba22748db9,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_heavy_torso.jsonl,False,episode,stage2,1,259806,d8e6fdf8c40959aa3734a91ba4e5c5c4d77294f3f424da8a7ff108af490d0406,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_low_ground_friction.jsonl,False,episode,stage2,1,219648,c0f4f703ef368fc123c12be17844249bd64e6fc594975b4293aea5fc54f2804c,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_one_side_weakness.jsonl,False,episode,stage2,1,265033,1c01a208544056bfe282b7f87ee10a69399b7ed6fcfe5f5029628957b40ff0a1,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_payload_offset.jsonl,False,episode,stage2,1,233782,60f6f6ff4e7f734a0e9d65949bf8b75302498e662cb5cc3dd9eadde3fb639a16,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_pitch_sensor_bias.jsonl,False,episode,stage2,1,224660,0ddd3372f20195e65f3aea01a8198d8bc5935ee967b2e2780e5f378dc974fbec,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot1_A3_short_feet.jsonl,False,episode,stage2,1,205876,6647a47d717540df24980579d96f3858cac1e3a449eebb870af70ed1b599696b,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_actuator_weakness.jsonl,False,episode,stage2,1,550533,9181698ea4482763e1b0f2a7de9aac6688ea570d6e711931199bfd9fd19057b2,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_clock_fault.jsonl,False,episode,stage2,1,151507,80501117f9349dcdf53bb6a2e49465e24cb7746367f2b753d1eb903e462d875c,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_feedback_gain_loss.jsonl,False,episode,stage2,1,384111,ade01cff0b22b8d33455017b2811f73c2240d60636540515aa15053e5dc32303,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_heavy_torso.jsonl,False,episode,stage2,1,123041,39fb99c1c7a7dce114d520345acb91776361ec64bd12d1479899e347bf93e96d,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_low_ground_friction.jsonl,False,episode,stage2,1,256066,21c2e4a036968ca82498132e904fd3380fec0e41fbe4b6d7aad3bcc07dc07ad0,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_one_side_weakness.jsonl,False,episode,stage2,1,133062,c94a1bd0cde7e9d9eb21490c3aa48cbfcde7cc23ba23f68568987d631f084f15,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_payload_offset.jsonl,False,episode,stage2,1,253516,ee4ab7426aff718adc828488a699060cfbf4eba4d385caf7fe158e34acba303f,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot2_A3_short_feet.jsonl,False,episode,stage2,1,136294,1619e77867b8d97ba0ecfb4850a28fc142d5ff203efb15032cb701a4e09d478d,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_actuator_weakness.jsonl,False,episode,stage2,1,95416,9a4ac24b2f23723c587c7fc4d0277fe0f503993b8fecfe6958e74c13dfd7958f,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_clock_fault.jsonl,False,episode,stage2,1,381246,05dd92b14575f87413f79ab3a3bfa3cfb9ed2e3541a4e8c19e6aab5d2725fd3e,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_feedback_gain_loss.jsonl,False,episode,stage2,1,147111,b76eb793c9bdc1465cff7ed4f22cb03730845968fdba4f2d90c15d5fe63f63ca,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_heavy_torso.jsonl,False,episode,stage2,1,135356,ce8540e79f229bd87779edf98b37b94b870f5953f86f03e8f39a592a5d4df474,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_low_ground_friction.jsonl,False,episode,stage2,1,175398,501f9fe1c326dd6306e28da79bb94ddf406ce123065b8c767415e6d4d8fd4fb4,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_one_side_weakness.jsonl,False,episode,stage2,1,136353,23bcb89d2b7f3e7c48f93d460ff08dce5da815184e867daea12cbc6a847f8b56,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_payload_offset.jsonl,False,episode,stage2,1,234117,f62ffbceb4e91d4dc0c77de73dce17817fb3f5e1de9c7c8cfe42035bb0b165fd,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_pitch_sensor_bias.jsonl,False,episode,stage2,1,90229,bd6ffd1b69ac353998bc1a867dc14c47b994f73039489f96a4e45ffea38c30f1,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_pilot3_A4_short_feet.jsonl,False,episode,stage2,1,152529,38b78bdc4a4a7ace1e225b49f53eaa2f0e1eb0865ddcc3463c829285b722ffc0,Nemotron pilots (init bases)
+<VM_ROOT>/hdb/artifacts/hdb/s2_smoke_A3.jsonl,False,episode,stage2,1,184069,8987f712d2e2668e03a01586522318724036f6c31feeede8fc24f1123b791c6b,smoke
+<VM_ROOT>/hdb/artifacts/hdb/smoke_a3_live.jsonl,False,episode,stage2,3,295877,9be4f80e80db0d9b19acacaabfb2715b8a6bae468ec785c003e23963f5c05390,live smoke
+<VM_ROOT>/hdb/artifacts/hdb/s2T_A1e.jsonl,False,episode,stage2,36,1897806,2014fa80f8f333b1b2f8d4ba561da024516fb49b0334ef7a696acbfa535cdf56,"transfer, engine"
+<VM_ROOT>/hdb/artifacts/hdb/s2T_A2.jsonl,False,episode,stage2,36,2165993,84f5fd06975ce490ea57aec298b1792c2ff11ad0d6cdc009c1c9beac9f334ea0,"transfer, engine + amortized posterior"
+<VM_ROOT>/hdb/artifacts/hdb/s2TDC_A1e.jsonl,False,episode,stage2,16,848780,51200c3db225153441406856fafeacfcfb41ccf62c4932bcd1473a00705c475d,"transfer compositions, engine"
+<VM_ROOT>/hdb/artifacts/hdb/s2DC_exp_A1e.jsonl,False,episode,stage2,16,850312,0d774b3cfc336333b89684a5ffc94a1972e4a63153cb5c7be86e672da8ec5305,"experience compositions, engine"
+<VM_ROOT>/hdb/artifacts/hdb/s2DC_exp_A3.jsonl,False,episode,stage2,4,1658918,3216a6116f6917f75eae1bd4aef3c430ab303b8c434d200371b8299534522d89,"experience compositions, Nemotron"
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/s2_transfer_A3.jsonl,False,episode,stage2,36,10259202,540b9415921b205a80ad62fe6ae9565f5c6d6027bae63e2fb1dee8dca374ea98,"transfer, Nemotron arms"
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/s2_transfer_A4.jsonl,False,episode,stage2,36,11167258,cb34a780d76f9325718e53f3d8345672ab642aa005a334cd96bf614dec7ec77a,"transfer, Nemotron arms"
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/s2_transfer_A4bad.jsonl,False,episode,stage2,12,4810219,d0f4d9a528f51e89b080ae3331f51e3e8ea2e201841c51d5eab005be925087fd,"transfer, Nemotron arms"
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/s2_transfer_A4lfo.jsonl,False,episode,stage2,8,2305687,6de56287d0eec10a4ecae2731c6659f4b7ada6422f39194fac40e3b822a8849a,"transfer, Nemotron arms"
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/s2_transfer_devcomp_A3.jsonl,False,episode,stage2,16,7790118,75cb303c6d54d6c4915d6af8e85e4a7682a590f50075e124a6e7dc2e88b1dda7,"transfer, Nemotron arms"
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/s2_transfer_devcomp_A4.jsonl,False,episode,stage2,16,7857208,7c3f9c18ee225278022975614ee472c54ca1358f00c2b7d1c7ab9f31c4ac2dc8,"transfer, Nemotron arms"
+<VM_ROOT>/hdb/artifacts/hdb/ds1_equiv_A1e.jsonl,False,episode,ds1,1,42915,24ed59e078a8d141286071e9b7f051e05953b13b928e2ed802d5068c425c4977,equivalence
+<VM_ROOT>/hdb/artifacts/hdb/ds1_smoke_A1e6.jsonl,False,episode,ds1,1,137952,0c38215a6d5fa10666a08963e73924154afcc4bcf444a2cfe81fd2948d886e94,smoke
+<VM_ROOT>/ds1/pilot_A1e.c.jsonl,False,episode,ds1,1,38246,7887dbc86751d74759d8c80955f6bde5913ecd696438a7337c781886c24ca18c,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A1e.jsonl,False,episode,ds1,2,83690,357a66faadcab7c24ee1d71e185b4c723f7469d98197ce56f344e7b69ada96b3,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A1e6.c.jsonl,False,episode,ds1,1,87723,5f92e0f69209a2268972bf014e6d0e95d8933499844424311fd9162229e60a7b,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A1e6.jsonl,False,episode,ds1,3,275925,dd8ac21f6e7254bcc64ace03634d83dc78839121309c1f61130f7823bfe5f845,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A3v5.c.jsonl,False,episode,ds1,1,365328,2ede9373fa0e56bb5b985d7800ace9492f9df32c30fe209ac5c3e43c40589ffc,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A3v5.jsonl,False,episode,ds1,2,668835,1847ad2384109c8f013348ae9bd83f980faf08a468222fe70c82099e98b7ab07,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A4x.c.jsonl,False,episode,ds1,1,231603,b933176388e7034d70ad5847b0f28276e62ae41627286683635d87f9c9b9fcee,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A4x.jsonl,False,episode,ds1,2,485314,0c36c3915d251bbec755eb4514c4c830766fadd062f8e50825ba947ba978993a,pilot (init bases)
+<VM_ROOT>/ds1/pilot_A4x_noscientist.jsonl,False,episode,ds1,1,60928,21be48f442c49e9137771085e12a5da1baecad0f62fcf3b619f8b11fc9b95e8a,pilot (init bases)
+<VM_ROOT>/ds1/gm_A1e6.c.jsonl,False,episode,ds1,12,1186421,70bc2c3aa836f3c926e6e651cf362f3a1dff9b25e182cb7c1a619af687cde9e5,G-m compositions
+<VM_ROOT>/ds1/eval/eval_A1e6_c.jsonl,False,episode,ds1,6,553684,8e3854eeda1f126ac8eda936187ac7d84ffecbb0afb75f79dea2d3f57d117576,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e6_s0.jsonl,False,episode,ds1,5,468331,8b7b8bbf191759dd27dd38a4aca9cd632f5f2ddde3b6a377f7975a716c93bcd1,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e6_s1.jsonl,False,episode,ds1,5,429454,75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e6_s2.jsonl,False,episode,ds1,5,465194,2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e6_s3.jsonl,False,episode,ds1,5,396416,f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e6_s4.jsonl,False,episode,ds1,5,396172,7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e6_s5.jsonl,False,episode,ds1,5,418212,5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_c.jsonl,False,episode,ds1,6,322451,17be63b0933c7ac7c242efbab39f9d2e3e5683f43765c844b794c7f1a3575a09,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_s0.jsonl,False,episode,ds1,5,273242,bde50474978da0a96cbf2ee7971a2288d268e8792b5cd94deeff35cce62ade58,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_s1.jsonl,False,episode,ds1,5,204883,3e82f22f5e82e726d43adc1c6366823ec5db3282a76aa80aab0566afccd6455b,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_s2.jsonl,False,episode,ds1,5,300825,52c6da55201fc4fda98994e061829f5a657604b099ecd460ef0acb99725960de,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_s3.jsonl,False,episode,ds1,5,240315,dd76d5f7a51948647ad30d31998a150edcddaa00483c06435124478f356b2cc8,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_s4.jsonl,False,episode,ds1,5,210041,a2f7133d3d38eab86ee8ef1eda73c2108d5e18ba06044de7f2f65cebea179c0b,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A1e_s5.jsonl,False,episode,ds1,5,266169,da9e3b0d560682b97d1043720c49b67aa0927083093c0f5cef1a68ee423cb79e,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_c.jsonl,False,episode,ds1,6,2649167,afddac43502188efec03ffe54c889851c3e5556b56764102dd639ede3d34fa5e,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_s0.jsonl,False,episode,ds1,5,2709440,6d7a2d371c37a06d04069a35ccca01d3627cf842f78c3cd355d50ed71666d41b,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_s1.jsonl,False,episode,ds1,5,1501033,d0808c7ca1c89276365de2493199db986d36fe41ab3424586d22629e2e7d87ff,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_s2.jsonl,False,episode,ds1,5,2257977,98ff2ba300b593bf82c098e6c6169f29bef9bb3f882187e1226117ce46b1e4e5,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_s3.jsonl,False,episode,ds1,5,1807386,1cf16158270682812148d399fab717b338779ae0b7ca4efc57f2c3893efa2fc5,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_s4.jsonl,False,episode,ds1,5,1553679,a0e9f5b2ea3972db5328163bc598b2a8492add86ac80d52149a7f03879e2c01a,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A3v5_s5.jsonl,False,episode,ds1,5,1935155,701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_c.jsonl,False,episode,ds1,6,1567339,a4c8b096ada8c1421673d47a16c75bfc66341cca8e652e7c9a0c13395ad2b365,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_s0.jsonl,False,episode,ds1,5,1529900,3d0c319f337285882effaaefcbbb82adb126dbff546b086874dc76ee79ff181f,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_s1.jsonl,False,episode,ds1,5,1087671,dc146e385289947aa12e093ac169a8785067dcdba6cb4934f460dba008cd7e2d,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_s2.jsonl,False,episode,ds1,5,1902994,1726000c7cc03794060510f3e6ee6feeb01a6126e8c492ad0ce65dd2863db1c8,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_s3.jsonl,False,episode,ds1,5,943997,d41970a915b8587218405990d605152f8593a1d4ab01dc1de07a2141e1a0f9f3,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_s4.jsonl,False,episode,ds1,5,1307753,91dcffe003eecbd9d054671bfc8d8b66eb3399a55bfacfc0972ae3230fe64f21,dev-eval-2
+<VM_ROOT>/ds1/eval/eval_A4x_s5.jsonl,False,episode,ds1,5,1393700,278c65dd43f9e8dc9a2df826116bfeb15f1323c9a53b6b8471c2a745d1b1db7f,dev-eval-2
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0004_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl,False,episode,ds1,1,281863,b04c7cd0e011377ecc8391f6af02a22eee931f0da13e2101ac3e8a8452d6c28a,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0004_payload_offset_2.jsonl,False,episode,ds1,1,301176,e7b4a01a81985b141ef20360a667a276f4d978af1b7d6fb48025509c6d6f5d95,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0013_low_ground_friction_2.jsonl,False,episode,ds1,1,116135,b51ee1e88edfd0db9f4b4c772c82f359abcb51ca71e0bc2948ec663f1c0717e1,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_frz_hdb-v1-gen-0064_one_side_weakness_3.jsonl,False,episode,ds1,1,285327,698da701ce6e9119d317b19667715cbbd3579693bbe131137affd2716c13c869,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_frz_stilts-drawn_one_side_weakness_0.jsonl,False,episode,ds1,1,508937,efc4f4e19b5a981117b03f395664be5c028b6946457d2685b51e778c8f22924c,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0004_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl,False,episode,ds1,1,272490,0f6c688f13075abbba6c43853ce7160487f89bac519e275334cc9f103909fa15,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0004_payload_offset_2.jsonl,False,episode,ds1,1,250927,6e3ff3a210a0e914515d2243aee20aca1a3b9dce4ff9d2dff9c18a6482a7736c,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0013_low_ground_friction_2.jsonl,False,episode,ds1,1,108300,0d47925a6f4e53d5c4ef8f53f2d9ec699e7e1071bccd9243debc2aee138c5fcb,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_upd_hdb-v1-gen-0064_one_side_weakness_3.jsonl,False,episode,ds1,1,399464,fcb955450b973207e4566b20cc4aca575f9e5aab93a65657c60d0a3eaadf031d,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r0_upd_stilts-drawn_one_side_weakness_0.jsonl,False,episode,ds1,1,272037,a8b12e08bc68b79dfa7272ee269b44109bde31c86cd59ead3f64c792b202d24d,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0013_devcomp_low_ground_friction+actuator_weakness_0.jsonl,False,episode,ds1,1,282980,34f431dd671461abb743341b291476f6df33e652aaf619b5a1b26ec6cf727a8f,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0028_one_side_weakness_5.jsonl,False,episode,ds1,1,168146,2c53b3f4cb60906881d81d5dea1c8cc3b686f4f8fc28e437405a093df2e02df9,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0038_low_ground_friction_0.jsonl,False,episode,ds1,1,167119,2a41c1d86186c3ae1acd0c9f2dd472d012933c98e747490cd9a4c90178be7de1,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_frz_hdb-v1-gen-0064_pitch_sensor_bias_2.jsonl,False,episode,ds1,1,197376,70a579e6af1c3866be0531bf2fa3eba25546a820d89de25e63d58abf94290caa,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_frz_stilts-drawn_clock_fault_3.jsonl,False,episode,ds1,1,230549,ebfb9147177eba33e528e7a68274a351207e4a3ef5c7facb3d5821bc1c7e56c3,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0013_devcomp_low_ground_friction+actuator_weakness_0.jsonl,False,episode,ds1,1,382870,8e3e531354fad7e3aec98e5920f994ea59b06620debe4cf8eeb6530d3365b1aa,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0028_one_side_weakness_5.jsonl,False,episode,ds1,1,224246,b2eb6a5b9d04898e53fb61cc2041b0aab7e9f15e36ba2eac25e0ee4e18dbaccd,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0038_low_ground_friction_0.jsonl,False,episode,ds1,1,338386,990f068128a7209567151c08f6e588b7b63100536b37d43b70c9ebd6abe47450,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_upd_hdb-v1-gen-0064_pitch_sensor_bias_2.jsonl,False,episode,ds1,1,109878,8396ebdb1b1113dbd86885541c9bcab62c0fc29e93327ef2abf7c02a3618037e,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r1_upd_stilts-drawn_clock_fault_3.jsonl,False,episode,ds1,1,231978,cef7be59524e944d2b7b659cce0e36c5c85f12697b71da031bf033da58b9db40,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0004_feedback_gain_loss_2.jsonl,False,episode,ds1,1,638979,975e38fdebf370b8c2f5cfc3c11a566510ed49ccddff2878c29119e6ccd0e2da,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0013_low_ground_friction_0.jsonl,False,episode,ds1,1,164765,20245ecf7da910ed1bb8a14a3b9097f3d8503d16280d09c6948a9c76ac6270dd,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl,False,episode,ds1,1,521386,7739518eaf62da44971991dab2b454ed20de850b8d10ae1923285f1de47ffa84,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0036_pitch_sensor_bias_2.jsonl,False,episode,ds1,1,334461,e3406b2cfabdb0fa35b25e95071ccfdabb409c180f52509195344670b2c21bb9,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_frz_hdb-v1-gen-0038_short_feet_2.jsonl,False,episode,ds1,1,372462,be81ce0eb343f3b1dd589d8c9690e09d2e22e3d28df4d0f780fdcf609482df4b,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0004_feedback_gain_loss_2.jsonl,False,episode,ds1,1,315177,6ebe6ced6c90665cd84cf321e996d6c118b6ca7696dff6fc822283ce3a259eb0,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0013_low_ground_friction_0.jsonl,False,episode,ds1,1,152002,52e21b454be2e3726de8c31bbf4cad41c935775c540922b72512ff5925a6fa29,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++actuator_weakness_0.jsonl,False,episode,ds1,1,300218,326685f654317d6ad1bd580b7a3c061c11c0b12c5c7fe75c981f908fd328aa1f,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0036_pitch_sensor_bias_2.jsonl,False,episode,ds1,1,211504,1b5d85ea8d94832c7b9d89c1b7b7bb9a7f6c6583722356cfce5ba8f514841f2a,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r2_upd_hdb-v1-gen-0038_short_feet_2.jsonl,False,episode,ds1,1,149780,2aad92884d4feb160929c0ddc0e6ffe71f25fae931675a7eded7ba1b860d68df,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++clock_fault.fast_0.jsonl,False,episode,ds1,1,338765,14aa388cbeb09f2ccc93989112f44d82308ce284296161aada3d73b30e5cb734,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0036_one_side_weakness_3.jsonl,False,episode,ds1,1,214123,baa110d6d958d3b910681dac6524378da1913818cbfb993bde4e5ae4c1b8d1e5,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0036_payload_offset_2.jsonl,False,episode,ds1,1,214852,cc9e3fa0d4b0ae31dc095c05c043e3903e036dea763462267e2cff6205e5d963,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0064_clock_fault_2.jsonl,False,episode,ds1,1,279538,1bf7f4e890e70444c94e0425439a6a485f48f43e389a2f277fd316b01fdf3600,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_frz_hdb-v1-gen-0064_feedback_gain_loss_0.jsonl,False,episode,ds1,1,406443,a072af307a08200b15ccb5c52515af0ae0b9e5c2ee13895a4f94b2b659eb35bc,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0028_devcomp_pitch_sensor_bias.++clock_fault.fast_0.jsonl,False,episode,ds1,1,846817,ccf2cff62d57244a46c57108ea605c5c4e87f22308c3090a78bbd41f3c951c40,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0036_one_side_weakness_3.jsonl,False,episode,ds1,1,170709,b4e008add864ad9b8400de0db7a87b6a1c282b86b418518908be4aa384b751c3,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0036_payload_offset_2.jsonl,False,episode,ds1,1,477645,37a363f9f79a2711d5a9cef41301470b403fcd7815460d4ca042d662da9bf958,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0064_clock_fault_2.jsonl,False,episode,ds1,1,547873,e1f505e1b08f6816dff3a27680b468aa5e6af823016f60d68c054860cfdf7ec2,learning stream
+<VM_ROOT>/hdb/artifacts/hdb/ds1/stream/r3_upd_hdb-v1-gen-0064_feedback_gain_loss_0.jsonl,False,episode,ds1,1,334170,09efe98ac07f9cedd4df1991dba2b794dc9e5340267898d2a1557d925a7ccf55,learning stream
+<REPO>/experiments/ta1/phase1b_2026-10-20/ta1_phase1b.jsonl,True,harness,ta1,2,226652,ebcf29eddbeffdf9b22234180957f25bc8ddd12bd6f6616a607b365c1c5aae67,"forced tool order, L1"
+<REPO>/experiments/ta1/a1_l4_pilot_2026-10-21/ta1_a1_l4.jsonl,True,harness,ta1,2,255616,c43601b22ccc1940f00786ec64ebd29735b0bd266ef45dc713bf14cecbb2f4e1,"forced tool order, L4"
+<REPO>/experiments/do1/l4_r0/do1_l4_r0.jsonl,True,harness,do1,2,507277,00a8db20b9b3ab186b935f2062a9a78d411a4d2a512e289e8aa1e4c39a5e263b,"objective change, L4 r0"
+<REPO>/experiments/do1/w3w4_2026-10-21/do1_l4_rep.jsonl,True,harness,do1,11,2660336,4f9c7295bd771cf26c8dab2a8a1db433ed2f2460dd6e1b3a3340d90571114714,"objective change, L4 r1-r5 + sentinel"
+<REPO>/experiments/do1/w3w4_2026-10-21/do1_x.jsonl,True,harness,do1,4,1113204,f484ac6b19ce0f54c8071e4566b42770920734e6553f21c691fb9e936899bc9d,"objective change, B1/C1"
+<VM_ROOT>/hdb/artifacts/hdb/stopcal.jsonl,False,stopcal,stage1,668,218798,8d3b01c0802f01f5b27081a8ff70ccb2d5043737b55c29340f7128c13f7becf3,stop calibration: designs re-verified by full_recovery_v1
+<VM_ROOT>/ds1/ds1_stopdata.jsonl,False,stopdata,ds1,231,68726,f5b805302cc16963ced6b7c51b5fb691d03650373b2eeba677efea2e423a1d99,"stop-map v2 evidence, shard a"
+<VM_ROOT>/ds1/ds1_stopdata_b.jsonl,False,stopdata,ds1,219,102712,41bfb610fb34642dd5a17b4eac1ea8358b3ceb95a5f9f519343641e66dab5a87,"stop-map v2 evidence, shard b"
+<VM_ROOT>/hdb/artifacts/hdb/ident_v2_all.jsonl,False,ident,stage1,340,8440246,a87d6d3794e5a0536249610e94e126d3cdf64ee162f866f3641aaed304bbbf47,"identifiability panel, every instrument on every instance"
+<VM_ROOT>/ce3/ce/probe_dev.jsonl,False,ce_probe,ce,165,7136595,25cfd983cc32f63809f9561432ecb9d648d48c13f3c24c21ffd46f747da2e62c,fault bench: fixed counterfactual catalogue + complete 10-tool matrix
+<VM_ROOT>/ce/ce/dev_mild_shard0.jsonl,False,ce_instances,ce,24,59849,95cc155fe1205e83935b215d24d77ccb6968142b2d3ac60b94db837d7c2d63e3,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_mild_shard1.jsonl,False,ce_instances,ce,24,49641,3a5c6a11220aa0b8dd4b45d393a775f62b2be7f0e22e4205cba9866b93bb11a3,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_mild_shard2.jsonl,False,ce_instances,ce,24,69068,8dc02d5598b6e40a4f034bdf40ec670cf7051cd46106cb92ba551bdb6307a420,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_mild_shard3.jsonl,False,ce_instances,ce,24,77318,1ca18525596427e87d4a76288560ed5c8158ae5426a44a63c15cf4b821450cab,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_mild_shard4.jsonl,False,ce_instances,ce,24,83420,463f6eaac729ec4dc20e4564fffa1ba9ba69264d102c8cdbb66979cad4b8ea27,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_mild_shard5.jsonl,False,ce_instances,ce,24,87272,71e8a01db885fb842b0dbeeaf590f216af43aee90073c40885123b1ed1c91f6f,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard0.jsonl,False,ce_instances,ce,16,45834,342a3c6419f4aa1043ca6628275aff64adec459ed805b09820e3d71bd511f0b7,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard1.jsonl,False,ce_instances,ce,16,43593,6a8b875fd37224109ccdf0ad3c75e57492e2584ae9e5d202542e035f764ca10b,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard10.jsonl,False,ce_instances,ce,16,50211,8ae86b94a40a0fb5d61f58bcbbfbffe4a1bb16f7d72ca5b1251a3ad4d96b0e7b,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard11.jsonl,False,ce_instances,ce,16,46129,f330c36e52395638fb9bf631e0d6ecc655a7144fd25cdb231138f3eed2cbd761,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard2.jsonl,False,ce_instances,ce,16,46511,95b99a1685bfac5200d1547beda2778c8e86287903792a5a40ec9dc241cdc6fc,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard3.jsonl,False,ce_instances,ce,16,43172,dfdf7d8a15cc296d6cfe3e585522d83e6662411cb4c5dad82f3a4967b293403f,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard4.jsonl,False,ce_instances,ce,16,52317,2e5ef325458aecd0318fd468db10beee6393bea9f023accfcb58d8f705c19b3d,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard5.jsonl,False,ce_instances,ce,16,46951,a83fbf73b848a183e3373120265e7aca2e9d10a8f28e2bd45a4c76064e93c6fb,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard6.jsonl,False,ce_instances,ce,16,46464,0a421a85ea16a9bdb92ece62f4387f2f607912097628e13d8f1b5063e2035a78,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard7.jsonl,False,ce_instances,ce,16,46467,ffdb82e269484ca9a440eeea6c98fbd0bed23151cf3bd8f2da7d71769ba301b5,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard8.jsonl,False,ce_instances,ce,16,49760,e33417b4a935d4f640a68dfd1d0ab826fda1f463b45381febd3111a64c5f9589,fault-bench dev instance builds
+<VM_ROOT>/ce/ce/dev_shard9.jsonl,False,ce_instances,ce,16,42635,f828117047edb0e016effe1233f96b7075056b7aa5c3bbefa679424045c86431,fault-bench dev instance builds
+<VM_ROOT>/hdb/artifacts/hdb/vs4_a1_partial.jsonl,False,superseded,stage1,65,2002906,e625de77eab12accecde6f70a195f23629a454d10ddf23d0e392fa6fce1675f9,partial pull of vs4_a1
+<VM_ROOT>/hdb/artifacts/hdb/vs5_A1c_partial.jsonl,False,superseded,stage1,59,1974567,ddcad9fcecc7036153d77a31fce9d5e25d1973553adbfd136243074eab1d869e,partial pull of vs5_A1c
+<VM_ROOT>/hdb/artifacts/hdb/mkv2_partial.jsonl,False,superseded,mkv,118,2088518,0282c5cbc372d2b9f4c50763510c258e71e71b933eba85d8f11350a57dac374c,partial MKV v2 (engine v2)
+<VM_ROOT>/hdb/artifacts/hdb/stopcal_partial.jsonl,False,superseded,stage1,566,185974,03e3779adf492f7b3577f4db2d9e29c2158085283c7905947c60073aecf4354e,partial stopcal
+<VM_ROOT>/hdb/artifacts/hdb/ident.jsonl,False,superseded,stage1,138,3458493,39259d4f0c04f9088dbbfb14e2ddbe03c877ed34939a67a2913c760a710905a0,identifiability v1
+<VM_ROOT>/hdb/artifacts/hdb/ident_v1_partial.jsonl,False,superseded,stage1,111,2798553,071df245f40b7391b01a94c217e58d8674a27f6b2f2aafcbf5cf2a6d808dd1bd,identifiability v1 partial
+<VM_ROOT>/hdb/artifacts/hdb/ds1_stopdata.jsonl,False,mirror,ds1,231,68726,f5b805302cc16963ced6b7c51b5fb691d03650373b2eeba677efea2e423a1d99,copy of ds1/ds1_stopdata.jsonl; canonical ds1/ds1_stopdata.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_c.jsonl,False,mirror,ds1,6,2649167,afddac43502188efec03ffe54c889851c3e5556b56764102dd639ede3d34fa5e,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_c.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_s0.jsonl,False,mirror,ds1,5,2709440,6d7a2d371c37a06d04069a35ccca01d3627cf842f78c3cd355d50ed71666d41b,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_s0.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_s1.jsonl,False,mirror,ds1,5,1501033,d0808c7ca1c89276365de2493199db986d36fe41ab3424586d22629e2e7d87ff,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_s1.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_s2.jsonl,False,mirror,ds1,5,2257977,98ff2ba300b593bf82c098e6c6169f29bef9bb3f882187e1226117ce46b1e4e5,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_s2.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_s3.jsonl,False,mirror,ds1,5,1807386,1cf16158270682812148d399fab717b338779ae0b7ca4efc57f2c3893efa2fc5,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_s3.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_s4.jsonl,False,mirror,ds1,5,1553679,a0e9f5b2ea3972db5328163bc598b2a8492add86ac80d52149a7f03879e2c01a,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_s4.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A3v5_s5.jsonl,False,mirror,ds1,5,1935155,701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A3v5_s5.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_c.jsonl,False,mirror,ds1,6,1567339,a4c8b096ada8c1421673d47a16c75bfc66341cca8e652e7c9a0c13395ad2b365,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_c.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_s0.jsonl,False,mirror,ds1,5,1529900,3d0c319f337285882effaaefcbbb82adb126dbff546b086874dc76ee79ff181f,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_s0.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_s1.jsonl,False,mirror,ds1,5,1087671,dc146e385289947aa12e093ac169a8785067dcdba6cb4934f460dba008cd7e2d,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_s1.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_s2.jsonl,False,mirror,ds1,5,1902994,1726000c7cc03794060510f3e6ee6feeb01a6126e8c492ad0ce65dd2863db1c8,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_s2.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_s3.jsonl,False,mirror,ds1,5,943997,d41970a915b8587218405990d605152f8593a1d4ab01dc1de07a2141e1a0f9f3,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_s3.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_s4.jsonl,False,mirror,ds1,5,1307753,91dcffe003eecbd9d054671bfc8d8b66eb3399a55bfacfc0972ae3230fe64f21,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_s4.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/eval_A4x_s5.jsonl,False,mirror,ds1,5,1393700,278c65dd43f9e8dc9a2df826116bfeb15f1323c9a53b6b8471c2a745d1b1db7f,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/eval/eval_A4x_s5.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A1e.c.jsonl,False,mirror,ds1,1,38246,7887dbc86751d74759d8c80955f6bde5913ecd696438a7337c781886c24ca18c,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A1e.c.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A1e.jsonl,False,mirror,ds1,3,152150,07f31b02310b9e9026eaa871057c2ff4d28cbb8014ab82d9d03411ca3e946377,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A1e.jsonl identical=False
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A1e6.c.jsonl,False,mirror,ds1,1,87723,5f92e0f69209a2268972bf014e6d0e95d8933499844424311fd9162229e60a7b,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A1e6.c.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A1e6.jsonl,False,mirror,ds1,3,275925,dd8ac21f6e7254bcc64ace03634d83dc78839121309c1f61130f7823bfe5f845,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A1e6.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A3v5.c.jsonl,False,mirror,ds1,1,365328,2ede9373fa0e56bb5b985d7800ace9492f9df32c30fe209ac5c3e43c40589ffc,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A3v5.c.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A3v5.jsonl,False,mirror,ds1,2,668835,1847ad2384109c8f013348ae9bd83f980faf08a468222fe70c82099e98b7ab07,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A3v5.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A4x.c.jsonl,False,mirror,ds1,1,231603,b933176388e7034d70ad5847b0f28276e62ae41627286683635d87f9c9b9fcee,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A4x.c.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A4x.jsonl,False,mirror,ds1,2,485314,0c36c3915d251bbec755eb4514c4c830766fadd062f8e50825ba947ba978993a,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A4x.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1/pilot_A4x_noscientist.jsonl,False,mirror,ds1,1,60928,21be48f442c49e9137771085e12a5da1baecad0f62fcf3b619f8b11fc9b95e8a,copies of ds1/ (canonical root used by the TA-1 harness); canonical ds1/pilot_A4x_noscientist.jsonl identical=True
+<VM_ROOT>/hdb/artifacts/hdb/ds1_all.tgz,False,archive,ds1/stage2,,6974602,ce77a5cb8fb9f5e3e3a256746b0cb216238952d759d0733b39aa3790dad71cf0,VM tarball of DS-1 records (source of the hdb/ds1 mirrors)
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/SHA256SUMS,False,archive,ds1/stage2,,986,f708b1ac0666bcdda12e55ad2ca38c1e9d9f7b9f943e8ac22785ab917cd1c383,VM-side checksum list for stage2_final
+<VM_ROOT>/hdb/artifacts/hdb/walkers_all.jsonl,False,excluded (never opened by the audit),,,981708,,contains test-split walker designs (sealed split); not used; size from a directory listing made earlier in the session; not re-read (incident note)
+<VM_ROOT>/cehb/**/*.jsonl,False,excluded (never opened by the audit),,,,,causal-engineer held-out evaluation shards (registered evaluation set); not used
+<REPO>/experiments/causal_engineer/heldout/**,True,excluded (never opened by the audit),,,,,causal-engineer held-out evaluation (registered evaluation set); not used
+<VM_ROOT>/hdb/artifacts/hdb/stage2_final/inference_ledger_*.jsonl,False,excluded (never opened by the audit),,,,,inference ledger; no outcomes
+<VM_ROOT>/hdb/artifacts/hdb/noise_cal.jsonl,False,excluded (never opened by the audit),,,,,noise calibration of the twin; no repair outcomes
+"<VM_ROOT>/ce2/**, ce3/ce/pilot*, ce3/ce/demo_src.jsonl",False,excluded (never opened by the audit),,,,,"causal-engineer scientist episodes (adaptive LLM runs, older bench); the standardised probe set covers this bench"

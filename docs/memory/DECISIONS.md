@@ -180,7 +180,7 @@ This is the Git-visible decision index. Add one dated section per consequential 
 
 ## 2026-10-22 - Experience learning: do not fit a FULL repair-applicability model from historical logs
 - **Decision.** Revised P0 returned INSUFFICIENT-DATA (`docs/EXPERIENCE_P0_REPORT.md`). Historical HDB records identify no
-  FULL-verified tool effect: there is only one assigned-tool instance (TA-1 L4), with no outcome difference. Policy-chosen
+  FULL-verified tool effect: there is only one assigned-tool instance (TA-1 L1; first written as "L4", corrected 2026-10-22, report Erratum E1), with no outcome difference. Policy-chosen
   outcomes are missing not at random and procedure-confounded.
 - **Do not:**
   - train or report a repair-tool or applicability predictor on historical HDB outcomes as if it estimated

@@ -198,7 +198,8 @@ def cluster_bootstrap(values: dict[str, np.ndarray], groups: np.ndarray, stat, n
             "ci95": [round(float(np.percentile(b, 2.5)), 4), round(float(np.percentile(b, 97.5)), 4)], "n_groups": len(gs)}
 
 
-def hard_negative_separation(space: Space, Y: np.ndarray, groups: np.ndarray, select_use, score_uses: dict) -> dict:
+def hard_negative_separation(space: Space, Y: np.ndarray, groups: np.ndarray, select_use, score_uses: dict,
+                             details: list | None = None) -> dict:
     """For each query with at least one repairing and one failing tool, find in the OTHER bases the nearest case (in the
     `select_use` space) whose own best tool repairs the query (hard positive) and the nearest whose best tool fails on it
     (hard negative). Each score space then 'separates' the pair if it puts the positive closer. The query's outcomes are used
@@ -223,6 +224,9 @@ def hard_negative_separation(space: Space, Y: np.ndarray, groups: np.ndarray, se
                 d = Ds[s][qi]
                 out[s].append(1.0 if d[hp] < d[hn] else (0.5 if d[hp] == d[hn] else 0.0))
             qgroups.append(groups[q])
+            if details is not None:          # per-query record for the evidence export (does not change the result)
+                details.append({"query": int(q), "hard_positive": int(tr[hp]), "hard_negative": int(tr[hn]),
+                                **{f"separated:{s}": out[s][-1] for s in score_uses}})
     g = np.array(qgroups)
     res: dict = {"n_queries": len(g)}
     for s, v in out.items():

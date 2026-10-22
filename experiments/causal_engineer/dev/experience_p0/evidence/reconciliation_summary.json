@@ -1,0 +1,48 @@
+{
+ "ds1_cases_init": {
+  "rows": 947,
+  "instances": 231,
+  "bases": 20,
+  "multi_tool_instances": 194,
+  "same_label_groups": 103,
+  "same_label_instances": 70,
+  "same_label_bases": 8,
+  "same_label_instances_with_differing_full": 21,
+  "same_label_groups_by_label": {
+   "diverse": 49,
+   "engine_old": 54
+  },
+  "rows_found_in_p0_corpus": 947,
+  "mkv_origin_stopcal_excluded_by_ds1": 259
+ },
+ "ds1_instances_in_p0": 231,
+ "p0": {
+  "outcome_rows": 2587,
+  "plants": 476,
+  "bases": 46,
+  "record_exclusions": 160,
+  "comparison_exclusions_oracle": 324,
+  "comparison_exclusions_no_tool": 132,
+  "level_P_instances": 124,
+  "level_P_informative": 39,
+  "level_P_informative_bases": 22,
+  "level_S_instances": 1
+ },
+ "ds1_same_label_instances_by_p0_level": {
+  "X": 43,
+  "P": 27
+ },
+ "per_case": {
+  "ce_cases": 165,
+  "ident_cases": 302,
+  "ident_excluded": 38,
+  "hard_negative_queries": 105
+ },
+ "environment": {
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "numpy": "2.4.6",
+  "mujoco (installed, not called; tripwire-tested)": "3.15.0"
+ },
+ "all_checks_against_committed_outputs": "passed"
+}
