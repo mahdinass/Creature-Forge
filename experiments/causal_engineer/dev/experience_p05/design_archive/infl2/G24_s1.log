@@ -1,0 +1,1 @@
+{'G': 24, 'm': 2, 'scenario': 'observation sufficient', 'sims': 80, 'procedure_estimand': 0.0039, 'procedure_estimand_mc_se': 0.0036, 'sd_estimate': 0.0552, 'rms_naive_se': 0.0523, 'inflation_var_ratio': 1.11, 'ratio_mc_rel_sd': 0.16, 'naive_t90_coverage': 0.887, 'zero_se_fraction': 0.025, 'naive_t90_coverage_nondegenerate': 0.91, 'sd_policy_learning_component': 0.0321}

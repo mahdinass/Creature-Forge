@@ -193,3 +193,19 @@ This is the Git-visible decision index. Add one dated section per consequential 
   model posterior.
 - **Next data.** Only a randomised, standardised multi-repair campaign (proposal P0.5, report §8) can create level-S
   FULL support. It needs owner approval and a cap decision.
+
+## 2026-10-23 - Experience learning P0.5: owner planning settings and inference rule
+- **Settings** (owner, planning baseline only; no execution gate approved):
+  - D1: minimum meaningful effect 0.10;
+  - D2: population P-B (hdb-v1 only), 28 confirmatory bases;
+  - D7′: external pilot of 4 T1-panel + 2 T3 bases, excluded from confirmatory work;
+  - D3: B = 300, 8 train seeds (all ten tools budget-feasible; the action set is fixed at B);
+  - D5: 3 instances per base, 2 severity bins.
+- **Rules carried into the protocol** (`docs/plans/EXPERIENCE_P05_PROTOCOL.md`):
+  - if no inference method is admissible under P05-SV1, every confirmatory contrast is "inference not validated" (no benefit
+    claim);
+  - an early safety STOP is reported with the achieved G and analysed as exploratory only;
+  - T3 eligibility UNKNOWN is never PASS;
+  - Stage-0b diagnosis-independence clearance covers only the tested generator, families and harness commit.
+- **Why:** with about 28 independent bases, power at δ = 0.10 is about 0.11–0.70 [ASSUMP]. Confirmatory claims therefore depend
+  on validated inference and fixed rules.

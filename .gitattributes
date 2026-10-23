@@ -21,3 +21,5 @@ experiments/do1/** -text
 experiments/ta1/** -text
 experiments/w2/** -text
 docs/archive/*.tsv -text
+# P0.5 design archive (archived copies; hashes in SHA256SUMS, source vs published in PROVENANCE.tsv); no EOL conversion
+experiments/causal_engineer/dev/experience_p05/design_archive/** -text

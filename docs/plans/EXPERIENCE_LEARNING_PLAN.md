@@ -183,7 +183,7 @@ A development campaign (P0.5) is justified only if all hold:
 | Phase | What | Physics / model | Cost |
 |---|---|---|---|
 | **P0 audit (this revision)** | §4–5 | none | $0, local |
-| P0.5 randomised repair-effect campaign | Standardised multi-tool FULL-verified matrices on development bases (design in the P0 report) | MuJoCo, no paid model calls | proposed in the P0 report |
+| P0.5 randomised repair-effect campaign | Standardised multi-tool FULL-verified matrices on development bases. **Current protocol: `docs/plans/EXPERIENCE_P05_PROTOCOL.md` (2026-10-23); the P0 report §8 design is superseded.** | MuJoCo, no paid model calls | see protocol §9 (not authorised) |
 | P1 harness | M0 / MK / MS / MSG / MS-shuffled / warm-start control behind a fail-closed runner; M-prior and M-repair ablated separately | none (tests, dry runs) | local |
 | P2 prospective development pilot | new dev robots and faults; MSG vs MS (negative transfer) and vs MK | MuJoCo | to be estimated |
 | P3 decision-aware diagnosis | only if P2 shows transfer signal: repair-regret-driven vs mechanism-EIG experiment selection | MuJoCo | to be estimated |

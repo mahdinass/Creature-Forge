@@ -1,0 +1,1 @@
+{'G': 24, 'm': 2, 'scenario': 'interventions add information', 'sims': 80, 'procedure_estimand': 0.0686, 'procedure_estimand_mc_se': 0.0064, 'sd_estimate': 0.0885, 'rms_naive_se': 0.059, 'inflation_var_ratio': 2.25, 'ratio_mc_rel_sd': 0.16, 'naive_t90_coverage': 0.662, 'zero_se_fraction': 0.037, 'naive_t90_coverage_nondegenerate': 0.688, 'sd_policy_learning_component': 0.057}

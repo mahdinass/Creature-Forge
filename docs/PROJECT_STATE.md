@@ -997,3 +997,33 @@ missing records. They are frozen and are not changed.
   unchanged.
 - **Incident:** the session parsed `walkers_all.jsonl` once during schema profiling (`docs/memory/INCIDENTS.md`, 2026-10-22).
   No influence on P0.
+
+## 2026-10-23 - Experience learning P0.5: protocol consolidated (A0 documentation; nothing executed)
+- **State:** design only. P0 remains **INSUFFICIENT-DATA**. No physics, no statistical calibration (P05-SV0/SV1 not run;
+  the G = 46 learning-variance cells are NOT COMPUTED), no spend, no sealed or held-out access. Documentation-only A0 commit.
+- **New documents:**
+  - `docs/plans/EXPERIENCE_P05_PROTOCOL.md`: current rules, superseded-rule table, blockers B1–B13 (B12 resolved), A0–A11 dependencies;
+  - `docs/EXPERIENCE_P05_HANDOFF.md`: handoff for a new session, including the bounded P05-SV0/SV1 proposal.
+- **Archive:** `experiments/causal_engineer/dev/experience_p05/design_archive/` holds revision 1 → 2 → 2.1, amendment 2.2,
+  erratum 2.2a, the scripts, outputs and tests (33 files). 32 are byte-identical to the delivered sources. `test_p05_amend22.py`
+  is sanitised (one line: a local path removed). Source and published hashes are in `PROVENANCE.tsv`.
+- **Owner planning settings** (2026-10-23; not approvals):
+  - D1: m = 0.10;
+  - D2: P-B (hdb-v1), 28 confirmatory bases;
+  - D7′: pilot 4 T1-panel + 2 T3 bases;
+  - D3: B = 300, 8 train seeds;
+  - D5: 3 instances per base, 2 severity bins.
+- **Balances (owner-reported):** VM $40.04, Token Factory $47.00. They are not authorisations. The $96 cap with a $89.405
+  ledger is unchanged.
+- **A0 cost model** (`experience_p05/a0_cost_model/`, [ASSUMP]):
+  - Stage 0b: about 70 k RE, local;
+  - pilot: 116–169 k RE ($1.6–2.2 at the recorded rate);
+  - campaign 28 × 3: 479 k RE ($5.4 recorded rate, $27.9 pessimistic);
+  - the full sequence exceeds the remaining $6.595.
+- **Precision:** power at δ = 0.10 is about 0.11–0.70 at G = 28 (0.16–0.59 at ρ = 0.3, q ≤ 0.42), so a 10-point benefit is
+  likely below reliable detection.
+- **Programme totals:** $7.54–8.28 at the old rate (exceeds the $6.595 remaining cap); $40.75–44.48 pessimistic (exceeds the
+  reported $40.04 VM credit).
+- **P05-SV1 rule at S = 40/cell:** P(admit | true coverage 0.90) = 0.63, so the resolution is inadequate; S ≈ 87–100 per cell
+  is recommended (B10).
+- **Next:** owner and auditor review of the A0 documents; then, only with approval, P05-SV0/SV1 offline validation.
