@@ -92,6 +92,14 @@ the Studio. Live calls are then allowed in three places:
 - **My creature → Recover walking (AI director):** the same model.
 - **AI investigation → Run live:** the original Nano demo path, `creature_forge/demo.py`.
 
+**Live runtime check (2026-10-24).**
+- `scripts/forge_acceptance.py --mode live` ran the Studio over real HTTP on a Nebius VM.
+- Nemotron 3 Super diagnosed a drawn creature that fell to backward pushes and proposed two edits.
+- MuJoCo verified one of them, "rear foot × 1.25", on 12 held-out seeds (12 wins, 0 losses). The new version then passed
+  its push challenge 8/8.
+- A size-matched random edit also verified in that round. The second round's proposal was inconclusive.
+- The run used 2 model calls and cost about $0.004. Record: `docs/submission/evidence/live_acceptance_2026-10-24.json`.
+
 Every call goes through `creature_forge/nebius.py`, which has request, token and dollar caps, no blind retries, and never
 logs the key. Each call is recorded in an inference ledger. Replies are validated against a schema, a whitelist and bounds,
 and are never clipped or repaired. The **Nemotron's experiment** and **AI scientist** pages show recorded runs of the HaS

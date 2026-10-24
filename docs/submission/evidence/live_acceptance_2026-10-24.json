@@ -1,0 +1,24 @@
+{
+ "args": {
+  "base": "http://127.0.0.1:8000",
+  "starter": "balanced",
+  "kind": "push",
+  "mode": "live",
+  "seeds": 8
+ },
+ "started": "2026-10-24T21:37:45",
+ "creature": "c-6e120936",
+ "run1": "r-179ddb1e",
+ "investigation1": "i-6932ab20e5f6",
+ "status1": "done",
+ "verdicts1": {
+  "ai:P2": "VERIFIED_IMPROVEMENT",
+  "random:P1": "VERIFIED_IMPROVEMENT",
+  "random:P2": "NOT_VERIFIED"
+ },
+ "accepted": "ai:P2",
+ "v2": 2,
+ "run2": "r-05e7adb4",
+ "investigation2": "i-f020890a761e",
+ "status2": "done"
+}
