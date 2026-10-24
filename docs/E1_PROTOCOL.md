@@ -124,8 +124,18 @@ cap later skips, but the accepted set depends only on the fixed order and on det
 
 ## 6. Compute and cost
 
-Filled in from G-R timings before registration. Budget authority is the owner's 2026-10-24 development mandate
-(Cloud $37.49).
+**G-R result (2026-10-24, main VM, slot `hdb` = commit `d63f901` tree): PASS.** A0 4/4 and A1 4/4 reproduce the stored
+fresh-dev records exactly (eligibility rows, status, walking fraction, all designs, plant and twin use); K0n completed 4/4.
+Evidence: `experiments/e1/gate/` (`gate_G_R.json` sha256 `38a917ae…`, `SHA256SUMS`). Cost $0.42.
+
+Wall per episode on the gate (concurrent on the 8-vCPU VM): A0 ≈ 196 s (2 workers), A1 ≈ 443 s (3 workers), K0n ≈ 476 s
+(2 workers); 12 episodes in ≈ 1.5 h of VM time.
+
+**Projection (160 instances × 3 arms = 480 episodes):** about 60 h on the main VM (too slow for the deadline), or about
+7–9 h on the batch VM (64 vCPU, $2.30/h), about **$17–21**. The build (thresholds and eligibility, about 30–60 k rollouts) adds
+about $1–2. **Total ≈ $18–23** of the $37.49 Cloud credit. The infra cap (`SPEND_CAP_USD`) must be raised to about $120; that is
+an internal guard within the real credit and is recorded with its reason. Budget authority: the owner's 2026-10-24
+development mandate.
 
 ## 7. Execution
 
