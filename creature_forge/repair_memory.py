@@ -170,3 +170,47 @@ def decide(P: dict, eng: list[str], n_eff: float, *, n_min: float, hedge_delta: 
         return {"order": ranked, "mode": "commit"}
     order = [top, etop] + [t for t in ranked if t not in (top, etop)]
     return {"order": order, "mode": "hedge"}
+
+
+# ------------------------------------------------------------------------------------------------------------ fit / apply
+def crossfit_queries(X: np.ndarray, Y: np.ndarray, groups: list, h: float) -> list[dict]:
+    """Memory query for every training case from a Memory without the case's own group (leave-one-group-out), so the
+    calibrator learns how much to trust memory evidence on cases the memory has not seen."""
+    out: list = [None] * len(X)
+    for g in sorted(set(groups)):
+        tr = [i for i, gg in enumerate(groups) if gg != g]
+        mem = Memory(X[tr], Y[tr], bandwidth=h)
+        for i, gg in enumerate(groups):
+            if gg == g:
+                out[i] = mem.query(X[i])
+    return out
+
+
+def fit(X: np.ndarray, Y: np.ndarray, tevs: list[dict], groups: list, *, h: float, n_min: float, delta: float,
+        l2: float = 1.0) -> dict:
+    """Train a repair-memory model (JSON-serialisable). `groups`: the grouping used for cross-fitting (dev family)."""
+    q = crossfit_queries(X, Y, groups, h)
+    F = [row_features(tevs[i], q[i], t) for i in range(len(X)) for t in TOOLS]
+    y = [Y[i, TOOLS.index(t)] for i in range(len(X)) for t in TOOLS]
+    w = fit_logistic(np.array(F), np.array(y), l2=l2)
+    return {"version": VERSION, "X": X.tolist(), "Y": Y.tolist(), "h": h, "n_min": n_min, "delta": delta, "l2": l2,
+            "w": w.tolist(), "n_cases": int(len(X))}
+
+
+def apply(model: dict, rec: dict, nominal_body: dict) -> dict:
+    """Decision for one episode at repair time: {"order", "mode", "P", "n_eff", "d_min"}."""
+    mem = Memory(np.array(model["X"]), np.array(model["Y"]), bandwidth=model["h"])
+    x = ctx_vector(context(rec, nominal_body))
+    q = mem.query(x)
+    tev = twin_evidence(rec)
+    w = np.array(model["w"])
+    P = {t: predict(w, row_features(tev, q, t)) for t in TOOLS}
+    dec = decide(P, engine_order(rec), q["n_eff"], n_min=model["n_min"], hedge_delta=model["delta"])
+    return {**dec, "P": P, "n_eff": q["n_eff"], "d_min": q["d_min"]}
+
+
+def apply_simple(model: dict, rec: dict, nominal_body: dict, k: int = 5) -> dict:
+    """P-mem0 decision (the simple memory baseline) from the same training cases."""
+    x = ctx_vector(context(rec, nominal_body))
+    order = simple_memory_order(np.array(model["X"]), np.array(model["Y"]), x, engine_order(rec), k=k)
+    return {"order": order, "mode": "simple"}

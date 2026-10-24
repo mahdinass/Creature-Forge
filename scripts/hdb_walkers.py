@@ -46,7 +46,7 @@ def split_of(region: str) -> str:
 
 def panel(a) -> None:
     with ForgePool(max_workers=a.workers) as pool:
-        p = cg.generate_panel(GEN_CAMPAIGN, a.n, pool=pool)
+        p = cg.generate_panel(a.gen_campaign, a.n, pool=pool)
     for c in p["accepted"]:
         c["hdb_split"] = split_of(c["region"])
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
@@ -58,7 +58,8 @@ def panel(a) -> None:
 def run(a) -> None:
     p = json.loads(Path(a.panel).read_text(encoding="utf-8"))
     k, n = (int(x) for x in a.shard.split("/"))
-    todo = p["accepted"][k::n]
+    todo = [c for c in p["accepted"] if a.split in ("all", c["hdb_split"])][k::n]
+    CAMPAIGN = a.campaign  # noqa: N806 (seed namespace of this walker campaign; default = the v1 campaign)
     st, ks, family, budget = S3["settings"], S3["seeds"], 17, 2000
     done = set()
     if os.path.exists(a.out):
@@ -98,11 +99,14 @@ def main() -> None:
     p.add_argument("--n", type=int, default=250)
     p.add_argument("--workers", type=int, default=16)
     p.add_argument("--out", required=True)
+    p.add_argument("--gen-campaign", default=GEN_CAMPAIGN, help="generation campaign (hdb-v2-gen for the E-2 cohort)")
     r = sub.add_parser("run")
     r.add_argument("--panel", required=True)
     r.add_argument("--shard", default="0/1")
     r.add_argument("--workers", type=int, default=3)
     r.add_argument("--out", required=True)
+    r.add_argument("--campaign", default=CAMPAIGN, help="walker seed campaign (hdb-v2-walkers for the E-2 cohort)")
+    r.add_argument("--split", default="all", choices=("all", "dev", "test"), help="run only creatures of this region split")
     a = ap.parse_args()
     {"panel": panel, "run": run}[a.cmd](a)
 
