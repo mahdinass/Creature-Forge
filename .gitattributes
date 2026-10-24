@@ -19,3 +19,4 @@ experiments/causal_engineer/heldout/**/*.json -text
 docs/archive/*.SHA256SUMS -text
 # E-1 registered study records and gate evidence (sha256-pinned; no EOL conversion)
 experiments/e1/** -text
+experiments/causal_engineer/dev/rl1/** -text

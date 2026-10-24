@@ -540,3 +540,13 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   p 0.034). The protocol had no gatekeeping, so it is not a study-wide confirmatory result: Holm over all 3 tests gives an
   adjusted p of 0.0503. Report it as supportive evidence (`docs/E1_RESULTS.md` §1.1). The earlier "rejected (Holm)" wording
   is withdrawn.
+
+## 2026-10-24 night - RL-1 repair learning: dev gate G-RL1 FAILED (`docs/RL1_DEV_REPORT.md`)
+- **Dev response matrix:** 211 instances × 10 tools, 2,110 cells, verified. Some tool works on 61.6 %; 38 % are
+  unrepairable by any single tool at 300 rollouts.
+- **LOFO top-2 matrix success:** engine twin ranking 0.521, RL-1 0.512 (−0.009, 90 % [−0.029, 0.009]), simple memory
+  0.450, probe ranking 0.450.
+- **Gate:** failed, so RL-1 is not run online. Exploratory: memory added to a twin-free engineer hurts (0.450 → 0.403).
+- **Recommendation:** no E-2 RL-1 vs A1. The proposed E-2R (diagnosis-ablation replication on a fresh cohort + HF2) needs
+  the owner's decision.
+- **Spend:** ledger $107.19. Both VMs STOPPED.
