@@ -1,7 +1,7 @@
 {
  "study": "E-1",
  "version": 1,
- "status": "DRAFT (not registered)",
+ "status": "REGISTERED 2026-10-24 (docs/E1_PROTOCOL.md section 9); frozen",
  "title": "Physics-grounded investigation engine vs equally plant-budgeted exhaustive repair on sealed held-out damage",
  "arms": [
   "A0",
@@ -71,5 +71,12 @@
   "n_total": 160,
   "order": "strict round robin over strata in this key order; per-stratum sha256(seed:stratum:base:severity) order"
  },
- "population": "hdb-v1 test-side bases (hdb_bench.load_bases('test'), 99 walkers); dev and sealed held-out families; eligibility hdb_bench.check_eligibility"
+ "population": "hdb-v1 test-side bases (hdb_bench.load_bases('test'), 99 walkers); dev and sealed held-out families; eligibility hdb_bench.check_eligibility",
+ "owner_approval": "2026-10-24: 160 sealed test instances; batch-VM spend about $18-23; cap $120",
+ "recovery": {
+  "worker_or_process_failure": "re-run the same shard with --resume (identical inputs; completed instance records are kept, a partial episode is recomputed from scratch)",
+  "vm_stop_or_crash": "restart the VM, re-sync the registered commit, resume every shard with --resume",
+  "build_interruption": "re-run e1_build.py on the same out-dir (resumable; evaluated candidates and thresholds are reused)",
+  "never": "no change of code, settings, seeds, sample or analysis after any arm outcome is seen; every deviation is reported"
+ }
 }

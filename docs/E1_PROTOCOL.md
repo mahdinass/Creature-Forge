@@ -1,12 +1,8 @@
 # E-1 protocol: physics-grounded investigation vs equally plant-budgeted exhaustive repair on sealed held-out damage
 
-**Status: DRAFT, not registered.** Registration means:
-1. this file and `experiments/e1/protocol.json` are final;
-2. the code hashes in §9 are filled in;
-3. the commit is pushed;
-4. **then**, and only then, the sealed test side is opened by `scripts/e1_build.py`.
-
-Nothing in this study has touched the sealed side yet.
+**Status: REGISTERED 2026-10-24** (owner approval 2026-10-24: 160 sealed test instances, batch-VM spend of about $18–23,
+infra cap $120). The registration record is in §9. Everything below is frozen. The sealed test side is opened only by
+`scripts/e1_build.py`, run after the registration commit was pushed.
 
 **Context:** `docs/ROADMAP_REASSESSMENT_2026-10-24.md` §4. **Bench:** `docs/HDB_SPEC.md` (HDB v2, frozen 2026-10-19).
 **Dev evidence motivating it:**
@@ -119,6 +115,8 @@ cap later skips, but the accepted set depends only on the fixed order and on det
 |---|---|---|
 | **G-R reproduction** | At the registration commit, A0 and A1 rerun on 4 stored fresh-dev instances (dev data only) must exactly reproduce the stored records: eligibility rows, verification status, walking fraction, every design created, and plant and twin use. K0n smoke on the same 4 must complete | before registration |
 | **G-T tests** | `tests/test_e1.py` and the existing HDB tests pass on the VM | before registration |
+| **G-R2 execution VM** | G-R repeated on the batch VM (the execution machine) at the registration commit: A0 and A1 exact on the same 4 stored dev instances | before any arm runs (may run alongside the physics-only build) |
+| **G-O operations** | VM-side API self-stop installed and tested end to end (STOPPED on the control plane); Windows watchdog on the service-account path; deadline inside the SA key lifetime | before the build |
 | **G-B build** | `e1_build.py` completes; quotas are met, or shortfalls are recorded (no top-up from other strata); `summary.json` and `SHA256SUMS` are written and pulled | after registration, before any arm |
 | **G-C completeness** | every arm has exactly one record per instance (ITT rules above) | before analysis |
 
@@ -146,6 +144,29 @@ development mandate.
 - **Outputs:** `artifacts/e1/` on the VM, pulled with `SHA256SUMS`. Records are committed under `experiments/e1/results/`
   with `-text`.
 
+### 7.1 Registered recovery procedure
+
+| failure | action |
+|---|---|
+| a worker or process dies; one arm shard fails | re-run the same shard with `--resume`. Inputs are identical; completed instance records are kept, and a partial episode is recomputed from scratch |
+| the VM stops, crashes or reaches its deadline mid-run | restart the VM, re-sync the registered commit (identical tree), resume every shard with `--resume` |
+| the build is interrupted | re-run `e1_build.py` on the same out-dir; it resumes, reusing evaluated candidates and thresholds |
+| a gate fails | stop, preserve the evidence and report. No fix-and-continue without a dated amendment, and no amendment after any arm outcome is seen |
+
+Never allowed: any change of code, settings, seeds, sample or analysis after an arm outcome has been seen. Every deviation
+from this protocol is reported in the results.
+
+### 7.2 Reserve for the future Nemotron evaluation
+
+- The 160 sampled instance ids are listed in `instances.jsonl` and are spent for every future confirmatory claim.
+- A later registered study (e.g. Stage 3, A3 > A1) samples from the **complement**:
+  - test-side candidates not in `instances.jsonl`;
+  - its own sampling seed;
+  - eligibility re-checked.
+- Thresholds and eligibility rows computed by this build are physics only and may be reused. Nothing from E-1's arm outcomes
+  may inform that sample.
+- `experiments/e1/RESERVE.md` records this rule and the spent ids.
+
 ## 8. What E-1 cannot show
 
 - That Nemotron adds value: there are no LLM arms.
@@ -154,12 +175,33 @@ development mandate.
 - Effects outside the hdb-v1 generator family. All bases come from one walker generator; the damage DSL and the simulator
   are shared with the twin, and only the reality gap is withheld.
 
-## 9. Registration record (to be filled at registration)
+## 9. Registration record
 
-- Commit: `<sha>`.
-- `protocol.json` sha256: `<…>`.
-- Code sha256:
-  - `hdb_testbench.py`, `e1_build.py`, `e1_run.py`, `e1_analysis.py`, `hdb_vs_run.py`;
-  - `belief_engine.py`, `hdb_workbench.py`, `hdb_policies.py`, `hdb_bench.py`, `hdb_heldout.py`, `hidden_plant.py`;
-  - stop map `8cf94726…`.
-- Environment: VM venv `~/dev/venvs/hdb` (mujoco 3.15.0, numpy 2.5.4); G-R report sha256.
+- **Registration commit:** the commit that contains this text, on branch `research/e1-engine-heldout`, pushed before the
+  build.
+- **`experiments/e1/protocol.json`** sha256 `a32107980635a8de6266e2121752ee9f2719acdc30505be4c49f3038470d3c81`.
+- **Frozen code** (sha256 of the committed blobs). Science code is unchanged since G-R commit `d63f901`. The four HDB modules
+  equal the `docs/HDB_SPEC.md` freeze hashes.
+
+| file | sha256 |
+|---|---|
+| `creature_forge/hdb_testbench.py` | `aad2165848cfeaa7758e44ba10d54312e5834635ca5bf3fd0b57e8e022e761e8` |
+| `scripts/e1_build.py` | `6b7ded0fe07e44435d17c533d996e572ce721555cd02c3df96297f433d50e1c1` |
+| `scripts/e1_run.py` | `fd0e3a0f4501a1b63bb279d05df33a69f32a3a898ff6494875d759779d395c83` |
+| `scripts/e1_analysis.py` | `178900c3a6c93cad857f24348bfb79fbc087211c4e7c504b6cd63e133fac60a0` |
+| `scripts/hdb_vs_run.py` | `79234ffcaf8d6aa3d89ef2403f857cf1d1c2d2c016754cf72c6ed8d20fe01917` |
+| `creature_forge/belief_engine.py` | `12e20cfeaa3f7dfaef1c7ad79f92b9df4cc929cfd2d92c6572ef98d44e66e915` |
+| `creature_forge/hdb_workbench.py` | `ba34b0a5f0aa2c729218a53a80a7525a60f6b474086bc79ee8049a50081d83d0` |
+| `creature_forge/hdb_policies.py` | `d50ea77030f65ded482fb4f985c168062e7fdf64130f7e96ba5f8e81d8b6805e` |
+| `creature_forge/hdb_bench.py` | `7bd810cf9b843ef9fa9b84f73f7f03ae55f91878030a2acbd85446845a64af05` |
+| `creature_forge/hdb_heldout.py` | `3875de597cfbcb8dd71cd4fae8ddc533d8e0cdeb2d23492174fc8cfec79f1077` |
+| `creature_forge/hidden_plant.py` | `91c26fd93fcb303e877ff5ee15ee62b7543077b2f549aae0875bad9e2773b7c6` |
+| `creature_forge/forge_pool.py` | `bc8145fd18c0c4d5574587bcfc0ca9fd1620c6e7c63691312826689a00347f43` |
+| stop map `experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json` | `8cf94726378daa10b3ef88db36f30887a056b9cda89d4a724651ba5898723595` |
+
+- **Environment:**
+  - venv `~/dev/venvs/hdb` (Python 3.12.3, mujoco 3.15.0, numpy 2.5.4) on the main VM (G-R) and on the batch VM (G-R2,
+    execution);
+  - walkers `CF_HDB_WALKERS=artifacts/hdb/walkers_all.jsonl`.
+- **Gate evidence:** G-R `experiments/e1/gate/gate_G_R.json` (sha256 `38a917ae…`). G-O was run 2026-10-24 on the batch VM:
+  VM-side deadline set in the past → API self-stop → STOPPED in 47 s.
