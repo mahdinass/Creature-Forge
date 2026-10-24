@@ -33,6 +33,28 @@ an optimiser and a pre-registered verifier do the measuring and the judging. Hea
     ([`experiments/forge_loop/scoreboard/REPORT.md`](experiments/forge_loop/scoreboard/REPORT.md)).
 - **R2 is classical optimisation, not Nemotron.** An earlier controller walks on 150/150 untouched seeds vs 91/150.
 
+**New in rc2: a registered evaluation on unseen damage (E-1, NO_AI, 2026-10-24).**
+- **Design:**
+  - 160 robots with hidden damage, on 90 morphologies never used in development;
+  - two thirds of the damage comes from mechanisms never used in development (sensor latency, joint damping wear, leg
+    asymmetry, combined faults);
+  - three arms with the same 700-rollout plant budget: the physics-diagnosis engine, a generic exhaustive repair search,
+    and the same engine with diagnosis switched off;
+  - the protocol and code were frozen and pushed before the sealed robots were opened.
+- **Primary result: inconclusive.** The engine recovered 56/160, exhaustive search 46/160 (paired 22 vs 12, exact
+  one-sided p = 0.061). This is **not** evidence that the engine beats exhaustive search.
+- **Diagnosis ablation: supportive, not confirmed.** Switching the diagnosis off cut recoveries from 56 to 42 (paired
+  26 vs 12, one-sided p = 0.017).
+  - This met the pre-specified secondary criterion (Holm over the two secondary tests, adjusted p = 0.034).
+  - The protocol had no rule tying the secondaries to the primary, and a correction over all three tests gives 0.050.
+- **Exploratory findings:**
+  - the engine often names unseen faults correctly but cannot repair them (sensor latency 1/18, joint damping 3/18);
+  - in 12 cases exhaustive search succeeded where the engine's diagnosis-directed repair did not;
+  - the development-time advantage (+22 points) shrank to +6 points on unseen robots.
+- **What E-1 does not show:** E-1 does **not** demonstrate learning from experience. No arm learns from earlier episodes.
+- Protocol, results, evidence and checksums: [`docs/E1_PROTOCOL.md`](docs/E1_PROTOCOL.md),
+  [`docs/E1_RESULTS.md`](docs/E1_RESULTS.md), `experiments/e1/`.
+
 ## Quick start for judges (no API key, no cloud, about 10 minutes)
 Prerequisites: Python 3.11 or 3.12, Node 22+, Git, and Chrome or Edge.
 
@@ -102,6 +124,13 @@ npm --prefix studio test && npm --prefix studio run build
 - **DO-1:** reliable on one robot under different optimizer randomness. W4 has only two examples.
 - **Nemotron:** the recorded case is one instance, chosen afterwards. The broad comparison shows parity with the engine
   alone.
+- **E-1:**
+  - the primary comparison with exhaustive search is inconclusive;
+  - the diagnosis ablation is supportive but not confirmed at the study-wide level;
+  - everything beyond the registered tests is exploratory;
+  - one robot generator family, simulation only, and no language model in any arm.
+- **Learning from experience** has not been demonstrated. Every direct test so far, including memory, learned
+  posteriors and dossiers, was null.
 - **Replays:** they are exact playbacks of stored records. Large raw archives are kept out of Git and documented in
   [`docs/NONGIT_ASSETS_2026-10-21.md`](docs/NONGIT_ASSETS_2026-10-21.md).
 
