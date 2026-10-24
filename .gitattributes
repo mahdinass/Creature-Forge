@@ -21,3 +21,5 @@ experiments/do1/** -text
 experiments/ta1/** -text
 experiments/w2/** -text
 docs/archive/*.tsv -text
+# E-1 registered study records and gate evidence (sha256-pinned; no EOL conversion)
+experiments/e1/** -text

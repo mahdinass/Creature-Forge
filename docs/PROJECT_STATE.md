@@ -943,3 +943,44 @@ missing records. They are frozen and are not changed.
   - the integration PR into `main`;
   - PR #18;
   - the off-machine backup of `%USERPROFILE%\CreatureForge-archive\2026-10-21\`.
+## 2026-10-24 - SV1 closed; auth-horizon guard; roadmap reassessment; E-1 prepared (not registered)
+- **Experience P05 (branch `feature/experience-learning`, pushed @ `cea00b5`).**
+  - SV0 and SV1 code, evidence and reports are committed. SV1 is ADMITTED: only the refit percentile bootstrap M2 was
+    admitted, and CR1 undercovers.
+  - `sv1/SV1_FINAL_REVIEW.md` covers the conclusions, the power consequence (θ_G 0.108 → "supported benefit" 5 %), and the
+    evaluation `verdict` label clarification; the frozen output is unchanged.
+  - Recommendation: no P0.5 campaign before the deadline.
+- **Ops (branch `infra/auth-horizon-guard` @ `d8e3727`, pushed).**
+  - Root cause of the 2026-10-19 and 2026-10-24 overruns: the CLI federation token is a fixed ~12 h token with no refresh.
+  - `start` now shortens and `extend` refuses any deadline beyond the token expiry minus 45 min. The watchdog stops running
+    VMs 30 min before expiry, and `status` and the watchdog log the remaining auth time.
+  - The watchdog task now also runs on battery.
+  - Remaining gap: a sleeping or off laptop. The fix needs a VM-side API stop with a service account, which is owner IAM
+    approval.
+- **Budget (owner, 2026-10-24).** Cloud $37.49, Token Factory $47.00. Development use is authorised; the $1.50 SV1 limit
+  is not the ongoing budget. Ledger $92.98 / cap 96 at 13:15 local.
+- **Roadmap.** `docs/ROADMAP_REASSESSMENT_2026-10-24.md`. Experience → better decisions remains undemonstrated. The strongest
+  effect (A1c5 109 vs A0 62 of 211 fresh dev) was never confirmed on the sealed test side.
+- **E-1 (branch `research/e1-engine-heldout`).** Protocol draft `docs/E1_PROTOCOL.md`; code: `hdb_testbench.py`,
+  `e1_build.py`, `e1_run.py`, `e1_analysis.py`, `e1_repro_gate.py`; 14 tests.
+  - The G-R reproduction gate is running on the main VM (slot `hdb`, `artifacts/e1/gate`).
+  - The sealed side is not opened. Registration and the build need the owner's go, because they spend sealed held-out data.
+
+## 2026-10-24 evening - E-1 complete (registered; `docs/E1_RESULTS.md`)
+- **Registration:** `494ed9b`, pushed before the sealed side was opened. Gates G-R, G-R2, G-O, G-T, G-B and G-C all PASS.
+- **Sample:** 160 sealed test instances on 90 bases; the reserve is in `experiments/e1/RESERVE.md`.
+- **Results:** A1 engine 56, A0 exhaustive 46, K0n (engine without diagnosis) 42.
+  - **H-E1 (A1 > A0): 22 vs 12, p = 0.061, not rejected.**
+  - **H-E2 (A1 > K0n): 26 vs 12, p = 0.017, rejected (Holm).**
+  - H-E3 (K0n > A0): null.
+  - Diagnosis carries the advantage on unseen damage; the twin machinery alone does not. The dev effect (+22 pts) shrank
+    to +6 pts.
+  - On sealed singles the diagnosis is right but the repair fails: sensor latency 1/18, damping 3/18.
+- **Ops:** service account `cf-vm-stopper` (instance-scoped editor). VM API self-stop installed on the batch VM and
+  tested. A VM-side finisher ran the analysis and stopped the VM through the API.
+- **Spend:** today +$8.85, ledger $101.82, cap 120. Both VMs STOPPED (control plane).
+- **Next:** rc2 wording (owner); diagnosis-conditioned repair memory (dev first, then registered on the reserve with A3).
+- **Correction (2026-10-25, owner review):** H-E2 meets only the registered secondary criterion (Holm over 2, adjusted
+  p 0.034). The protocol had no gatekeeping, so it is not a study-wide confirmatory result: Holm over all 3 tests gives an
+  adjusted p of 0.0503. Report it as supportive evidence (`docs/E1_RESULTS.md` §1.1). The earlier "rejected (Holm)" wording
+  is withdrawn.
