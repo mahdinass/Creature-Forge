@@ -23,3 +23,6 @@ experiments/w2/** -text
 docs/archive/*.tsv -text
 # P0.5 design archive (archived copies; hashes in SHA256SUMS, source vs published in PROVENANCE.tsv); no EOL conversion
 experiments/causal_engineer/dev/experience_p05/design_archive/** -text
+# P05-SV0 / SV1 code, evidence and archives (sha256-pinned; no EOL conversion)
+experiments/causal_engineer/dev/experience_p05/sv0/** -text
+experiments/causal_engineer/dev/experience_p05/sv1/** -text

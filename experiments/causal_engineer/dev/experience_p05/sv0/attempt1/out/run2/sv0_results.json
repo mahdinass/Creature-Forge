@@ -1,0 +1,4626 @@
+{
+ "checks": [
+  {
+   "diagnostics": [],
+   "id": "SV0-0",
+   "items": [
+    {
+     "expected": "GuardViolation",
+     "name": "audit hook active (listing ~ is refused)",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "/home/forge/sv0/repo",
+     "name": "REPO is ~/sv0/repo",
+     "observed": "/home/forge/sv0/repo",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": ".git is a directory (not a gitfile)",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "--out is sv0/out/run<N> of this checkout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "--expected is ~/sv0/pre/expected.json",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "dont_write_bytecode": true,
+      "isolated": true,
+      "no_user_site": true,
+      "safe_path": true
+     },
+     "name": "interpreter flags -I -B",
+     "observed": {
+      "dont_write_bytecode": true,
+      "isolated": true,
+      "no_user_site": true,
+      "safe_path": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "running inside a venv",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "venv equals the c1-approved venv",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [],
+     "name": "no creature_forge module loaded before the explicit import",
+     "observed": [],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": null,
+     "name": "explicit imports from the approved checkout",
+     "observed": null,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "creature_forge": "/home/forge/sv0/repo/creature_forge/__init__.py",
+      "creature_forge.experience_audit": "/home/forge/sv0/repo/creature_forge/experience_audit.py",
+      "creature_forge.experience_bank": "/home/forge/sv0/repo/creature_forge/experience_bank.py",
+      "creature_forge.experience_p0": "/home/forge/sv0/repo/creature_forge/experience_p0.py"
+     },
+     "name": "every creature_forge module is a pinned file of the checkout",
+     "observed": {
+      "creature_forge": "/home/forge/sv0/repo/creature_forge/__init__.py",
+      "creature_forge.experience_audit": "/home/forge/sv0/repo/creature_forge/experience_audit.py",
+      "creature_forge.experience_bank": "/home/forge/sv0/repo/creature_forge/experience_bank.py",
+      "creature_forge.experience_p0": "/home/forge/sv0/repo/creature_forge/experience_p0.py"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      "/home/forge/sv0/repo/creature_forge"
+     ],
+     "name": "creature_forge.__path__",
+     "observed": [
+      "/home/forge/sv0/repo/creature_forge"
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [],
+     "name": "every loaded module comes from the interpreter trees, the checkout pins, the archive or sv0/",
+     "observed": [],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/design_archive",
+     "name": "p05_design_calc resolves to its approved directory",
+     "observed": "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/design_archive",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/sv0",
+     "name": "sv0_lib resolves to its approved directory",
+     "observed": "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/sv0",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/sv0",
+     "name": "sv0_reference resolves to its approved directory",
+     "observed": "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/sv0",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": ".git/HEAD is a detached 40-hex hash",
+     "observed": "afe33ca68b73da313d720db0939ef382bc1cae91",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "afe33ca68b73da313d720db0939ef382bc1cae91",
+     "name": ".git/HEAD equals the approved hash",
+     "observed": "afe33ca68b73da313d720db0939ef382bc1cae91",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "afe33ca68b73da313d720db0939ef382bc1cae91",
+     "name": "launcher git rev-parse HEAD equals the approved hash",
+     "observed": "afe33ca68b73da313d720db0939ef382bc1cae91",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "dcfb1f29cc14ea05bb4bb80eb9d18240a81b3360",
+     "name": "index blob creature_forge/experience_p0.py",
+     "observed": "dcfb1f29cc14ea05bb4bb80eb9d18240a81b3360",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "dcfb1f29cc14ea05bb4bb80eb9d18240a81b3360",
+     "name": "worktree blob creature_forge/experience_p0.py",
+     "observed": "dcfb1f29cc14ea05bb4bb80eb9d18240a81b3360",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "38aed182696d5d46cf992e7bd4e9d138e6a6a0f4",
+     "name": "index blob creature_forge/experience_bank.py",
+     "observed": "38aed182696d5d46cf992e7bd4e9d138e6a6a0f4",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "38aed182696d5d46cf992e7bd4e9d138e6a6a0f4",
+     "name": "worktree blob creature_forge/experience_bank.py",
+     "observed": "38aed182696d5d46cf992e7bd4e9d138e6a6a0f4",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "dbaa4d34cb83bfc6fdfd0b456aaf3be72753ec98",
+     "name": "index blob scripts/exp_p0_audit.py",
+     "observed": "dbaa4d34cb83bfc6fdfd0b456aaf3be72753ec98",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "dbaa4d34cb83bfc6fdfd0b456aaf3be72753ec98",
+     "name": "worktree blob scripts/exp_p0_audit.py",
+     "observed": "dbaa4d34cb83bfc6fdfd0b456aaf3be72753ec98",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "1273379810988db569e855aa8d954c2da038b04f",
+     "name": "index blob creature_forge/experience_audit.py",
+     "observed": "1273379810988db569e855aa8d954c2da038b04f",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "1273379810988db569e855aa8d954c2da038b04f",
+     "name": "worktree blob creature_forge/experience_audit.py",
+     "observed": "1273379810988db569e855aa8d954c2da038b04f",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+     "name": "index blob creature_forge/__init__.py",
+     "observed": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+     "name": "worktree blob creature_forge/__init__.py",
+     "observed": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "missing": [],
+      "stray": []
+     },
+     "name": "launcher git status lists only the allowed lines",
+     "observed": {
+      "missing": [],
+      "stray": []
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "sv0_lib.py": "7ca9658df2fe3c22495b45a63f6f73c2e85316dbc7d06104632bbf354de8cde2",
+      "sv0_reference.py": "ec34f409aa77647df097f0f1e32fdae8dc6ddd244de3a9f42e5ea19baf4c60f8",
+      "sv0_run.py": "0708b7e8a810297c4e00d0749540d03fe4232f97647fe9aaf328f90464484ad8"
+     },
+     "name": "sha256 of the three sv0 files equals the (b) hashes",
+     "observed": {
+      "sv0_lib.py": "7ca9658df2fe3c22495b45a63f6f73c2e85316dbc7d06104632bbf354de8cde2",
+      "sv0_reference.py": "ec34f409aa77647df097f0f1e32fdae8dc6ddd244de3a9f42e5ea19baf4c60f8",
+      "sv0_run.py": "0708b7e8a810297c4e00d0749540d03fe4232f97647fe9aaf328f90464484ad8"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "33/33",
+     "name": "design_archive SHA256SUMS",
+     "observed": "33/33",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "2635ea8b7a00dd791d4e50e49ebdfcdf622915591fbd1f412e241445694db92b",
+     "name": "fingerprint cpu_flags_sha256 equals c1",
+     "observed": "2635ea8b7a00dd791d4e50e49ebdfcdf622915591fbd1f412e241445694db92b",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "AMD EPYC-Genoa Processor",
+     "name": "fingerprint cpu_model equals c1",
+     "observed": "AMD EPYC-Genoa Processor",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 29,
+     "name": "fingerprint dist_count equals c1",
+     "observed": 29,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "af2cf766ac30a5fa1067ef865601d92e10a535907f29d942160b5dde34a7a38d",
+     "name": "fingerprint dist_manifest_sha256 equals c1",
+     "observed": "af2cf766ac30a5fa1067ef865601d92e10a535907f29d942160b5dde34a7a38d",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "x86_64",
+     "name": "fingerprint machine equals c1",
+     "observed": "x86_64",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "2.5.4",
+     "name": "fingerprint numpy equals c1",
+     "observed": "2.5.4",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "2ab35740851adcdddd763d6a5fef42309f1c7d9717e94fa653d4c3b006dba8f6",
+     "name": "fingerprint numpy_config_sha256 equals c1",
+     "observed": "2ab35740851adcdddd763d6a5fef42309f1c7d9717e94fa653d4c3b006dba8f6",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+     "name": "fingerprint platform equals c1",
+     "observed": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "/home/forge/venvs/creature-forge",
+     "name": "fingerprint prefix equals c1",
+     "observed": "/home/forge/venvs/creature-forge",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+     "name": "fingerprint python equals c1",
+     "observed": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "linux",
+     "name": "fingerprint sys_platform equals c1",
+     "observed": "linux",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": ">=2.4.6,<2.6",
+     "name": "numpy in >=2.4.6,<2.6",
+     "observed": "2.5.4",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "linux x86_64",
+     "name": "platform linux x86_64",
+     "observed": "linux x86_64",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "def4117c52a6141453c0402277d5877fa32651bc70b6a3a2f6deb7a5db9f29f2",
+     "name": "venv pip freeze (via $V/bin/python -I -m pip) equals c1",
+     "observed": "def4117c52a6141453c0402277d5877fa32651bc70b6a3a2f6deb7a5db9f29f2",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": null,
+     "name": "scipy absent",
+     "observed": null,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+     },
+     "name": "thread variables equal 1",
+     "observed": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [],
+     "name": "no KEY / TOKEN / SECRET variable present",
+     "observed": [],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "MemAvailable >= 3 GB at start",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "PASS",
+   "title": "provenance and environment preflight"
+  },
+  {
+   "diagnostics": [],
+   "id": "SV0-1",
+   "items": [
+    {
+     "expected": [
+      [
+       0.8888888888888888,
+       0.1111111111111111
+      ]
+     ],
+     "max_abs_diff": 0.0,
+     "name": "F1 knn_rates P",
+     "observed": [
+      [
+       0.8888888888888888,
+       0.1111111111111111
+      ]
+     ],
+     "result": "PASS",
+     "rule": "abs tol 1e-12"
+    },
+    {
+     "expected": [
+      [
+       2,
+       0
+      ]
+     ],
+     "name": "F2 stable-tie neighbours (as in knn_rates)",
+     "observed": [
+      [
+       2,
+       0
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.3333333333333333,
+       0.0
+      ]
+     ],
+     "max_abs_diff": 0.0,
+     "name": "F2 knn_rates P",
+     "observed": [
+      [
+       0.3333333333333333,
+       0.0
+      ]
+     ],
+     "result": "PASS",
+     "rule": "abs tol 1e-12"
+    },
+    {
+     "expected": [
+      [
+       6.5,
+       5.0,
+       6.5
+      ]
+     ],
+     "max_abs_diff": 0.0,
+     "name": "F3 Space.dist",
+     "observed": [
+      [
+       6.5,
+       5.0,
+       6.5
+      ]
+     ],
+     "result": "PASS",
+     "rule": "abs tol 1e-12"
+    },
+    {
+     "expected": [
+      [
+       5.0,
+       5.0,
+       5.0
+      ]
+     ],
+     "max_abs_diff": 0.0,
+     "name": "F3n Space.dist with NaN column",
+     "observed": [
+      [
+       5.0,
+       5.0,
+       5.0
+      ]
+     ],
+     "result": "PASS",
+     "rule": "abs tol 1e-12"
+    },
+    {
+     "expected": [
+      1,
+      0
+     ],
+     "name": "F4 decide",
+     "observed": [
+      1,
+      0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.5,
+       0.5
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       0.75,
+       0.25
+      ],
+      [
+       0.75,
+       0.25
+      ],
+      [
+       0.75,
+       0.25
+      ],
+      [
+       0.75,
+       0.25
+      ]
+     ],
+     "name": "F5 prior",
+     "observed": [
+      [
+       0.5,
+       0.5
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       0.75,
+       0.25
+      ],
+      [
+       0.75,
+       0.25
+      ],
+      [
+       0.75,
+       0.25
+      ],
+      [
+       0.75,
+       0.25
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.25,
+       0.75
+      ],
+      [
+       0.25,
+       0.75
+      ],
+      [
+       0.875,
+       0.125
+      ],
+      [
+       0.875,
+       0.625
+      ],
+      [
+       0.875,
+       0.125
+      ],
+      [
+       0.875,
+       0.125
+      ]
+     ],
+     "name": "F5 P",
+     "observed": [
+      [
+       0.25,
+       0.75
+      ],
+      [
+       0.25,
+       0.75
+      ],
+      [
+       0.875,
+       0.125
+      ],
+      [
+       0.875,
+       0.625
+      ],
+      [
+       0.875,
+       0.125
+      ],
+      [
+       0.875,
+       0.125
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "name": "F5 pick",
+     "observed": [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "name": "F5 v_mem",
+     "observed": [
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      1,
+      1,
+      0,
+      1,
+      1,
+      0
+     ],
+     "name": "F5 v_pi0",
+     "observed": [
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0,
+      0.0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "delta_vs_pi0": -0.3333,
+      "n": 6,
+      "oracle_best": 0.8333,
+      "p_minus": 0.3333,
+      "p_plus": 0.0,
+      "regret_mem": 0.5,
+      "value_mem": 0.3333,
+      "value_pi0": 0.6667
+     },
+     "name": "F5 summarize_decision",
+     "observed": {
+      "delta_vs_pi0": -0.3333,
+      "n": 6,
+      "oracle_best": 0.8333,
+      "p_minus": 0.3333,
+      "p_plus": 0.0,
+      "regret_mem": 0.5,
+      "value_mem": 0.3333,
+      "value_pi0": 0.6667
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       20.0
+      ],
+      [
+       20.1
+      ]
+     ],
+     "name": "F6 X*",
+     "observed": [
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       20.0
+      ],
+      [
+       20.1
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      2
+     ],
+     "name": "F6 groups*",
+     "observed": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      2
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      2,
+      0,
+      1
+     ],
+     "name": "F6 c",
+     "observed": [
+      2,
+      0,
+      1
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      "0",
+      "2"
+     ],
+     "name": "F6 folds",
+     "observed": [
+      "0",
+      "2"
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0
+      ]
+     ],
+     "name": "F6 P*",
+     "observed": [
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "name": "F6 pick*",
+     "observed": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+     ],
+     "name": "F6 v_mem*",
+     "observed": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.8333333333333334,
+     "name": "F6 mean v_mem*",
+     "observed": 0.8333333333333334,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "F6 copies bit-identical",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [],
+     "name": "F7 leak_check, correct labels: rows flagged",
+     "observed": [],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "name": "F7 leak_check, copies mislabelled [0,0,1,1,2,2]: rows flagged",
+     "observed": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "PASS",
+   "title": "hand-computed reference fixtures on the exact P0 functions"
+  },
+  {
+   "diagnostics": [
+    {
+     "name": "B0 interv min pick margin",
+     "value": 0.001165501195804164
+    },
+    {
+     "name": "B0 interv min inner-CV loss gap",
+     "value": 0.0048759075453048695
+    },
+    {
+     "name": "B0 interv min k-boundary distance gap",
+     "value": 0.002290198378064545
+    },
+    {
+     "name": "B0 obs_morph min pick margin",
+     "value": 0.0
+    },
+    {
+     "name": "B0 obs_morph min inner-CV loss gap",
+     "value": 0.01613566922971893
+    },
+    {
+     "name": "B0 obs_morph min k-boundary distance gap",
+     "value": 0.00032307923230590063
+    },
+    {
+     "name": "B1 interv min pick margin",
+     "value": 0.0011655011958042194
+    },
+    {
+     "name": "B1 interv min inner-CV loss gap",
+     "value": 0.008442887461334814
+    },
+    {
+     "name": "B1 interv min k-boundary distance gap",
+     "value": 0.005594624498545642
+    },
+    {
+     "name": "B1 obs_morph min pick margin",
+     "value": 0.0
+    },
+    {
+     "name": "B1 obs_morph min inner-CV loss gap",
+     "value": 0.00022132303081734417
+    },
+    {
+     "name": "B1 obs_morph min k-boundary distance gap",
+     "value": 0.0004805471806523798
+    },
+    {
+     "name": "B2 interv min pick margin",
+     "value": 0.0023310023916083833
+    },
+    {
+     "name": "B2 interv min inner-CV loss gap",
+     "value": 0.001917475314256012
+    },
+    {
+     "name": "B2 interv min k-boundary distance gap",
+     "value": 0.011352151046764014
+    },
+    {
+     "name": "B2 obs_morph min pick margin",
+     "value": 0.0023310023916083833
+    },
+    {
+     "name": "B2 obs_morph min inner-CV loss gap",
+     "value": 0.017091860962570204
+    },
+    {
+     "name": "B2 obs_morph min k-boundary distance gap",
+     "value": 0.0038282111032703625
+    },
+    {
+     "name": "A2 interv min pick margin",
+     "value": 0.004273504384615379
+    },
+    {
+     "name": "A2 interv min inner-CV loss gap",
+     "value": 2.9825157752405573e-06
+    },
+    {
+     "name": "A2 interv min k-boundary distance gap",
+     "value": 4.911683368646891e-05
+    },
+    {
+     "name": "A2 obs_morph min pick margin",
+     "value": 0.0009496676410256644
+    },
+    {
+     "name": "A2 obs_morph min inner-CV loss gap",
+     "value": 0.01372986541184451
+    },
+    {
+     "name": "A2 obs_morph min k-boundary distance gap",
+     "value": 0.0003097712203086189
+    }
+   ],
+   "id": "SV0-2",
+   "items": [
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "B0 interv: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "B0 obs_morph: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "expected": 0.08333333333333333,
+     "name": "B0 estimate mean(v_interv - v_obs_morph)",
+     "observed": 0.08333333333333333,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "B1 interv: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "B1 obs_morph: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "expected": -0.08333333333333333,
+     "name": "B1 estimate mean(v_interv - v_obs_morph)",
+     "observed": -0.08333333333333333,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "B2 interv: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "B2 obs_morph: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "expected": 0.027777777777777776,
+     "name": "B2 estimate mean(v_interv - v_obs_morph)",
+     "observed": 0.027777777777777776,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "A2 interv: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "disagreements": [],
+     "expected": 0,
+     "max_abs_diff_P": 0.0,
+     "name": "A2 obs_morph: P0 == reference (k, neighbour sets, pick, v_mem, v_pi0, prior exact; P, gate_sim 1e-12)",
+     "observed": 0,
+     "result": "PASS",
+     "rule": "disagreements; FAIL-INVESTIGATE only if every one has a margin < 1e-9"
+    },
+    {
+     "expected": -0.011904761904761904,
+     "name": "A2 estimate mean(v_interv - v_obs_morph)",
+     "observed": -0.011904761904761904,
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "PASS",
+   "title": "independent pure-Python reference vs the exact P0 pipeline"
+  },
+  {
+   "diagnostics": [
+    {
+     "name": "3d B0 [one base 2x] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B0 [one base 2x] G*",
+     "value": 11
+    },
+    {
+     "name": "3d B0 [one 2x + one 3x] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B0 [one 2x + one 3x] G*",
+     "value": 9
+    },
+    {
+     "name": "3d B0 [seeded bootstrap draw] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B0 [seeded bootstrap draw] G*",
+     "value": 6
+    },
+    {
+     "name": "3d B1 [one base 2x] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B1 [one base 2x] G*",
+     "value": 11
+    },
+    {
+     "name": "3d B1 [one 2x + one 3x] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B1 [one 2x + one 3x] G*",
+     "value": 9
+    },
+    {
+     "name": "3d B1 [seeded bootstrap draw] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B1 [seeded bootstrap draw] G*",
+     "value": 8
+    },
+    {
+     "name": "3d B2 [one base 2x] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B2 [one base 2x] G*",
+     "value": 11
+    },
+    {
+     "name": "3d B2 [one 2x + one 3x] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B2 [one 2x + one 3x] G*",
+     "value": 9
+    },
+    {
+     "name": "3d B2 [seeded bootstrap draw] false positives (non-copied rows flagged)",
+     "value": 0
+    },
+    {
+     "name": "3c B2 [seeded bootstrap draw] G*",
+     "value": 8
+    }
+   ],
+   "id": "SV0-3",
+   "items": [
+    {
+     "expected": true,
+     "name": "3a A0 interv: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A0 obs_morph: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.011904761904761904,
+     "name": "3a A0 estimate",
+     "observed": -0.011904761904761904,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A0 rows unchanged by the identity layout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A1 interv: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A1 obs_morph: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.011904761904761904,
+     "name": "3a A1 estimate",
+     "observed": -0.011904761904761904,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A1 rows unchanged by the identity layout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A2 interv: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A2 obs_morph: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.011904761904761904,
+     "name": "3a A2 estimate",
+     "observed": -0.011904761904761904,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a A2 rows unchanged by the identity layout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B0 interv: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B0 obs_morph: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.08333333333333333,
+     "name": "3a B0 estimate",
+     "observed": 0.08333333333333333,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B0 rows unchanged by the identity layout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B1 interv: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B1 obs_morph: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.08333333333333333,
+     "name": "3a B1 estimate",
+     "observed": -0.08333333333333333,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B1 rows unchanged by the identity layout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B2 interv: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B2 obs_morph: replicate(idx = arange(G)) == direct P0, two calls",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.027777777777777776,
+     "name": "3a B2 estimate",
+     "observed": 0.027777777777777776,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3a B2 rows unchanged by the identity layout",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       20.0
+      ],
+      [
+       20.1
+      ]
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: X*",
+     "observed": [
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       0.0
+      ],
+      [
+       0.1
+      ],
+      [
+       20.0
+      ],
+      [
+       20.1
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      2
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: groups*",
+     "observed": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      2
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      2,
+      0,
+      1
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: c",
+     "observed": [
+      2,
+      0,
+      1
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      "0",
+      "2"
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: folds",
+     "observed": [
+      "0",
+      "2"
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0
+      ]
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: P*",
+     "observed": [
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       0.75,
+       0.75
+      ],
+      [
+       1.0,
+       0.0
+      ],
+      [
+       1.0,
+       0.0
+      ]
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: pick*",
+     "observed": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+     ],
+     "name": "3b F6 via resample -> refit_eval_fixed_k: v_mem*",
+     "observed": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.8333333333333334,
+     "name": "3b F6 via resample -> refit_eval_fixed_k: mean v_mem*",
+     "observed": 0.8333333333333334,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3b F6 via resample -> refit_eval_fixed_k: copies bit-identical",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [one base 2x] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 11,
+      "obs_morph": 11
+     },
+     "name": "3c B0 [one base 2x] (ii) outer folds = G*",
+     "observed": {
+      "interv": 11,
+      "obs_morph": 11
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [one base 2x] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [one base 2x] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.0,
+     "name": "3c B0 [one base 2x] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": 0.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B0 [one base 2x] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B0 [one base 2x] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [one 2x + one 3x] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 9,
+      "obs_morph": 9
+     },
+     "name": "3c B0 [one 2x + one 3x] (ii) outer folds = G*",
+     "observed": {
+      "interv": 9,
+      "obs_morph": 9
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [one 2x + one 3x] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [one 2x + one 3x] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.0,
+     "name": "3c B0 [one 2x + one 3x] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": 0.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B0 [one 2x + one 3x] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B0 [one 2x + one 3x] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [seeded bootstrap draw] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 6,
+      "obs_morph": 6
+     },
+     "name": "3c B0 [seeded bootstrap draw] (ii) outer folds = G*",
+     "observed": {
+      "interv": 6,
+      "obs_morph": 6
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [seeded bootstrap draw] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B0 [seeded bootstrap draw] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.05555555555555555,
+     "name": "3c B0 [seeded bootstrap draw] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": -0.05555555555555555,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B0 [seeded bootstrap draw] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B0 [seeded bootstrap draw] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [one base 2x] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 11,
+      "obs_morph": 11
+     },
+     "name": "3c B1 [one base 2x] (ii) outer folds = G*",
+     "observed": {
+      "interv": 11,
+      "obs_morph": 11
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [one base 2x] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [one base 2x] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.05555555555555555,
+     "name": "3c B1 [one base 2x] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": 0.05555555555555555,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B1 [one base 2x] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B1 [one base 2x] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [one 2x + one 3x] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 9,
+      "obs_morph": 9
+     },
+     "name": "3c B1 [one 2x + one 3x] (ii) outer folds = G*",
+     "observed": {
+      "interv": 9,
+      "obs_morph": 9
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [one 2x + one 3x] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [one 2x + one 3x] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.1111111111111111,
+     "name": "3c B1 [one 2x + one 3x] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": -0.1111111111111111,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B1 [one 2x + one 3x] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B1 [one 2x + one 3x] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [seeded bootstrap draw] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 8,
+      "obs_morph": 8
+     },
+     "name": "3c B1 [seeded bootstrap draw] (ii) outer folds = G*",
+     "observed": {
+      "interv": 8,
+      "obs_morph": 8
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [seeded bootstrap draw] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B1 [seeded bootstrap draw] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.08333333333333333,
+     "name": "3c B1 [seeded bootstrap draw] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": 0.08333333333333333,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B1 [seeded bootstrap draw] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B1 [seeded bootstrap draw] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [one base 2x] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 11,
+      "obs_morph": 11
+     },
+     "name": "3c B2 [one base 2x] (ii) outer folds = G*",
+     "observed": {
+      "interv": 11,
+      "obs_morph": 11
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [one base 2x] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [one base 2x] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.027777777777777776,
+     "name": "3c B2 [one base 2x] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": 0.027777777777777776,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B2 [one base 2x] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B2 [one base 2x] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [one 2x + one 3x] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 9,
+      "obs_morph": 9
+     },
+     "name": "3c B2 [one 2x + one 3x] (ii) outer folds = G*",
+     "observed": {
+      "interv": 9,
+      "obs_morph": 9
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [one 2x + one 3x] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [one 2x + one 3x] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 0.0,
+     "name": "3c B2 [one 2x + one 3x] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": 0.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B2 [one 2x + one 3x] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B2 [one 2x + one 3x] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [seeded bootstrap draw] (i) copies keep the original label",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 8,
+      "obs_morph": 8
+     },
+     "name": "3c B2 [seeded bootstrap draw] (ii) outer folds = G*",
+     "observed": {
+      "interv": 8,
+      "obs_morph": 8
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [seeded bootstrap draw] (iii) every outer and inner fold holds out all copies of its base",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "3c B2 [seeded bootstrap draw] (iv) copies have bit-identical P, pick and v",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": -0.027777777777777776,
+     "name": "3c B2 [seeded bootstrap draw] (v) theta* = (1/(G m)) sum_b c_b sum_i d*_bi",
+     "observed": -0.027777777777777776,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "name": "3c B2 [seeded bootstrap draw] (vi) leak_check flags no row",
+     "observed": {
+      "interv": 0,
+      "obs_morph": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 1.0,
+     "name": "3d B2 [seeded bootstrap draw] positive control: separate copy labels are detected",
+     "observed": 1.0,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "DegenerateReplicate",
+     "name": "3e replicate on F5, idx [0,0,0] (G* = 1)",
+     "observed": "DegenerateReplicate",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "DegenerateReplicate",
+     "name": "3e replicate on F5, F6's idx [0,0,2] (G* = 2)",
+     "observed": "DegenerateReplicate",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "DegenerateReplicate",
+     "name": "3e replicate on B0 with G* = 2",
+     "observed": "DegenerateReplicate",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "ValueError",
+     "name": "3e refit_eval_fixed_k at G* = 1",
+     "observed": "ValueError",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 7.776,
+     "name": "3f E[G*] at G = 12 (3 d.p.)",
+     "observed": 7.776,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 7.776052463830356,
+     "mc_se": 0.010871073959131292,
+     "name": "3f mean G* over 10,000 draws at G = 12 within 4 MC-SE",
+     "observed": 7.7663,
+     "result": "PASS",
+     "rule": "|mean - E| <= 4 MC-SE"
+    },
+    {
+     "expected": 17.886,
+     "name": "3f E[G*] at G = 28 (3 d.p.)",
+     "observed": 17.886,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 17.886102446888415,
+     "mc_se": 0.016401145409911947,
+     "name": "3f mean G* over 10,000 draws at G = 28 within 4 MC-SE",
+     "observed": 17.9073,
+     "result": "PASS",
+     "rule": "|mean - E| <= 4 MC-SE"
+    }
+   ],
+   "status": "PASS",
+   "title": "refit wrapper: identity, duplicates, edge cases"
+  },
+  {
+   "diagnostics": [
+    {
+     "name": "4c B0 order 0 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B0 order 0 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B0 order 1 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B0 order 1 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B0 order 2 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B0 order 2 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B1 order 0 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B1 order 0 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B1 order 1 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B1 order 1 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B1 order 2 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B1 order 2 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B2 order 0 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B2 order 0 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B2 order 1 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B2 order 1 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B2 order 2 interv",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    },
+    {
+     "name": "4c B2 order 2 obs_morph",
+     "value": {
+      "k_agreement": 1.0,
+      "max_abs_dP": 0.0,
+      "pick_agreement": 1.0
+     }
+    }
+   ],
+   "id": "SV0-4",
+   "items": [
+    {
+     "expected": true,
+     "name": "4a A0 interv: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a A0 obs_morph: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a A1 interv: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a A1 obs_morph: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a A2 interv: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a A2 obs_morph: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a B0 interv: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a B0 obs_morph: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a B1 interv: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a B1 obs_morph: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a B2 interv: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4a B2 obs_morph: labels g -> 1000 + 7g",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "4b B0 perm 0 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      8,
+      2,
+      1,
+      10,
+      11,
+      4,
+      0,
+      7,
+      6,
+      9,
+      3,
+      5
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B0 perm 0 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      8,
+      2,
+      1,
+      10,
+      11,
+      4,
+      0,
+      7,
+      6,
+      9,
+      3,
+      5
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B0 perm 1 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      6,
+      10,
+      5,
+      1,
+      11,
+      0,
+      3,
+      9,
+      8,
+      2,
+      7,
+      4
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B0 perm 1 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      6,
+      10,
+      5,
+      1,
+      11,
+      0,
+      3,
+      9,
+      8,
+      2,
+      7,
+      4
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B0 perm 2 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      3,
+      4,
+      1,
+      9,
+      2,
+      0,
+      7,
+      11,
+      5,
+      8,
+      10,
+      6
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B0 perm 2 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      3,
+      4,
+      1,
+      9,
+      2,
+      0,
+      7,
+      11,
+      5,
+      8,
+      10,
+      6
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B1 perm 0 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      10,
+      11,
+      7,
+      0,
+      9,
+      6,
+      8,
+      3,
+      2,
+      1,
+      5,
+      4
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B1 perm 0 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      10,
+      11,
+      7,
+      0,
+      9,
+      6,
+      8,
+      3,
+      2,
+      1,
+      5,
+      4
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B1 perm 1 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      10,
+      11,
+      7,
+      6,
+      1,
+      0,
+      9,
+      4,
+      8,
+      3,
+      2,
+      5
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B1 perm 1 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      10,
+      11,
+      7,
+      6,
+      1,
+      0,
+      9,
+      4,
+      8,
+      3,
+      2,
+      5
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B1 perm 2 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      4,
+      7,
+      5,
+      0,
+      9,
+      10,
+      2,
+      3,
+      1,
+      8,
+      6,
+      11
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B1 perm 2 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      4,
+      7,
+      5,
+      0,
+      9,
+      10,
+      2,
+      3,
+      1,
+      8,
+      6,
+      11
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B2 perm 0 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      2,
+      8,
+      5,
+      9,
+      10,
+      0,
+      3,
+      11,
+      4,
+      7,
+      1,
+      6
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B2 perm 0 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      2,
+      8,
+      5,
+      9,
+      10,
+      0,
+      3,
+      11,
+      4,
+      7,
+      1,
+      6
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B2 perm 1 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      0,
+      4,
+      3,
+      11,
+      2,
+      5,
+      8,
+      6,
+      9,
+      10,
+      7,
+      1
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B2 perm 1 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      0,
+      4,
+      3,
+      11,
+      2,
+      5,
+      8,
+      6,
+      9,
+      10,
+      7,
+      1
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B2 perm 2 interv: non-monotone labels",
+     "observed": true,
+     "perm": [
+      9,
+      1,
+      4,
+      10,
+      3,
+      0,
+      2,
+      8,
+      7,
+      11,
+      6,
+      5
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    },
+    {
+     "expected": true,
+     "name": "4b B2 perm 2 obs_morph: non-monotone labels",
+     "observed": true,
+     "perm": [
+      9,
+      1,
+      4,
+      10,
+      3,
+      0,
+      2,
+      8,
+      7,
+      11,
+      6,
+      5
+     ],
+     "result": "PASS",
+     "rule": "exact; any deviation is FAIL-INVESTIGATE (U2)"
+    }
+   ],
+   "status": "PASS",
+   "title": "label relabelling"
+  },
+  {
+   "diagnostics": [],
+   "id": "SV0-5",
+   "items": [
+    {
+     "expected": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "limited exact set",
+      "valid": true
+     },
+     "name": "H-a S-base: calculator",
+     "observed": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "limited exact set",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1"
+     },
+     "name": "H-a S-base: brute-force enumeration (D, F, N3)",
+     "observed": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 1,
+      "F": "2/3",
+      "N3": "1/1",
+      "regime": "single deterministic contrast",
+      "valid": true
+     },
+     "name": "H-b S-family-free: calculator",
+     "observed": {
+      "D": 1,
+      "F": "2/3",
+      "N3": "1/1",
+      "regime": "single deterministic contrast",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 1,
+      "F": "2/3",
+      "N3": "1/1"
+     },
+     "name": "H-b S-family-free: brute-force enumeration (D, F, N3)",
+     "observed": {
+      "D": 1,
+      "F": "2/3",
+      "N3": "1/1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 1,
+      "F": "4/9",
+      "N3": "1/1",
+      "regime": null,
+      "valid": false
+     },
+     "name": "H-c S-family-free: calculator",
+     "observed": {
+      "D": 1,
+      "F": "4/9",
+      "N3": "1/1",
+      "regime": null,
+      "valid": false
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 1,
+      "F": "4/9",
+      "N3": "1/1"
+     },
+     "name": "H-c S-family-free: brute-force enumeration (D, F, N3)",
+     "observed": {
+      "D": 1,
+      "F": "4/9",
+      "N3": "1/1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 2,
+      "F": "7/9",
+      "N3": "1/1",
+      "regime": "limited exact set",
+      "valid": true
+     },
+     "name": "H-d S-family-free: calculator",
+     "observed": {
+      "D": 2,
+      "F": "7/9",
+      "N3": "1/1",
+      "regime": "limited exact set",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 2,
+      "F": "7/9",
+      "N3": "1/1"
+     },
+     "name": "H-d S-family-free: brute-force enumeration (D, F, N3)",
+     "observed": {
+      "D": 2,
+      "F": "7/9",
+      "N3": "1/1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": null,
+      "F": "0/1",
+      "N3": "0/1",
+      "regime": null,
+      "valid": false
+     },
+     "name": "H-e S-family-free: calculator",
+     "observed": {
+      "D": null,
+      "F": "0/1",
+      "N3": "0/1",
+      "regime": null,
+      "valid": false
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": null,
+      "F": "0/1",
+      "N3": "0/1"
+     },
+     "name": "H-e S-family-free: brute-force enumeration (D, F, N3)",
+     "observed": {
+      "D": null,
+      "F": "0/1",
+      "N3": "0/1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "limited exact set",
+      "valid": true
+     },
+     "name": "H-f S-cf-conditional: calculator",
+     "observed": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "limited exact set",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1"
+     },
+     "name": "H-f S-cf-conditional: brute-force enumeration (D, F, N3)",
+     "observed": {
+      "D": 8,
+      "F": "1/1",
+      "N3": "1/1"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 134217728,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "genuine permutation distribution",
+      "valid": true
+     },
+     "name": "planned S-base, 27 bases, distinct rows: calculator vs closed form",
+     "observed": {
+      "D": 134217728,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "genuine permutation distribution",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 1,
+      "F": "2/3",
+      "N3": "1/1",
+      "regime": "single deterministic contrast",
+      "valid": true
+     },
+     "name": "planned S-family-free (2,1) per base: calculator vs closed form",
+     "observed": {
+      "D": 1,
+      "F": "2/3",
+      "N3": "1/1",
+      "regime": "single deterministic contrast",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 1,
+      "F": "52/81",
+      "N3": "1/1",
+      "regime": "single deterministic contrast",
+      "valid": true
+     },
+     "name": "planned S-family-free, one identical-pair base: calculator vs closed form",
+     "observed": {
+      "D": 1,
+      "F": "52/81",
+      "N3": "1/1",
+      "regime": "single deterministic contrast",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "D": 2132643480912968880445481788458415985591970002706008898635560764657277952279426282132782103612718323810881991586261907760,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "genuine permutation distribution",
+      "valid": true
+     },
+     "name": "planned S-global over 81 records: calculator vs closed form",
+     "observed": {
+      "D": 2132643480912968880445481788458415985591970002706008898635560764657277952279426282132782103612718323810881991586261907760,
+      "F": "1/1",
+      "N3": "1/1",
+      "regime": "genuine permutation distribution",
+      "valid": true
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "L1 prior bit-identical under within-base derangement (every fold)",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "L2 k = n_train: P bit-invariant under within-base outcome derangement",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": ">= 1",
+     "name": "L2 positive control k = 1: at least one prediction changes",
+     "observed": 32,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "L3 training mean and sd invariant under row permutation (relative 1e-12)",
+     "observed": true,
+     "result": "PASS",
+     "rule": "|a - b| <= 1e-12 * max(|a|, |b|, mean |x| of the column)"
+    },
+    {
+     "expected": true,
+     "name": "L4 cf-block derangement with unchanged neighbour set leaves P bit-invariant",
+     "observed": false,
+     "queries_with_changed_set": 36,
+     "queries_with_unchanged_set": 0,
+     "result": "FAIL",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "name": "L5 singleton-stratum control: V(pi_M) - V(pi_ctrl) per instance",
+     "observed": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      1,
+      2,
+      9
+     ],
+     "name": "L6 !1..!4 by enumeration",
+     "observed": [
+      0,
+      1,
+      2,
+      9
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      1,
+      2,
+      9
+     ],
+     "name": "L6 !1..!4 by the calculator recurrence",
+     "observed": [
+      0,
+      1,
+      2,
+      9
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "1.0235e+21",
+     "name": "L6 6^27 (m = 3 uniform, 27 groups)",
+     "observed": "1.0235e+21",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "1/1",
+     "name": "L7 m = 3, K = 2: N3 = 1 for every bin assignment (pigeonhole)",
+     "observed": "1/1",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "0/1",
+     "name": "L7 balanced m = 3, K = 3: N3 = 0",
+     "observed": "0/1",
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "FAIL",
+   "title": "H4 non-degeneracy calculator (amendment 2.2 Lemmas 1-7, erratum E2)"
+  },
+  {
+   "diagnostics": [],
+   "id": "SV0-6",
+   "items": [
+    {
+     "expected": [
+      84,
+      42
+     ],
+     "name": "A0 X shape",
+     "observed": [
+      84,
+      42
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      84,
+      10
+     ],
+     "name": "A0 Y shape",
+     "observed": [
+      84,
+      10
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      15,
+      15,
+      15,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      19,
+      19,
+      19,
+      20,
+      20,
+      20,
+      21,
+      21,
+      21,
+      22,
+      22,
+      22,
+      23,
+      23,
+      23,
+      24,
+      24,
+      24,
+      25,
+      25,
+      25,
+      26,
+      26,
+      26,
+      27,
+      27,
+      27
+     ],
+     "name": "A0 base = repeat(arange(G), 3)",
+     "observed": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      15,
+      15,
+      15,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      19,
+      19,
+      19,
+      20,
+      20,
+      20,
+      21,
+      21,
+      21,
+      22,
+      22,
+      22,
+      23,
+      23,
+      23,
+      24,
+      24,
+      24,
+      25,
+      25,
+      25,
+      26,
+      26,
+      26,
+      27,
+      27,
+      27
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "A0 Y in {0, 1}",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "X": "77bf76ad871f699d8700c10e6df5254e2ee1465e260056a5f780590632fed462",
+      "Y": "e5a039187217fe1fedcdf0954ed8a4b533efa3f43bbd1245f9f8ba675caf8bfa",
+      "base": "9b6170486a49595e5ed1a6099f4b0cd543c30fdb1330a0b2b0c72fa5e3a9161d"
+     },
+     "name": "A0 regeneration bit-identical (sha256 of X, Y, base)",
+     "observed": {
+      "X": "77bf76ad871f699d8700c10e6df5254e2ee1465e260056a5f780590632fed462",
+      "Y": "e5a039187217fe1fedcdf0954ed8a4b533efa3f43bbd1245f9f8ba675caf8bfa",
+      "base": "9b6170486a49595e5ed1a6099f4b0cd543c30fdb1330a0b2b0c72fa5e3a9161d"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      84,
+      42
+     ],
+     "name": "A1 X shape",
+     "observed": [
+      84,
+      42
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      84,
+      10
+     ],
+     "name": "A1 Y shape",
+     "observed": [
+      84,
+      10
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      15,
+      15,
+      15,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      19,
+      19,
+      19,
+      20,
+      20,
+      20,
+      21,
+      21,
+      21,
+      22,
+      22,
+      22,
+      23,
+      23,
+      23,
+      24,
+      24,
+      24,
+      25,
+      25,
+      25,
+      26,
+      26,
+      26,
+      27,
+      27,
+      27
+     ],
+     "name": "A1 base = repeat(arange(G), 3)",
+     "observed": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      15,
+      15,
+      15,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      19,
+      19,
+      19,
+      20,
+      20,
+      20,
+      21,
+      21,
+      21,
+      22,
+      22,
+      22,
+      23,
+      23,
+      23,
+      24,
+      24,
+      24,
+      25,
+      25,
+      25,
+      26,
+      26,
+      26,
+      27,
+      27,
+      27
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "A1 Y in {0, 1}",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "X": "acb1c8bf6d700012a3210a6f30d8ad96a25c1533531d12a99ca9d5dac60826a6",
+      "Y": "77c8c0f921d5442111b5b4ea32503fb83f9fb1b66be1e8b270f72a50000e1cdd",
+      "base": "9b6170486a49595e5ed1a6099f4b0cd543c30fdb1330a0b2b0c72fa5e3a9161d"
+     },
+     "name": "A1 regeneration bit-identical (sha256 of X, Y, base)",
+     "observed": {
+      "X": "acb1c8bf6d700012a3210a6f30d8ad96a25c1533531d12a99ca9d5dac60826a6",
+      "Y": "77c8c0f921d5442111b5b4ea32503fb83f9fb1b66be1e8b270f72a50000e1cdd",
+      "base": "9b6170486a49595e5ed1a6099f4b0cd543c30fdb1330a0b2b0c72fa5e3a9161d"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      84,
+      42
+     ],
+     "name": "A2 X shape",
+     "observed": [
+      84,
+      42
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      84,
+      10
+     ],
+     "name": "A2 Y shape",
+     "observed": [
+      84,
+      10
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      15,
+      15,
+      15,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      19,
+      19,
+      19,
+      20,
+      20,
+      20,
+      21,
+      21,
+      21,
+      22,
+      22,
+      22,
+      23,
+      23,
+      23,
+      24,
+      24,
+      24,
+      25,
+      25,
+      25,
+      26,
+      26,
+      26,
+      27,
+      27,
+      27
+     ],
+     "name": "A2 base = repeat(arange(G), 3)",
+     "observed": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11,
+      12,
+      12,
+      12,
+      13,
+      13,
+      13,
+      14,
+      14,
+      14,
+      15,
+      15,
+      15,
+      16,
+      16,
+      16,
+      17,
+      17,
+      17,
+      18,
+      18,
+      18,
+      19,
+      19,
+      19,
+      20,
+      20,
+      20,
+      21,
+      21,
+      21,
+      22,
+      22,
+      22,
+      23,
+      23,
+      23,
+      24,
+      24,
+      24,
+      25,
+      25,
+      25,
+      26,
+      26,
+      26,
+      27,
+      27,
+      27
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "A2 Y in {0, 1}",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "X": "94afb4497a11842baa4e42e24d9d7d046906266aff70ccdac9a9c0cb07375745",
+      "Y": "7fc2bdf105f4feab1fcbff6d08cf5eff5719fde787b8494ea273d4605d77b269",
+      "base": "9b6170486a49595e5ed1a6099f4b0cd543c30fdb1330a0b2b0c72fa5e3a9161d"
+     },
+     "name": "A2 regeneration bit-identical (sha256 of X, Y, base)",
+     "observed": {
+      "X": "94afb4497a11842baa4e42e24d9d7d046906266aff70ccdac9a9c0cb07375745",
+      "Y": "7fc2bdf105f4feab1fcbff6d08cf5eff5719fde787b8494ea273d4605d77b269",
+      "base": "9b6170486a49595e5ed1a6099f4b0cd543c30fdb1330a0b2b0c72fa5e3a9161d"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      36,
+      42
+     ],
+     "name": "B0 X shape",
+     "observed": [
+      36,
+      42
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      36,
+      10
+     ],
+     "name": "B0 Y shape",
+     "observed": [
+      36,
+      10
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11
+     ],
+     "name": "B0 base = repeat(arange(G), 3)",
+     "observed": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "B0 Y in {0, 1}",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "X": "6b71524e466936424e246c26c12c9bb2575913a1b77c011790b8e0e76c6f43b0",
+      "Y": "67751dbcb012676309420b01cc54513cd0c611ce2386fe90ebcdeafc5239056c",
+      "base": "6c31da72ca6f251882f0468679277eac8b9e4413fa0a71d581a2c7b618ec3ebd"
+     },
+     "name": "B0 regeneration bit-identical (sha256 of X, Y, base)",
+     "observed": {
+      "X": "6b71524e466936424e246c26c12c9bb2575913a1b77c011790b8e0e76c6f43b0",
+      "Y": "67751dbcb012676309420b01cc54513cd0c611ce2386fe90ebcdeafc5239056c",
+      "base": "6c31da72ca6f251882f0468679277eac8b9e4413fa0a71d581a2c7b618ec3ebd"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      36,
+      42
+     ],
+     "name": "B1 X shape",
+     "observed": [
+      36,
+      42
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      36,
+      10
+     ],
+     "name": "B1 Y shape",
+     "observed": [
+      36,
+      10
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11
+     ],
+     "name": "B1 base = repeat(arange(G), 3)",
+     "observed": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "B1 Y in {0, 1}",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "X": "59ee8f56c11359860f9c5fb95e0bcbcfe968228bfeac9427ffdc3160a14d0c67",
+      "Y": "047e569c586fc6d359f70e63d8fc65330ae8ab0c63f2bc6282f7500b1e7195bc",
+      "base": "6c31da72ca6f251882f0468679277eac8b9e4413fa0a71d581a2c7b618ec3ebd"
+     },
+     "name": "B1 regeneration bit-identical (sha256 of X, Y, base)",
+     "observed": {
+      "X": "59ee8f56c11359860f9c5fb95e0bcbcfe968228bfeac9427ffdc3160a14d0c67",
+      "Y": "047e569c586fc6d359f70e63d8fc65330ae8ab0c63f2bc6282f7500b1e7195bc",
+      "base": "6c31da72ca6f251882f0468679277eac8b9e4413fa0a71d581a2c7b618ec3ebd"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      36,
+      42
+     ],
+     "name": "B2 X shape",
+     "observed": [
+      36,
+      42
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      36,
+      10
+     ],
+     "name": "B2 Y shape",
+     "observed": [
+      36,
+      10
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11
+     ],
+     "name": "B2 base = repeat(arange(G), 3)",
+     "observed": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      8,
+      9,
+      9,
+      9,
+      10,
+      10,
+      10,
+      11,
+      11,
+      11
+     ],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "B2 Y in {0, 1}",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "X": "e1c04f0d6a73843adab657163b2324f361f2e05f3b79af8d7a1d6601e5dca37b",
+      "Y": "245ed9fe911a7e31e603f477c4afb2a1168ef52ff2d482283207cb08cc7d177e",
+      "base": "6c31da72ca6f251882f0468679277eac8b9e4413fa0a71d581a2c7b618ec3ebd"
+     },
+     "name": "B2 regeneration bit-identical (sha256 of X, Y, base)",
+     "observed": {
+      "X": "e1c04f0d6a73843adab657163b2324f361f2e05f3b79af8d7a1d6601e5dca37b",
+      "Y": "245ed9fe911a7e31e603f477c4afb2a1168ef52ff2d482283207cb08cc7d177e",
+      "base": "6c31da72ca6f251882f0468679277eac8b9e4413fa0a71d581a2c7b618ec3ebd"
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "errors": 0,
+      "failures": 0,
+      "ok": true,
+      "run": 25,
+      "skipped": 0
+     },
+     "name": "archived suite test_p05_design_calc",
+     "observed": {
+      "errors": 0,
+      "failures": 0,
+      "ok": true,
+      "run": 25,
+      "skipped": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "errors": 0,
+      "failures": 0,
+      "ok": true,
+      "run": 15,
+      "skipped": 0
+     },
+     "name": "archived suite test_p05_design_calc_rev21",
+     "observed": {
+      "errors": 0,
+      "failures": 0,
+      "ok": true,
+      "run": 15,
+      "skipped": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": {
+      "errors": 0,
+      "failures": 0,
+      "ok": true,
+      "run": 12,
+      "skipped": 0
+     },
+     "name": "archived suite test_p05_amend22",
+     "observed": {
+      "errors": 0,
+      "failures": 0,
+      "ok": true,
+      "run": 12,
+      "skipped": 0
+     },
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 52,
+     "name": "archived tests in total",
+     "observed": 52,
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "PASS",
+   "title": "generator and archived regression"
+  },
+  {
+   "diagnostics": [],
+   "id": "SV0-7",
+   "items": [
+    {
+     "expected": 0.28867513459481287,
+     "max_abs_diff": 0.0,
+     "name": "CR1 SE (calc section E formula)",
+     "observed": 0.28867513459481287,
+     "result": "PASS",
+     "rule": "abs tol 1e-12"
+    },
+    {
+     "expected": [
+      2.919986,
+      1.795885,
+      1.703288
+     ],
+     "max_abs_diff": 4.4572212387627985e-07,
+     "name": "t_ppf(0.95, df) for df = 2 / 11 / 27",
+     "observed": [
+      2.9199855803537202,
+      1.795884818704042,
+      1.7032884457221238
+     ],
+     "result": "PASS",
+     "rule": "abs tol 1e-05"
+    },
+    {
+     "expected": [
+      1.95,
+      19.05
+     ],
+     "max_abs_diff": 2.220446049250313e-16,
+     "name": "percentile 5 / 95 of 1..20 (linear)",
+     "observed": [
+      1.9500000000000002,
+      19.05
+     ],
+     "result": "PASS",
+     "rule": "abs tol 1e-12"
+    },
+    {
+     "expected": [
+      0.7647,
+      0.7353,
+      0.7639,
+      0.7356
+     ],
+     "max_abs_diff": 5.5740731527698095e-05,
+     "name": "Wilson lower bounds",
+     "observed": [
+      0.7646645528490874,
+      0.7352442592684723,
+      0.7639178888031067,
+      0.7356064413334321
+     ],
+     "result": "PASS",
+     "rule": "abs tol 0.0005"
+    },
+    {
+     "expected": true,
+     "name": "half-sample splits G = 12: 40 splits of two disjoint covering halves",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 40,
+     "name": "half-sample splits G = 12: distinct",
+     "observed": 40,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "half-sample splits G = 12: identical on regeneration",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "half-sample splits G = 28: 40 splits of two disjoint covering halves",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": 40,
+     "name": "half-sample splits G = 28: distinct",
+     "observed": 40,
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": true,
+     "name": "half-sample splits G = 28: identical on regeneration",
+     "observed": true,
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "PASS",
+   "title": "interval constructors (fixtures; no coverage)"
+  },
+  {
+   "diagnostics": [
+    {
+     "name": "cross-process byte identity",
+     "value": "verified outside the process: cmp run1/sv0_results.json run2/sv0_results.json"
+    }
+   ],
+   "id": "SV0-8",
+   "items": [
+    {
+     "expected": "raises ImportError",
+     "name": "guard fires: import mujoco",
+     "observed": "ModuleNotFoundError",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: socket.socket()",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: open artifacts/x",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: open ~/dev/.env",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: write outside sv0/out/run<N>/",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: subprocess.run",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: multiprocessing.Process.start",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": "raises GuardViolation",
+     "name": "guard fires: glob.glob",
+     "observed": "GuardViolation",
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [],
+     "name": "AST scan of sv0/*.py: no global RNG seeding, no random module, no coverage loop",
+     "observed": [],
+     "result": "PASS",
+     "rule": "exact"
+    },
+    {
+     "expected": [],
+     "name": "no mujoco* module loaded",
+     "observed": [],
+     "result": "PASS",
+     "rule": "exact"
+    }
+   ],
+   "status": "PASS",
+   "title": "guards and process determinism"
+  }
+ ],
+ "classification": "FAIL",
+ "proposal": "CF-V2-P05-SV0 revision 4",
+ "reason": null,
+ "statement": "SV0 verifies implementation correctness and determinism on synthetic fixtures only; it establishes no coverage, inference validity or transfer."
+}

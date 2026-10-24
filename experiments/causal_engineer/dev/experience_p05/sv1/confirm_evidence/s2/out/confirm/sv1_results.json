@@ -1,0 +1,5643 @@
+{
+ "admission": {
+  "admitted": [
+   "M2"
+  ],
+  "candidates": [
+   "M1",
+   "M2",
+   "M4",
+   "M3"
+  ],
+  "composite_M5": {
+   "admitted": true,
+   "cells": {
+    "A-info": {
+     "admitted_in_cell": true,
+     "conservative": true,
+     "coverage_rule": true,
+     "evidence_excess_lower_tail": false,
+     "lower_tail_rule": true,
+     "truth_sensitive": false,
+     "verdict": "validated"
+    },
+    "A-null": {
+     "admitted_in_cell": true,
+     "conservative": true,
+     "coverage_rule": true,
+     "evidence_excess_lower_tail": false,
+     "lower_tail_rule": true,
+     "truth_sensitive": false,
+     "verdict": "validated"
+    },
+    "A-obs": {
+     "admitted_in_cell": true,
+     "conservative": true,
+     "coverage_rule": true,
+     "evidence_excess_lower_tail": false,
+     "lower_tail_rule": true,
+     "truth_sensitive": false,
+     "verdict": "validated"
+    }
+   }
+  },
+  "composite_rule_valid": true,
+  "note": "admission-sample coverages of admitted methods are selection-biased upward (6A)",
+  "per_method": {
+   "M1": {
+    "admitted": false,
+    "cells": {
+     "A-info": {
+      "admitted_in_cell": false,
+      "conservative": false,
+      "coverage_rule": false,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "evidence of material undercoverage"
+     },
+     "A-null": {
+      "admitted_in_cell": true,
+      "conservative": false,
+      "coverage_rule": true,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "validated"
+     },
+     "A-obs": {
+      "admitted_in_cell": true,
+      "conservative": false,
+      "coverage_rule": true,
+      "evidence_excess_lower_tail": false,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "validated"
+     }
+    }
+   },
+   "M2": {
+    "admitted": true,
+    "cells": {
+     "A-info": {
+      "admitted_in_cell": true,
+      "conservative": true,
+      "coverage_rule": true,
+      "evidence_excess_lower_tail": false,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "validated"
+     },
+     "A-null": {
+      "admitted_in_cell": true,
+      "conservative": true,
+      "coverage_rule": true,
+      "evidence_excess_lower_tail": false,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "validated"
+     },
+     "A-obs": {
+      "admitted_in_cell": true,
+      "conservative": true,
+      "coverage_rule": true,
+      "evidence_excess_lower_tail": false,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "validated"
+     }
+    }
+   },
+   "M3": {
+    "admitted": false,
+    "cells": {
+     "A-info": {
+      "admitted_in_cell": false,
+      "conservative": false,
+      "coverage_rule": false,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": false,
+      "truth_sensitive": false,
+      "verdict": "evidence of material undercoverage"
+     },
+     "A-null": {
+      "admitted_in_cell": false,
+      "conservative": false,
+      "coverage_rule": false,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": false,
+      "truth_sensitive": false,
+      "verdict": "evidence of material undercoverage"
+     },
+     "A-obs": {
+      "admitted_in_cell": false,
+      "conservative": false,
+      "coverage_rule": false,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": false,
+      "truth_sensitive": false,
+      "verdict": "evidence of material undercoverage"
+     }
+    }
+   },
+   "M4": {
+    "admitted": false,
+    "cells": {
+     "A-info": {
+      "admitted_in_cell": false,
+      "conservative": false,
+      "coverage_rule": false,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "evidence of material undercoverage"
+     },
+     "A-null": {
+      "admitted_in_cell": false,
+      "conservative": false,
+      "coverage_rule": false,
+      "evidence_excess_lower_tail": true,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "evidence of undercoverage"
+     },
+     "A-obs": {
+      "admitted_in_cell": true,
+      "conservative": false,
+      "coverage_rule": true,
+      "evidence_excess_lower_tail": false,
+      "lower_tail_rule": true,
+      "truth_sensitive": false,
+      "verdict": "validated"
+     }
+    }
+   }
+  }
+ },
+ "c0_gate": {
+  "alpha_per_side": 0.01,
+  "band": [
+   0.85,
+   0.95
+  ],
+  "cells": {
+   "A-info": {
+    "k": 187,
+    "n": 200,
+    "p_above": 0.87010776629299,
+    "p_below": 0.9999349926315184,
+    "point_in_band": true,
+    "rate": 0.935,
+    "reject": false
+   },
+   "A-null": {
+    "k": 177,
+    "n": 200,
+    "p_above": 0.999927974059735,
+    "p_below": 0.9354967333407477,
+    "point_in_band": true,
+    "rate": 0.885,
+    "reject": false
+   },
+   "A-obs": {
+    "k": 188,
+    "n": 200,
+    "p_above": 0.7964843459883919,
+    "p_below": 0.9999776241095719,
+    "point_in_band": true,
+    "rate": 0.94,
+    "reject": false
+   },
+   "B-info": {
+    "k": 95,
+    "n": 100,
+    "p_above": 0.6159991279561312,
+    "p_below": 0.9995744861829438,
+    "point_in_band": true,
+    "rate": 0.95,
+    "reject": false
+   },
+   "B-null": {
+    "k": 85,
+    "n": 100,
+    "p_above": 0.9999629459237979,
+    "p_below": 0.5427757942240451,
+    "point_in_band": true,
+    "rate": 0.85,
+    "reject": false
+   }
+  },
+  "ok": true,
+  "pooled": {
+   "k": 732,
+   "n": 800,
+   "p_above": 0.9999887611239623,
+   "p_below": 0.9999999879480201,
+   "point_in_band": true,
+   "rate": 0.915,
+   "reject": false
+  }
+ },
+ "cells": {
+  "A-info": {
+   "C0_coverage": {
+    "k": 187,
+    "n": 200,
+    "rate": 0.935,
+    "wilson": [
+     0.9001234318626659,
+     0.9582624991919243
+    ]
+   },
+   "bias_check": {
+    "mcse": 0.0009200479869504203,
+    "mean": 4.5904286485826415e-05,
+    "n": 2200,
+    "ok": true
+   },
+   "bootstrap_bias": -0.022911607142857143,
+   "cr1_se_calibration": 0.47874264657863147,
+   "cr1_zero_se": 0,
+   "degenerate_flag_over_1pct": false,
+   "degenerate_replicates_redrawn": 0,
+   "methods": {
+    "C0": {
+     "bias_theta_hat_vs_theta_G": 0.0008496718258788546,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 187,
+      "n": 200,
+      "rate": 0.935,
+      "wilson": [
+       0.9001234318626659,
+       0.9582624991919243
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 187,
+      "n": 200,
+      "rate": 0.935,
+      "wilson": [
+       0.9001234318626659,
+       0.9582624991919243
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 188,
+      "n": 200,
+      "rate": 0.94,
+      "wilson": [
+       0.9060653311565419,
+       0.9621871048526985
+      ]
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 5,
+      "n": 200,
+      "rate": 0.025,
+      "wilson": [
+       0.012220276177698672,
+       0.050461753130507714
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 5,
+      "n": 200,
+      "rate": 0.025,
+      "wilson": [
+       0.012220276177698672,
+       0.050461753130507714
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 4,
+      "n": 200,
+      "rate": 0.02,
+      "wilson": [
+       0.009009207495447516,
+       0.04380631685810832
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0624548522016255,
+     "sd_theta_hat": 0.06260578281215567,
+     "upper_miss": {
+      "k": 8,
+      "n": 200,
+      "rate": 0.04,
+      "wilson": [
+       0.022681657525733673,
+       0.06959988664642403
+      ]
+     },
+     "width_mean": 0.24002434460748748,
+     "width_median": 0.2400503554970893,
+     "width_over_sd": 3.8339005412273806,
+     "zero_width": 0
+    },
+    "C1": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 149,
+      "n": 200,
+      "rate": 0.745,
+      "wilson": [
+       0.6912638471616046,
+       0.7921948956162679
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 149,
+      "n": 200,
+      "rate": 0.745,
+      "wilson": [
+       0.6912638471616046,
+       0.7921948956162679
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 145,
+      "n": 200,
+      "rate": 0.725,
+      "wilson": [
+       0.6703187134002434,
+       0.7736740095590272
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 185,
+      "n": 200,
+      "rate": 0.925,
+      "wilson": [
+       0.8883698631054456,
+       0.9502830580398436
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 166,
+      "n": 200,
+      "rate": 0.83,
+      "wilson": [
+       0.7819710222119624,
+       0.869218304794968
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 145,
+      "n": 200,
+      "rate": 0.725,
+      "wilson": [
+       0.6703187134002434,
+       0.7736740095590272
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.22,
+      "no meaningful gain": 0.145,
+      "supported benefit": 0.635,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 30,
+      "n": 200,
+      "rate": 0.15,
+      "wilson": [
+       0.11315254258075803,
+       0.19619211059370978
+      ]
+     },
+     "width_mean": 0.15846604180991614,
+     "width_median": 0.1614342799906388,
+     "width_over_sd": 2.2446223055748957,
+     "zero_width": 0
+    },
+    "C2": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 140,
+      "n": 200,
+      "rate": 0.7,
+      "wilson": [
+       0.644315720635901,
+       0.7503444775501174
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 179,
+      "n": 200,
+      "rate": 0.895,
+      "wilson": [
+       0.8539173828765199,
+       0.9255365085408666
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 163,
+      "n": 200,
+      "rate": 0.815,
+      "wilson": [
+       0.7657343428126343,
+       0.8558554693303446
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.22,
+      "no meaningful gain": 0.145,
+      "supported benefit": 0.635,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 22,
+      "n": 200,
+      "rate": 0.11,
+      "wilson": [
+       0.07868203916281824,
+       0.15173057437444581
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 31,
+      "n": 200,
+      "rate": 0.155,
+      "wilson": [
+       0.11753821980603774,
+       0.20167293832308053
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 22,
+      "n": 200,
+      "rate": 0.11,
+      "wilson": [
+       0.07868203916281824,
+       0.15173057437444581
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 44,
+      "n": 200,
+      "rate": 0.22,
+      "wilson": [
+       0.17573008497187595,
+       0.2717456375676983
+      ]
+     },
+     "width_mean": 0.15091071428571426,
+     "width_median": 0.15476190476190477,
+     "width_over_sd": 2.137603435834399,
+     "zero_width": 0
+    },
+    "M1": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 150,
+      "n": 200,
+      "rate": 0.75,
+      "wilson": [
+       0.6965211222955874,
+       0.7968041254369357
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 151,
+      "n": 200,
+      "rate": 0.755,
+      "wilson": [
+       0.7017871154754295,
+       0.8014046372117439
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 149,
+      "n": 200,
+      "rate": 0.745,
+      "wilson": [
+       0.6912638471616046,
+       0.7921948956162679
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 186,
+      "n": 200,
+      "rate": 0.93,
+      "wilson": [
+       0.894226337623718,
+       0.9542930884762217
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 166,
+      "n": 200,
+      "rate": 0.83,
+      "wilson": [
+       0.7819710222119624,
+       0.869218304794968
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 149,
+      "n": 200,
+      "rate": 0.745,
+      "wilson": [
+       0.6912638471616046,
+       0.7921948956162679
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.24,
+      "no meaningful gain": 0.14,
+      "supported benefit": 0.62,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 18,
+      "n": 200,
+      "rate": 0.09,
+      "wilson": [
+       0.06195790636596083,
+       0.12898868735270141
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 18,
+      "n": 200,
+      "rate": 0.09,
+      "wilson": [
+       0.06195790636596083,
+       0.12898868735270141
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 17,
+      "n": 200,
+      "rate": 0.085,
+      "wilson": [
+       0.05784524652423284,
+       0.12323484223977899
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 32,
+      "n": 200,
+      "rate": 0.16,
+      "wilson": [
+       0.1219386625133063,
+       0.20713900057046253
+      ]
+     },
+     "width_mean": 0.16219732549225951,
+     "width_median": 0.16574685588114474,
+     "width_over_sd": 2.2974747810084777,
+     "zero_width": 0
+    },
+    "M2": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 199,
+      "n": 200,
+      "rate": 0.995,
+      "wilson": [
+       0.9779001168833941,
+       0.9988838736270016
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 199,
+      "n": 200,
+      "rate": 0.995,
+      "wilson": [
+       0.9779001168833941,
+       0.9988838736270016
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 199,
+      "n": 200,
+      "rate": 0.995,
+      "wilson": [
+       0.9779001168833941,
+       0.9988838736270016
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 199,
+      "n": 200,
+      "rate": 0.995,
+      "wilson": [
+       0.9779001168833941,
+       0.9988838736270016
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.895,
+      "no meaningful gain": 0.005,
+      "supported benefit": 0.1,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 1,
+      "n": 200,
+      "rate": 0.005,
+      "wilson": [
+       0.0011161263729984013,
+       0.022099883116605934
+      ]
+     },
+     "width_mean": 0.237345238095238,
+     "width_median": 0.23809523809523808,
+     "width_over_sd": 3.361921642427358,
+     "zero_width": 0
+    },
+    "M3": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 164,
+      "n": 200,
+      "rate": 0.82,
+      "wilson": [
+       0.7711340389954109,
+       0.8603222781022186
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 149,
+      "n": 200,
+      "rate": 0.745,
+      "wilson": [
+       0.6912638471616046,
+       0.7921948956162679
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 134,
+      "n": 200,
+      "rate": 0.67,
+      "wilson": [
+       0.6133548019301361,
+       0.7221063665279795
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.365,
+      "no meaningful gain": 0.125,
+      "supported benefit": 0.505,
+      "supported harm": 0.005
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 36,
+      "n": 200,
+      "rate": 0.18,
+      "wilson": [
+       0.13967772189778144,
+       0.2288659610045891
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 40,
+      "n": 200,
+      "rate": 0.2,
+      "wilson": [
+       0.15761563321647964,
+       0.2503940695044927
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 36,
+      "n": 200,
+      "rate": 0.18,
+      "wilson": [
+       0.13967772189778144,
+       0.2288659610045891
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 30,
+      "n": 200,
+      "rate": 0.15,
+      "wilson": [
+       0.11315254258075803,
+       0.19619211059370978
+      ]
+     },
+     "width_mean": 0.237345238095238,
+     "width_median": 0.23809523809523808,
+     "width_over_sd": 3.361921642427358,
+     "zero_width": 0
+    },
+    "M4": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 157,
+      "n": 200,
+      "rate": 0.785,
+      "wilson": [
+       0.7335767218020357,
+       0.8288140606130406
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 156,
+      "n": 200,
+      "rate": 0.78,
+      "wilson": [
+       0.7282543624323017,
+       0.8242699150281241
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 158,
+      "n": 200,
+      "rate": 0.79,
+      "wilson": [
+       0.7389092599312859,
+       0.8333480274384408
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 189,
+      "n": 200,
+      "rate": 0.945,
+      "wilson": [
+       0.9120570559758479,
+       0.9660618849880431
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 170,
+      "n": 200,
+      "rate": 0.85,
+      "wilson": [
+       0.8038078894062902,
+       0.886847457419242
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 158,
+      "n": 200,
+      "rate": 0.79,
+      "wilson": [
+       0.7389092599312859,
+       0.8333480274384408
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.345,
+      "no meaningful gain": 0.11,
+      "supported benefit": 0.545,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 17,
+      "n": 200,
+      "rate": 0.085,
+      "wilson": [
+       0.05784524652423284,
+       0.12323484223977899
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 18,
+      "n": 200,
+      "rate": 0.09,
+      "wilson": [
+       0.06195790636596083,
+       0.12898868735270141
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075,
+      "wilson": [
+       0.04971694196015646,
+       0.11163013689455437
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 26,
+      "n": 200,
+      "rate": 0.13,
+      "wilson": [
+       0.09577012199450602,
+       0.17410851136135996
+      ]
+     },
+     "width_mean": 0.1862208138970117,
+     "width_median": 0.1804373867651011,
+     "width_over_sd": 2.637760039068431,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": -0.0018252737235853467,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 188,
+      "n": 200,
+      "rate": 0.94,
+      "wilson": [
+       0.9060653311565419,
+       0.9621871048526985
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 188,
+      "n": 200,
+      "rate": 0.94,
+      "wilson": [
+       0.9060653311565419,
+       0.9621871048526985
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 188,
+      "n": 200,
+      "rate": 0.94,
+      "wilson": [
+       0.9060653311565419,
+       0.9621871048526985
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 197,
+      "n": 200,
+      "rate": 0.985,
+      "wilson": [
+       0.9630607495865149,
+       0.9939902310145797
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 192,
+      "n": 200,
+      "rate": 0.96,
+      "wilson": [
+       0.930400113353576,
+       0.9773183424742663
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 188,
+      "n": 200,
+      "rate": 0.94,
+      "wilson": [
+       0.9060653311565419,
+       0.9621871048526985
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.795,
+      "no meaningful gain": 0.025,
+      "supported benefit": 0.18,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 7,
+      "n": 200,
+      "rate": 0.035,
+      "wilson": [
+       0.019084843112426773,
+       0.0633301961050805
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 7,
+      "n": 200,
+      "rate": 0.035,
+      "wilson": [
+       0.019084843112426773,
+       0.0633301961050805
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 7,
+      "n": 200,
+      "rate": 0.035,
+      "wilson": [
+       0.019084843112426773,
+       0.0633301961050805
+      ]
+     },
+     "n": 200,
+     "rmse": 0.07044502200510551,
+     "sd_theta_hat": 0.07059808744497423,
+     "upper_miss": {
+      "k": 5,
+      "n": 200,
+      "rate": 0.025,
+      "wilson": [
+       0.012220276177698672,
+       0.050461753130507714
+      ]
+     },
+     "width_mean": 0.23250640699544917,
+     "width_median": 0.22678571428571426,
+     "width_over_sd": 3.293381101530123,
+     "zero_width": 0
+    }
+   },
+   "n_cov": 200,
+   "truth": {
+    "T": 2000,
+    "bias_hat_minus_cond": 0.0002759167526051211,
+    "bias_mcse": 0.0009628374374858114,
+    "sd_theta_cond": 0.04753877082502258,
+    "theta_G": 0.10789670229501393,
+    "theta_G_mcse": 0.0010629992313153423,
+    "theta_fix_G": -0.058230624206831234,
+    "theta_fix_mcse": 0.000960662035327921,
+    "theta_new_G": 0.11007627858598637,
+    "theta_new_mcse": 0.0007482044492797992
+   }
+  },
+  "A-null": {
+   "C0_coverage": {
+    "k": 177,
+    "n": 200,
+    "rate": 0.885,
+    "wilson": [
+     0.8426440345158305,
+     0.917076846992255
+    ]
+   },
+   "bias_check": {
+    "mcse": 0.0007353878793072532,
+    "mean": -0.00024486113751334834,
+    "n": 2200,
+    "ok": true
+   },
+   "bootstrap_bias": -0.0032711309523809524,
+   "cr1_se_calibration": 0.9691569277682485,
+   "cr1_zero_se": 4,
+   "degenerate_flag_over_1pct": false,
+   "degenerate_replicates_redrawn": 0,
+   "methods": {
+    "C0": {
+     "bias_theta_hat_vs_theta_G": 0.0007576808847372246,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 177,
+      "n": 200,
+      "rate": 0.885,
+      "wilson": [
+       0.8426440345158305,
+       0.917076846992255
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 177,
+      "n": 200,
+      "rate": 0.885,
+      "wilson": [
+       0.8426440345158305,
+       0.917076846992255
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 179,
+      "n": 200,
+      "rate": 0.895,
+      "wilson": [
+       0.8539173828765199,
+       0.9255365085408666
+      ]
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075,
+      "wilson": [
+       0.04971694196015646,
+       0.11163013689455437
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075,
+      "wilson": [
+       0.04971694196015646,
+       0.11163013689455437
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 13,
+      "n": 200,
+      "rate": 0.065,
+      "wilson": [
+       0.04173750080807574,
+       0.09987656813733414
+      ]
+     },
+     "n": 200,
+     "rmse": 0.04856158092100778,
+     "sd_theta_hat": 0.04867751600117567,
+     "upper_miss": {
+      "k": 8,
+      "n": 200,
+      "rate": 0.04,
+      "wilson": [
+       0.022681657525733673,
+       0.06959988664642403
+      ]
+     },
+     "width_mean": 0.16532619551082905,
+     "width_median": 0.16574685588114477,
+     "width_over_sd": 3.396356451443333,
+     "zero_width": 0
+    },
+    "C1": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 170,
+      "n": 200,
+      "rate": 0.85,
+      "wilson": [
+       0.8038078894062902,
+       0.886847457419242
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 174,
+      "n": 200,
+      "rate": 0.87,
+      "wilson": [
+       0.82589148863864,
+       0.904229878005494
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 169,
+      "n": 200,
+      "rate": 0.845,
+      "wilson": [
+       0.7983270616769195,
+       0.8824617801939623
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.075,
+      "no meaningful gain": 0.81,
+      "supported benefit": 0.06,
+      "supported harm": 0.055
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 17,
+      "n": 200,
+      "rate": 0.085,
+      "wilson": [
+       0.05784524652423284,
+       0.12323484223977899
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 19,
+      "n": 200,
+      "rate": 0.095,
+      "wilson": [
+       0.06609977991541284,
+       0.13471331875789994
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 13,
+      "n": 200,
+      "rate": 0.065,
+      "wilson": [
+       0.04173750080807574,
+       0.09987656813733414
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 11,
+      "n": 200,
+      "rate": 0.055,
+      "wilson": [
+       0.033938115011956906,
+       0.08794294402415215
+      ]
+     },
+     "width_mean": 0.11172818091944381,
+     "width_median": 0.11269334358448069,
+     "width_over_sd": 3.1017676629664233,
+     "zero_width": 4
+    },
+    "C2": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 164,
+      "n": 200,
+      "rate": 0.82,
+      "wilson": [
+       0.7711340389954109,
+       0.8603222781022186
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 164,
+      "n": 200,
+      "rate": 0.82,
+      "wilson": [
+       0.7711340389954109,
+       0.8603222781022186
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 160,
+      "n": 200,
+      "rate": 0.8,
+      "wilson": [
+       0.7496059304955073,
+       0.8423843667835204
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 170,
+      "n": 200,
+      "rate": 0.85,
+      "wilson": [
+       0.8038078894062902,
+       0.886847457419242
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 159,
+      "n": 200,
+      "rate": 0.795,
+      "wilson": [
+       0.7442522372933023,
+       0.8378715550310749
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 160,
+      "n": 200,
+      "rate": 0.8,
+      "wilson": [
+       0.7496059304955073,
+       0.8423843667835204
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.085,
+      "no meaningful gain": 0.795,
+      "supported benefit": 0.06,
+      "supported harm": 0.06
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 24,
+      "n": 200,
+      "rate": 0.12,
+      "wilson": [
+       0.08718559623215656,
+       0.1629600272144085
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 24,
+      "n": 200,
+      "rate": 0.12,
+      "wilson": [
+       0.08718559623215656,
+       0.1629600272144085
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 14,
+      "n": 200,
+      "rate": 0.07,
+      "wilson": [
+       0.045706911523778315,
+       0.10577366237628205
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "width_mean": 0.10736011904761901,
+     "width_median": 0.10714285714285714,
+     "width_over_sd": 2.980502705886066,
+     "zero_width": 4
+    },
+    "M1": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 171,
+      "n": 200,
+      "rate": 0.855,
+      "wilson": [
+       0.8093040748375491,
+       0.8912177769426336
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 179,
+      "n": 200,
+      "rate": 0.895,
+      "wilson": [
+       0.8539173828765199,
+       0.9255365085408666
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.11,
+      "no meaningful gain": 0.775,
+      "supported benefit": 0.055,
+      "supported harm": 0.06
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 16,
+      "n": 200,
+      "rate": 0.08,
+      "wilson": [
+       0.053764058836757514,
+       0.11744952497260375
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 17,
+      "n": 200,
+      "rate": 0.085,
+      "wilson": [
+       0.05784524652423284,
+       0.12323484223977899
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "width_mean": 0.11565164212328982,
+     "width_median": 0.11628644903833912,
+     "width_over_sd": 3.2106897360624425,
+     "zero_width": 4
+    },
+    "M2": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.215,
+      "no meaningful gain": 0.785,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "width_mean": 0.17568154761904753,
+     "width_median": 0.17857142857142855,
+     "width_over_sd": 4.87722380244916,
+     "zero_width": 0
+    },
+    "M3": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 160,
+      "n": 200,
+      "rate": 0.8,
+      "wilson": [
+       0.7496059304955073,
+       0.8423843667835204
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 160,
+      "n": 200,
+      "rate": 0.8,
+      "wilson": [
+       0.7496059304955073,
+       0.8423843667835204
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 159,
+      "n": 200,
+      "rate": 0.795,
+      "wilson": [
+       0.7442522372933023,
+       0.8378715550310749
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 165,
+      "n": 200,
+      "rate": 0.825,
+      "wilson": [
+       0.7765461294162704,
+       0.8647766926360094
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 159,
+      "n": 200,
+      "rate": 0.795,
+      "wilson": [
+       0.7442522372933023,
+       0.8378715550310749
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 159,
+      "n": 200,
+      "rate": 0.795,
+      "wilson": [
+       0.7442522372933023,
+       0.8378715550310749
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.365,
+      "no meaningful gain": 0.455,
+      "supported benefit": 0.105,
+      "supported harm": 0.075
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 25,
+      "n": 200,
+      "rate": 0.125,
+      "wilson": [
+       0.09146825500896842,
+       0.16854387339224708
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 25,
+      "n": 200,
+      "rate": 0.125,
+      "wilson": [
+       0.09146825500896842,
+       0.16854387339224708
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075,
+      "wilson": [
+       0.04971694196015646,
+       0.11163013689455437
+      ]
+     },
+     "width_mean": 0.17568154761904758,
+     "width_median": 0.17857142857142855,
+     "width_over_sd": 4.877223802449162,
+     "zero_width": 0
+    },
+    "M4": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 167,
+      "n": 200,
+      "rate": 0.835,
+      "wilson": [
+       0.7874091552984823,
+       0.8736466766630985
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 166,
+      "n": 200,
+      "rate": 0.83,
+      "wilson": [
+       0.7819710222119624,
+       0.869218304794968
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 167,
+      "n": 200,
+      "rate": 0.835,
+      "wilson": [
+       0.7874091552984823,
+       0.8736466766630985
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 169,
+      "n": 200,
+      "rate": 0.845,
+      "wilson": [
+       0.7983270616769195,
+       0.8824617801939623
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 168,
+      "n": 200,
+      "rate": 0.84,
+      "wilson": [
+       0.7928609994295375,
+       0.8780613374866937
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 167,
+      "n": 200,
+      "rate": 0.835,
+      "wilson": [
+       0.7874091552984823,
+       0.8736466766630985
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.01,
+      "no meaningful gain": 0.855,
+      "supported benefit": 0.065,
+      "supported harm": 0.07
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 19,
+      "n": 200,
+      "rate": 0.095,
+      "wilson": [
+       0.06609977991541284,
+       0.13471331875789994
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 20,
+      "n": 200,
+      "rate": 0.1,
+      "wilson": [
+       0.0702688894854085,
+       0.14041071414255468
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 19,
+      "n": 200,
+      "rate": 0.095,
+      "wilson": [
+       0.06609977991541284,
+       0.13471331875789994
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 14,
+      "n": 200,
+      "rate": 0.07,
+      "wilson": [
+       0.045706911523778315,
+       0.10577366237628205
+      ]
+     },
+     "width_mean": 0.1003479540032689,
+     "width_median": 0.10022525303882329,
+     "width_over_sd": 2.7858328687602785,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": 0.003962294169389331,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 197,
+      "n": 200,
+      "rate": 0.985,
+      "wilson": [
+       0.9630607495865149,
+       0.9939902310145797
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 197,
+      "n": 200,
+      "rate": 0.985,
+      "wilson": [
+       0.9630607495865149,
+       0.9939902310145797
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 197,
+      "n": 200,
+      "rate": 0.985,
+      "wilson": [
+       0.9630607495865149,
+       0.9939902310145797
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 198,
+      "n": 200,
+      "rate": 0.99,
+      "wilson": [
+       0.9702319464559328,
+       0.9966855390998123
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 196,
+      "n": 200,
+      "rate": 0.98,
+      "wilson": [
+       0.9561936831418917,
+       0.9909907925045525
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 197,
+      "n": 200,
+      "rate": 0.985,
+      "wilson": [
+       0.9630607495865149,
+       0.9939902310145797
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.245,
+      "no meaningful gain": 0.74,
+      "supported benefit": 0.015,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 3,
+      "n": 200,
+      "rate": 0.015,
+      "wilson": [
+       0.006009768985420258,
+       0.036939250413485114
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 3,
+      "n": 200,
+      "rate": 0.015,
+      "wilson": [
+       0.006009768985420258,
+       0.036939250413485114
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 3,
+      "n": 200,
+      "rate": 0.015,
+      "wilson": [
+       0.006009768985420258,
+       0.036939250413485114
+      ]
+     },
+     "n": 200,
+     "rmse": 0.0361484573838207,
+     "sd_theta_hat": 0.03602080911907852,
+     "upper_miss": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "width_mean": 0.1725171685874587,
+     "width_median": 0.1741689861161477,
+     "width_over_sd": 4.789375164148784,
+     "zero_width": 0
+    }
+   },
+   "n_cov": 200,
+   "truth": {
+    "T": 2000,
+    "bias_hat_minus_cond": -0.0006567534496582876,
+    "bias_mcse": 0.0007701819361857345,
+    "sd_theta_cond": 0.010314008305201775,
+    "theta_G": -9.324655034171223e-05,
+    "theta_G_mcse": 0.00023062823690928565,
+    "theta_fix_G": -0.11837672850378483,
+    "theta_fix_mcse": 0.0003667475787502429,
+    "theta_new_G": 4.439538828881993e-06,
+    "theta_new_mcse": 0.00013149310748978213
+   }
+  },
+  "A-obs": {
+   "C0_coverage": {
+    "k": 188,
+    "n": 200,
+    "rate": 0.94,
+    "wilson": [
+     0.9060653311565419,
+     0.9621871048526985
+    ]
+   },
+   "bias_check": {
+    "mcse": 0.0007296381637370838,
+    "mean": 0.00025344390308307485,
+    "n": 2200,
+    "ok": true
+   },
+   "bootstrap_bias": -0.0014794642857142856,
+   "cr1_se_calibration": 1.0672191771207604,
+   "cr1_zero_se": 3,
+   "degenerate_flag_over_1pct": false,
+   "degenerate_replicates_redrawn": 0,
+   "methods": {
+    "C0": {
+     "bias_theta_hat_vs_theta_G": 0.0013502511415665885,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 188,
+      "n": 200,
+      "rate": 0.94,
+      "wilson": [
+       0.9060653311565419,
+       0.9621871048526985
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 189,
+      "n": 200,
+      "rate": 0.945,
+      "wilson": [
+       0.9120570559758479,
+       0.9660618849880431
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 187,
+      "n": 200,
+      "rate": 0.935,
+      "wilson": [
+       0.9001234318626659,
+       0.9582624991919243
+      ]
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 5,
+      "n": 200,
+      "rate": 0.025,
+      "wilson": [
+       0.012220276177698672,
+       0.050461753130507714
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 5,
+      "n": 200,
+      "rate": 0.025,
+      "wilson": [
+       0.012220276177698672,
+       0.050461753130507714
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 5,
+      "n": 200,
+      "rate": 0.025,
+      "wilson": [
+       0.012220276177698672,
+       0.050461753130507714
+      ]
+     },
+     "n": 200,
+     "rmse": 0.06522730222784842,
+     "sd_theta_hat": 0.06537697240144787,
+     "upper_miss": {
+      "k": 7,
+      "n": 200,
+      "rate": 0.035,
+      "wilson": [
+       0.019084843112426773,
+       0.0633301961050805
+      ]
+     },
+     "width_mean": 0.2364786017708504,
+     "width_median": 0.23608455452170346,
+     "width_over_sd": 3.6171543753777935,
+     "zero_width": 0
+    },
+    "C1": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 179,
+      "n": 200,
+      "rate": 0.895,
+      "wilson": [
+       0.8539173828765199,
+       0.9255365085408666
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 177,
+      "n": 200,
+      "rate": 0.885,
+      "wilson": [
+       0.8426440345158305,
+       0.917076846992255
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 179,
+      "n": 200,
+      "rate": 0.895,
+      "wilson": [
+       0.8539173828765199,
+       0.9255365085408666
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 192,
+      "n": 200,
+      "rate": 0.96,
+      "wilson": [
+       0.930400113353576,
+       0.9773183424742663
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 175,
+      "n": 200,
+      "rate": 0.875,
+      "wilson": [
+       0.8314561266077529,
+       0.9085317449910316
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 179,
+      "n": 200,
+      "rate": 0.895,
+      "wilson": [
+       0.8539173828765199,
+       0.9255365085408666
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.165,
+      "no meaningful gain": 0.73,
+      "supported benefit": 0.06,
+      "supported harm": 0.045
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 8,
+      "n": 200,
+      "rate": 0.04,
+      "wilson": [
+       0.022681657525733673,
+       0.06959988664642403
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 10,
+      "n": 200,
+      "rate": 0.05,
+      "wilson": [
+       0.030119271268665895,
+       0.08189528281279279
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 8,
+      "n": 200,
+      "rate": 0.04,
+      "wilson": [
+       0.022681657525733673,
+       0.06959988664642403
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 13,
+      "n": 200,
+      "rate": 0.065,
+      "wilson": [
+       0.04173750080807574,
+       0.09987656813733414
+      ]
+     },
+     "width_mean": 0.1273360891237692,
+     "width_median": 0.13207313248645086,
+     "width_over_sd": 3.3367521486396945,
+     "zero_width": 3
+    },
+    "C2": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 173,
+      "n": 200,
+      "rate": 0.865,
+      "wilson": [
+       0.8203451443061072,
+       0.8999097173833763
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 173,
+      "n": 200,
+      "rate": 0.865,
+      "wilson": [
+       0.8203451443061072,
+       0.8999097173833763
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 173,
+      "n": 200,
+      "rate": 0.865,
+      "wilson": [
+       0.8203451443061072,
+       0.8999097173833763
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 182,
+      "n": 200,
+      "rate": 0.91,
+      "wilson": [
+       0.8710113126472986,
+       0.9380420936340391
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 167,
+      "n": 200,
+      "rate": 0.835,
+      "wilson": [
+       0.7874091552984823,
+       0.8736466766630985
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 173,
+      "n": 200,
+      "rate": 0.865,
+      "wilson": [
+       0.8203451443061072,
+       0.8999097173833763
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.155,
+      "no meaningful gain": 0.75,
+      "supported benefit": 0.05,
+      "supported harm": 0.045
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075,
+      "wilson": [
+       0.04971694196015646,
+       0.11163013689455437
+      ]
+     },
+     "width_mean": 0.12034821428571424,
+     "width_median": 0.11904761904761904,
+     "width_over_sd": 3.1536398311438942,
+     "zero_width": 3
+    },
+    "M1": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 175,
+      "n": 200,
+      "rate": 0.875,
+      "wilson": [
+       0.8314561266077529,
+       0.9085317449910316
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 174,
+      "n": 200,
+      "rate": 0.87,
+      "wilson": [
+       0.82589148863864,
+       0.904229878005494
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 175,
+      "n": 200,
+      "rate": 0.875,
+      "wilson": [
+       0.8314561266077529,
+       0.9085317449910316
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 190,
+      "n": 200,
+      "rate": 0.95,
+      "wilson": [
+       0.9181047171872072,
+       0.9698807287313341
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 172,
+      "n": 200,
+      "rate": 0.86,
+      "wilson": [
+       0.8148162602985924,
+       0.8955720964362406
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 175,
+      "n": 200,
+      "rate": 0.875,
+      "wilson": [
+       0.8314561266077529,
+       0.9085317449910316
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.19,
+      "no meaningful gain": 0.705,
+      "supported benefit": 0.06,
+      "supported harm": 0.045
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 10,
+      "n": 200,
+      "rate": 0.05,
+      "wilson": [
+       0.030119271268665895,
+       0.08189528281279279
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 12,
+      "n": 200,
+      "rate": 0.06,
+      "wilson": [
+       0.03781289514730147,
+       0.09393466884345814
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 10,
+      "n": 200,
+      "rate": 0.05,
+      "wilson": [
+       0.030119271268665895,
+       0.08189528281279279
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 15,
+      "n": 200,
+      "rate": 0.075,
+      "wilson": [
+       0.04971694196015646,
+       0.11163013689455437
+      ]
+     },
+     "width_mean": 0.1289877149438078,
+     "width_median": 0.12681160268793976,
+     "width_over_sd": 3.3800318350324967,
+     "zero_width": 3
+    },
+    "M2": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 200,
+      "n": 200,
+      "rate": 1.0,
+      "wilson": [
+       0.986650495465046,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.455,
+      "no meaningful gain": 0.545,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 0,
+      "n": 200,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.013349504534953982
+      ]
+     },
+     "width_mean": 0.1913184523809523,
+     "width_median": 0.1907738095238094,
+     "width_over_sd": 5.013364722047208,
+     "zero_width": 0
+    },
+    "M3": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 161,
+      "n": 200,
+      "rate": 0.805,
+      "wilson": [
+       0.7549706336358162,
+       0.8468861685978619
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 161,
+      "n": 200,
+      "rate": 0.805,
+      "wilson": [
+       0.7549706336358162,
+       0.8468861685978619
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 161,
+      "n": 200,
+      "rate": 0.805,
+      "wilson": [
+       0.7549706336358162,
+       0.8468861685978619
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 178,
+      "n": 200,
+      "rate": 0.89,
+      "wilson": [
+       0.8482694256255542,
+       0.9213179608371818
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 163,
+      "n": 200,
+      "rate": 0.815,
+      "wilson": [
+       0.7657343428126343,
+       0.8558554693303446
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 161,
+      "n": 200,
+      "rate": 0.805,
+      "wilson": [
+       0.7549706336358162,
+       0.8468861685978619
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.42,
+      "no meaningful gain": 0.415,
+      "supported benefit": 0.105,
+      "supported harm": 0.06
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 21,
+      "n": 200,
+      "rate": 0.105,
+      "wilson": [
+       0.07446349145913347,
+       0.14608261712348014
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 18,
+      "n": 200,
+      "rate": 0.09,
+      "wilson": [
+       0.06195790636596083,
+       0.12898868735270141
+      ]
+     },
+     "width_mean": 0.1913184523809523,
+     "width_median": 0.1907738095238094,
+     "width_over_sd": 5.013364722047208,
+     "zero_width": 0
+    },
+    "M4": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 182,
+      "n": 200,
+      "rate": 0.91,
+      "wilson": [
+       0.8710113126472986,
+       0.9380420936340391
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 183,
+      "n": 200,
+      "rate": 0.915,
+      "wilson": [
+       0.876765157760221,
+       0.9421547534757672
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 180,
+      "n": 200,
+      "rate": 0.9,
+      "wilson": [
+       0.8595892858574453,
+       0.9297311105145915
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 193,
+      "n": 200,
+      "rate": 0.965,
+      "wilson": [
+       0.9366698038949195,
+       0.9809151568875732
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 182,
+      "n": 200,
+      "rate": 0.91,
+      "wilson": [
+       0.8710113126472986,
+       0.9380420936340391
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 180,
+      "n": 200,
+      "rate": 0.9,
+      "wilson": [
+       0.8595892858574453,
+       0.9297311105145915
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.2,
+      "no meaningful gain": 0.705,
+      "supported benefit": 0.055,
+      "supported harm": 0.04
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 9,
+      "n": 200,
+      "rate": 0.045,
+      "wilson": [
+       0.026363930840666305,
+       0.07578411828614184
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 9,
+      "n": 200,
+      "rate": 0.045,
+      "wilson": [
+       0.026363930840666305,
+       0.07578411828614184
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 9,
+      "n": 200,
+      "rate": 0.045,
+      "wilson": [
+       0.026363930840666305,
+       0.07578411828614184
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 9,
+      "n": 200,
+      "rate": 0.045,
+      "wilson": [
+       0.026363930840666305,
+       0.07578411828614184
+      ]
+     },
+     "width_mean": 0.137660761538337,
+     "width_median": 0.1388089344746407,
+     "width_over_sd": 3.607302886457818,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": -7.276554657573847e-06,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 195,
+      "n": 200,
+      "rate": 0.975,
+      "wilson": [
+       0.9495382468694923,
+       0.9877797238223013
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 195,
+      "n": 200,
+      "rate": 0.975,
+      "wilson": [
+       0.9495382468694923,
+       0.9877797238223013
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 195,
+      "n": 200,
+      "rate": 0.975,
+      "wilson": [
+       0.9495382468694923,
+       0.9877797238223013
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 198,
+      "n": 200,
+      "rate": 0.99,
+      "wilson": [
+       0.9702319464559328,
+       0.9966855390998123
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 196,
+      "n": 200,
+      "rate": 0.98,
+      "wilson": [
+       0.9561936831418917,
+       0.9909907925045525
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 195,
+      "n": 200,
+      "rate": 0.975,
+      "wilson": [
+       0.9495382468694923,
+       0.9877797238223013
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.455,
+      "no meaningful gain": 0.53,
+      "supported benefit": 0.005,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 1,
+      "n": 200,
+      "rate": 0.005,
+      "wilson": [
+       0.0011161263729984013,
+       0.022099883116605934
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 1,
+      "n": 200,
+      "rate": 0.005,
+      "wilson": [
+       0.0011161263729984013,
+       0.022099883116605934
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 1,
+      "n": 200,
+      "rate": 0.005,
+      "wilson": [
+       0.0011161263729984013,
+       0.022099883116605934
+      ]
+     },
+     "n": 200,
+     "rmse": 0.038066163334955175,
+     "sd_theta_hat": 0.0381616864098464,
+     "upper_miss": {
+      "k": 4,
+      "n": 200,
+      "rate": 0.02,
+      "wilson": [
+       0.009009207495447516,
+       0.04380631685810832
+      ]
+     },
+     "width_mean": 0.1869143501911485,
+     "width_median": 0.19047619047619047,
+     "width_over_sd": 4.897958339255187,
+     "zero_width": 0
+    }
+   },
+   "n_cov": 200,
+   "truth": {
+    "T": 2000,
+    "bias_hat_minus_cond": 8.796154058052145e-05,
+    "bias_mcse": 0.0007702282640725499,
+    "sd_theta_cond": 0.024043698825450075,
+    "theta_G": 0.004471562268943288,
+    "theta_G_mcse": 0.0005376334500423822,
+    "theta_fix_G": -0.05873120352251897,
+    "theta_fix_mcse": 0.0009436672449065922,
+    "theta_new_G": 0.005301076670821429,
+    "theta_new_mcse": 0.0002907692370685028
+   }
+  },
+  "B-info": {
+   "C0_coverage": {
+    "k": 95,
+    "n": 100,
+    "rate": 0.95,
+    "wilson": [
+     0.9008333016216962,
+     0.9754541411062255
+    ]
+   },
+   "bias_check": {
+    "mcse": 0.0015504664019456785,
+    "mean": 0.00037063266852806307,
+    "n": 1100,
+    "ok": true
+   },
+   "bootstrap_bias": -0.021637499999999997,
+   "cr1_se_calibration": 0.5728947659621555,
+   "cr1_zero_se": 17,
+   "degenerate_flag_over_1pct": false,
+   "degenerate_replicates_redrawn": 0,
+   "methods": {
+    "C0": {
+     "bias_theta_hat_vs_theta_G": 6.553755976197728e-06,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 95,
+      "n": 100,
+      "rate": 0.95,
+      "wilson": [
+       0.9008333016216962,
+       0.9754541411062255
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 95,
+      "n": 100,
+      "rate": 0.95,
+      "wilson": [
+       0.9008333016216962,
+       0.9754541411062255
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 95,
+      "n": 100,
+      "rate": 0.95,
+      "wilson": [
+       0.9008333016216962,
+       0.9754541411062255
+      ]
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "n": 100,
+     "rmse": 0.10585155885525503,
+     "sd_theta_hat": 0.10638481924975875,
+     "upper_miss": {
+      "k": 1,
+      "n": 100,
+      "rate": 0.01,
+      "wilson": [
+       0.002233840095275507,
+       0.04358650004543185
+      ]
+     },
+     "width_mean": 0.3816049276421905,
+     "width_median": 0.3751234957714987,
+     "width_over_sd": 3.5870242609173384,
+     "zero_width": 0
+    },
+    "C1": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 68,
+      "n": 100,
+      "rate": 0.68,
+      "wilson": [
+       0.5993914169617294,
+       0.7511235601294394
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 68,
+      "n": 100,
+      "rate": 0.68,
+      "wilson": [
+       0.5993914169617294,
+       0.7511235601294394
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 63,
+      "n": 100,
+      "rate": 0.63,
+      "wilson": [
+       0.5481319821200601,
+       0.705017723556895
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 86,
+      "n": 100,
+      "rate": 0.86,
+      "wilson": [
+       0.793399489901896,
+       0.9076304642804414
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 76,
+      "n": 100,
+      "rate": 0.76,
+      "wilson": [
+       0.6834885868746645,
+       0.8228108244792459
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 67,
+      "n": 100,
+      "rate": 0.67,
+      "wilson": [
+       0.5890654404137409,
+       0.7419764823945851
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.35,
+      "no meaningful gain": 0.45,
+      "supported benefit": 0.19,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 10,
+      "n": 100,
+      "rate": 0.1,
+      "wilson": [
+       0.06071598345043355,
+       0.16036184523585817
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 10,
+      "n": 100,
+      "rate": 0.1,
+      "wilson": [
+       0.06071598345043355,
+       0.16036184523585817
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 10,
+      "n": 100,
+      "rate": 0.1,
+      "wilson": [
+       0.06071598345043355,
+       0.16036184523585817
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 22,
+      "n": 100,
+      "rate": 0.22,
+      "wilson": [
+       0.15973392607776865,
+       0.2950205540026355
+      ]
+     },
+     "width_mean": 0.16915344793790088,
+     "width_median": 0.18773027308669615,
+     "width_over_sd": 2.253428683536845,
+     "zero_width": 15
+    },
+    "C2": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 59,
+      "n": 100,
+      "rate": 0.59,
+      "wilson": [
+       0.5077599061521503,
+       0.6674975823934339
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 59,
+      "n": 100,
+      "rate": 0.59,
+      "wilson": [
+       0.5077599061521503,
+       0.6674975823934339
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 59,
+      "n": 100,
+      "rate": 0.59,
+      "wilson": [
+       0.5077599061521503,
+       0.6674975823934339
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 81,
+      "n": 100,
+      "rate": 0.81,
+      "wilson": [
+       0.7376329804776489,
+       0.8660317022904751
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 69,
+      "n": 100,
+      "rate": 0.69,
+      "wilson": [
+       0.6097560975609755,
+       0.7602319338130358
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 59,
+      "n": 100,
+      "rate": 0.59,
+      "wilson": [
+       0.5077599061521503,
+       0.6674975823934339
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.35,
+      "no meaningful gain": 0.44,
+      "supported benefit": 0.19,
+      "supported harm": 0.02
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 30,
+      "n": 100,
+      "rate": 0.3,
+      "wilson": [
+       0.23069937463819615,
+       0.3798395397049499
+      ]
+     },
+     "width_mean": 0.15051388888888886,
+     "width_median": 0.16666666666666666,
+     "width_over_sd": 2.005116174855719,
+     "zero_width": 17
+    },
+    "M1": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 69,
+      "n": 100,
+      "rate": 0.69,
+      "wilson": [
+       0.6097560975609755,
+       0.7602319338130358
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 69,
+      "n": 100,
+      "rate": 0.69,
+      "wilson": [
+       0.6097560975609755,
+       0.7602319338130358
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 69,
+      "n": 100,
+      "rate": 0.69,
+      "wilson": [
+       0.6097560975609755,
+       0.7602319338130358
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 86,
+      "n": 100,
+      "rate": 0.86,
+      "wilson": [
+       0.793399489901896,
+       0.9076304642804414
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 78,
+      "n": 100,
+      "rate": 0.78,
+      "wilson": [
+       0.7049794459973645,
+       0.8402660739222314
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 69,
+      "n": 100,
+      "rate": 0.69,
+      "wilson": [
+       0.6097560975609755,
+       0.7602319338130358
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.38,
+      "no meaningful gain": 0.43,
+      "supported benefit": 0.18,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 7,
+      "n": 100,
+      "rate": 0.07,
+      "wilson": [
+       0.038392610946497256,
+       0.1242660548912663
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 7,
+      "n": 100,
+      "rate": 0.07,
+      "wilson": [
+       0.038392610946497256,
+       0.1242660548912663
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 7,
+      "n": 100,
+      "rate": 0.07,
+      "wilson": [
+       0.038392610946497256,
+       0.1242660548912663
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 24,
+      "n": 100,
+      "rate": 0.24,
+      "wilson": [
+       0.1771891755207541,
+       0.3165114131253355
+      ]
+     },
+     "width_mean": 0.17548826617297855,
+     "width_median": 0.17796871049960805,
+     "width_over_sd": 2.337819875616813,
+     "zero_width": 17
+    },
+    "M2": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.81,
+      "no meaningful gain": 0.19,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 1,
+      "n": 100,
+      "rate": 0.01,
+      "wilson": [
+       0.002233840095275507,
+       0.04358650004543185
+      ]
+     },
+     "width_mean": 0.22518055555555544,
+     "width_median": 0.2222222222222222,
+     "width_over_sd": 2.9998106988037057,
+     "zero_width": 0
+    },
+    "M3": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 65,
+      "n": 100,
+      "rate": 0.65,
+      "wilson": [
+       0.5685261258544665,
+       0.7235696883881741
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 65,
+      "n": 100,
+      "rate": 0.65,
+      "wilson": [
+       0.5685261258544665,
+       0.7235696883881741
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 65,
+      "n": 100,
+      "rate": 0.65,
+      "wilson": [
+       0.5685261258544665,
+       0.7235696883881741
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 76,
+      "n": 100,
+      "rate": 0.76,
+      "wilson": [
+       0.6834885868746645,
+       0.8228108244792459
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 70,
+      "n": 100,
+      "rate": 0.7,
+      "wilson": [
+       0.6201604602950501,
+       0.7693006253618039
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 65,
+      "n": 100,
+      "rate": 0.65,
+      "wilson": [
+       0.5685261258544665,
+       0.7235696883881741
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.37,
+      "no meaningful gain": 0.29,
+      "supported benefit": 0.26,
+      "supported harm": 0.08
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 19,
+      "n": 100,
+      "rate": 0.19,
+      "wilson": [
+       0.13396829770952495,
+       0.2623670195223511
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 19,
+      "n": 100,
+      "rate": 0.19,
+      "wilson": [
+       0.13396829770952495,
+       0.2623670195223511
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 19,
+      "n": 100,
+      "rate": 0.19,
+      "wilson": [
+       0.13396829770952495,
+       0.2623670195223511
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 16,
+      "n": 100,
+      "rate": 0.16,
+      "wilson": [
+       0.10878065313356891,
+       0.2291355012497791
+      ]
+     },
+     "width_mean": 0.22518055555555544,
+     "width_median": 0.2222222222222222,
+     "width_over_sd": 2.9998106988037057,
+     "zero_width": 0
+    },
+    "M4": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 74,
+      "n": 100,
+      "rate": 0.74,
+      "wilson": [
+       0.6621979655035286,
+       0.8051553372846963
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 73,
+      "n": 100,
+      "rate": 0.73,
+      "wilson": [
+       0.6516229607528832,
+       0.796257287752499
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 72,
+      "n": 100,
+      "rate": 0.72,
+      "wilson": [
+       0.6410926463898217,
+       0.7873145478327178
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 91,
+      "n": 100,
+      "rate": 0.91,
+      "wilson": [
+       0.851505535038808,
+       0.9468896905577431
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 80,
+      "n": 100,
+      "rate": 0.8,
+      "wilson": [
+       0.7266890723138059,
+       0.8575025561714754
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 70,
+      "n": 100,
+      "rate": 0.7,
+      "wilson": [
+       0.6201604602950501,
+       0.7693006253618039
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.29,
+      "no meaningful gain": 0.44,
+      "supported benefit": 0.24,
+      "supported harm": 0.03
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 14,
+      "n": 100,
+      "rate": 0.14,
+      "wilson": [
+       0.09236953571955868,
+       0.20660051009810398
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 16,
+      "n": 100,
+      "rate": 0.16,
+      "wilson": [
+       0.10878065313356891,
+       0.2291355012497791
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 14,
+      "n": 100,
+      "rate": 0.14,
+      "wilson": [
+       0.09236953571955868,
+       0.20660051009810398
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 12,
+      "n": 100,
+      "rate": 0.12,
+      "wilson": [
+       0.07632292968545351,
+       0.18370100756652363
+      ]
+     },
+     "width_mean": 0.16522950635492242,
+     "width_median": 0.15732455832277972,
+     "width_over_sd": 2.2011547120429102,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": 0.005768779250673872,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 90,
+      "n": 100,
+      "rate": 0.9,
+      "wilson": [
+       0.8396381547641418,
+       0.9392840165495664
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 90,
+      "n": 100,
+      "rate": 0.9,
+      "wilson": [
+       0.8396381547641418,
+       0.9392840165495664
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 90,
+      "n": 100,
+      "rate": 0.9,
+      "wilson": [
+       0.8396381547641418,
+       0.9392840165495664
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 93,
+      "n": 100,
+      "rate": 0.93,
+      "wilson": [
+       0.8757339451087337,
+       0.9616073890535027
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 90,
+      "n": 100,
+      "rate": 0.9,
+      "wilson": [
+       0.8396381547641418,
+       0.9392840165495664
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.63,
+      "no meaningful gain": 0.21,
+      "supported benefit": 0.15,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 7,
+      "n": 100,
+      "rate": 0.07,
+      "wilson": [
+       0.038392610946497256,
+       0.1242660548912663
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 7,
+      "n": 100,
+      "rate": 0.07,
+      "wilson": [
+       0.038392610946497256,
+       0.1242660548912663
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 7,
+      "n": 100,
+      "rate": 0.07,
+      "wilson": [
+       0.038392610946497256,
+       0.1242660548912663
+      ]
+     },
+     "n": 100,
+     "rmse": 0.0749111064914369,
+     "sd_theta_hat": 0.07506492181168471,
+     "upper_miss": {
+      "k": 3,
+      "n": 100,
+      "rate": 0.03,
+      "wilson": [
+       0.012050894013351769,
+       0.07271555469304103
+      ]
+     },
+     "width_mean": 0.2278956920953066,
+     "width_median": 0.22436285103993214,
+     "width_over_sd": 3.0359812092661373,
+     "zero_width": 0
+    }
+   },
+   "n_cov": 100,
+   "truth": {
+    "T": 1000,
+    "bias_hat_minus_cond": 0.00021322369511831955,
+    "bias_mcse": 0.0016335849669558776,
+    "sd_theta_cond": 0.048025757137678156,
+    "theta_G": 0.03534233186043723,
+    "theta_G_mcse": 0.0015187077890915172,
+    "theta_fix_G": -0.060284331533753975,
+    "theta_fix_mcse": 0.002026971189151413,
+    "theta_new_G": 0.04181668192555304,
+    "theta_new_mcse": 0.0010997708292209574
+   }
+  },
+  "B-null": {
+   "C0_coverage": {
+    "k": 85,
+    "n": 100,
+    "rate": 0.85,
+    "wilson": [
+     0.7820901552717874,
+     0.8994667446277074
+    ]
+   },
+   "bias_check": {
+    "mcse": 0.0011496780722341732,
+    "mean": -3.2990032554066045e-05,
+    "n": 1100,
+    "ok": true
+   },
+   "bootstrap_bias": -0.0003624999999999998,
+   "cr1_se_calibration": 1.198088747314616,
+   "cr1_zero_se": 30,
+   "degenerate_flag_over_1pct": false,
+   "degenerate_replicates_redrawn": 0,
+   "methods": {
+    "C0": {
+     "bias_theta_hat_vs_theta_G": 0.011007758836308945,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 85,
+      "n": 100,
+      "rate": 0.85,
+      "wilson": [
+       0.7820901552717874,
+       0.8994667446277074
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 86,
+      "n": 100,
+      "rate": 0.86,
+      "wilson": [
+       0.793399489901896,
+       0.9076304642804414
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 85,
+      "n": 100,
+      "rate": 0.85,
+      "wilson": [
+       0.7820901552717874,
+       0.8994667446277074
+      ]
+     },
+     "evidence_excess_lower_tail": true,
+     "lower_miss": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "n": 100,
+     "rmse": 0.08031063004240606,
+     "sd_theta_hat": 0.07995343684825787,
+     "upper_miss": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "width_mean": 0.2551433461624271,
+     "width_median": 0.26051951633868575,
+     "width_over_sd": 3.1911492015866547,
+     "zero_width": 0
+    },
+    "C1": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 68,
+      "n": 100,
+      "rate": 0.68,
+      "wilson": [
+       0.5993914169617294,
+       0.7511235601294394
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 68,
+      "n": 100,
+      "rate": 0.68,
+      "wilson": [
+       0.5993914169617294,
+       0.7511235601294394
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 68,
+      "n": 100,
+      "rate": 0.68,
+      "wilson": [
+       0.5993914169617294,
+       0.7511235601294394
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 79,
+      "n": 100,
+      "rate": 0.79,
+      "wilson": [
+       0.7158055853452586,
+       0.8489129888571798
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 70,
+      "n": 100,
+      "rate": 0.7,
+      "wilson": [
+       0.6201604602950501,
+       0.7693006253618039
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 68,
+      "n": 100,
+      "rate": 0.68,
+      "wilson": [
+       0.5993914169617294,
+       0.7511235601294394
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.14,
+      "no meaningful gain": 0.83,
+      "supported benefit": 0.02,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 31,
+      "n": 100,
+      "rate": 0.31,
+      "wilson": [
+       0.23976806618696422,
+       0.3902439024390245
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 30,
+      "n": 100,
+      "rate": 0.3,
+      "wilson": [
+       0.23069937463819615,
+       0.3798395397049499
+      ]
+     },
+     "width_mean": 0.09956823425350196,
+     "width_median": 0.11235019053512478,
+     "width_over_sd": 3.069658796611797,
+     "zero_width": 29
+    },
+    "C2": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 52,
+      "n": 100,
+      "rate": 0.52,
+      "wilson": [
+       0.43837706041192537,
+       0.60056904815376
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 50,
+      "n": 100,
+      "rate": 0.5,
+      "wilson": [
+       0.4188407647616972,
+       0.5811592352383028
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 52,
+      "n": 100,
+      "rate": 0.52,
+      "wilson": [
+       0.43837706041192537,
+       0.60056904815376
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 65,
+      "n": 100,
+      "rate": 0.65,
+      "wilson": [
+       0.5685261258544665,
+       0.7235696883881741
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 55,
+      "n": 100,
+      "rate": 0.55,
+      "wilson": [
+       0.467919471464355,
+       0.6294457999498586
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 50,
+      "n": 100,
+      "rate": 0.5,
+      "wilson": [
+       0.4188407647616972,
+       0.5811592352383028
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.11,
+      "no meaningful gain": 0.86,
+      "supported benefit": 0.02,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 49,
+      "n": 100,
+      "rate": 0.49,
+      "wilson": [
+       0.4091200433412875,
+       0.5714069023758699
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 46,
+      "n": 100,
+      "rate": 0.46,
+      "wilson": [
+       0.38014791826639016,
+       0.541959864602239
+      ]
+     },
+     "width_mean": 0.08563888888888888,
+     "width_median": 0.08333333333333333,
+     "width_over_sd": 2.640221257118377,
+     "zero_width": 30
+    },
+    "M1": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 67,
+      "n": 100,
+      "rate": 0.67,
+      "wilson": [
+       0.5890654404137409,
+       0.7419764823945851
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 67,
+      "n": 100,
+      "rate": 0.67,
+      "wilson": [
+       0.5890654404137409,
+       0.7419764823945851
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 67,
+      "n": 100,
+      "rate": 0.67,
+      "wilson": [
+       0.5890654404137409,
+       0.7419764823945851
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 79,
+      "n": 100,
+      "rate": 0.79,
+      "wilson": [
+       0.7158055853452586,
+       0.8489129888571798
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 69,
+      "n": 100,
+      "rate": 0.69,
+      "wilson": [
+       0.6097560975609755,
+       0.7602319338130358
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 67,
+      "n": 100,
+      "rate": 0.67,
+      "wilson": [
+       0.5890654404137409,
+       0.7419764823945851
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.15,
+      "no meaningful gain": 0.82,
+      "supported benefit": 0.02,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 32,
+      "n": 100,
+      "rate": 0.32,
+      "wilson": [
+       0.2488764398705606,
+       0.4006085830382706
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 31,
+      "n": 100,
+      "rate": 0.31,
+      "wilson": [
+       0.23976806618696422,
+       0.3902439024390245
+      ]
+     },
+     "width_mean": 0.1025318610818339,
+     "width_median": 0.09977137881689122,
+     "width_over_sd": 3.1610265227914334,
+     "zero_width": 30
+    },
+    "M2": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.12,
+      "no meaningful gain": 0.88,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "width_mean": 0.15329166666666663,
+     "width_median": 0.16666666666666666,
+     "width_over_sd": 4.7259361036029075,
+     "zero_width": 0
+    },
+    "M3": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 84,
+      "n": 100,
+      "rate": 0.84,
+      "wilson": [
+       0.7708644987502209,
+       0.8912193468664311
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 79,
+      "n": 100,
+      "rate": 0.79,
+      "wilson": [
+       0.7158055853452586,
+       0.8489129888571798
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 84,
+      "n": 100,
+      "rate": 0.84,
+      "wilson": [
+       0.7708644987502209,
+       0.8912193468664311
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 82,
+      "n": 100,
+      "rate": 0.82,
+      "wilson": [
+       0.7486407875873089,
+       0.8744969494636576
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 83,
+      "n": 100,
+      "rate": 0.83,
+      "wilson": [
+       0.7597164504002921,
+       0.8828943409335172
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 79,
+      "n": 100,
+      "rate": 0.79,
+      "wilson": [
+       0.7158055853452586,
+       0.8489129888571798
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.29,
+      "no meaningful gain": 0.59,
+      "supported benefit": 0.05,
+      "supported harm": 0.07
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 5,
+      "n": 100,
+      "rate": 0.05,
+      "wilson": [
+       0.02454585889377448,
+       0.09916669837830383
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 14,
+      "n": 100,
+      "rate": 0.14,
+      "wilson": [
+       0.09236953571955868,
+       0.20660051009810398
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 5,
+      "n": 100,
+      "rate": 0.05,
+      "wilson": [
+       0.02454585889377448,
+       0.09916669837830383
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 11,
+      "n": 100,
+      "rate": 0.11,
+      "wilson": [
+       0.06845861040442765,
+       0.17209227256470683
+      ]
+     },
+     "width_mean": 0.15329166666666663,
+     "width_median": 0.16666666666666663,
+     "width_over_sd": 4.7259361036029075,
+     "zero_width": 0
+    },
+    "M4": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 91,
+      "n": 100,
+      "rate": 0.91,
+      "wilson": [
+       0.851505535038808,
+       0.9468896905577431
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 91,
+      "n": 100,
+      "rate": 0.91,
+      "wilson": [
+       0.851505535038808,
+       0.9468896905577431
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 91,
+      "n": 100,
+      "rate": 0.91,
+      "wilson": [
+       0.851505535038808,
+       0.9468896905577431
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 88,
+      "n": 100,
+      "rate": 0.88,
+      "wilson": [
+       0.8162989924334764,
+       0.9236770703145465
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 90,
+      "n": 100,
+      "rate": 0.9,
+      "wilson": [
+       0.8396381547641418,
+       0.9392840165495664
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 91,
+      "n": 100,
+      "rate": 0.91,
+      "wilson": [
+       0.851505535038808,
+       0.9468896905577431
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.05,
+      "no meaningful gain": 0.87,
+      "supported benefit": 0.03,
+      "supported harm": 0.05
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 5,
+      "n": 100,
+      "rate": 0.05,
+      "wilson": [
+       0.02454585889377448,
+       0.09916669837830383
+      ]
+     },
+     "width_mean": 0.10386532052378179,
+     "width_median": 0.10471695320539322,
+     "width_over_sd": 3.2021366774164406,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": -0.000593773047363354,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.22,
+      "no meaningful gain": 0.75,
+      "supported benefit": 0.02,
+      "supported harm": 0.01
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "n": 100,
+     "rmse": 0.032279127506867566,
+     "sd_theta_hat": 0.032436254597221874,
+     "upper_miss": {
+      "k": 1,
+      "n": 100,
+      "rate": 0.01,
+      "wilson": [
+       0.002233840095275507,
+       0.04358650004543185
+      ]
+     },
+     "width_mean": 0.1642207419349758,
+     "width_median": 0.16666666666666666,
+     "width_over_sd": 5.062876215956238,
+     "zero_width": 0
+    }
+   },
+   "n_cov": 100,
+   "truth": {
+    "T": 1000,
+    "bias_hat_minus_cond": 1.733806374775715e-05,
+    "bias_mcse": 0.0012214218098953046,
+    "sd_theta_cond": 0.010804587596652244,
+    "theta_G": 0.00031599526958557626,
+    "theta_G_mcse": 0.00034167105984225755,
+    "theta_fix_G": -0.11961886994742005,
+    "theta_fix_mcse": 0.0007821708268683608,
+    "theta_new_G": -0.00018029452035195584,
+    "theta_new_mcse": 0.00018095762406910866
+   }
+  }
+ },
+ "classification": "ADMITTED and confirmed on the independent evaluation set",
+ "completeness": {
+  "conflicts": [],
+  "errors": [],
+  "missing": [],
+  "n_errors": 0,
+  "n_expected": 9100,
+  "n_extra": 0,
+  "n_missing": 0,
+  "n_present": 9100,
+  "n_wrong": 0,
+  "ok": true,
+  "partial_lines": 0,
+  "preflights": {
+   "n": 5,
+   "ok": true
+  },
+  "replay": {
+   "mismatches": [],
+   "n": 182,
+   "ok": true,
+   "required": 182,
+   "unparsable": 0
+  },
+  "wrong_parameters": []
+ },
+ "evaluation": {
+  "admission_confirmed": true,
+  "note": "independent evaluation datasets; the only coverage figures quoted as validity estimates (6A)",
+  "per_cell": {
+   "A-info": {
+    "M2": {
+     "bias_theta_hat_vs_theta_G": 0.004484250085938446,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 98,
+      "n": 100,
+      "rate": 0.98,
+      "wilson": [
+       0.9413466545385856,
+       0.9933599510378642
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.93,
+      "no meaningful gain": 0.02,
+      "supported benefit": 0.05,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.07067888881575647,
+     "sd_theta_hat": 0.07089184268296807,
+     "upper_miss": {
+      "k": 3,
+      "n": 100,
+      "rate": 0.03,
+      "wilson": [
+       0.012050894013351769,
+       0.07271555469304103
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.23810119047619038,
+     "width_median": 0.23809523809523808,
+     "width_over_sd": 3.358654274808331,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": 0.004484250085938446,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 95,
+      "n": 100,
+      "rate": 0.95,
+      "wilson": [
+       0.9008333016216962,
+       0.9754541411062255
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 98,
+      "n": 100,
+      "rate": 0.98,
+      "wilson": [
+       0.9413466545385856,
+       0.9933599510378642
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.8,
+      "no meaningful gain": 0.03,
+      "supported benefit": 0.17,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 2,
+      "n": 100,
+      "rate": 0.02,
+      "wilson": [
+       0.006640048962135751,
+       0.05865334546141443
+      ]
+     },
+     "n": 100,
+     "rmse": 0.07067888881575647,
+     "sd_theta_hat": 0.07089184268296807,
+     "upper_miss": {
+      "k": 4,
+      "n": 100,
+      "rate": 0.04,
+      "wilson": [
+       0.01808118288145052,
+       0.08615832010778501
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.23213824630984992,
+     "width_median": 0.2267857142857141,
+     "width_over_sd": 3.274541012398055,
+     "zero_width": 0
+    },
+    "M6": {
+     "bias_theta_hat_vs_theta_G": 0.004484250085938446,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 98,
+      "n": 100,
+      "rate": 0.98,
+      "wilson": [
+       0.9413466545385856,
+       0.9933599510378642
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 97,
+      "n": 100,
+      "rate": 0.97,
+      "wilson": [
+       0.927284445306959,
+       0.9879491059866482
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.93,
+      "no meaningful gain": 0.02,
+      "supported benefit": 0.05,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.07067888881575647,
+     "sd_theta_hat": 0.07089184268296807,
+     "upper_miss": {
+      "k": 3,
+      "n": 100,
+      "rate": 0.03,
+      "wilson": [
+       0.012050894013351769,
+       0.07271555469304103
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.23810119047619038,
+     "width_median": 0.23809523809523808,
+     "width_over_sd": 3.358654274808331,
+     "zero_width": 0
+    }
+   },
+   "A-null": {
+    "M2": {
+     "bias_theta_hat_vs_theta_G": 0.00283134178843695,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.22,
+      "no meaningful gain": 0.78,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.03740760423496262,
+     "sd_theta_hat": 0.037488211726638236,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.17527976190476185,
+     "width_median": 0.17857142857142855,
+     "width_over_sd": 4.675596776471794,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": 0.00283134178843695,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.23,
+      "no meaningful gain": 0.77,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.03740760423496262,
+     "sd_theta_hat": 0.037488211726638236,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.17172061831718868,
+     "width_median": 0.16726190476190472,
+     "width_over_sd": 4.580656435931513,
+     "zero_width": 0
+    },
+    "M6": {
+     "bias_theta_hat_vs_theta_G": 0.00283134178843695,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.22,
+      "no meaningful gain": 0.78,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.03740760423496262,
+     "sd_theta_hat": 0.037488211726638236,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.17527976190476185,
+     "width_median": 0.17857142857142855,
+     "width_over_sd": 4.675596776471794,
+     "zero_width": 0
+    }
+   },
+   "A-obs": {
+    "M2": {
+     "bias_theta_hat_vs_theta_G": 0.008742723445342425,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.48,
+      "no meaningful gain": 0.52,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.04415563792579641,
+     "sd_theta_hat": 0.0434995082683491,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.18879761904761896,
+     "width_median": 0.19047619047619047,
+     "width_over_sd": 4.340224213177852,
+     "zero_width": 0
+    },
+    "M5": {
+     "bias_theta_hat_vs_theta_G": 0.008742723445342425,
+     "conservative": false,
+     "coverage_theta_G": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 99,
+      "n": 100,
+      "rate": 0.99,
+      "wilson": [
+       0.9564134999545681,
+       0.9977661599047245
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 93,
+      "n": 100,
+      "rate": 0.93,
+      "wilson": [
+       0.8757339451087337,
+       0.9616073890535027
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 94,
+      "n": 100,
+      "rate": 0.94,
+      "wilson": [
+       0.8881532494695406,
+       0.9686611389755384
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.43,
+      "no meaningful gain": 0.51,
+      "supported benefit": 0.06,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 6,
+      "n": 100,
+      "rate": 0.06,
+      "wilson": [
+       0.03133886102446154,
+       0.11184675053045945
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 6,
+      "n": 100,
+      "rate": 0.06,
+      "wilson": [
+       0.03133886102446154,
+       0.11184675053045945
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 6,
+      "n": 100,
+      "rate": 0.06,
+      "wilson": [
+       0.03133886102446154,
+       0.11184675053045945
+      ]
+     },
+     "n": 100,
+     "rmse": 0.04415563792579641,
+     "sd_theta_hat": 0.0434995082683491,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.18264044049108968,
+     "width_median": 0.17976190476190454,
+     "width_over_sd": 4.198678278484854,
+     "zero_width": 0
+    },
+    "M6": {
+     "bias_theta_hat_vs_theta_G": 0.008742723445342425,
+     "conservative": true,
+     "coverage_theta_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_minus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_G_plus_2se": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_cond": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_D": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "coverage_theta_new_G": {
+      "k": 100,
+      "n": 100,
+      "rate": 1.0,
+      "wilson": [
+       0.9736527141421354,
+       1.0
+      ]
+     },
+     "decision_rates": {
+      "inconclusive": 0.48,
+      "no meaningful gain": 0.52,
+      "supported benefit": 0.0,
+      "supported harm": 0.0
+     },
+     "evidence_excess_lower_tail": false,
+     "lower_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_minus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "lower_miss_plus_2se": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "n": 100,
+     "rmse": 0.04415563792579641,
+     "sd_theta_hat": 0.0434995082683491,
+     "upper_miss": {
+      "k": 0,
+      "n": 100,
+      "rate": 0.0,
+      "wilson": [
+       0.0,
+       0.02634728585786461
+      ]
+     },
+     "verdict": "not validated",
+     "width_mean": 0.18879761904761896,
+     "width_median": 0.19047619047619047,
+     "width_over_sd": 4.340224213177852,
+     "zero_width": 0
+    }
+   }
+  }
+ },
+ "harness_ok": true,
+ "phase": "confirm",
+ "proposal": "CF-V2-P05-SV1 draft 2 (docs/plans/EXPERIENCE_P05_SV1_PROPOSAL.md)",
+ "provenance": {
+  "code_sha256": {
+   "design_archive/p05_design_calc.py": "18a6a163aa8233e6b2171094358e179d740124f5e6f0c028f0e4f74620d42ed4",
+   "sv0/sv0_lib.py": "7ca9658df2fe3c22495b45a63f6f73c2e85316dbc7d06104632bbf354de8cde2",
+   "sv0/sv0_run.py": "03e7a2f02ff8b03ddfbd383c60007ab22bdcc15721aedd1c6406588d198ee6a0",
+   "sv1/sv1_aggregate.py": "f8f744f592229c99baabcf3e20c24cf6354c607240aa4c8d4d116dd669cbb078",
+   "sv1/sv1_config.json": "dd1b052679e1099ee546280150217b8ce53d462c97cac70b92f21d3f80448c44",
+   "sv1/sv1_fast.py": "f9f5842cc49c071f3f194b464116e681c29daf1640f5c15262ad56fffce79ca8",
+   "sv1/sv1_guard.py": "572c14f0d6d8b6f2cc918a4c3d3b6d1698559bda24a9618bbe53ade1b25c3c18",
+   "sv1/sv1_lib.py": "8f16e4c76fd9121e9a0365f9163592de3a06fc7918f9836e98b0ca87ef34340d",
+   "sv1/sv1_run.py": "f2dd7fbb9035a2c0ba58dc4c27864c2b505f3aee5b99fd145353fcdcc9ec3276",
+   "sv1/sv1_selftest.py": "04fef70d7d32fe1c7df26751d4d82b60768e30625dce43cdb07a2e995ce923a1"
+  },
+  "expected_head": "afe33ca68b73da313d720db0939ef382bc1cae91",
+  "failures": [],
+  "fingerprint": {
+   "cpu_flags_sha256": "2635ea8b7a00dd791d4e50e49ebdfcdf622915591fbd1f412e241445694db92b",
+   "cpu_model": "AMD EPYC-Genoa Processor",
+   "dist_count": 29,
+   "dist_manifest_sha256": "af2cf766ac30a5fa1067ef865601d92e10a535907f29d942160b5dde34a7a38d",
+   "machine": "x86_64",
+   "numpy": "2.5.4",
+   "numpy_config_sha256": "2ab35740851adcdddd763d6a5fef42309f1c7d9717e94fa653d4c3b006dba8f6",
+   "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+   "prefix": "/home/forge/venvs/creature-forge",
+   "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+   "sys_platform": "linux"
+  },
+  "selftest_status": "PASS"
+ },
+ "selected": {
+  "composite_rule_valid": true,
+  "pool": [
+   "M2"
+  ],
+  "procedure": "M6 = widest admissible per dataset (frozen E1)"
+ },
+ "smoke": false
+}

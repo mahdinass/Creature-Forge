@@ -1,0 +1,804 @@
+{
+ "code_sha256": {
+  "design_archive/p05_design_calc.py": "18a6a163aa8233e6b2171094358e179d740124f5e6f0c028f0e4f74620d42ed4",
+  "sv0/sv0_lib.py": "7ca9658df2fe3c22495b45a63f6f73c2e85316dbc7d06104632bbf354de8cde2",
+  "sv0/sv0_run.py": "03e7a2f02ff8b03ddfbd383c60007ab22bdcc15721aedd1c6406588d198ee6a0",
+  "sv1/sv1_aggregate.py": "6bddc0c0b799d477af3b98d9f4b1b0df938da9b4fc4a84c868e08785f124192d",
+  "sv1/sv1_config.json": "06a717fbfcfd8b7edde84ef873fcaa243ceb57fb809323bdab85049eae54d4ec",
+  "sv1/sv1_fast.py": "f9f5842cc49c071f3f194b464116e681c29daf1640f5c15262ad56fffce79ca8",
+  "sv1/sv1_guard.py": "572c14f0d6d8b6f2cc918a4c3d3b6d1698559bda24a9618bbe53ade1b25c3c18",
+  "sv1/sv1_lib.py": "11bd1ac777a620d2945a8680378641c14a19b04b1001c1a714148684d38671a7",
+  "sv1/sv1_run.py": "f2dd7fbb9035a2c0ba58dc4c27864c2b505f3aee5b99fd145353fcdcc9ec3276",
+  "sv1/sv1_selftest.py": "25d6c75aa6af325b48b75aed1ef76e8df9b2f56a85235069e45934a35314f1b7"
+ },
+ "fingerprint": {
+  "cpu_flags_sha256": "2635ea8b7a00dd791d4e50e49ebdfcdf622915591fbd1f412e241445694db92b",
+  "cpu_model": "AMD EPYC-Genoa Processor",
+  "dist_count": 29,
+  "dist_manifest_sha256": "af2cf766ac30a5fa1067ef865601d92e10a535907f29d942160b5dde34a7a38d",
+  "machine": "x86_64",
+  "numpy": "2.5.4",
+  "numpy_config_sha256": "2ab35740851adcdddd763d6a5fef42309f1c7d9717e94fa653d4c3b006dba8f6",
+  "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+  "prefix": "/home/forge/venvs/creature-forge",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "sys_platform": "linux"
+ },
+ "items": [
+  {
+   "expected": 901,
+   "name": "(b) closed-form grid: covered count (i = 50..950 of 999)",
+   "observed": 901,
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    49,
+    49
+   ],
+   "name": "(b) lower and upper misses",
+   "observed": [
+    49,
+    49
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    0.63,
+    0.187,
+    0.026
+   ],
+   "name": "(e) P(admit), S = 40, 2 cells, two-sided z = 1.645 (A0: 0.630 / 0.187 / 0.026)",
+   "observed": [
+    0.63,
+    0.187,
+    0.026
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    0.811,
+    0.368,
+    0.082
+   ],
+   "name": "(e) P(admit), S = 40, 2 cells, one-sided z = 1.282 (A0: 0.811 / 0.368 / 0.082)",
+   "observed": [
+    0.811,
+    0.368,
+    0.082
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    35,
+    34
+   ],
+   "name": "(e) k_min at S = 40: 35 (z 1.645), 34 (z 1.282)",
+   "observed": [
+    35,
+    34
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(f) Wilson: lower <= k/n <= upper and lower(k) = 1 - upper(n - k)",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    "supported benefit",
+    "no meaningful gain",
+    "supported harm",
+    "inconclusive",
+    "inconclusive"
+   ],
+   "name": "(g) section-4 partition hand cases",
+   "observed": [
+    "supported benefit",
+    "no meaningful gain",
+    "supported harm",
+    "inconclusive",
+    "inconclusive"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(h) half-sampling variance: diffs (0.2, -0.2, 0, 0.4) -> 0.24 / 16",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    "not validated",
+    "evidence of undercoverage",
+    "evidence of material undercoverage",
+    "validated"
+   ],
+   "name": "(i) verdicts: 176/200 not validated, 170/200 evidence of undercoverage, 150/200 material, admitted",
+   "observed": [
+    "not validated",
+    "evidence of undercoverage",
+    "evidence of material undercoverage",
+    "validated"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    true,
+    "validated"
+   ],
+   "name": "(k) admission: 180 covered / 20 lower misses (0.90; lower 0.10)",
+   "observed": [
+    true,
+    "validated"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    false,
+    "evidence of undercoverage"
+   ],
+   "name": "(k) admission: 168 / 32 (0.84 < 0.85)",
+   "observed": [
+    false,
+    "evidence of undercoverage"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    false,
+    "not validated"
+   ],
+   "name": "(k) admission: 178 / 22 (0.89 but lower tail 0.11 > 0.10)",
+   "observed": [
+    false,
+    "not validated"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    true,
+    "validated"
+   ],
+   "name": "(k) admission: 178 / 22 without D-4",
+   "observed": [
+    true,
+    "validated"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    false,
+    "evidence of undercoverage"
+   ],
+   "name": "(k) admission: 160 + 10 edge / 30 (0.85 at theta_G, 0.80 at +2 MC-SE): truth-sensitive",
+   "observed": [
+    false,
+    "evidence of undercoverage"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(k) the truth-sensitivity flag is set in the edge case",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    false,
+    true,
+    "not validated"
+   ],
+   "name": "(k) lower-tail rule flipping inside +-2 MC-SE is truth-sensitive and not admitted",
+   "observed": [
+    false,
+    true,
+    "not validated"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    -1.0,
+    1.5
+   ],
+   "name": "(k) selection: widest admissible interval per dataset",
+   "observed": [
+    -1.0,
+    1.5
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": 9100,
+   "name": "(l) confirm units = 3 x (200 cov + 100 eval + 2000 truth) + 2 x (100 cov + 1000 truth) = 9100",
+   "observed": 9100,
+   "result": "PASS"
+  },
+  {
+   "expected": 1026,
+   "name": "(l) pilot units = 3 x (6 + 200) + 2 x (4 + 200) = 1026",
+   "observed": 1026,
+   "result": "PASS"
+  },
+  {
+   "expected": 9100,
+   "name": "(l) confirm unit keys unique",
+   "observed": 9100,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(l) confirm coverage units use the frozen B = 200, R = 40",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": [],
+   "name": "(l) record_problems: matching record has none",
+   "observed": [],
+   "result": "PASS"
+  },
+  {
+   "expected": [
+    "phase",
+    "G/fast",
+    "B/R_half/m"
+   ],
+   "name": "(l) record_problems: wrong phase, B and fast are caught",
+   "observed": [
+    "phase",
+    "G/fast",
+    "B/R_half/m"
+   ],
+   "result": "PASS"
+  },
+  {
+   "expected": 0.0,
+   "name": "(c) theta_new of identical policies is exactly 0",
+   "observed": 0.0,
+   "result": "PASS"
+  },
+  {
+   "expected": 0.0,
+   "name": "(c) theta_cond of identical policies is exactly 0",
+   "observed": 0.0,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(c) theta_cond equals the direct mean of Q at the picks (1e-12)",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": -0.19889584034345942,
+   "name": "(c) truth_unit theta_fix equals mean(Q0 - Q1)",
+   "observed": -0.19889584034345942,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(d) records identical regardless of order (shard invariance)",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(d) fast-path record identical to P0-path record (except the 'fast' flag)",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s0 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [B-info interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 9,
+   "name": "(a) fast choose_k == p0.choose_k on all G [B-info interv]",
+   "observed": 9,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s0 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [B-info obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 25,
+   "name": "(a) fast choose_k == p0.choose_k on all G [B-info obs_morph]",
+   "observed": 25,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s0]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s1 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s1 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s1]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s2 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s2 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s2]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s3 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s3 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s3]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s4 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s4 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s4]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s5 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s5 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s5]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s6 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s6 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s6]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s7 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-info s7 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-info s7]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s0 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [B-null interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 9,
+   "name": "(a) fast choose_k == p0.choose_k on all G [B-null interv]",
+   "observed": 9,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s0 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [B-null obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 1,
+   "name": "(a) fast choose_k == p0.choose_k on all G [B-null obs_morph]",
+   "observed": 1,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-null s0]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s1 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s1 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-null s1]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s2 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s2 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-null s2]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s3 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s3 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-null s3]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s4 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s4 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-null s4]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s5 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [B-null s5 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [B-null s5]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s0 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [A-info interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 9,
+   "name": "(a) fast choose_k == p0.choose_k on all G [A-info interv]",
+   "observed": 9,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s0 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [A-info obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 25,
+   "name": "(a) fast choose_k == p0.choose_k on all G [A-info obs_morph]",
+   "observed": 25,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [A-info s0]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s1 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s1 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [A-info s1]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s2 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s2 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [A-info s2]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s3 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-info s3 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [A-info s3]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-obs s0 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [A-obs interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 15,
+   "name": "(a) fast choose_k == p0.choose_k on all G [A-obs interv]",
+   "observed": 15,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-obs s0 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) relabelled fast == p0 [A-obs obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": 25,
+   "name": "(a) fast choose_k == p0.choose_k on all G [A-obs obs_morph]",
+   "observed": 25,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [A-obs s0]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-obs s1 interv]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast predict == p0.predict [A-obs s1 obs_morph]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) fast replicate == sv0_lib.replicate [A-obs s1]",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) number of bit-identity datasets >= 20",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(a) number of bit-identity cases >= 20",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(j) guard refuses subprocess.run",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(j) guard refuses socket.socket()",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(j) guard refuses read artifacts/x",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": true,
+   "name": "(j) guard refuses write outside --out",
+   "observed": true,
+   "result": "PASS"
+  },
+  {
+   "expected": [],
+   "name": "(j) every creature_forge module is a file of this checkout",
+   "observed": [],
+   "result": "PASS"
+  }
+ ],
+ "status": "PASS"
+}

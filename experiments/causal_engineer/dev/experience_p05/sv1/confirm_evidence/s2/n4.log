@@ -1,0 +1,13 @@
+2026-10-23T23:10:19Z [s1] session start; worker budget 8640s; nproc 8; system.slice cpu.max [max 100000]
+PASS 118 / 118
+2026-10-23T23:11:00Z [s1] SV1-0 selftest rc=0
+2026-10-23T23:11:00Z [s1] records before: 0 / 9100
+2026-10-24T01:34:58Z [s1] workers end rcs: 137 137 137 137 (0 = shard finished, 124/137 = session budget reached)
+2026-10-24T01:34:58Z [s1] records after: 4651 / 9100; errors: 0
+2026-10-24T01:34:58Z [s1] SESSION 1 DONE (resume needed)
+2026-10-24T01:36:15Z [s2] session start; worker budget 4800s; nproc 8; system.slice cpu.max [max 100000]
+2026-10-24T01:36:16Z [s2] records before: 4651 / 9100
+2026-10-24T02:40:54Z [s2] workers end rcs: 0 0 0 0 (0 = shard finished, 124/137 = session budget reached)
+2026-10-24T02:40:54Z [s2] records after: 9100 / 9100; errors: 0
+2026-10-24T02:52:19Z [s2] replay rc=0
+2026-10-24T02:52:19Z [s2] aggregate rc=0

@@ -29,7 +29,7 @@ old policy chose does not count.
 
 | what | where |
 |---|---|
-| V2 branch | `feature/experience-learning` = `e3caf8121da84523c36449e353a84bd05977ea9a` (GitHub identity independently verified 2026-10-23). Worktree: `cf-experience`, beside the main checkout `Creature-Forge`. |
+| V2 branch | `feature/experience-learning`. **A0 publication commit `afe33ca68b73da313d720db0939ef382bc1cae91`** (independently verified by the auditor on GitHub 2026-10-23: one commit, 46 files, 33/33 archive hashes, 52/52 tests, byte-identical A0 outputs). Its parent is `e3caf8121da84523c36449e353a84bd05977ea9a` (P0 evidence publication). Later documentation-only commits may sit on top, so take the current HEAD from `git rev-parse HEAD` and `git log --oneline -3`, never from this file. Worktree: `cf-experience`, beside the main checkout `Creature-Forge`. |
 | Frozen V1 (never modify) | tag `v1.0.0-rc1` (object `a0371946…`) → `3a740a74af4bdcafbc0b3dd7a012bc78d0fc0322`; branch `release/v1`. `main` = `e58dbdf…`. |
 | P0 code and outputs | `creature_forge/experience_audit.py`, `creature_forge/experience_p0.py`, `scripts/exp_p0_audit.py`, `scripts/exp_p0_evidence.py`, `tests/test_experience_audit.py`, `experiments/causal_engineer/dev/experience_p0/` (evidence, provenance, `FILE_INDEX.sha256`) |
 | P0.5 protocol | `docs/plans/EXPERIENCE_P05_PROTOCOL.md` |
@@ -57,7 +57,7 @@ old policy chose does not count.
 
 | claim | status |
 |---|---|
-| GitHub `feature/experience-learning` = `e3caf81` | **independently verified** (owner, GitHub compare, 2026-10-23) |
+| A0 publication `afe33ca` (parent `e3caf81`) on GitHub | **independently verified** (auditor, 2026-10-23) |
 | DS-1 cohort counts 947 / 231 / 194 / 70 / 21 / 27 / 18 / 2 / 0 | **independently reproduced** (auditor) |
 | Revision-2 arithmetic: 25 tests pass; G = 24 synthetic inflation +0.0686 / 2.25 / coverage 0.662 | **independently reproduced** (auditor); synthetic, not a Creature Forge property |
 | Minimum repair budgets 104 / 152 / 176 / 200; achieved ICC 0.096 / 0.188 | **independently found** (auditor); reproduced by Claude |
@@ -176,14 +176,34 @@ design. If none does, all confirmatory results become "inference not validated" 
 
 ## 10. Reproduce the A0 numbers (read-only, seconds)
 
+Run in **Windows PowerShell 5.1** from the `cf-experience` worktree root. Nothing is written inside the repository: script outputs go
+to `%TEMP%\cf_a0_repro` and are compared by hash with the committed files. The block does not require a clean worktree; it requires
+`git status --porcelain --ignored` to be **identical before and after** (the block itself changed nothing, including ignored paths).
+
+```powershell
+$py  = (Resolve-Path ..\Creature-Forge\.venv\Scripts\python.exe).Path
+$sha = 'C:\Program Files\Git\usr\bin\sha256sum.exe'
+$tmp = Join-Path $env:TEMP 'cf_a0_repro'; New-Item -ItemType Directory -Force $tmp | Out-Null
+$p05 = 'experiments\causal_engineer\dev\experience_p05'
+$st0 = (git status --porcelain --ignored) -join "`n"
+
+Push-Location "$p05\design_archive"
+& $sha -c SHA256SUMS                        # 33 lines "OK"
+& $py -I -B test_p05_design_calc.py         # OK
+& $py -I -B test_p05_design_calc_rev21.py   # OK
+& $py -I -B test_p05_amend22.py             # OK (12 tests)
+Pop-Location
+
+& $py -I -B "$p05\a0_cost_model\p05_a0_cost_model.py" --out "$tmp\p05_a0_cost_model_output.md"
+& $py -I -B "$p05\a0_review\p05_sv1_admission_resolution.py" --out "$tmp\p05_sv1_admission_resolution_output.md"
+foreach ($pair in @(@("$p05\a0_cost_model\p05_a0_cost_model_output.md", "$tmp\p05_a0_cost_model_output.md"),
+                    @("$p05\a0_review\p05_sv1_admission_resolution_output.md", "$tmp\p05_sv1_admission_resolution_output.md"))) {
+    $a = (Get-FileHash $pair[0] -Algorithm SHA256).Hash; $b = (Get-FileHash $pair[1] -Algorithm SHA256).Hash
+    if ($a -eq $b) { "MATCH  $($pair[0])" } else { "DIFFER $($pair[0])" }
+}
+$st1 = (git status --porcelain --ignored) -join "`n"
+if ($st0 -ceq $st1) { 'STATUS UNCHANGED' } else { 'STATUS CHANGED' }   # must print STATUS UNCHANGED
 ```
-cd experiments/causal_engineer/dev/experience_p05/design_archive
-sha256sum -c SHA256SUMS
-..\..\..\..\..\..\Creature-Forge\.venv\Scripts\python.exe -I -B test_p05_design_calc.py
-..\..\..\..\..\..\Creature-Forge\.venv\Scripts\python.exe -I -B test_p05_design_calc_rev21.py
-..\..\..\..\..\..\Creature-Forge\.venv\Scripts\python.exe -I -B test_p05_amend22.py
-cd ..\a0_cost_model
-..\..\..\..\..\..\Creature-Forge\.venv\Scripts\python.exe -I -B p05_a0_cost_model.py
-cd ..0_review
-..\..\..\..\..\..\Creature-Forge\.venv\Scripts\python.exe -I -B p05_sv1_admission_resolution.py
-```
+
+Git Bash equivalent: the same commands with forward slashes, `sha256sum -c SHA256SUMS`, `PY=../Creature-Forge/.venv/Scripts/python.exe`,
+`--out "$TMP/..."`, `cmp` instead of `Get-FileHash`, and `st0=$(git status --porcelain --ignored)` … `[ "$st0" = "$st1" ]`.

@@ -1,0 +1,123 @@
+{
+ "archived_tests_cpu_s": 1.0263132390000038,
+ "argv": [
+  "--run",
+  "2",
+  "--expected",
+  "/home/forge/sv0/pre/expected.json",
+  "--out",
+  "experiments/causal_engineer/dev/experience_p05/sv0/out/run2"
+ ],
+ "cgroup": {
+  "cpu.max": "100000 100000",
+  "memory.max": "1610612736",
+  "memory.swap.max": "0",
+  "pids.max": "32",
+  "proc_self_cgroup": "0::/system.slice/run-r197f1b295d0d4fee9085ab44992f5dcd.scope",
+  "rlimit_cpu": [
+   1800,
+   1800
+  ]
+ },
+ "end_utc": "2026-10-23T18:45:14Z",
+ "fingerprint": {
+  "cpu_flags_sha256": "2635ea8b7a00dd791d4e50e49ebdfcdf622915591fbd1f412e241445694db92b",
+  "cpu_model": "AMD EPYC-Genoa Processor",
+  "dist_count": 29,
+  "dist_manifest_sha256": "af2cf766ac30a5fa1067ef865601d92e10a535907f29d942160b5dde34a7a38d",
+  "machine": "x86_64",
+  "numpy": "2.5.4",
+  "numpy_config_sha256": "2ab35740851adcdddd763d6a5fef42309f1c7d9717e94fa653d4c3b006dba8f6",
+  "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+  "prefix": "/home/forge/venvs/creature-forge",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "sys_platform": "linux"
+ },
+ "git_index_version": 2,
+ "limits": {
+  "check_wall_s": 600.0,
+  "mem_available_min_bytes": 2147483648,
+  "mem_available_start_bytes": 3221225472,
+  "rss_max_bytes": 1073741824,
+  "run_cpu_s": 1800.0,
+  "run_wall_s": 1800.0,
+  "tests_cpu_s": 300.0
+ },
+ "mem_available_start_bytes": 32854913024,
+ "meta_path_removed": [
+  "builtins type __editable___creature_forge_0_0_1_finder _EditableFinder"
+ ],
+ "min_mem_available_bytes": 32857608192,
+ "peak_rss_bytes": 62726144,
+ "peak_vmhwm_bytes": 79941632,
+ "per_check": {
+  "SV0-0": {
+   "cpu_s": 0.128,
+   "wall_s": 0.128
+  },
+  "SV0-1": {
+   "cpu_s": 0.008,
+   "wall_s": 0.007
+  },
+  "SV0-2": {
+   "cpu_s": 6.235,
+   "wall_s": 6.236
+  },
+  "SV0-3": {
+   "cpu_s": 20.086,
+   "wall_s": 20.094
+  },
+  "SV0-4": {
+   "cpu_s": 10.972,
+   "wall_s": 10.974
+  },
+  "SV0-5": {
+   "cpu_s": 0.159,
+   "wall_s": 0.158
+  },
+  "SV0-6": {
+   "cpu_s": 1.027,
+   "wall_s": 1.027
+  },
+  "SV0-7": {
+   "cpu_s": 0.002,
+   "wall_s": 0.002
+  },
+  "SV0-8": {
+   "cpu_s": 0.036,
+   "wall_s": 0.036
+  }
+ },
+ "pins": {
+  "creature_forge/__init__.py": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+  "creature_forge/experience_audit.py": "1273379810988db569e855aa8d954c2da038b04f",
+  "creature_forge/experience_bank.py": "38aed182696d5d46cf992e7bd4e9d138e6a6a0f4",
+  "creature_forge/experience_p0.py": "dcfb1f29cc14ea05bb4bb80eb9d18240a81b3360",
+  "scripts/exp_p0_audit.py": "dbaa4d34cb83bfc6fdfd0b456aaf3be72753ec98"
+ },
+ "proposal": "CF-V2-P05-SV0 revision 4",
+ "run": 2,
+ "run_cpu_s": 38.664,
+ "run_wall_s": 38.676,
+ "start_utc": "2026-10-23T18:44:36Z",
+ "sys_path_original": [
+  "/usr/lib/python312.zip",
+  "/usr/lib/python3.12",
+  "/usr/lib/python3.12/lib-dynload",
+  "/home/forge/venvs/creature-forge/lib/python3.12/site-packages"
+ ],
+ "sys_path_pruned": [
+  "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/sv0",
+  "/home/forge/sv0/repo",
+  "/home/forge/sv0/repo/experiments/causal_engineer/dev/experience_p05/design_archive",
+  "/usr/lib/python312.zip",
+  "/usr/lib/python3.12",
+  "/usr/lib/python3.12/lib-dynload",
+  "/home/forge/venvs/creature-forge/lib/python3.12/site-packages"
+ ],
+ "threads": {
+  "MKL_NUM_THREADS": "1",
+  "OMP_NUM_THREADS": "1",
+  "OPENBLAS_NUM_THREADS": "1"
+ }
+}

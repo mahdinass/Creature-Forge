@@ -1,0 +1,19 @@
+{
+ "code_sha256": {
+  "design_archive/p05_design_calc.py": "18a6a163aa8233e6b2171094358e179d740124f5e6f0c028f0e4f74620d42ed4",
+  "sv0/sv0_lib.py": "7ca9658df2fe3c22495b45a63f6f73c2e85316dbc7d06104632bbf354de8cde2",
+  "sv0/sv0_run.py": "03e7a2f02ff8b03ddfbd383c60007ab22bdcc15721aedd1c6406588d198ee6a0",
+  "sv1/sv1_aggregate.py": "6bddc0c0b799d477af3b98d9f4b1b0df938da9b4fc4a84c868e08785f124192d",
+  "sv1/sv1_config.json": "06a717fbfcfd8b7edde84ef873fcaa243ceb57fb809323bdab85049eae54d4ec",
+  "sv1/sv1_fast.py": "f9f5842cc49c071f3f194b464116e681c29daf1640f5c15262ad56fffce79ca8",
+  "sv1/sv1_guard.py": "572c14f0d6d8b6f2cc918a4c3d3b6d1698559bda24a9618bbe53ade1b25c3c18",
+  "sv1/sv1_lib.py": "11bd1ac777a620d2945a8680378641c14a19b04b1001c1a714148684d38671a7",
+  "sv1/sv1_run.py": "f2dd7fbb9035a2c0ba58dc4c27864c2b505f3aee5b99fd145353fcdcc9ec3276",
+  "sv1/sv1_selftest.py": "25d6c75aa6af325b48b75aed1ef76e8df9b2f56a85235069e45934a35314f1b7"
+ },
+ "failures": [],
+ "local_test": false,
+ "nshards": 8,
+ "phase": "pilot",
+ "shard": 1
+}

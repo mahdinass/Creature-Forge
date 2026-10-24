@@ -151,3 +151,37 @@ Append one incident per significant recurring failure. Mark everything here as `
   schema-level exposure: row count 250, and absence or presence of the listed keys.
 - **Rule.** Never glob a whole archive directory that contains sealed files. Enumerate allowed sources explicitly (as
   `experience_audit.SOURCES` does).
+
+## 2026-10-24: SV1 confirmatory overran its spend authorisation (Nebius CLI login expired mid-run)
+
+- **What happened.**
+  - The SV1 confirmatory run was authorised for ≤ $1.50 of additional Nebius spend. It started at 23:08 UTC on 2026-10-23
+    (ledger baseline $89.996).
+  - At 23:43 UTC (01:43 local), during session 1, the Nebius CLI login expired, and the first failed call wrote
+    `infra/nebius/AUTH_BLOCKED`. From then on the Windows watchdog could not stop anything; every 15-minute run logged
+    "auth blocked".
+  - Session 2's deadline extension and all monitoring went over SSH and the local ledger arithmetic. None of these calls the
+    CLI, so the failure went unnoticed.
+  - The experiment completed correctly at 02:52 UTC. The end-of-run API stop then failed.
+  - The owner re-authenticated about 7 h later, and the VM was stopped at 09:59 UTC (11:59 local) and confirmed STOPPED;
+    batch was STOPPED.
+  - The VM-side deadline timer powered the guest off at 03:36 UTC, but guest poweroffs have previously been undone by
+    platform restarts, so billing is not assumed to have stopped then.
+- **Cost.**
+  - The ledger reads $92.965, a delta of **$2.969** against the $1.50 authorisation: **$1.47 over**.
+  - About $1.00 is the experiment (3.7 h); about $1.9 is the 7.1 h of overrun.
+  - This is the ledger's conservative estimate, not a billing statement. Project headroom under the $96 cap is now $3.03.
+- **Scientific effect.** None. All 9,100 units, the 182-unit replay and the aggregation completed before the failure, and the
+  evidence hashes verify.
+- **Root causes (operator error).**
+  1. No check of CLI or API auth health during the run.
+  2. The "deadline-bounded worst case" assumed that the watchdog works. It silently does not after a login expiry.
+  3. Progress monitoring used only SSH, which keeps working when the CLI is blocked.
+- **Rules from now on.**
+  - Before every paid start, and every ≤ 30 min during a paid session, run a cheap API call (`forge_cloud.py status`) and
+    check that `AUTH_BLOCKED` is absent. On the first auth failure, ask the owner to log in immediately, while they are still
+    present.
+  - Re-login before any session longer than about 1 h, because the token lifetime is shorter than our sessions.
+  - Never describe a deadline as a hard spend bound unless the watchdog's API path has been verified in the same hour.
+  - Unattended runs need a stop path on the VM side that does not depend on the laptop's CLI login. That is not available
+    today.

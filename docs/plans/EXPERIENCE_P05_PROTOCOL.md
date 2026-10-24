@@ -4,7 +4,7 @@
 - **Version:** consolidated 2026-10-23 (A0 documentation-only commit).
 - **Approvals:** **no execution gate (A1–A11) is approved.** Settings D1/D2/D3/D5/D7′ are the owner's planning choices,
   not authorisations to run.
-- **Branch:** `feature/experience-learning` at `e3caf8121da84523c36449e353a84bd05977ea9a`. This document is the only new
+- **Branch:** `feature/experience-learning`. Drafted on `e3caf8121da84523c36449e353a84bd05977ea9a`; published in A0 commit `afe33ca68b73da313d720db0939ef382bc1cae91`. This document is the only new
   protocol text; all source documents are preserved verbatim in the archive (§0.2), apart from one sanitised line in one test.
 - **P0 result:** **INSUFFICIENT-DATA** (`docs/EXPERIENCE_P0_REPORT.md`). Nothing here is evidence for or against repair
   memory.

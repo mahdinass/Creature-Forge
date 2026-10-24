@@ -1,0 +1,7 @@
+P05-SV0 attempt 1 (2026-10-23, Nebius main VM, venv /home/forge/venvs/creature-forge, HEAD afe33ca68b73da313d720db0939ef382bc1cae91)
+Classification: FAIL. SV0-5 item "L4 cf-block derangement with unchanged neighbour set leaves P bit-invariant" failed because
+the B2 synthetic fixture produced 0 of 36 queries with an unchanged k = 5 neighbour set (vacuous test). All other checks PASS.
+Runs 1 and 2: sv0_results.json byte-identical, sha256 d73e46f6976d5ea0234eed20359b329976febdd18b1eca406a79780a3202a21e.
+Code that produced these results is copied here: sv0_lib.py 7ca9658d..., sv0_reference.py ec34f409..., sv0_run.py 0708b7e8...
+Verify: cd out && sha256sum -c SHA256SUMS  (covers run1/*, run2/* and ../sv0_*.py).  Retrieved tarball: out/sv0_out.tgz 8bf78257...
+This directory is permanent audit history; it is never overwritten. The VM copy is moved to ~/sv0_attempt1 before the rerun.

@@ -1,0 +1,18 @@
+2026-10-23T21:55:18Z N3 start; nproc=8; cpu.max root=[cat: /sys/fs/cgroup/cpu.max: No such file or directory] system.slice=[max 100000] user.slice=[max 100000]
+2026-10-23T21:55:28Z bench P0-path 1 proc (first preflighted run) rc=0
+PASS 112 / 112
+2026-10-23T21:56:01Z SV1-0 selftest rc=0
+2026-10-23T21:56:01Z bench fast P=1 start
+2026-10-23T21:56:14Z bench fast P=1 end rcs: 0
+2026-10-23T21:56:14Z bench fast P=2 start
+2026-10-23T21:56:28Z bench fast P=2 end rcs: 0 0
+2026-10-23T21:56:28Z bench fast P=4 start
+2026-10-23T21:56:41Z bench fast P=4 end rcs: 0 0 0 0
+2026-10-23T21:56:41Z bench fast P=6 start
+2026-10-23T21:57:02Z bench fast P=6 end rcs: 0 0 0 0 0 0
+2026-10-23T21:57:02Z bench fast P=8 start
+2026-10-23T21:57:29Z bench fast P=8 end rcs: 0 0 0 0 0 0 0 0
+2026-10-23T21:57:29Z pilot start (8 shards)
+2026-10-23T22:02:56Z pilot end rcs: 0 0 0 0 0 0 0 0
+2026-10-23T22:03:07Z replay rc=0
+2026-10-23T22:03:08Z aggregate rc=0

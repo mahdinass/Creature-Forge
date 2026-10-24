@@ -1,0 +1,119 @@
+{
+ "schema": "sv1-config-1",
+ "proposal": "CF-V2-P05-SV1 draft 2 (docs/plans/EXPERIENCE_P05_SV1_PROPOSAL.md)",
+ "decisions": {
+  "B": 200,
+  "S_adm": 200,
+  "wilson_z": 1.645,
+  "admission_cells": [
+   "A-null",
+   "A-info",
+   "A-obs"
+  ],
+  "lower_tail_max": 0.1,
+  "m3_candidate": true,
+  "S_eval": 100
+ },
+ "decision_notes": {
+  "B": "open by protocol (B10): frozen SV1 B = 40 (amendment 2.2 4.2) vs confirmatory B = 200 (revision 2 4.4); recommended 200",
+  "S_adm": "open by protocol (B10): frozen 40; recommended 200",
+  "wilson_z": "open by protocol (B10): 1.645 (two-sided, revision-2 tables) or 1.282 (one-sided); recommended 1.645",
+  "admission_cells": "frozen [\"A-null\", \"A-info\"]; D-3 (new deviation) adds \"A-obs\"; recommended all three",
+  "lower_tail_max": "D-4 (new deviation): null = not applied (frozen) or 0.10; recommended 0.10",
+  "m3_candidate": "D-6 (new deviation): false = M3 reported as diagnostic only (frozen) or true; recommended true",
+  "S_eval": "D-8 (new deviation): 0 = no independent evaluation set (frozen; selection-bias flag) or 100; recommended 100"
+ },
+ "fixed": {
+  "frozen_candidates": [
+   "M1",
+   "M2",
+   "M4"
+  ],
+  "admission_coverage_min": 0.85,
+  "admission_wilson_lower_min": 0.75,
+  "composite_wider_ratio": 1.25,
+  "nominal": 0.9,
+  "margin_m": 0.1,
+  "R_half": 40,
+  "n_new_bases": 1000,
+  "T_admission_cells": 2000,
+  "T_diagnostic_cells": 1000,
+  "S_diagnostic_cells": 100,
+  "diagnostic_cells": [
+   "B-null",
+   "B-info"
+  ],
+  "c0_gate": {
+   "band": [
+    0.85,
+    0.95
+   ],
+   "alpha_per_side": 0.01,
+   "tests": "each of the 5 cells and all cells pooled"
+  }
+ },
+ "pilot": {
+  "_note": "engineering only, blinded (no M1-M6 coverage or width computed); B = 200 so timings reflect the recommended B",
+  "B": 200,
+  "S_per_A_cell": 6,
+  "S_per_B_cell": 4,
+  "T": 200
+ },
+ "engineering": {
+  "fast_path": true,
+  "_fast_note": "used only if this session's sv1_selftest_results.json is PASS with every (a) bit-identity item PASS (enforced by sv1_run.py; otherwise the run refuses)",
+  "shards": "set by the launcher from the N3 concurrency benchmark (engineering only)"
+ },
+ "decision_record": {
+  "date": "2026-10-23",
+  "by": "owner",
+  "status": "FROZEN before any pilot execution",
+  "summary": "B10 resolved: B = 200, S_adm = 200, two-sided Wilson z = 1.645; D-3 A-obs admission cell; D-4 lower-tail miss <= 0.10; D-6 M3 basic bootstrap candidate; D-8 S_eval = 100 per admission cell"
+ },
+ "amendments": {
+  "A-SV1-1": {
+   "date": "2026-10-24",
+   "status": "pre-registered before any confirmatory coverage was observed",
+   "replaces": "proposal 6 item 1 'C0 coverage in [0.85, 0.95] in every cell' (point-estimate band)",
+   "rule": "INVALID-HARNESS iff, in any cell or pooled, P_0.85(X <= k) < 0.01 or P_0.95(X >= k) < 0.01 (exact binomial)",
+   "old_gate_false_rejection_exact": {
+    "c=0.88": 0.437,
+    "c=0.90": 0.157,
+    "c=0.92": 0.272,
+    "c=0.94": 0.765
+   },
+   "method_admission_criteria": "unchanged",
+   "false_rejection_union_bound": {
+    "c=0.85": 0.047,
+    "c=0.88": 0.0008,
+    "c=0.90": 0.0001,
+    "c=0.92": 0.0007,
+    "c=0.94": 0.0098,
+    "c=0.95": 0.045
+   },
+   "false_rejection_exact_joint": {
+    "c=0.85": 0.0426,
+    "c=0.88": 0.0008,
+    "c=0.90": 0.0001,
+    "c=0.92": 0.0007,
+    "c=0.94": 0.0097,
+    "c=0.95": 0.0422
+   },
+   "note": "per-test probabilities exact (binomial); family-wise figures: union bound and exact joint (independent reviewer recomputation)",
+   "owner_approval": "APPROVED by the owner on 2026-10-24, before any confirmatory execution"
+  }
+ },
+ "confirmatory_authorization": {
+  "date": "2026-10-24",
+  "by": "owner",
+  "approved": [
+   "amendment A-SV1-1 (C0 harness gate: exact binomial per cell + pooled, alpha 0.01 per side)",
+   "M5/E1 interpretation: erratum E1 governs; confirmatory interval = widest admissible candidate (M6); M5 reported separately",
+   "full SV1 confirmatory experiment"
+  ],
+  "spend_cap_usd": 1.5,
+  "project_cap_usd": 96.0,
+  "stop_rule_ledger_delta_usd": 1.35,
+  "if_cap_insufficient": "stop and classify INCOMPLETE; no budget extension, no P0-path fallback"
+ }
+}
