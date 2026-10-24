@@ -498,3 +498,26 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   14:15 UTC; **both VMs verified STOPPED via the control plane** (infra ledger $88.47). Future finalisation must stop via
   the API, not rely on poweroff or the in-VM deadman.
   The batch VM's pre-existing `~/dev/.env` key line (2026-10-16) is untouched; removal is the owner's decision.
+
+## 2026-10-24 - SV1 closed; auth-horizon guard; roadmap reassessment; E-1 prepared (not registered)
+- **Experience P05 (branch `feature/experience-learning`, pushed @ `cea00b5`).**
+  - SV0 and SV1 code, evidence and reports are committed. SV1 is ADMITTED: only the refit percentile bootstrap M2 was
+    admitted, and CR1 undercovers.
+  - `sv1/SV1_FINAL_REVIEW.md` covers the conclusions, the power consequence (θ_G 0.108 → "supported benefit" 5 %), and the
+    evaluation `verdict` label clarification; the frozen output is unchanged.
+  - Recommendation: no P0.5 campaign before the deadline.
+- **Ops (branch `infra/auth-horizon-guard` @ `d8e3727`, pushed).**
+  - Root cause of the 2026-10-19 and 2026-10-24 overruns: the CLI federation token is a fixed ~12 h token with no refresh.
+  - `start` now shortens and `extend` refuses any deadline beyond the token expiry minus 45 min. The watchdog stops running
+    VMs 30 min before expiry, and `status` and the watchdog log the remaining auth time.
+  - The watchdog task now also runs on battery.
+  - Remaining gap: a sleeping or off laptop. The fix needs a VM-side API stop with a service account, which is owner IAM
+    approval.
+- **Budget (owner, 2026-10-24).** Cloud $37.49, Token Factory $47.00. Development use is authorised; the $1.50 SV1 limit
+  is not the ongoing budget. Ledger $92.98 / cap 96 at 13:15 local.
+- **Roadmap.** `docs/ROADMAP_REASSESSMENT_2026-10-24.md`. Experience → better decisions remains undemonstrated. The strongest
+  effect (A1c5 109 vs A0 62 of 211 fresh dev) was never confirmed on the sealed test side.
+- **E-1 (branch `research/e1-engine-heldout`).** Protocol draft `docs/E1_PROTOCOL.md`; code: `hdb_testbench.py`,
+  `e1_build.py`, `e1_run.py`, `e1_analysis.py`, `e1_repro_gate.py`; 14 tests.
+  - The G-R reproduction gate is running on the main VM (slot `hdb`, `artifacts/e1/gate`).
+  - The sealed side is not opened. Registration and the build need the owner's go, because they spend sealed held-out data.
