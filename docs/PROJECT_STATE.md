@@ -521,3 +521,18 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   `e1_build.py`, `e1_run.py`, `e1_analysis.py`, `e1_repro_gate.py`; 14 tests.
   - The G-R reproduction gate is running on the main VM (slot `hdb`, `artifacts/e1/gate`).
   - The sealed side is not opened. Registration and the build need the owner's go, because they spend sealed held-out data.
+
+## 2026-10-24 evening - E-1 complete (registered; `docs/E1_RESULTS.md`)
+- **Registration:** `494ed9b`, pushed before the sealed side was opened. Gates G-R, G-R2, G-O, G-T, G-B and G-C all PASS.
+- **Sample:** 160 sealed test instances on 90 bases; the reserve is in `experiments/e1/RESERVE.md`.
+- **Results:** A1 engine 56, A0 exhaustive 46, K0n (engine without diagnosis) 42.
+  - **H-E1 (A1 > A0): 22 vs 12, p = 0.061, not rejected.**
+  - **H-E2 (A1 > K0n): 26 vs 12, p = 0.017, rejected (Holm).**
+  - H-E3 (K0n > A0): null.
+  - Diagnosis carries the advantage on unseen damage; the twin machinery alone does not. The dev effect (+22 pts) shrank
+    to +6 pts.
+  - On sealed singles the diagnosis is right but the repair fails: sensor latency 1/18, damping 3/18.
+- **Ops:** service account `cf-vm-stopper` (instance-scoped editor). VM API self-stop installed on the batch VM and
+  tested. A VM-side finisher ran the analysis and stopped the VM through the API.
+- **Spend:** today +$8.85, ledger $101.82, cap 120. Both VMs STOPPED (control plane).
+- **Next:** rc2 wording (owner); diagnosis-conditioned repair memory (dev first, then registered on the reserve with A3).
