@@ -1,0 +1,308 @@
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0177|5", "decision": "accept", "instance_id": "hdb-v1-gen-0177:pitch_sensor_bias:5"}
+{"cand": "payload_offset|hdb-v1-gen-0189|4", "decision": "accept", "instance_id": "hdb-v1-gen-0189:payload_offset:4"}
+{"cand": "low_ground_friction|hdb-v1-gen-0248|0", "decision": "reject", "why": "ineligible: plant still walks on 8/8 check seeds (needs <= 2)"}
+{"cand": "short_feet|hdb-v1-gen-0046|1", "decision": "accept", "instance_id": "hdb-v1-gen-0046:short_feet:1"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0182|1", "decision": "accept", "instance_id": "hdb-v1-gen-0182:feedback_gain_loss:1"}
+{"cand": "actuator_weakness|hdb-v1-gen-0243|1", "decision": "accept", "instance_id": "hdb-v1-gen-0243:actuator_weakness:1"}
+{"cand": "one_side_weakness|hdb-v1-gen-0016|0", "decision": "accept", "instance_id": "hdb-v1-gen-0016:one_side_weakness:0"}
+{"cand": "clock_fault|hdb-v1-gen-0194|1", "decision": "accept", "instance_id": "hdb-v1-gen-0194:clock_fault:1"}
+{"cand": "heavy_torso|hdb-v1-gen-0007|0", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "sensor_latency|hdb-v1-gen-0083|0", "decision": "accept", "instance_id": "hdb-v1-gen-0083:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0095|1", "decision": "accept", "instance_id": "hdb-v1-gen-0095:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0130|1", "decision": "accept", "instance_id": "hdb-v1-gen-0130:leg_asymmetry:1"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0016|1", "decision": "accept", "instance_id": "hdb-v1-gen-0016:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0080|0", "decision": "accept", "instance_id": "hdb-v1-gen-0080:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0235|1", "decision": "accept", "instance_id": "hdb-v1-gen-0235:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0111|1", "decision": "accept", "instance_id": "hdb-v1-gen-0111:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0243|2", "decision": "accept", "instance_id": "hdb-v1-gen-0243:pitch_sensor_bias:2"}
+{"cand": "payload_offset|hdb-v1-gen-0223|0", "decision": "accept", "instance_id": "hdb-v1-gen-0223:payload_offset:0"}
+{"cand": "low_ground_friction|hdb-v1-gen-0084|2", "decision": "accept", "instance_id": "hdb-v1-gen-0084:low_ground_friction:2"}
+{"cand": "short_feet|hdb-v1-gen-0194|0", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0246|0", "decision": "accept", "instance_id": "hdb-v1-gen-0246:feedback_gain_loss:0"}
+{"cand": "actuator_weakness|hdb-v1-gen-0106|0", "decision": "accept", "instance_id": "hdb-v1-gen-0106:actuator_weakness:0"}
+{"cand": "one_side_weakness|hdb-v1-gen-0001|3", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "clock_fault|hdb-v1-gen-0079|4", "decision": "accept", "instance_id": "hdb-v1-gen-0079:clock_fault:4"}
+{"cand": "heavy_torso|hdb-v1-gen-0169|0", "decision": "accept", "instance_id": "hdb-v1-gen-0169:heavy_torso:0"}
+{"cand": "sensor_latency|hdb-v1-gen-0205|0", "decision": "accept", "instance_id": "hdb-v1-gen-0205:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0029|1", "decision": "accept", "instance_id": "hdb-v1-gen-0029:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0189|3", "decision": "accept", "instance_id": "hdb-v1-gen-0189:leg_asymmetry:3"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0144|0", "decision": "accept", "instance_id": "hdb-v1-gen-0144:heldcomp:payload_offset.fwd+actuator_weakness:0"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0237|1", "decision": "accept", "instance_id": "hdb-v1-gen-0237:heldcomp:low_ground_friction+clock_fault.fast:1"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0045|1", "decision": "accept", "instance_id": "hdb-v1-gen-0045:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0186|0", "decision": "accept", "instance_id": "hdb-v1-gen-0186:heldcomp:heavy_torso+feedback_gain_loss:0"}
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0094|2", "decision": "accept", "instance_id": "hdb-v1-gen-0094:pitch_sensor_bias:2"}
+{"cand": "payload_offset|hdb-v1-gen-0145|0", "decision": "accept", "instance_id": "hdb-v1-gen-0145:payload_offset:0"}
+{"cand": "low_ground_friction|hdb-v1-gen-0116|2", "decision": "accept", "instance_id": "hdb-v1-gen-0116:low_ground_friction:2"}
+{"cand": "short_feet|hdb-v1-gen-0049|2", "decision": "accept", "instance_id": "hdb-v1-gen-0049:short_feet:2"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0211|0", "decision": "accept", "instance_id": "hdb-v1-gen-0211:feedback_gain_loss:0"}
+{"cand": "actuator_weakness|hdb-v1-gen-0112|2", "decision": "accept", "instance_id": "hdb-v1-gen-0112:actuator_weakness:2"}
+{"cand": "one_side_weakness|hdb-v1-gen-0159|0", "decision": "accept", "instance_id": "hdb-v1-gen-0159:one_side_weakness:0"}
+{"cand": "clock_fault|hdb-v1-gen-0224|3", "decision": "accept", "instance_id": "hdb-v1-gen-0224:clock_fault:3"}
+{"cand": "heavy_torso|hdb-v1-gen-0185|2", "decision": "accept", "instance_id": "hdb-v1-gen-0185:heavy_torso:2"}
+{"cand": "sensor_latency|hdb-v1-gen-0245|1", "decision": "accept", "instance_id": "hdb-v1-gen-0245:sensor_latency:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0145|1", "decision": "reject", "why": "no_instance"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0229|0", "decision": "accept", "instance_id": "hdb-v1-gen-0229:leg_asymmetry:0"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0029|1", "decision": "accept", "instance_id": "hdb-v1-gen-0029:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0210|0", "decision": "accept", "instance_id": "hdb-v1-gen-0210:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0231|1", "decision": "accept", "instance_id": "hdb-v1-gen-0231:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0182|0", "decision": "accept", "instance_id": "hdb-v1-gen-0182:heldcomp:heavy_torso+feedback_gain_loss:0"}
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0050|4", "decision": "accept", "instance_id": "hdb-v1-gen-0050:pitch_sensor_bias:4"}
+{"cand": "payload_offset|hdb-v1-gen-0185|3", "decision": "accept", "instance_id": "hdb-v1-gen-0185:payload_offset:3"}
+{"cand": "low_ground_friction|hdb-v1-gen-0141|0", "decision": "accept", "instance_id": "hdb-v1-gen-0141:low_ground_friction:0"}
+{"cand": "short_feet|hdb-v1-gen-0211|2", "decision": "accept", "instance_id": "hdb-v1-gen-0211:short_feet:2"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0139|0", "decision": "accept", "instance_id": "hdb-v1-gen-0139:feedback_gain_loss:0"}
+{"cand": "actuator_weakness|hdb-v1-gen-0001|2", "decision": "accept", "instance_id": "hdb-v1-gen-0001:actuator_weakness:2"}
+{"cand": "one_side_weakness|hdb-v1-gen-0121|1", "decision": "accept", "instance_id": "hdb-v1-gen-0121:one_side_weakness:1"}
+{"cand": "clock_fault|hdb-v1-gen-0176|0", "decision": "accept", "instance_id": "hdb-v1-gen-0176:clock_fault:0"}
+{"cand": "heavy_torso|hdb-v1-gen-0176|2", "decision": "accept", "instance_id": "hdb-v1-gen-0176:heavy_torso:2"}
+{"cand": "sensor_latency|hdb-v1-gen-0229|2", "decision": "accept", "instance_id": "hdb-v1-gen-0229:sensor_latency:2"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0094|0", "decision": "reject", "why": "ineligible: plant still walks on 5/8 check seeds (needs <= 2)"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0079|3", "decision": "accept", "instance_id": "hdb-v1-gen-0079:leg_asymmetry:3"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0195|1", "decision": "accept", "instance_id": "hdb-v1-gen-0195:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0175|0", "decision": "accept", "instance_id": "hdb-v1-gen-0175:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0007|1", "decision": "accept", "instance_id": "hdb-v1-gen-0007:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0197|1", "decision": "accept", "instance_id": "hdb-v1-gen-0197:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0168|3", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "payload_offset|hdb-v1-gen-0169|5", "decision": "accept", "instance_id": "hdb-v1-gen-0169:payload_offset:5"}
+{"cand": "low_ground_friction|hdb-v1-gen-0129|0", "decision": "accept", "instance_id": "hdb-v1-gen-0129:low_ground_friction:0"}
+{"cand": "short_feet|hdb-v1-gen-0223|1", "decision": "accept", "instance_id": "hdb-v1-gen-0223:short_feet:1"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0240|2", "decision": "accept", "instance_id": "hdb-v1-gen-0240:feedback_gain_loss:2"}
+{"cand": "actuator_weakness|hdb-v1-gen-0075|1", "decision": "accept", "instance_id": "hdb-v1-gen-0075:actuator_weakness:1"}
+{"cand": "one_side_weakness|hdb-v1-gen-0046|0", "decision": "accept", "instance_id": "hdb-v1-gen-0046:one_side_weakness:0"}
+{"cand": "clock_fault|hdb-v1-gen-0141|0", "decision": "accept", "instance_id": "hdb-v1-gen-0141:clock_fault:0"}
+{"cand": "heavy_torso|hdb-v1-gen-0109|0", "decision": "accept", "instance_id": "hdb-v1-gen-0109:heavy_torso:0"}
+{"cand": "sensor_latency|hdb-v1-gen-0050|0", "decision": "accept", "instance_id": "hdb-v1-gen-0050:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0020|1", "decision": "accept", "instance_id": "hdb-v1-gen-0020:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0184|0", "decision": "accept", "instance_id": "hdb-v1-gen-0184:leg_asymmetry:0"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0114|1", "decision": "accept", "instance_id": "hdb-v1-gen-0114:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0184|1", "decision": "accept", "instance_id": "hdb-v1-gen-0184:heldcomp:low_ground_friction+clock_fault.fast:1"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0079|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0211|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0066|1", "decision": "accept", "instance_id": "hdb-v1-gen-0066:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0065|1", "decision": "accept", "instance_id": "hdb-v1-gen-0065:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0045|4", "decision": "accept", "instance_id": "hdb-v1-gen-0045:pitch_sensor_bias:4"}
+{"cand": "payload_offset|hdb-v1-gen-0172|1", "decision": "accept", "instance_id": "hdb-v1-gen-0172:payload_offset:1"}
+{"cand": "low_ground_friction|hdb-v1-gen-0140|1", "decision": "accept", "instance_id": "hdb-v1-gen-0140:low_ground_friction:1"}
+{"cand": "short_feet|hdb-v1-gen-0106|2", "decision": "reject", "why": "no_instance"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0184|0", "decision": "skip_cap"}
+{"cand": "feedback_gain_loss|hdb-v1-gen-0097|1", "decision": "accept", "instance_id": "hdb-v1-gen-0097:feedback_gain_loss:1"}
+{"cand": "actuator_weakness|hdb-v1-gen-0029|0", "decision": "skip_cap"}
+{"cand": "actuator_weakness|hdb-v1-gen-0007|1", "decision": "accept", "instance_id": "hdb-v1-gen-0007:actuator_weakness:1"}
+{"cand": "one_side_weakness|hdb-v1-gen-0046|4", "decision": "skip_cap"}
+{"cand": "one_side_weakness|hdb-v1-gen-0084|5", "decision": "accept", "instance_id": "hdb-v1-gen-0084:one_side_weakness:5"}
+{"cand": "clock_fault|hdb-v1-gen-0189|4", "decision": "skip_cap"}
+{"cand": "clock_fault|hdb-v1-gen-0192|1", "decision": "accept", "instance_id": "hdb-v1-gen-0192:clock_fault:1"}
+{"cand": "heavy_torso|hdb-v1-gen-0032|2", "decision": "reject", "why": "no_instance"}
+{"cand": "sensor_latency|hdb-v1-gen-0116|0", "decision": "accept", "instance_id": "hdb-v1-gen-0116:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0201|1", "decision": "reject", "why": "no_instance"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0176|2", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0112|4", "decision": "accept", "instance_id": "hdb-v1-gen-0112:leg_asymmetry:4"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0026|1", "decision": "accept", "instance_id": "hdb-v1-gen-0026:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0206|0", "decision": "reject", "why": "ineligible: plant still walks on 7/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0069|0", "decision": "accept", "instance_id": "hdb-v1-gen-0069:heldcomp:pitch_sensor_bias.++short_feet:0"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0218|0", "decision": "accept", "instance_id": "hdb-v1-gen-0218:heldcomp:heavy_torso+feedback_gain_loss:0"}
+{"cand": "pitch_sensor_bias|hdb-v1-gen-0158|0", "decision": "accept", "instance_id": "hdb-v1-gen-0158:pitch_sensor_bias:0"}
+{"cand": "low_ground_friction|hdb-v1-gen-0227|2", "decision": "accept", "instance_id": "hdb-v1-gen-0227:low_ground_friction:2"}
+{"cand": "short_feet|hdb-v1-gen-0149|1", "decision": "accept", "instance_id": "hdb-v1-gen-0149:short_feet:1"}
+{"cand": "one_side_weakness|hdb-v1-gen-0169|3", "decision": "skip_cap"}
+{"cand": "one_side_weakness|hdb-v1-gen-0145|3", "decision": "accept", "instance_id": "hdb-v1-gen-0145:one_side_weakness:3"}
+{"cand": "heavy_torso|hdb-v1-gen-0248|0", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "sensor_latency|hdb-v1-gen-0092|2", "decision": "accept", "instance_id": "hdb-v1-gen-0092:sensor_latency:2"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0121|0", "decision": "reject", "why": "ineligible: plant still walks on 7/8 check seeds (needs <= 2)"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0119|5", "decision": "accept", "instance_id": "hdb-v1-gen-0119:leg_asymmetry:5"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0109|1", "decision": "accept", "instance_id": "hdb-v1-gen-0109:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0186|0", "decision": "accept", "instance_id": "hdb-v1-gen-0186:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0172|0", "decision": "reject", "why": "ineligible: plant still walks on 7/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0188|1", "decision": "accept", "instance_id": "hdb-v1-gen-0188:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "short_feet|hdb-v1-gen-0141|0", "decision": "skip_cap"}
+{"cand": "short_feet|hdb-v1-gen-0177|1", "decision": "reject", "why": "no_instance"}
+{"cand": "heavy_torso|hdb-v1-gen-0177|0", "decision": "accept", "instance_id": "hdb-v1-gen-0177:heavy_torso:0"}
+{"cand": "sensor_latency|hdb-v1-gen-0175|0", "decision": "accept", "instance_id": "hdb-v1-gen-0175:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0069|0", "decision": "accept", "instance_id": "hdb-v1-gen-0069:joint_damping_wear:0"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0032|2", "decision": "accept", "instance_id": "hdb-v1-gen-0032:leg_asymmetry:2"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0205|1", "decision": "accept", "instance_id": "hdb-v1-gen-0205:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0111|1", "decision": "accept", "instance_id": "hdb-v1-gen-0111:heldcomp:low_ground_friction+clock_fault.fast:1"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0248|0", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0026|1", "decision": "accept", "instance_id": "hdb-v1-gen-0026:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "short_feet|hdb-v1-gen-0016|2", "decision": "skip_cap"}
+{"cand": "short_feet|hdb-v1-gen-0182|2", "decision": "skip_cap"}
+{"cand": "short_feet|hdb-v1-gen-0075|2", "decision": "reject", "why": "no_instance"}
+{"cand": "heavy_torso|hdb-v1-gen-0080|1", "decision": "reject", "why": "no_instance"}
+{"cand": "sensor_latency|hdb-v1-gen-0248|1", "decision": "accept", "instance_id": "hdb-v1-gen-0248:sensor_latency:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0238|0", "decision": "accept", "instance_id": "hdb-v1-gen-0238:joint_damping_wear:0"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0063|4", "decision": "accept", "instance_id": "hdb-v1-gen-0063:leg_asymmetry:4"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0051|0", "decision": "reject", "why": "ineligible: plant still walks on 5/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0194|1", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0141|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0206|0", "decision": "accept", "instance_id": "hdb-v1-gen-0206:heldcomp:pitch_sensor_bias.++short_feet:0"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0079|0", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0020|0", "decision": "accept", "instance_id": "hdb-v1-gen-0020:heldcomp:heavy_torso+feedback_gain_loss:0"}
+{"cand": "short_feet|hdb-v1-gen-0179|2", "decision": "accept", "instance_id": "hdb-v1-gen-0179:short_feet:2"}
+{"cand": "heavy_torso|hdb-v1-gen-0085|0", "decision": "accept", "instance_id": "hdb-v1-gen-0085:heavy_torso:0"}
+{"cand": "sensor_latency|hdb-v1-gen-0049|1", "decision": "accept", "instance_id": "hdb-v1-gen-0049:sensor_latency:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0065|1", "decision": "accept", "instance_id": "hdb-v1-gen-0065:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0243|0", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0175|2", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0197|1", "decision": "accept", "instance_id": "hdb-v1-gen-0197:leg_asymmetry:1"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0066|1", "decision": "accept", "instance_id": "hdb-v1-gen-0066:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0029|0", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0058|0", "decision": "accept", "instance_id": "hdb-v1-gen-0058:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0049|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0246|1", "decision": "accept", "instance_id": "hdb-v1-gen-0246:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0177|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0192|0", "decision": "accept", "instance_id": "hdb-v1-gen-0192:heldcomp:heavy_torso+feedback_gain_loss:0"}
+{"cand": "sensor_latency|hdb-v1-gen-0210|0", "decision": "accept", "instance_id": "hdb-v1-gen-0210:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0129|1", "decision": "accept", "instance_id": "hdb-v1-gen-0129:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0071|4", "decision": "accept", "instance_id": "hdb-v1-gen-0071:leg_asymmetry:4"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0046|1", "decision": "skip_cap"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0243|1", "decision": "skip_cap"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0231|1", "decision": "accept", "instance_id": "hdb-v1-gen-0231:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0057|1", "decision": "accept", "instance_id": "hdb-v1-gen-0057:heldcomp:low_ground_friction+clock_fault.fast:1"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0226|0", "decision": "accept", "instance_id": "hdb-v1-gen-0226:heldcomp:pitch_sensor_bias.++short_feet:0"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0175|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0045|0", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0139|1", "decision": "reject", "why": "no_instance"}
+{"cand": "sensor_latency|hdb-v1-gen-0218|1", "decision": "accept", "instance_id": "hdb-v1-gen-0218:sensor_latency:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0079|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0007|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0169|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0112|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0114|1", "decision": "accept", "instance_id": "hdb-v1-gen-0114:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0197|2", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0201|0", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0195|0", "decision": "skip_cap"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0121|1", "decision": "accept", "instance_id": "hdb-v1-gen-0121:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0144|0", "decision": "accept", "instance_id": "hdb-v1-gen-0144:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0144|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0016|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0220|1", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0029|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0151|1", "decision": "reject", "why": "ineligible: plant still walks on 8/8 check seeds (needs <= 2)"}
+{"cand": "sensor_latency|hdb-v1-gen-0195|2", "decision": "accept", "instance_id": "hdb-v1-gen-0195:sensor_latency:2"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0116|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0000|1", "decision": "accept", "instance_id": "hdb-v1-gen-0000:joint_damping_wear:1"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0121|3", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0119|1", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0111|1", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0085|4", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0194|0", "decision": "accept", "instance_id": "hdb-v1-gen-0194:heldcomp:payload_offset.fwd+actuator_weakness:0"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0050|1", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0029|1", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0016|1", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0079|1", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0194|0", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0195|0", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0168|0", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0194|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0145|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0111|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0173|0", "decision": "accept", "instance_id": "hdb-v1-gen-0173:heldcomp:pitch_sensor_bias.++short_feet:0"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0184|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0097|1", "decision": "accept", "instance_id": "hdb-v1-gen-0097:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "sensor_latency|hdb-v1-gen-0112|1", "decision": "skip_cap"}
+{"cand": "sensor_latency|hdb-v1-gen-0001|0", "decision": "accept", "instance_id": "hdb-v1-gen-0001:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0186|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0223|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0021|2", "decision": "reject", "why": "no_instance"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0092|0", "decision": "accept", "instance_id": "hdb-v1-gen-0092:leg_asymmetry:0"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0007|1", "decision": "skip_cap"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0210|0", "decision": "skip_cap"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0184|1", "decision": "skip_cap"}
+{"cand": "heldcomp:payload_offset.fwd+actuator_weakness|hdb-v1-gen-0095|1", "decision": "accept", "instance_id": "hdb-v1-gen-0095:heldcomp:payload_offset.fwd+actuator_weakness:1"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0130|0", "decision": "accept", "instance_id": "hdb-v1-gen-0130:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0226|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0188|0", "decision": "reject", "why": "ineligible: plant still walks on 7/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0084|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0139|0", "decision": "reject", "why": "no_instance"}
+{"cand": "sensor_latency|hdb-v1-gen-0046|1", "decision": "skip_cap"}
+{"cand": "sensor_latency|hdb-v1-gen-0079|1", "decision": "skip_cap"}
+{"cand": "sensor_latency|hdb-v1-gen-0235|0", "decision": "accept", "instance_id": "hdb-v1-gen-0235:sensor_latency:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0149|0", "decision": "accept", "instance_id": "hdb-v1-gen-0149:joint_damping_wear:0"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0061|2", "decision": "accept", "instance_id": "hdb-v1-gen-0061:leg_asymmetry:2"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0184|0", "decision": "skip_cap"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0245|0", "decision": "accept", "instance_id": "hdb-v1-gen-0245:heldcomp:low_ground_friction+clock_fault.fast:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0194|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0085|1", "decision": "reject", "why": "ineligible: plant still walks on 5/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0220|0", "decision": "accept", "instance_id": "hdb-v1-gen-0220:heldcomp:heavy_torso+feedback_gain_loss:0"}
+{"cand": "sensor_latency|hdb-v1-gen-0182|1", "decision": "skip_cap"}
+{"cand": "sensor_latency|hdb-v1-gen-0158|2", "decision": "accept", "instance_id": "hdb-v1-gen-0158:sensor_latency:2"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0210|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0195|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0205|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0248|0", "decision": "reject", "why": "ineligible: plant still walks on 8/8 check seeds (needs <= 2)"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0205|0", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0159|0", "decision": "accept", "instance_id": "hdb-v1-gen-0159:leg_asymmetry:0"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0132|0", "decision": "reject", "why": "ineligible: plant still walks on 4/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0109|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0145|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0020|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0092|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0029|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0195|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0197|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0112|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0097|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0218|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0211|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0050|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0061|0", "decision": "accept", "instance_id": "hdb-v1-gen-0061:heldcomp:pitch_sensor_bias.++short_feet:0"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0144|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0151|0", "decision": "reject", "why": "ineligible: plant still walks on 8/8 check seeds (needs <= 2)"}
+{"cand": "sensor_latency|hdb-v1-gen-0007|2", "decision": "skip_cap"}
+{"cand": "sensor_latency|hdb-v1-gen-0075|1", "decision": "accept", "instance_id": "hdb-v1-gen-0075:sensor_latency:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0050|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0179|0", "decision": "accept", "instance_id": "hdb-v1-gen-0179:joint_damping_wear:0"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0223|3", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0151|3", "decision": "accept", "instance_id": "hdb-v1-gen-0151:leg_asymmetry:3"}
+{"cand": "heldcomp:low_ground_friction+clock_fault.fast|hdb-v1-gen-0083|1", "decision": "accept", "instance_id": "hdb-v1-gen-0083:heldcomp:low_ground_friction+clock_fault.fast:1"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0001|0", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0058|1", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0065|0", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0130|1", "decision": "skip_cap"}
+{"cand": "heldcomp:heavy_torso+feedback_gain_loss|hdb-v1-gen-0238|1", "decision": "accept", "instance_id": "hdb-v1-gen-0238:heldcomp:heavy_torso+feedback_gain_loss:1"}
+{"cand": "sensor_latency|hdb-v1-gen-0201|1", "decision": "accept", "instance_id": "hdb-v1-gen-0201:sensor_latency:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0026|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0049|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0080|0", "decision": "accept", "instance_id": "hdb-v1-gen-0080:joint_damping_wear:0"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0216|0", "decision": "accept", "instance_id": "hdb-v1-gen-0216:leg_asymmetry:0"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0237|1", "decision": "accept", "instance_id": "hdb-v1-gen-0237:heldcomp:pitch_sensor_bias.++short_feet:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0237|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0084|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0172|0", "decision": "reject", "why": "ineligible: plant still walks on 6/8 check seeds (needs <= 2)"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0243|2", "decision": "skip_cap"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0240|2", "decision": "accept", "instance_id": "hdb-v1-gen-0240:leg_asymmetry:2"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0020|1", "decision": "skip_cap"}
+{"cand": "heldcomp:pitch_sensor_bias.++short_feet|hdb-v1-gen-0224|0", "decision": "accept", "instance_id": "hdb-v1-gen-0224:heldcomp:pitch_sensor_bias.++short_feet:0"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0161|2", "decision": "accept", "instance_id": "hdb-v1-gen-0161:joint_damping_wear:2"}
+{"cand": "leg_asymmetry|hdb-v1-gen-0220|4", "decision": "accept", "instance_id": "hdb-v1-gen-0220:leg_asymmetry:4"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0130|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0066|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0145|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0226|1", "decision": "accept", "instance_id": "hdb-v1-gen-0226:joint_damping_wear:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0158|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0140|1", "decision": "accept", "instance_id": "hdb-v1-gen-0140:joint_damping_wear:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0085|1", "decision": "accept", "instance_id": "hdb-v1-gen-0085:joint_damping_wear:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0179|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0141|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0016|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0112|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0132|0", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0007|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0223|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0238|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0045|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0069|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0029|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0179|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0045|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0046|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0021|1", "decision": "accept", "instance_id": "hdb-v1-gen-0021:joint_damping_wear:1"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0145|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0189|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0176|1", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0245|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0106|0", "decision": "reject", "why": "ineligible: plant still walks on 3/8 check seeds (needs <= 2)"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0243|0", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0111|2", "decision": "skip_cap"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0168|2", "decision": "reject", "why": "no_instance"}
+{"cand": "joint_damping_wear|hdb-v1-gen-0173|2", "decision": "accept", "instance_id": "hdb-v1-gen-0173:joint_damping_wear:2"}

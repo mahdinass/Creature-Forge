@@ -1,0 +1,107 @@
+{
+ "n_bases": 99,
+ "n_evaluated": 280,
+ "n_instances": 160,
+ "n_thresholds": 342,
+ "protocol_sha256": "a32107980635a8de6266e2121752ee9f2719acdc30505be4c49f3038470d3c81",
+ "rehearsal_dev": false,
+ "rollouts_approx": 21248,
+ "strata": {
+  "actuator_weakness": {
+   "accepted": 6,
+   "candidates": 297,
+   "examined": 7,
+   "quota": 6
+  },
+  "clock_fault": {
+   "accepted": 6,
+   "candidates": 594,
+   "examined": 7,
+   "quota": 6
+  },
+  "feedback_gain_loss": {
+   "accepted": 6,
+   "candidates": 297,
+   "examined": 7,
+   "quota": 6
+  },
+  "heavy_torso": {
+   "accepted": 6,
+   "candidates": 297,
+   "examined": 10,
+   "quota": 6
+  },
+  "heldcomp:heavy_torso+feedback_gain_loss": {
+   "accepted": 13,
+   "candidates": 198,
+   "examined": 27,
+   "quota": 13
+  },
+  "heldcomp:low_ground_friction+clock_fault.fast": {
+   "accepted": 13,
+   "candidates": 198,
+   "examined": 25,
+   "quota": 13
+  },
+  "heldcomp:payload_offset.fwd+actuator_weakness": {
+   "accepted": 13,
+   "candidates": 198,
+   "examined": 20,
+   "quota": 13
+  },
+  "heldcomp:pitch_sensor_bias.++short_feet": {
+   "accepted": 13,
+   "candidates": 198,
+   "examined": 44,
+   "quota": 13
+  },
+  "joint_damping_wear": {
+   "accepted": 18,
+   "candidates": 297,
+   "examined": 66,
+   "quota": 18
+  },
+  "leg_asymmetry": {
+   "accepted": 18,
+   "candidates": 594,
+   "examined": 30,
+   "quota": 18
+  },
+  "low_ground_friction": {
+   "accepted": 6,
+   "candidates": 297,
+   "examined": 7,
+   "quota": 6
+  },
+  "one_side_weakness": {
+   "accepted": 6,
+   "candidates": 594,
+   "examined": 9,
+   "quota": 6
+  },
+  "payload_offset": {
+   "accepted": 6,
+   "candidates": 594,
+   "examined": 6,
+   "quota": 6
+  },
+  "pitch_sensor_bias": {
+   "accepted": 6,
+   "candidates": 594,
+   "examined": 7,
+   "quota": 6
+  },
+  "sensor_latency": {
+   "accepted": 18,
+   "candidates": 297,
+   "examined": 23,
+   "quota": 18
+  },
+  "short_feet": {
+   "accepted": 6,
+   "candidates": 297,
+   "examined": 13,
+   "quota": 6
+  }
+ }
+}

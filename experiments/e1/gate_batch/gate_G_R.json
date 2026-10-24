@@ -1,0 +1,449 @@
+{
+ "K0n_smoke": [
+  {
+   "instance_id": "hdb-v1-gen-0013:payload_offset:1",
+   "status": "FULL_RECOVERY"
+  },
+  {
+   "instance_id": "hdb-v1-gen-0038:low_ground_friction:1",
+   "status": "NOT_RECOVERED"
+  },
+  {
+   "instance_id": "hdb-v1-gen-0034:feedback_gain_loss:1",
+   "status": "PARTIAL_IMPROVEMENT"
+  },
+  {
+   "instance_id": "hdb-v1-gen-0034:one_side_weakness:1",
+   "status": "NOT_RECOVERED"
+  }
+ ],
+ "arms": {
+  "A0": [
+   {
+    "instance_id": "hdb-v1-gen-0013:payload_offset:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "6ef8f0ecc24e1d94d6bf4748bc8f2dde626a031ef4d712060918a194e1031da7",
+     "n_designs": 13,
+     "plant_used": 684,
+     "status": "PARTIAL_IMPROVEMENT",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.9166666666666666
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "6ef8f0ecc24e1d94d6bf4748bc8f2dde626a031ef4d712060918a194e1031da7",
+     "n_designs": 13,
+     "plant_used": 684,
+     "status": "PARTIAL_IMPROVEMENT",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.9166666666666666
+    }
+   },
+   {
+    "instance_id": "hdb-v1-gen-0038:low_ground_friction:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "foot_sliding",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "contact_chatter"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "dd1eae8f5738c263b029695cc676ca9b67f76cf706c8ffbe5c7e28193691c248",
+     "n_designs": 14,
+     "plant_used": 700,
+     "status": "NOT_RECOVERED",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.75
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "foot_sliding",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "contact_chatter"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "dd1eae8f5738c263b029695cc676ca9b67f76cf706c8ffbe5c7e28193691c248",
+     "n_designs": 14,
+     "plant_used": 700,
+     "status": "NOT_RECOVERED",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.75
+    }
+   },
+   {
+    "instance_id": "hdb-v1-gen-0034:feedback_gain_loss:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "fall",
+       "fall",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "fall"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "e7df1bf699eeb5478e884079ccb2019164e39d8fc036da141ac5e08c7116897c",
+     "n_designs": 13,
+     "plant_used": 696,
+     "status": "PARTIAL_IMPROVEMENT",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.625
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "fall",
+       "fall",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "fall"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "e7df1bf699eeb5478e884079ccb2019164e39d8fc036da141ac5e08c7116897c",
+     "n_designs": 13,
+     "plant_used": 696,
+     "status": "PARTIAL_IMPROVEMENT",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.625
+    }
+   },
+   {
+    "instance_id": "hdb-v1-gen-0034:one_side_weakness:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "af019fe4ab728d9618c878237b594ab9b9bcaa27c36e5648d790034c98cf9fe2",
+     "n_designs": 13,
+     "plant_used": 700,
+     "status": "NOT_RECOVERED",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.5
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "af019fe4ab728d9618c878237b594ab9b9bcaa27c36e5648d790034c98cf9fe2",
+     "n_designs": 13,
+     "plant_used": 700,
+     "status": "NOT_RECOVERED",
+     "submitted": 12,
+     "twin_used": 0,
+     "walking_frac": 0.5
+    }
+   }
+  ],
+  "A1": [
+   {
+    "instance_id": "hdb-v1-gen-0013:payload_offset:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "95b3fe2f7c37cba4022b9be56b4ce9618493aeedbc0fc74e2d6f2f86f2477bda",
+     "n_designs": 2,
+     "plant_used": 36,
+     "status": "FULL_RECOVERY",
+     "submitted": null,
+     "twin_used": 1942,
+     "walking_frac": 1.0
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "95b3fe2f7c37cba4022b9be56b4ce9618493aeedbc0fc74e2d6f2f86f2477bda",
+     "n_designs": 2,
+     "plant_used": 36,
+     "status": "FULL_RECOVERY",
+     "submitted": null,
+     "twin_used": 1942,
+     "walking_frac": 1.0
+    }
+   },
+   {
+    "instance_id": "hdb-v1-gen-0038:low_ground_friction:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "foot_sliding",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "contact_chatter"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "e2aa3a76792543aebf9df1fb0c4f40e6a5db80bdd695a76e63206eaf35d315ce",
+     "n_designs": 4,
+     "plant_used": 688,
+     "status": "NOT_RECOVERED",
+     "submitted": null,
+     "twin_used": 1888,
+     "walking_frac": 0.5833333333333334
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "foot_sliding",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "foot_sliding",
+       "contact_chatter",
+       "contact_chatter",
+       "contact_chatter"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "e2aa3a76792543aebf9df1fb0c4f40e6a5db80bdd695a76e63206eaf35d315ce",
+     "n_designs": 4,
+     "plant_used": 688,
+     "status": "NOT_RECOVERED",
+     "submitted": null,
+     "twin_used": 1888,
+     "walking_frac": 0.5833333333333334
+    }
+   },
+   {
+    "instance_id": "hdb-v1-gen-0034:feedback_gain_loss:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "fall",
+       "fall",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "fall"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "b1cd6fff0854ab99768ef93e9ee37b211d16d80d3a9c109546a6bc20e955c4b0",
+     "n_designs": 4,
+     "plant_used": 700,
+     "status": "PARTIAL_IMPROVEMENT",
+     "submitted": null,
+     "twin_used": 1870,
+     "walking_frac": 0.5416666666666666
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "fall",
+       "fall",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "fall"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "b1cd6fff0854ab99768ef93e9ee37b211d16d80d3a9c109546a6bc20e955c4b0",
+     "n_designs": 4,
+     "plant_used": 700,
+     "status": "PARTIAL_IMPROVEMENT",
+     "submitted": null,
+     "twin_used": 1870,
+     "walking_frac": 0.5416666666666666
+    }
+   },
+   {
+    "instance_id": "hdb-v1-gen-0034:one_side_weakness:1",
+    "match": true,
+    "rerun": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "fcbf9045f95a74e4bde6ea5588ab63b1e5f3bf422eb1595bc0e65b1d40673995",
+     "n_designs": 4,
+     "plant_used": 700,
+     "status": "NOT_RECOVERED",
+     "submitted": null,
+     "twin_used": 1920,
+     "walking_frac": 0.4166666666666667
+    },
+    "stored": {
+     "check": {
+      "labels": [
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward",
+       "falling_forward"
+      ],
+      "n": 8,
+      "rollouts": 8,
+      "walking": 0
+     },
+     "designs_sha": "fcbf9045f95a74e4bde6ea5588ab63b1e5f3bf422eb1595bc0e65b1d40673995",
+     "n_designs": 4,
+     "plant_used": 700,
+     "status": "NOT_RECOVERED",
+     "submitted": null,
+     "twin_used": 1920,
+     "walking_frac": 0.4166666666666667
+    }
+   }
+  ]
+ },
+ "gate_G_R": "PASS",
+ "ids": [
+  "hdb-v1-gen-0013:payload_offset:1",
+  "hdb-v1-gen-0038:low_ground_friction:1",
+  "hdb-v1-gen-0034:feedback_gain_loss:1",
+  "hdb-v1-gen-0034:one_side_weakness:1"
+ ]
+}
