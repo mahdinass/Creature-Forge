@@ -536,3 +536,7 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
   tested. A VM-side finisher ran the analysis and stopped the VM through the API.
 - **Spend:** today +$8.85, ledger $101.82, cap 120. Both VMs STOPPED (control plane).
 - **Next:** rc2 wording (owner); diagnosis-conditioned repair memory (dev first, then registered on the reserve with A3).
+- **Correction (2026-10-25, owner review):** H-E2 meets only the registered secondary criterion (Holm over 2, adjusted
+  p 0.034). The protocol had no gatekeeping, so it is not a study-wide confirmatory result: Holm over all 3 tests gives an
+  adjusted p of 0.0503. Report it as supportive evidence (`docs/E1_RESULTS.md` §1.1). The earlier "rejected (Holm)" wording
+  is withdrawn.

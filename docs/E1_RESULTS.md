@@ -15,7 +15,7 @@
 | hypothesis | contrast | FULL | discordant | exact one-sided p | base-clustered sign-flip p | verdict |
 |---|---|---|---|---|---|---|
 | **H-E1 (primary)** | A1 engine > A0 exhaustive | 56 vs 46 of 160 | 22 vs 12 | **0.061** | 0.056 | **not rejected at α = 0.05** |
-| H-E2 (secondary, Holm) | A1 engine > K0n engine without diagnosis | 56 vs 42 | 26 vs 12 | **0.017** | 0.022 | **rejected** (Holm threshold 0.025) |
+| H-E2 (secondary, Holm) | A1 engine > K0n engine without diagnosis | 56 vs 42 | 26 vs 12 | **0.0168** (Holm(2)-adjusted 0.034) | 0.022 | meets the **registered secondary** criterion; **not a study-wide confirmatory claim** (see §1.1) |
 | H-E3 (secondary, Holm) | K0n > A0 | 42 vs 46 | 17 vs 21 | 0.79 | 0.78 | not rejected |
 
 **Completeness and ITT.** 160 of 160 records per arm; nothing missing, no errored episode, no re-run. The registered
@@ -27,13 +27,45 @@ recovery procedure was never needed.
    (+6.3 points) is not statistically significant at the registered level.
    - Per the registered wording, this is **no evidence that the engine beats exhaustive search on sealed held-out damage**.
    - It is not a falsification: the point estimate favours the engine, and p = 0.061.
-2. **The engine's diagnosis carries real value.** It is the only part with a significant effect.
+2. **The diagnosis ablation is the strongest signal, with a qualification.** It is the only contrast that meets a registered
+   criterion. That criterion is the secondary-family Holm correction, not a study-wide correction (§1.1).
    - With the same repair machinery and the same plant and twin budgets, switching diagnosis off costs 14 recoveries
      (56 → 42; discordant 26 vs 12).
    - Without diagnosis, the twin-robust repair is no better than model-free exhaustive search (42 vs 46).
-3. This reverses the dev-based expectation recorded in the MKV studies ("structure knowledge adds little; the
+3. If this holds up, it reverses the dev-based expectation recorded in the MKV studies ("structure knowledge adds little; the
    ensemble-robust pipeline compensates"). On unseen damage, the advantage comes from investigating the cause, not from the
    extra simulation compute.
+
+### 1.1 Multiplicity and sidedness (correction added 2026-10-25, after an owner review; frozen data and analysis unchanged)
+
+**What the registration fixed.** Registration commit `494ed9b` (`docs/E1_PROTOCOL.md` §3 and `protocol.json`
+`hypotheses`) fixed:
+- **H-E1:** one primary test, exact **one-sided** McNemar, α = 0.05;
+- **H-E2 and H-E3:** a **separate secondary family**, Holm over **two**, α = 0.05.
+
+It specified **no gatekeeping** between the primary and the secondary family.
+
+**Exact values** (independently recomputed; equal to `e1_results.json`):
+
+| test | discordant | one-sided p | two-sided p |
+|---|---|---|---|
+| H-E1 | 22 vs 12 | 0.060725 | 0.121449 |
+| H-E2 | 26 vs 12 | 0.016776 | 0.033552 |
+| H-E3 | 17 vs 21 | 0.791154 | 0.627103 |
+
+**Under the registered rule:**
+- H-E2's Holm(2)-adjusted p is 0.0336 ≤ 0.05, so the registered secondary criterion is met.
+- H-E3 (0.791) is not.
+
+**Why this is not a confirmatory claim.** No rule linked the secondaries to the primary, so the family-wise error over all
+three registered tests is **not** controlled at 0.05. The primary family and the secondary family each spend α = 0.05.
+- Under a Holm correction over all three tests, the adjusted p values are 0.0503, 0.121 and 0.791. That correction was not
+  registered and is used here only as a sensitivity reading. Nothing is rejected under it.
+- H-E2 is therefore reported as **supportive evidence that met the registered secondary criterion but is not significant
+  at the study-wide level**. It is not reported as a confirmed effect.
+- The family has not been changed after seeing the results. Both readings are reported.
+- An earlier version of this report and of the session summary said H-E2 was "rejected (Holm)" and "significant" without
+  this qualification. That wording is withdrawn.
 
 ## 2. Three-arm comparison: effect sizes and uncertainty (descriptive intervals; post hoc)
 
@@ -196,12 +228,13 @@ in the programme is null:
 ## 9. Recommendation for the next milestone
 
 1. **Submission (deadline 30 Oct) can now claim, honestly:**
-   - "On 160 robots with hidden damage from mechanisms and morphologies never used in development, the system's physics
-     diagnosis significantly improved verified recovery over the same repair pipeline without diagnosis (56 vs 42,
-     p = 0.017, registered)."
-   - "Against exhaustive search, the engine was ahead (56 vs 46) but not significantly (p = 0.061)."
+   - The primary result is inconclusive: the engine recovered 56 of 160 robots against 46 for exhaustive search, with
+     p = 0.061 one-sided.
+   - In a registered ablation, switching the diagnosis off lowered recoveries from 56 to 42. This met the pre-specified
+     secondary criterion (Holm over two secondaries, adjusted p = 0.034), but the study-wide correction is borderline
+     (0.050). It is supportive evidence, not a confirmed effect.
 
-   This is the project's first registered positive result for the "investigate the physical cause" step.
+   See `docs/submission/` (rc2) for the exact wording.
    - **Proposed:** a `v1.0.0-rc2` PR with one README/Devpost paragraph and one narration line. The owner reviews the wording.
 2. **Next research milestone: diagnosis-conditioned repair, learned from verified outcomes.** This is the target where
    experience can matter.
