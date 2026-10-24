@@ -75,5 +75,46 @@ class WatchdogReasonTests(unittest.TestCase):
         self.assertLess(first, expiry)
 
 
+class ServiceAccountPathTests(unittest.TestCase):
+    def test_ctl_prefers_sa_and_falls_back_to_federation(self):
+        with mock.patch.object(fc, "sa_config", return_value={"profile": "p", "key_expires_epoch": 2e9}), \
+             mock.patch.object(fc, "nebius_sa", return_value="sa-out") as sa, mock.patch.object(fc, "nebius") as fed:
+            self.assertEqual(fc.ctl("compute", "instance", "get"), "sa-out")
+            fed.assert_not_called()
+        with mock.patch.object(fc, "sa_config", return_value={"profile": "p", "key_expires_epoch": 2e9}), \
+             mock.patch.object(fc, "nebius_sa", side_effect=SystemExit("denied")), \
+             mock.patch.object(fc, "nebius", return_value="fed-out"):
+            self.assertEqual(fc.ctl("x"), "fed-out")
+        with mock.patch.object(fc, "sa_config", return_value={"profile": "p", "key_expires_epoch": 2e9}), \
+             mock.patch.object(fc, "nebius_sa", side_effect=SystemExit("denied")), \
+             mock.patch.object(fc, "nebius", side_effect=SystemExit("expired")):
+            with self.assertRaises(SystemExit) as cm:
+                fc.ctl("x")
+            self.assertIn("both auth paths failed", str(cm.exception))
+        with mock.patch.object(fc, "sa_config", return_value=None), mock.patch.object(fc, "nebius", return_value="f"):
+            self.assertEqual(fc.ctl("x"), "f")
+
+    def test_expired_sa_key_is_refused_without_a_call(self):
+        with mock.patch.object(fc, "sa_config", return_value={"profile": "p", "key_expires_epoch": 1}), \
+             mock.patch.object(fc.subprocess, "run") as run:
+            with self.assertRaises(SystemExit):
+                fc.nebius_sa("x")
+            run.assert_not_called()
+
+    def test_auth_expiry_uses_the_sa_key_only_when_the_sa_works(self):
+        with mock.patch.object(fc, "sa_config", return_value={"profile": "p", "key_expires_epoch": 1794009600}), \
+             mock.patch.object(fc, "load", return_value={"instance_id": "i"}), \
+             mock.patch.object(fc, "federation_expiry", return_value=123):
+            with mock.patch.object(fc, "sa_working", return_value=True):
+                self.assertEqual(fc.auth_expiry(), 1794009600)
+            with mock.patch.object(fc, "sa_working", return_value=False):
+                self.assertEqual(fc.auth_expiry(), 123)
+
+    def test_wait_state_polls_until_stopped(self):
+        seq = iter(['{"status": {"state": "STOPPING"}}', '{"status": {"state": "STOPPED"}}'])
+        with mock.patch.object(fc, "ctl", side_effect=lambda *a: next(seq)), mock.patch.object(fc.time, "sleep"):
+            self.assertEqual(fc.wait_state("i", timeout_s=60), "STOPPED")
+
+
 if __name__ == "__main__":
     unittest.main()

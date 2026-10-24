@@ -28,7 +28,9 @@ ROOT = HERE.parents[1]
 # 2026-10-19: Stage 1 ended at a ledger of $75.48 (5.39 h of unplanned batch time past a deadline, CLI login expired).
 # Phase-3 Stage 2 approved by the owner: +$20 incremental infra. Cap = ledger at the Stage-2 start $75.48 + $20 + $0.5
 # accounting slack (disk accrual rounding). Estimated real credit before Stage 2 is ~$23.8.
-SPEND_CAP_USD = 96.0
+# 2026-10-24: the owner set a standing development mandate (Cloud credit $37.49 at a ledger of $92.98) and raised the cap
+# to $120 for the registered study E-1 (projected $18-23 on the batch VM).
+SPEND_CAP_USD = 120.0
 SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
 _BASE = {
@@ -112,13 +114,72 @@ def parse_expiry(text: str) -> int | None:
     return min(vals) if vals else None
 
 
-def auth_expiry() -> int | None:
-    """Epoch at which the WSL Nebius CLI federation token expires, or None if unknown. The token itself never leaves WSL."""
+def federation_expiry() -> int | None:
+    """Earliest cached CLI token expiry in WSL (the federation token, ~12 h), or None. The tokens never leave WSL."""
     try:
         r = subprocess.run(WSL, input=_EXPIRY_CMD.encode(), capture_output=True, timeout=60)
     except subprocess.TimeoutExpired:
         return None
     return parse_expiry(r.stdout.decode(errors="replace").replace("\0", ""))
+
+
+# Service account for unattended control-plane calls (owner-approved 2026-10-24): a dedicated SA in a group whose only
+# rights are `editor` access permits on the two research instances (no project-level role). Its authorized key lives only
+# in WSL (~/.nebius/sa/, mode 600) and expires at a fixed date; the CLI mints short tokens from it, so unattended stop/status
+# no longer depend on the owner's 12 h federation login. sa.json (git-ignored) holds no secret: profile name, key expiry.
+SA_CFG = HERE / "sa.json"
+
+
+def sa_config() -> dict | None:
+    return json.loads(SA_CFG.read_text("utf-8")) if SA_CFG.exists() else None
+
+
+def nebius_sa(*args: str) -> str:
+    """Run the CLI with the service-account profile. Never writes AUTH_BLOCKED (that marker is about the owner's login)."""
+    cfg = sa_config()
+    if not cfg:
+        raise SystemExit("no service-account profile configured (infra/nebius/sa.json)")
+    if time.time() >= cfg["key_expires_epoch"]:
+        raise SystemExit("service-account key expired")
+    cmd = "~/.nebius/bin/nebius " + " ".join(shlex.quote(a) for a in ["--profile", cfg["profile"], *args]) + "\n"
+    try:
+        r = subprocess.run(WSL, input=cmd.encode(), capture_output=True, timeout=180)
+    except subprocess.TimeoutExpired:
+        raise SystemExit(f"nebius(sa) {' '.join(args[:3])} timed out")
+    if r.returncode != 0:
+        raise SystemExit(f"nebius(sa) {' '.join(args[:3])} failed:\n{r.stderr.decode(errors='replace')[-800:]}")
+    return r.stdout.decode(errors="replace").replace("\0", "")
+
+
+def ctl(*args: str) -> str:
+    """Unattended control-plane call: service account first, the owner's federation profile as fallback."""
+    if sa_config():
+        try:
+            return nebius_sa(*args)
+        except SystemExit as e:
+            sa_err = str(e)
+        try:
+            return nebius(*args)
+        except SystemExit as e:
+            raise SystemExit(f"both auth paths failed: sa: {sa_err[:300]} | federation: {str(e)[:300]}")
+    return nebius(*args)
+
+
+def sa_working(iid: str) -> bool:
+    try:
+        nebius_sa("compute", "instance", "get", "--id", iid, "--format", "json")
+        return True
+    except SystemExit:
+        return False
+
+
+def auth_expiry() -> int | None:
+    """When unattended stops stop working: the SA key expiry if the SA profile works for this profile's instance, else the
+    federation token expiry."""
+    cfg, iid = sa_config(), load().get("instance_id")
+    if cfg and iid and sa_working(iid):
+        return int(cfg["key_expires_epoch"])
+    return federation_expiry()
 
 
 def auth_horizon(expiry: int | None, now: float | None = None) -> float:
@@ -234,7 +295,7 @@ def instance() -> dict:
     st = load()
     if "instance_id" not in st:
         raise SystemExit("no instance recorded; run `create`")
-    return json.loads(nebius("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
+    return json.loads(ctl("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
 
 
 def cmd_plan(_a=None) -> None:
@@ -395,10 +456,25 @@ def cmd_extend(a) -> None:
     print(f"deadline now {a.hours} h from now ({dl}), local and VM verified equal (est. cap ${a.hours * costs()['total_usd_per_h']:.2f})")
 
 
+def wait_state(iid: str, want: str = "STOPPED", timeout_s: int = 600, poll_s: int = 15) -> str:
+    """Poll the control plane until the instance reports `want` (or the timeout). Returns the last state seen."""
+    t_end, state = time.time() + timeout_s, None
+    while True:
+        state = json.loads(ctl("compute", "instance", "get", "--id", iid, "--format", "json")).get("status", {}).get("state")
+        if state == want or time.time() >= t_end:
+            return state
+        time.sleep(poll_s)
+
+
 def cmd_stop(_a=None) -> None:
-    nebius("compute", "instance", "stop", "--id", load()["instance_id"])
+    """API stop, then verify STOPPED on the control plane (a guest poweroff is not a stop: the platform restarts it)."""
+    iid = load()["instance_id"]
+    ctl("compute", "instance", "stop", "--id", iid)
     spend_record("stop")
-    print("stop requested (compute billing ends when STOPPED; the boot disk keeps billing ~$%s/day)" % costs()["disk_usd_per_day_when_stopped"])
+    state = wait_state(iid)
+    if state != "STOPPED":
+        raise SystemExit(f"stop requested but the instance reports {state} after 10 min: check NOW")
+    print("STOPPED (verified on the control plane; the boot disk keeps billing ~$%s/day)" % costs()["disk_usd_per_day_when_stopped"])
 
 
 def remote_deadline() -> int:
@@ -488,11 +564,11 @@ def cmd_watchdog(_a=None) -> None:
         if not st.get("instance_id"):
             continue
         try:
-            got = json.loads(nebius("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
+            got = json.loads(ctl("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
             state = got.get("status", {}).get("state")
             why = watchdog_reason(time.time(), st.get("deadline_epoch", 0), exp, state)
             if why:
-                nebius("compute", "instance", "stop", "--id", st["instance_id"])
+                ctl("compute", "instance", "stop", "--id", st["instance_id"])
                 with (HERE / prof["spend"]).open("a", encoding="utf-8") as f:
                     f.write(json.dumps({"event": "stop", "epoch": int(time.time()), "by": "watchdog", "reason": why}) + "\n")
                 msg = f"{why}: stop requested"
@@ -516,10 +592,41 @@ def watchdog_reason(now: float, deadline: float, expiry: int | None, state: str 
     return None
 
 
+def cmd_selfstop_install(_a=None) -> None:
+    """Install the VM-side API self-stop (infra/nebius/remote/forge-selfstop) on this profile's running VM. A fresh SA key
+    (fixed expiry = sa.json key_expires_epoch) is generated in WSL and streamed through this process into the VM installer's
+    stdin: it is never written to the repository, a log or the Windows disk, and the WSL temp copy is removed at once."""
+    cfg = sa_config()
+    if not cfg:
+        raise SystemExit("no service-account profile configured (infra/nebius/sa.json)")
+    iid = load()["instance_id"]
+    exp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(cfg["key_expires_epoch"]))
+    tmp = "/tmp/cf_selfstop_bin"
+    script = (f"set -e; rm -rf {tmp}; mkdir -m 700 {tmp}; cp ~/.nebius/bin/nebius {tmp}/nebius; "
+              f"wslpath -w {tmp}\n")
+    win_tmp = subprocess.run(WSL, input=script.encode(), capture_output=True, check=True).stdout.decode().strip()
+    remote = HERE / "remote"
+    subprocess.run(["scp", "-q", "-F", str(Path.home() / ".ssh" / "config"), str(Path(win_tmp) / "nebius"),
+                    str(remote / "forge-selfstop"), str(remote / "install_selfstop.sh"), f"{HOST}:/tmp/"], check=True)
+    keygen = (f"set -e; umask 077; k=$(mktemp); ~/.nebius/bin/nebius --no-browser --auth-timeout 30s iam auth-public-key "
+              f"generate --service-account-id {shlex.quote(cfg['service_account_id'])} --expires-at {exp} --output \"$k\" "
+              f">/dev/null 2>&1; cat \"$k\"; rm -f \"$k\"; rm -rf {tmp}\n")
+    key = subprocess.run(WSL, input=keygen.encode(), capture_output=True, check=True).stdout
+    if not key.strip().startswith(b"{"):
+        raise SystemExit("service-account key generation failed")
+    r = subprocess.run(["ssh", "-F", str(Path.home() / ".ssh" / "config"), HOST,
+                        f"cd /tmp && sudo bash install_selfstop.sh {shlex.quote(iid)} && rm -f /tmp/nebius /tmp/forge-selfstop /tmp/install_selfstop.sh"],
+                       input=key, capture_output=True)
+    del key
+    if r.returncode != 0:
+        raise SystemExit(f"self-stop install failed:\n{r.stderr.decode(errors='replace')[-800:]}")
+    print(r.stdout.decode(errors="replace").strip().splitlines()[-1])
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
-    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend", "login"):
+    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend", "login", "selfstop-install"):
         sp.add_parser(n)
     e = sp.add_parser("exec"); e.add_argument("command"); e.add_argument("--timeout", type=int, default=600)
     r = sp.add_parser("run-stage"); r.add_argument("stage", choices=["pilot", "train", "validate", "gate", "select"]); r.add_argument("--rep", type=int, default=1)
@@ -530,7 +637,7 @@ def main() -> None:
     a = ap.parse_args()
     {"plan": cmd_plan, "create": cmd_create, "status": cmd_status, "ssh-config": cmd_ssh_config, "bootstrap": cmd_bootstrap,
      "check": cmd_check, "exec": cmd_exec, "run-stage": cmd_run_stage, "monitor": cmd_monitor, "sync-down": cmd_sync_down,
-     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend, "login": cmd_login}[a.cmd](a)
+     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend, "login": cmd_login, "selfstop-install": cmd_selfstop_install}[a.cmd](a)
 
 
 if __name__ == "__main__":

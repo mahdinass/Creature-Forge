@@ -40,3 +40,4 @@ infra/nebius/state_batch.json
 infra/nebius/spend_ledger_batch.jsonl
 infra/nebius/tunnel.pid
 infra/nebius/AUTH_BLOCKED
+infra/nebius/sa.json
