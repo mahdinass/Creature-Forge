@@ -10,7 +10,12 @@ Local Windows PC: edit files, git, ssh only — it has almost no free RAM. Every
 ## Lifecycle (`infra/nebius/forge_cloud.py`, Nebius CLI runs inside WSL)
 - `status`, `start` (refuses beyond the infra cap `SPEND_CAP_USD`, $96 since 2026-10-19 (phase-3 Stage 2: +$20 on a $75.48 ledger); sets a verified 6 h deadline), `extend --hours H`
   (cap-guarded), `stop`, `spend` (ledger total). Never `create`/`delete` without owner approval.
-- Deadman timer on the VM powers off at the deadline; the Windows task `CreatureForgeNebiusWatchdog` stops it too.
+- Deadman timer on the VM powers off at the deadline, but the platform restarts a guest poweroff (spec `stopped: false`
+  is the desired state), so it is NOT a billing stop. Only an API stop (`forge_cloud.py stop` or the Windows task
+  `CreatureForgeNebiusWatchdog`, every 15 min, also on battery) ends compute billing.
+- Auth horizon (2026-10-24): the CLI federation token is a fixed ~12 h token with no refresh. `start` shortens and `extend`
+  refuses any deadline that outlives the token minus 45 min, and the watchdog stops running VMs 30 min before it expires.
+  `status` shows `auth_expires_in_h`. For long runs, `login` first to get a fresh 12 h window.
 - Stop the VM at the end of every work block or when idle > 30 min. Pull artifacts first.
 
 ## Development loop (`infra/nebius/forge_dev.py`)

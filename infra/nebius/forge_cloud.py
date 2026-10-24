@@ -87,7 +87,67 @@ def cmd_login(_a=None) -> None:
     """Owner action in a terminal: refresh the CLI login (may open the browser once), then clear AUTH_BLOCKED."""
     nebius("compute", "instance", "list", "--parent-id", CFG["project_id"], "--format", "json", interactive=True)
     AUTH_BLOCKED.unlink(missing_ok=True)
-    print("login ok; AUTH_BLOCKED cleared")
+    exp = auth_expiry()
+    print("login ok; AUTH_BLOCKED cleared" + (f"; CLI auth valid for {(exp - time.time()) / 3600:.1f} h" if exp else ""))
+
+
+# Auth horizon (2026-10-24 incident: the federation token is a fixed ~12 h access token with no refresh; once it expires the
+# watchdog can no longer stop anything). Rule: no VM may be running when the token expires. `start`/`extend` keep every
+# deadline (+ watchdog lag) inside the token lifetime, and the watchdog stops running VMs AUTH_MARGIN_S before expiry.
+AUTH_MARGIN_S = 1800         # pre-emptive stop this long before expiry (watchdog period 15 min -> stops >= 15 min early)
+WATCHDOG_LAG_S = 900         # the watchdog runs every 15 min
+_EXPIRY_CMD = "grep -E '^[[:space:]]*expires_at:' ~/.nebius/credentials.yaml 2>/dev/null\n"   # never reads the token line
+
+
+def parse_expiry(text: str) -> int | None:
+    """Earliest `expires_at:` epoch in credentials.yaml text (conservative if several profiles hold tokens)."""
+    vals = []
+    for line in text.splitlines():
+        k, _, v = line.strip().partition(":")
+        if k == "expires_at":
+            try:
+                vals.append(int(float(v.strip().strip("'\""))))
+            except ValueError:
+                pass
+    return min(vals) if vals else None
+
+
+def auth_expiry() -> int | None:
+    """Epoch at which the WSL Nebius CLI federation token expires, or None if unknown. The token itself never leaves WSL."""
+    try:
+        r = subprocess.run(WSL, input=_EXPIRY_CMD.encode(), capture_output=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        return None
+    return parse_expiry(r.stdout.decode(errors="replace").replace("\0", ""))
+
+
+def auth_horizon(expiry: int | None, now: float | None = None) -> float:
+    """Latest epoch a VM deadline may have so that the watchdog still holds a valid token when it must act."""
+    now = time.time() if now is None else now
+    if expiry is None:
+        return now                       # unknown lifetime: treat as expired (fail closed)
+    return expiry - AUTH_MARGIN_S - WATCHDOG_LAG_S
+
+
+def auth_clamp_hours(hours: float, expiry: int | None, now: float | None = None) -> float:
+    """Hours of deadline that fit inside the auth horizon (<= hours, possibly <= 0)."""
+    now = time.time() if now is None else now
+    return min(hours, (auth_horizon(expiry, now) - now) / 3600)
+
+
+def auth_guard(hours: float, *, clamp: bool) -> float:
+    """Return the deadline length to use. `clamp` (start) shortens to the horizon; otherwise (extend) refuse beyond it."""
+    exp = auth_expiry()
+    ok = auth_clamp_hours(hours, exp)
+    left = "unknown" if exp is None else f"{(exp - time.time()) / 3600:.2f} h"
+    if ok >= hours:
+        return hours
+    if clamp and ok >= 0.5:
+        print(f"WARNING: CLI auth expires in {left}; deadline shortened from {hours} h to {ok:.2f} h so the watchdog can "
+              "still stop the VM. Run `forge_cloud.py login` to get a fresh ~12 h window.")
+        return ok
+    raise SystemExit(f"refusing: a {hours} h deadline outlives the Nebius CLI auth (expires in {left}; need "
+                     f"{(AUTH_MARGIN_S + WATCHDOG_LAG_S) / 60:.0f} min margin). Run `python infra/nebius/forge_cloud.py login` first.")
 
 
 def load() -> dict:
@@ -230,7 +290,9 @@ def cmd_status(_a=None) -> dict:
         st["ip"] = ip
         save(st)
     left = (st.get("deadline_epoch", 0) - time.time()) / 3600
+    exp = auth_expiry()
     print(json.dumps({"id": st["instance_id"], "state": state, "ip": ip, "deadline_in_h": round(left, 2),
+                      "auth_expires_in_h": None if exp is None else round((exp - time.time()) / 3600, 2),
                       "est_spend_usd_if_running_since_create": round(max(0, (time.time() - st["created_epoch"]) / 3600) * costs()["total_usd_per_h"], 2)}))
     return {"state": state, "ip": ip}
 
@@ -327,6 +389,7 @@ def cmd_sync_down(_a=None) -> Path:
 def cmd_extend(a) -> None:
     left = max(0.0, (load().get("deadline_epoch", 0) - time.time()) / 3600)
     spend_guard(max(0.0, a.hours - left))
+    auth_guard(a.hours, clamp=False)
     dl = set_deadline(a.hours)
     spend_record("extend", deadline=dl)
     print(f"deadline now {a.hours} h from now ({dl}), local and VM verified equal (est. cap ${a.hours * costs()['total_usd_per_h']:.2f})")
@@ -357,8 +420,9 @@ def set_deadline(hours: float) -> int:
 
 def cmd_start(_a=None) -> None:
     spend_guard(CFG["default_deadline_h"])
+    hours = auth_guard(CFG["default_deadline_h"], clamp=True)
     nebius("compute", "instance", "start", "--id", load()["instance_id"])
-    spend_record("start", deadline=int(time.time() + CFG["default_deadline_h"] * 3600) + 900)  # +15 min: boot/sync slack
+    spend_record("start", deadline=int(time.time() + hours * 3600) + 900)  # +15 min: boot/sync slack
     for _ in range(30):
         time.sleep(10)
         s = cmd_status()
@@ -373,9 +437,9 @@ def cmd_start(_a=None) -> None:
         time.sleep(10)
     else:
         raise SystemExit("SSH not reachable after start")
-    dl = set_deadline(CFG["default_deadline_h"])
+    dl = set_deadline(hours)
     spend_record("extend", deadline=dl)
-    print(f"started; local and VM-side deadline verified equal ({dl}, {CFG['default_deadline_h']} h from now)")
+    print(f"started; local and VM-side deadline verified equal ({dl}, {hours:.2f} h from now)")
 
 
 def cmd_spend(_a=None) -> None:
@@ -414,8 +478,10 @@ def cmd_delete(a) -> None:
 
 
 def cmd_watchdog(_a=None) -> None:
-    """Run from Task Scheduler every 15 min: stops EVERY profile's VM whose deadline passed (independent of any session)."""
+    """Run from Task Scheduler every 15 min: stops EVERY profile's VM whose deadline passed (independent of any session),
+    and pre-emptively stops running VMs when the CLI auth is about to expire (after expiry it could stop nothing)."""
     log = HERE / "watchdog.log"
+    exp = auth_expiry()
     for name, prof in PROFILES.items():
         path = HERE / prof["state"]
         st = json.loads(path.read_text("utf-8")) if path.exists() else {}
@@ -424,17 +490,30 @@ def cmd_watchdog(_a=None) -> None:
         try:
             got = json.loads(nebius("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
             state = got.get("status", {}).get("state")
-            if time.time() > st.get("deadline_epoch", 0) and state in ("RUNNING", "STARTING"):
+            why = watchdog_reason(time.time(), st.get("deadline_epoch", 0), exp, state)
+            if why:
                 nebius("compute", "instance", "stop", "--id", st["instance_id"])
                 with (HERE / prof["spend"]).open("a", encoding="utf-8") as f:
-                    f.write(json.dumps({"event": "stop", "epoch": int(time.time()), "by": "watchdog"}) + "\n")
-                msg = "deadline passed: stop requested"
+                    f.write(json.dumps({"event": "stop", "epoch": int(time.time()), "by": "watchdog", "reason": why}) + "\n")
+                msg = f"{why}: stop requested"
             else:
-                msg = f"ok state={state}"
+                msg = f"ok state={state}" + ("" if exp is None else f" auth_left_h={(exp - time.time()) / 3600:.2f}")
         except SystemExit as e:
             msg = f"error {e}"
         with log.open("a") as f:
             f.write(f"{time.strftime('%FT%T')} [{name}] {msg}\n")
+
+
+def watchdog_reason(now: float, deadline: float, expiry: int | None, state: str | None) -> str | None:
+    """Why the watchdog must stop a VM now, or None. Unknown auth expiry does not trigger a stop by itself (the `get` call
+    that produced `state` just succeeded, so the token is valid now)."""
+    if state not in ("RUNNING", "STARTING"):
+        return None
+    if now > deadline:
+        return "deadline passed"
+    if expiry is not None and now >= expiry - AUTH_MARGIN_S:
+        return "CLI auth expiring"
+    return None
 
 
 def main() -> None:
