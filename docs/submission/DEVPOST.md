@@ -81,6 +81,15 @@ The video shows two recorded results from the Studio. They are kept separate on 
   - Across 36 paired instances Nemotron and the engine alone are level (15 vs 14).
 - **Nemotron's pre-registered win** is in our Forge Loop redesign scoreboard: AI-selected redesigns verified in 6 of 12
   investigations vs 1 of 12 for size-matched random edits (p = 0.031), mostly on push challenges.
+- **A registered test on unseen damage (E-1, NO_AI).** 160 robots with hidden damage, on morphologies and mostly mechanisms
+  never used in development, with equal 700-rollout plant budgets.
+  - **Primary:** the physics-diagnosis engine recovered 56 robots against 46 for exhaustive repair search (one-sided
+    p = 0.061). That is **inconclusive**, and we report it as such.
+  - **Ablation:** with diagnosis switched off, the same engine recovered 42 (one-sided p = 0.017 vs 56). This met our
+    pre-specified secondary criterion, but not a correction across all three tests (0.050), so it is supportive evidence,
+    not a confirmed effect.
+  - **Exploratory:** the engine often identifies unfamiliar faults (sensor latency, joint wear) correctly but cannot repair
+    them, and its development-time advantage shrank on unseen robots.
 - **Negative results are reported, not dropped.** Walking redesigns by the AI never verified, and several registered
   comparisons were null.
 
@@ -89,12 +98,17 @@ The video shows two recorded results from the Studio. They are kept separate on 
   cannot tell options apart.
 - Random edits are a strong baseline, so a single VERIFIED result says little until it stands next to its matched-random
   twin.
+- A registered held-out test humbles development results: our engine's +22-point development advantage over exhaustive
+  search became +6 points on unseen robots.
 
 ## What's next
-Learning from past experiments: keeping hypotheses, failed experiments and repair outcomes, and testing, with a
-memory-on vs memory-off design that prevents leakage, when a lesson from one robot really applies to another. Our first
-attempt, retrieved text lessons in Forge Loop, showed no benefit (p = 0.773). So the next design stores measured causal
-evidence, not prose.
+**Learning from past experiments, which we have not yet demonstrated.** No E-1 arm learned from earlier episodes, and
+every direct test of memory so far was null (Forge Loop text lessons, p = 0.773; dossiers; learned posteriors).
+- E-1 shows why. Those memories improved *diagnosis*, but on unseen damage the bottleneck is choosing a repair once the
+  cause is known.
+- Our next design learns, from verified repair successes and failures, which interventions work for a diagnosed fault on
+  a given body, and when an apparently similar past case does not apply.
+- It will be tested against the same engine without memory and a simple-memory baseline, under matched physics budgets.
 
 ## Built with
 Python, MuJoCo, NumPy, FastAPI, React, three.js / React Three Fiber, TypeScript, Vite, **NVIDIA Nemotron 3 Super**,

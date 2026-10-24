@@ -1,0 +1,26 @@
+#!/bin/bash
+# Runs ON the VM as root (systemd timer, every 5 min; installed by infra/nebius/remote/install_selfstop.sh).
+# Cost safeguard that does not depend on the laptop: when the deadline in /var/lib/forge/deadline has passed, stop THIS
+# instance through the Nebius API with the dedicated service account (profile cf-stopper in /root/.nebius; its key is
+# /root/.nebius/sa/key.json, mode 600, expires on a fixed date). A guest poweroff is NOT a billing stop (the platform
+# restarts the VM), so it is used only as a last resort to halt the workload if the API stop keeps failing.
+# Independent of this script, the Windows watchdog stops the VM through the API at the same deadline (a crashed or
+# unresponsive VM cannot stop itself).
+set -u
+f=/var/lib/forge/deadline
+id_file=/var/lib/forge/instance_id
+log() { logger -t forge-selfstop "$*"; echo "$(date -u +%FT%TZ) $*" >> /var/log/forge-selfstop.log; }
+[ -f "$f" ] && [ -f "$id_file" ] || exit 0
+now=$(date +%s); dl=$(cat "$f"); iid=$(cat "$id_file")
+[ "$now" -ge "$dl" ] || exit 0
+N=/usr/local/bin/nebius
+for attempt in 1 2 3; do
+  if HOME=/root "$N" --profile cf-stopper compute instance stop --id "$iid" --async >/dev/null 2>>/var/log/forge-selfstop.err; then
+    log "deadline passed: API stop requested for $iid (attempt $attempt)"
+    exit 0
+  fi
+  sleep 20
+done
+fails=$(( $(cat /var/lib/forge/selfstop_fails 2>/dev/null || echo 0) + 1 )); echo "$fails" > /var/lib/forge/selfstop_fails
+log "deadline passed: API stop FAILED ($fails consecutive runs)"
+if [ "$fails" -ge 3 ]; then log "API stop failing repeatedly: halting the guest (not a billing stop)"; /sbin/shutdown -h now; fi

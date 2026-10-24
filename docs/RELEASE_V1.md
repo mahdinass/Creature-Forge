@@ -94,3 +94,31 @@ python scripts/do1_replication_analysis.py --w3 experiments/do1/w3w4_2026-10-21/
   is recorded in `docs/PROJECT_STATE.md`.
 - **Experiment preflights refuse modified code.** The experiment runners refuse to run when the protected paths
   (`creature_forge/`, `experiments/`) differ from their frozen implementation commits.
+
+## 9. `v1.0.0-rc2` (proposed; branch `release/v1-rc2-prep`, through a PR into `release/v1`)
+
+**What it adds.** One registered result, E-1, plus the operational fixes that made running it safe. The V1 demo, its
+records and its claims are unchanged.
+
+**Contents:**
+- **Merge of `research/e1-engine-heldout` (`26626b6`):**
+  - the E-1 protocol (registered at `494ed9b` before the sealed side was opened), results and correction note:
+    `docs/E1_PROTOCOL.md`, `docs/E1_RESULTS.md`;
+  - the evidence: `experiments/e1/` (gates, build, final archive sha256 `8ebaceb4…`, `RESERVE.md`);
+  - the code: `creature_forge/hdb_testbench.py`, `scripts/e1_*.py`, `tests/test_e1.py`;
+  - the Nebius operations fixes: auth-horizon guard, service-account stop path with STOPPED verification, VM-side API
+    self-stop.
+- **README and Devpost:** one E-1 paragraph each.
+  - The primary result is inconclusive (56 vs 46, one-sided p = 0.061).
+  - The diagnosis ablation is supportive but not study-wide significant (56 vs 42, p = 0.017; registered Holm(2)-adjusted
+    0.034; Holm over all three tests 0.050).
+  - The failure analysis is exploratory.
+  - E-1 does not demonstrate learning from experience.
+- **Optional narration line** for the owner's voice-over: `docs/submission/E1_NARRATION_OPTION.md`. The cut list is
+  unchanged.
+
+**Not changed:**
+- the DO-1 and W2 records and replays;
+- the Studio pages;
+- the physics, verifier and optimiser code paths used by the demo;
+- the `v1.0.0-rc1` tag.

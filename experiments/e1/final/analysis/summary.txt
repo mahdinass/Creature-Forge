@@ -1,0 +1,19 @@
+{
+ "n": 160,
+ "full": {
+  "A0": 46,
+  "A1": 56,
+  "K0n": 42
+ },
+ "primary": {
+  "hypothesis": "H-E1",
+  "reject_null": false
+ },
+ "secondary_holm": {
+  "H-E2": true,
+  "H-E3": false
+ }
+}
+H-E1 ['A1', 'A0'] 22 vs 12 p=0.06072 cluster p=0.05551
+H-E2 ['A1', 'K0n'] 26 vs 12 p=0.01678 cluster p=0.02179
+H-E3 ['K0n', 'A0'] 17 vs 21 p=0.7912 cluster p=0.7781

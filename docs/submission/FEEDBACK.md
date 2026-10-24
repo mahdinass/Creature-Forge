@@ -40,5 +40,45 @@ Creature Forge's Forge Loop calls **`nvidia/nemotron-3-super-120b-a12b` on Nebiu
 1. **Plausible but inconsistent diagnoses.** Across repeated development runs on one creature the model's hypotheses were physically plausible but varied between runs (torque, friction, heel geometry), and on the walking challenge it repeatedly identified the support base (the probes confirmed it) but chose edits too small to pass our 0.5 m bar (`experiments/forge_loop/dev_live_records/README.md`). We handle both with probes and an independent verifier; model-side guidance on keeping a diagnosis consistent across samples would help.
 2. **Earlier phase (Nano):** the first live investigation, with Nano, blamed torso inertia, which MuJoCo falsified (`docs/memory/INCIDENTS.md`); we kept it as a recorded failed trial, which is the intended behaviour of the verifier. We moved the default to Super after the calibration above.
 
+## Update, 2026-10-16 → 2026-10-24 (later phases; same account)
+
+**Nebius AI Cloud: what worked well**
+- **Service accounts with resource-scoped access permits.**
+  - A group whose only rights are `editor` permits on two specific instances let an unattended watchdog and the VM itself
+    stop instances through the API.
+  - A project-wide listing is refused, so the scope is visibly minimal.
+  - `iam auth-public-key generate --expires-at` gives keys that expire on their own.
+  - In a live test, the VM requested its own API stop and the control plane reported STOPPED 47 s later
+    (`infra/nebius/forge_cloud.py`, `infra/nebius/remote/forge-selfstop`).
+- **Large batch work.** A registered study ran on a 64-vCPU VM: 480 physics episodes in about 3.4 h. Each run finished
+  with an API self-stop (`docs/E1_RESULTS.md`).
+
+**Nebius AI Cloud: friction and requests**
+1. **The CLI federation login is a fixed ~12 h token with no refresh.**
+   - Twice, a long run outlived it. The unattended stop then failed until the owner logged in again, about 5–7 h later.
+     The overrun cost was about $11 on 2026-10-19 and about $1.5 on 2026-10-24 (`docs/memory/INCIDENTS.md`,
+     `docs/PROJECT_STATE.md`).
+   - We now keep every deadline inside the token lifetime and use a service account for stops.
+   - **Request:** a refreshable CLI session, or an expiry warning in `nebius` output.
+2. **A guest power-off is restarted by the platform.** The instance's desired state is "running", so an in-guest `poweroff`
+   is not a billing stop (re-observed twice on 2026-10-20). Only an API stop holds.
+   - **Request:** an instance-level maximum runtime or TTL, or a "stay stopped on guest shutdown" option.
+3. **`nebius profile create` silently activates the new profile.** Creating a service-account profile switched our
+   default away from the owner's federation profile. We had to run `profile activate` again.
+4. **vCPU is not cores.** The 64-vCPU preset behaved like about 32 physical cores for our numpy/MuJoCo workers. On the
+   8-vCPU VM, an SMT benchmark showed no throughput gain beyond 4 processes.
+   - **Request:** state the vCPU → core mapping beside the presets.
+
+**Nebius Token Factory and Nemotron (2026-10-24)**
+- **Live checks.** One request each to `nvidia/nemotron-3-super-120b-a12b` (0.7 s) and
+  `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` (1.3 s), both HTTP 200.
+- **Live end-to-end Studio investigation.** The Forge Loop ran over real HTTP on a Nebius VM (two rounds, 2 model calls,
+  about $0.004; `docs/submission/evidence/live_acceptance_2026-10-24.json`).
+  - **Round 1:** Nemotron's "rear foot length × 1.25" was verified by MuJoCo on 12 held-out seeds (12 wins, 0 losses).
+    A size-matched random edit also verified in that round.
+  - **Round 2:** its proposal was inconclusive.
+- **Nemotron's runtime decisions do not yet beat our deterministic engine on outcomes** (15 vs 14 across 36 paired
+  instances; `docs/NEMOTRON_CONTRIBUTION.md`). We report this as found.
+
 ## Honest note
 These observations come from one account, a small number of calibration requests (30 requests, $0.31 in total, including n = 1 per model-setting pair outside the chosen ones) and two days of development. Some may reflect our prompts or contract (the first calibration round failed because of our schema, not the models) rather than the platform. "Valid" in the calibration means machine-checkable and grounded in real evidence paths, not physically correct.

@@ -1,6 +1,7 @@
 # Final submission checklist (V1)
 
-- **Deadlines:** the official deadline is **Fri 2026-10-30, 18:00 Europe/Oslo**; the internal target is **Tue 2026-10-27**,
+- **Deadlines:** the official deadline is **Fri 2026-10-30, 10:00 PDT = 17:00 UTC = 18:00 Europe/Oslo** (Oslo is on CET
+  from 25 Oct); the internal target is **Tue 2026-10-27**,
   with 28–29 October as buffer.
 - **Status as of the V1 release candidate.** The release record is `docs/RELEASE_V1.md`. Status values: done = verified in
   the repository; OWNER = needs the owner.
@@ -42,8 +43,10 @@
    final export.
 
 ## Pre-publication checks (before any visibility change)
-- [ ] **Reachable-history secret scan** on the final refs (snippet in `docs/MODEL_AND_SERVICE_TERMS.md` §3). The V1 release
-      audit scanned the new commits only.
+- [x] **Reachable-history secret scan** (2026-10-24, rc2). Scope: every blob reachable from all 100 local and remote refs and
+      tags (2,476 blobs, 397 MB), checked for the actual key value (from `.env`, in memory, never printed) and 6
+      credential patterns (key assignment, bearer, private-key block, JWT, `sk-`, AWS). **0 hits.** Re-run after any new
+      commit before going public.
 - [x] **No secrets in tracked files:** `.env` is untracked and ignored, and `.env.example` has no value.
 - [x] **No local Windows paths** in tracked docs (re-checked for V1).
 - [x] **Third-party notices are current.** The dependency files are unchanged since they were generated. `--check` reports
@@ -52,3 +55,14 @@
 - [ ] **Nebius resource ids** (project and instance ids in `infra/nebius/` and some docs): decide whether to redact them
       before going public. They are not credentials.
 - [ ] **CI green on the final head:** check the release record before publishing.
+
+## rc2 status (2026-10-24; PR #20, `release/v1-rc2-prep`)
+| Item | Status | Evidence |
+|---|---|---|
+| E-1 result, with defensible wording | done, **OWNER review** | README and Devpost paragraphs. Primary inconclusive; ablation supportive, not study-wide significant; failure analysis exploratory; no experience-learning claim |
+| CI on the rc2 head | re-run after the frozen-manifest fix | The only failure on the first rc2 run was the frozen-record guard: the E-1 records were not in `FROZEN_MANIFEST.json`. Fixed (42 additions, nothing changed) |
+| Live NVIDIA model at runtime | done, re-verified 2026-10-24 | Super and Nano connectivity (HTTP 200); live end-to-end Studio investigation (`docs/submission/evidence/live_acceptance_2026-10-24.json`) |
+| Nebius integration | done, re-verified 2026-10-24 | Token Factory calls above; AI Cloud VMs with a service-account API stop (STOPPED verified) |
+| Feedback text | updated | `FEEDBACK.md`, section "Update, 2026-10-16 → 2026-10-24" |
+| Unsupported-claim scan | done | Judge-facing text (README, Devpost, cut list, narration, storyboard, Studio UI) mentions experience learning only as "not demonstrated" and uses "significant" only in recorded verifier reasons |
+| Video voice-over and export, YouTube, Devpost submit, visibility, PR #19 / #20 merges, `v1.0.0-rc2` tag | **OWNER** | See "Owner decisions" above |
