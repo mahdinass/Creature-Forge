@@ -279,8 +279,14 @@ class R0OpsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
             (Path(t)/"sa.json").write_text(json.dumps({"key_expires_epoch": 9999999999}))
             fc = ops.cloud(t, "batch")
-            self.assertIs(fc.ctl, fc.nebius_sa)
-            self.assertIs(fc.nebius, fc.nebius_sa)
+            self.assertIs(fc.ctl, fc.nebius)
+            with mock.patch.object(fc, "nebius_sa") as api:
+                fc.nebius("compute", "instance", "start", "--id", "fake")
+                api.assert_called_with("compute", "instance", "start", "--id", "fake", "--async")
+                fc.ctl("compute", "instance", "stop", "--id", "fake")
+                api.assert_called_with("compute", "instance", "stop", "--id", "fake", "--async")
+                fc.ctl("compute", "instance", "get", "--id", "fake")
+                api.assert_called_with("compute", "instance", "get", "--id", "fake")
 
     def test_resource_limits_cannot_exceed_credit_or_ten_hours(self):
         import r0_nebius as ops

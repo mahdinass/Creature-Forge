@@ -133,3 +133,10 @@ Append one incident per significant recurring failure. Mark everything here as `
 - **Fix:** `scripts/r0_experiment.py:write_new` uses same-directory fsynced temporary files, Windows atomic rename that refuses overwrite, and POSIX exclusive hard-link publication. An already-existing checkpoint must match exact bytes; malformed or disagreeing evidence is rejected. No existing scientific record was overwritten.
 - **Validation:** immutable checkpoint/invalid JSON and resume tests in `tests/test_r0.py`; 69 selected local tests passed. An unrelated real-cloud launch remains blocked by unverified current account credit.
 - **Lesson:** exercise the target OS publication primitive before generating outcomes; preserve exclusive creation and exact-byte comparison rather than weakening evidence immutability.
+
+
+## 2026-10-25 — Scoped SA lifecycle operation polling (R0 engineering)
+
+- First authorized engineering start was accepted, but the CLI default operation-resource wait returned PermissionDenied. Instance get confirmed RUNNING; stale-host SSH timed out. No R0 physical unit ran.
+- Immediately used existing SA `stop --async` and instance polling; both VMs verified STOPPED. Conservatively charged the initial interval without resetting the campaign clock.
+- Fix is R0-scoped: append `--async` to lifecycle start/stop only, keep get synchronous and poll instance state. No IAM/auth changes. Focused ops tests pass. Original and amended protocols are preserved; all scientific choices remain unchanged. Evidence: `ENGINEERING_AMENDMENT_2.md` under the R0 registration directory, `scripts/r0_nebius.py`, `tests/test_r0.py`.

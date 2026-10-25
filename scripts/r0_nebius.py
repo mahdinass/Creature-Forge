@@ -29,8 +29,14 @@ def cloud(ops_root, profile):
     if not fc.SA_CFG.exists() or time.time() >= fc.sa_config()["key_expires_epoch"]:
         raise ValueError("unattended service-account authentication unavailable")
     # No personal-login fallback: the campaign requires service-account control.
-    fc.ctl = fc.nebius_sa
-    fc.nebius = fc.nebius_sa  # cmd_start calls this legacy entry point directly
+    def sa_control(*args):
+        # The instance-scoped SA may mutate/read the VM but cannot read the
+        # separate operation resource. Existing lifecycle code polls VM state.
+        if args[:3] in (("compute", "instance", "start"), ("compute", "instance", "stop")) and "--async" not in args:
+            args = (*args, "--async")
+        return fc.nebius_sa(*args)
+    fc.ctl = sa_control
+    fc.nebius = sa_control  # cmd_start calls this legacy entry point directly
     return fc
 
 
