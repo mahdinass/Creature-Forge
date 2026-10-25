@@ -25,3 +25,5 @@ experiments/causal_engineer/dev/repair_strategy_r0/** -text
 # Windows command transcripts retain CRLF; continue checking actual whitespace.
 experiments/causal_engineer/dev/repair_strategy_r0/validation/** whitespace=trailing-space,space-before-tab,cr-at-eol
 experiments/causal_engineer/dev/repair_strategy_r0/results/** whitespace=trailing-space,space-before-tab,cr-at-eol
+experiments/causal_engineer/dev/em1/** -text
+experiments/causal_engineer/dev/em1/** whitespace=trailing-space,space-before-tab,cr-at-eol
