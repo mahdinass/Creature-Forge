@@ -1,0 +1,13 @@
+test_exact_power_and_small_sample_uncertainty (test_di1.TraceTests.test_exact_power_and_small_sample_uncertainty) ... ok
+test_exclusive_journal (test_di1.TraceTests.test_exclusive_journal) ... ok
+test_hidden_plant_recursive_redaction (test_di1.TraceTests.test_hidden_plant_recursive_redaction) ... ok
+test_jobs_fixed_before_first_outcome_and_exact_order (test_di1.TraceTests.test_jobs_fixed_before_first_outcome_and_exact_order) ... ok
+test_legacy_threshold_json_roundtrip_keeps_numeric_guards (test_di1.TraceTests.test_legacy_threshold_json_roundtrip_keeps_numeric_guards) ... ok
+test_ops_rejects_runtime_overrun (test_di1.TraceTests.test_ops_rejects_runtime_overrun) ... ok
+test_probe_policy_uses_only_frozen_ranked_candidates (test_di1.TraceTests.test_probe_policy_uses_only_frozen_ranked_candidates) ... ok
+test_tampering_fails (test_di1.TraceTests.test_tampering_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.041s
+
+OK

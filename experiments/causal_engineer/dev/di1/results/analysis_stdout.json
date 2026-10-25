@@ -1,0 +1,110 @@
+{
+  "stage": "engineering pilot only",
+  "gate": "PENDING_FEASIBILITY",
+  "independent_bases": 5,
+  "amendment": "v2_stop_or_probe",
+  "attempts": 8,
+  "equivalence_passes": 5,
+  "opportunity_bases": 1,
+  "opportunity_rate": 0.2,
+  "opportunity_exact95": [
+    0.005050763379468082,
+    0.7164179361180896
+  ],
+  "contrasts": {
+    "raw_improvement": {
+      "discordant_bases": 0,
+      "n": 5,
+      "mean": 0.0,
+      "descriptive_base_bootstrap95": [
+        0.0,
+        0.0
+      ],
+      "discordance_upper97_5": 0.5218237501049814,
+      "required_n_90pct_power": 562
+    },
+    "predictivity": {
+      "discordant_bases": 1,
+      "n": 5,
+      "mean": -0.2,
+      "descriptive_base_bootstrap95": [
+        -0.6,
+        0.0
+      ],
+      "discordance_upper97_5": 0.7164179361180896,
+      "required_n_90pct_power": 768
+    }
+  },
+  "power_sensitivity": [
+    {
+      "delta": 0.05,
+      "discordance": 0.2,
+      "required_n_90pct_power": null
+    },
+    {
+      "delta": 0.05,
+      "discordance": 0.4,
+      "required_n_90pct_power": null
+    },
+    {
+      "delta": 0.05,
+      "discordance": 0.6,
+      "required_n_90pct_power": null
+    },
+    {
+      "delta": 0.1,
+      "discordance": 0.2,
+      "required_n_90pct_power": 215
+    },
+    {
+      "delta": 0.1,
+      "discordance": 0.4,
+      "required_n_90pct_power": 433
+    },
+    {
+      "delta": 0.1,
+      "discordance": 0.6,
+      "required_n_90pct_power": 645
+    },
+    {
+      "delta": 0.15,
+      "discordance": 0.2,
+      "required_n_90pct_power": 90
+    },
+    {
+      "delta": 0.15,
+      "discordance": 0.4,
+      "required_n_90pct_power": 193
+    },
+    {
+      "delta": 0.15,
+      "discordance": 0.6,
+      "required_n_90pct_power": 288
+    }
+  ],
+  "active_decision_bases": 1,
+  "alternative_decision_bases": 5,
+  "raw_changed_choices": 5,
+  "random_changed_choices": 5,
+  "full_paths": {
+    "baseline": 3,
+    "raw_eig": 3,
+    "random": 4
+  },
+  "distinct_final_interventions": 11,
+  "negative_transfer_exact95": [
+    0.0,
+    0.5218237501049814
+  ],
+  "planning_n": 768,
+  "trace_errors": 0,
+  "qualification_note": "new body draws conditional on fixed development parent pool; narrow local population",
+  "notes": [
+    "Not a registered prospective gate result",
+    "No learner or Nemotron adaptation tested",
+    "Small-pilot bootstrap intervals can degenerate; exact base-level rate bounds remain reported",
+    "Planning powers only paired contrast tests; full advancement conditions can require more information",
+    "Counterfactual panel is research-only; selected best-of-panel is not a deployable policy",
+    "No sealed cohort accessed; pilot excluded from any future evaluation"
+  ]
+}

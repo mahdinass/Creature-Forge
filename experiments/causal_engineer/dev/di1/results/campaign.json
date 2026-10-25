@@ -1,0 +1,11 @@
+{
+  "first_start_epoch": 1792960767.4621837,
+  "initial_spend_usd": 118.846,
+  "cloud_credit_usd": 23.28,
+  "token_credit_usd": 47.0,
+  "cloud_cap_usd": 12.0,
+  "token_cap_usd": 2.0,
+  "max_hours": 6.0,
+  "hard_stop_epoch": 1793098800,
+  "credit_source": "Owner confirmed current DI-1 balances in chat 2026-10-25"
+}

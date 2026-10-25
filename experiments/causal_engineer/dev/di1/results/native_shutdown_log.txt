@@ -1,0 +1,6 @@
+{"exit_code":0,"end_epoch":1792967687}
+{"audit":"legacy tuple/list normalization; all physical values preserved","exact_scientific_matches":64,"excluded_fields":["wall_s"],"no_policy_or_FULL_rerun":true,"partial_jobs":64}
+2026-10-25T19:02:26Z deadline passed: API stop requested for computeinstance-e01efb17k9jbzct0m0 (attempt 1)
+2026-10-25T19:20:26Z deadline passed: API stop requested for computeinstance-e01efb17k9jbzct0m0 (attempt 1)
+2026-10-25T21:09:33Z deadline passed: API stop requested for computeinstance-e01efb17k9jbzct0m0 (attempt 1)
+2026-10-25T21:30:28Z deadline passed: API stop requested for computeinstance-e01efb17k9jbzct0m0 (attempt 1)
