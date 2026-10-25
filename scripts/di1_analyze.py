@@ -135,12 +135,22 @@ def analyze(root):
         b,p,s=(arms[m] for m in config['arms'])
         y={m:int(r['verification']['status']=='FULL_RECOVERY') for m,r in arms.items()}
         choice={m:(r['first_decision'] or {}).get('selected',{}).get('id') for m,r in arms.items()}
+        pre=b['first_decision']
+        signals=None
+        if pre:
+            weights=[p[1] for p in pre['state']['posterior']]
+            baseline_eig=pre['candidates'][0][1]
+            signals={'posterior_entropy':-sum(w*math.log(w) for w in weights if w),
+                     'candidate_count':len(pre['candidates']),
+                     'raw_eig_advantage':max(t[1] for t in pre['candidates'])-baseline_eig,
+                     'raw_changes_choice':choice['raw_eig']!=choice['baseline']}
         if any(r['first_decision'] is not None for r in arms.values()):
             panels=[r['first_decision'] for r in arms.values()]
             if any(p is None for p in panels):raise ValueError('decision fork missing')
             if any(p['state']!=panels[0]['state'] or p['candidates']!=panels[0]['candidates'] for p in panels):
                 raise ValueError('fork predecision state/candidate mismatch')
         rows.append({'base':base['base_id'],'parent':base['parent_dev_base'],'full':y,'choice':choice,
+                     'predecision_signals':signals,
                      'distinct_final_interventions':len({hashlib.sha256(json.dumps({k:r['scientific']['selected'][k] for k in ('body','vector')},sort_keys=True).encode()).hexdigest() for r in arms.values()}),
                      'opportunity':int(not y['baseline'] and (y['raw_eig'] or y['random'])),
                      'raw_improvement':y['raw_eig']-y['baseline'], 'predictivity':y['raw_eig']-y['random'],
@@ -166,6 +176,11 @@ def analyze(root):
              'attempts':8,'excluded':excluded,'rows':rows,'equivalence_passes':len(equivalences),
              'opportunity_bases':opp,'opportunity_rate':opp/n if n else None,
              'opportunity_exact95':rate_interval(opp,n),'contrasts':contrasts,'power_sensitivity':sensitivity,
+             'active_decision_bases':sum(r['choice']['baseline'] is not None for r in rows),
+             'raw_changed_choices':sum(r['choice']['raw_eig']!=r['choice']['baseline'] for r in rows),
+             'random_changed_choices':sum(r['choice']['random']!=r['choice']['baseline'] for r in rows),
+             'full_paths':{m:sum(r['full'][m] for r in rows) for m in config['arms']},
+             'distinct_final_interventions':sum(r['distinct_final_interventions'] for r in rows),
              'negative_transfer_exact95':rate_interval(sum(r['raw_negative_transfer'] for r in rows),n),
              'planning_n':max(x['required_n_90pct_power'] or 801 for x in contrasts.values()),
              'traces':traces,'trace_errors':sum(t['errors'] for t in traces.values()),
