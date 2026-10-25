@@ -1,0 +1,23 @@
+{
+  "gate": "PASS",
+  "checked_epoch": 1792935719.648072,
+  "source_commit": "d29cdce6dbca4df9a410beed4ed8acaa47b0e1a5",
+  "protocol_sha256": "b481dc8977d56a9878526cfafce259e05e4c55bd551f1983661040bb482139bb",
+  "assigned_main_units": 324,
+  "serial_units": 6,
+  "pool_units": 6,
+  "exact_scientific_comparison": true,
+  "regression_tests": 84,
+  "serial_worker_seconds": 2326.161033724,
+  "contention_factor": 1.5317745643305076,
+  "main_public_probe_h": 3.91112472334501,
+  "main_smoke_projection_h": 1.6702285799977423,
+  "forecast_with_25pct_and_finalization_h": 5.038905904181263,
+  "authorized_main_deadline_h": 6,
+  "elapsed_original_campaign_wall_h": 1.58638315015369,
+  "conservative_spend_to_date_usd": 3.0889999999999986,
+  "main_six_hour_compute_and_disk_cap_usd": 12.7014,
+  "credit_verified_initial_usd": 33.73,
+  "additional_spend_ceiling_usd": 35,
+  "notes": "Launch decision uses correctness/equivalence/timing only; excluded smoke recovery rates do not select methods. All frozen scientific fields/case bytes unchanged."
+}

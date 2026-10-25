@@ -1,0 +1,1 @@
+{"evidence":"VM root /var/log/forge-selfstop.log confirms API request attempt 1; independent control-plane read observed both VMs STOPPED after transient local DNS failure. Root log read back after restart.","instance_id":"computeinstance-e01efb17k9jbzct0m0","root_log_api_stop_utc":"2026-10-25T12:14:19Z","state":"STOPPED","verified_epoch":1792930905.9844904}

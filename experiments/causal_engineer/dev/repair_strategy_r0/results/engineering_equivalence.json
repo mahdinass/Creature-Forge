@@ -1,0 +1,7 @@
+{
+  "exact": true,
+  "units": 6,
+  "ignored": [
+    "wall_s"
+  ]
+}

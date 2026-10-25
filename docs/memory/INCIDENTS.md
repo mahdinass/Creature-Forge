@@ -148,3 +148,10 @@ Append one incident per significant recurring failure. Mark everything here as `
 - Guard archived logs and API-stopped the VM; both instances independently confirmed STOPPED. Invalid archive SHA-256 `212a534187009f011b8bda80213d1de0e52bd7e162ca379ba6a18d9875abaa42`, preserved in the R0 registration `engineering/invalid_v1.tgz`.
 - Fix: trusted loader adds a reporting-only engineering cohort in memory, preserving exact case/seed bytes; required metadata is checked before physics. Focused record tests pass. No optimizer, physics, verifier, budget or threshold changed.
 - Recovery is explicit in `ENGINEERING_AMENDMENT_3.md`: preserve v1, uniformly rerun all six serial/pooled excluded smoke conditions in fresh v2 output, then reevaluate launch gates. No selective favorable rerun. Original campaign clock/credit bounds remain in force.
+
+## 2026-10-25 — R0 autonomous completion and evidence retrieval verified
+
+- Native supervisor completed all 324 units, frozen analysis and audit with exit zero at 16:50:02 UTC, archived evidence, and invoked the existing root SA API stop at 16:50:07. Both VMs independently observed STOPPED at 17:03:23. No main worker/verification errors occurred.
+- Raw archive remains on persistent batch disk. A bounded 15-minute restart retrieved its exact 16,568,688 bytes and reran analysis/audit without new physics; then API stop and independent get confirmed both STOPPED at 17:10:46. Archive SHA-256 and all 337 checksums verified; repeated analysis and native/local audits matched.
+- Preserve the distinction between actual API stop and local ledger observation: root shutdown does not automatically append the laptop ledger event, so paid time was conservatively charged until the first later API observation. Final $10.349 additional/4.877 hours are local conservative estimates, not provider invoice or final-credit evidence. Never reset campaign time/credit on restart.
+- Evidence and scientific negative gate: R0 `results/verification_receipt.json`, `final_control_plane.json`, `final_selfstop_log.txt` and `EXECUTION_REPORT.md`. No permission/IAM expansion or shutdown workaround was needed.

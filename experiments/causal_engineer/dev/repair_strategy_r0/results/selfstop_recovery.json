@@ -1,0 +1,8 @@
+{
+  "observed_epoch": 1792930905.9844904,
+  "states": {
+    "main": "STOPPED",
+    "batch": "STOPPED"
+  },
+  "context": "Real prove-selfstop invocation lost control-plane polling to transient DNS; subsequent independent API read observed STOPPED. Confirm VM root log after restart before accepting proof."
+}

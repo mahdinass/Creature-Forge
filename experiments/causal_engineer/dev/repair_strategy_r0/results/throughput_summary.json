@@ -1,0 +1,24 @@
+{
+  "exact_scientific_equivalence": true,
+  "phases": [
+    {
+      "elapsed_s": 27.44908209899998,
+      "fell": 8,
+      "n": 384,
+      "rollouts_per_s": 13.989538834669805,
+      "walking": 374,
+      "worker_s": 163.63569175700013,
+      "workers": 6
+    },
+    {
+      "elapsed_s": 5.390008232000014,
+      "fell": 8,
+      "n": 384,
+      "rollouts_per_s": 71.24293386422401,
+      "walking": 374,
+      "worker_s": 250.65299045000012,
+      "workers": 48
+    }
+  ],
+  "rows_sha256": "ab2a5a6f07f26597bae6c89deae7494efd04a722fdb81c930ac8014709b51874"
+}

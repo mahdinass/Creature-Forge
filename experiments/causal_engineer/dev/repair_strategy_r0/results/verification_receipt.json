@@ -1,0 +1,28 @@
+{
+  "archive": {
+    "archive": "/home/forge/dev/r0-codex/artifacts/r0_run_20261025_1792947002738841029.tgz",
+    "bytes": 16568688,
+    "files_verified": 337,
+    "sha256": "6dcda839b60a401831a46efd760b2702e65e42fda65e8391e87d7018e8520806"
+  },
+  "campaign_elapsed_wall_h": 5.066189776725239,
+  "confirmation_units": 190,
+  "conservative_additional_usd": 10.349,
+  "conservative_paid_batch_h": 4.877,
+  "engineering_manifest_files_verified": 27,
+  "final_api_checked_utc": "2026-10-25 17:10:46 UTC",
+  "main_finish": {
+    "end_epoch": 1792947002,
+    "exit_code": 0
+  },
+  "main_units": 324,
+  "manifest_files_verified": 337,
+  "native_and_local_audits_equal": true,
+  "note": "Ledger upper estimate, not a provider invoice or verified final account balance. Root stop recorded conservatively at first later API observation.",
+  "protocol_sha256": "b481dc8977d56a9878526cfafce259e05e4c55bd551f1983661040bb482139bb",
+  "refusals": 0,
+  "registered_analysis_repeated_exactly": true,
+  "selection_errors": 0,
+  "source_commit": "d29cdce6dbca4df9a410beed4ed8acaa47b0e1a5",
+  "verification_seed_errors": 0
+}
