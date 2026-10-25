@@ -1,0 +1,20 @@
+{
+  "gate": "PASS",
+  "checks": [
+    {
+      "id": "30cf9df227c6a48011b8fe80",
+      "n": 16,
+      "wall_s": 7.897082945000008,
+      "equivalent_to_frozen_ensemble_evaluator": true
+    },
+    {
+      "id": "157e5f6e00946678d804d39c",
+      "n": 8,
+      "wall_s": 2.478465045000007,
+      "equivalent_to_frozen_ensemble_evaluator": true
+    }
+  ],
+  "forecast_s_with_30pct_and_finalization": 1466.5842601715847,
+  "remaining_deadline_s": 1691.960495710373,
+  "extra_engineering_twin_rollouts": 48
+}

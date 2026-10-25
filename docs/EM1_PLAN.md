@@ -1,6 +1,8 @@
 # EM-1 — experience-based physics model correction
 
-Status: G0 identifiability audit, before any residual learner or prospective cohort.
+Status: G0 audit completed. **EM-1 NOT EVALUABLE; NO-GO for further learner/online
+implementation with the current decision evidence.** See `EM1_RESULTS.md` and
+`EM1_DECISION.md`. No prospective gate, learner or new evaluation cohort was run.
 Owner authorization: development only, maximum $12 additional Cloud, $3 Token
 Factory, six paid VM hours; paid work ends by 2026-10-27 12:00 Europe/Oslo.
 Owner verified current balances on 2026-10-25: Cloud $26.51, Token Factory $47.00.
@@ -80,3 +82,20 @@ use budget-matched sham and numerical controls. Do not presume numerical predict
 improvement, call in-context adaptation neural-weight training, or spend inference
 before there is a legitimate discrepancy task. Untested contribution is reported
 as untested, not as a null experiment.
+
+## Completed scope and stopping decision
+
+All 804 distinct saved interventions were measured, preserving 866 original
+log entries and 30 independent bases. Retrospective prediction bias exists,
+but B0 already selects a measured robustness-walking maximizer in every observed
+candidate set. Predictions/outcomes for earlier untried screened candidates and
+FULL outcomes for 480 unsubmitted designs are absent. The ordered G0 requirement
+of identifiable decision-relevant transfer is not met. This is a scoping
+NO-GO, not a statistical rejection of H-EM1 or proof that correction cannot help.
+
+Accordingly, the conditional learner stages above were not entered. Their
+hyperparameters, applicability thresholds, chronological updates, B1/B2/B3 and
+prospective effect/negative-transfer gates are **not registered or evaluated**.
+Do not treat the exploratory G0 bootstrap or planning sensitivity as a positive
+prospective result. A valid follow-up requires new decision-time paired evidence
+and a separately frozen powered design; it must not repurpose the sealed reserve.

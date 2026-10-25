@@ -1,0 +1,21 @@
+{
+  "B1_B2_B3_implemented_or_tested": false,
+  "G0_decision": "NO-GO for current repair-decision identifiability",
+  "Nemotron_incremental_effect": null,
+  "alternative_full_missing": 480,
+  "complete_measurement_units": 804,
+  "decision_relevant_transfer_identified": false,
+  "em1_gate": "NOT EVALUABLE",
+  "experience_causal_effect": null,
+  "independent_bases": 30,
+  "interpretation": "Identifiability/scoping NO-GO, not a statistical rejection of H-EM1 or proof that correction cannot help.",
+  "matched_robustness_seed_responses": 11632,
+  "new_prospective_bases": 0,
+  "original_engine_observed_robustness_walking_regret": 0.0,
+  "original_full_known": 324,
+  "physical_pairing_audit": "PASS",
+  "prediction_discrepancy_identified": true,
+  "primary_B1_minus_B0_FULL_effect": null,
+  "reason": "Available same-design discrepancies concern B0-selected, already plant-checked candidates. B0 selects a measured walking maximizer in every observed set. Pre-check screened candidate forecasts/outcomes are missing; FULL for 480 unsubmitted designs is unknown. No justified powered causal repair comparison can be inferred from this data.",
+  "recommendation": "NO-GO for further learner/online implementation under the current evidence"
+}

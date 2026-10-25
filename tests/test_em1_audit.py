@@ -108,4 +108,10 @@ class Audit(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'incomplete'):
                 em1_g0_analyze.analyze(p)
 
+    def test_hash_index_paths_are_portable(self):
+        from pathlib import PureWindowsPath,PurePosixPath
+        from em1_g0_analyze import portable_relative
+        self.assertEqual(portable_relative(PureWindowsPath('C:/r/predictions/a.json'),PureWindowsPath('C:/r')),'predictions/a.json')
+        self.assertEqual(portable_relative(PurePosixPath('/r/predictions/a.json'),PurePosixPath('/r')),'predictions/a.json')
+
 if __name__=='__main__':unittest.main()

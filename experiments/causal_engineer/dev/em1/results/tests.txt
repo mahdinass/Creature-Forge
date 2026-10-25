@@ -1,0 +1,17 @@
+test_alternative_has_no_invented_full_label (test_em1_audit.Audit.test_alternative_has_no_invented_full_label) ... ok
+test_analysis_rejects_incomplete_comparison (test_em1_audit.Audit.test_analysis_rejects_incomplete_comparison) ... ok
+test_changed_design_changes_identity (test_em1_audit.Audit.test_changed_design_changes_identity) ... ok
+test_conflicting_duplicate_physics_is_rejected (test_em1_audit.Audit.test_conflicting_duplicate_physics_is_rejected) ... ok
+test_duplicate_design_indices_are_one_physical_intervention (test_em1_audit.Audit.test_duplicate_design_indices_are_one_physical_intervention) ... ok
+test_duplicate_episode_rejected (test_em1_audit.Audit.test_duplicate_episode_rejected) ... ok
+test_gold_and_hidden_evaluation_metadata_not_in_predictor (test_em1_audit.Audit.test_gold_and_hidden_evaluation_metadata_not_in_predictor) ... ok
+test_invalid_count_rejected (test_em1_audit.Audit.test_invalid_count_rejected) ... ok
+test_missing_ledger_check_rejected (test_em1_audit.Audit.test_missing_ledger_check_rejected) ... ok
+test_post_outcome_posterior_rejected (test_em1_audit.Audit.test_post_outcome_posterior_rejected) ... ok
+test_task_limits_do_not_reuse_r0_allowance (test_em1_audit.Audit.test_task_limits_do_not_reuse_r0_allowance) ... ok
+test_worker_error_retains_identity_and_traceback (test_em1_audit.Audit.test_worker_error_retains_identity_and_traceback) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.049s
+
+OK

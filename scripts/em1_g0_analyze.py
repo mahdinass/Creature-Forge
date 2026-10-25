@@ -20,6 +20,10 @@ from r0_experiment import write_new,canonical
 def mean(xs): return sum(xs)/len(xs) if xs else None
 
 
+def portable_relative(path,root):
+    return path.relative_to(root).as_posix()
+
+
 def base_mean(rows,key):
     by=collections.defaultdict(list)
     for r in rows:by[r['base']].append(r[key])
@@ -113,7 +117,7 @@ def analyze(root):
             'known_original_full':sum(r['known_full'] for r in rows if r['original_submission']),
             'sum_worker_h':sum(r['worker_s'] for r in rows)/3600,
             'power_sensitivity':power,'candidate_comparisons':comparisons,
-            'record_sha256':{str(f.relative_to(root)).replace('\\','/'):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(files.values())},
+            'record_sha256':{portable_relative(f,root):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(files.values())},
             'interpretation':'Retrospective model-error audit only; no correction learner, causal recovery contrast, prospective evaluation or Nemotron test.'}
     write_new(root/'g0_analysis.json',result)
     write_new(root/'paired_aggregate_rows.json',rows)

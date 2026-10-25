@@ -1,0 +1,6 @@
+{
+  "scripts/em1_audit.py": "dad38c6bb39806ab5bb06996421d6da2e0b22a06ca25815c64da750467fa5c09",
+  "scripts/em1_g0_analyze.py": "a8bf153c7b18c0339f144c1c3b3b8acb624fe0ea79a807e102efeca424c84a04",
+  "scripts/em1_ops.py": "5da2a9994b3c4ec55e11b853453ffc96ef6a1c6526f7d7dfc86843f44f4b2c4f",
+  "tests/test_em1_audit.py": "aae2b9fa04e6545ad80dad408275dea677fa6e2103d86e2470f65b4f7a71910b"
+}

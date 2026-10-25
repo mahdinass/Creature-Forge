@@ -1,0 +1,15 @@
+{
+  "FULL_gain_logical_base_mean_bounds": [
+    -0.08617345617345618,
+    0.17663234913234913
+  ],
+  "FULL_gain_logical_count_bounds": [
+    -29,
+    57
+  ],
+  "audit_ranker_not_B0_or_learned_B1": true,
+  "changed": 86,
+  "note": "Logical bounds from missing outcomes, not confidence intervals or an effect estimate. No unknown FULL is assigned failure or success.",
+  "same_robust_walking_changed": 32,
+  "strictly_lower_robust_walking": 54
+}

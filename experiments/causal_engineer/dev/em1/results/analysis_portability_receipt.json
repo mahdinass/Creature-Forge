@@ -1,0 +1,72 @@
+{
+  "different_float_paths": [
+    [
+      "/base_cluster_bootstrap95_residual/0",
+      3.469446951953614e-18
+    ],
+    [
+      "/base_equal_aggregate_bernoulli_brier",
+      2.7755575615628914e-17
+    ],
+    [
+      "/base_equal_mean_residual",
+      1.3877787807814457e-17
+    ],
+    [
+      "/residuals_by_family/actuator_weakness/base_mean_residual",
+      5.204170427930421e-18
+    ],
+    [
+      "/residuals_by_family/actuator_weakness/descriptive_bootstrap95/1",
+      1.3877787807814457e-17
+    ],
+    [
+      "/residuals_by_family/clock_fault/base_mean_residual",
+      1.3877787807814457e-17
+    ],
+    [
+      "/residuals_by_family/clock_fault/descriptive_bootstrap95/0",
+      6.938893903907228e-18
+    ],
+    [
+      "/residuals_by_family/heavy_torso/descriptive_bootstrap95/0",
+      1.1564823173178713e-18
+    ],
+    [
+      "/residuals_by_family/low_ground_friction/descriptive_bootstrap95/0",
+      1.3877787807814457e-17
+    ],
+    [
+      "/residuals_by_family/low_ground_friction/descriptive_bootstrap95/1",
+      1.3877787807814457e-17
+    ],
+    [
+      "/residuals_by_family/payload_offset/descriptive_bootstrap95/0",
+      3.469446951953614e-18
+    ],
+    [
+      "/residuals_by_family/payload_offset/descriptive_bootstrap95/1",
+      1.3877787807814457e-17
+    ],
+    [
+      "/residuals_by_family/short_feet/base_mean_residual",
+      4.163336342344337e-17
+    ],
+    [
+      "/residuals_by_family/short_feet/descriptive_bootstrap95/1",
+      2.7755575615628914e-17
+    ],
+    [
+      "/sum_worker_h",
+      1.7763568394002505e-15
+    ],
+    [
+      "/twin_only_audit_ranker_base_mean_walking_regret",
+      6.938893903907228e-18
+    ]
+  ],
+  "formatting_only_patch": "ENGINEERING_AMENDMENT_3.md",
+  "post_run_utility_sha256_lf": "a8bf153c7b18c0339f144c1c3b3b8acb624fe0ea79a807e102efeca424c84a04",
+  "registered_analysis_sha256": "3e6ea56125b74d5f39b7a9f44af9ae041b16bf7973b49ad12cef584d4a387d11",
+  "registered_source_commit": "f70549d636b5b2141988a9165574c5f53015a6be"
+}
