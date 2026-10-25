@@ -1,0 +1,17 @@
+test_base_equal_brier_not_episode_weighted (test_vel1.VEL1Tests.test_base_equal_brier_not_episode_weighted) ... ok
+test_beta_tail_extremes (test_vel1.VEL1Tests.test_beta_tail_extremes) ... ok
+test_cluster_repeats_do_not_increase_independent_n (test_vel1.VEL1Tests.test_cluster_repeats_do_not_increase_independent_n) ... ok
+test_conflicting_duplicate_label_rejected (test_vel1.VEL1Tests.test_conflicting_duplicate_label_rejected) ... ok
+test_dual_family_and_base_blocks (test_vel1.VEL1Tests.test_dual_family_and_base_blocks) ... ok
+test_errors_are_not_failed_repairs (test_vel1.VEL1Tests.test_errors_are_not_failed_repairs) ... ok
+test_failure_requirements_are_separate (test_vel1.VEL1Tests.test_failure_requirements_are_separate) ... ok
+test_heldout_base_labels_never_affect_any_model_or_memory (test_vel1.VEL1Tests.test_heldout_base_labels_never_affect_any_model_or_memory) ... ok
+test_not_run_confirmation_is_missing (test_vel1.VEL1Tests.test_not_run_confirmation_is_missing) ... ok
+test_outer_physical_alias_guard (test_vel1.VEL1Tests.test_outer_physical_alias_guard) ... ok
+test_unpaid_or_outcome_updated_observations_rejected (test_vel1.VEL1Tests.test_unpaid_or_outcome_updated_observations_rejected) ... ok
+test_verifier_and_hidden_labels_cannot_enter_features (test_vel1.VEL1Tests.test_verifier_and_hidden_labels_cannot_enter_features) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.616s
+
+OK

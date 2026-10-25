@@ -1,0 +1,6 @@
+cohort,distinct_candidates,body_groups,instances,full,nonfull,apparent,apparent_nonfull
+di1,11,5,5,7,4,7,1
+fresh_v5,211,18,211,109,102,115,27
+legacy_v5,113,12,113,44,69,50,19
+r0,320,18,18,157,163,184,60
+rl1,2105,18,211,381,1724,903,566
