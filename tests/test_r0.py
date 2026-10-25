@@ -274,6 +274,14 @@ class R0RecordTests(unittest.TestCase):
 
 
 class R0OpsTests(unittest.TestCase):
+    def test_legacy_start_entry_point_uses_service_account_without_personal_login(self):
+        import r0_nebius as ops
+        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+            (Path(t)/"sa.json").write_text(json.dumps({"key_expires_epoch": 9999999999}))
+            fc = ops.cloud(t, "batch")
+            self.assertIs(fc.ctl, fc.nebius_sa)
+            self.assertIs(fc.nebius, fc.nebius_sa)
+
     def test_resource_limits_cannot_exceed_credit_or_ten_hours(self):
         import r0_nebius as ops
         c={"first_start_epoch":1000,"verified_credit_usd":20,"initial_spend_usd":100}

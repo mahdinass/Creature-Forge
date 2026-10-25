@@ -560,3 +560,10 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Genuine blocker: console requires sign-in; current available Cloud credit cannot be verified through the exposed SA tooling. Requested authentication immediately and continued safe preparation. No paid start occurred: 0/324 units, R0 gate NOT EVALUATED, zero R0 compute runtime/spend. Existing disks continue charges.
 - Both VMs independently verified STOPPED through SA control-plane API at epoch 1792889886; watchdog Ready and battery allowed. Conservative lifetime ledger $107.262 is not account credit or an invoice. No remote Basic Memory tools exposed; tracked memory used, no sync claimed.
 - Report, validation evidence, limitations and next step: `experiments/causal_engineer/dev/repair_strategy_r0/REPORT.md` and `README.md`. Next: verify actual current credit, perform bounded remote engineering/self-stop/equivalence/throughput gates, then run the unchanged registration only if it fits with margin. No R1 capability conclusion exists.
+
+
+## 2026-10-25 — R0 resumption authorized, credit verified by owner
+
+- Owner confirmed current available Cloud credit $33.73 and instructed autonomous resumption from `bb2ecb9`, with the existing $35/ten-hour limits and no R1 or sealed work. Both VMs rechecked STOPPED; watchdog Ready.
+- Before any paid start or R0 outcome, found the existing cloud helper start path calls legacy `nebius` directly. Engineering amendment 1 binds that entry point as well as `ctl` to the existing SA helper. The original registration is preserved; only the operational source hash/annotation change, with all scientific choices/case bytes unchanged. See `experiments/causal_engineer/dev/repair_strategy_r0/ENGINEERING_AMENDMENT_1.md`.
+- Next: bounded engineering start, inspect existing remote environment and timer, prove real VM-side SA API stop, then physical regression/equivalence/throughput gates. Basic Memory tools are now exposed; scoped text searches found no R0/self-stop note.

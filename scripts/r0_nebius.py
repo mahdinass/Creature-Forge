@@ -30,6 +30,7 @@ def cloud(ops_root, profile):
         raise ValueError("unattended service-account authentication unavailable")
     # No personal-login fallback: the campaign requires service-account control.
     fc.ctl = fc.nebius_sa
+    fc.nebius = fc.nebius_sa  # cmd_start calls this legacy entry point directly
     return fc
 
 
