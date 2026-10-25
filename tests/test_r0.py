@@ -112,6 +112,25 @@ class R0PolicyTests(unittest.TestCase):
 
 
 class R0RecordTests(unittest.TestCase):
+    def test_frozen_smoke_gets_reporting_cohort_without_changing_case_bytes(self):
+        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+            directory = Path(t)
+            driver.write_new(directory/"smoke_cases.json", [{"instance_id": "excluded", "base_id": "b"}])
+            raw = (directory/"smoke_cases.json").read_bytes()
+            driver.write_new(directory/"protocol.json", {"smoke_cases_sha256": driver.sha(raw),
+                "code_sha256_lf": {}, "pairs": [list(p) for p in rp.PAIRS],
+                "actions": list(rp.ACTIONS), "objectives": list(rp.OBJECTIVES)})
+            with mock.patch.object(driver, "code_hashes", return_value={}):
+                _, cases = driver.load_study(directory, smoke=True)
+            self.assertEqual(cases[0]["cohort"], "engineering")
+            self.assertEqual((directory/"smoke_cases.json").read_bytes(), raw)
+
+    def test_missing_metadata_rejected_before_any_physics_or_optimization(self):
+        with mock.patch.object(rp, "solve", side_effect=AssertionError("optimization started")), \
+             mock.patch.object(hp, "verify", side_effect=AssertionError("verification started")):
+            with self.assertRaisesRegex(ValueError, "metadata before physics"):
+                driver.run_unit({"case": {"instance_id": "incomplete"}})
+
     def test_sampling_is_balanced_base_disjoint_deterministic(self):
         cs = [{"instance_id": f"b{i}:f{j}:0", "base_id": f"b{i}", "family": f"f{j}"}
               for i in range(18) for j in range(3)]

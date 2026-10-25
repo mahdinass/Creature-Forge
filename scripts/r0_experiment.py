@@ -214,6 +214,12 @@ def load_study(directory, smoke=False):
     if p["pairs"] != [list(pair) for pair in rp.PAIRS] or p["actions"] != list(rp.ACTIONS) or p["objectives"] != list(rp.OBJECTIVES):
         raise ValueError("protocol/implementation condition mismatch")
     cases = read(directory / name)
+    if smoke:
+        # The frozen excluded-case blob predates this reporting-only label.
+        # Keep its bytes/seeds/robot/plant unchanged; never expose it to policy.
+        cases = [{**c, "cohort": "engineering"} for c in cases]
+    elif any(c.get("cohort") not in ("failed", "control") for c in cases):
+        raise ValueError("missing or invalid study cohort metadata")
     if len({c["base_id"] for c in cases}) != len(cases) and not smoke:
         raise ValueError("base cap violated")
     return p, cases
@@ -260,6 +266,10 @@ def run_unit(job):
     from creature_forge import r0_repair as rp
     t0 = time.perf_counter()
     c = job["case"]
+    required = ("instance_id", "base_id", "family", "cohort", "policy_id", "robot", "plant", "seeds")
+    missing = [k for k in required if k not in c]
+    if missing:
+        raise ValueError(f"missing case metadata before physics: {missing}")
     view = {"robot_id": c["policy_id"], "robot": copy.deepcopy(c["robot"]),
             "seeds": {r: c["seeds"][r] for r in ("train", "select")}}
     result = rp.solve(view, job["action"], job["objective"], job["replicate"],

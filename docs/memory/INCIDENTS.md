@@ -140,3 +140,11 @@ Append one incident per significant recurring failure. Mark everything here as `
 - First authorized engineering start was accepted, but the CLI default operation-resource wait returned PermissionDenied. Instance get confirmed RUNNING; stale-host SSH timed out. No R0 physical unit ran.
 - Immediately used existing SA `stop --async` and instance polling; both VMs verified STOPPED. Conservatively charged the initial interval without resetting the campaign clock.
 - Fix is R0-scoped: append `--async` to lifecycle start/stop only, keep get synchronous and poll instance state. No IAM/auth changes. Focused ops tests pass. Original and amended protocols are preserved; all scientific choices remain unchanged. Evidence: `ENGINEERING_AMENDMENT_2.md` under the R0 registration directory, `scripts/r0_nebius.py`, `tests/test_r0.py`.
+
+
+## 2026-10-25 — R0 excluded smoke missing reporting cohort (resolved before main)
+
+- After first real smoke solve/verification, record construction failed on absent `cohort` in the frozen excluded-case blob. No valid checkpoint or main record existed; the unserialized design/verifier result is unavailable and is not inferred.
+- Guard archived logs and API-stopped the VM; both instances independently confirmed STOPPED. Invalid archive SHA-256 `212a534187009f011b8bda80213d1de0e52bd7e162ca379ba6a18d9875abaa42`, preserved in the R0 registration `engineering/invalid_v1.tgz`.
+- Fix: trusted loader adds a reporting-only engineering cohort in memory, preserving exact case/seed bytes; required metadata is checked before physics. Focused record tests pass. No optimizer, physics, verifier, budget or threshold changed.
+- Recovery is explicit in `ENGINEERING_AMENDMENT_3.md`: preserve v1, uniformly rerun all six serial/pooled excluded smoke conditions in fresh v2 output, then reevaluate launch gates. No selective favorable rerun. Original campaign clock/credit bounds remain in force.
