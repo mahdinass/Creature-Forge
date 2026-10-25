@@ -28,3 +28,6 @@ experiments/causal_engineer/dev/repair_strategy_r0/results/** whitespace=trailin
 experiments/causal_engineer/dev/em1/** -text
 experiments/causal_engineer/dev/em1/** whitespace=trailing-space,space-before-tab,cr-at-eol
 docs/EM1_*.md -text
+experiments/causal_engineer/dev/di1/** -text
+experiments/causal_engineer/dev/di1/** whitespace=trailing-space,space-before-tab,cr-at-eol
+docs/DI1_*.md -text
