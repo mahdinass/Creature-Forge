@@ -1,0 +1,37 @@
+{
+  "version": "em1_g0_v1",
+  "stage": "retrospective measurement, not learner or prospective gate",
+  "parent_commit": "8e7e8246d62502861f882f0fc3a9306274824c9c",
+  "source_sha256_lf": {
+    "scripts/em1_audit.py": "73f4f351f7b19149d721d69fcf6d033930f10ccaf9c82e6bde1d1382bbdfd660",
+    "scripts/em1_ops.py": "5da2a9994b3c4ec55e11b853453ffc96ef6a1c6526f7d7dfc86843f44f4b2c4f",
+    "scripts/r0_experiment.py": "4dbe170687b951feff241ad2dbf3b550ccd1e48950f7d4b61f154ea189c336d9",
+    "scripts/r0_nebius.py": "42f3e028054e163a9cfe843ad9e9bb1b659ffae022b8a081802d1f33beffc5c8",
+    "creature_forge/belief_engine.py": "12e20cfeaa3f7dfaef1c7ad79f92b9df4cc929cfd2d92c6572ef98d44e66e915",
+    "creature_forge/hidden_plant.py": "91c26fd93fcb303e877ff5ee15ee62b7543077b2f549aae0875bad9e2773b7c6",
+    "creature_forge/hdb_bench.py": "7bd810cf9b843ef9fa9b84f73f7f03ae55f91878030a2acbd85446845a64af05",
+    "creature_forge/hdb_workbench.py": "ba34b0a5f0aa2c729218a53a80a7525a60f6b474086bc79ee8049a50081d83d0",
+    "creature_forge/arena.py": "ad980b871dc8ed42e55f1a469d09f4787fb4382a22d38b51482e781657eb33c2",
+    "tests/test_em1_audit.py": "235e4b8b2a6eb831d36416aae416e03cb11cb5a3248059942590934112585d99"
+  },
+  "jobs_sha256": "ef3d627c993b268524c83cd9e2fe467d2e63319a925c6483f85cdb5b3fa8f76e",
+  "twin_rollouts": 12592,
+  "plant_rollouts": 0,
+  "model_calls": 0,
+  "max_workers": 6,
+  "first_measurement_limit_h": 0.5,
+  "task_limits": {
+    "cloud_usd": 12,
+    "token_usd": 3,
+    "paid_vm_h": 6,
+    "hard_stop_utc": "2026-10-27T11:00:00Z"
+  },
+  "primary_future_estimand": "base-averaged paired FULL recovery B1 minus B0 on independent fresh development bases; not yet registered",
+  "g0_requirements": [
+    "exact matched intervention/seed/condition identity",
+    "pre-outcome model reconstructable",
+    "independent cross-base signal with uncertainty quantified",
+    "decision relevance separated from missing FULL counterfactuals",
+    "adequate power/precision and bounded cost before prospective launch"
+  ]
+}

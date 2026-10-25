@@ -14,6 +14,7 @@ import math
 from pathlib import Path
 import sys
 import time
+import traceback
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -151,15 +152,26 @@ def predict(job):
 
 
 def measure(jobs_path,out,workers):
-    from concurrent.futures import ProcessPoolExecutor,as_completed
     import multiprocessing as mp
     if not 1<=workers<=6:raise ValueError('max six independent workers')
     data=json.loads(Path(jobs_path).read_text()); out=Path(out)
-    with ProcessPoolExecutor(workers,mp_context=mp.get_context('spawn')) as pool:
-        fs={pool.submit(predict,{'id':j['id'],'predictor':j['predictor']}):j['id'] for j in data['jobs']}
-        for f in as_completed(fs):
-            row=f.result();write_new(out/'predictions'/f"{row['id']}.json",row)
+    with mp.get_context('spawn').Pool(workers) as pool:
+        inputs=({'id':j['id'],'predictor':j['predictor']} for j in data['jobs'])
+        for row in pool.imap_unordered(measure_one,inputs):
+            if 'error' in row:
+                write_new(out/'errors'/f"{row['id']}.json",row)
+                # Pool.__exit__ terminates queued/running work on exception;
+                # unlike Executor.__exit__, it does not wait for the full queue.
+                raise ValueError(f"twin measurement {row['id']} failed: {row['error']}")
+            write_new(out/'predictions'/f"{row['id']}.json",row)
+            print(json.dumps({'completed':row['id']}),flush=True)
     write_new(out/'MEASURE_COMPLETE.json',{'units':len(data['jobs']),'source_jobs_sha256':sha(Path(jobs_path).read_bytes())})
+
+
+def measure_one(job):
+    try:return predict(job)
+    except Exception:
+        return {'version':VERSION,'id':job['id'],'error':traceback.format_exc()}
 
 
 def main():

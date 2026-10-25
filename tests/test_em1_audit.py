@@ -79,4 +79,11 @@ class Audit(unittest.TestCase):
         self.assertEqual(dollars,7.)
         self.assertLess(em1_ops.limits(c,100.,1000.+6*3600)[0],0.)
 
+    def test_worker_error_retains_identity_and_traceback(self):
+        from unittest.mock import patch
+        with patch.object(em,'predict',side_effect=RuntimeError('sentinel')):
+            r=em.measure_one({'id':'bad-job'})
+        self.assertEqual(r['id'],'bad-job')
+        self.assertIn('RuntimeError: sentinel',r['error'])
+
 if __name__=='__main__':unittest.main()
