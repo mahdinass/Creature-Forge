@@ -1,0 +1,14 @@
+{
+  "creature_forge/decision_trace.py": "772372eb0185858ce48952bee82a42188c39d79243973d161333e7b6cfcb293c",
+  "scripts/di1_study.py": "54f648ca4e5d970b19e139f015408a8af6ea99f4821e21cfebde65c21bb811f8",
+  "scripts/di1_ops.py": "c6f58ac1ace29ad606039913671d977ba466accfc0515007a2e3045a3b1efc1c",
+  "scripts/di1_pilot_driver.py": "743d67f2b5e62f71eabec5e2a83798ea0d5114a4a1b2bdd39b4f38c28debc882",
+  "scripts/di1_pilot_native.sh": "2cfb7c6e0fae553228ff15da7784f1f863b88050a5de1bcd4b985aceab3fb300",
+  "docs/DI1_PROTOCOL.md": "30046abf92e2cf393400edeca6d4b7f5e258f131a00d59279e85f177b77619ad",
+  "experiments/causal_engineer/dev/di1/pilot_config.json": "3258f1df4ff74ca2787a0f9c1d26c3948c5947ac113871aa1518ffee145e9fe4",
+  "experiments/causal_engineer/dev/di1/stopmap_dev_v1.json": "8cf94726378daa10b3ef88db36f30887a056b9cda89d4a724651ba5898723595",
+  "creature_forge/belief_engine.py": "12e20cfeaa3f7dfaef1c7ad79f92b9df4cc929cfd2d92c6572ef98d44e66e915",
+  "creature_forge/hidden_plant.py": "91c26fd93fcb303e877ff5ee15ee62b7543077b2f549aae0875bad9e2773b7c6",
+  "creature_forge/hdb_workbench.py": "ba34b0a5f0aa2c729218a53a80a7525a60f6b474086bc79ee8049a50081d83d0",
+  "creature_forge/recovery.py": "c70a7d60f411786539284b31ed1414e23dafbacf58bdbc24fbc76f53d749d687"
+}

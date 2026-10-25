@@ -31,3 +31,5 @@ equality. Alternative paths run only after the baseline equality passes.
 The local control process is single-threaded; process workers run unchanged
 module-level simulator functions. Each parallel base has its own journal and
 separate process. Hooks are restored even on failure. No release API changes.
+
+Before physics: the Windows working-copy manifest retains CRLF hashes for four inherited files. pilot_git_blob_hashes.json additionally freezes committed LF bytes for Linux verification. This transport-only amendment changes no source, seeds, policy or analysis.
