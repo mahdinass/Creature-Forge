@@ -20,3 +20,7 @@ docs/archive/*.SHA256SUMS -text
 # E-1 registered study records and gate evidence (sha256-pinned; no EOL conversion)
 experiments/e1/** -text
 experiments/causal_engineer/dev/rl1/** -text
+# R0 development registration and validation evidence: exact portable bytes.
+experiments/causal_engineer/dev/repair_strategy_r0/** -text
+# Windows command transcripts retain CRLF; continue checking actual whitespace.
+experiments/causal_engineer/dev/repair_strategy_r0/validation/** whitespace=trailing-space,space-before-tab,cr-at-eol

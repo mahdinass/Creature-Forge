@@ -135,3 +135,13 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - **Spending:** staged. Stage 1 approved: infra $35 (cap 38 → 72) and inference ≤ $5 within the $40 cap. Real credit on
   2026-10-18 was Cloud $66, Token Factory $52. Later stages need owner approval with advance notice.
 - **Elicit:** API access was denied; no Elicit result is used anywhere.
+
+
+## 2026-10-25 — R0 capability registration before learning (isolated research)
+
+- **Status:** active registration; physical execution pending current-credit verification. Owner authorized the bounded run, so no additional run approval is needed.
+- **Decision:** six conditions (single, standardized sequential, joint × frozen, byte-exact DO-1); 12 historically failed dev cases and six controls, all distinct bases; three technical replicates; exactly 3,000 policy rollouts including selection. Eight predeclared physically motivated pairs, original-relative bounds, unchanged verifier, opaque policy inputs, fresh role-separated seeds.
+- **Reason:** existing tools are parameter groups and the engine already chains edits; coordinate optimization and objective alignment must be separated from additional search budget. Sequential is a plant-only standardized comparator, not the full diagnosis/twin engine. Equal rollout counts do not remove portfolio/dimension/overhead differences. No Nemotron learning or transfer claim follows from R0 alone.
+- **Evidence:** `docs/R0_REPAIRABILITY_PROTOCOL.md`, `scripts/r0_experiment.py`, `creature_forge/r0_repair.py`, `experiments/causal_engineer/dev/repair_strategy_r0/protocol.json`, `tests/test_r0.py`. Gate, cluster analysis, source and case hashes frozen before any physical R0 outcome.
+- **Operational boundary:** no test/reserve data, release/PR #20/E-2R work or global manifest repair. $35 and ten campaign hours are independent of current credit. Missing balance is a blocker; do not infer it from a historical balance or local ledger. Both VMs STOPPED; no R0 compute started. Real remote engineering gates remain unverified.
+- **Next:** establish current credit, prove actual SA self-stop and physics equivalence, measure full-study fit with 25% margin, then execute all 324 units. No selective unfavorable reruns or silent sample reduction. Basic Memory unavailable; this tracked decision has not been synced remotely.

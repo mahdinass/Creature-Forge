@@ -1,0 +1,21 @@
+{
+  "date_utc": "2026-10-25T00:57:24.001144+00:00",
+  "tests": 69,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "suite": [
+    "test_r0",
+    "test_walk_opt.SpaceTests",
+    "test_walk_opt.SimilarityTests",
+    "test_walk_opt.CmaTests",
+    "test_walk_opt.BaseOnBoundTests",
+    "test_walk_opt.LogCandidatesTests",
+    "test_recovery.StatusLogic",
+    "test_hdb.Bench",
+    "test_hdb.Engine",
+    "test_hidden_plant.DSL"
+  ],
+  "physics_rollouts": 0,
+  "result": "PASS"
+}

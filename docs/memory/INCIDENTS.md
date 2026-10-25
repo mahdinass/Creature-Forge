@@ -125,3 +125,11 @@ Append one incident per significant recurring failure. Mark everything here as `
   - No test ran, so this is not a code failure.
 - Impact: there is no CI signal on any branch or PR (including PR #18) until the owner fixes GitHub billing.
 - Not done: no workaround, and no workflow change on this branch. PR #18 already reduces Actions usage once merged.
+
+
+## 2026-10-25 — R0 atomic checkpoint portability (resolved before physical execution)
+
+- **Symptom:** the first Windows engineering test of a POSIX-style atomic hard-link checkpoint failed under the workspace filesystem permissions. No physical R0 record existed.
+- **Fix:** `scripts/r0_experiment.py:write_new` uses same-directory fsynced temporary files, Windows atomic rename that refuses overwrite, and POSIX exclusive hard-link publication. An already-existing checkpoint must match exact bytes; malformed or disagreeing evidence is rejected. No existing scientific record was overwritten.
+- **Validation:** immutable checkpoint/invalid JSON and resume tests in `tests/test_r0.py`; 69 selected local tests passed. An unrelated real-cloud launch remains blocked by unverified current account credit.
+- **Lesson:** exercise the target OS publication primitive before generating outcomes; preserve exclusive creation and exact-byte comparison rather than weakening evidence immutability.

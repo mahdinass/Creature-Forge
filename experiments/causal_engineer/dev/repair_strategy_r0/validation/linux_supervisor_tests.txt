@@ -1,0 +1,9 @@
+Command: wsl.exe -d Ubuntu -u mahdi -- python3 -B /mnt/c/Users/mbnas/.codex/worktrees/3935/Creature-Forge/tests/test_r0_supervisor.py -v
+
+test_early_argument_error_requests_stop ... ok
+test_failed_shard_terminates_other_process_groups_and_requests_stop ... ok
+test_normal_completion_requests_stop ... ok
+
+Ran 3 tests in 4.465s
+OK
+Command fakes only; no real sudo/cloud API or physical rollouts.

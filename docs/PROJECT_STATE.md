@@ -550,3 +550,13 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - **Recommendation:** no E-2 RL-1 vs A1. The proposed E-2R (diagnosis-ablation replication on a fresh cohort + HF2) needs
   the owner's decision.
 - **Spend:** ledger $107.19. Both VMs STOPPED.
+
+
+## 2026-10-25 — Isolated R0 preparation; execution blocked on current credit
+
+- Branch `codex/repair-strategy-r0`, from research `0828cbd`; no release, PR #20, E-2R, test or reserve changes. Owner authorized development execution up to $35 additional infrastructure and ten campaign hours, subject to actual available credit.
+- Implemented bounded single/sequential/joint search crossed with frozen/byte-exact DO-1 objectives, exact 3,000-rollout accounting, sanitized policy input, original-relative bounds and unchanged recovery verification. Frozen dev registration: 18 distinct bases, three technical replicates, 324 units. Details: `docs/R0_REPAIRABILITY_PROTOCOL.md`; source/inputs/seeds: `experiments/causal_engineer/dev/repair_strategy_r0/protocol.json`.
+- Added atomic validated checkpoints/resume, provenance, deterministic shards, base-clustered analysis, evidence archive/audit and existing-SA lifecycle/VM supervisor. Validation: 69 selected local tests (zero physical rollouts) and three Linux command-fake supervisor tests passed. Actual VM physics/equivalence/throughput/self-stop gates remain pending.
+- Genuine blocker: console requires sign-in; current available Cloud credit cannot be verified through the exposed SA tooling. Requested authentication immediately and continued safe preparation. No paid start occurred: 0/324 units, R0 gate NOT EVALUATED, zero R0 compute runtime/spend. Existing disks continue charges.
+- Both VMs independently verified STOPPED through SA control-plane API at epoch 1792889886; watchdog Ready and battery allowed. Conservative lifetime ledger $107.262 is not account credit or an invoice. No remote Basic Memory tools exposed; tracked memory used, no sync claimed.
+- Report, validation evidence, limitations and next step: `experiments/causal_engineer/dev/repair_strategy_r0/REPORT.md` and `README.md`. Next: verify actual current credit, perform bounded remote engineering/self-stop/equivalence/throughput gates, then run the unchanged registration only if it fits with margin. No R1 capability conclusion exists.

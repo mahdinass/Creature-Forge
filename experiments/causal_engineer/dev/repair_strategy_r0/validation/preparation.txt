@@ -1,0 +1,95 @@
+{
+  "protocol_sha256": "e9c0a0b1a9f24e173129de569c77c7795ee72a1b5c794efcf39e066dd66ffa26",
+  "cases": [
+    {
+      "instance_id": "hdb-v1-gen-0008:one_side_weakness:4",
+      "cohort": "failed",
+      "family": "one_side_weakness"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0024:clock_fault:1",
+      "cohort": "failed",
+      "family": "clock_fault"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0038:low_ground_friction:1",
+      "cohort": "failed",
+      "family": "low_ground_friction"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0034:short_feet:1",
+      "cohort": "failed",
+      "family": "short_feet"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0037:pitch_sensor_bias:4",
+      "cohort": "failed",
+      "family": "pitch_sensor_bias"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0011:feedback_gain_loss:1",
+      "cohort": "failed",
+      "family": "feedback_gain_loss"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0064:payload_offset:1",
+      "cohort": "failed",
+      "family": "payload_offset"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0039:heavy_torso:1",
+      "cohort": "failed",
+      "family": "heavy_torso"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0004:low_ground_friction:1",
+      "cohort": "failed",
+      "family": "low_ground_friction"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0028:clock_fault:1",
+      "cohort": "failed",
+      "family": "clock_fault"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0062:pitch_sensor_bias:1",
+      "cohort": "failed",
+      "family": "pitch_sensor_bias"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0044:feedback_gain_loss:1",
+      "cohort": "failed",
+      "family": "feedback_gain_loss"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0040:payload_offset:1",
+      "cohort": "control",
+      "family": "payload_offset"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0013:heavy_torso:1",
+      "cohort": "control",
+      "family": "heavy_torso"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0052:clock_fault:1",
+      "cohort": "control",
+      "family": "clock_fault"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0036:short_feet:1",
+      "cohort": "control",
+      "family": "short_feet"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0030:pitch_sensor_bias:4",
+      "cohort": "control",
+      "family": "pitch_sensor_bias"
+    },
+    {
+      "instance_id": "hdb-v1-gen-0054:feedback_gain_loss:1",
+      "cohort": "control",
+      "family": "feedback_gain_loss"
+    }
+  ]
+}

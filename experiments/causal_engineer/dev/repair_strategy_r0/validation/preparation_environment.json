@@ -1,0 +1,1 @@
+{"blas_threads":{"MKL_NUM_THREADS":null,"OMP_NUM_THREADS":null,"OPENBLAS_NUM_THREADS":null},"cpu_count":16,"executable":"C:\\Users\\mbnas\\.vscode\\Creature-Forge\\.venv\\Scripts\\python.exe","machine":"AMD64","mujoco":"3.15.0","numpy":"2.4.6","platform":"Windows-10-10.0.26200-SP0","python":"3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]"}
