@@ -113,7 +113,7 @@ class R0PolicyTests(unittest.TestCase):
 
 class R0RecordTests(unittest.TestCase):
     def test_frozen_smoke_gets_reporting_cohort_without_changing_case_bytes(self):
-        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             directory = Path(t)
             driver.write_new(directory/"smoke_cases.json", [{"instance_id": "excluded", "base_id": "b"}])
             raw = (directory/"smoke_cases.json").read_bytes()
@@ -150,7 +150,7 @@ class R0RecordTests(unittest.TestCase):
         self.assertEqual(len(set(flat)), 60)
 
     def test_checkpoint_is_immutable_and_bad_json_not_resumable(self):
-        with tempfile.TemporaryDirectory(dir=ROOT / "artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             path = Path(t) / "unit.json"
             driver.write_new(path, {"ok": 1})
             driver.write_new(path, {"ok": 1})
@@ -201,7 +201,7 @@ class R0RecordTests(unittest.TestCase):
 
     def test_analysis_rejects_missing_or_unexpected_units(self):
         import argparse
-        with tempfile.TemporaryDirectory(dir=ROOT / "artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             driver.write_new(Path(t) / "execution.json", {})
             (Path(t) / "units").mkdir()
             with mock.patch.object(driver, "load_study", return_value=(
@@ -227,7 +227,7 @@ class R0RecordTests(unittest.TestCase):
              "analysis": {"bootstrap_seed": 2026102507, "bootstrap": 10000}}
         cases = [{"instance_id": f"dev{i}", "base_id": f"b{i}", "family": f"f{i%2}",
                   "cohort": "failed" if i < 12 else "control"} for i in range(18)]
-        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             for regress in (False, True):
                 out = Path(t)/str(regress)
                 driver.write_new(out/"execution.json", {})
@@ -259,7 +259,7 @@ class R0RecordTests(unittest.TestCase):
                 self.assertAlmostEqual(contrast["mean_base_difference"], 1/6)
 
     def test_provenance_rejects_wrong_protocol_sources_and_missing_environment(self):
-        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             protocol = Path(t)/"protocol.json"
             driver.write_new(protocol, {"study": "fixture"})
             provenance = {"protocol_sha256": driver.sha(protocol.read_bytes()),
@@ -276,7 +276,7 @@ class R0RecordTests(unittest.TestCase):
 
     def test_resume_validates_completed_unit_without_reexecution(self):
         import argparse
-        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             p={"actions":["single"],"objectives":["frozen"],"replicates":[0],"budget":3000}
             jobs=driver.units(p,[{"instance_id":"dev"}])
             path=Path(t)/"units"/(driver.unit_id(jobs[0])+".json")
@@ -295,7 +295,7 @@ class R0RecordTests(unittest.TestCase):
 class R0OpsTests(unittest.TestCase):
     def test_legacy_start_entry_point_uses_service_account_without_personal_login(self):
         import r0_nebius as ops
-        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             (Path(t)/"sa.json").write_text(json.dumps({"key_expires_epoch": 9999999999}))
             fc = ops.cloud(t, "batch")
             self.assertIs(fc.ctl, fc.nebius)
@@ -322,7 +322,7 @@ class R0OpsTests(unittest.TestCase):
     def test_archive_exact_bytes_and_compare_scientific_records(self):
         import r0_integrity as integrity
         import tarfile
-        with tempfile.TemporaryDirectory(dir=ROOT/"artifacts") as t:
+        with tempfile.TemporaryDirectory() as t:
             a,b=Path(t)/"a",Path(t)/"b"
             for p,w in [(a,1),(b,2)]:
                 driver.write_new(p/"units/u.json",{"wall_s":w,"design":[1,2]})
