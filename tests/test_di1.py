@@ -66,6 +66,8 @@ class TraceTests(unittest.TestCase):
         self.assertEqual(choose(scored,'raw_eig','x')[0]['id'],'floor')
         r,p=choose(scored,'random','x');self.assertIn(r['id'],('floor','cf'));self.assertEqual(p,.5)
         self.assertEqual(choose(scored,'random','x'),choose(scored,'random','x'))
+        r,p=choose(scored,'random','x',include_original=True)
+        self.assertIn(r['id'],('weigh','floor','cf'));self.assertEqual(p,1/3)
 
 
 if __name__=='__main__':unittest.main()

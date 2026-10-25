@@ -70,18 +70,18 @@ def prepare(source, output):
                        "equivalence": "original versus instrumented full baseline on every eligible pilot base"})
 
 
-def choose(scored, mode, key):
+def choose(scored, mode, key, *, include_original=False):
     if mode == "baseline":
         return scored[0][2], 1.0
     if mode == "raw_eig":
         return max(scored, key=lambda t: t[1])[2], 1.0
-    others = [t[2] for t in scored if t[2]["id"] != scored[0][2]["id"]]
+    others = [t[2] for t in scored if include_original or t[2]["id"] != scored[0][2]["id"]]
     if not others:
         return scored[0][2], 1.0
     return random.Random(f"{CAMPAIGN}:choice:{key}").choice(others), 1 / len(others)
 
 
-def run_path(inst, mode, pool, stop_model, trace_path=None):
+def run_path(inst, mode, pool, stop_model, trace_path=None, *, force_first=False):
     from creature_forge import belief_engine as be, hdb_bench as hb
     from creature_forge.hdb_workbench import HDBWorkbench
     from creature_forge.decision_trace import Journal, instrument, verify_journal, snapshot, plain
@@ -96,15 +96,21 @@ def run_path(inst, mode, pool, stop_model, trace_path=None):
         with cm:
             ep.start()
             for step in range(6):
-                if ep.diagnosis_done(.9):
+                would_stop = ep.diagnosis_done(.9)
+                forced = force_first and step == 0 and mode != "baseline" and would_stop
+                if would_stop and not forced:
                     break
+                origin = plain(snapshot(ep)) if step == 0 else None
                 ranked = ep.rank_experiments()
                 if not ranked:
                     break
-                pick, probability = choose(ranked, mode if step == 0 else "baseline", inst["base_id"])
+                pick, probability = choose(ranked, mode if step == 0 else "baseline", inst["base_id"],
+                                           include_original=forced)
                 if step == 0:
                     first = plain({"state": snapshot(ep), "candidates": ranked, "selected": pick,
                                    "inclusion_probability": probability, "policy": mode})
+                    if force_first:
+                        first.update(origin_state=origin, baseline_would_stop=would_stop, forced=forced)
                     if journal:
                         journal.emit("panel_frozen_before_plant", **first)
                 ep.experiment_step(pick, by="eig" if mode == "baseline" or step else mode, scored=ranked)

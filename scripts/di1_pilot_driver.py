@@ -8,11 +8,14 @@ import time
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--out',required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--out',required=True);p.add_argument('--stop-pilot',action='store_true')
+    p.add_argument('--prior',default='artifacts/di1_pilot_v1');a=p.parse_args()
     out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
     common=[sys.executable,'-B','scripts/di1_study.py','run','--config',
             'experiments/causal_engineer/dev/di1/pilot_config.json','--stop-model',
             'experiments/causal_engineer/dev/di1/stopmap_dev_v1.json','--out',str(out)]
+    if a.stop_pilot:
+        common=[sys.executable,'-B','scripts/di1_stop_pilot.py','--prior',a.prior,'--out',str(out)]
     running=[]
     def launch(i):
         f=open(out/f'base{i}.log','xb')

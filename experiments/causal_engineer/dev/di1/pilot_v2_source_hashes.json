@@ -1,0 +1,21 @@
+{
+  "creature_forge/decision_trace.py": "772372eb0185858ce48952bee82a42188c39d79243973d161333e7b6cfcb293c",
+  "scripts/di1_study.py": "77083fc8ff0b27af7faddc9371a1c7347a847f4ce8cff6dc4b3130a2ed7ecfbf",
+  "scripts/di1_ops.py": "c6f58ac1ace29ad606039913671d977ba466accfc0515007a2e3045a3b1efc1c",
+  "scripts/di1_pilot_driver.py": "53f009b9a4d41cb02424adf79923c7f75772d509129c35bf879bb2bf17264f91",
+  "scripts/di1_pilot_native.sh": "ca40783949c6a0b58781f019e138cd372d1b87ddbe684d410cfb377f934b3580",
+  "docs/DI1_PROTOCOL.md": "30046abf92e2cf393400edeca6d4b7f5e258f131a00d59279e85f177b77619ad",
+  "experiments/causal_engineer/dev/di1/pilot_config.json": "3258f1df4ff74ca2787a0f9c1d26c3948c5947ac113871aa1518ffee145e9fe4",
+  "experiments/causal_engineer/dev/di1/stopmap_dev_v1.json": "8cf94726378daa10b3ef88db36f30887a056b9cda89d4a724651ba5898723595",
+  "creature_forge/belief_engine.py": "12e20cfeaa3f7dfaef1c7ad79f92b9df4cc929cfd2d92c6572ef98d44e66e915",
+  "creature_forge/hidden_plant.py": "91c26fd93fcb303e877ff5ee15ee62b7543077b2f549aae0875bad9e2773b7c6",
+  "creature_forge/hdb_workbench.py": "ba34b0a5f0aa2c729218a53a80a7525a60f6b474086bc79ee8049a50081d83d0",
+  "creature_forge/recovery.py": "c70a7d60f411786539284b31ed1414e23dafbacf58bdbc24fbc76f53d749d687",
+  "scripts/di1_stop_pilot.py": "42dc7794ccc839186628cf68ac601f2bcdfcf3cc288e03411fae4aea12c6a1e0",
+  "scripts/di1_analyze.py": "b3b4fd083f1624b5e6db901a9dc49c5266316aa4b52ac2b54de9f717c4a45ec4",
+  "scripts/di1_generation_replay.py": "6eeea9d9bf0a6ff83956b0aebcc2c50c47a8f03dbb170fa95934291140ea7809",
+  "scripts/di1_feasibility.py": "21d434d80fd2461ff31a5482a16417fcf3435316d0acedf24087848c0515248a",
+  "scripts/di1_closeout.py": "449ba68a3c29aa6b92c33692b99bf5cca39d2dd33a9773764e6f36a9edc33a94",
+  "tests/test_di1.py": "4cb9e9fbff1dbbfa90119a93e31d2e60515bef234a79020cd2c186a54c3db62e",
+  "experiments/causal_engineer/dev/di1/PILOT_AMENDMENT_2.md": "b523777bab16a3d1bbfa815b1ec6cbe0ac3abbcf2cfbec52ea669c7f73cb5ac4"
+}

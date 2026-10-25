@@ -111,7 +111,7 @@ def audit_trace(path):
             'physical_rollout_equivalents':equiv,'static_weigh_equivalents':weigh}
 
 
-def analyze(root):
+def analyze(root,stop_amendment=False):
     root=Path(root);config=json.loads(Path('experiments/causal_engineer/dev/di1/pilot_config.json').read_text())
     rows=[];traces={};excluded=[];equivalences=[]
     for base in config['bases']:
@@ -135,7 +135,7 @@ def analyze(root):
         b,p,s=(arms[m] for m in config['arms'])
         y={m:int(r['verification']['status']=='FULL_RECOVERY') for m,r in arms.items()}
         choice={m:(r['first_decision'] or {}).get('selected',{}).get('id') for m,r in arms.items()}
-        pre=b['first_decision']
+        pre=b['first_decision'] or (p['first_decision'] if stop_amendment else None)
         signals=None
         if pre:
             weights=[p[1] for p in pre['state']['posterior']]
@@ -145,10 +145,20 @@ def analyze(root):
                      'raw_eig_advantage':max(t[1] for t in pre['candidates'])-baseline_eig,
                      'raw_changes_choice':choice['raw_eig']!=choice['baseline']}
         if any(r['first_decision'] is not None for r in arms.values()):
-            panels=[r['first_decision'] for r in arms.values()]
+            panels=[r['first_decision'] for m,r in arms.items() if not (stop_amendment and m=='baseline' and r['first_decision'] is None)]
             if any(p is None for p in panels):raise ValueError('decision fork missing')
             if any(p['state']!=panels[0]['state'] or p['candidates']!=panels[0]['candidates'] for p in panels):
                 raise ValueError('fork predecision state/candidate mismatch')
+            if stop_amendment and b['first_decision'] is None:
+                with open(d/'baseline.jsonl') as f:
+                    origin=next(r['state'] for r in (json.loads(l) for l in f)
+                                if r['kind']=='call_before' and r['method']=='robust_repair')
+                if any(panel['origin_state']!=origin for panel in panels):
+                    raise ValueError('forced probe origin differs from original stopping state')
+            if stop_amendment:
+                refs=json.loads((d/'baseline_reference.json').read_text())['files_sha256']
+                if any(hashlib.sha256((d/name).read_bytes()).hexdigest()!=h for name,h in refs.items()):
+                    raise ValueError('baseline reference bytes changed')
         rows.append({'base':base['base_id'],'parent':base['parent_dev_base'],'full':y,'choice':choice,
                      'predecision_signals':signals,
                      'distinct_final_interventions':len({hashlib.sha256(json.dumps({k:r['scientific']['selected'][k] for k in ('body','vector')},sort_keys=True).encode()).hexdigest() for r in arms.values()}),
@@ -173,10 +183,12 @@ def analyze(root):
     sensitivity=[{'delta':delta,'discordance':dis,'required_n_90pct_power':required_n(dis,delta)}
                  for delta in (.05,.1,.15) for dis in (.2,.4,.6)]
     summary={'stage':'engineering pilot only','gate':'PENDING_FEASIBILITY','independent_bases':n,
+             'amendment':'v2_stop_or_probe' if stop_amendment else 'v1_probe_choice',
              'attempts':8,'excluded':excluded,'rows':rows,'equivalence_passes':len(equivalences),
              'opportunity_bases':opp,'opportunity_rate':opp/n if n else None,
              'opportunity_exact95':rate_interval(opp,n),'contrasts':contrasts,'power_sensitivity':sensitivity,
              'active_decision_bases':sum(r['choice']['baseline'] is not None for r in rows),
+             'alternative_decision_bases':sum(r['choice']['raw_eig'] is not None for r in rows),
              'raw_changed_choices':sum(r['choice']['raw_eig']!=r['choice']['baseline'] for r in rows),
              'random_changed_choices':sum(r['choice']['random']!=r['choice']['baseline'] for r in rows),
              'full_paths':{m:sum(r['full'][m] for r in rows) for m in config['arms']},
@@ -195,8 +207,9 @@ def analyze(root):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--root',required=True);p.add_argument('--out',required=True);a=p.parse_args()
-    out=analyze(a.root);write_new(a.out,out)
+    p=argparse.ArgumentParser();p.add_argument('--root',required=True);p.add_argument('--out',required=True)
+    p.add_argument('--stop-amendment',action='store_true');a=p.parse_args()
+    out=analyze(a.root,a.stop_amendment);write_new(a.out,out)
     print(json.dumps({k:v for k,v in out.items() if k not in ('rows','traces','excluded')},indent=2))
 
 
