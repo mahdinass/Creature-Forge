@@ -69,5 +69,15 @@ class TraceTests(unittest.TestCase):
         r,p=choose(scored,'random','x',include_original=True)
         self.assertIn(r['id'],('weigh','floor','cf'));self.assertEqual(p,1/3)
 
+    def test_legacy_threshold_json_roundtrip_keeps_numeric_guards(self):
+        import sys
+        sys.path.insert(0,str(Path('scripts').resolve()))
+        from di1_study import science
+        live={'trace':[(.25,2),(.125,4)],'s_star':.25}
+        saved=json.loads(json.dumps(live))
+        self.assertEqual(science(live),science(saved))
+        saved['trace'][0][1]=3
+        self.assertNotEqual(science(live),science(saved))
+
 
 if __name__=='__main__':unittest.main()

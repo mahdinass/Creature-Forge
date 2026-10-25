@@ -32,7 +32,7 @@ def main():
                 if (d/'threshold.json').exists():
                     th=json.loads((d/'threshold.json').read_text())
                     again=hb.threshold(base,th['family'],th['variant'],pool=pool)
-                    if again!=th:raise ValueError('threshold replay mismatch')
+                    if science(again)!=science(th):raise ValueError('threshold replay mismatch')
                 if (d/'instance.json').exists():
                     inst=json.loads((d/'instance.json').read_text());again=hb.check_eligibility(inst,pool=pool)
                     if again!=inst:raise ValueError('faulty qualification replay mismatch')

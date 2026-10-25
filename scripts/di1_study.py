@@ -26,7 +26,7 @@ def sha(x):
 def science(x):
     if isinstance(x, dict):
         return {k: science(v) for k, v in x.items() if k not in ("wall_s", "elapsed_s")}
-    if isinstance(x, list):
+    if isinstance(x, (list, tuple)):
         return [science(v) for v in x]
     return x
 
