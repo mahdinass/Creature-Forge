@@ -48,5 +48,24 @@ class TraceTests(unittest.TestCase):
         h,d=m.limits(c,105,1000+6*3600);self.assertEqual(h,0);self.assertEqual(d,7)
         with self.assertRaises(ValueError):m.limits(c,float('nan'),1000)
 
+    def test_exact_power_and_small_sample_uncertainty(self):
+        import sys
+        sys.path.insert(0,str(Path('scripts').resolve()))
+        from di1_analyze import power,upper_rate,rate_interval
+        self.assertEqual(power(5,1.,1.),0.)
+        self.assertAlmostEqual(power(6,1.,1.),1.)
+        self.assertAlmostEqual(upper_rate(0,8),1-.05**(1/8))
+        self.assertEqual(rate_interval(0,0),[0.,1.])
+
+    def test_probe_policy_uses_only_frozen_ranked_candidates(self):
+        import sys
+        sys.path.insert(0,str(Path('scripts').resolve()))
+        from di1_study import choose
+        scored=[(.3,.3,{'id':'weigh','cost':1}),(.2,.8,{'id':'floor','cost':4}),(.1,.4,{'id':'cf','cost':4})]
+        self.assertEqual(choose(scored,'baseline','x')[0]['id'],'weigh')
+        self.assertEqual(choose(scored,'raw_eig','x')[0]['id'],'floor')
+        r,p=choose(scored,'random','x');self.assertIn(r['id'],('floor','cf'));self.assertEqual(p,.5)
+        self.assertEqual(choose(scored,'random','x'),choose(scored,'random','x'))
+
 
 if __name__=='__main__':unittest.main()
