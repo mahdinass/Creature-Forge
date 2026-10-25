@@ -109,9 +109,36 @@ def prepare(records_root, out):
                                            'is_original_submission':idx==r['repair']['design'],
                                            'verified_status':r['verification']['status'] if idx==r['repair']['design'] else None},
                              'source':{'file':name,'line':lineno,'row_sha256':sha(line)}})
+    # Different pipeline indices can name the same unchanged physical design.
+    # They are one intervention, not independent measurements. Keep the largest
+    # check (8 seeds are a prefix of 16) and propagate a FULL label only across
+    # exact same-design identity, never merely the same tool.
+    logged_checks=len(jobs); merged={}
+    for j in jobs:
+        key=sha(canonical({k:v for k,v in j['predictor'].items() if k!='n'}))
+        if key not in merged:
+            j['evaluation']['design_indices']=[j['evaluation']['design_index']]
+            merged[key]=j
+            continue
+        old=merged[key];a,b=old['gold'],j['gold']
+        if a['n']==b['n'] and a['walking']!=b['walking']:
+            raise ValueError('identical physical check has conflicting observations')
+        small,large=sorted((a,b),key=lambda x:x['n'])
+        if not 0<=large['walking']-small['walking']<=large['n']-small['n']:
+            raise ValueError('prefix robustness observations conflict')
+        if b['n']>a['n']:
+            old['gold']=b;old['predictor']['n']=b['n']
+        old['evaluation']['design_indices'].append(j['evaluation']['design_index'])
+        if j['evaluation']['is_original_submission']:
+            old['evaluation']['is_original_submission']=True
+            old['evaluation']['verified_status']=j['evaluation']['verified_status']
+    jobs=list(merged.values())
+    for j in jobs:j['id']=sha(canonical(j['predictor']))[:24]
+    if len({j['id'] for j in jobs})!=len(jobs):raise ValueError('nonunique physical input identity')
     summary={'version':VERSION,'source_files':sources,'counts':dict(counts),
              'independent_bases':len(bases),'bases':sorted(bases),'families':sorted(families),
              'eligible_episodes':len(episodes),'unique_saved_checked_interventions':len(jobs),
+             'logged_check_entries':logged_checks,'duplicate_design_entries_collapsed':logged_checks-len(jobs),
              'matched_aggregate_observation_seed_count':sum(j['gold']['n'] for j in jobs),
              'prospectively_logged_exact_prediction_pairs':0,
              'retrospective_predictions_required':len(jobs),

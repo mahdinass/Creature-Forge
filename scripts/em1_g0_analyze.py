@@ -47,6 +47,11 @@ def analyze(root):
             raise ValueError('mismatched seed/condition identity')
         if any(not r.get('ok') for r in p['rows']):raise ValueError('errored physical prediction')
         if sum(r['walking'] for r in p['rows'])!=p['walking']:raise ValueError('prediction aggregate inconsistent')
+        from creature_forge.hdb_bench import instance_seeds
+        b,f,s=q['instance_key'].rsplit(':',2)
+        if p['seeds']!=instance_seeds(b,f,int(s))['robust'][:n]:
+            raise ValueError('prediction used the wrong seed role')
+        if not 0<=j['gold']['walking']<=n:raise ValueError('invalid measured target')
         y=j['gold']['walking']/n;pred=p['walking']/n
         rows.append({'id':uid,'instance_id':e['instance_id'],'base':e['base'],'family':e['family'],
                      'design_index':e['design_index'],'original_submission':e['is_original_submission'],

@@ -3,7 +3,7 @@
   "stage": "retrospective measurement, not learner or prospective gate",
   "parent_commit": "8e7e8246d62502861f882f0fc3a9306274824c9c",
   "source_sha256_lf": {
-    "scripts/em1_audit.py": "749b88992d3a9824206ff3fa376d9ab6090663b9732310092296df509a2fdb83",
+    "scripts/em1_audit.py": "dad38c6bb39806ab5bb06996421d6da2e0b22a06ca25815c64da750467fa5c09",
     "scripts/em1_ops.py": "5da2a9994b3c4ec55e11b853453ffc96ef6a1c6526f7d7dfc86843f44f4b2c4f",
     "scripts/r0_experiment.py": "4dbe170687b951feff241ad2dbf3b550ccd1e48950f7d4b61f154ea189c336d9",
     "scripts/r0_nebius.py": "42f3e028054e163a9cfe843ad9e9bb1b659ffae022b8a081802d1f33beffc5c8",
@@ -12,11 +12,11 @@
     "creature_forge/hdb_bench.py": "7bd810cf9b843ef9fa9b84f73f7f03ae55f91878030a2acbd85446845a64af05",
     "creature_forge/hdb_workbench.py": "ba34b0a5f0aa2c729218a53a80a7525a60f6b474086bc79ee8049a50081d83d0",
     "creature_forge/arena.py": "ad980b871dc8ed42e55f1a469d09f4787fb4382a22d38b51482e781657eb33c2",
-    "tests/test_em1_audit.py": "a71f1518605eaadb0499c8ac52345ca4a0e50cef0d4cdd2d00603a15f483eaae",
-    "scripts/em1_g0_analyze.py": "e52eafcce280693ec4be2c30113cb772f542d99ce40b5e26ad603657bfbf3a00"
+    "tests/test_em1_audit.py": "7a314afcf8c1590f617bb131efcefe2a6d8adb7830473991b6221c6351aa9605",
+    "scripts/em1_g0_analyze.py": "0016b1a9128895fee888406dcf101abac423a214f403a9523085304c5e7682b8"
   },
-  "jobs_sha256": "ef3d627c993b268524c83cd9e2fe467d2e63319a925c6483f85cdb5b3fa8f76e",
-  "twin_rollouts": 12592,
+  "jobs_sha256": "00806fea2d1f09fc70d0f4a349ab3f4b84dd1529cb0f683571d9eded5a9af2fa",
+  "twin_rollouts": 11632,
   "plant_rollouts": 0,
   "model_calls": 0,
   "max_workers": 6,
@@ -35,6 +35,8 @@
     "decision relevance separated from missing FULL counterfactuals",
     "adequate power/precision and bounded cost before prospective launch"
   ],
-  "engineering_amendment": "ENGINEERING_AMENDMENT_1.md",
-  "recovery_limit_h": 0.75
+  "engineering_amendment": "ENGINEERING_AMENDMENT_2.md",
+  "recovery_limit_h": 0.75,
+  "unique_interventions": 804,
+  "logged_check_entries": 866
 }

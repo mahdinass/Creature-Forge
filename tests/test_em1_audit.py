@@ -86,4 +86,26 @@ class Audit(unittest.TestCase):
         self.assertEqual(r['id'],'bad-job')
         self.assertIn('RuntimeError: sentinel',r['error'])
 
+    def test_duplicate_design_indices_are_one_physical_intervention(self):
+        r=fixture();d=copy.deepcopy(r['designs'][1]);d['index']=2;r['designs'].append(d)
+        r['repair']['log'].append({'design':2,'check':7})
+        r['engine']['ledger']['lines'].append({'item':'robustness_check','detail':{'design':2,'n':8}})
+        s,j=self.run_record(r)
+        self.assertEqual((s['logged_check_entries'],len(j)),(2,1))
+        self.assertEqual(j[0]['evaluation']['design_indices'],[1,2])
+        self.assertTrue(j[0]['evaluation']['is_original_submission'])
+
+    def test_conflicting_duplicate_physics_is_rejected(self):
+        r=fixture();d=copy.deepcopy(r['designs'][1]);d['index']=2;r['designs'].append(d)
+        r['repair']['log'].append({'design':2,'check':1})
+        r['engine']['ledger']['lines'].append({'item':'robustness_check','detail':{'design':2,'n':8}})
+        with self.assertRaises(ValueError):self.run_record(r)
+
+    def test_analysis_rejects_incomplete_comparison(self):
+        import em1_g0_analyze
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1]/'artifacts') as tmp:
+            p=Path(tmp);(p/'jobs.json').write_text(json.dumps({'jobs':[{'id':'missing'}]}))
+            with self.assertRaisesRegex(ValueError,'incomplete'):
+                em1_g0_analyze.analyze(p)
+
 if __name__=='__main__':unittest.main()
