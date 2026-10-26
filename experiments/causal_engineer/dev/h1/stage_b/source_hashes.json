@@ -1,0 +1,7 @@
+{
+  "docs/H1_RELIABILITY_PROTOCOL.md": "7e3cfac539f57d7a71d316213891645a6ca916b0f4bd9017233975b829f0e221",
+  "scripts/h1_reliability.py": "20307b68d9e7c4063c17f60178c72455230f50c0290d842b37aff929a4642383",
+  "scripts/h1_reliability_audit.py": "317832f31c66914dc7c4c15188d39bf03758388c67c60b40c7d1448ae15697f8",
+  "scripts/h1_reliability_native.sh": "22ef2b8308ce85cb273e25125bcf1baf66d4999caf30f3385a6fcdd91e7bef72",
+  "tests/test_h1_reliability.py": "d25d2ec2f690f323d1db81dababa92be0cd5f0e037aa45b4673713db27520639"
+}
