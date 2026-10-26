@@ -1,0 +1,45 @@
+{
+  "checked_epoch": 1793033104.0726569,
+  "states": {
+    "main": {
+      "id": "computeinstance-e01g6rhpgcpnf1bfbr",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "8vcpu-32gb"
+      }
+    },
+    "batch": {
+      "id": "computeinstance-e01efb17k9jbzct0m0",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "64vcpu-256gb"
+      }
+    }
+  },
+  "ledger": {
+    "usd": 124.876,
+    "cap_usd": 120.0,
+    "profiles": {
+      "main": {
+        "compute_h": 72.369,
+        "usd": 20.483,
+        "cap_usd": 120.0
+      },
+      "batch": {
+        "compute_h": 48.874,
+        "usd": 104.393,
+        "cap_usd": 120.0
+      }
+    }
+  },
+  "rate": {
+    "compute_usd_per_h": 2.112,
+    "disk_usd_per_h": 0.00486,
+    "total_usd_per_h": 2.1169,
+    "run_90min_usd": 3.18,
+    "deadline_cap_usd": 6.35,
+    "disk_usd_per_day_when_stopped": 0.117
+  }
+}

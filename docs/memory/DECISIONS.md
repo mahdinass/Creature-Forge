@@ -1,5 +1,9 @@
 # Creature Forge — durable decisions
 
+## 2026-10-26 — H3 checkpoint paused at owner's request
+
+Status: **paused / prototype unvalidated**. Branch `codex/h3-capability-audit`, H1 base a2619c7. Saved-development audit, primary-source review, four proposals, seven draft documents and research-only nested stance residual/runner implemented;26 non-physics tests passed. No H3 physics, training, Cloud starts or Token Factory calls. Search versus controller expressiveness remains unresolved; no AI-learning benefit claimed. Proposed$8/3h pilot is not authorized. Both VMs API STOPPED at1793033104.0726569; compute unchanged. Exact progress, unfinished plan freeze/review/PR/sync and resume steps: `docs/H3_RESUME.md`. Preserve sealed records/V1 freeze/inherited42 manifest omissions. Continue only on explicit resume; new physics/spending requires separate approval.
+
 This is the Git-visible decision index. Add one dated section per consequential choice, with status (`active`, `superseded`, or `proposed`), alternatives, reason and concrete evidence. Prefer succinct entries linking to ADRs/commits instead of copying large discussions.
 
 ## 2026-10-13 — Memory architecture

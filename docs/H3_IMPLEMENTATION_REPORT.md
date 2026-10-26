@@ -1,0 +1,29 @@
+# H3 implementation report — research prototype only
+
+The implementation is justified as a small nested controller-class test, not as a diagnosed cure or speculative learner. Native physical compatibility and recovery benefit remain unverified. V1 factories, controllers, historical experiments and submission materials are unchanged.
+
+## Files and contracts
+
+- `creature_forge/h3_capability.py`: bounded two-gain stance residual; exact zero-output identity; reset/sense forwarding; strict vector/gain validation; exception-safe single-thread plant-factory scope;17/19D walk/seed jobs; duration-weighted budget pool; matched CMA search reusing the existing kernel and evaluation hooks.
+- `scripts/h3_run.py`: non-physics plan creation; explicit-approval-only native gate, qualification and per-case execution; complete policy freezing before verification; rich diagnostic logger; exclusive canonical unit directories and fsynced reservation journal. It does not contain Cloud lifecycle, Token Factory or automatic follow-on calls.
+- `scripts/h3_analyze.py`: saved-row independent FULL replay,12-lineage stratified bootstrap, strict completeness/seed checks, healthy/harm/persistent-rescue gates, diagnostic clipping/activity checks and explicit pilot-only interpretation.
+- `scripts/h3_saved_audit.py`: stdlib-only existing-development evidence recount with hashes and no simulator/model/training calls. Explicit prior-root option accesses existing EM1/DI1 raw records without copying them into this branch.
+- `tests/test_h3.py`: non-physics contracts, synthetic search dispatch and analysis-gate fixtures. Fabricated unit-test responses are confined to tests, not reported as research evidence. MuJoCo `mj_step` and `mj_forward` are patched to raise during these tests.
+- `experiments/causal_engineer/dev/h3/saved_audit.json`: completed prior-evidence analysis. The machine plan and final SHA receipt remain **unfinished at the requested pause**; `plan.json` does not yet exist. No H3 physical outcomes.
+- Seven `docs/H3_*.md` documents, project-state/memory updates and `.gitattributes` rules preserve exact new research artifacts.
+
+## Validation scope
+
+Environment preflight found no worktree venv; global Windows Python3.11.9 had NumPy but no MuJoCo. The original repository's existing `C:/Users/mbnas/.vscode/Creature-Forge/.venv/Scripts/python.exe` was inspected and reused: Python3.11.9, NumPy2.4.6, MuJoCo3.15.0. No environment or dependency was created, installed or overwritten. Initial global-Python test import failure is an environment limitation, corrected by using that existing venv.
+
+The H3 tests exercise real FP controller objects on synthetic input streams, exact zero-gain torque identity, cap/contact/ramp/sign behavior, nested/concurrent scope rejection and restoration, non-mutation of job inputs, budget-before-dispatch, matched optimizer dimensionality/cost, grouped positive/negative/unstable/harm cases, malformed panels and default execution refusal. H1 non-physics guards are retained. Final commands/counts and frozen-record warning are recorded in `H3_DECISION.md` and the H3 evidence directory.
+
+Plan/source validation reads data or constructs controller/body objects only; it does not compile a MuJoCo model or step physics. Byte-identity of saved H1 raw manifests and all covered historical frozen records is checked. The known **42 inherited E1 manifest coverage omissions** remain; no manifest regeneration or concealment is permitted.
+
+## Limitations before execution
+
+The plant bridge temporarily replaces a module factory in a dedicated worker process. It refuses Python thread concurrency/nesting and always restores the factory; this is research infrastructure, not a production registry extension. Unit tests validate its routing and lifetime. They cannot establish native physical trajectory equality, multiprocessing/throughput behavior on the Cloud environment or19D end-to-end verified recovery. The registered T1 native gate is mandatory.
+
+The prototype has no capability recognizer or learned family selector; it adapts two additional gains by conventional physical search. Its runner is prepared, not executed. Qualification yield, useful residual authority after clipping, search adequacy, statistical power and deadline fit are uncertain. A hard Cloud API timer and external watchdog must be configured through existing operations tools after fresh approval; a Python dispatch guard is not a billing shutdown mechanism. The receipt's human-message reference documents authorization; it does not independently authenticate a human.
+
+No full repository test discovery was run because many existing tests generate new MuJoCo trajectories, outside current permission. The result is a locally tested research prototype with explicit physical gates pending, not validated functionality or an achieved recovery improvement.

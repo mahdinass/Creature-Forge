@@ -41,3 +41,10 @@ docs/VEL2_*.md -text
 experiments/causal_engineer/dev/h1/** -text
 experiments/causal_engineer/dev/h1/** whitespace=trailing-space,space-before-tab,cr-at-eol
 docs/H1_*.md -text
+# H3 preparation is distinct from the sealed historical studies.
+experiments/causal_engineer/dev/h3/** -text
+experiments/causal_engineer/dev/h3/** whitespace=trailing-space,space-before-tab,cr-at-eol
+docs/H3_*.md -text
+creature_forge/h3_*.py -text
+scripts/h3_*.py -text
+tests/test_h3.py -text
