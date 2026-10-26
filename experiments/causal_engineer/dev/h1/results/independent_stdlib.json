@@ -1,0 +1,127 @@
+{
+  "imports_project_physics_or_verdict": false,
+  "original_r0_assessments_replayed": 324,
+  "stage_a": {
+    "base_equal_oracle_gain": 0.05864197530864197,
+    "gate": true,
+    "manifest_entries": 346,
+    "missed_full_bases": 9,
+    "missed_full_screens": 19,
+    "new_assessments": 320,
+    "new_equivalents": 21216,
+    "new_response_rows": 18288,
+    "new_status_counts": {
+      "FULL_RECOVERY": 96,
+      "NOT_RECOVERED": 70,
+      "PARTIAL_IMPROVEMENT": 154
+    },
+    "reverse_bases": 15,
+    "reverse_screens": 79
+  },
+  "stage_a_source_hashes": 108,
+  "stage_b": {
+    "fixed_physical_rules": {
+      "first_training_rank": {
+        "bases_harmed": 11,
+        "bases_improved": 4,
+        "gain": -0.07098765432098765,
+        "whole_base95": [
+          -0.12191358024691358,
+          -0.026234567901234566
+        ]
+      },
+      "fitness_keep_incumbent_ties": {
+        "bases_harmed": 1,
+        "bases_improved": 0,
+        "gain": -0.0015432098765432098,
+        "whole_base95": [
+          -0.004629629629629629,
+          0.0
+        ]
+      },
+      "incumbent": {
+        "bases_harmed": 0,
+        "bases_improved": 0,
+        "gain": 0.0,
+        "whole_base95": [
+          0.0,
+          0.0
+        ]
+      },
+      "survival_walking_fitness": {
+        "bases_harmed": 2,
+        "bases_improved": 0,
+        "gain": -0.0030864197530864196,
+        "whole_base95": [
+          -0.007716049382716049,
+          0.0
+        ]
+      },
+      "walking_first_training_tie": {
+        "bases_harmed": 2,
+        "bases_improved": 4,
+        "gain": 0.006172839506172839,
+        "whole_base95": [
+          -0.0030864197530864196,
+          0.016975308641975308
+        ]
+      },
+      "walking_keep_incumbent_ties": {
+        "bases_harmed": 0,
+        "bases_improved": 0,
+        "gain": 0.0,
+        "whole_base95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "gate": false,
+    "gate_checks": {
+      "complete_error_free": true,
+      "fresh_panel_oracle_gain": true,
+      "legal_physical_decision_signal": false,
+      "persistent_missed_bases": true
+    },
+    "manifest_entries": 1306,
+    "new_assessments": 1280,
+    "new_equivalents": 90096,
+    "new_response_rows": 75768,
+    "new_status_counts": {
+      "FULL_RECOVERY": 459,
+      "NOT_RECOVERED": 279,
+      "PARTIAL_IMPROVEMENT": 542
+    },
+    "new_unique_disjoint_seeds": 1728,
+    "oracle_headroom": 0.08179012345679013,
+    "persistent_missed_bases": 4,
+    "requirement_observed_missing": {
+      "confirmation_body_contact": {
+        "fail": 35,
+        "missing": 683,
+        "pass": 562
+      },
+      "confirmation_median_speed_upright": {
+        "missing": 683,
+        "pass": 597
+      },
+      "confirmation_walking_frac": {
+        "fail": 121,
+        "missing": 683,
+        "pass": 476
+      },
+      "improvement": {
+        "fail": 279,
+        "pass": 1001
+      },
+      "validation_walking": {
+        "fail": 594,
+        "pass": 686
+      }
+    },
+    "source_hashes": 5,
+    "stable_candidates": 477,
+    "strict_rank_reversals": 6
+  },
+  "version": "h1-independent-stdlib-v1"
+}

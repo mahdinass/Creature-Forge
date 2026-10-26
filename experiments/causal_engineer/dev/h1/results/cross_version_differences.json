@@ -1,0 +1,50 @@
+[
+  {
+    "path": "/fixed_physical_rules/first_training_rank/descriptive_whole_base95/0",
+    "native": -0.12191358024691357,
+    "local": -0.12191358024691354,
+    "absolute_difference": 2.7755575615628914e-17
+  },
+  {
+    "path": "/fixed_physical_rules/first_training_rank/fresh_panel_base_equal_net_full_gain",
+    "native": -0.07098765432098765,
+    "local": -0.07098765432098764,
+    "absolute_difference": 1.3877787807814457e-17
+  },
+  {
+    "path": "/fixed_physical_rules/walking_first_training_tie/descriptive_whole_base95/1",
+    "native": 0.016975308641975308,
+    "local": 0.01697530864197531,
+    "absolute_difference": 3.469446951953614e-18
+  },
+  {
+    "path": "/fixed_physical_rules/walking_first_training_tie/fresh_panel_base_equal_net_full_gain",
+    "native": 0.006172839506172839,
+    "local": 0.00617283950617284,
+    "absolute_difference": 8.673617379884035e-19
+  },
+  {
+    "path": "/full_stability_whole_base95/1",
+    "native": 0.8284391534391534,
+    "local": 0.8284391534391533,
+    "absolute_difference": 1.1102230246251565e-16
+  },
+  {
+    "path": "/requirement_repeatability/confirmation_walking_frac/base_equal_agreement",
+    "native": 0.7245359721743271,
+    "local": 0.7245359721743269,
+    "absolute_difference": 2.220446049250313e-16
+  },
+  {
+    "path": "/requirement_repeatability/improvement/descriptive_whole_base95/1",
+    "native": 0.9709219490265242,
+    "local": 0.9709219490265243,
+    "absolute_difference": 1.1102230246251565e-16
+  },
+  {
+    "path": "/requirement_repeatability/validation_walking/base_equal_agreement",
+    "native": 0.8105699069751358,
+    "local": 0.8105699069751356,
+    "absolute_difference": 1.1102230246251565e-16
+  }
+]

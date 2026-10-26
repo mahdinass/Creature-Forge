@@ -209,3 +209,8 @@ Both VMs API STOPPED00:22:10UTC, reconfirmed00:23:56UTC /01:23:56Oslo. Initial/f
 ## 2026-10-26 — H1 exact missing-counterfactual prerequisite
 
 Recovered Stage0 confirms 320 missing R0 candidate/condition identities on18 historical bases. Freeze exact alternatives and original matched development conditions before outcomes; preserve full_recovery_v1 and sealed boundaries. StageA advances only with complete error-free outcomes, >=3 missed-FULL bases and >=5pp base-equal oracle headroom. This measures the R0 finalist selector opportunity, not production A1 or historical-experience benefit. Source: `docs/H1_PROTOCOL.md`, `experiments/causal_engineer/dev/h1/`. No learner unless independent reliability, support, power and prospective gates justify it.
+
+
+## 2026-10-26 — H1 bounded investigation stops at B decision-value gate
+
+Available exact finalist opportunity is established (A19misses/9bases; Bpersistentmisses4bases), but frozen legal physical rules fail useful independent decision-value screen. Best+0.617pp95[-0.309,+1.698], not5pp. NOT EVALUABLE for experience-learning recovery; no learner/C/D or Nemotron claim.18historical bases do not provide powered independent prospective evidence; conditional confirmation remains missing. Preserve negative/insufficient-evidence result, all raw outcomes and current production behavior. Evidence: docs/H1_RESULTS.md, docs/H1_DECISION.md, experiments/causal_engineer/dev/h1/results/independent_stdlib.json. New paid studies need separate justified registration and authorization.

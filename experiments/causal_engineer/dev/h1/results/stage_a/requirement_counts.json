@@ -1,0 +1,10 @@
+{
+  "assessments": 320,
+  "improvement_pass": 250,
+  "validation_walking_pass": 138,
+  "confirmation_observed": 122,
+  "body_contact_pass": 119,
+  "median_speed_upright_pass": 122,
+  "walking_frac_pass": 98,
+  "confirmation_unexecuted_missing": 198
+}

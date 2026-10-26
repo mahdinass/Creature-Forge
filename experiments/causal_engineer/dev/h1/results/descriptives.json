@@ -1,0 +1,53 @@
+{
+  "controls_absolute_paired_counts": {
+    "first_training_rank": {
+      "full": 230,
+      "total_paired_panels": 648,
+      "wins": 18,
+      "losses": 64,
+      "decisions_changed": 135
+    },
+    "fitness_keep_incumbent_ties": {
+      "full": 275,
+      "total_paired_panels": 648,
+      "wins": 0,
+      "losses": 1,
+      "decisions_changed": 4
+    },
+    "incumbent": {
+      "full": 276,
+      "total_paired_panels": 648,
+      "wins": 0,
+      "losses": 0,
+      "decisions_changed": 0
+    },
+    "survival_walking_fitness": {
+      "full": 274,
+      "total_paired_panels": 648,
+      "wins": 0,
+      "losses": 2,
+      "decisions_changed": 10
+    },
+    "walking_first_training_tie": {
+      "full": 280,
+      "total_paired_panels": 648,
+      "wins": 8,
+      "losses": 4,
+      "decisions_changed": 32
+    },
+    "walking_keep_incumbent_ties": {
+      "full": 276,
+      "total_paired_panels": 648,
+      "wins": 0,
+      "losses": 0,
+      "decisions_changed": 0
+    }
+  },
+  "persistent_missed_screens": 7,
+  "rank_reversal_bases": 4,
+  "any_pair_difference_change": 125,
+  "total_new_assessments": 1600,
+  "total_new_response_rows": 94056,
+  "total_new_equivalents": 111312.0,
+  "shard_logs_with_resource_tracker_warnings": 8
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-26",
+  "A_guards_local_and_native": 7,
+  "B_guards_local_and_native": 3,
+  "resumption_full_independent_replay_exact": true,
+  "independent_assessments_replayed": 1924,
+  "native_manifest_entries_verified": 1652,
+  "source_pins_verified": 113,
+  "native_analysis_repeats_byte_exact": true,
+  "cross_version_max_float_difference": 2.220446049250313e-16,
+  "git_diff_check": "passed",
+  "sealed_core_frontend_diff_from_baseline": "empty",
+  "full_suite_green": false,
+  "inherited_frozen_manifest_coverage_failure_omissions": 42,
+  "auditor_sha256_lf": "3276495ca8cba4dec9924fad306d29d7a9ace66bbf0794c8941c1409bcb14d07"
+}

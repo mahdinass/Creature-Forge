@@ -1,0 +1,164 @@
+{
+  "scope": "Conditional prospective feasibility planning, not empirical Stage C learning evaluation",
+  "existing_independent_base_groups": 18,
+  "new_lineages": 0,
+  "paired_binary_assumptions": {
+    "two_sided_alpha": 0.05,
+    "power": 0.8,
+    "formula": "ceil((z_.975+z_.8)^2*(discordance-delta^2)/delta^2)"
+  },
+  "sample_size_sensitivity": [
+    {
+      "useful_gain": 0.1,
+      "discordance_assumed": 0.2,
+      "evaluation_bases_approx": 150
+    },
+    {
+      "useful_gain": 0.1,
+      "discordance_assumed": 0.4,
+      "evaluation_bases_approx": 307
+    },
+    {
+      "useful_gain": 0.05,
+      "discordance_assumed": 0.2,
+      "evaluation_bases_approx": 621
+    },
+    {
+      "useful_gain": 0.05,
+      "discordance_assumed": 0.4,
+      "evaluation_bases_approx": 1248
+    }
+  ],
+  "resource_sensitivity": [
+    {
+      "evaluation_bases": 150,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 1253400.0,
+      "physics_hours_with_25percent_margin": 6.4480466666666665,
+      "quoted_cloud_usd_before_ops": 13.649869988666666
+    },
+    {
+      "evaluation_bases": 150,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 1884600.0,
+      "physics_hours_with_25percent_margin": 9.695219999999999,
+      "quoted_cloud_usd_before_ops": 20.523811217999995
+    },
+    {
+      "evaluation_bases": 150,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 1504080.0,
+      "physics_hours_with_25percent_margin": 7.737656,
+      "quoted_cloud_usd_before_ops": 16.379843986399997
+    },
+    {
+      "evaluation_bases": 150,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 2261520.0,
+      "physics_hours_with_25percent_margin": 11.634264000000002,
+      "quoted_cloud_usd_before_ops": 24.628573461600002
+    },
+    {
+      "evaluation_bases": 307,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 2565292.0,
+      "physics_hours_with_25percent_margin": 13.197002177777776,
+      "quoted_cloud_usd_before_ops": 27.93673391013777
+    },
+    {
+      "evaluation_bases": 307,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 3857148.0,
+      "physics_hours_with_25percent_margin": 19.8428836,
+      "quoted_cloud_usd_before_ops": 42.005400292839994
+    },
+    {
+      "evaluation_bases": 307,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 2815972.0,
+      "physics_hours_with_25percent_margin": 14.48661151111111,
+      "quoted_cloud_usd_before_ops": 30.666707907871107
+    },
+    {
+      "evaluation_bases": 307,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 4234068.0,
+      "physics_hours_with_25percent_margin": 21.7819276,
+      "quoted_cloud_usd_before_ops": 46.110162536439994
+    },
+    {
+      "evaluation_bases": 621,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 5189076.0,
+      "physics_hours_with_25percent_margin": 26.694913199999995,
+      "quoted_cloud_usd_before_ops": 56.51046175307998
+    },
+    {
+      "evaluation_bases": 621,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 7802244.0,
+      "physics_hours_with_25percent_margin": 40.138210799999996,
+      "quoted_cloud_usd_before_ops": 84.96857844251998
+    },
+    {
+      "evaluation_bases": 621,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 5439756.0,
+      "physics_hours_with_25percent_margin": 27.984522533333333,
+      "quoted_cloud_usd_before_ops": 59.240435750813326
+    },
+    {
+      "evaluation_bases": 621,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 8179164.0,
+      "physics_hours_with_25percent_margin": 42.0772548,
+      "quoted_cloud_usd_before_ops": 89.07334068611999
+    },
+    {
+      "evaluation_bases": 1248,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 10428288.0,
+      "physics_hours_with_25percent_margin": 53.64774826666667,
+      "quoted_cloud_usd_before_ops": 113.56691830570665
+    },
+    {
+      "evaluation_bases": 1248,
+      "training_bases_illustrative_not_validated": 0,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 15679872.0,
+      "physics_hours_with_25percent_margin": 80.66423040000001,
+      "quoted_cloud_usd_before_ops": 170.75810933376
+    },
+    {
+      "evaluation_bases": 1248,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.5,
+      "equivalents": 10678968.0,
+      "physics_hours_with_25percent_margin": 54.9373576,
+      "quoted_cloud_usd_before_ops": 116.29689230343999
+    },
+    {
+      "evaluation_bases": 1248,
+      "training_bases_illustrative_not_validated": 30,
+      "healthy_yield_assumed": 0.25,
+      "equivalents": 16056792.0,
+      "physics_hours_with_25percent_margin": 82.60327439999999,
+      "quoted_cloud_usd_before_ops": 174.86287157735995
+    }
+  ],
+  "resources_exclude": "operations, unknown creation yield, additional predecision sensing, history/sham fitting/compute and simultaneous-contrast power",
+  "conclusion": "No supported sufficiently powered prospective design within six total paid hours. No claim all possible alternative designs are impossible."
+}

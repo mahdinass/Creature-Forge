@@ -1,0 +1,8 @@
+test_full_complete_cohort_matched_panels (test_h1_reliability.ReliabilityGuards.test_full_complete_cohort_matched_panels) ... ok
+test_requires_audited_stage_a_advance (test_h1_reliability.ReliabilityGuards.test_requires_audited_stage_a_advance) ... ok
+test_whole_base_bootstrap_reproducible (test_h1_reliability.ReliabilityGuards.test_whole_base_bootstrap_reproducible) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.139s
+
+OK
