@@ -1,0 +1,14 @@
+{
+  "native_archive_bytes": 140679,
+  "native_archive_local": "artifacts/h3_ops/native_run.tgz",
+  "native_archive_sha256": "7033654550fd5d2bb6fbc37b600cce7b3dc0d44c0df5f3200947b4cf733e1262",
+  "note": "Git exports exact scientific rows, no authorization/payment-capacity claims. Full native archive remains locally ignored and on the stopped persistent VM.",
+  "persistent_native_archive": "/home/forge/dev/h3-codex/artifacts/h3_pilot_v1_1793048925572741742.tgz",
+  "private_metadata_excluded": [
+    "gate/claim.json",
+    "qualify/claim.json"
+  ],
+  "qualification_gzip_sha256": "8ac22cedb978ad684375d846ca3dbd8bed29d1c820882bac90d26624ec9dab70",
+  "qualification_raw_json_sha256": "abd895ae2873f5d8f3fbf7040645fbd981bd9eb847a9089cead98c292695f883",
+  "raw_native_qualification_bytes_preserved": true
+}

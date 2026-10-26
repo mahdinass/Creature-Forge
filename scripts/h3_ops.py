@@ -26,7 +26,8 @@ def remaining(auth,campaign,spend,now):
 def main():
     p=argparse.ArgumentParser();p.add_argument('cmd',choices=('status','start','stop'))
     p.add_argument('--ops-root',required=True);p.add_argument('--authorization',required=True)
-    p.add_argument('--campaign',default='artifacts/h3_ops/campaign.json');a=p.parse_args()
+    p.add_argument('--campaign',default='artifacts/h3_ops/campaign.json')
+    p.add_argument('--hours',type=float,help='optional shorter window, e.g. evidence retrieval only');a=p.parse_args()
     auth=json.loads(Path(a.authorization).read_text(encoding='utf-8'))
     if (auth.get('study')!='h3-pilot-v1' or auth.get('protocol_sha256')!=PLAN_SHA or
         auth.get('cloud_cap_usd')!=8 or auth.get('token_factory_cap_usd')!=0 or not auth.get('human_message_reference')):
@@ -35,10 +36,14 @@ def main():
     receipt={'checked_epoch':now,'states':states,'ledger':spend,'rate':fc.costs()}
     path=Path(a.campaign);root=path.parent;root.mkdir(parents=True,exist_ok=True)
     if a.cmd=='status':
+        if states['batch']['state']=='STOPPED' and fc.spend_events() and fc.spend_events()[-1]['event'] in ('start','extend'):
+            fc.spend_record('stop',by='h3_API_STOPPED_observation');receipt['ledger']=fc.spend_all()
         (root/f'status_{time.time_ns()}.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
         print(json.dumps(receipt,indent=2));return
     if a.cmd=='stop':
         if states['batch']['state']!='STOPPED':fc.cmd_stop()
+        elif fc.spend_events() and fc.spend_events()[-1]['event'] in ('start','extend'):
+            fc.spend_record('stop',by='h3_API_STOPPED_observation')
         result={'checked_epoch':time.time(),'states':ops.states(fc),'ledger':fc.spend_all()}
         (root/f'stop_{time.time_ns()}.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
         print(json.dumps(result,indent=2));return
@@ -52,16 +57,21 @@ def main():
            'initial_compute_h':{k:v['compute_h'] for k,v in spend['profiles'].items()},'authorization':auth}
         with path.open('x',encoding='utf-8') as f:json.dump(c,f,indent=2)
     hours,dollars,hard=remaining(auth,c,spend['usd'],now)
+    if a.hours is not None:
+        if not math.isfinite(a.hours) or not 0<a.hours<=hours:raise ValueError('requested window exceeds remaining authorization')
+        hours=a.hours
     if hours<.1 or (hours+.25)*fc.costs()['total_usd_per_h']+.3>dollars:raise ValueError('bounded window no longer affordable')
     if fc.auth_horizon(fc.auth_expiry())<hard:raise ValueError('SA lifetime cannot cover hard shutdown')
     fc.SPEND_CAP_USD=c['initial_spend_usd']+min(8,credit['available_usd']-5)
     fc.CFG['default_deadline_h']=hours
     # The independent local watchdog is armed before the start request.
     st=fc.load();st['deadline_epoch']=int(hard-900);fc.save(st)
-    (root/'initial_provider_state.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
+    if not (root/'initial_provider_state.json').exists():
+        (root/'initial_provider_state.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
+    (root/f'prestart_{time.time_ns()}.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
     try:
         fc.cmd_start()
-        deadline=int(hard-900)
+        deadline=min(int(hard-900),int(time.time()+hours*3600))
         fc.ssh(f'printf "%s\\n" {deadline} | sudo tee /var/lib/forge/deadline >/dev/null',timeout=45)
         if fc.remote_deadline()!=deadline:raise ValueError('native deadline mismatch')
         st=fc.load();st['deadline_epoch']=deadline;fc.save(st);fc.spend_record('extend',deadline=deadline,by='h3_scoped_guard')

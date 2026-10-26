@@ -1,0 +1,23 @@
+{
+  "additional_batch_hours_upper": 0.16479862418439653,
+  "additional_compute_plus_storage_usd_upper_quote": 0.3500432178349416,
+  "both_disks_usd_per_h": 0.00972,
+  "compute_usd_per_h": 2.112,
+  "initial_provider_receipt_note": "The operational helper reused initial_provider_state.json on retrieval; first-window baseline remains in campaign.json and unique start receipts. No scientific outcome overwritten.",
+  "ledger_delta_usd": 0.3299999999999983,
+  "main_compute_hours": 0,
+  "method": "Conservative pre-start to first API STOPPED observations; configured quote plus both existing disks. Not provider invoice or remaining balance.",
+  "token_factory_usd": 0,
+  "windows": [
+    {
+      "first_API_STOPPED_epoch": 1793049064.7371168,
+      "purpose": "T1 and qualification",
+      "start_before_API_epoch": 1793048647.2688522
+    },
+    {
+      "first_API_STOPPED_epoch": 1793049383.7590587,
+      "purpose": "evidence retrieval only; zero physics replay",
+      "start_before_API_epoch": 1793049207.9522762
+    }
+  ]
+}

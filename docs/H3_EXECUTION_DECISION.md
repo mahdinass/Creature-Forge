@@ -1,0 +1,11 @@
+# H3 execution decision — NO-GO: qualification
+
+**Completed and stopped.** The approved pilot failed its preregistered acquisition gate: four eligible roots (one left, three right) versus six per side required. No optimizer or FULL comparison ran. The stance-residual efficacy/learning question remains **NOT EVALUATED**, not disproved.
+
+Native T1 zero-gain trajectory/verifier-row equivalence passed. T2 tested all48 frozen roots: six met both nominal-walking requirements, and four also met the damaged-failure condition. No replacements, rule changes, underpowered four-base study or post-outcome subgroup was used. This is a limitation of this acquisition recipe and transferred initialization, not a certificate of physical infeasibility or controller inadequacy.
+
+All permitted execution and audit work is complete. The experiment used1,176 physical rollouts /1,560 ten-second equivalents, zero optimizer rollouts/FULL assessments/model calls. Conservative quoted cost approximatelyUSD0.35 /0.165 additional batch hours, including a retrieval-only restart; main compute0, Token Factory0. Both VMs are API STOPPED and evidence is recovered/hash-verified. Full findings and limitations: [H3_RESULTS.md](H3_RESULTS.md).
+
+**No further paid work under this completed design.** Unused budget does not authorize replacing failed roots, changing qualification or restarting research. Next scientific proposal: first validate a sufficiently yielding nominal-walking acquisition recipe, with any nominal tuning explicitly charged. A new controller comparison needs an independently frozen design and fresh approval; inspected roots are development evidence. No learner, release integration, merge or submission edit is justified.
+
+This current decision supersedes the preparation-only status in `H3_DECISION.md`. That document and the fourteen-file preparation export remain unchanged to preserve the pre-outcome packet and source hashes. The original seven reports explain the design; this decision and results report describe what actually ran. Reproduction, manifests, shutdown, cost and publication/synchronization receipts are linked from `experiments/causal_engineer/dev/h3/VALIDATION.md` and `results/COMMANDS.md`.

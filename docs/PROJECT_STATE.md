@@ -1,5 +1,7 @@
 # Creature Forge — observed current project state
 
+> Latest H3 execution (2026-10-26): **NO-GO at qualification**. Read `docs/H3_EXECUTION_DECISION.md` and `docs/H3_RESULTS.md`. Both VMs stopped; no further paid work scheduled. Earlier entries below are historical.
+
 > **Current state (2026-10-18): read `docs/RESEARCH_HANDOFF_2026-10-18.md` first.** This file is an append-only log; the
 > header and early sections below describe 2026-10-13 and are historical.
 
@@ -696,3 +698,10 @@ No new H3 physics, training, VM start or Token Factory call. Both VMs API STOPPE
 ## 2026-10-26 — H3 pilot explicitly authorized; T0 operations preflight
 
 Owner approved the proposed USD8 additional Cloud / three paid batch hours / USD0 Token Factory pilot and supplied fresh usable capacity. Existing service-account and watchdog reused; main stays STOPPED. Added scripts/h3_ops.py and h3_native.sh for a campaign-specific financial/time envelope and automatic native shutdown; two non-physics operational-cap tests pass and shell syntax checked. Frozen plan c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd and106 scientific source pins unchanged. Authorization/capacity receipt is local ignored artifacts/h3_ops/authorization.json. Both VMs were API STOPPED before launch; no research executor active. Native T1/qualification T2 remain mandatory; no threshold changes or permission for a larger follow-on.
+
+
+## 2026-10-26 — H3 executed; qualification NO-GO; study stopped
+
+Explicit USD8 Cloud / three batch hours / USD0 Token Factory approval led to native T1/T2 at source c7103d47ba6e63e6cfd5d0b2c2ab161091163969. T1 zero-gain trajectory/verifier identity passed. T2 exhausted all48 fixed fresh roots;6 met both nominal walking requirements,4 met all entry conditions (1left/3right), below required6 per side. Expected supervisor exit20 stopped the campaign. Total1176 rollouts/1560 ten-second equivalents, zero errors; zero optimizer, FULL assessment or model calls. Residual efficacy and learning remain NOT EVALUATED. Frozen plan106 pins and original14-file export preserved; no threshold changes, extra draws, sealed/release/submission edits.
+
+Registered saved analyzer and separate stdlib archive/portable row audits agree. Full native archive SHA7033654550fd5d2bb6fbc37b600cce7b3dc0d44c0df5f3200947b4cf733e1262 retained locally/on stopped disk; lossless science-only1152-row qualification export committed. Both VMs API STOPPED at1793049383.7590587 (21:16:23UTC); main compute unchanged. Conservative additional batch0.16480h, configured compute plus existing-disk quote USD0.35004, Token Factory0. Retrieval-only restart included; quote is not invoice/balance. See docs/H3_RESULTS.md, docs/H3_EXECUTION_DECISION.md and results/COMMANDS.md. Next requires a separately designed/approved nominal-walking acquisition recipe; these48 roots are now development evidence. No unused-budget continuation.

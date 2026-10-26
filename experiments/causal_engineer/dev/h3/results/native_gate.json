@@ -1,0 +1,77 @@
+{
+  "environment": {
+    "mujoco": "3.15.0",
+    "numpy": "2.5.4",
+    "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "equivalents_reserved": 24.0,
+  "passed": true,
+  "phase": "gate",
+  "plan_sha256": "c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd",
+  "rollouts_reserved": 24,
+  "seed_job_identity": true,
+  "wall_s": 2.2648869689999884,
+  "zero_gain_native": [
+    {
+      "plant": {},
+      "seed": 1930000000,
+      "trace_equal": true
+    },
+    {
+      "plant": {},
+      "seed": 1930000001,
+      "trace_equal": true
+    },
+    {
+      "plant": {},
+      "seed": 1930000002,
+      "trace_equal": true
+    },
+    {
+      "plant": {
+        "deviation": [
+          {
+            "kind": "actuator_strength",
+            "params": {
+              "factor": 0.4
+            },
+            "target": "left"
+          }
+        ]
+      },
+      "seed": 1930000000,
+      "trace_equal": true
+    },
+    {
+      "plant": {
+        "deviation": [
+          {
+            "kind": "actuator_strength",
+            "params": {
+              "factor": 0.4
+            },
+            "target": "left"
+          }
+        ]
+      },
+      "seed": 1930000001,
+      "trace_equal": true
+    },
+    {
+      "plant": {
+        "deviation": [
+          {
+            "kind": "actuator_strength",
+            "params": {
+              "factor": 0.4
+            },
+            "target": "left"
+          }
+        ]
+      },
+      "seed": 1930000002,
+      "trace_equal": true
+    }
+  ]
+}
