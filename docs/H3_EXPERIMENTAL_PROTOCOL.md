@@ -1,6 +1,6 @@
 # H3-SR pilot v1 — frozen before physical outcomes
 
-Date: 26 October 2026. Status: **PROPOSED; NOT AUTHORIZED TO EXECUTE.** This protocol and machine-readable `experiments/causal_engineer/dev/h3/plan.json` must be committed/pushed before any H3 physics. Subsequent scientific changes require a new version before affected outcomes; never overwrite this version or prior evidence. Exact plan SHA and normalized source hashes bind execution. H3 financial authorization is currently zero. H1 permission is inapplicable.
+Date: 26 October 2026. Status: **PROTOCOL v1 FINALIZED FOR APPROVAL; NOT AUTHORIZED TO EXECUTE.** This protocol and machine-readable `experiments/causal_engineer/dev/h3/plan.json` must be committed/pushed before any H3 physics. Subsequent scientific changes require a new version before affected outcomes; never overwrite this version or prior evidence. Exact plan SHA and normalized source hashes bind execution. H3 financial authorization is currently zero. H1 permission is inapplicable.
 
 ## Question, scope and population
 
@@ -16,7 +16,7 @@ Qualification, once per attempted draw on dedicated seeds:
 2. Nominal20-second walk on8 different seeds: at least7/8 walking, no errors.
 3. Damaged10-second walk on8 different seeds: at most1/8 walking, no errors.
 
-Use existing arena variation/conditions. Retain first six eligible lineages per side, skipping remaining draws on a side after its quota. Qualification outcomes never tune parameters or thresholds. No replacement outside the48-draw stream. Fewer than6+6 yields **NO-GO / insufficient acquisition**, with all rejected/unattempted draws reported and no adaptation run. Qualification yield is unknown; severe0.4 loss may make this target sparse or infeasible. This conditional target excludes healthy failures and does not estimate population-wide recoverability.
+Use existing arena variation/conditions, also stored explicitly in the plan. Retain first six eligible lineages per side, skipping remaining draws on a side after its quota. Qualification outcomes never tune parameters or thresholds. No replacement outside the48-draw stream. Fewer than6+6 yields **NO-GO / insufficient acquisition**, with all rejected/unattempted draws reported and no adaptation run. Qualification yield is unknown; severe0.4 loss may make this target sparse or infeasible. This conditional target excludes healthy failures and does not estimate population-wide recoverability.
 
 ## Gates before adaptation
 
@@ -36,7 +36,7 @@ Two conventional optimizer replicates per lineage; same predefined train/select/
 | residual | Existing17D + two residual gains | 3,000 |
 | current2x | Existing17D FP, same kernel | 6,000 |
 
-Initial candidate uses four training rollouts. Full12-candidate generations follow; remaining training budget is filled with a partial population without CMA update. Two distinct finalists are selected by saved training scores, then evaluated on eight independent selection seeds; choose one using the same lexicographic rule, stable ties in generation order. All six final policies are persisted **before any FULL evaluation**. This is a matched current-family implementation, not a claim that this kernel dominates every existing optimizer. The larger control explicitly spends more budget and is secondary as a budget-matched contrast, but must also be beaten for PASS-PILOT.
+Initial candidate uses four training rollouts. Full12-candidate generations follow; remaining training budget is filled with a partial population without CMA update. Before each training/selection batch, proposed vectors and seeds are journaled with fsync; returned aggregate records are appended before further decisions. Exceptions retain a failure receipt plus prior claims/journals. An interrupted batch without responses remains attempted/pending, never an invented failure or success. Two distinct finalists are selected by saved training scores, then evaluated on eight independent selection seeds; choose one using the same lexicographic rule, stable ties in generation order. All six final policies are persisted **before any FULL evaluation**. This is a matched current-family implementation, not a claim that this kernel dominates every existing optimizer. The larger control explicitly spends more budget and is secondary as a budget-matched contrast, but must also be beaten for PASS-PILOT.
 
 ## Independent evaluation and reliability
 
@@ -52,7 +52,7 @@ Primary: lineage-equal mean FULL probability estimated from six technical outcom
 
 Stratified whole-lineage bootstrap: independently resample the six left and six right bases10,000 times, seed2026102603; preserve all arms/repeats per sampled base. Report descriptive90% and95% percentile intervals. These small-pilot intervals are not a powered confirmatory test or a verifier's per-panel sign-test uncertainty. No test-data tuning or threshold updates.
 
-Secondary: paired physical displacement/walking/speed/contact requirements, actual rollouts/equivalents, wall/cost; harmful-intervention rate (`WORSE` versus the original); healthy nominal walking. Report first-panel FULL that fails to remain FULL on all three panels as **label-instability proxy**, with numerator/denominator, not a ground-truth false-success estimate. Generalization is only to qualified new lineages drawn here; no hardware,3D, other faults or learning-transfer inference. No probabilistic model is trained, so no learned calibration claim is planned.
+Secondary: per-base validation walking and mean paired displacement difference; conditional confirmation walking, median speed and maximum body-contact fraction with observed/missing denominators; actual reserved rollouts/equivalents and wall/cost; harmful-intervention rate (`WORSE` versus the original); healthy nominal walking. Report first-panel FULL that fails to remain FULL on all three panels as **label-instability proxy**, with numerator/denominator, not a ground-truth false-success estimate. Healthy/harm intervals are reported but advancement guardrails use the specified pilot point estimates; passing them does not establish a population safety bound. Generalization is only to qualified new lineages drawn here; no hardware,3D, other faults or learning-transfer inference. No probabilistic model is trained, so no learned calibration claim is planned.
 
 **PASS-PILOT** requires all of:
 
@@ -78,7 +78,7 @@ PASS-PILOT permits a proposal for a larger confirmatory experiment, **not releas
 | Rich diagnostics12×6×2 | 144 |
 | **Total** | **311,808** |
 
-Per-case cap25,836 equivalents. Every attempted/error job reserves duration/10 before dispatch and journals the cumulative counter with fsync. Confirmation savings do not fund new searches or replacement lineages. **Cloud proposed maximum$8 additional and three paid batch hours; main VM stays STOPPED; Token Factory$0.** No approval has been given for this proposal.
+Per-case cap25,836 equivalents. Every attempted/error job reserves duration/10 before dispatch and journals the cumulative counter with fsync. Any reported worker error aborts the unit without resetting reserved budget. Completed units record environment versions and elapsed time and are sealed with an exact-byte SHA256SUMS manifest; dependent stages and saved analysis reject corrupt/incomplete manifests or mismatched canonical receipt paths. Failed units retain their claim/journal and cannot be replayed. Confirmation savings do not fund new searches or replacement lineages. **Cloud proposed maximum$8 additional and three paid batch hours; main VM stays STOPPED; Token Factory$0.** No approval has been given for this proposal.
 
 Provider read-only quote:64-vCPU batch$2.112 compute/h plus$0.00486 disk/h, quoted total$2.1169/h. Historical conservative six-worker path throughput0.118528 s/equivalent (`H1_PROTOCOL.md`) is a forecast, not a new H3 measurement. Eight independent six-worker case processes (48 workers total), two waves for12 cases, plus serial gate/qualification: about1.76 physics hours;25% slowdown plus0.5 hour startup/retrieval/shutdown gives **~2.70 batch hours / ~$5.72**, before any taxes/provider differences. Three-hour quote~$6.35, with$8 cap for slack. CMA/diagnostic I/O may be slower than H1 verification; T2 and in-run forecasts must stop if they cannot fit. Quote/balance/timing must be refreshed before approval execution; old$21.04 balance is not a fresh H3 billing verification.
 

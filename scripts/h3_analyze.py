@@ -2,6 +2,7 @@
 import argparse
 import collections
 import json
+import statistics
 from pathlib import Path
 import sys
 
@@ -15,11 +16,13 @@ ARMS=('current','residual','current2x')
 
 def analyze(plan, qualification, cases):
     from h1_independent_stdlib import replay
+    from h3_run import qualified_ids
     ids=sum(qualification['accepted'].values(),[])
     if not qualification['passed'] or len(ids)!=12 or len(set(ids))!=12:
         return {'decision':'NO-GO','reason':'fewer than 12 independent lineages (6 per side)'}
     if {c['id'] for c in cases} != set(ids) or len(cases)!=12:
         raise ValueError('complete 12-case panel required; no post-outcome dropping')
+    qualified_ids(plan,qualification)
     byid={d['id']:d for d in plan['draws']}
     per=[];req=collections.Counter();flips=collections.Counter();first=collections.Counter()
     for c in sorted(cases,key=lambda c:c['id']):
@@ -29,11 +32,14 @@ def analyze(plan, qualification, cases):
         for arm in ARMS:
             rr=sorted([r for r in c['results'] if r['arm']==arm],key=lambda r:r['rep'])
             for r in rr:
+                d=byid[c['id']]
+                if (r['candidate']['body']!=d['body'] or len(r['candidate']['vector'])!=(19 if arm=='residual' else 17)):
+                    raise ValueError('candidate body/controller-family drift')
                 if len(r['panels'])!=3 or any(p.get('errors') for p in r['panels']):
                     raise ValueError('incomplete/error verifier panels')
                 for p,expected in zip(r['panels'],byid[c['id']]['panels']):
                     if p['seeds'] != expected: raise ValueError('panel seed drift')
-                    replay(p,r['candidate'],expected,p['variation'])
+                    replay(p,r['candidate'],expected,plan['variation'])
                     if p['status'] not in (FULL,'NOT_RECOVERED','PARTIAL_IMPROVEMENT'):
                         raise ValueError('invalid verifier status')
                     for label in ('original','candidate'):
@@ -44,13 +50,25 @@ def analyze(plan, qualification, cases):
                     req[arm+'/confirmation_observed']+=p['confirmation']['run']
                     if p['confirmation']['run']:
                         for k,v in p['confirmation']['checks'].items():req[arm+'/'+k+'_failure']+=not v['passed']
-                if len(r['healthy'])!=8 or any(x.get('error') for x in r['healthy']): raise ValueError('healthy rows missing/error')
+                if (len(r['healthy'])!=8 or [x['seed'] for x in r['healthy']]!=d['healthy_guard']
+                    or any(x.get('error') or x['outcome'] not in ('PASS','POOR','FAIL')
+                           or x['walking']!=(x['outcome']=='PASS') for x in r['healthy'])):
+                    raise ValueError('healthy rows missing/error/seed drift')
                 first[arm]+=r['panels'][0]['status']==FULL
                 flips[arm]+=(r['panels'][0]['status']==FULL and not all(p['status']==FULL for p in r['panels']))
-            row[arm]={'full':sum(p['status']==FULL for r in rr for p in r['panels'])/6,
+            panels=[p for r in rr for p in r['panels']]
+            confirm=[p['confirmation'] for p in panels if p['confirmation']['run']]
+            row[arm]={'full':sum(p['status']==FULL for p in panels)/6,
                       'healthy_walking':sum(x['walking'] for r in rr for x in r['healthy'])/16,
                       'harm':sum(p['validation']['verdict']['status']=='WORSE' for r in rr for p in r['panels'])/6,
-                      'stable_full_replicates':sum(all(p['status']==FULL for p in r['panels']) for r in rr)}
+                      'stable_full_replicates':sum(all(p['status']==FULL for p in r['panels']) for r in rr),
+                      'validation_walking':sum(x['walking'] for p in panels for x in p['validation']['candidate'])/144,
+                      'paired_displacement_mean_m':float(np.mean([b['score']-a['score'] for p in panels
+                          for a,b in zip(p['validation']['original'],p['validation']['candidate'])])),
+                      'confirmation_observed_panels':len(confirm),
+                      'conditional_confirmation_walking':float(np.mean([x['walking'] for p in confirm for x in p['per_seed']])) if confirm else None,
+                      'conditional_confirmation_speed_median':statistics.median([x['speed_upright'] for p in confirm for x in p['per_seed']]) if confirm else None,
+                      'conditional_confirmation_contact_max':max(x['body_contact_frac'] for p in confirm for x in p['per_seed']) if confirm else None}
         per.append(row)
     def contrast(metric,baseline):
         diffs=np.array([r['residual'][metric]-r[baseline][metric] for r in per])
@@ -89,6 +107,7 @@ def diagnostic_audit(root,cases):
                 base=np.asarray([s['base_demand'] for s in samples]);extra=np.asarray([s['residual'] for s in samples])
                 if not np.all(np.isfinite(base)) or not np.all(np.isfinite(extra)) or np.max(np.abs(extra))>.15*limit+1e-9:
                     raise ValueError('invalid or out-of-bound residual')
+                if arm!='residual' and np.any(extra!=0):raise ValueError('control arm has added residual')
                 active=float(np.mean(np.any(np.abs(extra)>1e-9,axis=1)))
                 effective=np.clip(base+extra,-limit,limit)-np.clip(base,-limit,limit)
                 if arm=='residual' and active>=.01:active_bases.add(c['id'])
@@ -103,11 +122,10 @@ def diagnostic_audit(root,cases):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--plan',required=True);p.add_argument('--campaign',required=True);p.add_argument('--out',required=True)
     a=p.parse_args();root=Path(a.campaign)
-    from h3_run import sha,save
-    plan=json.loads(Path(a.plan).read_text());q=json.loads((root/'qualify/result.json').read_text())
-    if q['plan_sha256']!=sha(a.plan):raise ValueError('plan drift')
-    cases=[json.loads(p.read_text()) for p in sorted((root/'cases').glob('*/result.json'))]
-    if any(c['plan_sha256']!=sha(a.plan) for c in cases):raise ValueError('case plan drift')
+    from h3_run import save,check_unit,check_plan
+    plan=json.loads(Path(a.plan).read_text(encoding='utf-8'));check_plan(plan)
+    q=check_unit(root/'qualify',a.plan,'qualify')
+    cases=[check_unit(p.parent,a.plan,'case') for p in sorted((root/'cases').glob('*/result.json'))]
     result=analyze(plan,q,cases)
     if q['passed']:
         result['diagnostics']=diagnostic_audit(root,cases)

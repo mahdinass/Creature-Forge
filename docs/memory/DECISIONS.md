@@ -1,5 +1,9 @@
 # Creature Forge — durable decisions
 
+## 2026-10-26 — H3 preparation completed after explicit resume
+
+Status: **awaiting new physics authorization**, supersedes the paused-work status below. Reviewed research-only nested two-gain stance residual, guarded journaled runner and grouped analysis;32 non-physics tests pass, including spawned contracts. Protocol/plan v1 frozen before any H3 outcomes: plan SHA c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd,106 source pins,48 fresh root draws,9,696 disjoint seed IDs. Saved audit preserved. No controller benefit, AI-learning/Nemotron contribution or physical compatibility demonstrated. Existing observations cannot distinguish search from controller-class inadequacy. Proposed twelve-lineage engineering pilot has USD8/3h/USD0-token ceiling but no approval. Both VMs still API STOPPED, compute unchanged; frozen guard confirms same42 omissions and279 matching covered blobs. Evidence and verified publication/sync: `experiments/causal_engineer/dev/h3/VALIDATION.md`; decision `docs/H3_DECISION.md`. No release/sealed/submission edits.
+
 ## 2026-10-26 — H3 checkpoint paused at owner's request
 
 Status: **paused / prototype unvalidated**. Branch `codex/h3-capability-audit`, H1 base a2619c7. Saved-development audit, primary-source review, four proposals, seven draft documents and research-only nested stance residual/runner implemented;26 non-physics tests passed. No H3 physics, training, Cloud starts or Token Factory calls. Search versus controller expressiveness remains unresolved; no AI-learning benefit claimed. Proposed$8/3h pilot is not authorized. Both VMs API STOPPED at1793033104.0726569; compute unchanged. Exact progress, unfinished plan freeze/review/PR/sync and resume steps: `docs/H3_RESUME.md`. Preserve sealed records/V1 freeze/inherited42 manifest omissions. Continue only on explicit resume; new physics/spending requires separate approval.

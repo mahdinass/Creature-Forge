@@ -8,6 +8,7 @@ from functools import partial
 import hashlib
 import json
 import os
+import platform
 from pathlib import Path
 import sys
 import time
@@ -35,10 +36,17 @@ def save(path, obj):
         f.write('\n')
 
 
+def append_event(path,event):
+    from creature_forge.optimize import jsonable
+    with Path(path).open('a',encoding='utf-8') as f:
+        f.write(json.dumps(jsonable(event),sort_keys=True,allow_nan=False)+'\n');f.flush();os.fsync(f.fileno())
+
+
 def make_plan():
     import numpy as np
     from creature_forge.creature_gen import sample_body
     from creature_forge.creature_walk import R2_WINNER
+    from creature_forge.arena import VARIATION_PRESET
     history_file='experiments/causal_engineer/dev/h1/candidates.json'
     history=json.loads((ROOT/history_file).read_text(encoding='utf-8'))
     def body_hash(body):
@@ -75,7 +83,7 @@ def make_plan():
     sources[-1] = r2.SELECTION.relative_to(ROOT).as_posix()
     sources=sorted(set(sources+['pyproject.toml',history_file]+[p.relative_to(ROOT).as_posix()
         for p in (ROOT/'creature_forge').rglob('*.py')]))
-    return {'version':'h3-pilot-v1','draws': draws,'required_per_side':6,
+    return {'version':'h3-pilot-v1','draws': draws,'required_per_side':6,'variation':dict(VARIATION_PRESET),
             'historical_body_hashes_checked':sorted(historical_bodies),
             'case_cap_equivalents':25836,'gate_cap_equivalents':240,
             'qualify_cap_equivalents':1536,'total_cap_equivalents':311808,
@@ -85,8 +93,45 @@ def make_plan():
 
 
 def check_plan(plan):
+    if (plan.get('version')!='h3-pilot-v1' or len(plan.get('draws',[]))!=48
+        or [plan.get(k) for k in ('case_cap_equivalents','gate_cap_equivalents','qualify_cap_equivalents',
+                                 'total_cap_equivalents','max_batch_hours','cloud_cap_usd','token_factory_cap_usd')]
+        != [25836,240,1536,311808,3,8,0]):
+        raise ValueError('frozen H3 plan schema/budgets differ')
     for p,h in plan['sources'].items():
         if source_sha(ROOT/p) != h: raise ValueError('frozen H3 source differs: '+p)
+
+
+def seal_unit(root):
+    root=Path(root)
+    rows=[f'{sha(p)}  {p.relative_to(root).as_posix()}' for p in sorted(root.rglob('*')) if p.is_file()]
+    with (root/'SHA256SUMS').open('x',encoding='utf-8',newline='\n') as f:f.write('\n'.join(rows)+'\n')
+
+
+def check_unit(root,plan_path,phase):
+    root=Path(root);listed={}
+    for line in (root/'SHA256SUMS').read_text(encoding='utf-8').splitlines():
+        h,name=line.split('  ',1);p=(root/name).resolve()
+        if not p.is_relative_to(root.resolve()) or name in listed:raise ValueError('invalid unit manifest path')
+        if sha(p)!=h:raise ValueError('unit evidence hash mismatch: '+name)
+        listed[name]=h
+    actual={p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file() and p.name!='SHA256SUMS'}
+    if set(listed)!=actual:raise ValueError('unit manifest coverage mismatch')
+    r=json.loads((root/'result.json').read_text(encoding='utf-8'))
+    if r['plan_sha256']!=sha(plan_path) or r['phase']!=phase:raise ValueError('unit identity drift')
+    return r
+
+
+def qualified_ids(plan,q):
+    """Validate independent-lineage membership and balanced side labels."""
+    accepted=q.get('accepted',{})
+    ids=sum(accepted.values(),[])
+    if (set(accepted)!={'left','right'} or any(len(accepted[s])!=6 for s in accepted)
+        or len(set(ids))!=12):raise ValueError('six unique lineages per side required')
+    byid={d['id']:d for d in plan['draws']}
+    for side,items in accepted.items():
+        if any(i not in byid or byid[i]['side']!=side for i in items):raise ValueError('qualification lineage/side drift')
+    return ids
 
 
 def require_authorization(path, plan_path, phase, campaign):
@@ -177,7 +222,8 @@ def case(plan,case_id,pool,out):
     for rep in range(2):
         for arm,expanded,budget in [('current',False,3000),('residual',True,3000),('current2x',False,6000)]:
             s=search(d['body'],d['vector'],d['plant'],expanded=expanded,budget=budget,
-                     seeds=d['train'][rep],selection=d['select'][rep],noise_seed=d['optimizer'][rep],pool=pool)
+                     seeds=d['train'][rep],selection=d['select'][rep],noise_seed=d['optimizer'][rep],pool=pool,
+                     progress=lambda event,path=out/f'{arm}_{rep}_progress.jsonl':append_event(path,event))
             save(out/f'{arm}_{rep}_search.json',s)
             policies.append((arm,rep,s['candidate']))
     # All candidates frozen before FULL labels. No verifier-driven reselection.
@@ -211,16 +257,19 @@ def main():
     auth=require_authorization(a.authorization,a.plan,a.phase,out)
     if not 1 <= a.workers <= 6: raise ValueError('1..6 workers per shard')
     if a.phase!='gate':
-        g=json.loads(Path(a.gate_receipt).read_text())
-        if not g.get('passed') or g['plan_sha256']!=sha(a.plan): raise ValueError('native gate absent')
+        if Path(a.gate_receipt).resolve()!=(out/'gate/result.json').resolve():raise ValueError('canonical gate receipt required')
+        g=check_unit(out/'gate',a.plan,'gate')
+        if not g.get('passed') or not g.get('seed_job_identity'): raise ValueError('native gate absent')
     if a.phase=='case':
-        q=json.loads(Path(a.qualification).read_text())
-        if not q.get('passed') or q['plan_sha256']!=sha(a.plan) or a.case not in sum(q['accepted'].values(),[]):
+        if Path(a.qualification).resolve()!=(out/'qualify/result.json').resolve():raise ValueError('canonical qualification receipt required')
+        q=check_unit(out/'qualify',a.plan,'qualify')
+        if not q.get('passed') or a.case not in qualified_ids(plan,q):
             raise ValueError('12 independent qualified lineages required')
     if a.phase=='case' and a.case not in {d['id'] for d in plan['draws']}: raise ValueError('unknown case')
     out=out/('cases/'+a.case if a.phase=='case' else a.phase)
     out.mkdir(parents=True,exist_ok=False)  # canonical unit directory prevents budget-reset replay
     save(out/'claim.json',{'phase':a.phase,'case':a.case,'plan_sha256':sha(a.plan),'authorization':auth})
+    run_started=time.perf_counter()
     def reserve(rollouts,eq):
         if time.time() >= auth['deadline_epoch']-120: raise RuntimeError('shutdown margin reached')
         with (out/'reserved.jsonl').open('a',encoding='utf-8') as f:
@@ -230,11 +279,22 @@ def main():
     cap=plan[{'gate':'gate_cap_equivalents','qualify':'qualify_cap_equivalents','case':'case_cap_equivalents'}[a.phase]]
     with ForgePool(max_workers=a.workers) as inner:
         pool=BudgetPool(cap,cap,inner=inner,on_reserve=reserve)
-        if a.phase=='gate': result=gate(plan,pool)
-        elif a.phase=='qualify': result=qualify(plan,pool,out)
-        else: result=case(plan,a.case,pool,out)
-        result.update({'plan_sha256':sha(a.plan),'rollouts_reserved':pool.rollouts,'equivalents_reserved':pool.equivalents})
+        try:
+            if a.phase=='gate': result=gate(plan,pool)
+            elif a.phase=='qualify': result=qualify(plan,pool,out)
+            else: result=case(plan,a.case,pool,out)
+        except Exception as exc:
+            save(out/'failure.json',{'phase':a.phase,'case':a.case,'plan_sha256':sha(a.plan),
+                'error':f'{type(exc).__name__}: {exc}','rollouts_reserved':pool.rollouts,
+                'equivalents_reserved':pool.equivalents,'wall_s':time.perf_counter()-run_started})
+            raise
+        import mujoco,numpy as np
+        result.update({'plan_sha256':sha(a.plan),'phase':a.phase,'rollouts_reserved':pool.rollouts,
+                       'equivalents_reserved':pool.equivalents,'wall_s':time.perf_counter()-run_started,
+                       'environment':{'python':sys.version,
+                       'platform':platform.platform(),'numpy':np.__version__,'mujoco':mujoco.__version__}})
         save(out/'result.json',result)
+        seal_unit(out)
 
 
 if __name__=='__main__': main()

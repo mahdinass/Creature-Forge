@@ -121,7 +121,7 @@ def seed_job(job, plant=None):
 
 
 class BudgetPool:
-    """Serial legacy pool adapter; reserve before each native job, including errors.
+    """Legacy pool adapter; reserve each batch before dispatch, including errors.
 
     Limits both attempted rollouts and ten-second equivalents. A future outer
     process pool may run independent case commands, each with a frozen local cap.
@@ -150,13 +150,16 @@ class BudgetPool:
         self.equivalents += cost
         if self.on_reserve:
             self.on_reserve(self.rollouts, self.equivalents)
-        if self.inner:
-            yield from self.inner.imap(target, jobs)
-        else:
-            for i, job in enumerate(jobs): yield i, target(job)
+        results = self.inner.imap(target, jobs) if self.inner else ((i,target(job)) for i,job in enumerate(jobs))
+        from .forge_pool import is_error
+        for i,result in results:
+            if (is_error(result) or isinstance(result,dict) and
+                (result.get('ok') is False or result.get('outcome') == 'ERROR')):
+                raise RuntimeError(f'H3 worker error at reserved job {i}: {result}')
+            yield i,result
 
 
-def search(body, vector, plant, *, expanded, budget, seeds, selection, noise_seed, pool):
+def search(body, vector, plant, *, expanded, budget, seeds, selection, noise_seed, pool, progress=None):
     """Matched CMA kernel/population/objective; only two added dimensions differ.
 
     Budget includes initial candidate, training and 8-seed selection of two
@@ -183,7 +186,9 @@ def search(body, vector, plant, *, expanded, budget, seeds, selection, noise_see
     def evaluate_points(points):
         nonlocal used
         vectors = [(lo+(hi-lo)*p).tolist() for p in points]
+        if progress:progress({'stage':'before_train','vectors':vectors,'seeds':list(seeds)})
         recs = evaluate([(body, v) for v in vectors])
+        if progress:progress({'stage':'after_train','records':recs})
         used += 4 * len(vectors)
         if any(r.get("error") for r in recs):
             raise RuntimeError("training errors; preserve attempted budget, stop case")
@@ -208,7 +213,9 @@ def search(body, vector, plant, *, expanded, budget, seeds, selection, noise_see
         if records[i]["vector"] not in [r["vector"] for r in finalists]: finalists.append(records[i])
         if len(finalists) == 2: break
     if len(finalists) != 2: raise RuntimeError("fewer than two distinct finalists")
+    if progress:progress({'stage':'before_select','finalists':finalists,'seeds':list(selection)})
     selected = hp.make_eval_fn(plant, selection, pool=pool)([(body,r["vector"]) for r in finalists])
+    if progress:progress({'stage':'after_select','records':selected})
     if any(r.get("error") for r in selected): raise RuntimeError("selection error")
     winner = max(range(2), key=lambda i: wo._score(selected[i]))
     return {"candidate": {"body": body, "vector": finalists[winner]["vector"]},

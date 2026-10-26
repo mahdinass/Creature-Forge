@@ -1,5 +1,7 @@
 # H3 pause checkpoint — 26 October 2026, 16:45 UTC
 
+**Historical snapshot, superseded after the owner's explicit “please continue.”** Current status and next authorized boundary are in [H3_DECISION.md](H3_DECISION.md) and `experiments/causal_engineer/dev/h3/VALIDATION.md`. The original pause record below is retained for provenance; its unfinished-work list describes the state at that pause.
+
 **Owner requested pause to shut down their computer. Resume research only on explicit request. No new physics, training, VM starts or Token Factory calls are authorized. H1 financial permission must not be reused.**
 
 ## Location and original instructions

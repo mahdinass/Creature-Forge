@@ -1,0 +1,34 @@
+{
+  "actions_invoice_cost": "not established; separate from Nebius ledger",
+  "commit": "6c27e116a350898007d7352347b1f8279eb4954a",
+  "errors": 1,
+  "failures": 2,
+  "inspected_run": 40362890285,
+  "issues": [
+    "Inherited 42 E1 manifest omissions",
+    "Two H3 parent-runner thread-isolation assumptions; runtime guard behaved correctly"
+  ],
+  "nebius_vm_start": false,
+  "new_h3_pilot_or_training": false,
+  "remediation": "Positive scope unit tests model a dedicated worker; actual extra-thread rejection and spawned contracts retained. 32 local non-physics tests pass; no full-suite rerun. Publication uses [skip ci].",
+  "runs": [
+    {
+      "conclusion": "failure",
+      "frontend": "success",
+      "id": 40362890285,
+      "status": "completed",
+      "url": "https://github.com/mahdinass/Creature-Forge/actions/runs/40362890285"
+    },
+    {
+      "conclusion": "failure",
+      "frontend": "success",
+      "id": 40362889245,
+      "status": "completed",
+      "url": "https://github.com/mahdinass/Creature-Forge/actions/runs/40362889245"
+    }
+  ],
+  "skipped": 5,
+  "tests": 1539,
+  "trigger": "push",
+  "unintended_automatic_existing_physics_suite": true
+}

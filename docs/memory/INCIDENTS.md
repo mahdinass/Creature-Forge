@@ -1,5 +1,13 @@
 # Creature Forge — incidents and proven fixes
 
+## 2026-10-26 — H3 checkpoint push triggered physics CI; test isolation corrected
+
+Status: **observed; local non-physics fix verified; full-suite rerun intentionally not performed**. Checkpoint6c27e116a350898007d7352347b1f8279eb4954a was pushed without suppressing Actions. Existing push workflows automatically ran their physics-test step in completed runs40362890285 and40362889245. This should have been suppressed under the H3 execution boundary. No H3 pilot/training or Nebius VM was started, and CI trajectories are not used as research outcomes. Actions consumption is separate from the Nebius quote ledger; no invoice claim is made.
+
+Run40362890285 reported1539 tests, two failures/one error/five skips. One failure is the unchanged42-path frozen-manifest omission. Two H3 unit-test assumptions were also exposed: positive factory-scope tests assumed the parent test runner had no unrelated service threads. The production guard correctly rejects such a process. Positive unit tests now explicitly model the required dedicated-worker thread count; a new test proves an actual additional thread is rejected, and spawned-worker contracts retain real thread checking. Runtime concurrency guards were not weakened.
+
+`python -m unittest tests.test_h3 tests.test_h1 -v` in the reused original-repo venv passes32 non-physics tests (9.604s). No full-suite rerun is claimed. Current research publication commits use `[skip ci]`, supported for this repository's push/pull_request triggers; no workflow/release configuration is modified. Evidence: `experiments/causal_engineer/dev/h3/checkpoint_ci_review.json` and `VALIDATION.md`. Review CI links and keep this distinction from zero H3 research-physics calls.
+
 Append one incident per significant recurring failure. Mark everything here as `observed`, `hypothesized`, `verified`, or `superseded`. Never claim a workaround succeeded without a command/log/test demonstrating it.
 
 ## Template

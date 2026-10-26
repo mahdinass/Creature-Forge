@@ -1,8 +1,6 @@
 # H3 decision — 26 October 2026
 
-**PAUSED at the owner's request, 2026-10-26 16:45 UTC.** This is an unfinished research checkpoint. Read [H3_RESUME.md](H3_RESUME.md). Machine-plan generation/freeze, final review, H3 draft PR and full documentation sync remain unfinished. No physics or spending is authorized.
-
-**PROCEED TO REVIEW OF A BOUNDED ENGINEERING PILOT; DO NOT EXECUTE WITHOUT FRESH APPROVAL.** No new learner, physics experiment, training campaign, Cloud start or Token Factory call was made. No repair improvement has been demonstrated.
+**NON-PHYSICS PREPARATION COMPLETE; AWAITING FRESH EXPERIMENT AUTHORIZATION.** The owner resumed the paused investigation explicitly. The historical pause snapshot remains in [H3_RESUME.md](H3_RESUME.md). Reviewed prototype,32 non-physics tests and frozen protocol/plan are ready for review; publication/synchronization receipts are recorded in the validation record. No new learner, H3 physics experiment, training campaign, Cloud start or Token Factory call was made. Earlier automatic checkpoint CI did run existing physics tests and is recorded separately; current publication skips CI. No repair improvement has been demonstrated.
 
 The evidence most strongly identifies insufficient independent, repeatable and decision-relevant observations for learning. H1's best fixed physical selector remains statistically compatible with no gain; saved verifier rows lack full control traces; label instability is substantial. Existing controllers already implement contact/phase feedback and foot placement. Controller inadequacy, finite search and physical infeasibility cannot be separated retrospectively.
 

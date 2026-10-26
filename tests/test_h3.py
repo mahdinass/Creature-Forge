@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -19,6 +20,17 @@ import h3_run as runner
 import h3_analyze as analysis
 
 V=list(R2_WINNER)+[.5,.5]
+
+
+def synthetic_contract_job(job):
+    """Spawn-only controller contract test, never a physical rollout."""
+    with patch('mujoco.mj_step',side_effect=AssertionError('no physics')), patch('mujoco.mj_forward',side_effect=AssertionError('no physics')):
+        if job.get('fail'):raise RuntimeError('synthetic spawned failure')
+        with h3.controller_scope((.2,-.1)):
+            c=factory.controller_from_vector(V,body=SandboxBody())
+            c.reset(100,200);c.sense(0,[0,0])
+            tau=c.torque(.01,0,0,np.zeros(6),np.zeros(6))
+        return {'ok':True,'dimension':len(tau),'restored':factory.controller_from_vector(V,body=SandboxBody()).name!='h3_stance_residual_v1'}
 
 
 class NonPhysics(unittest.TestCase):
@@ -83,7 +95,9 @@ class NonPhysics(unittest.TestCase):
 
     def test_bridge_restore_nesting_and_thread_guard(self):
         original=factory.controller_from_vector
-        with self.assertRaisesRegex(RuntimeError,'sentinel'):
+        # Model the documented dedicated-worker contract; other suite tests may
+        # leave unrelated service threads in the test runner's parent process.
+        with patch('threading.active_count',return_value=1), self.assertRaisesRegex(RuntimeError,'sentinel'):
             with h3.controller_scope((0,0)) as made:
                 self.assertIsInstance(factory.controller_from_vector(V,body=SandboxBody()),h3.StanceResidual)
                 self.assertEqual(len(made),1)
@@ -101,11 +115,19 @@ class NonPhysics(unittest.TestCase):
         def fake(j,plant=None):
             self.assertEqual(len(j['controllers']['walk']['vector']),17)
             return {'ok':True}
-        with patch.object(hp,'seed_job',side_effect=fake): self.assertTrue(h3.seed_job(job)['ok'])
+        with patch('threading.active_count',return_value=1), patch.object(hp,'seed_job',side_effect=fake):
+            self.assertTrue(h3.seed_job(job)['ok'])
         self.assertEqual(job,before)
         plain={'vector':V}
         with patch.object(hp,'walk_job',return_value={'ok':True}) as f:
             h3.walk_job(plain);self.assertIs(f.call_args.args[0],plain)
+
+    def test_real_background_thread_is_rejected(self):
+        stop=threading.Event();t=threading.Thread(target=stop.wait);t.start()
+        try:
+            with self.assertRaisesRegex(RuntimeError,'single-thread'):
+                with h3.controller_scope((0,0)):pass
+        finally:stop.set();t.join()
 
     def test_budget_reserves_before_dispatch_and_errors(self):
         reservations=[];calls=[]
@@ -117,6 +139,35 @@ class NonPhysics(unittest.TestCase):
         with self.assertRaises(RuntimeError):list(pool.imap(f,[{'duration':20}]))
         self.assertEqual(len(calls),2)
         with self.assertRaises(ValueError):list(pool.imap(f,[{'duration':float('nan')}]))
+
+    def test_worker_error_reservation_is_not_reset(self):
+        pool=h3.BudgetPool(2,2)
+        with self.assertRaisesRegex(RuntimeError,'worker error'):
+            list(pool.imap(lambda job:{'ok':False,'error':'synthetic'},[{'duration':10}]))
+        self.assertEqual((pool.rollouts,pool.equivalents),(1,1))
+
+    def test_spawn_bridge_contract_without_physics(self):
+        from creature_forge.forge_pool import ForgePool
+        with ForgePool(max_workers=2) as inner:
+            pool=h3.BudgetPool(3,3,inner=inner)
+            rows=list(pool.imap(synthetic_contract_job,[{'duration':10},{'duration':10}]))
+            self.assertEqual(len(rows),2)
+            self.assertTrue(all(r['dimension']==6 and r['restored'] for _,r in rows))
+            with self.assertRaisesRegex(RuntimeError,'synthetic spawned failure'):
+                list(pool.imap(synthetic_contract_job,[{'duration':10,'fail':True}]))
+            self.assertEqual(pool.rollouts,3)
+
+    def test_completed_unit_manifest_detects_mutation_and_extra_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);plan=root/'plan.json';plan.write_text('{}');unit=root/'unit';unit.mkdir()
+            runner.save(unit/'result.json',{'phase':'gate','plan_sha256':runner.sha(plan),'passed':True})
+            runner.seal_unit(unit)
+            self.assertTrue(runner.check_unit(unit,plan,'gate')['passed'])
+            (unit/'unlisted').write_text('test')
+            with self.assertRaisesRegex(ValueError,'coverage'):runner.check_unit(unit,plan,'gate')
+            (unit/'unlisted').unlink()
+            (unit/'result.json').write_text('{}')
+            with self.assertRaisesRegex(ValueError,'hash mismatch'):runner.check_unit(unit,plan,'gate')
 
     def test_search_budget_dimensions_synthetic_only(self):
         counts=[]
@@ -137,8 +188,11 @@ class NonPhysics(unittest.TestCase):
         def fake(*args,**kw):
             return lambda candidates:[{'error':'synthetic worker fault'} for _ in candidates]
         with patch.object(hp,'make_eval_fn',side_effect=fake):
+            events=[]
             with self.assertRaisesRegex(RuntimeError,'training errors'):
-                h3.search({},V,{},expanded=True,budget=120,seeds=[1,2,3,4],selection=list(range(8,16)),noise_seed=3,pool=None)
+                h3.search({},V,{},expanded=True,budget=120,seeds=[1,2,3,4],selection=list(range(8,16)),noise_seed=3,pool=None,progress=events.append)
+            self.assertEqual([e['stage'] for e in events],['before_train','after_train'])
+            self.assertEqual(events[0]['seeds'],[1,2,3,4]);self.assertEqual(len(events[0]['vectors']),1)
 
     def test_prepared_plan_seed_roles_sources_and_caps(self):
         p=runner.make_plan();runner.check_plan(p)
@@ -203,16 +257,18 @@ class NonPhysics(unittest.TestCase):
         draws=[];cases=[]
         for i in range(12):
             seeds=[{'validate':list(range(24)), 'confirm':list(range(24,48))} for _ in range(3)]
-            draws.append({'id':str(i),'side':'left' if i<6 else 'right','panels':seeds})
+            draws.append({'id':str(i),'side':'left' if i<6 else 'right','panels':seeds,
+                          'body':SandboxBody().as_dict(),'healthy_guard':list(range(8))})
             results=[]
             for arm in analysis.ARMS:
                 for rep in range(2):
                     panels=[self.fake_panel(arm=='residual',s) for s in seeds]
-                    results.append({'arm':arm,'rep':rep,'candidate':{'body':SandboxBody().as_dict(),'vector':V},
-                                    'panels':panels,'healthy':[{'walking':True}]*8})
+                    results.append({'arm':arm,'rep':rep,'candidate':{'body':SandboxBody().as_dict(),'vector':V+[0,0] if arm=='residual' else V},
+                                    'panels':panels,'healthy':[{'seed':s,'outcome':'PASS','walking':True} for s in range(8)]})
             cases.append({'id':str(i),'results':results})
         q={'passed':True,'accepted':{'left':list(map(str,range(6))),'right':list(map(str,range(6,12)))}}
-        return {'draws':draws},q,cases
+        from creature_forge.arena import VARIATION_PRESET
+        return {'draws':draws,'variation':dict(VARIATION_PRESET)},q,cases
 
     def fake_panel(self,full,seeds):
         from creature_forge import recovery as rc
@@ -235,7 +291,7 @@ class NonPhysics(unittest.TestCase):
         bad=copy.deepcopy(cases)
         for c in bad:
             for r in c['results']:
-                if r['arm']=='residual':r['healthy']=[{'walking':False}]*8
+                if r['arm']=='residual':r['healthy']=[{**x,'walking':False,'outcome':'POOR'} for x in r['healthy']]
         self.assertEqual(analysis.analyze(plan,q,bad)['decision'],'FAIL')
         for c in cases:
             for r in c['results']:
@@ -259,6 +315,29 @@ class NonPhysics(unittest.TestCase):
         a=analysis.analyze(plan,q,cases)
         self.assertEqual(a['decision'],'INSUFFICIENT EVIDENCE')
         self.assertEqual(a['first_panel_full_not_stable']['residual'],{'numerator':24,'denominator':24})
+
+    def test_candidate_and_healthy_condition_drift_refused(self):
+        plan,q,cases=self.fixture()
+        cases[0]['results'][0]['candidate']['body']['torso_mass']+=1
+        with self.assertRaisesRegex(ValueError,'candidate body'):analysis.analyze(plan,q,cases)
+        plan,q,cases=self.fixture()
+        cases[0]['results'][0]['healthy'][0]['seed']=999
+        with self.assertRaisesRegex(ValueError,'healthy rows'):analysis.analyze(plan,q,cases)
+
+    def test_case_freezes_six_policies_before_first_verifier_synthetic_only(self):
+        from creature_forge import recovery as rc
+        plan=runner.make_plan();d=plan['draws'][0];events=[]
+        def search(body,vector,plant,**kw):
+            events.append('search')
+            return {'candidate':{'body':body,'vector':vector+[0,0] if kw['expanded'] else vector}}
+        def assess(*args,**kw):events.append('verify');return {'status':'NOT_RECOVERED'}
+        class FakePool:
+            def imap(self,fn,jobs):
+                for i,_ in enumerate(jobs):yield i,{'synthetic_unit_test_only':True}
+        with tempfile.TemporaryDirectory() as tmp, patch.object(h3,'search',side_effect=search), patch.object(rc,'assess',side_effect=assess), patch.object(rc,'run_walk_seeds',return_value=[{'walking':True}]*8):
+            result=runner.case(plan,d['id'],FakePool(),Path(tmp))
+        self.assertEqual(events[:6],['search']*6);self.assertEqual(events.count('verify'),18)
+        self.assertEqual(len(result['results']),6)
 
 
 if __name__=='__main__':unittest.main()
