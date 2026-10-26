@@ -201,8 +201,11 @@ historical chronology, negative transfer and learned recovery remain unestablish
 ## Reproduction, review and next boundary
 
 See `experiments/causal_engineer/dev/h1/results/COMMANDS.md` and `H1_DATA_AUDIT.md`.
-Results are on the isolated branch; the review PR and verified Basic Memory/Notion
-readback are recorded in project state and closeout receipts. No merge is authorized.
+Results commit [8ed1ead](https://github.com/mahdinass/Creature-Forge/commit/8ed1ead41196d76da73390c96ed20fa6c8d5979a)
+is pushed on the isolated branch. [Draft review PR22](https://github.com/mahdinass/Creature-Forge/pull/22)
+targets the pinned research base. Basic Memory and the existing Notion research
+page were synchronized and read back with the matching result, commit and counts;
+prior research history is preserved. See `results/sync_receipt.json`. No merge.
 
 Smallest justified next step: a separately registered design for richer legal
 requirement margins and independent lineage acquisition, with measured yield,

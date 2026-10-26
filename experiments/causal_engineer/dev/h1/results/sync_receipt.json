@@ -1,0 +1,29 @@
+{
+  "results_commit": "8ed1ead41196d76da73390c96ed20fa6c8d5979a",
+  "branch": "codex/h1-bounded-investigation",
+  "pull_request": "https://github.com/mahdinass/Creature-Forge/pull/22",
+  "draft": true,
+  "merged": false,
+  "basic_memory": {
+    "project": "creature-forge",
+    "permalink": "creature-forge/research/h1-completed-not-evaluable-for-learning-recovery-2026-10-26",
+    "checksum": "cec4da5a75f3ec64055581a85b526bd1510c82b3fc16458278a97461ee28c3fa",
+    "readback_verified": true
+  },
+  "notion": {
+    "page_id": "4035d357-b5ad-813e-84d4-de5fd8928f41",
+    "url": "https://app.notion.com/p/4035d357b5ad813e84d4de5fd8928f41?pvs=204",
+    "last_edited_at": "2026-10-26T14:35:21.177Z",
+    "readback_verified": true
+  },
+  "checks": {
+    "oneH1Section": true,
+    "notionCommit": true,
+    "notionCorrectedRanking": true,
+    "earlierHistoryPreserved": true,
+    "memoryCorrectedRanking": true,
+    "memoryCommit": true,
+    "memoryChecksum": true,
+    "notionNotTruncated": true
+  }
+}

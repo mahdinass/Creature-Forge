@@ -1,0 +1,37 @@
+[
+  {
+    "path": "experiments/causal_engineer/dev/h1/recovery_validation.json",
+    "only_line_endings": true,
+    "working_crlf": 13
+  },
+  {
+    "path": "experiments/causal_engineer/dev/h1/results/stage_a/receipt.json",
+    "only_line_endings": true,
+    "working_crlf": 13
+  },
+  {
+    "path": "experiments/causal_engineer/dev/h1/source_hashes.json",
+    "only_line_endings": true,
+    "working_crlf": 110
+  },
+  {
+    "path": "experiments/causal_engineer/dev/h1/stage0/AUDIT_DEFINITIONS.md",
+    "only_line_endings": true,
+    "working_crlf": 11
+  },
+  {
+    "path": "experiments/causal_engineer/dev/h1/stage0/READ_ONLY_VALIDATION.json",
+    "only_line_endings": true,
+    "working_crlf": 18
+  },
+  {
+    "path": "experiments/causal_engineer/dev/h1/STAGE0_RECOVERY.md",
+    "only_line_endings": true,
+    "working_crlf": 13
+  },
+  {
+    "path": "experiments/causal_engineer/dev/h1/stage_b/source_hashes.json",
+    "only_line_endings": true,
+    "working_crlf": 7
+  }
+]
