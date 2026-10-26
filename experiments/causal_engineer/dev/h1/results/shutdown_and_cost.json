@@ -1,0 +1,47 @@
+{
+  "verified_epoch": 1793013133.1399596,
+  "verified_utc": "2026-10-26T11:12:13.139959+00:00",
+  "states": {
+    "main": {
+      "id": "computeinstance-e01g6rhpgcpnf1bfbr",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "8vcpu-32gb"
+      }
+    },
+    "batch": {
+      "id": "computeinstance-e01efb17k9jbzct0m0",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "64vcpu-256gb"
+      }
+    }
+  },
+  "ledger": {
+    "usd": 124.822,
+    "cap_usd": 120.0,
+    "profiles": {
+      "main": {
+        "compute_h": 72.369,
+        "usd": 20.456,
+        "cap_usd": 120.0
+      },
+      "batch": {
+        "compute_h": 48.874,
+        "usd": 104.366,
+        "cap_usd": 120.0
+      }
+    }
+  },
+  "initial_campaign_ledger_usd": 123.422,
+  "additional_cloud_quoted_ledger_usd": 1.4,
+  "additional_paid_batch_hours": 0.659,
+  "additional_main_compute_hours": 0.0,
+  "token_factory_usd": 0,
+  "token_factory_calls": 0,
+  "preserved_disks": true,
+  "provider_balance_source": "Owner current21.04USD confirmation, not local ledger",
+  "estimate_limitations": "Conservative until API-stop observations at quoted compute/storage rates; not provider invoice or final balance; applicable taxes not independently billed/read."
+}

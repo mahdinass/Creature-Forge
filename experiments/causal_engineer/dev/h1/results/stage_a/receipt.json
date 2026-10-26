@@ -1,0 +1,13 @@
+{
+  "archive_bytes": 1123344,
+  "archive_sha256": "6645c26f2249080a300d59df3a12996bffbb44b6bd05d9cdece4f78d200353a4",
+  "manifest_entries_verified": 346,
+  "physics_wall_s": 260.8161811828613,
+  "stage_b_worst_case_forecast_s_including_25percent": 1888.2619452152856,
+  "stage_b_window_hours": 1,
+  "stage_b_compute_and_disk_forecast_usd": 2.1169,
+  "local_replay_counts_gate_exact": true,
+  "native_replay_byte_exact": true,
+  "local_python311_interval_upper_difference": 1.3877787807814457e-17,
+  "arrays_location": "ignored artifacts/h1_ops/h1_stage_a_v1 plus persistent batch disk; no rerun"
+}

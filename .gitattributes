@@ -37,3 +37,7 @@ docs/VEL1_*.md -text
 experiments/causal_engineer/dev/vel2/** -text
 experiments/causal_engineer/dev/vel2/** whitespace=trailing-space,space-before-tab,cr-at-eol
 docs/VEL2_*.md -text
+# H1 frozen inputs, recovered evidence and results retain exact bytes on every platform.
+experiments/causal_engineer/dev/h1/** -text
+experiments/causal_engineer/dev/h1/** whitespace=trailing-space,space-before-tab,cr-at-eol
+docs/H1_*.md -text

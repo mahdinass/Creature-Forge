@@ -204,3 +204,15 @@ Both VMs API STOPPED00:22:10UTC, reconfirmed00:23:56UTC /01:23:56Oslo. Initial/f
 
 
 - **VEL-2 results and documentation sync verified:** results commit4ce8a6fb16dc3aa973517edbe4f767ac2159c622 pushed; remote branch refmatched. All74 report/input/output/source hashes matched working and staged bytes; full107 frozen scientific source hashes matched. Working source-hash JSON newline conversion was aligned to exact preregistered Git bytes with unchanged semantic contents; scientific freeze unchanged. Notion researchpage4035d357-b5ad-813e-84d4-de5fd8928f41 readback has exactlyone VEL-2 NO-GO stable-label section, correctresultcommit, broad-H-VEL2 insufficient-evidence caveat and earlierVEL-1 history; lastedit2026-10-26T00:31:06.134Z. BasicMemory creature-forge note creature-forge/research/vel-2-repeatability-no-go-for-stable-labels-2026-10-26 readback matchesverdict/scope/commit, checksum1889f429f028905b81e0213e2754f291ef7e9ce40dcab100e01d9526e9788ea6. Bothsyncs verified. Reproduction from committed native evidence independentlypassed. No furtherphysics/modelcalls/studies scheduled; bothVMs remainSTOPPED atlastAPIcheck.
+
+
+## 2026-10-26 — H1 exact missing-counterfactual prerequisite
+
+Recovered Stage0 confirms 320 missing R0 candidate/condition identities on18 historical bases. Freeze exact alternatives and original matched development conditions before outcomes; preserve full_recovery_v1 and sealed boundaries. StageA advances only with complete error-free outcomes, >=3 missed-FULL bases and >=5pp base-equal oracle headroom. This measures the R0 finalist selector opportunity, not production A1 or historical-experience benefit. Source: `docs/H1_PROTOCOL.md`, `experiments/causal_engineer/dev/h1/`. No learner unless independent reliability, support, power and prospective gates justify it.
+
+
+## 2026-10-26 — H1 bounded investigation stops at B decision-value gate
+
+Available exact finalist opportunity is established (A19misses/9bases; Bpersistentmisses4bases), but frozen legal physical rules fail useful independent decision-value screen. Best+0.617pp95[-0.309,+1.698], not5pp. NOT EVALUABLE for experience-learning recovery; no learner/C/D or Nemotron claim.18historical bases do not provide powered independent prospective evidence; conditional confirmation remains missing. Preserve negative/insufficient-evidence result, all raw outcomes and current production behavior. Evidence: docs/H1_RESULTS.md, docs/H1_DECISION.md, experiments/causal_engineer/dev/h1/results/independent_stdlib.json. New paid studies need separate justified registration and authorization.
+
+- H1 final evidence commit8ed1ead41196d76da73390c96ed20fa6c8d5979a and draftPR22 published. BasicMemory and existing Notionresearchpage readbacks match finalsignal/counts/commit; verifiedchecksums and timestamps in `experiments/causal_engineer/dev/h1/results/sync_receipt.json`. No merger or further paid stage authorized by this closeout.

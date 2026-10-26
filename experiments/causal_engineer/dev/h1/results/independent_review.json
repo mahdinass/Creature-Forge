@@ -1,0 +1,22 @@
+{
+  "independent_agent": "independent_audit",
+  "stage0_registered_inputs": 330,
+  "stage0_manifest_entries": 28,
+  "stage0_prior_source_hashes": 102,
+  "original_verifier_assessments_replayed": 324,
+  "new_verifier_assessments_replayed": 1600,
+  "new_A_manifest_entries": 346,
+  "new_B_manifest_entries": 1306,
+  "new_sources": 113,
+  "independent_stdlib_source_sha256": "3276495ca8cba4dec9924fad306d29d7a9ace66bbf0794c8941c1409bcb14d07",
+  "negative_checks": [
+    "reversed seed order rejected",
+    "ERROR row rejected",
+    "fabricated status rejected",
+    "flipped confirmation routing rejected",
+    "overwrite refusal preserves bytes",
+    "deterministic A repeat",
+    "no physics/verdict/NumPy imports"
+  ],
+  "result": "A gate agrees true; B gate agrees false; all requirement and control counts match; no paid execution by reviewer"
+}
