@@ -1,0 +1,16 @@
+test_authoritative_full_unchanged (test_vel2.Guards.test_authoritative_full_unchanged) ... ok
+test_confirmation_missing (test_vel2.Guards.test_confirmation_missing) ... ok
+test_cost_and_cutoff (test_vel2.Guards.test_cost_and_cutoff) ... ok
+test_duplicate_one_ticket_and_base_grouping (test_vel2.Guards.test_duplicate_one_ticket_and_base_grouping) ... ok
+test_error_not_nonfull (test_vel2.Guards.test_error_not_nonfull) ... ok
+test_future_labels_not_selection_inputs (test_vel2.Guards.test_future_labels_not_selection_inputs) ... ok
+test_physical_identity (test_vel2.Guards.test_physical_identity) ... ok
+test_seed_panels_disjoint (test_vel2.Guards.test_seed_panels_disjoint) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.934s
+
+OK
+
+Prior scientific implementation and frozen study paths unchanged vs8f3c621.
+Local analysis bytes identical to native.

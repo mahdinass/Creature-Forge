@@ -1,0 +1,58 @@
+{
+  "n_bases": 15,
+  "new_verifications": 30,
+  "new_rollout_equivalents": 2592.0,
+  "three_panel_agreement_bases": 9,
+  "discordant_bases": 6,
+  "stable_fraction_wilson_reference95": [
+    0.35746830120625167,
+    0.8017550385865801
+  ],
+  "agreement": {
+    "full": {
+      "agree": 33,
+      "n_observed_pairs": 45,
+      "fraction": 0.7333333333333333
+    },
+    "improvement": {
+      "agree": 45,
+      "n_observed_pairs": 45,
+      "fraction": 1.0
+    },
+    "validation_walking": {
+      "agree": 37,
+      "n_observed_pairs": 45,
+      "fraction": 0.8222222222222222
+    },
+    "confirmation_walking_frac": {
+      "agree": 29,
+      "n_observed_pairs": 33,
+      "fraction": 0.8787878787878788
+    },
+    "confirmation_median_speed_upright": {
+      "agree": 33,
+      "n_observed_pairs": 33,
+      "fraction": 1.0
+    },
+    "confirmation_body_contact": {
+      "agree": 31,
+      "n_observed_pairs": 33,
+      "fraction": 0.9393939393939394
+    }
+  },
+  "full_by_panel": [
+    11,
+    11,
+    10
+  ],
+  "gate_checks": {
+    "complete_error_free": true,
+    "three_panel_agreement": false,
+    "pairwise_agreement": false,
+    "validation_requirements": true,
+    "persistent_failure_support": false,
+    "persistent_success_support": true
+  },
+  "stage_a_gate": false,
+  "inference": "fixed selected known development bases; pairwise observations correlated; not transfer, recovery improvement, or learning"
+}

@@ -1,0 +1,6 @@
+{
+  "path": "artifacts\\vel2_ops\\stage_a_native.tgz",
+  "bytes": 228957,
+  "sha256": "aac3a50a713da2615a9798743ae63fe49a71ce02eb7d195c61f9033eaa9f5d20",
+  "transport": "SSH archive checksum verified on guest before writing bytes"
+}

@@ -1,0 +1,13 @@
+{
+  "first_start_epoch": 1792973556.6813626,
+  "initial_spend_usd": 122.985,
+  "credit": {
+    "available_usd": 21.34,
+    "verified_epoch": 1792973493.6267686,
+    "source": "Owner current Nebius AI Cloud balance reply in VEL-2 chat, 26 October 2026; $21.34. Cloud cap $6, Token Factory $0."
+  },
+  "cloud_cap_usd": 6,
+  "token_cap_usd": 0,
+  "wall_cap_hours": 2.4,
+  "cutoff_epoch": 1793098800
+}

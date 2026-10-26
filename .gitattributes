@@ -34,3 +34,6 @@ docs/DI1_*.md -text
 experiments/causal_engineer/dev/vel1/** -text
 experiments/causal_engineer/dev/vel1/** whitespace=trailing-space,space-before-tab,cr-at-eol
 docs/VEL1_*.md -text
+experiments/causal_engineer/dev/vel2/** -text
+experiments/causal_engineer/dev/vel2/** whitespace=trailing-space,space-before-tab,cr-at-eol
+docs/VEL2_*.md -text

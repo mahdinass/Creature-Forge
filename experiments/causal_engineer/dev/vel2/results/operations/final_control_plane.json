@@ -1,0 +1,47 @@
+{
+  "checked_epoch": 1792974236.3960881,
+  "states": {
+    "main": {
+      "id": "computeinstance-e01g6rhpgcpnf1bfbr",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "8vcpu-32gb"
+      }
+    },
+    "batch": {
+      "id": "computeinstance-e01efb17k9jbzct0m0",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "64vcpu-256gb"
+      }
+    }
+  },
+  "ledger": {
+    "usd": 123.324,
+    "cap_usd": 120.0,
+    "profiles": {
+      "main": {
+        "compute_h": 72.369,
+        "usd": 20.403,
+        "cap_usd": 120.0
+      },
+      "batch": {
+        "compute_h": 48.215,
+        "usd": 102.921,
+        "cap_usd": 120.0
+      }
+    }
+  },
+  "rate": {
+    "compute_usd_per_h": 2.112,
+    "disk_usd_per_h": 0.00486,
+    "total_usd_per_h": 2.1169,
+    "run_90min_usd": 3.18,
+    "deadline_cap_usd": 6.35,
+    "disk_usd_per_day_when_stopped": 0.117
+  },
+  "billing_stop_observed_epoch": 1792974130.6817937,
+  "accounting": "Conservative local quote ledger; final interval closed at first retained API STOPPED observation. Not provider invoice or current credit."
+}

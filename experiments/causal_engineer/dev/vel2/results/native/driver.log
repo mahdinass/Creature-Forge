@@ -1,0 +1,140 @@
+{"base": "hdb-v1-gen-0004", "panel": 0, "status": "NOT_RECOVERED", "wall_s": 3.4010911419999985}
+{"base": "hdb-v1-gen-0004", "panel": 1, "status": "NOT_RECOVERED", "wall_s": 3.1024697240000023}
+{"base": "hdb-v1-gen-0011", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 7.124437123000007}
+{"base": "hdb-v1-gen-0011", "panel": 1, "status": "PARTIAL_IMPROVEMENT", "wall_s": 3.103858940000009}
+{"base": "hdb-v1-gen-0013", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 6.7776788440000075}
+{"base": "hdb-v1-gen-0013", "panel": 1, "status": "PARTIAL_IMPROVEMENT", "wall_s": 6.916413249000001}
+{"base": "hdb-v1-gen-0024", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 8.509508032999989}
+{"base": "hdb-v1-gen-0024", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 8.474687563999993}
+{"base": "hdb-v1-gen-0028", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 6.659683936999997}
+{"base": "hdb-v1-gen-0028", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 6.685400024000003}
+{"base": "hdb-v1-gen-0030", "panel": 0, "status": "PARTIAL_IMPROVEMENT", "wall_s": 1.8621059040000034}
+{"base": "hdb-v1-gen-0030", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 5.9271654809999745}
+{"base": "hdb-v1-gen-0036", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 6.269430767000017}
+{"base": "hdb-v1-gen-0036", "panel": 1, "status": "PARTIAL_IMPROVEMENT", "wall_s": 6.14006071099999}
+{"base": "hdb-v1-gen-0037", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 6.229416541000006}
+{"base": "hdb-v1-gen-0037", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 6.213871378000022}
+{"base": "hdb-v1-gen-0038", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 7.950422911999993}
+{"base": "hdb-v1-gen-0038", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 7.931024014999991}
+{"base": "hdb-v1-gen-0039", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 6.649755497000001}
+{"base": "hdb-v1-gen-0039", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 6.649906568999995}
+{"base": "hdb-v1-gen-0040", "panel": 0, "status": "PARTIAL_IMPROVEMENT", "wall_s": 2.722352643999983}
+{"base": "hdb-v1-gen-0040", "panel": 1, "status": "PARTIAL_IMPROVEMENT", "wall_s": 2.8104152840000154}
+{"base": "hdb-v1-gen-0044", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 5.983750851999986}
+{"base": "hdb-v1-gen-0044", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 5.941995793999979}
+{"base": "hdb-v1-gen-0052", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 8.119632712999987}
+{"base": "hdb-v1-gen-0052", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 8.140567974000021}
+{"base": "hdb-v1-gen-0054", "panel": 0, "status": "FULL_RECOVERY", "wall_s": 6.357114550999995}
+{"base": "hdb-v1-gen-0054", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 6.310418741999996}
+{"base": "hdb-v1-gen-0064", "panel": 0, "status": "PARTIAL_IMPROVEMENT", "wall_s": 6.524647240000007}
+{"base": "hdb-v1-gen-0064", "panel": 1, "status": "FULL_RECOVERY", "wall_s": 6.494108073999996}
+Exception ignored in: <Finalize object, dead>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/multiprocessing/synchronize.py", line 87, in _cleanup
+    sem_unlink(name)
+FileNotFoundError: [Errno 2] No such file or directory
+Exception ignored in: <Finalize object, dead>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/multiprocessing/synchronize.py", line 87, in _cleanup
+    sem_unlink(name)
+FileNotFoundError: [Errno 2] No such file or directory
+Exception ignored in: <Finalize object, dead>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/multiprocessing/synchronize.py", line 87, in _cleanup
+    sem_unlink(name)
+FileNotFoundError: [Errno 2] No such file or directory
+Exception ignored in: <Finalize object, dead>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/multiprocessing/synchronize.py", line 87, in _cleanup
+    sem_unlink(name)
+FileNotFoundError: [Errno 2] No such file or directory
+Exception ignored in: <Finalize object, dead>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/util.py", line 227, in __call__
+    res = self._callback(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/multiprocessing/synchronize.py", line 87, in _cleanup
+    sem_unlink(name)
+FileNotFoundError: [Errno 2] No such file or directory
+{
+  "n_bases": 15,
+  "new_verifications": 30,
+  "new_rollout_equivalents": 2592.0,
+  "three_panel_agreement_bases": 9,
+  "discordant_bases": 6,
+  "stable_fraction_wilson_reference95": [
+    0.35746830120625167,
+    0.8017550385865801
+  ],
+  "agreement": {
+    "full": {
+      "agree": 33,
+      "n_observed_pairs": 45,
+      "fraction": 0.7333333333333333
+    },
+    "improvement": {
+      "agree": 45,
+      "n_observed_pairs": 45,
+      "fraction": 1.0
+    },
+    "validation_walking": {
+      "agree": 37,
+      "n_observed_pairs": 45,
+      "fraction": 0.8222222222222222
+    },
+    "confirmation_walking_frac": {
+      "agree": 29,
+      "n_observed_pairs": 33,
+      "fraction": 0.8787878787878788
+    },
+    "confirmation_median_speed_upright": {
+      "agree": 33,
+      "n_observed_pairs": 33,
+      "fraction": 1.0
+    },
+    "confirmation_body_contact": {
+      "agree": 31,
+      "n_observed_pairs": 33,
+      "fraction": 0.9393939393939394
+    }
+  },
+  "full_by_panel": [
+    11,
+    11,
+    10
+  ],
+  "gate_checks": {
+    "complete_error_free": true,
+    "three_panel_agreement": false,
+    "pairwise_agreement": false,
+    "validation_requirements": true,
+    "persistent_failure_support": false,
+    "persistent_success_support": true
+  },
+  "stage_a_gate": false,
+  "inference": "fixed selected known development bases; pairwise observations correlated; not transfer, recovery improvement, or learning"
+}
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-pca_6y7h': [Errno 2] No such file or directory
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-g13vgv_8': [Errno 2] No such file or directory
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-qfoh8i93': [Errno 2] No such file or directory
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-pid7upxw': [Errno 2] No such file or directory
+  warnings.warn('resource_tracker: %r: %s' % (name, e))
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:267: UserWarning: resource_tracker: '/mp-5tr7isfh': [Errno 2] No such file or directory
+  warnings.warn('resource_tracker: %r: %s' % (name, e))

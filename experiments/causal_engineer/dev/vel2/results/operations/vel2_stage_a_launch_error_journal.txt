@@ -1,0 +1,23 @@
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 systemd[1]: Starting forge-vel2-stage-a.service - /bin/bash /home/forge/dev/r0-codex/scripts/vel2_native.sh...
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 systemd[1]: Started forge-vel2-stage-a.service - /bin/bash /home/forge/dev/r0-codex/scripts/vel2_native.sh.
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 bash[2243]: fatal: detected dubious ownership in repository at '/home/forge/dev/r0-codex'
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 bash[2243]: To add an exception for this directory, call:
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 bash[2243]:         git config --global --add safe.directory /home/forge/dev/r0-codex
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2244]:     root : PWD=/home/forge/dev/r0-codex ; USER=root ; COMMAND=/usr/bin/systemctl is-active --quiet forge-selfstop.timer
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2244]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2244]: pam_unix(sudo:session): session closed for user root
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2246]:     root : PWD=/home/forge/dev/r0-codex ; USER=root ; COMMAND=/usr/bin/test -x /usr/local/sbin/forge-selfstop
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2246]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2246]: pam_unix(sudo:session): session closed for user root
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 bash[2250]: fatal: detected dubious ownership in repository at '/home/forge/dev/r0-codex'
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 bash[2250]: To add an exception for this directory, call:
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 bash[2250]:         git config --global --add safe.directory /home/forge/dev/r0-codex
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2257]:     root : PWD=/home/forge/dev/r0-codex ; USER=root ; COMMAND=/usr/bin/tee /var/lib/forge/deadline
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2257]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2257]: pam_unix(sudo:session): session closed for user root
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2259]:     root : PWD=/home/forge/dev/r0-codex ; USER=root ; COMMAND=/usr/local/sbin/forge-selfstop
+Oct 26 00:14:21 computeinstance-e01efb17k9jbzct0m0 sudo[2259]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Oct 26 00:14:23 computeinstance-e01efb17k9jbzct0m0 forge-selfstop[2287]: deadline passed: API stop requested for computeinstance-e01efb17k9jbzct0m0 (attempt 1)
+Oct 26 00:14:23 computeinstance-e01efb17k9jbzct0m0 sudo[2259]: pam_unix(sudo:session): session closed for user root
+Oct 26 00:14:23 computeinstance-e01efb17k9jbzct0m0 systemd[1]: forge-vel2-stage-a.service: Main process exited, code=exited, status=128/n/a
+Oct 26 00:14:23 computeinstance-e01efb17k9jbzct0m0 systemd[1]: forge-vel2-stage-a.service: Failed with result 'exit-code'.
