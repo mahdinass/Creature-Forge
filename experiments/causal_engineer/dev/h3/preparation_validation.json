@@ -1,0 +1,31 @@
+{
+  "archived_unregistered_review_plan": "artifacts/h3_plan_prelogging_review_20261026.json",
+  "authorization": "No H3 physics or paid execution authorized",
+  "fresh_root_draws": 48,
+  "frozen_guard": {
+    "covered_blobs_matching": 279,
+    "failed": 1,
+    "failure": "42 inherited E1 coverage omissions, exactly equal baseline",
+    "passed": 2,
+    "tests": 3
+  },
+  "independent_evaluation_seed_ids": 9696,
+  "known_historical_body_hashes_excluded": 18,
+  "new_physics": 0,
+  "new_training": 0,
+  "nonphysics_tests": {
+    "h3_h1": 31,
+    "includes_spawned_controller_contracts": true,
+    "native_physics_compatibility_tested": false,
+    "result": "PASS",
+    "wall_s": 9.692
+  },
+  "original_audit_preserved": true,
+  "plan_regeneration_exact": true,
+  "plan_sha256": "c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd",
+  "preparation_only": true,
+  "source_pins_verified": 106,
+  "study": "h3-pilot-v1",
+  "token_factory_calls": 0,
+  "unrelated_e2r_preserved": true
+}

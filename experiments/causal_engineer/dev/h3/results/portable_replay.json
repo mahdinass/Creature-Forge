@@ -1,0 +1,20 @@
+{
+  "accepted": {
+    "left": [
+      "h3-new-028"
+    ],
+    "right": [
+      "h3-new-023",
+      "h3-new-027",
+      "h3-new-033"
+    ]
+  },
+  "audit_passed": true,
+  "decision": "NO-GO: qualification",
+  "mode": "portable science-only entry-rule replay; native archive manifests audited separately",
+  "qualification_equivalents": 1536.0,
+  "qualification_passed": false,
+  "qualification_rollouts": 1152,
+  "roots": 48,
+  "seed_rows": 1152
+}

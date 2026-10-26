@@ -1,0 +1,39 @@
+{
+  "results_commit": "64e3ed406c13b7331ae4cb0e6ec1c44298918d01",
+  "branch": "codex/h3-capability-audit",
+  "remote_results_ref_verified": true,
+  "draft_pr": "https://github.com/mahdinass/Creature-Forge/pull/23",
+  "base_commit": "a2619c7dfc6513e55184bbc15baba7d288ff1dcf",
+  "decision": "NO-GO: qualification; residual repair efficacy and learning NOT EVALUATED",
+  "basic_memory": {
+    "permalink": "creature-forge/research/h3-completed-acquisition-no-go-efficacy-untested-2026-10-26",
+    "checksum": "af8b43a78a9485859d90ed3dca2eb904777fc109e1a7d1f27bc53656bfce5c7a",
+    "commit": "64e3ed406c13b7331ae4cb0e6ec1c44298918d01",
+    "verified": true
+  },
+  "notion": {
+    "page_id": "4035d357-b5ad-813e-84d4-de5fd8928f41",
+    "page_last_edited_at": "2026-10-26T21:37:15.860Z",
+    "prior_body_preserved": true,
+    "new_section_count": 1,
+    "commit_present": true,
+    "untruncated": true,
+    "unknown_blocks": null
+  },
+  "ci": {
+    "publication_skip_ci": true,
+    "no_new_result_runs_verified": true,
+    "historical_checkpoint_runs": [
+      40362890285,
+      40362889245
+    ],
+    "full_suite_green": false
+  },
+  "shutdown": {
+    "both": "STOPPED",
+    "reconfirmed_epoch": 1793050472.4653478,
+    "no_matching_local_research_executor": true
+  },
+  "authorization_closed_at_failed_gate": true,
+  "further_paid_work_scheduled": false
+}

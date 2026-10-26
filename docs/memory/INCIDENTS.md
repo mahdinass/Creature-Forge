@@ -1,5 +1,13 @@
 # Creature Forge — incidents and proven fixes
 
+## 2026-10-26 — H3 checkpoint push triggered physics CI; test isolation corrected
+
+Status: **observed; local non-physics fix verified; full-suite rerun intentionally not performed**. Checkpoint6c27e116a350898007d7352347b1f8279eb4954a was pushed without suppressing Actions. Existing push workflows automatically ran their physics-test step in completed runs40362890285 and40362889245. This should have been suppressed under the H3 execution boundary. No H3 pilot/training or Nebius VM was started, and CI trajectories are not used as research outcomes. Actions consumption is separate from the Nebius quote ledger; no invoice claim is made.
+
+Run40362890285 reported1539 tests, two failures/one error/five skips. One failure is the unchanged42-path frozen-manifest omission. Two H3 unit-test assumptions were also exposed: positive factory-scope tests assumed the parent test runner had no unrelated service threads. The production guard correctly rejects such a process. Positive unit tests now explicitly model the required dedicated-worker thread count; a new test proves an actual additional thread is rejected, and spawned-worker contracts retain real thread checking. Runtime concurrency guards were not weakened.
+
+`python -m unittest tests.test_h3 tests.test_h1 -v` in the reused original-repo venv passes32 non-physics tests (9.604s). No full-suite rerun is claimed. Current research publication commits use `[skip ci]`, supported for this repository's push/pull_request triggers; no workflow/release configuration is modified. Evidence: `experiments/causal_engineer/dev/h3/checkpoint_ci_review.json` and `VALIDATION.md`. Review CI links and keep this distinction from zero H3 research-physics calls.
+
 Append one incident per significant recurring failure. Mark everything here as `observed`, `hypothesized`, `verified`, or `superseded`. Never claim a workaround succeeded without a command/log/test demonstrating it.
 
 ## Template
@@ -181,3 +189,10 @@ Post-pool multiprocessing semaphore cleanup warnings remain in rawdriverlog; low
 ## 2026-10-26 — H1 early startup shutdown probe and ledger correction
 
 The first remote engineering self-stop probe raced VM startup; its control-plane wait ended RUNNING. An ad hoc receipt incorrectly appended a stop event despite that result. No physics ran. After bounded SSH readiness verification, the native SA API self-stop succeeded and both VMs were provider-confirmed STOPPED. The false stop was offset with a same-epoch start so all runtime remained charged; its initially omitted required deadline field was repaired after preserving original ledger bytes in ignored H1 ops evidence. The corrected ledger closed at observed STOPPED. Lesson: require state==STOPPED before recording any stop; serialize readiness and mutation checks. Existing native timer/watchdog remained ready.
+
+
+## 2026-10-26 — H3 evidence retrieval restart and operational receipt limitations
+
+Native supervisor correctly stopped at qualification (exit20) and archived before API stop. Local retrieval guard expected a relative archive path, but reused helper returned an absolute path; no download occurred before60-second grace expired. One bounded7.2-minute retrieval-only restart recovered exact140679-byte archive SHA7033654550fd5d2bb6fbc37b600cce7b3dc0d44c0df5f3200947b4cf733e1262; zero physics replay. Both VMs subsequently API STOPPED, receipt1793049383.7590587. Counts/manifests/qualification outcomes independently verified. No scientific outcome overwritten; original stopped disks retained.
+
+Operational helper reused initial_provider_state.json at retrieval start. Original first-window baseline remains in campaign.json and uniquely named start receipts. scripts/h3_ops.py now preserves existing initial receipt and adds unique prestart receipts. Ledger records stop requests before first observed STOPPED, so raw USD0.330 ledger delta understates the observation-based quote bound USD0.35004. Report larger estimate (two windows0.16480batchh), not provider invoice or balance. Existing storage retained/continues accruing. Resource method in results/resource_audit.json. Frozen scientific plan/sources unchanged; no new IAM/environment. No further paid work scheduled.

@@ -1,0 +1,37 @@
+{
+  "checked_epoch": 1793049383.7590587,
+  "states": {
+    "main": {
+      "id": "computeinstance-e01g6rhpgcpnf1bfbr",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "8vcpu-32gb"
+      }
+    },
+    "batch": {
+      "id": "computeinstance-e01efb17k9jbzct0m0",
+      "state": "STOPPED",
+      "resources": {
+        "platform": "cpu-d3",
+        "preset": "64vcpu-256gb"
+      }
+    }
+  },
+  "ledger": {
+    "usd": 125.248,
+    "cap_usd": 120.0,
+    "profiles": {
+      "main": {
+        "compute_h": 72.369,
+        "usd": 20.505,
+        "cap_usd": 120.0
+      },
+      "batch": {
+        "compute_h": 49.03,
+        "usd": 104.743,
+        "cap_usd": 120.0
+      }
+    }
+  }
+}

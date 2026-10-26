@@ -1,0 +1,47 @@
+{
+  "scientific_commit": "5c0975e2dcd3dd3be0ed89a5596917273a7e96aa",
+  "branch": "codex/h3-capability-audit",
+  "scientific_remote_sha_verified": true,
+  "plan_sha256": "c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd",
+  "pull_request": {
+    "url": "https://github.com/mahdinass/Creature-Forge/pull/23",
+    "draft": true,
+    "base": "codex/h1-bounded-investigation",
+    "base_sha": "a2619c7dfc6513e55184bbc15baba7d288ff1dcf",
+    "attached_to_chat": true
+  },
+  "basic_memory": {
+    "permalink": "creature-forge/research/h3-preparation-complete-unvalidated-stance-residual-pilot-2026-10-26",
+    "checksum": "f5316102462d1e7d057cbc058b2c4fa821e5a5bd96890c212e1ebb984dd27b45",
+    "checksum_matches_write": true,
+    "commit_present": true,
+    "permission_boundary_present": true
+  },
+  "notion": {
+    "page_id": "4035d357-b5ad-813e-84d4-de5fd8928f41",
+    "page_last_edited_at": "2026-10-26T20:23:57.721Z",
+    "h3_heading_count": 1,
+    "commit_present": true,
+    "plan_present": true,
+    "earlier_body_preserved": true,
+    "h1_heading_present": true
+  },
+  "local_nonphysics_tests": 32,
+  "new_h3_research_physics": 0,
+  "nebius_vm_starts": 0,
+  "token_factory_calls": 0,
+  "final_cloud_checked_epoch": 1793046301.875729,
+  "main_state": "STOPPED",
+  "batch_state": "STOPPED",
+  "main_compute_h": 72.369,
+  "batch_compute_h": 48.874,
+  "ci": {
+    "new_runs_for_scientific_commit": 0,
+    "prior_checkpoint_runs_disclosed": [
+      40362890285,
+      40362889245
+    ],
+    "current_publication_skip_ci": true
+  },
+  "next_permission": "Fresh explicit H3 approval for proposed USD8 / three batch hours / USD0 Token Factory pilot; verify credit/quote and pass native/qualification/throughput gates before further work."
+}

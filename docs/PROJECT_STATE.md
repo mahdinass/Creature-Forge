@@ -1,5 +1,7 @@
 # Creature Forge — observed current project state
 
+> Latest H3 execution (2026-10-26): **NO-GO at qualification**. Read `docs/H3_EXECUTION_DECISION.md` and `docs/H3_RESULTS.md`. Both VMs stopped; no further paid work scheduled. Earlier entries below are historical.
+
 > **Current state (2026-10-18): read `docs/RESEARCH_HANDOFF_2026-10-18.md` first.** This file is an append-only log; the
 > header and early sections below describe 2026-10-13 and are historical.
 
@@ -676,3 +678,33 @@ BothVMs API STOPPED at original11:12:13UTC/12:12:13Oslo. Original additionalquot
 
 
 - **H1 publication/sync verified:** results8ed1ead41196d76da73390c96ed20fa6c8d5979a pushed with matching remote ref; draftPR22 https://github.com/mahdinass/Creature-Forge/pull/22 targets pin e8d5fa6, notrelease. BasicMemory creature-forge/research/h1-completed-not-evaluable-for-learning-recovery-2026-10-26 readback checksumcec4da5a75f3ec64055581a85b526bd1510c82b3fc16458278a97461ee28c3fa matches verdict/commit/counts. Existing Notionpage4035d357-b5ad-813e-84d4-de5fd8928f41 contains exactlyone H1completed section, preserves earlier research, matchingresultcommit; readbacklastedit2026-10-26T14:35:21.177Z. Bothsyncs verified. Resumedfullstdlibaudit matches originalJSON exactly;10guards passagain. Publication fixed only Git EOL conversion on7recovered metadata files under -text; working originalbytes and all scientific contents remain unchanged. No newphysics/modelcalls or scheduledpaidwork; bothVMs confirmedSTOPPED atresumption.
+
+
+## 2026-10-26 — H3 PAUSED at owner request
+
+Branch codex/h3-capability-audit, base H1 a2619c7. Saved-development audit, primary-source review, four proposals, seven draft H3 documents and research prototype/guarded runner written;26 non-physics tests passed in existing original-repo venv. No H3 physics, training, Cloud starts or Token Factory calls; no demonstrated physical or learning improvement. Machine plan/freeze, final review, draft PR and remote documentation sync unfinished. Exact checkpoint and next steps: docs/H3_RESUME.md. Proposed USD8/3h/USD0-token pilot is NOT authorized; H1 permission does not carry over. Both VMs API STOPPED at1793033104.0726569, compute main72.369h/batch48.874h unchanged; no matching active research executor. Resume only explicitly; preserve sealed evidence, inherited42 manifest omissions, V1 freeze and unrelated untracked scripts/e2r_analysis.py.
+
+
+## 2026-10-26 — H3 non-physics preparation complete; fresh approval required
+
+Explicit owner resume completed the H3 review from checkpoint6c27e11. Seven research documents, conventional nested asymmetric stance residual prototype, journaled/manifest-checked runner and grouped saved-row analysis are ready for review.32 non-physics tests pass; spawned contracts are not native physical validation. Frozen plan c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd has48 fresh root draws,9,696 disjoint seed IDs and106 source pins; original saved audit preserved. Frozen-record check confirms same42 inherited E1 omissions and279 covered blobs matching pin e8d5fa6. No sealed/manifest/release/submission changes; unrelated e2r script preserved.
+
+No new H3 physics, training, VM start or Token Factory call. Both VMs API STOPPED at1793045409.7172987; compute main72.369h/batch48.874h unchanged. No repair/learning benefit established. Proposed twelve-lineage engineering pilot: at most311,808 equivalents, USD8 additional Cloud, three batch hours, USD0 Token Factory, subject to native identity/qualification/throughput and fresh credit/quote/approval gates. H1 permission is not reused. Exact evidence and publication/synchronization readback: experiments/causal_engineer/dev/h3/VALIDATION.md; current decision docs/H3_DECISION.md. No further paid work scheduled.
+
+
+- **H3 publication/sync verified:** scientific bundle5c0975e2dcd3dd3be0ed89a5596917273a7e96aa pushed, remote matched; draftPR23 https://github.com/mahdinass/Creature-Forge/pull/23 targets H1 research a2619c7, attached to chat. BasicMemory H3 preparation note readback checksum f5316102462d1e7d057cbc058b2c4fa821e5a5bd96890c212e1ebb984dd27b45; Notion readback2026-10-26T20:23:57.721Z contains one matching H3 section and preserves complete earlier body.32 local non-physics tests pass. Prior checkpoint's unintended automatic physics CI and two corrected unit-isolation assumptions are disclosed in INCIDENTS/validation; current publication skips CI, no full-green claim.106 source pins/14 export hashes match staged Git. Final both-STOPPED API check1793046301.875729, compute unchanged; zero H3 pilot/training/Nebius starts/Token Factory calls. Fresh USD8/3h/USD0-token pilot approval remains pending; no paid follow-on scheduled. Exact receipts experiments/causal_engineer/dev/h3/publication.json and VALIDATION.md.
+
+
+## 2026-10-26 — H3 pilot explicitly authorized; T0 operations preflight
+
+Owner approved the proposed USD8 additional Cloud / three paid batch hours / USD0 Token Factory pilot and supplied fresh usable capacity. Existing service-account and watchdog reused; main stays STOPPED. Added scripts/h3_ops.py and h3_native.sh for a campaign-specific financial/time envelope and automatic native shutdown; two non-physics operational-cap tests pass and shell syntax checked. Frozen plan c5eea6daddaf90c9ed2cef598dce0b45919e6c9bbcef8226b456b0412e988bdd and106 scientific source pins unchanged. Authorization/capacity receipt is local ignored artifacts/h3_ops/authorization.json. Both VMs were API STOPPED before launch; no research executor active. Native T1/qualification T2 remain mandatory; no threshold changes or permission for a larger follow-on.
+
+
+## 2026-10-26 — H3 executed; qualification NO-GO; study stopped
+
+Explicit USD8 Cloud / three batch hours / USD0 Token Factory approval led to native T1/T2 at source c7103d47ba6e63e6cfd5d0b2c2ab161091163969. T1 zero-gain trajectory/verifier identity passed. T2 exhausted all48 fixed fresh roots;6 met both nominal walking requirements,4 met all entry conditions (1left/3right), below required6 per side. Expected supervisor exit20 stopped the campaign. Total1176 rollouts/1560 ten-second equivalents, zero errors; zero optimizer, FULL assessment or model calls. Residual efficacy and learning remain NOT EVALUATED. Frozen plan106 pins and original14-file export preserved; no threshold changes, extra draws, sealed/release/submission edits.
+
+Registered saved analyzer and separate stdlib archive/portable row audits agree. Full native archive SHA7033654550fd5d2bb6fbc37b600cce7b3dc0d44c0df5f3200947b4cf733e1262 retained locally/on stopped disk; lossless science-only1152-row qualification export committed. Both VMs API STOPPED at1793049383.7590587 (21:16:23UTC); main compute unchanged. Conservative additional batch0.16480h, configured compute plus existing-disk quote USD0.35004, Token Factory0. Retrieval-only restart included; quote is not invoice/balance. See docs/H3_RESULTS.md, docs/H3_EXECUTION_DECISION.md and results/COMMANDS.md. Next requires a separately designed/approved nominal-walking acquisition recipe; these48 roots are now development evidence. No unused-budget continuation.
+
+
+- H3 execution publication verified: results64e3ed406c13b7331ae4cb0e6ec1c44298918d01, draftPR23 head/base match; BasicMemory checksum af8b43a78a9485859d90ed3dca2eb904777fc109e1a7d1f27bc53656bfce5c7a and Notion readback2026-10-26T21:37:15.860Z verified, prior content preserved. Both API STOPPED reconfirmed1793050472.4653478; no matching local executor/new CI/paid continuation. Receipt experiments/causal_engineer/dev/h3/execution_publication.json; current decision H3_EXECUTION_DECISION.md.

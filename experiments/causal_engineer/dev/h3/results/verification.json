@@ -1,0 +1,11 @@
+{
+  "auditor_added_after_acquisition": true,
+  "auditor_sha256": "81d9bb5d47e9ffa78614aba82a42ce5b99614a258b366daaa63328fbf4eea7f0",
+  "e2r_untracked_preserved": true,
+  "final_API_STOPPED_epoch": 1793050472.4653478,
+  "full_and_portable_reaudits_byte_exact": true,
+  "operations_tests": "2 pass; no physics",
+  "plan_pins_verified": 106,
+  "preparation_export_hashes_verified": 14,
+  "prior_science_tests": "32 non-physics pass, see preparation VALIDATION.md"
+}
