@@ -1,0 +1,18 @@
+{
+  "pinned_head": "e8d5fa6730ecf6d2db67021a9d3d0f08cce03310",
+  "tracked_worktree_clean": true,
+  "source_file_hashes_rechecked": 330,
+  "rl1_original_counts_reproduced": true,
+  "r0_original_counts_reproduced": true,
+  "repeated_numerics_exact": true,
+  "candidate_reconstruction_all648_hash_exact": true,
+  "supplement_repeat_byte_exact": true,
+  "new_cloud_starts": 0,
+  "new_physics_rollouts": 0,
+  "new_fitted_models": 0,
+  "paid_model_calls": 0,
+  "cloud_compute_spend": 0,
+  "token_factory_spend": 0,
+  "remote_writes": 0,
+  "commits_or_pushes": 0
+}

@@ -1,0 +1,11 @@
+# H1 Stage 0 local audit definitions
+
+Read-only audit against pinned e8d5fa6730ecf6d2db67021a9d3d0f08cce03310. This records transformations for already-open historical development evidence; it is NOT a preregistration or a fresh hypothesis test.
+
+No physics imports/execution, fitting, model calls, cloud lifecycle, source edits, commits or remote writes.
+
+R0: one final screen per unit; unique selection design_hashes define the screened choice set. Exact label join key is instance_id, physical candidate hash and validation+confirmation seed lists. Check source SHA and case/plant identities. An unchosen candidate label can be recovered only from an identical already-verified candidate, not similar design/other seeds. Treat unknown alternatives as missing. Report selection walking-only incumbent-tie, walking-only first-index-tie, survival-first and fitness-only fixed lexicographic rules; no fitted threshold. Do not pool optimizer arms as an original affordable choice set. All-unit per-case oracle is explicitly a 54,000-policy-rollout hypothetical union, not selectable policy value. No post-outcome change of rules.
+
+RL1: ten separately optimized single-tool cells per fault instance; dedup exact candidate body/vector within instance. Engine tool order follows original repair_memory.engine_order source. Compare first engine tool with maximum four-train-seed walking count, engine order breaks ties; report complete ten-candidate acquisition cost. This is exploratory standardized matrix choice, NOT current A1's final selection or a 700-rollout deployable policy. Beta posterior/lower-bound with common n=4 is monotonically equivalent to count ordering. Engine top-two any-FULL remains a two-tool query-policy endpoint, not selecting one candidate. No fitting or recalibration. Any-tool oracle and cross-arm oracles are upper bounds only. Report both instance-weighted and base-equal descriptions; bootstrap whole independent bases (5000 draws, fixed seed2026102607), no inferential significance or threshold selection.
+
+Only published E1 summaries are read. R0/RL1/fresh v5 explicit dev sources only. Keep original labels and missing confirmation untouched. Prepared outputs are immutable new local files. Source checksums and all transformations recorded by audit.py and results.json.

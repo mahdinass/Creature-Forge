@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-26",
+  "input_hashes_verified": 330,
+  "audit_manifest_entries_independently_verified": 28,
+  "source_hashes_independently_verified": 102,
+  "audit_equal_except_absolute_roots": true,
+  "reconstruction_byte_exact": true,
+  "supplement_byte_exact": true,
+  "exact_candidate_hashes": 640,
+  "incumbent_choices_replayed": 324,
+  "independent_review": "collaboration independent_audit, no physics",
+  "new_physics": 0
+}
