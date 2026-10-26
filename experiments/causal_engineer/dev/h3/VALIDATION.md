@@ -25,3 +25,16 @@ Native trajectory equivalence, real19D physics/verifier behavior, qualification 
 Both VMs are API-confirmed STOPPED at epoch1793045409.7172987, main compute72.369h/batch48.874h unchanged from H1. See `preparation_cloud_status.json` and the older `pause_cloud_status.json`. Ledger124.909USD includes existing disk accrual; it is not a fresh payment-capacity balance. New H3 compute/Token Factory spending is0; no starts, training, new physics or model calls.
 
 Publication and verified memory/Notion readback are appended after the scientific bundle commit. The provider quote and usable credit must be freshly checked before any later approved paid window. No release merge, sealed data mutation or submission edit is authorized or performed.
+
+
+## Publication and synchronization verified
+
+Scientific bundle **5c0975e2dcd3dd3be0ed89a5596917273a7e96aa** is pushed on `codex/h3-capability-audit`; remote ref matched. Draft PR23 https://github.com/mahdinass/Creature-Forge/pull/23 targets H1 `codex/h1-bounded-investigation` at a2619c7 and is attached to this chat. No merge. The closeout commit adds metadata only; find it with `git log -1 -- experiments/causal_engineer/dev/h3/publication.json`.
+
+Basic Memory project creature-forge note `research/h3-preparation-complete-unvalidated-stance-residual-pilot-2026-10-26` was written and read back, checksum **f5316102462d1e7d057cbc058b2c4fa821e5a5bd96890c212e1ebb984dd27b45** matches the write and contains the scientific commit and fresh-approval boundary.
+
+Notion page4035d357-b5ad-813e-84d4-de5fd8928f41 readback last edit **2026-10-26T20:23:57.721Z** contains exactly one H3-preparation section, the matching scientific commit and plan hash. Its complete earlier content prefix, including H1 and prior studies, is preserved. A date-tag deprecation was automatically converted without changing the date. This is content synchronization verification, not Notion's native editorial-verification badge.
+
+Final provider receipt `final_cloud_status.json`, epoch **1793046301.875729**: both STOPPED; main72.369h/batch48.874h unchanged. Ledger124.911USD reflects stopped-disk accrual, not usable credit or new H3 compute. No new CI runs for scientific commit5c0975e; only the two disclosed, completed checkpoint runs remain. Publication/closeout use `[skip ci]`. Exact metadata: `publication.json`; staged verification records106 matching source pins and14 matching exported files. The export manifest lists those14 scientific files explicitly; status/publication/staged-check metadata and this mutable log are outside that list. Future execution-unit manifests instead enforce full unit-directory coverage.
+
+All permitted H3 preparation is complete. Next action is fresh explicit experiment approval, then fresh credit/price checks and native T1/qualification T2/throughput gates. Do not start either VM, new physics, training or Token Factory work from a generic resume or H1 authorization. Proposed ceiling USD8 additional Cloud / three paid batch hours / USD0 Token Factory; no paid follow-on scheduled. V1 release, submission and sealed evidence remain untouched.
