@@ -984,3 +984,17 @@ missing records. They are frozen and are not changed.
   p 0.034). The protocol had no gatekeeping, so it is not a study-wide confirmatory result: Holm over all 3 tests gives an
   adjusted p of 0.0503. Report it as supportive evidence (`docs/E1_RESULTS.md` §1.1). The earlier "rejected (Holm)" wording
   is withdrawn.
+
+## 2026-10-27 - Research frozen; submission candidate prepared (`release/v1-submission`)
+- **Scope:** release engineering and documentation only. No physics batches, model calls, VM starts or credit spend.
+- **Branch:** `release/v1-submission` from `release/v1-rc2-prep` @ `60b6ac9`, worktree `cf-submission`.
+- **Added:** judge-facing `README.md` rewrite, `docs/ARCHITECTURE.md`, `docs/RESEARCH_STATUS.md`, `docs/README.md`,
+  `docs/submission/{JUDGE_TESTING,VIDEO_HANDOFF}.md`, rewritten `DEVPOST.md` and `SUBMISSION_CHECKLIST.md` (compliance
+  against the official rules read on 2026-10-27), a paste-ready summary in `FEEDBACK.md`, `docs/assets/` (3 screenshots,
+  architecture SVG, mark SVG), `.env.example` live switch, live-take records and capture script imported byte-identically.
+- **Rules finding:** "runs on Nebius" means a runtime Token Factory call or AI Cloud Serverless Jobs, Endpoints or DevPods.
+  We qualify through Token Factory; the VMs are described as Compute VMs.
+- **Video package (outside Git):** `%USERPROFILE%/CreatureForge-archive/video_package_2026-10-27/`, 67 files + SHA256SUMS.
+- **VMs:** main and batch both STOPPED via the control plane at 2026-10-27 22:13 UTC (`forge_cloud.py status`).
+- **Owner actions:** merge the release PR into `main`, make the repository public, video, Devpost form
+  (`docs/submission/SUBMISSION_CHECKLIST.md` §5).

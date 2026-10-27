@@ -122,3 +122,37 @@ records and its claims are unchanged.
 - the Studio pages;
 - the physics, verifier and optimiser code paths used by the demo;
 - the `v1.0.0-rc1` tag.
+
+## 10. Submission candidate (branch `release/v1-submission`, PR into `main`; 2026-10-27)
+
+**Base and integration decision.** Built on `release/v1-rc2-prep` @ `60b6ac9`, so it contains V1 (PR #19) and rc2
+(PR #20). PR #20 was reviewed and kept whole: its E-1 code is a separate module and scripts, the frozen manifest only gains
+42 entries (0 removed or changed), and its infra changes harden the VM stop path. H1 (PR #22), H3 (PR #23), E-2R and the
+other research branches are **not** included; their decisions are summarised in `docs/RESEARCH_STATUS.md`.
+
+**What changed (documentation, assets and records only; no code path of the app changed):**
+- judge-facing `README.md`; new `docs/ARCHITECTURE.md`, `docs/RESEARCH_STATUS.md`, `docs/README.md`, `docs/assets/`;
+- `docs/submission/`: rewritten `DEVPOST.md` and `SUBMISSION_CHECKLIST.md` (compliance with the official rules),
+  `FEEDBACK.md` summary, new `JUDGE_TESTING.md` and `VIDEO_HANDOFF.md`;
+- byte-identical imports from `feature/demo-capture` @ `29e8e50`: `experiments/forge_loop/demo_capture/` and
+  `studio/e2e/forge-demo-capture.mjs` (not run by CI);
+- `.env.example` documents `CREATURE_FORGE_ENABLE_LIVE` (empty, off).
+
+**Frozen-manifest status.** `tests/test_frozen_records.py` passes on this branch: rc2 already registered the 42 E-1
+records. The "42 inherited E1 omissions" reported by later research branches (H1, H3) belong to those branches, which
+fork from `research/e1-engine-heldout` before rc2's manifest commit; they are not a release defect, and nothing in the
+manifest was edited here.
+
+**Validation on Windows 11, Python 3.11.9, NumPy 2.4.6, MuJoCo 3.15.0, Node 24 (2026-10-27/28):**
+| Check | Result |
+|---|---|
+| `python -m unittest discover -s tests` | 1,643 tests, OK, 6 skipped, 1,846 s |
+| `npm --prefix studio test` | 199 passed (14 files) |
+| `npm --prefix studio run build` | built (chunk-size warning only) |
+| `python scripts/smoke_test.py` | 6/6 PASS |
+| Studio start (no key) | ready in about 15 s; `/`, `/api/do1/index`, `/api/nemotron/case`, `/api/forge/status` HTTP 200; `live_available: false` |
+| `python scripts/lab_browser_check.py` (Edge) | 301 PASS, 2 FAIL. Both failures are waits for long MuJoCo jobs (`forge-flow` scripted investigation, 15 min; `forge-recovery-flow`, 10 min) while an unrelated process held about 10 CPU-hours and free RAM was about 1 GB. The demo-video flows (`do1-flow`, `nemotron-flow`) passed. No app code differs from rc2, whose CI run passed; CI on Ubuntu is the reference |
+| Test fix | `tests/test_creature_gen.py::test_stilts_matches_record` had never run (its record was absent on every branch with the test). With the imported record it errored: the record stores leg geometry per leg. The test now checks both legs; values match exactly |
+| Secret scan | the real key value and 6 credential patterns over every blob added since `60b6ac9` (31 blobs) and the commit messages: 0 hits |
+
+**Nebius.** No paid service was used. Both VMs were STOPPED via the control plane at 2026-10-27 22:13 UTC.

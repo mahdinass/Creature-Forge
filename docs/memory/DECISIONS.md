@@ -177,3 +177,19 @@ This is the Git-visible decision index. Add one dated section per consequential 
 - **Damaged-robot animation only via the gated exporter** (`scripts/w2_damaged_plant_export.py`).
   - Gate: per-seed experiment features exact, verification aggregates exact, FK.
   - It must run in the recorded Linux environment, and only with owner approval.
+
+## 2026-10-27 - Submission candidate (`release/v1-submission`)
+- **Base:** `release/v1-rc2-prep` @ `60b6ac9` (PR #20), which contains `release/v1` (PR #19). PR #20 was reviewed and kept
+  whole: E-1 evidence and code are additive (a separate testbench module and scripts), the frozen manifest only gains
+  42 entries, the infra changes harden the stop path, and no Studio, physics, verifier or optimiser path changed.
+- **Excluded from the release:** H1 (PR #22), H3 (PR #23), E-2R and the other research branches (RL-1, R0, EM-1, DI-1,
+  VEL-1, VEL-2). Their decisions are summarised in `docs/RESEARCH_STATUS.md`; their code is not product code.
+- **Imported byte-identically from `feature/demo-capture` @ `29e8e50`:** `experiments/forge_loop/demo_capture/` (live
+  take records, request ids) and `studio/e2e/forge-demo-capture.mjs` (refuses live mode without `LIVE_OK=1`). The
+  directory is a living, non-frozen one, so the manifest is unchanged.
+- **Wording rules for public text:** the qualifying Nebius path is the runtime Token Factory call. Our AI Cloud use was
+  Compute VMs, not Serverless Jobs, Endpoints or DevPods, and is described as such. DO-1 is reported with the R0 caveat
+  (not a general improvement). The walking-recovery confirmatory result (fixed rule 19/48, AI director 9/48) is shown
+  in the README. Experience learning is reported as not demonstrated.
+- **No file moves** for repository structure: frozen records, tests and commit messages cite current paths. A
+  categorised index (`docs/README.md`) was added instead.
