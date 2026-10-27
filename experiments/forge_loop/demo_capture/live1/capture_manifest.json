@@ -1,0 +1,320 @@
+{
+ "kind": "forge-demo-capture",
+ "mode": "live",
+ "attempt": "live1",
+ "base": "http://127.0.0.1:8000",
+ "started_utc": "2026-10-16T12:08:59.520Z",
+ "overlay": "cursor dot drawn by the capture script (headless Chrome renders no cursor); nothing else is added to the page",
+ "chapters": [
+  {
+   "t": 2.16,
+   "name": "sketch: empty canvas"
+  },
+  {
+   "t": 24.42,
+   "name": "sketch: drawing interpreted as a valid creature"
+  },
+  {
+   "t": 33,
+   "name": "creature on the bench as v1",
+   "version": "v1"
+  },
+  {
+   "t": 46.54,
+   "name": "target force set by the user",
+   "target_force_n": 15
+  },
+  {
+   "t": 51.38,
+   "name": "push challenge started (MuJoCo)"
+  },
+  {
+   "t": 73.03,
+   "name": "push challenge result",
+   "outcome": "POOR",
+   "headline": "0 of 8 seeds passed, 8 poor. Median critical push force 12.5 N against a target of 15 N."
+  },
+  {
+   "t": 84.26,
+   "name": "replay of the failure"
+  },
+  {
+   "t": 104.97,
+   "name": "investigate with AI clicked (LIVE Nemotron)"
+  },
+  {
+   "t": 109.08,
+   "name": "investigation progress",
+   "stages": "EvidenceModelBuild armsScreenValidateVerdict"
+  },
+  {
+   "t": 437.62,
+   "name": "investigation record shown",
+   "status": "done",
+   "provenance": "LIVE"
+  },
+  {
+   "t": 449.34,
+   "name": "probe results"
+  },
+  {
+   "t": 458.84,
+   "name": "arms screened"
+  },
+  {
+   "t": 476.99,
+   "name": "held-out validation: AI vs matched twin vs baseline"
+  },
+  {
+   "t": 502.31,
+   "name": "side-by-side replay on a held-out seed"
+  },
+  {
+   "t": 523.75,
+   "name": "accept enabled: MuJoCo verified the AI redesign",
+   "verdict": "VERIFIED_IMPROVEMENT"
+  },
+  {
+   "t": 530.42,
+   "name": "accepted as v2",
+   "version": "v2",
+   "lineage": "v2AI change, acceptedfrom v1Nemotron: both legs: foot length x 1.35 · verified on 12 held-out seeds (12 wins / 0 losses / 0 ties)current"
+  },
+  {
+   "t": 541.62,
+   "name": "v2 push challenge started"
+  },
+  {
+   "t": 564.25,
+   "name": "v2 push challenge result",
+   "outcome": "PASS",
+   "headline": "8 of 8 seeds passed. Median critical push force 17.5 N against a target of 15 N."
+  },
+  {
+   "t": 589.02,
+   "name": "end of take"
+  }
+ ],
+ "checks": [
+  {
+   "ok": true,
+   "m": "server live mode on (model nvidia/nemotron-3-super-120b-a12b)"
+  },
+  {
+   "ok": true,
+   "m": "investigation finished and its record is shown"
+  },
+  {
+   "ok": true,
+   "m": "record is LIVE with real request ids"
+  }
+ ],
+ "errors": [],
+ "server": {
+  "live_available": true,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "settings": {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "selected": "2026-10-14 calibration v2 (experiments/forge_loop/calibration/REPORT.md)",
+   "profiles": {
+    "default": {
+     "model": "nvidia/nemotron-3-super-120b-a12b",
+     "max_tokens": 8000,
+     "temperature": 0.6,
+     "reasoning_effort": null,
+     "json_schema": true
+    },
+    "deep": {
+     "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+     "max_tokens": 24000,
+     "temperature": 0.6,
+     "reasoning_effort": "low",
+     "json_schema": true
+    }
+   }
+  },
+  "version": {
+   "git_commit": "e42e64e",
+   "git_branch": "HEAD",
+   "started_at": "2026-10-16T12:08:53+00:00",
+   "dist_built": "2026-10-15T22:42:43+00:00",
+   "api_routes": [
+    "/api/demo/run",
+    "/api/demo/runs",
+    "/api/demo/runs/{run_id}",
+    "/api/demo/runs/{run_id}/replay",
+    "/api/demo/status",
+    "/api/experiments/phase0",
+    "/api/forge/creatures",
+    "/api/forge/creatures",
+    "/api/forge/creatures/{cid}",
+    "/api/forge/creatures/{cid}/accept",
+    "/api/forge/creatures/{cid}/current",
+    "/api/forge/creatures/{cid}/versions/{n}/challenges",
+    "/api/forge/creatures/{cid}/versions/{n}/investigations",
+    "/api/forge/investigations",
+    "/api/forge/investigations/{iid}",
+    "/api/forge/jobs/{job_id}",
+    "/api/forge/jobs/{job_id}/cancel",
+    "/api/forge/memory",
+    "/api/forge/replay",
+    "/api/forge/runs/{run_id}",
+    "/api/forge/status",
+    "/api/freehand/interpret",
+    "/api/investigations",
+    "/api/investigations/{trial_id}",
+    "/api/investigations/{trial_id}/view",
+    "/api/lab/trials",
+    "/api/lab/trials/{trial_id}",
+    "/api/lab/trials/{trial_id}/replay",
+    "/api/locomotion/replay",
+    "/api/locomotion/summary",
+    "/api/overview",
+    "/api/sandbox/schema",
+    "/api/sandbox/simulate",
+    "/api/schema",
+    "/api/simulate",
+    "/api/sketch/compile",
+    "/api/sketch/default",
+    "/api/sketch/normalize",
+    "/api/sketch/support",
+    "/api/version",
+    "/api/walking/replay",
+    "/api/walking/summary",
+    "/api/{rest:path}"
+   ]
+  }
+ },
+ "ledger_before": {
+  "requests": 140,
+  "usd": 0.541237,
+  "tokens": 954877,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "creature_url": "http://127.0.0.1:8000/?tab=forge&creature=c-ff23bc71&v=1",
+ "target_force_n": 15,
+ "v1_run": {
+  "outcome": "POOR",
+  "headline": "0 of 8 seeds passed, 8 poor. Median critical push force 12.5 N against a target of 15 N."
+ },
+ "investigation": {
+  "id": "i-957877ed1690",
+  "status": "done",
+  "provenance": "LIVE",
+  "model_calls": [
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "request_id": "9df79116eef8efe9a7adcb4de422f451",
+    "latency_s": 2.9544260479999593,
+    "usage": {
+     "prompt_tokens": 5438,
+     "completion_tokens": 398,
+     "total_tokens": 5836,
+     "reasoning_tokens": 0
+    },
+    "cost_usd": 0.0019896,
+    "ok": true
+   },
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "request_id": "4b046be5b0ddd10225760b02b4a36bb7",
+    "latency_s": 4.161572128999978,
+    "usage": {
+     "prompt_tokens": 5836,
+     "completion_tokens": 591,
+     "total_tokens": 6427,
+     "reasoning_tokens": 0
+    },
+    "cost_usd": 0.0022827,
+    "ok": true
+   }
+  ],
+  "selection": {
+   "ai": "ai:P1",
+   "matched_twin": "random:P1",
+   "baseline": "random:P1"
+  },
+  "verdicts": {
+   "ai:P1": {
+    "status": "VERIFIED_IMPROVEMENT",
+    "median_diff": 6.5625,
+    "n": 12
+   },
+   "random:P1": {
+    "status": "INCONCLUSIVE",
+    "median_diff": 0,
+    "n": 12
+   }
+  },
+  "ai_edits": [
+   {
+    "param": "foot_length",
+    "op": "scale",
+    "value": 1.35,
+    "target": "both"
+   }
+  ],
+  "probes": null,
+  "code": {
+   "commit": "e42e64e290193dfe240882125e4643a8282c3368",
+   "dirty": false
+  }
+ },
+ "ai_verdict": "VERIFIED_IMPROVEMENT",
+ "v2_run": {
+  "outcome": "PASS",
+  "headline": "8 of 8 seeds passed. Median critical push force 17.5 N against a target of 15 N."
+ },
+ "accepted": true,
+ "finished_utc": "2026-10-16T12:18:49.046Z",
+ "duration_s": 589.53,
+ "ledger_after": {
+  "requests": 142,
+  "usd": 0.54551,
+  "tokens": 967140,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "frames": {
+  "count": 10012,
+  "mean_fps": 17.06
+ },
+ "video": {
+  "file": "take.mp4",
+  "fps": 30,
+  "codec": "h264",
+  "crf": 16
+ },
+ "stills": [
+  "02-drawing.png",
+  "06-v1-result.png",
+  "07-v1-replay.png",
+  "10-model-call.png",
+  "10-provenance.png",
+  "11-probes.png",
+  "13-verdicts.png",
+  "14-arena-replay.png",
+  "16-v2-lineage.png",
+  "18-v2-replay.png",
+  "18-v2-result.png"
+ ]
+}

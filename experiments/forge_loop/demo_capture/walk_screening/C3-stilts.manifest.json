@@ -1,0 +1,1070 @@
+{
+ "kind": "walk",
+ "mode": "scripted",
+ "attempt": "screen-C3-stilts",
+ "base": "http://127.0.0.1:8000",
+ "started_utc": "2026-10-16T13:16:19.386Z",
+ "overlay": "cursor dot drawn by the capture script (headless Chrome renders no cursor); nothing else is added to the page",
+ "chapters": [
+  {
+   "t": 2.06,
+   "name": "sketch: empty canvas"
+  },
+  {
+   "t": 25.08,
+   "name": "sketch: drawing interpreted as a valid creature"
+  },
+  {
+   "t": 33.54,
+   "name": "creature on the bench as v1",
+   "version": "v1"
+  },
+  {
+   "t": 47.05,
+   "name": "walk challenge started (MuJoCo)"
+  },
+  {
+   "t": 49.62,
+   "name": "walk challenge result",
+   "outcome": "FAIL",
+   "headline": "0 of 8 seeds passed, 8 failed. Median score 2.11 m."
+  },
+  {
+   "t": 59.98,
+   "name": "replay of the failure"
+  },
+  {
+   "t": 71.48,
+   "name": "end of screening take (no investigation, no model call)"
+  },
+  {
+   "t": 73.48,
+   "name": "end of take"
+  }
+ ],
+ "checks": [],
+ "errors": [],
+ "figure": {
+  "torso": [
+   [
+    476,
+    44
+   ],
+   [
+    524,
+    44
+   ],
+   [
+    524,
+    164
+   ],
+   [
+    476,
+    164
+   ],
+   [
+    476,
+    44
+   ]
+  ],
+  "leg": [
+   [
+    500,
+    164
+   ],
+   [
+    500,
+    384
+   ],
+   [
+    500,
+    604
+   ]
+  ],
+  "foot": [
+   [
+    493,
+    604
+   ],
+   [
+    521,
+    604
+   ]
+  ]
+ },
+ "server": {
+  "live_available": false,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "settings": {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "selected": "2026-10-14 calibration v2 (experiments/forge_loop/calibration/REPORT.md)",
+   "profiles": {
+    "default": {
+     "model": "nvidia/nemotron-3-super-120b-a12b",
+     "max_tokens": 8000,
+     "temperature": 0.6,
+     "reasoning_effort": null,
+     "json_schema": true
+    },
+    "deep": {
+     "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+     "max_tokens": 24000,
+     "temperature": 0.6,
+     "reasoning_effort": "low",
+     "json_schema": true
+    }
+   }
+  },
+  "version": {
+   "git_commit": "2235243",
+   "git_branch": "HEAD",
+   "started_at": "2026-10-16T13:14:03+00:00",
+   "dist_built": "2026-10-15T22:42:43+00:00",
+   "api_routes": [
+    "/api/demo/run",
+    "/api/demo/runs",
+    "/api/demo/runs/{run_id}",
+    "/api/demo/runs/{run_id}/replay",
+    "/api/demo/status",
+    "/api/experiments/phase0",
+    "/api/forge/creatures",
+    "/api/forge/creatures",
+    "/api/forge/creatures/{cid}",
+    "/api/forge/creatures/{cid}/accept",
+    "/api/forge/creatures/{cid}/current",
+    "/api/forge/creatures/{cid}/versions/{n}/challenges",
+    "/api/forge/creatures/{cid}/versions/{n}/investigations",
+    "/api/forge/investigations",
+    "/api/forge/investigations/{iid}",
+    "/api/forge/jobs/{job_id}",
+    "/api/forge/jobs/{job_id}/cancel",
+    "/api/forge/memory",
+    "/api/forge/replay",
+    "/api/forge/runs/{run_id}",
+    "/api/forge/status",
+    "/api/freehand/interpret",
+    "/api/investigations",
+    "/api/investigations/{trial_id}",
+    "/api/investigations/{trial_id}/view",
+    "/api/lab/trials",
+    "/api/lab/trials/{trial_id}",
+    "/api/lab/trials/{trial_id}/replay",
+    "/api/locomotion/replay",
+    "/api/locomotion/summary",
+    "/api/overview",
+    "/api/sandbox/schema",
+    "/api/sandbox/simulate",
+    "/api/schema",
+    "/api/simulate",
+    "/api/sketch/compile",
+    "/api/sketch/default",
+    "/api/sketch/normalize",
+    "/api/sketch/support",
+    "/api/version",
+    "/api/walking/replay",
+    "/api/walking/summary",
+    "/api/{rest:path}"
+   ]
+  }
+ },
+ "ledger_before": {
+  "requests": 144,
+  "usd": 0.549071,
+  "tokens": 976807,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "creature_url": "http://127.0.0.1:8000/?tab=forge&creature=c-45522feb&v=1",
+ "v1_run": {
+  "outcome": "FAIL",
+  "headline": "0 of 8 seeds passed, 8 failed. Median score 2.11 m.",
+  "run_id": "r-b7616c24",
+  "outcome_overall": "FAIL",
+  "spec": {
+   "kind": "walk",
+   "seeds": [
+    115057,
+    115058,
+    115059,
+    115060,
+    115061,
+    115062,
+    115063,
+    115064
+   ],
+   "duration": 10,
+   "perturb": 0.03,
+   "target_force": 10,
+   "push_time": 1,
+   "push_duration": 0.15,
+   "max_force": 80,
+   "start": "neutral",
+   "settle_s": 0.3,
+   "bisection_steps": 5
+  },
+  "per_seed": [
+   {
+    "seed": 115057,
+    "outcome": "FAIL",
+    "score": 0,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115058,
+    "outcome": "FAIL",
+    "score": 2.23884490970418,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115059,
+    "outcome": "FAIL",
+    "score": 2.0489425803321932,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115060,
+    "outcome": "FAIL",
+    "score": 1.941427930138129,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115061,
+    "outcome": "FAIL",
+    "score": 1.7623286461841268,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115062,
+    "outcome": "FAIL",
+    "score": 2.2135686848861518,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115063,
+    "outcome": "FAIL",
+    "score": 2.1810094303957426,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   },
+   {
+    "seed": 115064,
+    "outcome": "FAIL",
+    "score": 2.289694343572252,
+    "error": null,
+    "events": [
+     "fall"
+    ]
+   }
+  ]
+ },
+ "creature": {
+  "id": "c-45522feb",
+  "v1": {
+   "n": 1,
+   "parent": null,
+   "created": "2026-10-16T13:16:52Z",
+   "content_hash": "69b5f560938e0dd1d9bed41c7b35e2d4934774c52d95e51e2aaad5ee04db56b1",
+   "mode": "guided",
+   "body": {
+    "torso_mass": 4.7917,
+    "thigh_length": 0.55,
+    "shank_length": 0.55,
+    "foot_length": 0.07,
+    "foot_friction": 1,
+    "torque_limit": 60,
+    "leg_density": 1000,
+    "thigh_length_r": 0.55,
+    "shank_length_r": 0.55,
+    "foot_length_r": 0.07,
+    "pose": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "controllers": {
+    "stand": {
+     "kp": 150,
+     "kd": 8,
+     "gait_freq": 0,
+     "hip_amp": 0,
+     "knee_amp": 0,
+     "balance_gain": 80,
+     "stand_hip": 0,
+     "stand_knee": 0
+    },
+    "walk": null
+   },
+   "origin": "user",
+   "drawing": {
+    "strokes": [
+     {
+      "id": "s1",
+      "role": "torso",
+      "points": [
+       [
+        476,
+        44
+       ],
+       [
+        478.2,
+        44
+       ],
+       [
+        480.4,
+        44
+       ],
+       [
+        482.5,
+        44
+       ],
+       [
+        484.7,
+        44
+       ],
+       [
+        486.9,
+        44
+       ],
+       [
+        489.1,
+        44
+       ],
+       [
+        491.3,
+        44
+       ],
+       [
+        493.5,
+        44
+       ],
+       [
+        495.6,
+        44
+       ],
+       [
+        497.8,
+        44
+       ],
+       [
+        500,
+        44
+       ],
+       [
+        502.2,
+        44
+       ],
+       [
+        504.4,
+        44
+       ],
+       [
+        506.5,
+        44
+       ],
+       [
+        508.7,
+        44
+       ],
+       [
+        510.9,
+        44
+       ],
+       [
+        513.1,
+        44
+       ],
+       [
+        515.3,
+        44
+       ],
+       [
+        517.5,
+        44
+       ],
+       [
+        519.6,
+        44
+       ],
+       [
+        521.8,
+        44
+       ],
+       [
+        524,
+        44
+       ],
+       [
+        524,
+        49.5
+       ],
+       [
+        524,
+        54.9
+       ],
+       [
+        524,
+        60.4
+       ],
+       [
+        524,
+        65.8
+       ],
+       [
+        524,
+        71.3
+       ],
+       [
+        524,
+        76.7
+       ],
+       [
+        524,
+        82.2
+       ],
+       [
+        524,
+        87.6
+       ],
+       [
+        524,
+        93.1
+       ],
+       [
+        524,
+        98.5
+       ],
+       [
+        524,
+        104
+       ],
+       [
+        524,
+        109.5
+       ],
+       [
+        524,
+        114.9
+       ],
+       [
+        524,
+        120.4
+       ],
+       [
+        524,
+        125.8
+       ],
+       [
+        524,
+        131.3
+       ],
+       [
+        524,
+        136.7
+       ],
+       [
+        524,
+        142.2
+       ],
+       [
+        524,
+        147.6
+       ],
+       [
+        524,
+        153.1
+       ],
+       [
+        524,
+        158.5
+       ],
+       [
+        524,
+        164
+       ],
+       [
+        521.8,
+        164
+       ],
+       [
+        519.6,
+        164
+       ],
+       [
+        517.5,
+        164
+       ],
+       [
+        515.3,
+        164
+       ],
+       [
+        513.1,
+        164
+       ],
+       [
+        510.9,
+        164
+       ],
+       [
+        508.7,
+        164
+       ],
+       [
+        506.5,
+        164
+       ],
+       [
+        504.4,
+        164
+       ],
+       [
+        502.2,
+        164
+       ],
+       [
+        500,
+        164
+       ],
+       [
+        497.8,
+        164
+       ],
+       [
+        495.6,
+        164
+       ],
+       [
+        493.5,
+        164
+       ],
+       [
+        491.3,
+        164
+       ],
+       [
+        489.1,
+        164
+       ],
+       [
+        486.9,
+        164
+       ],
+       [
+        484.7,
+        164
+       ],
+       [
+        482.5,
+        164
+       ],
+       [
+        480.4,
+        164
+       ],
+       [
+        478.2,
+        164
+       ],
+       [
+        476,
+        164
+       ],
+       [
+        476,
+        158.5
+       ],
+       [
+        476,
+        153.1
+       ],
+       [
+        476,
+        147.6
+       ],
+       [
+        476,
+        142.2
+       ],
+       [
+        476,
+        136.7
+       ],
+       [
+        476,
+        131.3
+       ],
+       [
+        476,
+        125.8
+       ],
+       [
+        476,
+        120.4
+       ],
+       [
+        476,
+        114.9
+       ],
+       [
+        476,
+        109.5
+       ],
+       [
+        476,
+        104
+       ],
+       [
+        476,
+        98.5
+       ],
+       [
+        476,
+        93.1
+       ],
+       [
+        476,
+        87.6
+       ],
+       [
+        476,
+        82.2
+       ],
+       [
+        476,
+        76.7
+       ],
+       [
+        476,
+        71.3
+       ],
+       [
+        476,
+        65.8
+       ],
+       [
+        476,
+        60.4
+       ],
+       [
+        476,
+        54.9
+       ],
+       [
+        476,
+        49.5
+       ],
+       [
+        476,
+        44
+       ]
+      ]
+     },
+     {
+      "id": "s2",
+      "role": "leg",
+      "points": [
+       [
+        500,
+        164
+       ],
+       [
+        500,
+        174
+       ],
+       [
+        500,
+        184
+       ],
+       [
+        500,
+        194
+       ],
+       [
+        500,
+        204
+       ],
+       [
+        500,
+        214
+       ],
+       [
+        500,
+        224
+       ],
+       [
+        500,
+        234
+       ],
+       [
+        500,
+        244
+       ],
+       [
+        500,
+        254
+       ],
+       [
+        500,
+        264
+       ],
+       [
+        500,
+        274
+       ],
+       [
+        500,
+        284
+       ],
+       [
+        500,
+        294
+       ],
+       [
+        500,
+        304
+       ],
+       [
+        500,
+        314
+       ],
+       [
+        500,
+        324
+       ],
+       [
+        500,
+        334
+       ],
+       [
+        500,
+        344
+       ],
+       [
+        500,
+        354
+       ],
+       [
+        500,
+        364
+       ],
+       [
+        500,
+        374
+       ],
+       [
+        500,
+        384
+       ],
+       [
+        500,
+        394
+       ],
+       [
+        500,
+        404
+       ],
+       [
+        500,
+        414
+       ],
+       [
+        500,
+        424
+       ],
+       [
+        500,
+        434
+       ],
+       [
+        500,
+        444
+       ],
+       [
+        500,
+        454
+       ],
+       [
+        500,
+        464
+       ],
+       [
+        500,
+        474
+       ],
+       [
+        500,
+        484
+       ],
+       [
+        500,
+        494
+       ],
+       [
+        500,
+        504
+       ],
+       [
+        500,
+        514
+       ],
+       [
+        500,
+        524
+       ],
+       [
+        500,
+        534
+       ],
+       [
+        500,
+        544
+       ],
+       [
+        500,
+        554
+       ],
+       [
+        500,
+        564
+       ],
+       [
+        500,
+        574
+       ],
+       [
+        500,
+        584
+       ],
+       [
+        500,
+        594
+       ],
+       [
+        500,
+        604
+       ]
+      ]
+     },
+     {
+      "id": "s3",
+      "role": "foot",
+      "points": [
+       [
+        493,
+        604
+       ],
+       [
+        495.5,
+        604
+       ],
+       [
+        498.1,
+        604
+       ],
+       [
+        500.6,
+        604
+       ],
+       [
+        503.2,
+        604
+       ],
+       [
+        505.7,
+        604
+       ],
+       [
+        508.3,
+        604
+       ],
+       [
+        510.8,
+        604
+       ],
+       [
+        513.4,
+        604
+       ],
+       [
+        515.9,
+        604
+       ],
+       [
+        518.5,
+        604
+       ],
+       [
+        521,
+        604
+       ]
+      ]
+     }
+    ],
+    "interpretation": {
+     "status": "ok",
+     "outcome": "valid_with_snaps",
+     "roles": {
+      "s1": {
+       "role": "torso",
+       "source": "pen",
+       "reason": "drawn with the torso pen"
+      },
+      "s2": {
+       "role": "leg",
+       "source": "pen",
+       "reason": "drawn with the leg pen"
+      },
+      "s3": {
+       "role": "foot",
+       "source": "pen",
+       "reason": "drawn with the foot pen"
+      }
+     },
+     "notes": [],
+     "assumptions": [
+      "A straight leg stroke has no visible knee: the knee was placed halfway along it. Use Refine to move it.",
+      "Only one leg was drawn: the second leg mirrors it exactly (same lengths and pose).",
+      "Only one foot was drawn: the other foot copies it."
+     ],
+     "adjustments": [
+      {
+       "kind": "straighten",
+       "what": "torso",
+       "message": "Stood the torso upright (it leaned -0.0°)."
+      }
+     ],
+     "skeleton": {
+      "torso": {
+       "base": [
+        498.51,
+        164.01
+       ],
+       "top": [
+        498.51,
+        44.01
+       ],
+       "half_width": 24
+      },
+      "legs": [
+       {
+        "hip": [
+         498.51,
+         164.01
+        ],
+        "knee": [
+         498.51,
+         384.01
+        ],
+        "ankle": [
+         498.51,
+         604.01
+        ],
+        "toe": [
+         519.51,
+         604.01
+        ],
+        "heel": [
+         491.51,
+         604.01
+        ]
+       },
+       {
+        "hip": [
+         498.51,
+         164.01
+        ],
+        "knee": [
+         498.51,
+         384.01
+        ],
+        "ankle": [
+         498.51,
+         604.01
+        ],
+        "toe": [
+         519.51,
+         604.01
+        ],
+        "heel": [
+         491.51,
+         604.01
+        ]
+       }
+      ],
+      "ground_y": 604.01
+     },
+     "guided": true
+    },
+    "approximation": null
+   },
+   "change": null
+  }
+ },
+ "finished_utc": "2026-10-16T13:17:33.370Z",
+ "duration_s": 73.98,
+ "ledger_after": {
+  "requests": 144,
+  "usd": 0.549071,
+  "tokens": 976807,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "frames": {
+  "count": 2039,
+  "mean_fps": 28.56
+ },
+ "video": {
+  "file": "take.mp4",
+  "fps": 30,
+  "codec": "h264",
+  "crf": 16
+ },
+ "stills": [
+  "02-drawing.png",
+  "05-v1-result.png",
+  "06-v1-replay.png"
+ ]
+}

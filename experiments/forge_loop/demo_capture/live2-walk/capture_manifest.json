@@ -1,0 +1,298 @@
+{
+ "kind": "walk",
+ "mode": "live",
+ "attempt": "live2-walk",
+ "base": "http://127.0.0.1:8000",
+ "started_utc": "2026-10-16T12:22:51.181Z",
+ "overlay": "cursor dot drawn by the capture script (headless Chrome renders no cursor); nothing else is added to the page",
+ "chapters": [
+  {
+   "t": 2.05,
+   "name": "sketch: empty canvas"
+  },
+  {
+   "t": 23.95,
+   "name": "sketch: drawing interpreted as a valid creature"
+  },
+  {
+   "t": 32.4,
+   "name": "creature on the bench as v1",
+   "version": "v1"
+  },
+  {
+   "t": 45.8,
+   "name": "walk challenge started (MuJoCo)"
+  },
+  {
+   "t": 49.21,
+   "name": "walk challenge result",
+   "outcome": "PASS",
+   "headline": "8 of 8 seeds passed. Median score 4.79 m."
+  },
+  {
+   "t": 62.77,
+   "name": "replay of the failure"
+  },
+  {
+   "t": 87.91,
+   "name": "investigate with AI clicked (LIVE Nemotron)"
+  },
+  {
+   "t": 92.62,
+   "name": "investigation progress",
+   "stages": "EvidenceModelBuild armsScreenValidateVerdict"
+  },
+  {
+   "t": 222.36,
+   "name": "investigation record shown",
+   "status": "done",
+   "provenance": "LIVE"
+  },
+  {
+   "t": 238.62,
+   "name": "probe results"
+  },
+  {
+   "t": 247.7,
+   "name": "arms screened"
+  },
+  {
+   "t": 255,
+   "name": "held-out validation: AI vs matched twin vs baseline"
+  },
+  {
+   "t": 270.06,
+   "name": "side-by-side replay on a held-out seed"
+  },
+  {
+   "t": 291.33,
+   "name": "accept stays disabled: nothing verified",
+   "verdict": "NOT_VERIFIED",
+   "status": "done"
+  },
+  {
+   "t": 301.45,
+   "name": "end of take"
+  }
+ ],
+ "checks": [
+  {
+   "ok": true,
+   "m": "server live mode on (model nvidia/nemotron-3-super-120b-a12b)"
+  },
+  {
+   "ok": true,
+   "m": "investigation finished and its record is shown"
+  },
+  {
+   "ok": true,
+   "m": "record is LIVE with real request ids"
+  }
+ ],
+ "errors": [],
+ "server": {
+  "live_available": true,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "settings": {
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "selected": "2026-10-14 calibration v2 (experiments/forge_loop/calibration/REPORT.md)",
+   "profiles": {
+    "default": {
+     "model": "nvidia/nemotron-3-super-120b-a12b",
+     "max_tokens": 8000,
+     "temperature": 0.6,
+     "reasoning_effort": null,
+     "json_schema": true
+    },
+    "deep": {
+     "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+     "max_tokens": 24000,
+     "temperature": 0.6,
+     "reasoning_effort": "low",
+     "json_schema": true
+    }
+   }
+  },
+  "version": {
+   "git_commit": "e42e64e",
+   "git_branch": "HEAD",
+   "started_at": "2026-10-16T12:08:53+00:00",
+   "dist_built": "2026-10-15T22:42:43+00:00",
+   "api_routes": [
+    "/api/demo/run",
+    "/api/demo/runs",
+    "/api/demo/runs/{run_id}",
+    "/api/demo/runs/{run_id}/replay",
+    "/api/demo/status",
+    "/api/experiments/phase0",
+    "/api/forge/creatures",
+    "/api/forge/creatures",
+    "/api/forge/creatures/{cid}",
+    "/api/forge/creatures/{cid}/accept",
+    "/api/forge/creatures/{cid}/current",
+    "/api/forge/creatures/{cid}/versions/{n}/challenges",
+    "/api/forge/creatures/{cid}/versions/{n}/investigations",
+    "/api/forge/investigations",
+    "/api/forge/investigations/{iid}",
+    "/api/forge/jobs/{job_id}",
+    "/api/forge/jobs/{job_id}/cancel",
+    "/api/forge/memory",
+    "/api/forge/replay",
+    "/api/forge/runs/{run_id}",
+    "/api/forge/status",
+    "/api/freehand/interpret",
+    "/api/investigations",
+    "/api/investigations/{trial_id}",
+    "/api/investigations/{trial_id}/view",
+    "/api/lab/trials",
+    "/api/lab/trials/{trial_id}",
+    "/api/lab/trials/{trial_id}/replay",
+    "/api/locomotion/replay",
+    "/api/locomotion/summary",
+    "/api/overview",
+    "/api/sandbox/schema",
+    "/api/sandbox/simulate",
+    "/api/schema",
+    "/api/simulate",
+    "/api/sketch/compile",
+    "/api/sketch/default",
+    "/api/sketch/normalize",
+    "/api/sketch/support",
+    "/api/version",
+    "/api/walking/replay",
+    "/api/walking/summary",
+    "/api/{rest:path}"
+   ]
+  }
+ },
+ "ledger_before": {
+  "requests": 142,
+  "usd": 0.54551,
+  "tokens": 967140,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "creature_url": "http://127.0.0.1:8000/?tab=forge&creature=c-1509c6ae&v=1",
+ "v1_run": {
+  "outcome": "PASS",
+  "headline": "8 of 8 seeds passed. Median score 4.79 m."
+ },
+ "investigation": {
+  "id": "i-6628ccc1705c",
+  "status": "done",
+  "provenance": "LIVE",
+  "model_calls": [
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "request_id": "1cb660687a7979f0d6747cfa3a0a8b19",
+    "latency_s": 2.3325916439998764,
+    "usage": {
+     "prompt_tokens": 4049,
+     "completion_tokens": 317,
+     "total_tokens": 4366,
+     "reasoning_tokens": 0
+    },
+    "cost_usd": 0.0015,
+    "ok": true
+   },
+   {
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "request_id": "331dc3b52c4a88603bb36c355cd69db4",
+    "latency_s": 4.394960281999829,
+    "usage": {
+     "prompt_tokens": 4516,
+     "completion_tokens": 785,
+     "total_tokens": 5301,
+     "reasoning_tokens": 0
+    },
+    "cost_usd": 0.0020613,
+    "ok": true
+   }
+  ],
+  "selection": {
+   "ai": "ai:P1",
+   "matched_twin": "random:P1",
+   "baseline": "random:P2"
+  },
+  "verdicts": {
+   "ai:P1": {
+    "status": "NOT_VERIFIED",
+    "median_diff": 0.11686109495488894,
+    "n": 24
+   },
+   "random:P2": {
+    "status": "NOT_VERIFIED",
+    "median_diff": 0.19314424349173764,
+    "n": 24
+   },
+   "random:P1": {
+    "status": "NOT_VERIFIED",
+    "median_diff": 0.015209254136401285,
+    "n": 24
+   }
+  },
+  "ai_edits": [
+   {
+    "param": "walk.balance_gain",
+    "op": "scale",
+    "value": 0.9,
+    "target": "both"
+   }
+  ],
+  "probes": null,
+  "code": {
+   "commit": "3165725d8fa4082b74381f74a7212c3f1d224c34",
+   "dirty": false
+  }
+ },
+ "ai_verdict": "NOT_VERIFIED",
+ "accepted": false,
+ "finished_utc": "2026-10-16T12:27:53.137Z",
+ "duration_s": 301.96,
+ "ledger_after": {
+  "requests": 144,
+  "usd": 0.549071,
+  "tokens": 976807,
+  "skipped_lines": 0,
+  "caps": {
+   "requests": 1500,
+   "usd": 15,
+   "investigation_requests": 4,
+   "investigation_tokens": 80000
+  },
+  "prices": {
+   "date": "2026-10-14",
+   "source": "GET /v1/models"
+  }
+ },
+ "frames": {
+  "count": 4970,
+  "mean_fps": 16.6
+ },
+ "video": {
+  "file": "take.mp4",
+  "fps": 30,
+  "codec": "h264",
+  "crf": 16
+ },
+ "stills": [
+  "02-drawing.png",
+  "05-v1-result.png",
+  "06-v1-replay.png",
+  "09-model-call.png",
+  "09-provenance.png",
+  "10-probes.png",
+  "12-verdicts.png",
+  "13-arena-replay.png",
+  "14-not-verified.png"
+ ]
+}
