@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" role="img" aria-label="Creature Forge architecture: the Forge Loop">
+  <!-- Illustrative diagram of the implemented Forge Loop (docs/ARCHITECTURE.md section 2). Colours from studio/src/theme.css. -->
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8f9aae"/>
+    </marker>
+    <style>
+      .t{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;fill:#e9edf4}
+      .h{font-size:34px;font-weight:700}
+      .b{font-size:24px;fill:#8f9aae}
+      .l{font-size:21px;fill:#8f9aae}
+      .box{fill:#161b24;stroke-width:3;rx:18}
+      .ln{stroke:#8f9aae;stroke-width:3;fill:none;marker-end:url(#a)}
+    </style>
+  </defs>
+  <rect width="1920" height="1080" fill="#0d1016"/>
+  <text x="96" y="110" class="t" style="font-size:52px;font-weight:800">The Forge Loop</text>
+  <text x="96" y="160" class="t b" style="font-size:28px">The model proposes. The physics measures. A fixed rule judges.</text>
+
+  <!-- row 1 -->
+  <rect x="96" y="250" width="380" height="190" class="box" stroke="#ff7a45"/>
+  <text x="126" y="310" class="t h">1. Draw / load</text>
+  <text x="126" y="355" class="t b">a two-legged robot</text>
+  <text x="126" y="392" class="t b">in the Studio</text>
+
+  <rect x="566" y="250" width="380" height="190" class="box" stroke="#3cc9d6"/>
+  <text x="596" y="310" class="t h">2. Challenge</text>
+  <text x="596" y="355" class="t b">MuJoCo: stand, push, walk</text>
+  <text x="596" y="392" class="t b">on fixed, hashed seeds</text>
+
+  <rect x="1036" y="250" width="380" height="190" class="box" stroke="#9c8cff"/>
+  <text x="1066" y="310" class="t h">3. Investigate</text>
+  <text x="1066" y="355" class="t b">NVIDIA Nemotron 3 Super</text>
+  <text x="1066" y="392" class="t b">via Nebius Token Factory</text>
+
+  <rect x="1506" y="250" width="318" height="190" class="box" stroke="#9c8cff"/>
+  <text x="1536" y="310" class="t h">Probes</text>
+  <text x="1536" y="355" class="t b">up to 3 counter-</text>
+  <text x="1536" y="392" class="t b">factual experiments</text>
+
+  <!-- row 2 -->
+  <rect x="1036" y="600" width="380" height="190" class="box" stroke="#e9edf4"/>
+  <text x="1066" y="660" class="t h">4. Validate</text>
+  <text x="1066" y="705" class="t b">schema, whitelist, bounds</text>
+  <text x="1066" y="742" class="t b">reject, never clip</text>
+
+  <rect x="566" y="600" width="380" height="190" class="box" stroke="#3cc9d6"/>
+  <text x="596" y="660" class="t h">5. Verify</text>
+  <text x="596" y="705" class="t b">AI edit vs matched random</text>
+  <text x="596" y="742" class="t b">edit, held-out seeds</text>
+
+  <rect x="96" y="600" width="380" height="190" class="box" stroke="#ff7a45"/>
+  <text x="126" y="660" class="t h">6. Evolve</text>
+  <text x="126" y="705" class="t b">accept only a</text>
+  <text x="126" y="742" class="t b">VERIFIED version</text>
+
+  <!-- arrows -->
+  <path d="M476 345 H556" class="ln"/>
+  <path d="M946 345 H1026" class="ln"/>
+  <path d="M1416 320 H1496" class="ln"/>
+  <path d="M1496 380 H1426" class="ln"/>
+  <path d="M1226 440 V590" class="ln"/>
+  <path d="M1036 695 H956" class="ln"/>
+  <path d="M566 695 H486" class="ln"/>
+  <text x="1421" y="300" class="t l" style="font-size:18px">request</text>
+  <text x="1421" y="412" class="t l" style="font-size:18px">results</text>
+  <text x="1242" y="525" class="t l">bounded edits (strict JSON)</text>
+  <text x="604" y="830" class="t l">verdict_v1: VERIFIED / NOT_VERIFIED</text>
+  <text x="604" y="860" class="t l">INCONCLUSIVE / WORSE</text>
+
+  <!-- record strip -->
+  <rect x="96" y="920" width="1728" height="86" rx="16" fill="#1b212c" stroke="#313b4d" stroke-width="2"/>
+  <text x="126" y="974" class="t" style="font-size:25px">Every step is recorded: request ids, tokens and cost of each model call, rejected proposals with reasons, per-seed physics.</text>
+</svg>
