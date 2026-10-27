@@ -279,8 +279,12 @@ class NamedBodyTests(unittest.TestCase):
         rec = json.loads((ROOT / "experiments/forge_loop/demo_capture/live3-walk-stilts/i-2ed39b130df0.json").read_text())
         b = rec["evidence"]["creature"]["body"]
         n = cg.dev_named_bodies()["stilts-drawn"]
-        for k in ("torso_mass", "thigh_length", "shank_length", "foot_length", "leg_density", "torque_limit"):
+        for k in ("torso_mass", "leg_density", "torque_limit"):
             self.assertAlmostEqual(b[k], n[k])
+        # the record's evidence pack stores leg geometry per leg; the drawn stilts are symmetric
+        for leg in ("rear", "front"):
+            for k in ("thigh_length", "shank_length", "foot_length"):
+                self.assertAlmostEqual(b[leg][k], n[k], msg=f"{leg}.{k}")
 
 
 class RealPhysicsSmoke(unittest.TestCase):
