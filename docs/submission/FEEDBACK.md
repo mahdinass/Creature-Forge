@@ -1,6 +1,51 @@
-# Feedback on Nebius and NVIDIA technologies (from actual use, 2026-10-13 -> 2026-10-15)
+# Feedback on Nebius and NVIDIA technologies (from actual use, 2026-10-13 -> 2026-10-27)
 
 Required by the hackathon submission. Everything below was observed during this project and is backed by a record in the repository (named in each section); where we could not verify something we say so or leave it out. These are engineering observations from one account, not benchmarks of the platform or the models.
+
+## Paste-ready summary (for the Devpost feedback field)
+
+**What we used.** NVIDIA Nemotron 3 Super (`nvidia/nemotron-3-super-120b-a12b`) on Nebius Token Factory as the runtime
+model of a physics-verified robot-repair loop, plus Nemotron 3 Ultra and Nano in calibration and an early prototype;
+about 5,600 logged Token Factory requests. Nebius AI Cloud Compute VMs (8 and 64 vCPU) for batch MuJoCo studies.
+
+**What worked well**
+1. *Strict JSON-schema guided decoding* on Token Factory was the single most useful feature. Once we enumerated
+   hypothesis ids, editable parameter names and citable evidence paths in the schema, the chosen configuration went from
+   0/12 to 6/6 machine-valid replies. Identifiers valid by construction made model output safe to act on.
+2. *Nemotron 3 Super with thinking off* gave short, grounded proposals at about 3 to 5 s and about $0.002 per call in our
+   ledger; a 12-investigation pre-registered scoreboard cost $0.05 in total.
+3. *Request ids and `usage` on every response* let us store a traceable receipt in every investigation record.
+4. *Service accounts with instance-scoped access permits* gave us a minimal, unattended API stop path; a VM requested its
+   own stop and was STOPPED 47 s later.
+
+**What was hard, and what would help**
+1. *Reasoning controls differ per model and are discovered by trial.* A per-model table of which of `reasoning_effort`
+   and `chat_template_kwargs.enable_thinking` is honoured, with its effect on latency and tokens, would save calibration
+   spend.
+2. *Silent empty answers.* With Nano, hidden reasoning consumed the budget and the API returned HTTP 200,
+   `finish_reason=length` and `content: null`, without a reasoning-token count in `usage`. Partial visible content, a
+   separate reasoning budget or an explicit status would prevent this.
+3. *Numeric bounds are not enforced by guided decoding.* Enums and formats held, but proposals still exceeded stated
+   numeric ranges (for example ×2.0 where 1.5 was the limit). We reject them server-side; schema range support would cut
+   wasted calls.
+4. *Guest power-off is not a stop.* An in-guest `poweroff` is restarted by the platform, and only an API stop holds. An
+   instance TTL or "stay stopped on guest shutdown" option would prevent costly overruns.
+5. *The CLI federation login is a fixed ~12 h token with no refresh.* Twice a long run outlived it and our unattended
+   stop failed until a manual re-login. A refreshable session or an expiry warning would help.
+6. *No balance query outside the console.* Neither the CLI nor a service account could report the current account credit,
+   which once blocked an approved batch run until someone signed in to the console interactively. A read-only balance or
+   budget API would help automated spend guards.
+7. *Smaller items:* `nebius profile create` silently activates the new profile; vCPU-to-core mapping is not stated next
+   to the presets (our 64-vCPU VM behaved like about 32 cores for MuJoCo); some regions showed a 0 vCPU quota on first use
+   without a clear message.
+
+**Overall.** Token Factory plus Nemotron made a structured, auditable AI-in-the-loop design practical and cheap. The main
+gaps we hit were in operational guard rails (reasoning-budget visibility, VM lifetime, auth lifetime, balance visibility)
+rather than in model quality.
+
+---
+
+The sections below are the detailed record behind this summary.
 
 ## What we use
 

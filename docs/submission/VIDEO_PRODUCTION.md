@@ -1,5 +1,8 @@
 # Video production: tools, capture workflow, edit and export (W5, 2026-10-21)
 
+> **2026-10-27:** for the final video, start from [`VIDEO_HANDOFF.md`](VIDEO_HANDOFF.md) (asset package, shot list with the
+> live Forge Loop takes, disclosures). This file is kept as the record of the 2026-10-21 rough cut.
+
 The storyboard and narration are in `STORYBOARD.md`. The cut list (picture plus words, the single source) is
 `video/cutlist.json`.
 

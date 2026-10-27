@@ -1,5 +1,8 @@
 # Demo video storyboard (W5 draft, 2026-10-21; 2:53.5 long, hard limit < 3:00)
 
+> **2026-10-27:** for the final video, start from [`VIDEO_HANDOFF.md`](VIDEO_HANDOFF.md) (asset package, shot list with the
+> live Forge Loop takes, disclosures). This file is kept as the record of the 2026-10-21 rough cut.
+
 **Positioning.** Creature Forge is an AI scientist that investigates why a robot fails. It tests explanations by
 simulation and only accepts repairs that an independent verifier confirms. The video keeps two results apart:
 - **DO-1**: a deterministic optimiser result. NO_AI.
