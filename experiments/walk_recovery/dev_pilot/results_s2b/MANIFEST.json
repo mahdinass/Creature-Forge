@@ -1,0 +1,24 @@
+{
+  "sha256": {
+    "amend1_shard1.jsonl": "bd1c690dac652f7050eb75d0e9a15deb58a72ef3e8e5f95ba3a7557bcec8c55e",
+    "amend1_shard2.jsonl": "510537be107872dfb10c08ee810626cc48b99e248320867d327a421197859e71",
+    "amend1_shard3.jsonl": "add79fb90970da11f859bddbdbae1878c5e277dc7a6dd73e78a03570c8f4025a",
+    "amend1_shard4.jsonl": "e836aea0adc111be2e17bcd5b83900b93aa3cff5442bbc8f24a3073a05e3cff1",
+    "amend1_shard5.jsonl": "8d6a3791abe29ff64498a2359a76e9b0427fbb14c890e78c9cb7e995b672b573",
+    "amend1_shard8.jsonl": "9f0dd407dfff3cd3b8c0a928bf0c8f1363682b2950cc58dcd41929fc50ea598d",
+    "analysis_output.txt": "9f43f8601af46bcd83aff511b3728ddff00cfcc496d494336f72159a0663fd53",
+    "shard0.jsonl": "b28767e4b749d4475b70a5bbe64a667838dfecf53a3ed31b598afb729856de01",
+    "shard1.jsonl": "89b3f4f77b2d43c3667bb74a52c0e59ba7aef9aea4d4e01baaf20100c9f2e6f8",
+    "shard10.jsonl": "c30f50217ec88e9cc7e157328aadd93988786e0693b8327e6c7c466577324e40",
+    "shard11.jsonl": "33fe6bac9b7e731cf6ffbb0b47e92e9576db5af1c45883303311510ad8d913a8",
+    "shard2.jsonl": "da5afa34b48a552fab5ebf324c982dc0c4f3397d25d3332326b40ef6f89c7ea7",
+    "shard3.jsonl": "5d12db2fabd01bc1c99b1b096c5309cbb0d7e53499e2d55f63d18114aacc80c7",
+    "shard4.jsonl": "5857ae72655fbefe54334bd29756d74a2a3585a8a10a4f079fc1096ef12d1beb",
+    "shard5.jsonl": "8831d1ca49b2a9f5f89887c94dc11b2f0fd72fd1d23bf7c03bf9312d062e5a59",
+    "shard6.jsonl": "870c96dc4aac1e5d572ab3e7dd1b55f42a1cff6f5e493693608d7f70ae4a18cd",
+    "shard7.jsonl": "b6f13b8450f1e72a6ccf578e06cec8f1b9e705c90bb71ce0ca04ab732fbcc566",
+    "shard8.jsonl": "c12ee5f34853310e89612edb7f8438811518588f733dd61157a8a99f60b6afdc",
+    "shard9.jsonl": "a3a541a8aad475682618735686e62f6da23207e88c16b9fe0a77e3a492be736c"
+  },
+  "note": "S2b records (shard*: protocol_s2b, snapshot 5ab575f = 0799dea; amend1_shard*: protocol_s2b_amend1, snapshot 8381ecd = 10d92d7) pulled from the batch VM; analysis_output.txt = scripts/walk_s2_analysis.py over S2+S2b"
+}

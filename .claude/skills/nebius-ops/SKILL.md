@@ -8,9 +8,14 @@ description: Use whenever Creature Forge work needs the Nebius VM (tests, builds
 Local Windows PC: edit files, git, ssh only — it has almost no free RAM. Everything heavy runs on the VM.
 
 ## Lifecycle (`infra/nebius/forge_cloud.py`, Nebius CLI runs inside WSL)
-- `status`, `start` (refuses beyond the $10 infra cap; sets a verified 6 h deadline), `extend --hours H`
+- `status`, `start` (refuses beyond the infra cap `SPEND_CAP_USD`, $96 since 2026-10-19 (phase-3 Stage 2: +$20 on a $75.48 ledger); sets a verified 6 h deadline), `extend --hours H`
   (cap-guarded), `stop`, `spend` (ledger total). Never `create`/`delete` without owner approval.
-- Deadman timer on the VM powers off at the deadline; the Windows task `CreatureForgeNebiusWatchdog` stops it too.
+- Deadman timer on the VM powers off at the deadline, but the platform restarts a guest poweroff (spec `stopped: false`
+  is the desired state), so it is NOT a billing stop. Only an API stop (`forge_cloud.py stop` or the Windows task
+  `CreatureForgeNebiusWatchdog`, every 15 min, also on battery) ends compute billing.
+- Auth horizon (2026-10-24): the CLI federation token is a fixed ~12 h token with no refresh. `start` shortens and `extend`
+  refuses any deadline that outlives the token minus 45 min, and the watchdog stops running VMs 30 min before it expires.
+  `status` shows `auth_expires_in_h`. For long runs, `login` first to get a fresh 12 h window.
 - Stop the VM at the end of every work block or when idle > 30 min. Pull artifacts first.
 
 ## Development loop (`infra/nebius/forge_dev.py`)
@@ -24,6 +29,6 @@ Local Windows PC: edit files, git, ssh only — it has almost no free RAM. Every
 
 ## Secrets and spend
 - `.env` lives only on Windows and at `~/dev/.env` (mode 600) on the VM. Never print, log, commit or pass keys as args.
-- Inference ledger on the VM: `~/dev/ledger/inference_ledger.jsonl` (`CF_INFERENCE_LEDGER`); caps $15 / 1,500
-  requests. Infra ledger: `infra/nebius/spend_ledger.jsonl` (git-ignored), cap $10.
+- Inference ledger on the VM: `~/dev/ledger/inference_ledger.jsonl` (`CF_INFERENCE_LEDGER`); caps $40 / 8,000 (2026-10-18, owner-approved amendment)
+  requests. Infra ledger: `infra/nebius/spend_ledger.jsonl` (git-ignored), cap `SPEND_CAP_USD` ($96, phase-3 Stage 2, 2026-10-19). Unattended CLI calls never open a browser; an auth failure writes `AUTH_BLOCKED` and stops all further attempts until the owner runs `forge_cloud.py login`.
 - On any failure: record state in `docs/PROJECT_STATE.md`, stop the VM if idle, resume from the last commit.

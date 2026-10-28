@@ -1,0 +1,1387 @@
+{
+ "version": "creature_gen_v1",
+ "campaign": "walkrec-dev-m1-gen",
+ "gen_dist": {
+  "thigh_length": {
+   "dist": "uniform",
+   "lo": 0.15,
+   "hi": 0.6
+  },
+  "shank_length": {
+   "dist": "uniform",
+   "lo": 0.15,
+   "hi": 0.6
+  },
+  "foot_length": {
+   "dist": "loguniform",
+   "lo": 0.06,
+   "hi": 0.3
+  },
+  "torso_mass": {
+   "dist": "loguniform",
+   "lo": 1.0,
+   "hi": 15.0
+  },
+  "leg_density": {
+   "dist": "loguniform",
+   "lo": 300.0,
+   "hi": 3000.0
+  },
+  "foot_friction": {
+   "dist": "uniform",
+   "lo": 0.4,
+   "hi": 1.5
+  },
+  "torque_limit": {
+   "dist": "loguniform",
+   "lo": 15.0,
+   "hi": 200.0
+  }
+ },
+ "regions_allowed": [
+  "L0-f0-t0-q0",
+  "L0-f0-t0-q1",
+  "L0-f0-t1-q0",
+  "L0-f0-t1-q1",
+  "L0-f1-t0-q0",
+  "L0-f1-t0-q1",
+  "L0-f1-t1-q0",
+  "L0-f1-t1-q1",
+  "L1-f0-t0-q0",
+  "L1-f0-t0-q1",
+  "L1-f0-t1-q0",
+  "L1-f0-t1-q1",
+  "L1-f1-t0-q0",
+  "L1-f1-t0-q1",
+  "L1-f1-t1-q0",
+  "L1-f1-t1-q1",
+  "L2-f0-t0-q0",
+  "L2-f0-t0-q1",
+  "L2-f0-t1-q0",
+  "L2-f0-t1-q1",
+  "L2-f1-t0-q0",
+  "L2-f1-t0-q1",
+  "L2-f1-t1-q0",
+  "L2-f1-t1-q1"
+ ],
+ "min_dist": 0.15,
+ "max_per_region": 2,
+ "selection_k": 8,
+ "n_requested": 8,
+ "accepted": [
+  {
+   "draw": 2,
+   "body": {
+    "thigh_length": 0.456219,
+    "shank_length": 0.214459,
+    "foot_length": 0.079138,
+    "torso_mass": 4.979833,
+    "leg_density": 1147.272654,
+    "foot_friction": 0.436298,
+    "torque_limit": 113.709874,
+    "thigh_length_r": 0.456219,
+    "shank_length_r": 0.214459,
+    "foot_length_r": 0.079138,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.670678,
+    "foot_to_leg": 0.11799701197892282,
+    "mass_total": 11.751824557287424,
+    "torso_frac": 0.4237497739797312,
+    "tau_ratio": 1.4706516383128099,
+    "friction": 0.436298,
+    "leg_density": 1147.272654
+   },
+   "region": "L1-f0-t0-q1",
+   "id": "walkrec-dev-m1-gen-0000",
+   "selection": {
+    "seeds": [
+     26657664,
+     26657665,
+     26657666,
+     26657667,
+     26657668,
+     26657669,
+     26657670,
+     26657671
+    ],
+    "per_seed": [
+     {
+      "seed": 26657664,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.4309999999999532,
+      "label": "fall"
+     },
+     {
+      "seed": 26657665,
+      "outcome": "FAIL",
+      "score": 1.311971198727081,
+      "fall_time": 2.250999999999863,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26657666,
+      "outcome": "FAIL",
+      "score": 1.3299104383500682,
+      "fall_time": 2.28099999999986,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26657667,
+      "outcome": "FAIL",
+      "score": 1.2690343044268928,
+      "fall_time": 2.1659999999998725,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26657668,
+      "outcome": "FAIL",
+      "score": 1.2617735495565698,
+      "fall_time": 2.0409999999998862,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26657669,
+      "outcome": "FAIL",
+      "score": 1.2601020090064157,
+      "fall_time": 2.0309999999998873,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26657670,
+      "outcome": "FAIL",
+      "score": 1.1628129972442276,
+      "fall_time": 1.695999999999924,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26657671,
+      "outcome": "FAIL",
+      "score": 1.3217128325888623,
+      "fall_time": 2.2359999999998648,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 4,
+   "body": {
+    "thigh_length": 0.42818,
+    "shank_length": 0.243733,
+    "foot_length": 0.075872,
+    "torso_mass": 1.509811,
+    "leg_density": 1012.540284,
+    "foot_friction": 0.960053,
+    "torque_limit": 37.521325,
+    "thigh_length_r": 0.42818,
+    "shank_length_r": 0.243733,
+    "foot_length_r": 0.075872,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.671913,
+    "foot_to_leg": 0.11291938093175753,
+    "mass_total": 8.562168015495605,
+    "torso_frac": 0.17633512882106267,
+    "tau_ratio": 0.6648326957206324,
+    "friction": 0.960053,
+    "leg_density": 1012.540284
+   },
+   "region": "L1-f0-t0-q1",
+   "id": "walkrec-dev-m1-gen-0001",
+   "selection": {
+    "seeds": [
+     26822400,
+     26822401,
+     26822402,
+     26822403,
+     26822404,
+     26822405,
+     26822406,
+     26822407
+    ],
+    "per_seed": [
+     {
+      "seed": 26822400,
+      "outcome": "FAIL",
+      "score": 1.6857759345615633,
+      "fall_time": 2.995999999999781,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26822401,
+      "outcome": "FAIL",
+      "score": 1.6983621495906827,
+      "fall_time": 3.2259999999997557,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26822402,
+      "outcome": "FAIL",
+      "score": 1.608863888108243,
+      "fall_time": 2.6209999999998224,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26822403,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.260999999999972,
+      "label": "fall"
+     },
+     {
+      "seed": 26822404,
+      "outcome": "FAIL",
+      "score": 1.6823985704436706,
+      "fall_time": 3.540999999999721,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26822405,
+      "outcome": "FAIL",
+      "score": 1.582801767013248,
+      "fall_time": 2.515999999999834,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26822406,
+      "outcome": "FAIL",
+      "score": 1.697752815034841,
+      "fall_time": 3.170999999999762,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 26822407,
+      "outcome": "FAIL",
+      "score": 1.7542778819738425,
+      "fall_time": 3.130999999999766,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 5,
+   "body": {
+    "thigh_length": 0.275847,
+    "shank_length": 0.17479,
+    "foot_length": 0.111751,
+    "torso_mass": 9.39048,
+    "leg_density": 2341.886839,
+    "foot_friction": 0.634176,
+    "torque_limit": 195.005717,
+    "thigh_length_r": 0.275847,
+    "shank_length_r": 0.17479,
+    "foot_length_r": 0.111751,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.450637,
+    "foot_to_leg": 0.24798451969101518,
+    "mass_total": 19.051000592210592,
+    "torso_frac": 0.4929126926718746,
+    "tau_ratio": 2.315440891745797,
+    "friction": 0.634176,
+    "leg_density": 2341.886839
+   },
+   "region": "L0-f1-t0-q1",
+   "id": "walkrec-dev-m1-gen-0002",
+   "selection": {
+    "seeds": [
+     21310848,
+     21310849,
+     21310850,
+     21310851,
+     21310852,
+     21310853,
+     21310854,
+     21310855
+    ],
+    "per_seed": [
+     {
+      "seed": 21310848,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 2.2659999999998615,
+      "label": "fall"
+     },
+     {
+      "seed": 21310849,
+      "outcome": "FAIL",
+      "score": 2.7156103462056524,
+      "fall_time": 6.871000000000629,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21310850,
+      "outcome": "FAIL",
+      "score": 2.6231788329826604,
+      "fall_time": 6.821000000000613,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21310851,
+      "outcome": "FAIL",
+      "score": 2.703427429150792,
+      "fall_time": 6.591000000000536,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21310852,
+      "outcome": "FAIL",
+      "score": 2.719325296824042,
+      "fall_time": 6.861000000000626,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21310853,
+      "outcome": "FAIL",
+      "score": 2.667056213480174,
+      "fall_time": 6.661000000000559,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21310854,
+      "outcome": "FAIL",
+      "score": 2.6260044010381485,
+      "fall_time": 6.376000000000464,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21310855,
+      "outcome": "FAIL",
+      "score": 2.6207359989233256,
+      "fall_time": 6.886000000000634,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 7,
+   "body": {
+    "thigh_length": 0.485158,
+    "shank_length": 0.309984,
+    "foot_length": 0.139309,
+    "torso_mass": 10.763764,
+    "leg_density": 2556.568105,
+    "foot_friction": 1.137679,
+    "torque_limit": 26.569318,
+    "thigh_length_r": 0.485158,
+    "shank_length_r": 0.309984,
+    "foot_length_r": 0.139309,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.795142,
+    "foot_to_leg": 0.17520015292865926,
+    "mass_total": 29.595680803971792,
+    "torso_frac": 0.3636937454250245,
+    "tau_ratio": 0.11509020691446599,
+    "friction": 1.137679,
+    "leg_density": 2556.568105
+   },
+   "region": "L1-f1-t0-q0",
+   "id": "walkrec-dev-m1-gen-0003",
+   "selection": {
+    "seeds": [
+     25759616,
+     25759617,
+     25759618,
+     25759619,
+     25759620,
+     25759621,
+     25759622,
+     25759623
+    ],
+    "per_seed": [
+     {
+      "seed": 25759616,
+      "outcome": "FAIL",
+      "score": 0.9978291259190298,
+      "fall_time": 1.5359999999999416,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759617,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.5309999999999422,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759618,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.3109999999999664,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759619,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.7809999999999147,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759620,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.3109999999999664,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759621,
+      "outcome": "FAIL",
+      "score": 0.9817996294866419,
+      "fall_time": 1.4809999999999477,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759622,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.5309999999999422,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 25759623,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.5859999999999361,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 9,
+   "body": {
+    "thigh_length": 0.30866,
+    "shank_length": 0.178618,
+    "foot_length": 0.087131,
+    "torso_mass": 11.009542,
+    "leg_density": 1253.06356,
+    "foot_friction": 0.924053,
+    "torque_limit": 46.810344,
+    "thigh_length_r": 0.30866,
+    "shank_length_r": 0.178618,
+    "foot_length_r": 0.087131,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.487278,
+    "foot_to_leg": 0.17881168450042892,
+    "mass_total": 14.037377408464538,
+    "torso_frac": 0.784301916208454,
+    "tau_ratio": 0.6976057391441381,
+    "friction": 0.924053,
+    "leg_density": 1253.06356
+   },
+   "region": "L0-f1-t1-q1",
+   "id": "walkrec-dev-m1-gen-0004",
+   "selection": {
+    "seeds": [
+     21096064,
+     21096065,
+     21096066,
+     21096067,
+     21096068,
+     21096069,
+     21096070,
+     21096071
+    ],
+    "per_seed": [
+     {
+      "seed": 21096064,
+      "outcome": "FAIL",
+      "score": 0.9738278752172804,
+      "fall_time": 1.9259999999998987,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096065,
+      "outcome": "FAIL",
+      "score": 1.03292071661611,
+      "fall_time": 2.050999999999885,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096066,
+      "outcome": "FAIL",
+      "score": 1.0589636012864958,
+      "fall_time": 2.740999999999809,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096067,
+      "outcome": "FAIL",
+      "score": 1.0535143764689987,
+      "fall_time": 2.195999999999869,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096068,
+      "outcome": "FAIL",
+      "score": 1.0192697947057243,
+      "fall_time": 2.0009999999998906,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096069,
+      "outcome": "FAIL",
+      "score": 1.0643200279263956,
+      "fall_time": 2.515999999999834,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096070,
+      "outcome": "FAIL",
+      "score": 1.0070613279754905,
+      "fall_time": 1.9559999999998954,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21096071,
+      "outcome": "FAIL",
+      "score": 1.0694835478907396,
+      "fall_time": 2.740999999999809,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 10,
+   "body": {
+    "thigh_length": 0.483042,
+    "shank_length": 0.598252,
+    "foot_length": 0.124379,
+    "torso_mass": 11.057383,
+    "leg_density": 383.772263,
+    "foot_friction": 1.057631,
+    "torque_limit": 41.683255,
+    "thigh_length_r": 0.483042,
+    "shank_length_r": 0.598252,
+    "foot_length_r": 0.124379,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 1.081294,
+    "foot_to_leg": 0.11502792025110654,
+    "mass_total": 10.914309639770213,
+    "torso_frac": 1.0131087869917532,
+    "tau_ratio": 0.36004149312624895,
+    "friction": 1.057631,
+    "leg_density": 383.772263
+   },
+   "region": "L2-f0-t1-q1",
+   "id": "walkrec-dev-m1-gen-0005",
+   "selection": {
+    "seeds": [
+     27750720,
+     27750721,
+     27750722,
+     27750723,
+     27750724,
+     27750725,
+     27750726,
+     27750727
+    ],
+    "per_seed": [
+     {
+      "seed": 27750720,
+      "outcome": "FAIL",
+      "score": 2.8247254439938643,
+      "fall_time": 3.485999999999727,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 27750721,
+      "outcome": "FAIL",
+      "score": 2.7521173576811333,
+      "fall_time": 3.3009999999997475,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 27750722,
+      "outcome": "FAIL",
+      "score": 2.6759524774976393,
+      "fall_time": 3.105999999999769,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 27750723,
+      "outcome": "FAIL",
+      "score": 2.6706603750404083,
+      "fall_time": 3.1109999999997684,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 27750724,
+      "outcome": "FAIL",
+      "score": 2.7476321835770645,
+      "fall_time": 3.2559999999997524,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 27750725,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 2.8909999999997926,
+      "label": "fall"
+     },
+     {
+      "seed": 27750726,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 2.4859999999998372,
+      "label": "fall"
+     },
+     {
+      "seed": 27750727,
+      "outcome": "FAIL",
+      "score": 2.8721214348395043,
+      "fall_time": 3.5809999999997166,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 11,
+   "body": {
+    "thigh_length": 0.347714,
+    "shank_length": 0.554422,
+    "foot_length": 0.170937,
+    "torso_mass": 1.89746,
+    "leg_density": 387.199594,
+    "foot_friction": 0.492657,
+    "torque_limit": 26.538219,
+    "thigh_length_r": 0.347714,
+    "shank_length_r": 0.554422,
+    "foot_length_r": 0.170937,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.902136,
+    "foot_to_leg": 0.18948030008779163,
+    "mass_total": 4.914556754268993,
+    "torso_frac": 0.3860897523162766,
+    "tau_ratio": 0.6101637432761244,
+    "friction": 0.492657,
+    "leg_density": 387.199594
+   },
+   "region": "L2-f1-t0-q1",
+   "id": "walkrec-dev-m1-gen-0006",
+   "selection": {
+    "seeds": [
+     21446272,
+     21446273,
+     21446274,
+     21446275,
+     21446276,
+     21446277,
+     21446278,
+     21446279
+    ],
+    "per_seed": [
+     {
+      "seed": 21446272,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.7159999999999218,
+      "label": "fall"
+     },
+     {
+      "seed": 21446273,
+      "outcome": "FAIL",
+      "score": 4.308749667910982,
+      "fall_time": 4.945999999999986,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21446274,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 2.9809999999997827,
+      "label": "fall"
+     },
+     {
+      "seed": 21446275,
+      "outcome": "FAIL",
+      "score": 4.235893927876903,
+      "fall_time": 5.186000000000067,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21446276,
+      "outcome": "FAIL",
+      "score": 4.427816939940133,
+      "fall_time": 7.786000000000935,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21446277,
+      "outcome": "FAIL",
+      "score": 5.0263814909052265,
+      "fall_time": 7.101000000000706,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21446278,
+      "outcome": "FAIL",
+      "score": 3.9911111132794335,
+      "fall_time": 4.845999999999953,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 21446279,
+      "outcome": "FAIL",
+      "score": 4.360448633881292,
+      "fall_time": 5.621000000000212,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  },
+  {
+   "draw": 12,
+   "body": {
+    "thigh_length": 0.525942,
+    "shank_length": 0.486009,
+    "foot_length": 0.141258,
+    "torso_mass": 4.784863,
+    "leg_density": 1415.222262,
+    "foot_friction": 1.258302,
+    "torque_limit": 42.828537,
+    "thigh_length_r": 0.525942,
+    "shank_length_r": 0.486009,
+    "foot_length_r": 0.141258,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 1.011951,
+    "foot_to_leg": 0.13958976274542936,
+    "mass_total": 18.19425725772536,
+    "torso_frac": 0.2629875422899347,
+    "tau_ratio": 0.23712121792705398,
+    "friction": 1.258302,
+    "leg_density": 1415.222262
+   },
+   "region": "L2-f0-t0-q0",
+   "id": "walkrec-dev-m1-gen-0007",
+   "selection": {
+    "seeds": [
+     22947520,
+     22947521,
+     22947522,
+     22947523,
+     22947524,
+     22947525,
+     22947526,
+     22947527
+    ],
+    "per_seed": [
+     {
+      "seed": 22947520,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.9459999999998965,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947521,
+      "outcome": "FAIL",
+      "score": 1.5528191477435764,
+      "fall_time": 2.215999999999867,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947522,
+      "outcome": "FAIL",
+      "score": 1.5064030055401807,
+      "fall_time": 2.105999999999879,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947523,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.7159999999999218,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947524,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 1.4909999999999466,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947525,
+      "outcome": "FAIL",
+      "score": 1.4739146866415547,
+      "fall_time": 2.0409999999998862,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947526,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 2.0209999999998884,
+      "label": "falling_forward"
+     },
+     {
+      "seed": 22947527,
+      "outcome": "FAIL",
+      "score": 1.5679036171938892,
+      "fall_time": 2.28099999999986,
+      "label": "falling_forward"
+     }
+    ],
+    "rule": "failing: 8 FAIL, 0 PASS of 8"
+   }
+  }
+ ],
+ "rejected": [
+  {
+   "draw": 0,
+   "body": {
+    "thigh_length": 0.393382,
+    "shank_length": 0.394155,
+    "foot_length": 0.247868,
+    "torso_mass": 1.177116,
+    "leg_density": 466.367503,
+    "foot_friction": 1.361638,
+    "torque_limit": 40.38606,
+    "thigh_length_r": 0.393382,
+    "shank_length_r": 0.394155,
+    "foot_length_r": 0.247868,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.7875369999999999,
+    "foot_to_leg": 0.3147382281721367,
+    "mass_total": 5.122857865635885,
+    "torso_frac": 0.2297772124220136,
+    "tau_ratio": 1.0204205715780095,
+    "friction": 1.361638,
+    "leg_density": 466.367503
+   },
+   "region": "L1-f1-t0-q1",
+   "reason": "not_failing: aggregate POOR (2 FAIL, 3 PASS of 8)",
+   "selection": {
+    "seeds": [
+     22163456,
+     22163457,
+     22163458,
+     22163459,
+     22163460,
+     22163461,
+     22163462,
+     22163463
+    ],
+    "per_seed": [
+     {
+      "seed": 22163456,
+      "outcome": "PASS",
+      "score": 3.8922310908802324,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 22163457,
+      "outcome": "PASS",
+      "score": 3.98764604977511,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 22163458,
+      "outcome": "POOR",
+      "score": 4.778496480440437,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 22163459,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 4.430999999999814,
+      "label": "fall"
+     },
+     {
+      "seed": 22163460,
+      "outcome": "PASS",
+      "score": 3.3753245783116603,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 22163461,
+      "outcome": "POOR",
+      "score": 3.7320621652107486,
+      "fall_time": null,
+      "label": "slow_or_few_steps"
+     },
+     {
+      "seed": 22163462,
+      "outcome": "FAIL",
+      "score": 0.0,
+      "fall_time": 3.695999999999704,
+      "label": "fall"
+     },
+     {
+      "seed": 22163463,
+      "outcome": "POOR",
+      "score": 4.922109342903643,
+      "fall_time": null,
+      "label": "contact_chatter"
+     }
+    ],
+    "rule": "not_failing: aggregate POOR (2 FAIL, 3 PASS of 8)"
+   }
+  },
+  {
+   "draw": 1,
+   "body": {
+    "thigh_length": 0.328888,
+    "shank_length": 0.264314,
+    "foot_length": 0.212445,
+    "torso_mass": 7.603324,
+    "leg_density": 1028.110995,
+    "foot_friction": 0.767114,
+    "torque_limit": 115.364095,
+    "thigh_length_r": 0.328888,
+    "shank_length_r": 0.264314,
+    "foot_length_r": 0.212445,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.593202,
+    "foot_to_leg": 0.3581326428434159,
+    "mass_total": 12.371261972803886,
+    "torso_frac": 0.6145956666922593,
+    "tau_ratio": 1.6024520607252581,
+    "friction": 0.767114,
+    "leg_density": 1028.110995
+   },
+   "region": "L0-f1-t1-q1",
+   "reason": "not_failing: aggregate PASS (0 FAIL, 7 PASS of 8)",
+   "selection": {
+    "seeds": [
+     21080960,
+     21080961,
+     21080962,
+     21080963,
+     21080964,
+     21080965,
+     21080966,
+     21080967
+    ],
+    "per_seed": [
+     {
+      "seed": 21080960,
+      "outcome": "PASS",
+      "score": 4.413892363498027,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 21080961,
+      "outcome": "PASS",
+      "score": 4.423767436125664,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 21080962,
+      "outcome": "PASS",
+      "score": 4.432327499791442,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 21080963,
+      "outcome": "PASS",
+      "score": 4.4365048651687164,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 21080964,
+      "outcome": "PASS",
+      "score": 4.432096172861774,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 21080965,
+      "outcome": "PASS",
+      "score": 4.393798702243533,
+      "fall_time": null,
+      "label": "walking"
+     },
+     {
+      "seed": 21080966,
+      "outcome": "POOR",
+      "score": 4.310267619311545,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 21080967,
+      "outcome": "PASS",
+      "score": 4.39262242867507,
+      "fall_time": null,
+      "label": "walking"
+     }
+    ],
+    "rule": "not_failing: aggregate PASS (0 FAIL, 7 PASS of 8)"
+   }
+  },
+  {
+   "draw": 3,
+   "body": {
+    "thigh_length": 0.201468,
+    "shank_length": 0.19047,
+    "foot_length": 0.15837,
+    "torso_mass": 7.806698,
+    "leg_density": 1723.228775,
+    "foot_friction": 1.220278,
+    "torque_limit": 31.364571,
+    "thigh_length_r": 0.201468,
+    "shank_length_r": 0.19047,
+    "foot_length_r": 0.15837,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.391938,
+    "foot_to_leg": 0.4040690109149917,
+    "mass_total": 13.990019532258003,
+    "torso_frac": 0.5580190922535467,
+    "tau_ratio": 0.583088735256405,
+    "friction": 1.220278,
+    "leg_density": 1723.228775
+   },
+   "region": "L0-f1-t1-q1",
+   "reason": "not_failing: aggregate POOR (0 FAIL, 0 PASS of 8)",
+   "selection": {
+    "seeds": [
+     24252672,
+     24252673,
+     24252674,
+     24252675,
+     24252676,
+     24252677,
+     24252678,
+     24252679
+    ],
+    "per_seed": [
+     {
+      "seed": 24252672,
+      "outcome": "POOR",
+      "score": 0.6710461610416909,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252673,
+      "outcome": "POOR",
+      "score": 0.846337851648871,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252674,
+      "outcome": "POOR",
+      "score": 0.5597186926631431,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252675,
+      "outcome": "POOR",
+      "score": 0.7264144670189775,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252676,
+      "outcome": "POOR",
+      "score": 0.6675416975365124,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252677,
+      "outcome": "POOR",
+      "score": 0.6144801543071522,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252678,
+      "outcome": "POOR",
+      "score": 0.6492289590490654,
+      "fall_time": null,
+      "label": "contact_chatter"
+     },
+     {
+      "seed": 24252679,
+      "outcome": "POOR",
+      "score": 0.7436244623862992,
+      "fall_time": null,
+      "label": "contact_chatter"
+     }
+    ],
+    "rule": "not_failing: aggregate POOR (0 FAIL, 0 PASS of 8)"
+   }
+  },
+  {
+   "draw": 6,
+   "body": {
+    "thigh_length": 0.418041,
+    "shank_length": 0.19171,
+    "foot_length": 0.24631,
+    "torso_mass": 7.015258,
+    "leg_density": 1385.422433,
+    "foot_friction": 1.355852,
+    "torque_limit": 55.50353,
+    "thigh_length_r": 0.418041,
+    "shank_length_r": 0.19171,
+    "foot_length_r": 0.24631,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.6097509999999999,
+    "foot_to_leg": 0.4039517770368561,
+    "mass_total": 15.500233330683807,
+    "torso_frac": 0.4525904772099657,
+    "tau_ratio": 0.5986332572160952,
+    "friction": 1.355852,
+    "leg_density": 1385.422433
+   },
+   "region": "L1-f1-t0-q1",
+   "reason": "not_failing: aggregate POOR (0 FAIL, 0 PASS of 8)",
+   "selection": {
+    "seeds": [
+     22358528,
+     22358529,
+     22358530,
+     22358531,
+     22358532,
+     22358533,
+     22358534,
+     22358535
+    ],
+    "per_seed": [
+     {
+      "seed": 22358528,
+      "outcome": "POOR",
+      "score": 0.0,
+      "fall_time": null,
+      "label": "stationary"
+     },
+     {
+      "seed": 22358529,
+      "outcome": "POOR",
+      "score": 0.0,
+      "fall_time": null,
+      "label": "stationary"
+     },
+     {
+      "seed": 22358530,
+      "outcome": "POOR",
+      "score": 1.4290592142822502,
+      "fall_time": null,
+      "label": "slow_or_few_steps"
+     },
+     {
+      "seed": 22358531,
+      "outcome": "POOR",
+      "score": 0.24002435926704876,
+      "fall_time": null,
+      "label": "stationary"
+     },
+     {
+      "seed": 22358532,
+      "outcome": "POOR",
+      "score": 0.0,
+      "fall_time": null,
+      "label": "stationary"
+     },
+     {
+      "seed": 22358533,
+      "outcome": "POOR",
+      "score": 0.20978184047102486,
+      "fall_time": null,
+      "label": "stationary"
+     },
+     {
+      "seed": 22358534,
+      "outcome": "POOR",
+      "score": 1.3646982689307074,
+      "fall_time": null,
+      "label": "slow_or_few_steps"
+     },
+     {
+      "seed": 22358535,
+      "outcome": "POOR",
+      "score": 0.0,
+      "fall_time": null,
+      "label": "stationary"
+     }
+    ],
+    "rule": "not_failing: aggregate POOR (0 FAIL, 0 PASS of 8)"
+   }
+  },
+  {
+   "draw": 8,
+   "body": {
+    "thigh_length": 0.334358,
+    "shank_length": 0.42403,
+    "foot_length": 0.109421,
+    "torso_mass": 1.495573,
+    "leg_density": 473.214125,
+    "foot_friction": 1.001463,
+    "torque_limit": 89.750856,
+    "thigh_length_r": 0.334358,
+    "shank_length_r": 0.42403,
+    "foot_length_r": 0.109421,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "features": {
+    "L": 0.7583880000000001,
+    "foot_to_leg": 0.14428102765339113,
+    "mass_total": 4.7874946361813855,
+    "torso_frac": 0.31239157715128074,
+    "tau_ratio": 2.519821859059315,
+    "friction": 1.001463,
+    "leg_density": 473.214125
+   },
+   "region": "L1-f0-t0-q1",
+   "reason": "region_cap: L1-f0-t0-q1 already has 2 (cap 2)"
+  }
+ ],
+ "draws": 13,
+ "rollouts": 96,
+ "protocol_id": "walkrec-oracle-m1-v1",
+ "protocol_sha256": "252f00387392ccf3e05d80bbbcb885d5a331b696e58919effe29d17d0dc6754f",
+ "code_commit": "b6825a0364dd1b1af2224d3025533145b8ce5580"
+}

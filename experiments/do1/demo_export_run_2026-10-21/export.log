@@ -1,0 +1,12 @@
+do1_demo_export_v2: hdb-v1-gen-0137:low_ground_friction:0 (DO1-L4-r0, harness e9d2379, record sha256 00a8db20 OK)
+  faulty  design f7a709fa06: walking 5/24, median score 2.336818 m
+  frozen  design 66053dae8e: walking 19/24, median score 3.429721 m
+  do1     design 9aa66e0f04: walking 21/24, median score 3.052606 m
+  do1 20 s confirmation: walking 22/24
+  statuses (recorded): {'frozen': 'PARTIAL_IMPROVEMENT', 'do1': 'FULL_RECOVERY'}
+  validation seeds 66645952..66645975 (24), confirmation seeds 79386176..79386199 (24); variation {'perturb_mult': 2.0, 'push_time_jitter_s': 0.15, 'friction_pct': 0.1}
+  default seed (pre-declared rule): 66645963
+  planned replays: {'rollouts_10s': 72, 'rollouts_20s': 24} on each of 2 paths = 240 rollout-equivalents; smoke test 20 (plus 8 eligibility rollouts per instance build (ta1.build_instance, as the runner))
+  output: /home/forge/dev/runs/do1_demo_export_2026-10-21_r2/demo
+  environment matches the record: {'system': 'Linux', 'machine': 'x86_64', 'python': '3.12.3', 'numpy': '2.5.4', 'mujoco': '3.15.0', 'platform': 'Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39'}
+OK: {'production_rows_exact': 96, 'trace_rows_exact': 96, 'fk_max_err_m': 0.0, 'fk_tol_m': 1e-09} -> /home/forge/dev/runs/do1_demo_export_2026-10-21_r2/demo

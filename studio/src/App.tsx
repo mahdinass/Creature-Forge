@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getPhase0, getSchema, sandboxSimulate, simulate } from './api'
+import { CausalLab } from './causal/CausalLab'
+import { ScientistLab } from './scientist/ScientistLab'
+import { Do1Recovery } from './do1/Do1Recovery'
+import { NemotronCase } from './nemotron/NemotronCase'
 import { Demo } from './demo/Demo'
 import { ForgePage } from './forge/ForgePage'
 import { forgeUrl } from './forge/forgeLogic'
@@ -205,6 +209,11 @@ export default function App() {
       {tab === 'locomotion' && <WalkingLab />}
 
       {tab === 'demo' && <Demo initialRun={q.get('run')} go={go} />}
+
+      {tab === 'causal' && <CausalLab />}
+      {tab === 'scientist' && <ScientistLab />}
+      {tab === 'nemotron' && <NemotronCase />}
+      {tab === 'recovery' && <Do1Recovery />}
 
       {tab === 'lab' && <Lab initialTrial={link.trial} initialStep={link.step} />}
 

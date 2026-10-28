@@ -1,0 +1,117 @@
+{
+  "id": "walkrec-confirm-v1-amend1",
+  "stage": "S3 confirmatory study (fresh creatures; the only confirmatory evidence of the walking-recovery research)",
+  "registered_before_run": true,
+  "status": "FROZEN (amendment 1) - see 'amendment'; code commit recorded in frozen_components.code_commit",
+  "question": "At an equal TOTAL rollout budget, does Nemotron directing the engineering decisions (which experiments to run, which subsystems of controller and body to change, how to spend the budget) make more genuinely failing, never-seen creatures walk than the best non-AI strategy we built?",
+  "development_history": "M1 (G1 PROCEED: joint 17-D search 6/12), S2 (R* = 2000; primary comparator FIX; G2 PASS), S2b (director prompt v2 = the one dev revision of the AI in this design; Ultra ineligible under G2), L2 (G3 FAIL: no experience arm), iteration 3 / S4a (G4 FAIL: closed-loop mechanism invention 4/24 vs fix15 11/24; not in S3). Reports: experiments/walk_recovery/*/REPORT_*.md. Every number there is development data; none of it is pooled here.",
+  "campaign": "walkrec-confirm-v1",
+  "family": 17,
+  "seeds": {
+    "diag": 4,
+    "train": 8,
+    "screen": 12,
+    "validate": 24,
+    "confirm": 24
+  },
+  "settings": {
+    "probe_budget_frac": 0.1,
+    "rounds": 2,
+    "screen_top_k": 3,
+    "screen_n": 12,
+    "selection": "v2"
+  },
+  "budget_R_star": 2000,
+  "methods": [
+    {
+      "id": "ai_v2",
+      "budgets": [
+        2000
+      ],
+      "what": "NemotronDirector prompt v2, nvidia/nemotron-3-super-120b-a12b, production config (thinking off), probe/subspace order shuffled per pipeline (recorded seed); live calls through the authoritative inference ledger"
+    },
+    {
+      "id": "fix",
+      "budgets": [
+        2000
+      ],
+      "what": "FixedDirector(probes=(opt_placement, opt_body, opt_posture)) - the PRIMARY COMPARATOR (S2 rule)"
+    },
+    {
+      "id": "cma_joint",
+      "budgets": [
+        2000
+      ],
+      "what": "blind CMA-ES over all 17 control dims + 4 body params"
+    },
+    {
+      "id": "cma_ctrl",
+      "budgets": [
+        2000
+      ],
+      "what": "blind CMA-ES over the 17 control dims"
+    },
+    {
+      "id": "rand",
+      "budgets": [
+        2000
+      ],
+      "what": "same pipeline, random decisions"
+    }
+  ],
+  "replicates": [
+    1
+  ],
+  "pairing": "for each creature every method uses the same seeds (all roles) and the same noise seed",
+  "accounting": "equal TOTAL budget: start evaluation, every probe, every plan (incl. rejected/discarded), screening and every round charged (walk_pipelines.Budget; ledger == sum of lines <= budget asserted per unit); final validation/confirmation not charged and identical for all methods",
+  "recovery_rule": "recovery.full_recovery_v1 (unchanged): aggregate PASS (>= 80% walking) on 24 held-out validation seeds under VARIATION_PRESET AND verdict_v1 VERIFIED_IMPROVEMENT vs the unmodified original AND a 20 s confirmation on 24 further seeds (>= 80% walking, median speed >= the creature's min_speed, no body dragging). PARTIAL_IMPROVEMENT is never counted as recovery.",
+  "primary_hypothesis": {
+    "statement": "ai_v2 fully recovers more creatures than fix",
+    "test": "exact one-sided McNemar (binomial on discordant pairs, H1: ai-only > fix-only), alpha = 0.05",
+    "outcome": "FULL_RECOVERY per creature (binary), paired by creature"
+  },
+  "secondary_hypotheses": {
+    "family": [
+      "ai_v2 > cma_joint",
+      "ai_v2 > rand",
+      "ai_v2 > cma_ctrl"
+    ],
+    "test": "exact one-sided McNemar each; Holm-Bonferroni over the family at alpha = 0.05"
+  },
+  "exploratory": [
+    "fix vs cma_joint, rand vs fix, cma_joint vs cma_ctrl (two-sided exact McNemar, reported without multiplicity claims)",
+    "region-cluster sensitivity: exact sign test on per-region differences (ai_v2 minus fix full-recovery counts)",
+    "partial-improvement rates, mean validation walking fractions, rollouts used, AI decision patterns (body co-design rate, first probes, refutations), AI cost and latency"
+  ],
+  "itt_and_errors": "an AI pipeline whose director returns nothing valid keeps the start candidate (not recovered); a unit error is recorded and counted as not recovered in the primary analysis, and listed; no unit is rerun; one analysis after all units completed",
+  "power": "48 pairs; an exact one-sided McNemar detects e.g. 7 vs 1 (p = 0.035) or 9 vs 2 (p = 0.033) discordant pairs; a null result is a valid outcome and will be reported as such",
+  "frozen_components": {
+    "code_commit": "700924f (code; the next commit only records this hash)",
+    "director_prompt": "director.build_system_prompt('v2', order_seed) with the recorded order seed per pipeline",
+    "model_config": "experiments/forge_loop/model_config.json default profile",
+    "analysis_script": "scripts/walk_confirm_analysis.py at bfca67d",
+    "driver": "scripts/walk_s2_pilot.py at bfca67d (methods ai_v2, fix, cma_joint, cma_ctrl, rand; settings.selection = v2)"
+  },
+  "execution": "batch VM (cpu-d3 64vcpu), 12 shards x 3 workers; outputs to git-ignored artifacts/, pulled before any sync; authoritative inference ledger on the VM, returned afterwards",
+  "rollout_cap": 560000,
+  "inference_cap": "<= 8 requests per pipeline; global ledger caps $15 / 1,500 requests",
+  "wording_rule": "report classical-optimiser recoveries, the AI's marginal contribution at equal budget, and the unchanged/harder evaluation conditions separately; never call a partial improvement a recovery; unrecovered = 'not recovered within 2,000 rollouts'",
+  "creatures": [
+    {
+      "panel": {
+        "campaign": "walkrec-confirm-v1-gen",
+        "n": 48,
+        "min_dist": 0.15,
+        "max_draws": 3000
+      }
+    }
+  ],
+  "panel_rule": {
+    "allowed_regions": "all 24",
+    "rule": "creature_gen.generate_panel: guided bodies from GEN_DIST; accepted iff the R2-transfer walk challenge on 8 selection seeds is aggregate FAIL with <= 1 walking seed; region cap ceil(48/24)+1 = 3; every draw recorded; generated ONCE after the freeze commit, before any method runs; its sha256 is stored in every unit",
+    "no_recoverability_prescreen": true
+  },
+  "selection_note": "selection v2 for EVERY arm (walk_pipelines selection='v2'): the final screening also requires the screen median to reach the original's screen median + 0.5 m (verdict_v1's walk minimum effect) before walking count decides; the shared fix approved with iteration 3 for a method-independent artifact (a stable walker that does not out-distance a runaway original cannot be verified). The original's screen is charged to every arm. verdict_v1 itself is unchanged. The ai_v2 prompt is unchanged (byte-identical to S2b).",
+  "amends": "walkrec-confirm-v1",
+  "amendment": "2026-10-17, BEFORE any confirmatory creature or unit existed (the panel had not been generated): a pre-run smoke of the frozen code showed the ai_v2 director's validator rejecting an otherwise valid final plan because its free-text 'diagnosis' exceeded 500 characters (the same defect had been fixed in director v3; it also caused 2/96 invalid decisions in S2b). With the owner's approval the ONLY change is director.TEXT_MAX 500 -> 1500 (validation of free-text length). Prompt text, model, schemas (other than that length check), arms, seeds, budget, selection, recovery rule, hypotheses and analysis are unchanged. The original frozen file experiments/walk_recovery/confirmatory/protocol.json is kept byte-identical."
+}

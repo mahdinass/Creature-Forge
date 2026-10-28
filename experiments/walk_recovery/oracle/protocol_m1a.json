@@ -1,0 +1,22 @@
+{
+  "id": "walkrec-oracle-m1a-v1",
+  "stage": "S0 / M1a quick feasibility (development data only; never confirmatory)",
+  "registered_before_run": true,
+  "question": "Can a strong non-AI optimizer (CMA-ES) make genuinely failing development creatures walk under full_recovery_v1, with the existing 15-D controller representation? Zero-rollout dynamic-similarity transfer is assessed as well.",
+  "campaign": "walkrec-dev-m1a",
+  "creatures": [{"name": "stilts-drawn"}, {"name": "tiny-feet"}, {"name": "top-heavy"}, {"name": "weak-slippery"}],
+  "seeds": {"train": 8, "validate": 24, "confirm": 24},
+  "conditions": [
+    {"id": "c0_r2", "init": "r2", "space": {"ctrl": "none"}, "budget": 0},
+    {"id": "c0_sim", "init": "similarity", "space": {"ctrl": "none"}, "budget": 0},
+    {"id": "ctrl_r2", "init": "r2", "space": {"ctrl": "all"}, "budget": 4000, "checkpoints": [250, 1000, 4000], "n_train": 8, "train_variation": "preset"},
+    {"id": "joint_sim", "init": "similarity", "space": {"ctrl": "all", "body": ["foot_length", "thigh_length", "shank_length", "torso_mass"]}, "budget": 4000, "checkpoints": [250, 1000, 4000], "n_train": 8, "train_variation": "preset"}
+  ],
+  "replicates": [1],
+  "optimizer": "walk_opt.cma_search defaults (sigma0 0.2 in [0,1] units, IPOP restarts, Hansen 2016 parameters)",
+  "recovery_rule": "recovery.full_recovery_v1 (aggregate PASS >= 80% walking on 24 validation seeds under VARIATION_PRESET + verdict_v1 VERIFIED vs the unmodified original + 20 s confirmation on 24 further seeds); verdict_v1 and WalkingCriteria unchanged",
+  "body_edit_rules": "joint search stays inside the existing edit-rule ratio box [0.5, 1.5] and the guided bounds; at most 4 body parameters",
+  "analysis": "descriptive only: per creature x condition x checkpoint status (FULL_RECOVERY / PARTIAL_IMPROVEMENT / NOT_RECOVERED / INCONCLUSIVE_ERROR), walking fraction, verdict, rollouts. No test statistic. Informs the full M1 design and the G1 gate; does not by itself decide G1.",
+  "wording_rule": "an unrecovered creature is 'not recovered within budget X under representation Y', never 'impossible'",
+  "rollout_cap": 40000
+}

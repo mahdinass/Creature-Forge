@@ -1,0 +1,147 @@
+[
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "experiment",
+  "why": "scripted smoke of every tool",
+  "experiment": "floor_test@x3",
+  "prediction": [
+   {
+    "quantity": "n_walking",
+    "q05": 0,
+    "q25": 0,
+    "q50": 1,
+    "q75": 2,
+    "q95": 4
+   },
+   {
+    "quantity": "time_upright",
+    "q05": 1,
+    "q25": 3,
+    "q50": 6,
+    "q75": 9,
+    "q95": 10
+   },
+   {
+    "quantity": "pitch_mean",
+    "q05": -0.2,
+    "q25": -0.05,
+    "q50": 0.05,
+    "q75": 0.12,
+    "q95": 0.25
+   }
+  ],
+  "hypotheses": [
+   {
+    "mechanism": "m",
+    "causal_chain": "c",
+    "expected_signature": "s",
+    "primitives": [
+     {
+      "kind": "payload",
+      "target": "torso",
+      "params": [
+       {
+        "name": "mass_kg",
+        "value": 1.5
+       },
+       {
+        "name": "x_m",
+        "value": 0.1
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "propose",
+  "why": "scripted smoke of every tool",
+  "hypotheses": [
+   {
+    "mechanism": "m",
+    "causal_chain": "c",
+    "expected_signature": "s",
+    "primitives": [
+     {
+      "kind": "sensor_bias",
+      "target": "pitch",
+      "params": [
+       {
+        "name": "rad",
+        "value": -0.1
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "mechanism": "m",
+    "causal_chain": "c",
+    "expected_signature": "s",
+    "primitives": [
+     {
+      "kind": "sensor_bias",
+      "target": "pitch",
+      "params": [
+       {
+        "name": "rad",
+        "value": 0.1
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "screen_tools",
+  "why": "scripted smoke of every tool"
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "repair",
+  "why": "scripted smoke of every tool",
+  "tool": "posture",
+  "mode": "twin",
+  "start_edits": "pitch_ref@-0.1R"
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "repair",
+  "why": "scripted smoke of every tool",
+  "tool": "timing",
+  "mode": "plant",
+  "plant_share": 0.4,
+  "n_train": 4
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "check",
+  "why": "scripted smoke of every tool",
+  "design": 2,
+  "n": 16
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "assimilate",
+  "why": "scripted smoke of every tool",
+  "design": 2
+ },
+ {
+  "understanding": "scripted",
+  "uncertainty": "scripted",
+  "action": "conclude",
+  "why": "scripted smoke of every tool",
+  "design": 3
+ }
+]

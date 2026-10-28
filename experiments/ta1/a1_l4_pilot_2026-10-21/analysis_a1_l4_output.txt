@@ -1,0 +1,35 @@
+
+=== CONTROL r0 wall 366s submitted d4 66053dae8e
+  PARTIAL_IMPROVEMENT | walking 19/24 aggregate POOR | verdict VERIFIED_IMPROVEMENT W/L/T 20/1/3 median +1.082 m p_better 1.049e-05 | confirmation run=False passed=None
+  reasons: ['candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)']
+  validation distances: faulty median 2.34 m, submitted median 3.43 m; candidate labels {'walking': 19, 'fall': 4, 'slow_or_few_steps': 1}
+  hook: ranking ['leg_length', 'posture', 'timing', 'torque_limit', 'feedback', 'torso_mass', 'stride', 'placement', 'foot_length'] | plan {} | fingerprint beeaeb58bf3968f4 | prehook plant 28 twin 1450
+  d3 <- d0 twin:cma:leg_length        fric x1.000 | r8 6 r16 None stress4 None disp None None P None
+      changes: thigh_length 0.2764->0.4792; shank_length 0.278->0.3851; thigh_length_r 0.2764->0.4792; shank_length_r 0.278->0.3851
+  d4 <- d3 repair:leg_length          fric x1.000 | r8 None r16 15 stress4 3 disp VERIFIED_IMPROVEMENT 1.1279 P 0.5883532228270734 | robust W/L/T 15/0/1 med +1.128 -> VERIFIED_IMPROVEMENT (recomputed) | robust dist median 3.47 vs faulty 2.31
+      changes: thigh_length 0.4792->0.5237; shank_length 0.3851->0.3832; thigh_length_r 0.4792->0.5237; shank_length_r 0.3851->0.3832
+  d5 <- d4 repair:posture             fric x1.000 | r8 None r16 14 stress4 3 disp VERIFIED_IMPROVEMENT 1.1835 P 0.3886577649324444 | robust W/L/T 15/0/1 med +1.183 -> VERIFIED_IMPROVEMENT (recomputed) | robust dist median 3.53 vs faulty 2.31
+      changes: stance_knee -0.04193->-0.05793; hip_bias +0.1797->+0.1987; pitch_ref +0.1123->+0.1402; start_lean +0.01687->+0.02182
+  selection pmap {'4': 0.5884, '5': 0.3887} -> d4 | resources plant {'used': 700, 'budget': 700, 'prehook': 28, 'posthook': 672} twin {'used': 2514, 'budget': 2800, 'prehook': 1450, 'posthook': 1064} total 3270.0
+  rescreen no re-screen | complete True
+  CONTROL reproduction exact True (21/21) failing []
+
+=== TREATMENT r0 wall 364s submitted d5 f8048eea33
+  PARTIAL_IMPROVEMENT | walking 19/24 aggregate POOR | verdict VERIFIED_IMPROVEMENT W/L/T 21/0/3 median +1.017 m p_better 4.768e-07 | confirmation run=False passed=None
+  reasons: ['candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)']
+  validation distances: faulty median 2.34 m, submitted median 3.34 m; candidate labels {'walking': 19, 'fall': 3, 'slow_or_few_steps': 2}
+  hook: ranking ['leg_length', 'posture', 'timing', 'torque_limit', 'feedback', 'torso_mass', 'stride', 'placement', 'foot_length'] | plan {'tool_order': ['foot_friction']} | fingerprint beeaeb58bf3968f4 | prehook plant 28 twin 1450
+  d3 <- d0 twin:cma:foot_friction     fric x1.542 | r8 7 r16 14 stress4 4 disp NOT_VERIFIED -0.067 P 0.003498275742858101 | robust W/L/T 0/11/5 med -0.067 -> NOT_VERIFIED (recomputed) | robust dist median 2.28 vs faulty 2.31
+      changes: foot_friction 1.127->1.737
+  d4 <- d3 repair:foot_friction       fric x1.574 | r8 None r16 15 stress4 4 disp NOT_VERIFIED -0.0604 P 0.007656057068660575 | robust W/L/T 1/9/6 med -0.060 -> NOT_VERIFIED (recomputed) | robust dist median 2.27 vs faulty 2.31
+      changes: foot_friction 1.737->1.773
+  d5 <- d4 repair:leg_length          fric x1.574 | r8 None r16 15 stress4 3 disp VERIFIED_IMPROVEMENT 1.0756 P 0.5929703962889397 | robust W/L/T 16/0/0 med +1.076 -> VERIFIED_IMPROVEMENT (recomputed) | robust dist median 3.44 vs faulty 2.31
+      changes: thigh_length 0.2764->0.4847; shank_length 0.278->0.3824; thigh_length_r 0.2764->0.4847; shank_length_r 0.278->0.3824
+  selection pmap {'3': 0.0035, '4': 0.0077, '5': 0.593} -> d5 | resources plant {'used': 700, 'budget': 700, 'prehook': 28, 'posthook': 672} twin {'used': 2514, 'budget': 2800, 'prehook': 1450, 'posthook': 1064} total 3270.0
+  rescreen no re-screen | complete True
+  TREATMENT stored-prefix True {'plant_lines': True, 'twin_lines': True, 'events': True, 'history': True, 'eligibility_labels': True, 'eligibility_walking': True, 'eligibility_n': True, 'eligibility_rollouts': True}
+  PAIRED {'equal': True, 'same_unit': True, 'n_calls': [1, 1], 'differing_components': []}
+
+component fingerprints equal: True ['bench', 'engine_flags', 'engine_trace', 'experiments', 'ledgers', 'particles', 'ranking', 'session', 'state']
+same submitted design in both arms: False
+manifest: {'git_commit': '86d0a2bcf8b32f74455739aa040d6e35d32f9e73', 'git_dirty': False, 'harness_commit_approved': '86d0a2bcf8b32f74455739aa040d6e35d32f9e73', 'harness_version': 'ta1_harness_v3', 'python': '3.12.3', 'numpy': '2.5.4', 'mujoco': '3.15.0', 'platform': 'Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39', 'created_utc': '2026-10-20T23:01:58+00:00'} amendment A1

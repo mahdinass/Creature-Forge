@@ -1,0 +1,118 @@
+{"pitch_sensor_bias": 2, "payload_offset": 2, "low_ground_friction": 1, "short_feet": 1, "feedback_gain_loss": 2, "actuator_weakness": 2, "one_side_weakness": 1, "clock_fault": 2, "heavy_torso": 1, "sensor_latency": 2, "joint_damping_wear": 2, "leg_asymmetry": 2, "heldcomp:payload_offset.fwd+actuator_weakness": 1, "heldcomp:low_ground_friction+clock_fault.fast": 1, "heldcomp:pitch_sensor_bias.++short_feet": 1, "heldcomp:heavy_torso+feedback_gain_loss": 1}
+{"pitch_sensor_bias": 3, "payload_offset": 3, "low_ground_friction": 2, "short_feet": 2, "feedback_gain_loss": 3, "actuator_weakness": 3, "one_side_weakness": 2, "clock_fault": 3, "heavy_torso": 2, "sensor_latency": 3, "joint_damping_wear": 2, "leg_asymmetry": 3, "heldcomp:payload_offset.fwd+actuator_weakness": 2, "heldcomp:low_ground_friction+clock_fault.fast": 2, "heldcomp:pitch_sensor_bias.++short_feet": 2, "heldcomp:heavy_torso+feedback_gain_loss": 2}
+{"pitch_sensor_bias": 4, "payload_offset": 5, "low_ground_friction": 4, "short_feet": 4, "feedback_gain_loss": 5, "actuator_weakness": 5, "one_side_weakness": 4, "clock_fault": 5, "heavy_torso": 4, "sensor_latency": 5, "joint_damping_wear": 3, "leg_asymmetry": 5, "heldcomp:payload_offset.fwd+actuator_weakness": 4, "heldcomp:low_ground_friction+clock_fault.fast": 4, "heldcomp:pitch_sensor_bias.++short_feet": 4, "heldcomp:heavy_torso+feedback_gain_loss": 4}
+{"pitch_sensor_bias": 4, "payload_offset": 5, "low_ground_friction": 4, "short_feet": 4, "feedback_gain_loss": 5, "actuator_weakness": 5, "one_side_weakness": 4, "clock_fault": 5, "heavy_torso": 4, "sensor_latency": 5, "joint_damping_wear": 3, "leg_asymmetry": 5, "heldcomp:payload_offset.fwd+actuator_weakness": 5, "heldcomp:low_ground_friction+clock_fault.fast": 5, "heldcomp:pitch_sensor_bias.++short_feet": 4, "heldcomp:heavy_torso+feedback_gain_loss": 4}
+{"pitch_sensor_bias": 6, "payload_offset": 6, "low_ground_friction": 6, "short_feet": 5, "feedback_gain_loss": 6, "actuator_weakness": 6, "one_side_weakness": 6, "clock_fault": 6, "heavy_torso": 5, "sensor_latency": 8, "joint_damping_wear": 4, "leg_asymmetry": 8, "heldcomp:payload_offset.fwd+actuator_weakness": 8, "heldcomp:low_ground_friction+clock_fault.fast": 7, "heldcomp:pitch_sensor_bias.++short_feet": 6, "heldcomp:heavy_torso+feedback_gain_loss": 8}
+{"pitch_sensor_bias": 6, "payload_offset": 6, "low_ground_friction": 6, "short_feet": 6, "feedback_gain_loss": 6, "actuator_weakness": 6, "one_side_weakness": 6, "clock_fault": 6, "heavy_torso": 6, "sensor_latency": 11, "joint_damping_wear": 7, "leg_asymmetry": 11, "heldcomp:payload_offset.fwd+actuator_weakness": 10, "heldcomp:low_ground_friction+clock_fault.fast": 9, "heldcomp:pitch_sensor_bias.++short_feet": 9, "heldcomp:heavy_torso+feedback_gain_loss": 10}
+{"pitch_sensor_bias": 6, "payload_offset": 6, "low_ground_friction": 6, "short_feet": 6, "feedback_gain_loss": 6, "actuator_weakness": 6, "one_side_weakness": 6, "clock_fault": 6, "heavy_torso": 6, "sensor_latency": 14, "joint_damping_wear": 9, "leg_asymmetry": 11, "heldcomp:payload_offset.fwd+actuator_weakness": 12, "heldcomp:low_ground_friction+clock_fault.fast": 10, "heldcomp:pitch_sensor_bias.++short_feet": 10, "heldcomp:heavy_torso+feedback_gain_loss": 11}
+{"pitch_sensor_bias": 6, "payload_offset": 6, "low_ground_friction": 6, "short_feet": 6, "feedback_gain_loss": 6, "actuator_weakness": 6, "one_side_weakness": 6, "clock_fault": 6, "heavy_torso": 6, "sensor_latency": 16, "joint_damping_wear": 10, "leg_asymmetry": 14, "heldcomp:payload_offset.fwd+actuator_weakness": 13, "heldcomp:low_ground_friction+clock_fault.fast": 12, "heldcomp:pitch_sensor_bias.++short_feet": 10, "heldcomp:heavy_torso+feedback_gain_loss": 12}
+{"pitch_sensor_bias": 6, "payload_offset": 6, "low_ground_friction": 6, "short_feet": 6, "feedback_gain_loss": 6, "actuator_weakness": 6, "one_side_weakness": 6, "clock_fault": 6, "heavy_torso": 6, "sensor_latency": 18, "joint_damping_wear": 16, "leg_asymmetry": 18, "heldcomp:payload_offset.fwd+actuator_weakness": 13, "heldcomp:low_ground_friction+clock_fault.fast": 13, "heldcomp:pitch_sensor_bias.++short_feet": 13, "heldcomp:heavy_torso+feedback_gain_loss": 13}
+{"pitch_sensor_bias": 6, "payload_offset": 6, "low_ground_friction": 6, "short_feet": 6, "feedback_gain_loss": 6, "actuator_weakness": 6, "one_side_weakness": 6, "clock_fault": 6, "heavy_torso": 6, "sensor_latency": 18, "joint_damping_wear": 18, "leg_asymmetry": 18, "heldcomp:payload_offset.fwd+actuator_weakness": 13, "heldcomp:low_ground_friction+clock_fault.fast": 13, "heldcomp:pitch_sensor_bias.++short_feet": 13, "heldcomp:heavy_torso+feedback_gain_loss": 13}
+{
+ "protocol_sha256": "a32107980635a8de6266e2121752ee9f2719acdc30505be4c49f3038470d3c81",
+ "rehearsal_dev": false,
+ "n_bases": 99,
+ "strata": {
+  "pitch_sensor_bias": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 7,
+   "candidates": 594
+  },
+  "payload_offset": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 6,
+   "candidates": 594
+  },
+  "low_ground_friction": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 7,
+   "candidates": 297
+  },
+  "short_feet": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 13,
+   "candidates": 297
+  },
+  "feedback_gain_loss": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 7,
+   "candidates": 297
+  },
+  "actuator_weakness": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 7,
+   "candidates": 297
+  },
+  "one_side_weakness": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 9,
+   "candidates": 594
+  },
+  "clock_fault": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 7,
+   "candidates": 594
+  },
+  "heavy_torso": {
+   "quota": 6,
+   "accepted": 6,
+   "examined": 10,
+   "candidates": 297
+  },
+  "sensor_latency": {
+   "quota": 18,
+   "accepted": 18,
+   "examined": 23,
+   "candidates": 297
+  },
+  "joint_damping_wear": {
+   "quota": 18,
+   "accepted": 18,
+   "examined": 66,
+   "candidates": 297
+  },
+  "leg_asymmetry": {
+   "quota": 18,
+   "accepted": 18,
+   "examined": 30,
+   "candidates": 594
+  },
+  "heldcomp:payload_offset.fwd+actuator_weakness": {
+   "quota": 13,
+   "accepted": 13,
+   "examined": 20,
+   "candidates": 198
+  },
+  "heldcomp:low_ground_friction+clock_fault.fast": {
+   "quota": 13,
+   "accepted": 13,
+   "examined": 25,
+   "candidates": 198
+  },
+  "heldcomp:pitch_sensor_bias.++short_feet": {
+   "quota": 13,
+   "accepted": 13,
+   "examined": 44,
+   "candidates": 198
+  },
+  "heldcomp:heavy_torso+feedback_gain_loss": {
+   "quota": 13,
+   "accepted": 13,
+   "examined": 27,
+   "candidates": 198
+  }
+ },
+ "n_instances": 160,
+ "n_evaluated": 280,
+ "n_thresholds": 342,
+ "rollouts_approx": 21248
+}
+BUILD_EXIT 0

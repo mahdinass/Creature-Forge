@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Freeze manifest for the immutable experiment records under experiments/.
 
-Maps every git-tracked file under experiments/ (except experiments/forge_loop/ and the
+Maps every git-tracked file under experiments/ (except experiments/forge_loop/, experiments/causal_engineer/dev/ and the
 manifest itself) to its git blob id. Working-tree files are hashed the way git stores
 them (clean filters, .gitattributes, core.autocrlf), so CRLF and LF checkouts both match.
 
@@ -21,7 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_REL = "experiments/FROZEN_MANIFEST.json"
-EXCLUDED_PREFIXES = ("experiments/forge_loop/",)
+EXCLUDED_PREFIXES = ("experiments/forge_loop/", "experiments/causal_engineer/dev/", "experiments/causal_engineer/demo_records/")   # living dirs; registered causal-engineer records live outside dev/ and are frozen
 
 
 def git(args: list[str], stdin: bytes | None = None) -> bytes:

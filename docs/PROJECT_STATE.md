@@ -1,5 +1,10 @@
 # Creature Forge — observed current project state
 
+> **Current state (2026-10-18): read `docs/RESEARCH_HANDOFF_2026-10-18.md` first.** This file is an append-only log; the
+> header and early sections below describe 2026-10-13 and are historical.
+>
+> **Latest (2026-10-21, branch `feature/do1-demo`): W1 (DO-1 demo) complete; read the final section "W1b grid fix; W1 COMPLETE (handoff)".**
+
 Updated: 2026-10-13. Local environment audit **reported by Claude Code and relayed by project owner**; ChatGPT has not executed these checks on the Windows machine. Facts may change; always rerun the preflight.
 
 ## GitHub / implementation
@@ -270,3 +275,726 @@ un_studio.py` then open http://127.0.0.1:8000 (after `npm --prefix studio instal
 - Budgets after the evaluation: inference 140 requests, $0.54 of $15; infra ledger in `forge_cloud.py spend`.
 - Submission docs: capture plan rewritten for the Forge Loop, feedback updated for Nemotron-3-Super, `webgl-constants`
   confirmed MIT (`4a43440`).
+
+## 2026-10-16 - Walking-recovery research started (branch `feature/walk-recovery` from `main` e58dbdf)
+- Plan approved by the owner (rev. 2): `~/.claude/plans/pasted-content-id-4675-creature-merry-corbato.md` (local) — G1 recoverability gate first; Nemotron-as-director later; equal-total-compute comparisons; `full_recovery_v1`; staged spend.
+- New modules (VM-tested): `walk_opt.py` (budget-exact numpy CMA-ES, IPOP, subspaces, similarity init, 17-D support), `creature_gen.py` (walkrec seed namespace >= 10M, regions, generator, failing-panel rule, dev bodies), `recovery.py` (`full_recovery_v1`), `gait_features.py` (cadence, capture margin, foot placement, fall direction), `phasegait_fp.py` (optional SIMBICON-style foot placement; zero gains bit-identical to the 15-D controller). Scripts `walk_profile.py`, `walk_oracle.py`, `walk_oracle_report.py`.
+- S0 profile: 8-vCPU VM = 4 physical cores; ~11 walking / ~37 falling rollouts/s; 65 MB/worker.
+- M1a (registered `563f41c`, results `2274e80`, development data): 4/4 dev creatures fail; similarity transfer never helps; 4k-rollout CMA reaches walking 0.38-1.00, 1 FULL_RECOVERY (weak-slippery, joint); budget-limited; overfitting signs. `experiments/walk_recovery/oracle/REPORT_M1A.md`.
+- Incident: a slot sync deleted partial M1a results; re-run deterministically (INCIDENTS 2026-10-16). Outputs now go to git-ignored `artifacts/`.
+- Spend: infra $5.00 of $10 (VM STOPPED); inference unchanged ($0.55). Next: S1 (full M1, 12-creature dev panel) awaits owner approval.
+
+## 2026-10-17 - Walking-recovery development stages complete (all development data; reports under experiments/walk_recovery/)
+- M1 (G1 PROCEED): foot-placement controller + body co-design make 6/12 failing dev creatures walk (full_recovery_v1).
+- S2/S2b: Nemotron director v1 2/12, v2 4/12 at 2k vs FIX 4, RAND 7, CMA-joint 3 (noise-dominated; AI under-uses body co-design; Ultra fails G2).
+- L2 (G3 FAIL): learned surrogate warm starts no better than a reused medoid of past solutions.
+- Iteration 3 / S4a (G4 FAIL): closed-loop control-law invention (mechanism DSL, director v3) 4/24 (iterative), 5/24 (one-shot) vs fix15 11/24; the loop works (self-stops, revisions) but does not help; invented laws mostly redundant stance torques.
+- New product feature: Studio "Recover walking" (backend + frontend, accept only FULL_RECOVERY).
+- Spend: infra $17.65 of $35 (owner-approved); inference ~$3.3 of $15. VMs stopped.
+- Next: owner decision on the S3 confirmatory freeze (`experiments/walk_recovery/confirmatory/protocol.json`, DRAFT).
+
+## 2026-10-17 - S3 confirmatory complete (walking recovery)
+- FIX 19/48, CMA-joint 11, RAND 11, Nemotron director 9, CMA-ctrl 8 (equal total budget 2,000; full_recovery_v1). Primary AI > FIX not supported (p = 0.996). Report `experiments/walk_recovery/confirmatory/REPORT.md`; summary `docs/WALK_RECOVERY.md`.
+- Regression on the branch: 1178 Python tests, frontend + build, 314 browser checks PASS (main VM, 2026-10-17).
+- Spend: infra ~$26 of $35; inference ~$3.7 of $15. Both VMs STOPPED; the batch VM can be deleted (owner).
+- Next: owner decides the demo/submission framing; demo take of "Recover walking" on the stilts robot; Devpost/storyboard update; PR for review (no merge without the owner).
+
+## 2026-10-17 evening - Causal engineer (branch `feature/causal-engineer`), development in progress
+- Owner directive: the autonomous physics-grounded AI engineering scientist; log in `docs/CAUSAL_ENGINEER.md` §4.
+- Done:
+  - pilot1 audit, scientist v2 / v2.1, physics digest with a healthy reference;
+  - parametric experiments;
+  - Level A/B memory (`experience_bank.py`, `ce_memory.py`) and the probe dataset (165 dev instances);
+  - `ce_eval` arms: thinking, one-shot thinking and memory.
+- Pilot2 (dev): the thinking scientist chose a repairing tool in 9/13 (v1: 4/13) and recovered 4 FULL.
+- Pilot3 (fresh dev subset) is running on the main VM. Level C (repair learner) is being built.
+- Security incident (see `docs/memory/INCIDENTS.md`): fixed. The owner should rotate the Token Factory key.
+- Budgets:
+  - inference caps raised by the owner to $30 / 4,000 requests (ledger about $5);
+  - infra cap $35 (ledger about $29.5); the real account balance is about $11.
+- PR #18 (CI fix) is open for review. PR #17 is untouched.
+
+## 2026-10-17 22:45 Oslo - Registered held-out evaluation RUNNING (causal engineer)
+- Protocol: `experiments/causal_engineer/heldout/PROTOCOL.md` + `protocol.json`, frozen at code commit `5ca165c` (protocol
+  commit `c4c2c87`, pushed).
+- Scope: 40 instances on 22 unseen bases × 8 arms = 320 episodes.
+- Location: main VM, slot `ceh`, 16 tmux sessions `heval_0..15`. Results in `~/dev/ceh/artifacts/ce/heldout_eval_shard*.jsonl`.
+- When all shards exit, tmux `hwatch` writes `heldout_eval.sha256`, backs up the ledger to
+  `~/dev/ledger/backup/inference_ledger_after_heldout.jsonl` and powers the VM off after 15 min. The VM deadline (10 h) is the
+  backstop.
+- ETA: about 6 h, CPU-bound.
+- If interrupted:
+  - restart the same `ce_eval.py` command per shard with `--resume`; the command is in this file's git history and in
+    `docs/CAUSAL_ENGINEER.md`; episodes are append-only, never rerun;
+  - then run `scripts/ce_heldout_analysis.py` ONCE.
+- Next:
+  - pull results;
+  - run the single analysis;
+  - write REPORT.md;
+  - update `docs/CAUSAL_ENGINEER.md` (results, what Nemotron contributes, limitations);
+  - refresh the Studio demo records.
+- Batch VM: STOPPED. Infra ledger about $31.3 of $38; inference about $10.7 of $30 before the run (about $12 expected).
+
+## 2026-10-18 morning - Held-out run finished; AI arms invalidated by key rotation; owner decision pending
+- Results, single analysis and REPORT are in `experiments/causal_engineer/heldout/` (frozen). Non-AI arms are valid:
+  exhaustive 23/40, learned 18/40 (C5a not supported), random 12/40, expert 6/40.
+- AI arms: the key was rotated at 21:02 UTC, about 50 minutes into the run, and every later call returned HTTP 401.
+- The new key is on the VM (verified read-only). The main VM is STOPPED and the batch VM STOPPED.
+- Inference: real spend $12.37; the ledger shows $20.50, including $7.42 worst-case settlements for failed calls.
+- Decision needed: amendment 1 (re-run the 4 AI arms, about $10 real); this requires raising the ledger cap to about $40.
+
+## 2026-10-18 - Causal engineer: held-out evaluation complete (registered run + amendment 1)
+- Summary: `docs/CAUSAL_ENGINEER.md` §0. Reports: `experiments/causal_engineer/heldout/REPORT.md` and `REPORT_AMEND1.md` (frozen).
+- Held-out FULL recoveries of 40:
+  - exhaustive 23, learned 18, scientist+memory 16, scientist 14, scientist+memory+advice 14, random 12, one-shot 8,
+    expert 6.
+  - No registered hypothesis is supported. Closed loop vs one-shot gives p = 0.09.
+- Spend:
+  - inference: real $24.75; the ledger shows $32.88 against a $40 cap, including $7.42 of worst-case settlements for calls
+    that failed authentication;
+  - infra: ledger $33.2 against a $38 cap.
+  - Both VMs are STOPPED; the boot disks keep billing about $0.12/day each.
+- Open for the owner: PR #18 (CI fix) review/merge; whether to delete the batch VM; demo framing for the submission.
+
+## 2026-10-18 - Research handoff written (no experiments, no cloud cost)
+- Handoff for the next session: `docs/RESEARCH_HANDOFF_2026-10-18.md`. It covers state, research history, architecture,
+  experience levels, negative findings, infrastructure, budgets, repository operations, priorities, reproducibility, rules,
+  and a table resolving outdated statements.
+- Verified read-only:
+  - both VMs STOPPED;
+  - infra ledger $33.28 of $38;
+  - inference ledger $32.88 of $40 (real spend $23.6–25.5; $7.42 is unbilled 401 settlements);
+  - PR #17 Draft and PR #18 open, both unmerged; repo private.
+- New issue: GitHub Actions did not start the run for `192c000` ("recent account payments have failed or your spending
+  limit needs to be increased"). The owner must fix billing.
+
+## 2026-10-18 - Causal-engineer artifacts archived; branch pushed (no experiments, no cloud cost)
+- What was archived: 66 git-ignored files, 118.7 MB:
+  - memory inputs and Level C training data;
+  - raw dev traces from pilots 1–5;
+  - fault-bench candidates;
+  - ledgers.
+
+  All 27 inputs pinned in `protocol.json` are included. Archive SHA-256
+  `b81ea8be8d8e40a32a33e02992e66ef0832650abc0423fd7ab292ceb53c20611`.
+- Locations:
+  - `%USERPROFILE%\CreatureForge-archive\2026-10-18\` (owner's laptop);
+  - a draft (unpublished, untagged) release `archive-ce-artifacts-2026-10-18` of the private repo.
+
+  Procedure: `docs/ARTIFACT_ARCHIVE_2026-10-18.md`; checksums: `docs/archive/ce_artifacts_2026-10-18.SHA256SUMS`.
+- Verification: both copies were extracted into fresh directories, and all 66 files match their SHA-256.
+- Secret scan, 0 hits in each case:
+  - the archive inputs;
+  - the extracted copies;
+  - all 1,461 blobs and 619 commits in the Git object database, including unreachable objects. The only pattern hits are
+    the known placeholders (`.env.example` empty value, test fakes).
+- **Infrastructure blocker:** GitHub Actions does not start runs ("recent account payments have failed or your spending
+  limit needs to be increased"), first seen on `192c000`. CI results for this branch are unavailable until the owner fixes
+  GitHub billing. This is not a code failure.
+
+## 2026-10-18 - Phase 3 (HaS scientist) approved; Stage 1 started (branch `feature/has-scientist`)
+- **Plan:** `docs/HAS_PLAN_2026-10-18.md`; spec and log: `docs/HAS_SCIENTIST.md`; diagnosis of the frozen held-out records:
+  `experiments/causal_engineer/phase3_diagnosis/` (exploratory).
+- **Done:** `creature_forge/hidden_plant.py` (deviation DSL, hidden plant, hooks for Workbench and `full_recovery_v1`) with
+  `tests/test_hidden_plant.py`: 11 pass locally, bit-identical at zero deviation.
+- **Spend:** infra cap raised to $72 for Stage 1 (ledger $33.29); inference cap unchanged at $40 (ledger $32.88). VMs stopped.
+- **Next:** vertical slice by 21 Oct (bench families T2/T4, workbench on the plant, belief engine, mock proposer).
+- **Deadline:** internal deadline 29 Oct.
+
+## 2026-10-18 - Phase 3 correction: dev records moved into the living dev directory
+- The M0 diagnosis outputs were moved to `experiments/causal_engineer/dev/phase3_diagnosis/`; phase-3 dev reports live in
+  `experiments/causal_engineer/dev/hdb/`.
+- Committing them outside the living directories had broken `tests/test_frozen_records.py` since `777ef0d`; it passes again.
+
+## 2026-10-19 - Phase 3 Stage 1 (non-LLM development) complete; Stage 2 awaits owner approval
+- **Bench:** Hidden-Damage Bench v2 frozen (`docs/HDB_SPEC.md`). The threshold-relative severity definition awaits owner
+  confirmation.
+- **Bases:** 135 fresh verified walkers (36 dev, 99 test-sealed).
+- **Identifiability (multi-class, dev):** 282/302 identified with all instruments; observation alone 245.
+- **Engine:** v5 (`belief_engine.py`); dev-fitted stopping map in
+  `experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json`.
+- **Dev results, no claims:**
+  - 12 old dev bases: A1c5 44/113 vs A0 28/113.
+  - Fresh dev bases, 9 families: A1c5 109/211 vs A0 62/211 (paired 61 vs 14).
+  - MKV: exact deviation knowledge helps; structure alone adds little.
+  - Calibration: the naive Beta reading is worse than a constant forecast.
+- **Live Nemotron smoke:** 3 A3 episodes, $0.013.
+- **Spend:** infra ledger about $60 of the $72 cap; inference ledger +$0.013. VMs stopped.
+- **Next:** owner decisions (C-MKV primary, severity definition, Stage 2 approval), then LLM development (A3h/A3hx/A3),
+  then registration on the test split.
+
+## 2026-10-19 - Ops incident: batch VM ran past its deadline (corrects "VMs stopped" above)
+- **What happened:** the session's API stop of `creature-forge-batch` was killed (local out-of-memory) before it ran. The Nebius
+  CLI login then expired, so the Windows watchdog's `instance get` failed from 01:47 to 08:47 UTC and it could not stop
+  the VM. The deadline was 03:56 UTC.
+- **Observed state:**
+  - 08:57 and 09:12 UTC: the watchdog saw STOPPING.
+  - 09:19 UTC: the control plane reported STARTING, then RUNNING. The cause is not known; it was not started by any script
+    in this repository.
+- **Stopped:** an API stop at 09:20 UTC (`forge_cloud.py stop`). STOPPED was confirmed twice. The main VM was STOPPED
+  throughout.
+- **Spend (quoted-rate estimate, not a provider statement):**
+  - The conservative ledger is $75.47, over the $72 cap, so `start` now refuses.
+  - Stage-1 increment: $42.18 against the $35 envelope.
+  - Charged past the deadline: 5.39 h × $2.112/h ≈ $11.39 (worst case; billing during guest-off/STOPPING is not known).
+- **Billing:** the Nebius CLI has no balance query (`billing` only has `pricing-policy`). The owner checks the console.
+- **Lesson:** an expired CLI login silently disables the watchdog. Before leaving a VM on a deadline, confirm the CLI
+  auth is valid, and stop through the API instead of relying on the deadline.
+- **Artifacts:** all Stage-1 dev artifacts are present locally (`artifacts/vm/hdb/`, 71 MB; fresh_A0/A1c5 220 rows each).
+  The dev reports are committed.
+
+## 2026-10-19 - Phase 3 Stage 2 (owner-authorized: +$20 infra, +$10 inference) in progress
+- **Caps:** infra `SPEND_CAP_USD` $96 (ledger $75.48 + $20 + $0.50); inference USD cap $43.40 (ledger $32.90 + $10 + $0.50).
+  Requests stay at 8,000 (4,733 used).
+- **Nebius auth guard:** unattended CLI calls use `--no-browser --auth-timeout 30s`. An auth failure writes
+  `infra/nebius/AUTH_BLOCKED` and stops every further attempt until the owner runs `forge_cloud.py login`.
+- **Owner decisions recorded:**
+  - severity definition confirmed;
+  - C-MKV registered form: primary K2 vs K0n, secondary K1 vs K3 and K2 vs K1, plus a paired Wilcoxon on walking
+    (`scripts/hdb_report.py`).
+- **Built:**
+  - `has_agent.py` (Nemotron-directed scientist; full delegation reproduces A1c5 exactly: identical plant/twin ledgers
+    and verification on 3/3 checked instances);
+  - `has_memory.py` (dossiers, deterministic support, Nemotron consolidator);
+  - `amortized_posterior.py`;
+  - `scripts/hdb_agent_run.py`, `hdb_memory_build.py`, `hdb_amortized.py`, `hdb_agent_report.py`, `has_export_records.py`;
+  - Studio "AI scientist" tab + `/api/scientist`.
+- **Dev protocol (fixed before pilots):** tune on the experience bases, evaluate once on the 18 unseen transfer bases
+  (`experiments/causal_engineer/dev/hdb/stage2_split.json`). Details in `docs/HAS_SCIENTIST.md`.
+
+## 2026-10-20 - Phase 3 Stage 2 complete; Stage 3 awaits owner approval
+- Transfer evaluation done (124/124 LLM-arm episodes valid). Nemotron scientist at parity with the engine on single
+  mechanisms (FULL 15 vs 14 of 36; discordant 4 vs 3), slightly behind on compositions (6 vs 8 of 16). Memory was barely
+  used. Details: `docs/STAGE2_REPORT.md`, `experiments/causal_engineer/dev/hdb/STAGE2_TRANSFER_agent_v4.md`.
+- Costs: Stage 2 infra $7.82 of $20 (ledger $83.30 / cap $96); inference $3.75 billed of $10 (ledger $46.02 / cap $52.78).
+- Both VMs STOPPED (control plane, 01:38 UTC 20 Oct). Raw records are in `artifacts/vm/hdb/artifacts/hdb/stage2_final/`
+  (git-ignored, SHA-256 in the record file) and on the main VM boot disk.
+- Next: owner decision on Stage 3 (proposed envelopes $65 infra / $15 inference; Cloud top-up of about $55).
+
+## 2026-10-20 - Stage 2b proposal (dual-signal learning); Stage 3 deferred by the owner
+- Owner: no Stage 3 yet. The two pre-registration fixes are approved within the remaining Stage-2 allowance (infra
+  ≈ $12.18, inference ≈ $6.25 left).
+- Failure analysis and the DS-1 plan are in `docs/DUAL_SIGNAL_PLAN.md`. They await owner approval before any run. No VM is
+  running.
+
+## DS-1 dual-signal iteration — complete 2026-10-20 (report `docs/DS1_REPORT.md`)
+- **Gates:** G-a FAILED (R-head; no A1x, R-head never orders tools); G-b pass; equivalence pass; G-m FAILED (composite
+  mechanism, amendment 2); **G-c FAILED** (A4x deviated from the engine default in 3/36 episodes < 15 %), so A4x is not
+  Stage-3 eligible.
+- **Engine v6 vs v5 (non-LLM, 30 + 6):** diagnosis better calibrated (confidently wrong 4 vs 9 and 0 vs 6); repair
+  unchanged (FULL 8 vs 9, 1 vs 1). Stop map v2 beats v1 (LOBO Brier 0.099 vs 0.166).
+- **Nemotron (A3v5 vs A1e6):** FULL 8 vs 8 and 2 vs 1; diagnosis slightly worse; registered P(success) worse than a
+  constant base-rate forecast.
+- **Experience (A4x, M_final):** FULL 10 vs 8 (A3v5) and 10 vs 8 (A1e6), discordant 3 vs 1 each (p = 0.31); Nemotron
+  mostly delegated. **Learning stream:** updating vs frozen 7 vs 7 of 20.
+- **Cross-feedback:** inert (1 leader change in 183 dev-eval assimilations); repair checks barely discriminate hypotheses.
+- **Recommendation:** no registered Nemotron evaluation (Stage 3) now; optional non-LLM registered study of engine-v6
+  diagnostic calibration needs its own registration and owner approval. Next development step: informative interventions
+  (report §12).
+- **Costs:** infra ledger $88.43 at 14:05 UTC (DS-1 limit $93.30); inference $2.44 / 1,441 requests since 2026-10-20
+  (limit $4.60). No cap changed.
+- **Data:** `artifacts/vm/hdb/artifacts/hdb/ds1_all.tgz` (VM archive), `artifacts/vm/ds1/eval/` (72 + 72 episodes), tables
+  `experiments/causal_engineer/dev/hdb/DS1_RESULTS.md`.
+- **Ops:** in-VM `poweroff` does not keep the main VM stopped: after the finalisation poweroff (13:42 UTC) and a manual one
+  (14:08 UTC) the platform showed it RUNNING again within ~3 min. After the owner's re-login it was stopped via the API at
+  14:15 UTC; **both VMs verified STOPPED via the control plane** (infra ledger $88.47). Future finalisation must stop via
+  the API, not rely on poweroff or the in-VM deadman.
+  The batch VM's pre-existing `~/dev/.env` key line (2026-10-16) is untouched; removal is the owner's decision.
+
+## 2026-10-20/21 - FA-1C (TA-1 / RV-1) and DO-1: summary, now recorded in the repository
+Until now these results were recorded only in the Notion FA-1C page, in script docstrings and in local memory.
+
+**TA-1 / RV-1.** Harness `scripts/ta1_tool_access.py`, branch `experiment/ta1-harness`. Raw records in `experiments/ta1/`.
+- Phase 1A (re-verification): PASS on the stored **summary** fields (status, walking fraction, verdict, reasons, rollouts) for all 8 designs on 7 instances, on Windows. The DS-1 records had no per-seed rows, so this was not a per-seed physics check (see W1a below).
+- Phase 1B (L1, paired): both arms NOT_RECOVERED.
+- X1: d3 is NOT_RECOVERED.
+- A1 L4 pilot: both arms PARTIAL 19/24. Friction priority did not change the outcome.
+
+**DO-1.** Objective v2 `scripts/do1_objective.py` and runner `scripts/do1_repair_ablation.py`, branch
+`experiment/do1-objective` @ `e9d2379`. Raw records in `experiments/do1/l4_r0/`.
+- DO1-L4-r0, one paired technical replicate on L4 (`hdb-v1-gen-0137:low_ground_friction:0`):
+
+  | Arm | Status | Walking | Paired displacement | Confirmation |
+  |---|---|---|---|---|
+  | Frozen | PARTIAL | 19/24 | +1.082 m | — |
+  | DO-1 | FULL_RECOVERY | 21/24 | +0.710 m | 22/24 |
+
+- ChatGPT independently audited the raw JSONL (sha256 `00a8db20…`).
+- Both arms are A1e6 (NO_AI): no Nemotron involvement.
+- One replicate (McNemar 1/0, p = 0.5). Not a rate.
+
+**2026-10-21, Step 1 of the post-DO-1 plan.** Plan of record: `~/.claude/plans/pasted-content-id-3fc3-creature-cozy-parasol.md`.
+Branch `feature/do1-demo` from `e9d2379`, worktree `cf-do1-demo`. No physics, Nebius or inference.
+- **Preserved the runs.** The 76 raw files were copied to the git-ignored `artifacts/runs/2026-10-20_21/` and verified 76/76. The evidence is tracked byte-exact in `experiments/do1/l4_r0/` and `experiments/ta1/`. `docs/ARTIFACT_ARCHIVE_2026-10-21.md`; `docs/archive/runs_2026-10-21.SHA256SUMS`.
+- **Frozen-path guard.** `tests/test_frozen_paths.py` pins 87 `creature_forge/*.py` modules, `scripts/do1_objective.py` and the 4 DS-1 inputs at their `e9d2379` blobs. A negative probe confirmed it fails on a change.
+- **Demo exporter.** `scripts/do1_demo_export.py` takes the faulty, frozen and DO-1 designs on the hidden plant through a two-layer fail-closed fidelity gate:
+  1. the verifier's own per-seed path must equal the stored rows exactly;
+  2. frames come from `plant_rollout` traces, with a forward-kinematics check (≤ 1e-9 m).
+  - The dry run reproduces the recorded aggregates from the record (frozen 19/24, DO-1 21/24, confirmation 22/24, faulty 5/24).
+  - Default seed by the pre-declared rule: 66645963.
+  - `--execute` (about 240 rollout-equivalents, local) **awaits owner approval**.
+- **Tests.** 11 no-physics tests. 138 TA-1/DO-1/guard tests pass.
+- **Open items:**
+  - Publication (owner decision 2026-10-21): pinned TA-1/DO-1 commits keep their AI co-author trailers and hashes; AI assistance is to be disclosed.
+  - Local account paths in 7 tracked run files are redacted in the tracked copies (`docs/archive/redactions_2026-10-21.json`); originals archived byte-exact.
+- **Notion.** Project HQ snapshot v1.9 written (21 Oct).
+
+## 2026-10-21 - W1a local replay: fidelity gate FAILED CLOSED (Windows does not reproduce the Linux per-seed physics)
+Owner-approved local replay of the DO-1 demo export (`scripts/do1_demo_export.py --execute`, 2 workers). **Nothing was exported.**
+
+**Result 1 — Windows ≠ Linux per-seed physics.** The verifier's own per-seed path (`recovery.run_walk_seeds` + `hidden_plant.seed_job`, exact L4 plant and stored conditions) on Windows did not reproduce any of the 96 audited Linux rows bitwise.
+- Windows environment: Python 3.11.9, numpy 2.4.6, MuJoCo 3.15.0.
+- Recorded environment: main VM, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0.
+- Windows is deterministic: today's values equal the RV-1 Phase 1A Windows values of 20 Oct.
+- Every outcome-level quantity matched:
+
+  | Check | Matched |
+  |---|---|
+  | Labels and walking flags | 96/96 |
+  | Walking counts | faulty 5, frozen 19, DO-1 21, confirmation 22 |
+  | Verdicts | frozen 20/1/3, DO-1 21/0/3, both VERIFIED |
+
+- Distances differed:
+
+  | Rows | Max abs diff | Median abs diff |
+  |---|---|---|
+  | Faulty | 7.2 mm | 0.36 mm |
+  | Frozen | 0.9 µm | — |
+  | DO-1 | 0.37 mm | — |
+  | 20 s confirmation | 9.0 mm | — |
+
+  Median paired gain: frozen 1.08219 vs 1.08186 m; DO-1 0.70993 vs 0.71001 m.
+- Under the exact-equality gate this is a failure, and it was not loosened. The cause cannot be split between OS/build and the Python/numpy versions without a second environment.
+
+**Result 2 — an exporter frame-reconstruction defect, found and diagnosed.** `plant_rollout` logs torso/foot positions from `mj_step`'s pre-integration kinematics, but pitch and joint angles from the post-integration `qpos`.
+- Forward kinematics of the **pre-step** `qpos` reproduces the logged positions exactly: 0.0 m on 2000/2000 samples.
+- Mixing the two states, as exporter v1 did, gives 1.4 mm.
+- The fix: record the pre-step `qpos` by observing `mujoco.mj_step` during the traced rollout, with no frozen code changed. Not yet implemented.
+
+**Rollouts, all local, about 206 rollout-equivalents:** 158 × 10 s + 24 × 20 s, including 4 instance-eligibility checks of 8. No cloud and no inference.
+
+Diagnostics and outputs are in the git-ignored `artifacts/runs/w1a_windows_check_2026-10-21/` (SHA256SUMS).
+
+**Next (needs approval):** fix the exporter frames, then run the export on the main VM, which is the recorded Linux environment.
+
+## 2026-10-21 - W1a recovery: DO-1 demo export on the main VM, exact fidelity PASSED
+Owner-approved: exporter fix, a standalone Linux export (≤ 2 workers, < $0.30), and the publication redaction of the
+unpushed commits. No W3/W4, no inference, no push.
+
+**Exporter v2** (`dd5d5ea`): frames from one consistent pre-step state, step-alignment checks, recorded-environment gate,
+smoke mode, verified transactional write.
+
+**Attempt 1** (09:18–09:21 UTC) stopped in the no-physics pre-flight before any physics.
+- Cause: the repository-wide `*.log` ignore rule had left 18 run logs out of the tracked evidence. Local tests passed only because the files were on disk.
+- The VM was stopped via the API.
+- Fix: `2d2fbfb` (scoped `.gitignore` exception, the 18 logs verified against the archive and added, new guard `tests/test_evidence_tracked.py`). A clean-clone rehearsal passed. The exporter code is unchanged.
+
+**Attempt 2** (VM 09:27:47–09:31:47 UTC; run 09:28:56–09:30:21) at `2d2fbfb`.
+- Environment: Linux x86_64, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0, an exact match with the record.
+- **No-physics tests:** pass.
+- **Smoke test:** 8/8 rows exact, FK error 0.0 m.
+- **Full export:**
+  - 96/96 rows exact on the verifier's production path;
+  - 96/96 rows exact on the trace path;
+  - max FK error 0.0 m (tolerance 1e-9 m).
+- Export wall time 1:14; peak RSS 219 MB; 2 workers.
+
+**Output.** `experiments/do1/demo/`: `index.json` (sha256 `e7a0712d…`), 96 payloads (12.7 MB; 10–230 KB each), `SHA256SUMS` (`73078ae5…`).
+- A local cross-check found every row identical to the audited JSONL. The default seed is 66645963.
+- Run logs of both attempts are in `experiments/do1/demo_export_run_2026-10-21/`.
+- The full VM copy and tgz (`40d927f1…`) are in the git-ignored `artifacts/runs/do1_demo_export_2026-10-21/`, listed in `docs/archive/do1_demo_export_2026-10-21.SHA256SUMS`.
+
+**Ops and cost.**
+- Before the start: auth verified (control plane plus the watchdog code path).
+- The watchdog task does not start on battery; it was verified running on AC.
+- Deadline 0.75 h per session.
+- Both VMs were confirmed STOPPED via the control plane at 09:21:09 and 09:31:47 UTC.
+- Infra ledger $88.858 → $88.888: **+$0.030** for both sessions, including disk accrual.
+
+**Next:** W1b, the Studio comparison view from these static files. It needs approval.
+
+## 2026-10-21 - W1b: Studio "Verified repair" tab (three-way DO-1 comparison), local
+Owner-approved W1b. No push, no Nebius, no inference, no physics. Details in `docs/DO1_DEMO.md`.
+
+**Built:**
+- `creature_forge/studio/do1_api.py`: read-only `/api/do1/*` serving the pinned, hash-verified export plus the recorded verifier outcome.
+- `studio/src/do1/*`, with nav tab `recovery` under Investigate.
+- `studio/e2e/do1-flow.mjs`.
+- `Timeline.tsx`: time-axis ticks now scale beyond 5 s.
+
+**Verification:**
+- Python: 95 tests pass under a physics tripwire (0 hits).
+- `npm run build`: OK.
+- vitest: 189/190. The one failure is a pre-existing locale issue that also fails on `main`.
+- Browser flow: 48/48 PASS. It covers:
+  - numbers matched against the API;
+  - only `GET /api/do1/*` from the page;
+  - a regression render of all other tabs, with simulation requests aborted.
+- Real-GPU Edge: 1× playback is real time.
+
+**Captures:** git-ignored, in `artifacts/capture/do1_w1b_2026-10-21/`.
+- full page, the stage at t = 5.8 s, confirmation mode;
+- frames at t = 0/1/2/4/6/10 s, plus one GPU render.
+- Video was not recorded: Playwright needs `ffmpeg-1010`, which is not installed.
+
+**Known issue:** the floor grid is intermittently missing in one of several viewports on first mount (shared viewer).
+It is documented, not fixed.
+
+**Note:** browser checks need the Studio server, whose start-up computes the existing Phase 0 demo rollouts (nominal
+biped, unrelated to DO-1).
+
+## 2026-10-21 - W1b grid fix; W1 COMPLETE (handoff)
+**Grid fix** (`3fe9add`, `studio/src/Viewport.tsx`, shared viewer, all tabs).
+- **Symptom:** the floor grid was missing in some viewports.
+- **Reproduced:**
+  - SwiftShader: missing in every frame.
+  - Real GPU (Intel Iris Xe, D3D11): missing in 12/162 frames of a sweep over 3 window sizes × 3 seeds × 6 playback times. The misses were deterministic per camera position.
+- **Root cause:** the floor (400 m) and the drei infinite grid (scaled to 10,400 m) are each a pair of huge triangles. Clipped at the 0.1 m near plane, they rasterise with depth errors larger than the grid's 1 mm offset, so the floor won the depth test.
+- **Evidence:**
+  - Hiding the floor, or lowering it 0.3 m, restores the grid.
+  - A 10 mm grid offset, polygon offset up to (4,4), and a camera far of 100 do not.
+  - Shrinking both planes to 40 m restores it.
+- **Fix:** the floor is drawn first (`renderOrder={-1}`) and writes no depth (`depthWrite={false}`). The grid and the robot never have to beat its imprecise depth.
+- **Verification:**
+  - After the fix: 0/162 missing on GPU (also against the real Studio), 0/162 on SwiftShader.
+  - `do1-flow` 48/48 PASS, `overview-flow` 23/23 PASS.
+  - `npm run build` and tsc OK; vitest 189/190 (the same pre-existing locale failure).
+  - Guard and API tests 12/12.
+- **Side effect:** robot geometry below y = 0 (mm-scale MuJoCo contact penetration) is no longer hidden by the floor.
+- **Captures:** git-ignored, in `artifacts/capture/do1_w1b_gridfix_2026-10-21/`. `gpu-3views-t7.5.png` is a frame that previously lost the grid.
+- **Physics disclosure:**
+  - The investigation used a physics-free scratch server: `/api/do1` plus stub shell endpoints, with a MuJoCo tripwire.
+  - The final browser flows ran against the real Studio: its existing Phase 0 start-up rollouts, and the Overview hero's cached deterministic walking replays (incumbent and r2_winner, seed 8004).
+  - No new experiment, no Nebius, no inference.
+
+### W1 status: COMPLETE (local, unpushed)
+**Where things are**
+- **Branch:** `feature/do1-demo` in worktree `cf-do1-demo` (a sibling of the main checkout), from `e9d2379`. Commits:
+  - `bc79038` evidence, guard, exporter v1
+  - `dd5d5ea` exporter v2
+  - `2d2fbfb` run logs
+  - `0414360` export
+  - `a30458d` W1b page
+  - `3fe9add` grid fix
+  - this docs commit on top
+
+  Nothing is pushed or merged.
+- **Other worktrees:**
+  - main checkout `feature/has-scientist` @ `ea9e729` (published);
+  - `cf-ta1-harness` = `experiment/do1-objective` @ `e9d2379` (pinned DO-1 commit; not on GitHub; keep for W3/W4).
+- **Verified evidence and demo artifacts (tracked):**
+  - `experiments/do1/l4_r0/do1_l4_r0.jsonl` sha256 `00a8db20b9b3ab186b935f2062a9a78d411a4d2a512e289e8aa1e4c39a5e263b` (audited), with its manifest.
+  - `experiments/do1/demo/`:
+    - `index.json` `e7a0712d06c4f752eb0065bc652241db1d86aa482829387d9c40047a48385264`;
+    - `SHA256SUMS` `73078ae5075c7a0897ef2cbefae0a373817d1816330e8a7ebdcb7585e1782ec4`, pinned in `do1_api.py`;
+    - 96 payloads, exported on the main VM at `2d2fbfb`: 96/96 rows exact, FK error 0.0 m.
+  - Frozen-path guard: `tests/test_frozen_paths.py`.
+- **Demo:** Studio tab `?tab=recovery` ("Verified repair"):
+  - faulty 5/24, frozen PARTIAL 19/24, DO-1 FULL 21/24 with 22/24 confirmation;
+  - three synchronised replays and all 24 seeds;
+  - captions "No Nemotron in this repair" and "One technical replicate on one robot; not a recovery rate."
+
+  Docs: `docs/DO1_DEMO.md`.
+- **Captures (git-ignored):** `artifacts/capture/do1_w1b_2026-10-21/` and `artifacts/capture/do1_w1b_gridfix_2026-10-21/`.
+
+**Known limitations**
+- **Evidence scope:** DO-1 is one technical replicate on one robot (McNemar 1/0, p = 0.5). Both arms are NO_AI.
+- **Reproduction:** Windows does not reproduce the Linux per-seed rows (≤ 9 mm; outcomes identical). The export is valid only from the recorded Linux environment.
+- **Demo:**
+  - No video yet: Playwright needs `ffmpeg-1010`, which is not installed.
+  - The Studio start-up computes the Phase 0 demo rollouts.
+  - vitest has one pre-existing locale failure (`forgeLogic.test.ts`).
+- **Integrity issue:** the Scientist/Causal replays (`causal_api.default_replayer`) simulate the nominal arena **without the hidden plant fault**, so they must not be filmed as "the damaged robot" until fixed or relabelled (W2).
+- **Unavailable this session:** the Basic Memory MCP (timeout) and GitHub MCP (HTTP 400). The `gh` CLI works.
+
+**Pointers**
+- Plan of record: `~/.claude/plans/pasted-content-id-3fc3-creature-cozy-parasol.md`.
+- Notion **Project HQ** ("Creature Forge — Project HQ | Strategy, State & Findings"): https://app.notion.com/p/3fe5d357b5ad812186d1fe1ded3757fc
+  - Its latest snapshot is v1.9 (Step 1). It does not yet record W1a recovery, W1b or this fix.
+- Notion **FA-1C journal** ("FA-1C Plan Review and Approval Gates — 20 October 2026"; full DO-1 record and ChatGPT audit): https://app.notion.com/p/3ff5d357b5ad810fb547dd5cb8acf247
+
+**W2 priorities (not started; each needs owner approval)**
+1. **W2a (read-only):** `docs/NEMOTRON_CONTRIBUTION.md`. One row per study, every number traced to a file or record:
+   - registration, n, comparator, outcome, what Nemotron decided vs what deterministic tools did;
+   - DO-1 listed as NO_AI;
+   - only the pre-registered Forge Loop push scoreboard (6/12 vs 1/12, p = 0.031) is a superiority claim.
+2. **W2b demonstration:** the recorded Stage 2 A3 one_side_weakness trace on `gen-0137` (`stage2_final/s2_transfer_A3.jsonl`):
+   - show Nemotron's hypotheses, its discriminating gait-frequency experiment, the posterior shift, delegation and verification;
+   - contrast with the engine-only A1e record (wrong side);
+   - add a deterministic attribution replay (`hdb_replay.replay`, no model calls);
+   - captions: "single instance", "the engine alone won 3 instances Nemotron lost", "the repair itself was run by the optimizer".
+3. **Fix the Scientist replay integrity:**
+   - either export the one_side_weakness designs through the fidelity-gated exporter (recorded Linux environment, so a VM slot), or relabel the generic replays "nominal design, no hidden damage";
+   - then re-run `scientist-flow`.
+4. **Secondary:** the push scoreboard with live take `live1`. State that nothing verified on walking.
+
+**Pending owner decisions:** W0b push (trailers kept and disclosed); merge order; the W3/W4 VM session (`DO1-L4-rep` cap 39,644, `DO1-X` cap 14,416); repository visibility; the Nebius §4.1.10(c) question; the Playwright ffmpeg install.
+
+**Fresh-session start:**
+1. Read this section and `docs/DO1_DEMO.md`.
+2. `git -C ..\cf-do1-demo log --oneline -8` (from the main checkout).
+3. Run tests with `..\Creature-Forge\.venv\Scripts\python.exe -m unittest discover -s tests` from the worktree.
+4. Studio: `studio/node_modules` is a junction to the main checkout's install; `npm run build`; start uvicorn `creature_forge.studio.app:app` on 127.0.0.1; run `BASE_URL=… node studio/e2e/do1-flow.mjs`.
+
+## 2026-10-21 - W2: Nemotron attribution audit and "Nemotron's experiment" demo (local, unpushed)
+Owner-approved W2 (auto mode). No physics, Nebius, inference, push or merge.
+
+**W2a: attribution.** See `docs/NEMOTRON_CONTRIBUTION.md`.
+- The demo case was verified against the raw Stage 2 records: A3 line 24 `540b9415…`, A1e `2014fa80…`, A4 `cb34a780…`.
+- Up to turn 0 the arms are bit-identical: observation and belief, right 0.895 / left 0.105.
+- At turn 0 all 7 candidates have EIG 0.34.
+  - **The engine** took `cf:freq@x1.2` (predicted walking 1/1). It measured 2/4 and its belief went to **left 0.998**
+    (wrong).
+  - **Nemotron** took `cf:freq@x0.85` (predicted 2/0). It measured 3/4 and its belief went to **right 1.000** (correct).
+- Its registered prediction was empty. Its 4 hypotheses ended at weight 0. The repair was delegated to the engine.
+- The twin design against the correct belief checked 6/8 on the robot, against 3/8 for the wrong belief.
+- Verification: **A3 FULL 23/24** vs **A1e PARTIAL 20/24** (confirmation 79%).
+- **The A4 replicate** made the same choice and reached the same correct belief, but verified only PARTIAL, 19/24.
+- Across the 36 instances: 15 vs 14 (4/3, p = 0.50); MAP 28 vs 29. This instance is the only one with that pattern.
+- All 8 request ids are in the inference ledger.
+
+**W2b: demo.**
+- **New tab** `?tab=nemotron`: `studio/src/nemotron/*` and `creature_forge/studio/nemotron_api.py`. It serves only
+  `experiments/w2/*`, pinned by the SHA256SUMS hash.
+- **Scientist tab relabelled** "nominal design, no hidden damage" (labels, banner, API note).
+- **Damaged-plant exporter prepared:** `scripts/w2_damaged_plant_export.py`.
+  - Dry run plus 9 no-physics gate tests.
+  - About 296 plant rollout-eq, to run on the main VM. **Awaiting approval.**
+
+**New files.**
+- `experiments/w2/` (frozen; manifest 459 entries).
+- `scripts/w2_case_build.py`, `scripts/w2_pin_sums.sh`.
+- Tests: `tests/test_w2_case.py` (11), `tests/test_w2_damaged_plant_export.py` (9), `studio/src/nemotron/nemotronLogic.test.ts` (7).
+- Browser flow: `studio/e2e/nemotron-flow.mjs`. `scientist-flow.mjs` now takes an optional `REPLAY_FIXTURE` (a UI fixture).
+
+**Verification.**
+- **Python:** 108 tests under a MuJoCo tripwire: 106 pass. The 2 tripwire hits are `test_studio_api`'s own physics tests
+  (`/api/simulate`, Phase 0), which the tripwire blocked; no physics ran.
+- **Frontend:**
+  - `npm run build` OK.
+  - vitest 196/197; the failure is the pre-existing `forgeLogic` locale test.
+- **Browser flows** (physics-free scratch server, tripwire 0 hits):
+  - `nemotron-flow` 28/28 PASS;
+  - `scientist-flow` 11/11 with a UI replay fixture;
+  - `do1-flow` 48/48, so there is no W1 regression.
+
+**Not done; needs approval.**
+- The damaged-plant export on the VM.
+- Re-running `scientist-flow` with real nominal replays (fresh MuJoCo rollouts).
+- `hdb_replay` hypothesis attribution (twin physics). It is not needed for this case, and agent-v4 logs are not read by
+  it (`docs/NEMOTRON_CONTRIBUTION.md` §3.3).
+
+## 2026-10-21 - W2 complete (damaged-plant replays) and W5 video workflow with a draft rough cut (local, unpushed)
+Owner-authorized: the bounded W2 export on the main VM; local video tooling; a capture workflow. No W3/W4, no inference,
+no push or merge.
+
+**W2 damaged-plant export** (`dc83cdf`; details in `docs/NEMOTRON_CONTRIBUTION.md` §5).
+- **Pre-flight:** control-plane auth OK; watchdog task running every 15 min (last result 0) on AC power; infra ledger
+  $88.939 of the $96 cap; VM deadline set to 0.75 h; snapshot tree equal to the local commit; inputs equal to their
+  pinned hashes; environment Linux x86_64, Python 3.12.3, numpy 2.5.4, MuJoCo 3.15.0.
+- **Attempt 1** failed closed in the instance check, before any experiment rollout. Cause: an exporter bug (all 8 obs
+  seeds were compared with the bench's first 4), fixed in `c8816c6`.
+- **Attempt 2:** smoke passed (3 experiments exact, FK 0.0 m). The full export wrote 84 payloads.
+  - The X0 and both X1 experiments were per-seed exact.
+  - Verification equals the record (A3 FULL 23/24, A1e PARTIAL 20/24), at aggregate level only, because Stage 2 kept no
+    per-seed rows.
+  - Wall time 1:32, 2 workers.
+- **Cost:** +$0.032 (ledger $88.971). Both VMs were confirmed STOPPED via the control plane.
+- **Archive:** `artifacts/runs/w2_plant_export_2026-10-21/`. The tgz SHA-256 values are in
+  `experiments/w2/export_run_2026-10-21/archive_sha256.txt`.
+
+**Studio.** `?tab=nemotron` now plays the verified export.
+- Stages 1, 4 and 7 have watch buttons; one viewer is mounted at a time.
+- Every replay is labelled "Reconstructed MuJoCo replay". The validation replays are additionally labelled "not an
+  archived original".
+- A new "laboratory" strip shows who decides and what each instrument does.
+- The page width was raised to 1760 px.
+- W1's Verified repair page is unchanged (`do1-flow` 48/48).
+
+**Video toolchain (W5).** See `docs/submission/VIDEO_PRODUCTION.md`.
+- **Already present:** FFmpeg 8.1 (gyan.dev full build), Clipchamp 4.7.10020.0, Edge, `playwright-core` 1.49.1.
+- **Installed:** OBS Studio 32.2.2 (`winget OBSProject.OBSStudio`, hash verified).
+- **Not needed:** Playwright's `ffmpeg-1010`. The CDP screencast plus system FFmpeg replaces Playwright video.
+- **`studio/e2e/demo-video-capture.mjs`:**
+  - Headless Edge on the real GPU (ANGLE D3D11, Intel Iris Xe; software renderers are refused).
+  - A 2400×1350 CSS layout at 0.8 scale, so frames are exactly 1920×1080 and uncropped. This fixes the owner-reported
+    cropping: the display is 2560×1600 at 200 %, so the earlier 1936×1176 headed window overflowed it.
+  - A fresh profile, and an API allow-list (0 blocked).
+  - Chapters keyed to the storyboard.
+- **`scripts/video_rough_cut.py`** reads `docs/submission/video/cutlist.json` (shots plus narration) and writes
+  `rough_cut.mp4`, `rough_cut_clean.mp4`, `narration.srt` and `report.json`.
+- **Storyboard:** `docs/submission/STORYBOARD.md`, generated from the cut list. The old Forge Loop storyboard and capture
+  plan are in `docs/submission/archive/`.
+- **Draft:** take 3 (3:55 raw, 27.4 fps screencast, 0 errors). Rough cut v1 is 2:53.5, 1920×1080, 30 fps, with a silent
+  AAC track. It is git-ignored under `artifacts/capture/video_2026-10-21/`; hashes are in
+  `docs/submission/video/media_SHA256SUMS.txt`.
+
+**Verification.**
+- **Python:** 105 tests under the MuJoCo tripwire, 0 hits.
+- **Frontend:** build OK; vitest 198/199 (pre-existing `forgeLogic` locale failure).
+- **Browser flows:** `nemotron-flow` 40/40, `do1-flow` 48/48, `scientist-flow` 11/11 (UI fixture).
+- **Capture:** the smoke take (SwiftShader) and the real-GPU takes all passed their checks.
+- **Frames reviewed by eye:** a contact sheet of the rough cut plus a full-resolution crop. The grid renders on the real
+  GPU in every viewport, and text is legible at 1080p.
+
+**Owner next.**
+- Record the voice-over (OBS or Clipchamp) over `rough_cut_clean.mp4`, then export in Clipchamp. Steps are in
+  `VIDEO_PRODUCTION.md` §4.
+- Review the narration wording.
+- Upload and visibility decisions.
+- W3/W4, push and merge all await approval.
+
+## 2026-10-21: GitHub checkpoint of W1/W2 (owner-authorized push, private repository)
+**Remote state, verified with `git ls-remote` after the push. All pushes were normal; there was no force push and no rewrite.**
+
+| Ref | Commit | Notes |
+|---|---|---|
+| tag `checkpoint/w2-demo-2026-10-21` (annotated) | `5e02df5742d2409b527440a696670148c677af46` | the W2 milestone |
+| tag `checkpoint/do1-l4-r0-harness-e9d2379` (annotated) | `e9d2379def2546cedcc9ce5c3cc2aa22b9746392` | the frozen DO-1 harness of the r0 pilot |
+| `feature/do1-demo` | `827b84c` and later | 5e02df5 + hygiene `1c0b76e` + CI test fix `827b84c` + this record |
+| `experiment/do1-objective` | `e9d2379` | the frozen DO-1 harness |
+| `experiment/ta1-harness` | `86d0a2b` | TA-1 amendment A1 |
+| `main` | `e58dbdf` | unchanged; an ancestor of every ref above, so it can be fast-forwarded |
+
+**Audit (A1).**
+- The history is linear: `main` ⊂ `ea9e729` ⊂ `86d0a2b` ⊂ `e9d2379` ⊂ `5e02df5`. 20 commits were unpushed.
+- The unpushed commits contain no credentials, `.env` contents, keys or tokens.
+- Already present in pushed history, and not credentials:
+  - Nebius project and instance ids;
+  - the Windows user folder name;
+  - the author e-mail.
+- No blob is larger than 0.51 MB (24 MB added in total), and no evidence file is ignored.
+- `FROZEN_MANIFEST.json`: 563/563 blob ids match. Every entry that existed at e9d2379 is unchanged there.
+- No broken relative links (101 Markdown files).
+- **Trailers:** `main` has none. 22 pushed commits on `feature/has-scientist` and all 20 new commits carry `Co-Authored-By`
+  trailers, against the submission checklist. Removing them would mean rewriting history and changing the frozen
+  hashes, so that is an owner decision (for example, squash-merge to `main`).
+
+**Cleanup (A2).**
+- `budgetLine` now formats with en-US. The vitest locale failure is fixed: 199/199.
+- The Windows user folder is no longer named in any tracked file.
+- The checklist video row now points to the W1/W2 cut list. `DEVPOST.md` is still Forge Loop-centred (owner).
+- `tests/test_do1_objective.py` skips its 14 stored-record tests when the git-ignored DS-1 records are absent, so a clean
+  clone and CI no longer error.
+
+**Checks.**
+- In the worktree:
+  - Python 1591 OK (skipped 6);
+  - vitest 199/199; build OK;
+  - `do1-flow` 48/48, `nemotron-flow` 40/40, `tabs-smoke` 23/23, `overview-flow` 23/23.
+- **Clean GitHub clone** of `feature/do1-demo`:
+  - the manifest and all four SHA256SUMS files (DO-1 demo, W2, W2 plant replays, L4 r0) verified;
+  - evidence, license and W1/W2 tests pass;
+  - `npm ci`, vitest 199/199 and the build pass;
+  - `do1-flow` 48/48;
+  - `nemotron-flow`: 40/40 in 4 of 5 runs, 39/40 once (intermittent, check not captured).
+
+**Note.** `experiment/do1-objective` and both tags point at code before the test fix, so CI on those refs may error on the
+missing records. They are frozen and are not changed.
+
+**Git-ignored assets (A4).**
+- The inventory and backup procedure are in `docs/NONGIT_ASSETS_2026-10-21.md`.
+- Both archives are local only. The upload to a draft release was blocked by the tool permission policy.
+- **Owner:** copy `%USERPROFILE%\CreatureForge-archive\2026-10-21\` off the machine.
+## 2026-10-21: W3/W4 DO-1 replication and cross-family pilot (owner-authorized, NO_AI)
+- **Branch:** `experiment/do1-replication-w3w4`, from the frozen harness `e9d2379`.
+- **Pre-registration:** commit `3b8a8b1`, pushed before any run. Protocol `docs/DO1_REPLICATION_PROTOCOL.md`; results
+  `docs/DO1_REPLICATION_REPORT.md`; evidence `experiments/do1/w3w4_2026-10-21/`.
+
+**W3 (L4, 5 fresh paired replicates).**
+- DO-1 FULL_RECOVERY 5/5 vs frozen 0/5 (frozen PARTIAL 19/24 every time).
+- Exact one-sided McNemar 5/0, p = 0.031, meeting the pre-registered criterion.
+- This is instance-specific: technical replicates of optimizer randomness on one robot, with the same validation seeds.
+- The margins are thin (20–21/24 against a threshold of 20).
+- The sentinel reproduced the stored record exactly.
+
+**W4 (exploratory, one pair each).**
+- C1 `feedback_gain_loss:2`: DO-1 FULL 20/24 vs frozen PARTIAL 19/24.
+- B1 `payload_offset:5`: both PARTIAL. DO-1 reached 20/24 validation, but its 20 s confirmation failed (62 %).
+
+**Gates and cost.**
+- All gates passed; 15/15 episodes ran; no exclusions and no infrastructure errors.
+- Infra ledger $88.999 → $89.405 (+$0.41). Both VMs STOPPED via the API at 19:17 UTC.
+- Rollout-equivalents: 34,354 (cap 39,644) + 12,538 (cap 14,416).
+
+**Next (owner).**
+- An independent review of the raw JSONL and the report, before any Studio or submission wording uses W3/W4.
+- Do not merge this branch into `main`. Its preflight now refuses re-execution at HEAD, because `experiments/` changed; for
+  re-execution, use `3b8a8b1`.
+
+## V1 release candidate (submission-ready; frozen)
+- **Branch and tag:** `release/v1`, tag `v1.0.0-rc1` (annotated; the exact commit is in the tag message). Release record:
+  `docs/RELEASE_V1.md`.
+- **Base:** `feature/do1-demo` @ `28766c6` (W1/W2, tag `checkpoint/w2-demo-2026-10-21` → `5e02df5`), plus the merge
+  `0e96779` of `experiment/do1-replication-w3w4` @ `920a7b0`. The W3/W4 raw-data review is reported by the owner as
+  complete. Nothing was rewritten, and the AI `Co-Authored-By` disclosures are kept.
+- **V1 changes** (no physics, verifier, optimizer or record change):
+  - Home gains an entry to the two demo pages, and the Verified repair page cites the replication report;
+  - the CI browser check also runs `do1-flow` and `nemotron-flow`;
+  - narration shots 2 and 9 are corrected for W3, with rough cut v2 captions (same picture, 173.5 s);
+  - README, setup, Devpost, checklist and `NEMOTRON_CONTRIBUTION.md` are rewritten for V1.
+- **Freeze:** never move the tag. A fix becomes `v1.0.0-rc2`, through a reviewed PR to `release/v1`. New work goes on new
+  branches; next is the proposal `feature/experience-learning`.
+- **Owner actions:** see `docs/submission/SUBMISSION_CHECKLIST.md`.
+  - voice-over and export;
+  - YouTube upload and visibility;
+  - Devpost paste and submit;
+  - repository visibility and judge access;
+  - the integration PR into `main`;
+  - PR #18;
+  - the off-machine backup of `%USERPROFILE%\CreatureForge-archive\2026-10-21\`.
+## 2026-10-24 - SV1 closed; auth-horizon guard; roadmap reassessment; E-1 prepared (not registered)
+- **Experience P05 (branch `feature/experience-learning`, pushed @ `cea00b5`).**
+  - SV0 and SV1 code, evidence and reports are committed. SV1 is ADMITTED: only the refit percentile bootstrap M2 was
+    admitted, and CR1 undercovers.
+  - `sv1/SV1_FINAL_REVIEW.md` covers the conclusions, the power consequence (θ_G 0.108 → "supported benefit" 5 %), and the
+    evaluation `verdict` label clarification; the frozen output is unchanged.
+  - Recommendation: no P0.5 campaign before the deadline.
+- **Ops (branch `infra/auth-horizon-guard` @ `d8e3727`, pushed).**
+  - Root cause of the 2026-10-19 and 2026-10-24 overruns: the CLI federation token is a fixed ~12 h token with no refresh.
+  - `start` now shortens and `extend` refuses any deadline beyond the token expiry minus 45 min. The watchdog stops running
+    VMs 30 min before expiry, and `status` and the watchdog log the remaining auth time.
+  - The watchdog task now also runs on battery.
+  - Remaining gap: a sleeping or off laptop. The fix needs a VM-side API stop with a service account, which is owner IAM
+    approval.
+- **Budget (owner, 2026-10-24).** Cloud $37.49, Token Factory $47.00. Development use is authorised; the $1.50 SV1 limit
+  is not the ongoing budget. Ledger $92.98 / cap 96 at 13:15 local.
+- **Roadmap.** `docs/ROADMAP_REASSESSMENT_2026-10-24.md`. Experience → better decisions remains undemonstrated. The strongest
+  effect (A1c5 109 vs A0 62 of 211 fresh dev) was never confirmed on the sealed test side.
+- **E-1 (branch `research/e1-engine-heldout`).** Protocol draft `docs/E1_PROTOCOL.md`; code: `hdb_testbench.py`,
+  `e1_build.py`, `e1_run.py`, `e1_analysis.py`, `e1_repro_gate.py`; 14 tests.
+  - The G-R reproduction gate is running on the main VM (slot `hdb`, `artifacts/e1/gate`).
+  - The sealed side is not opened. Registration and the build need the owner's go, because they spend sealed held-out data.
+
+## 2026-10-24 evening - E-1 complete (registered; `docs/E1_RESULTS.md`)
+- **Registration:** `494ed9b`, pushed before the sealed side was opened. Gates G-R, G-R2, G-O, G-T, G-B and G-C all PASS.
+- **Sample:** 160 sealed test instances on 90 bases; the reserve is in `experiments/e1/RESERVE.md`.
+- **Results:** A1 engine 56, A0 exhaustive 46, K0n (engine without diagnosis) 42.
+  - **H-E1 (A1 > A0): 22 vs 12, p = 0.061, not rejected.**
+  - **H-E2 (A1 > K0n): 26 vs 12, p = 0.017, rejected (Holm).**
+  - H-E3 (K0n > A0): null.
+  - Diagnosis carries the advantage on unseen damage; the twin machinery alone does not. The dev effect (+22 pts) shrank
+    to +6 pts.
+  - On sealed singles the diagnosis is right but the repair fails: sensor latency 1/18, damping 3/18.
+- **Ops:** service account `cf-vm-stopper` (instance-scoped editor). VM API self-stop installed on the batch VM and
+  tested. A VM-side finisher ran the analysis and stopped the VM through the API.
+- **Spend:** today +$8.85, ledger $101.82, cap 120. Both VMs STOPPED (control plane).
+- **Next:** rc2 wording (owner); diagnosis-conditioned repair memory (dev first, then registered on the reserve with A3).
+- **Correction (2026-10-25, owner review):** H-E2 meets only the registered secondary criterion (Holm over 2, adjusted
+  p 0.034). The protocol had no gatekeeping, so it is not a study-wide confirmatory result: Holm over all 3 tests gives an
+  adjusted p of 0.0503. Report it as supportive evidence (`docs/E1_RESULTS.md` §1.1). The earlier "rejected (Holm)" wording
+  is withdrawn.
+
+## 2026-10-27 - Research frozen; submission candidate prepared (`release/v1-submission`)
+- **Scope:** release engineering and documentation only. No physics batches, model calls, VM starts or credit spend.
+- **Branch:** `release/v1-submission` from `release/v1-rc2-prep` @ `60b6ac9`, worktree `cf-submission`.
+- **Added:** judge-facing `README.md` rewrite, `docs/ARCHITECTURE.md`, `docs/RESEARCH_STATUS.md`, `docs/README.md`,
+  `docs/submission/{JUDGE_TESTING,VIDEO_HANDOFF}.md`, rewritten `DEVPOST.md` and `SUBMISSION_CHECKLIST.md` (compliance
+  against the official rules read on 2026-10-27), a paste-ready summary in `FEEDBACK.md`, `docs/assets/` (3 screenshots,
+  architecture SVG, mark SVG), `.env.example` live switch, live-take records and capture script imported byte-identically.
+- **Rules finding:** "runs on Nebius" means a runtime Token Factory call or AI Cloud Serverless Jobs, Endpoints or DevPods.
+  We qualify through Token Factory; the VMs are described as Compute VMs.
+- **Video package (outside Git):** `%USERPROFILE%/CreatureForge-archive/video_package_2026-10-27/`, 67 files + SHA256SUMS.
+- **VMs:** main and batch both STOPPED via the control plane at 2026-10-27 22:13 UTC (`forge_cloud.py status`).
+- **Owner actions:** merge the release PR into `main`, make the repository public, video, Devpost form
+  (`docs/submission/SUBMISSION_CHECKLIST.md` §5).

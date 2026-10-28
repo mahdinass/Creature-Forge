@@ -1,0 +1,68 @@
+108 units, 12 creatures, conditions ['c0_r2', 'ctrl15', 'ctrl17', 'joint17', 'joint15', 'h7_ctrl15_3nominal']
+protocol sha256 ['252f00387392ccf3e05d80bbbcb885d5a331b696e58919effe29d17d0dc6754f'], commits ['b6825a0364dd1b1af2224d3025533145b8ce5580'], panel ['5e2b84e3adabb1a36fa97f7383b578e5ca80e87a53853bec8c814b397a021d85']
+
+| creature | c0_r2 | ctrl15 | ctrl17 | joint17 | joint15 | h7_ctrl15_3nominal |
+|---|---|---|---|---|---|---|
+| stilts-drawn | NOT 0.00 | PART 0.71 / NOT 0.50 | NOT 0.00 / PART 0.67 | FULL 1.00 / PART 0.83 | FULL 0.83 | NOT 0.42 |
+| tiny-feet | NOT 0.00 | PART 0.46 / NOT 0.38 | NOT 0.42 / PART 0.50 | PART 0.62 / PART 0.62 | PART 0.71 | NOT 0.42 |
+| walkrec-dev-m1-gen-0006 | NOT 0.00 | NOT 0.79 / NOT 0.62 | NOT 0.58 / PART 0.83 | PART 0.83 / NOT 0.96 | NOT 0.88 | NOT 0.62 |
+| walkrec-dev-m1-gen-0007 | NOT 0.00 | PART 0.58 / PART 0.50 | PART 0.79 / FULL 0.88 | FULL 1.00 / PART 0.75 | FULL 0.96 | NOT 0.29 |
+| top-heavy | NOT 0.00 | PART 0.62 / PART 0.58 | PART 0.58 / FULL 0.96 | PART 0.54 / PART 0.75 | PART 0.75 | PART 0.62 |
+| weak-slippery | NOT 0.00 | PART 0.75 / PART 0.54 | PART 0.46 / PART 0.67 | PART 0.92 / FULL 0.96 | PART 0.58 | PART 0.25 |
+| walkrec-dev-m1-gen-0000 | NOT 0.00 | PART 0.79 / NOT 0.50 | PART 0.83 / FULL 0.92 | PART 0.88 / FULL 0.96 | PART 0.79 | NOT 0.38 |
+| walkrec-dev-m1-gen-0001 | NOT 0.00 | PART 0.75 / PART 0.67 | PART 0.92 / PART 0.79 | PART 0.83 / PART 0.79 | PART 0.79 | NOT 0.50 |
+| walkrec-dev-m1-gen-0002 | NOT 0.00 | FULL 0.92 / FULL 0.92 | FULL 0.92 / PART 0.96 | FULL 1.00 / FULL 0.96 | FULL 0.92 | PART 0.75 |
+| walkrec-dev-m1-gen-0003 | NOT 0.00 | NOT 0.00 / PART 0.33 | NOT 0.00 / NOT 0.42 | FULL 1.00 / FULL 0.96 | FULL 1.00 | PART 0.58 |
+| walkrec-dev-m1-gen-0004 | NOT 0.00 | PART 0.71 / PART 0.67 | FULL 0.96 / PART 0.83 | NOT 0.54 / PART 0.75 | PART 0.71 | NOT 0.33 |
+| walkrec-dev-m1-gen-0005 | NOT 0.00 | PART 0.50 / NOT 0.29 | PART 0.71 / NOT 0.46 | PART 0.67 / PART 0.58 | PART 0.58 | NOT 0.25 |
+
+Recovered (FULL at final checkpoint, any replicate) by condition:
+- c0_r2: 0/12  []
+- ctrl15: 1/12  ['walkrec-dev-m1-gen-0002(2/2)']
+- ctrl17: 5/12  ['top-heavy(1/2)', 'walkrec-dev-m1-gen-0000(1/2)', 'walkrec-dev-m1-gen-0002(1/2)', 'walkrec-dev-m1-gen-0004(1/2)', 'walkrec-dev-m1-gen-0007(1/2)']
+- joint17: 6/12  ['stilts-drawn(1/2)', 'walkrec-dev-m1-gen-0000(1/2)', 'walkrec-dev-m1-gen-0002(2/2)', 'walkrec-dev-m1-gen-0003(2/2)', 'walkrec-dev-m1-gen-0007(1/2)', 'weak-slippery(1/2)']
+- joint15: 4/12  ['stilts-drawn(1/1)', 'walkrec-dev-m1-gen-0002(1/1)', 'walkrec-dev-m1-gen-0003(1/1)', 'walkrec-dev-m1-gen-0007(1/1)']
+- h7_ctrl15_3nominal: 0/12  []
+
+G1: best single condition joint17: 6/12 = 50%; union over conditions (final checkpoint): 8/12; any condition, any checkpoint: 10/12
+
+Status counts per condition x checkpoint (all replicates):
+- c0_r2 @0: NOT_RECOVERED 12
+- ctrl15 @1000: FULL_RECOVERY 2, NOT_RECOVERED 9, PARTIAL_IMPROVEMENT 13
+- ctrl15 @2000: FULL_RECOVERY 2, NOT_RECOVERED 9, PARTIAL_IMPROVEMENT 13
+- ctrl15 @4000: FULL_RECOVERY 1, NOT_RECOVERED 7, PARTIAL_IMPROVEMENT 16
+- ctrl15 @8000: FULL_RECOVERY 2, NOT_RECOVERED 7, PARTIAL_IMPROVEMENT 15
+- ctrl17 @1000: FULL_RECOVERY 3, NOT_RECOVERED 10, PARTIAL_IMPROVEMENT 11
+- ctrl17 @2000: FULL_RECOVERY 2, NOT_RECOVERED 7, PARTIAL_IMPROVEMENT 15
+- ctrl17 @4000: FULL_RECOVERY 7, NOT_RECOVERED 5, PARTIAL_IMPROVEMENT 12
+- ctrl17 @8000: FULL_RECOVERY 5, NOT_RECOVERED 6, PARTIAL_IMPROVEMENT 13
+- joint17 @1000: FULL_RECOVERY 5, NOT_RECOVERED 13, PARTIAL_IMPROVEMENT 6
+- joint17 @2000: FULL_RECOVERY 5, NOT_RECOVERED 4, PARTIAL_IMPROVEMENT 15
+- joint17 @4000: FULL_RECOVERY 10, NOT_RECOVERED 1, PARTIAL_IMPROVEMENT 13
+- joint17 @8000: FULL_RECOVERY 8, NOT_RECOVERED 2, PARTIAL_IMPROVEMENT 14
+- joint15 @1000: NOT_RECOVERED 7, PARTIAL_IMPROVEMENT 5
+- joint15 @2000: FULL_RECOVERY 3, NOT_RECOVERED 2, PARTIAL_IMPROVEMENT 7
+- joint15 @4000: FULL_RECOVERY 6, PARTIAL_IMPROVEMENT 6
+- joint15 @8000: FULL_RECOVERY 4, NOT_RECOVERED 1, PARTIAL_IMPROVEMENT 7
+- h7_ctrl15_3nominal @1000: FULL_RECOVERY 1, NOT_RECOVERED 7, PARTIAL_IMPROVEMENT 4
+- h7_ctrl15_3nominal @4000: NOT_RECOVERED 8, PARTIAL_IMPROVEMENT 4
+paired ctrl17 vs ctrl15: better on 5, worse on 1, equal on 6 (status rank, best replicate)
+paired joint17 vs ctrl17: better on 3, worse on 2, equal on 7 (status rank, best replicate)
+paired joint15 vs ctrl15: better on 3, worse on 0, equal on 9 (status rank, best replicate)
+paired joint17 vs joint15: better on 3, worse on 0, equal on 9 (status rank, best replicate)
+
+H7 (status at 4000):
+- stilts-drawn: 3 nominal seeds NOT_RECOVERED (0.42) vs 8 varied PARTIAL_IMPROVEMENT (0.6666666666666666)
+- tiny-feet: 3 nominal seeds NOT_RECOVERED (0.42) vs 8 varied PARTIAL_IMPROVEMENT (0.625)
+- walkrec-dev-m1-gen-0006: 3 nominal seeds NOT_RECOVERED (0.62) vs 8 varied NOT_RECOVERED (0.625)
+- walkrec-dev-m1-gen-0007: 3 nominal seeds NOT_RECOVERED (0.29) vs 8 varied PARTIAL_IMPROVEMENT (0.6666666666666666)
+- top-heavy: 3 nominal seeds PARTIAL_IMPROVEMENT (0.62) vs 8 varied PARTIAL_IMPROVEMENT (0.5416666666666666)
+- weak-slippery: 3 nominal seeds PARTIAL_IMPROVEMENT (0.25) vs 8 varied PARTIAL_IMPROVEMENT (0.375)
+- walkrec-dev-m1-gen-0000: 3 nominal seeds NOT_RECOVERED (0.38) vs 8 varied PARTIAL_IMPROVEMENT (0.75)
+- walkrec-dev-m1-gen-0001: 3 nominal seeds NOT_RECOVERED (0.50) vs 8 varied PARTIAL_IMPROVEMENT (0.6666666666666666)
+- walkrec-dev-m1-gen-0002: 3 nominal seeds PARTIAL_IMPROVEMENT (0.75) vs 8 varied PARTIAL_IMPROVEMENT (1.0)
+- walkrec-dev-m1-gen-0003: 3 nominal seeds PARTIAL_IMPROVEMENT (0.58) vs 8 varied NOT_RECOVERED (0.0)
+- walkrec-dev-m1-gen-0004: 3 nominal seeds NOT_RECOVERED (0.33) vs 8 varied PARTIAL_IMPROVEMENT (0.7083333333333334)
+- walkrec-dev-m1-gen-0005: 3 nominal seeds NOT_RECOVERED (0.25) vs 8 varied PARTIAL_IMPROVEMENT (0.5)
+
+train walking frac - validation walking frac at the final checkpoint: median +0.21, min -0.08, max +0.75 (n=96)

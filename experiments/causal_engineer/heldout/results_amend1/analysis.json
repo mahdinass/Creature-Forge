@@ -1,0 +1,447 @@
+{
+ "protocol": "ce-heldout-eval-v1",
+ "n_registered": 40,
+ "results_outside_registry": 0,
+ "arms": {
+  "exhaustive": {
+   "n": 40,
+   "missing": 0,
+   "full": 23,
+   "partial": 7,
+   "not": 10,
+   "error": 0,
+   "mean_walking": 0.8541666666666667,
+   "mean_rollouts": 689.3,
+   "chose_repairing_tool": [
+    38,
+    40
+   ],
+   "first_repair_repairs": [
+    36,
+    40
+   ],
+   "diagnosis_injected_match": [
+    0,
+    0
+   ],
+   "diagnosis_repair_consistent": [
+    0,
+    0
+   ],
+   "repair_consistent_by_stratum": {},
+   "predictions_scored": 0,
+   "predictions_correct": 0,
+   "status_updates": 0,
+   "llm_usd": 0.0,
+   "wall_s_mean": 659.6454944193363
+  },
+  "expert": {
+   "n": 40,
+   "missing": 0,
+   "full": 6,
+   "partial": 19,
+   "not": 15,
+   "error": 0,
+   "mean_walking": 0.6083333333333333,
+   "mean_rollouts": 689.5,
+   "chose_repairing_tool": [
+    31,
+    40
+   ],
+   "first_repair_repairs": [
+    22,
+    40
+   ],
+   "diagnosis_injected_match": [
+    0,
+    0
+   ],
+   "diagnosis_repair_consistent": [
+    0,
+    0
+   ],
+   "repair_consistent_by_stratum": {},
+   "predictions_scored": 0,
+   "predictions_correct": 0,
+   "status_updates": 0,
+   "llm_usd": 0.0,
+   "wall_s_mean": 614.5155463635922
+  },
+  "learned": {
+   "n": 40,
+   "missing": 0,
+   "full": 18,
+   "partial": 13,
+   "not": 9,
+   "error": 0,
+   "mean_walking": 0.8291666666666666,
+   "mean_rollouts": 687.8,
+   "chose_repairing_tool": [
+    37,
+    40
+   ],
+   "first_repair_repairs": [
+    33,
+    40
+   ],
+   "diagnosis_injected_match": [
+    0,
+    0
+   ],
+   "diagnosis_repair_consistent": [
+    0,
+    0
+   ],
+   "repair_consistent_by_stratum": {},
+   "predictions_scored": 0,
+   "predictions_correct": 0,
+   "status_updates": 0,
+   "llm_usd": 0.0,
+   "wall_s_mean": 595.1545004189014
+  },
+  "random": {
+   "n": 40,
+   "missing": 0,
+   "full": 12,
+   "partial": 10,
+   "not": 18,
+   "error": 0,
+   "mean_walking": 0.6239583333333334,
+   "mean_rollouts": 690.0,
+   "chose_repairing_tool": [
+    28,
+    40
+   ],
+   "first_repair_repairs": [
+    17,
+    40
+   ],
+   "diagnosis_injected_match": [
+    0,
+    0
+   ],
+   "diagnosis_repair_consistent": [
+    0,
+    0
+   ],
+   "repair_consistent_by_stratum": {},
+   "predictions_scored": 0,
+   "predictions_correct": 0,
+   "status_updates": 0,
+   "llm_usd": 0.0,
+   "wall_s_mean": 568.3634404718875
+  },
+  "scientist_1shot_think": {
+   "n": 40,
+   "missing": 0,
+   "full": 8,
+   "partial": 17,
+   "not": 15,
+   "error": 0,
+   "mean_walking": 0.5989583333333335,
+   "mean_rollouts": 380.8,
+   "chose_repairing_tool": [
+    30,
+    40
+   ],
+   "first_repair_repairs": [
+    21,
+    40
+   ],
+   "diagnosis_injected_match": [
+    9,
+    40
+   ],
+   "diagnosis_repair_consistent": [
+    22,
+    40
+   ],
+   "repair_consistent_by_stratum": {
+    "over_determined": [
+     18,
+     26
+    ],
+    "specific": [
+     4,
+     14
+    ]
+   },
+   "predictions_scored": 0,
+   "predictions_correct": 0,
+   "status_updates": 0,
+   "llm_usd": 0.2899242,
+   "wall_s_mean": 356.9945138156414
+  },
+  "scientist_think": {
+   "n": 40,
+   "missing": 0,
+   "full": 14,
+   "partial": 12,
+   "not": 14,
+   "error": 0,
+   "mean_walking": 0.6937500000000002,
+   "mean_rollouts": 317.3,
+   "chose_repairing_tool": [
+    34,
+    40
+   ],
+   "first_repair_repairs": [
+    23,
+    40
+   ],
+   "diagnosis_injected_match": [
+    11,
+    34
+   ],
+   "diagnosis_repair_consistent": [
+    19,
+    34
+   ],
+   "repair_consistent_by_stratum": {
+    "over_determined": [
+     12,
+     22
+    ],
+    "specific": [
+     7,
+     12
+    ]
+   },
+   "predictions_scored": 1178,
+   "predictions_correct": 438,
+   "status_updates": 369,
+   "llm_usd": 3.6989837999999997,
+   "wall_s_mean": 507.4332866728306
+  },
+  "scientist_think_mem": {
+   "n": 40,
+   "missing": 0,
+   "full": 16,
+   "partial": 14,
+   "not": 10,
+   "error": 0,
+   "mean_walking": 0.7406250000000002,
+   "mean_rollouts": 358.9,
+   "chose_repairing_tool": [
+    35,
+    40
+   ],
+   "first_repair_repairs": [
+    29,
+    40
+   ],
+   "diagnosis_injected_match": [
+    9,
+    27
+   ],
+   "diagnosis_repair_consistent": [
+    16,
+    27
+   ],
+   "repair_consistent_by_stratum": {
+    "over_determined": [
+     14,
+     20
+    ],
+    "specific": [
+     2,
+     7
+    ]
+   },
+   "predictions_scored": 1196,
+   "predictions_correct": 478,
+   "status_updates": 417,
+   "llm_usd": 4.2267768000000006,
+   "wall_s_mean": 545.6362289726734
+  },
+  "scientist_think_mem_learned": {
+   "n": 40,
+   "missing": 0,
+   "full": 14,
+   "partial": 16,
+   "not": 10,
+   "error": 0,
+   "mean_walking": 0.7489583333333332,
+   "mean_rollouts": 361.5,
+   "chose_repairing_tool": [
+    34,
+    40
+   ],
+   "first_repair_repairs": [
+    26,
+    40
+   ],
+   "diagnosis_injected_match": [
+    11,
+    33
+   ],
+   "diagnosis_repair_consistent": [
+    20,
+    33
+   ],
+   "repair_consistent_by_stratum": {
+    "over_determined": [
+     14,
+     23
+    ],
+    "specific": [
+     6,
+     10
+    ]
+   },
+   "predictions_scored": 1221,
+   "predictions_correct": 406,
+   "status_updates": 420,
+   "llm_usd": 4.1692185,
+   "wall_s_mean": 561.0628317117691
+  }
+ },
+ "tests": {
+  "C2": {
+   "a": "scientist_think",
+   "b": "scientist_1shot_think",
+   "a_only": 10,
+   "b_only": 4,
+   "a_full": 14,
+   "b_full": 8,
+   "n": 40,
+   "p_one_sided": 0.08978271484375,
+   "p": 0.08978271484375,
+   "holm_threshold": 0.008333333333333333,
+   "reject_null": false
+  },
+  "C3": {
+   "a": "scientist_think",
+   "b": "exhaustive",
+   "a_only": 2,
+   "b_only": 11,
+   "a_full": 14,
+   "b_full": 23,
+   "n": 40,
+   "p_one_sided": 0.998291015625,
+   "p": 0.998291015625,
+   "holm_threshold": 0.05,
+   "reject_null": false
+  },
+  "C4": {
+   "a": "scientist_think_mem",
+   "b": "scientist_think",
+   "a_only": 6,
+   "b_only": 4,
+   "a_full": 16,
+   "b_full": 14,
+   "n": 40,
+   "p_one_sided": 0.376953125,
+   "p": 0.376953125,
+   "holm_threshold": 0.01,
+   "reject_null": false
+  },
+  "C5a": {
+   "a": "learned",
+   "b": "exhaustive",
+   "a_only": 1,
+   "b_only": 6,
+   "a_full": 18,
+   "b_full": 23,
+   "n": 40,
+   "p_one_sided": 0.9921875,
+   "p": 0.9921875,
+   "holm_threshold": 0.025,
+   "reject_null": false
+  },
+  "C5b": {
+   "a": "scientist_think_mem_learned",
+   "b": "scientist_think_mem",
+   "a_only": 5,
+   "b_only": 7,
+   "a_full": 14,
+   "b_full": 16,
+   "n": 40,
+   "p_one_sided": 0.80615234375,
+   "p": 0.80615234375,
+   "holm_threshold": 0.0125,
+   "reject_null": false
+  },
+  "C1": {
+   "a": "scientist_think accuracy",
+   "b": "majority-direction baseline",
+   "above": 14,
+   "below": 23,
+   "p_one_sided": 0.9505641252035275,
+   "p": 0.9505641252035275,
+   "holm_threshold": 0.016666666666666666,
+   "reject_null": false
+  }
+ },
+ "secondary": {
+  "C2_walking": {
+   "n": 36,
+   "w_plus": 416.5,
+   "z": 1.3128663051388272,
+   "p_two_sided": 0.18922800263260406
+  },
+  "C3_walking": {
+   "n": 29,
+   "w_plus": 66.0,
+   "z": -3.278982672803308,
+   "p_two_sided": 0.0010418203249039513
+  },
+  "C4_walking": {
+   "n": 33,
+   "w_plus": 305.5,
+   "z": 0.4469812256630707,
+   "p_two_sided": 0.6548886154869837
+  },
+  "C5a_walking": {
+   "n": 26,
+   "w_plus": 105.0,
+   "z": -1.7943956806607595,
+   "p_two_sided": 0.07275003585905537
+  },
+  "C5b_walking": {
+   "n": 29,
+   "w_plus": 226.5,
+   "z": 0.19471695340449421,
+   "p_two_sided": 0.8456145390475102
+  }
+ },
+ "memory": {
+  "scientist_think_mem": {
+   "verdicts": {
+    "card:applies": 21,
+    "card:does_not_apply": 14,
+    "card:needs_adaptation": 3,
+    "card:test_first": 1,
+    "episode:applies": 12,
+    "episode:does_not_apply": 24,
+    "episode:needs_adaptation": 41,
+    "episode:test_first": 1
+   },
+   "negative_transfer": 1,
+   "memory_followed_and_correct": 3
+  },
+  "scientist_think_mem_learned": {
+   "verdicts": {
+    "card:applies": 24,
+    "card:does_not_apply": 10,
+    "card:needs_adaptation": 4,
+    "card:test_first": 1,
+    "episode:applies": 10,
+    "episode:does_not_apply": 21,
+    "episode:needs_adaptation": 45,
+    "episode:test_first": 2,
+    "learned_advice:applies": 36,
+    "learned_advice:does_not_apply": 1,
+    "learned_advice:needs_adaptation": 2
+   },
+   "negative_transfer": 1,
+   "memory_followed_and_correct": 1
+  },
+  "level_c_advice": {
+   "n": 40,
+   "top1_repairs": 31,
+   "followed": 9,
+   "followed_and_repairs": 8
+  }
+ }
+}

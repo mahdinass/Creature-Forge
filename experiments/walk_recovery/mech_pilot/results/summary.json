@@ -1,0 +1,14 @@
+{
+ "full": {
+  "fix15": 11,
+  "generic": 5,
+  "randmech": 6,
+  "expert": 9,
+  "ai_1shot": 5,
+  "ai_iter": 4
+ },
+ "g4": false,
+ "best_non_ai": 11,
+ "unit_errors": [],
+ "accounting_violations": []
+}

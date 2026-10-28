@@ -1,0 +1,23 @@
+	Command being timed: "/home/forge/dev/venvs/hdb/bin/python -u scripts/ta1_tool_access.py --phase 2a-L4-pilot --execute --approved-by owner Amendment A1 L4 pilot authorization 2026-10-21 --harness-commit 86d0a2bcf8b32f74455739aa040d6e35d32f9e73 --max-rollouts 7208 --artifacts-root /home/forge/dev/hdb/artifacts/hdb --records-root /home/forge/dev/runs/fa1c_a1_inputs/records --workers 6 --out /home/forge/dev/runs/fa1c_a1_l4_pilot_2026-10-21/ta1_a1_l4.jsonl"
+	User time (seconds): 3219.32
+	System time (seconds): 1.72
+	Percent of CPU this job got: 439%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:13.39
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 86092
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 74
+	Minor (reclaiming a frame) page faults: 127422
+	Voluntary context switches: 31243
+	Involuntary context switches: 14154
+	Swaps: 0
+	File system inputs: 17832
+	File system outputs: 3656
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

@@ -1,0 +1,20 @@
+{
+  "sha256": {
+    "analysis_output.txt": "fcf84b8039dfdcf8a4acd0a3b447758497092afcc0d6f7fc7c06993d37e92011",
+    "panel.json": "5898251a2ca67164424c8f601a888091b7a8936a315ef758ee2825684f450d8f",
+    "shard0.jsonl": "c6a6342a00172951815ad2f954eac9434d62f905354dc45165a37be03c2c40e1",
+    "shard1.jsonl": "078b37d1c906fcbbabcbabf132ec415357fd89689b8e7940da1f468ee9e75546",
+    "shard10.jsonl": "3b557de2762a29fa5caa47a0fd3c23f9cbda2ca0cee4b19fd007e6b803e7628e",
+    "shard11.jsonl": "9cc9ffd9c0c80fbc33d0010334f1da088d09d33f9191a6120a6fba5b96e1c7ae",
+    "shard2.jsonl": "2d50058e8692218d6f176b783eab19e4f5f8f744c3a12542447b6a447a5da7a6",
+    "shard3.jsonl": "60dc82febe6ea224f4995d19889e55e983d0ecc3398a13091b11dfc4c898eb11",
+    "shard4.jsonl": "45c00ee4d9e3fd5cc21e80955ef2b8ffaf3f74b79885282032886a9963e35502",
+    "shard5.jsonl": "348c6339aea9a21583d010c1677936a239c277aac7c08c1933aa121bdb08070c",
+    "shard6.jsonl": "ffef26d752293fb39cf1603869a99557496ab13ab35e813816d2392ff3a70ae5",
+    "shard7.jsonl": "8da7b0d5425ae629b5948b85692ee5bca9047e07b70beed0480fb3011faaf541",
+    "shard8.jsonl": "1e24e75429eac46de1a9a2c3951866b19722080b97d01bedbac24743343695b5",
+    "shard9.jsonl": "d1dcaf1ba51a6a9afe1bdac8c37cb865befab53c6e9c7bffc4eaf49ea10f63d5",
+    "summary.json": "ef8e695f293a19246f9e0a31a800a596f1bd1b81f20a42b61a7113a1d1a498bf"
+  },
+  "note": "S4a records from the batch VM (slot s4, snapshot 4ba1fb9); analysis_output.txt = single run of scripts/walk_s4_analysis.py (7a6bc08)"
+}

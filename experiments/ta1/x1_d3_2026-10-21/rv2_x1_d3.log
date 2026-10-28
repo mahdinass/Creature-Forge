@@ -1,0 +1,13 @@
+rv2_d3_reverify_v1: POST-HOC EXPLORATORY VERIFICATION OF A DISCARDED CANDIDATE (not an independent generalisation test; not a preregistered TA-1 outcome; not evidence for the policy)
+  candidate: ta1_phase1b.jsonl#L2 treatment r0 hdb-v1-gen-0073:low_ground_friction:2 design 3 84835bc636 (repair:foot_friction)
+  cap 104 rollout-equivalents (8 eligibility + 48 validation + up to 48 confirmation); no twin rollouts, no optimisation
+  input v6_settings: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/ds1/engine_v6_settings.json sha256=a0b037ef292886cf6311e41e275b8d492832de3cc3b1a68d8a1c8fb3fb5f8df1
+  input stop_model: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/ds1/stopmap_dev_v2.json sha256=7a829bb31cb88a6d0f38bf046326ab0b657f92423bc2807203c5f5dfc4f3ce73
+  input split_file: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/stage2_split.json sha256=8ce0c7d0fc128f0385092a0574c4045542f7e1cfee37096e15e5544afa609394
+  input eval_instances: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/ds1/ds1_eval_instances.json sha256=dbd502de456234d70a69bebc69522a7640c4163608f82528d65c72ae8f65e97e
+  input thresholds: C:/Users/<user>/.vscode/Creature-Forge/artifacts/vm/hdb/artifacts/hdb\thresholds_dev.json sha256=12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89
+  input walkers: C:/Users/<user>/.vscode/Creature-Forge/artifacts/vm/hdb/artifacts/hdb\walkers_all.jsonl sha256=151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd
+X1 d3 NOT_RECOVERED walking 17/24 | reasons ['candidate aggregate is POOR, not PASS (walking on 17 of 24 seeds; PASS needs >= 80%)', 'verdict_v1 is NOT_VERIFIED, not VERIFIED_IMPROVEMENT']
+  paired: wins 4 losses 6 ties 14 of 24 | verdict NOT_VERIFIED median 0.00010342189775158772
+  preregistered reading: no verified recovery for this discarded candidate under the frozen verifier; on L1 the selection between d3 and d4 did not cost a recovery
+DONE (post-hoc exploratory; one design, one instance).

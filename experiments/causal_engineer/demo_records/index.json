@@ -1,0 +1,145 @@
+{
+ "schema": "causal_record_v1",
+ "records": [
+  {
+   "id": "c-66550080318c",
+   "policy": "scientist_think",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 0.875,
+   "n_steps": 12,
+   "n_experiments": 13,
+   "cost_usd": 0.14138789999999998,
+   "llm_calls": 21,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.663,
+    "torso_mass": 6.351141877560075,
+    "foot_length": 0.06630498286262382,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0
+   },
+   "final_category": null,
+   "has_memory": false
+  },
+  {
+   "id": "c-71c360e98c4a",
+   "policy": "scientist_think",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 1.0,
+   "n_steps": 9,
+   "n_experiments": 10,
+   "cost_usd": 0.0778899,
+   "llm_calls": 13,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.603,
+    "torso_mass": 15.0,
+    "foot_length": 0.0805,
+    "foot_friction": 1.0,
+    "torque_limit": 60.0
+   },
+   "final_category": "posture_bias",
+   "has_memory": false
+  },
+  {
+   "id": "c-4f006a753100",
+   "policy": "scientist_think",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 0.8333333333333334,
+   "n_steps": 12,
+   "n_experiments": 14,
+   "cost_usd": 0.1196286,
+   "llm_calls": 20,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.379,
+    "torso_mass": 4.219068139554291,
+    "foot_length": 0.16697362531139942,
+    "foot_friction": 0.05,
+    "torque_limit": 5.0
+   },
+   "final_category": "unresolved",
+   "has_memory": false
+  },
+  {
+   "id": "c-b44c86e08094",
+   "policy": "scientist_think",
+   "status": "NOT_RECOVERED",
+   "walking_frac": 0.5833333333333334,
+   "n_steps": 11,
+   "n_experiments": 11,
+   "cost_usd": 0.1485849,
+   "llm_calls": 22,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.603,
+    "torso_mass": 15.0,
+    "foot_length": 0.0805,
+    "foot_friction": 1.0,
+    "torque_limit": 26.25
+   },
+   "final_category": "low_torque_authority",
+   "has_memory": false
+  },
+  {
+   "id": "c-b0b530b0627e",
+   "policy": "scientist_think",
+   "status": "PARTIAL_IMPROVEMENT",
+   "walking_frac": 0.8333333333333334,
+   "n_steps": 4,
+   "n_experiments": 4,
+   "cost_usd": 0.0323226,
+   "llm_calls": 7,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 1.081,
+    "torso_mass": 11.057383,
+    "foot_length": 0.124379,
+    "foot_friction": 1.057631,
+    "torque_limit": 41.683255
+   },
+   "final_category": "leg_geometry_mismatch",
+   "has_memory": false
+  },
+  {
+   "id": "c-9a6b58f0f722",
+   "policy": "scientist_think_mem",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 0.9583333333333334,
+   "n_steps": 5,
+   "n_experiments": 5,
+   "cost_usd": 0.0616542,
+   "llm_calls": 9,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.852,
+    "torso_mass": 8.980515702047834,
+    "foot_length": 0.141258,
+    "foot_friction": 1.258302,
+    "torque_limit": 42.828537
+   },
+   "final_category": "posture_bias",
+   "has_memory": true
+  },
+  {
+   "id": "c-db8777ef86dc",
+   "policy": "scientist_think_mem",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 0.9166666666666666,
+   "n_steps": 10,
+   "n_experiments": 9,
+   "cost_usd": 0.11410619999999999,
+   "llm_calls": 19,
+   "model": "nvidia/nemotron-3-super-120b-a12b",
+   "robot": {
+    "leg_length": 0.622,
+    "torso_mass": 5.0071,
+    "foot_length": 0.08173839699573288,
+    "foot_friction": 1.0,
+    "torque_limit": 70.88236439262232
+   },
+   "final_category": "unresolved",
+   "has_memory": true
+  }
+ ]
+}

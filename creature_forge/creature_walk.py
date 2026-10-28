@@ -22,6 +22,7 @@ from . import r2
 from .locomotion import DEFAULT_CRITERIA, FALL_HEIGHT_FRAC, FALL_PITCH, FALL_SUSTAIN_SAMPLES, LOG_EVERY, PERTURB, WalkingCriteria
 from .forge_pool import InlinePool, is_error
 from .morphology import build_model
+from .mechanisms import controller_from_spec
 from .optimize import jsonable
 from .phasegait_init import LOWER15, UPPER15, controller_from_vector
 from .sandbox import SandboxBody
@@ -195,11 +196,13 @@ def _body(d) -> SandboxBody:
     return SandboxBody(**d)
 
 
-def eval_vector(vector, body, seeds, duration: float, *, start: str = "neutral", perturb: float = PERTURB) -> dict:
-    """Walk one vector on one creature for each seed; compact per-seed outcomes (creature criteria)."""
+def eval_vector(vector, body, seeds, duration: float, *, start: str = "neutral", perturb: float = PERTURB,
+                mechanisms=()) -> dict:
+    """Walk one vector on one creature for each seed; compact per-seed outcomes (creature criteria).
+    With `mechanisms` the vector is 15 base parameters + the mechanism gains (see mechanisms.controller_from_spec)."""
     b = _body(body)
     crit = creature_criteria(b)
-    ctrl = controller_from_vector(vector)
+    ctrl = controller_from_spec(vector, mechanisms, body=b) if mechanisms else controller_from_vector(vector, body=b)
     per = []
     for s in seeds:
         m = loc.compute_metrics(rollout(ctrl, b, s, duration, start=start, perturb=perturb), crit)
@@ -211,11 +214,11 @@ def eval_vector(vector, body, seeds, duration: float, *, start: str = "neutral",
 
 
 def eval_job(job: dict) -> dict:
-    """Pool job: {vector, body, seeds, duration, start?, perturb?} -> {ok, per_seed, wall_s} (errors as values)."""
+    """Pool job: {vector, body, seeds, duration, start?, perturb?, mechanisms?} -> {ok, per_seed, wall_s} (errors as values)."""
     t0 = time.perf_counter()
     try:
         res = eval_vector(job["vector"], job["body"], job["seeds"], job["duration"], start=job.get("start", "neutral"),
-                          perturb=job.get("perturb", PERTURB))
+                          perturb=job.get("perturb", PERTURB), mechanisms=job.get("mechanisms") or ())
         return {"ok": True, **res, "wall_s": time.perf_counter() - t0}
     except Exception as exc:  # noqa: BLE001 - recorded, never swallowed
         return {"ok": False, "error": f"{type(exc).__name__}: {exc}", "wall_s": time.perf_counter() - t0}

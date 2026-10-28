@@ -1,0 +1,236 @@
+{
+ "harness_version": "ta1_harness_v3",
+ "created_utc": "2026-10-21T17:50:29+00:00",
+ "git_commit": "3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5",
+ "git_branch": "HEAD",
+ "git_dirty": false,
+ "git_status_porcelain": "",
+ "inputs": {
+  "v6_settings": {
+   "path": "/home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/ds1/engine_v6_settings.json",
+   "sha256": "f6e9eef6affd3253e9ef9e7bbe8156b39927d2ed394155f2453611e68f8393ff",
+   "git_blob_at_head": "805c72ce0218a23d414c1ca05975f52356292b18"
+  },
+  "stop_model": {
+   "path": "/home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/ds1/stopmap_dev_v2.json",
+   "sha256": "c20b6c4b064c359b8c9df5f99611e3fbd14d1fd304bac402feb88a46bb5d9df9",
+   "git_blob_at_head": "99590dc7d362dc9f5abc0f448bf058529ebe70b5"
+  },
+  "split_file": {
+   "path": "/home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/stage2_split.json",
+   "sha256": "79bc3b254e6eca584fbc167c699f67a466dae8bb3891261b3138e36da2b66c1e",
+   "git_blob_at_head": "c357bed7ca762fe38dde2323b86b32613d82deb6"
+  },
+  "eval_instances": {
+   "path": "/home/forge/dev/do1-w3w4/experiments/causal_engineer/dev/hdb/ds1/ds1_eval_instances.json",
+   "sha256": "bac394ea850f39ab119d19cf57f0d0336cf21c9e09d52bfb84414179ae77891e",
+   "git_blob_at_head": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "thresholds": {
+   "path": "/home/forge/dev/hdb/artifacts/hdb/thresholds_dev.json",
+   "sha256": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "git_blob_at_head": null
+  },
+  "walkers": {
+   "path": "/home/forge/dev/hdb/artifacts/hdb/walkers_all.jsonl",
+   "sha256": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd",
+   "git_blob_at_head": null
+  }
+ },
+ "reference": {
+  "implementation_commit": "ea9e7291e8b718f1936120fcd844bd236175a16d",
+  "tracked_inputs_git_blob": {
+   "v6_settings": "805c72ce0218a23d414c1ca05975f52356292b18",
+   "stop_model": "99590dc7d362dc9f5abc0f448bf058529ebe70b5",
+   "split_file": "c357bed7ca762fe38dde2323b86b32613d82deb6",
+   "eval_instances": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "artifact_inputs_sha256": {
+   "thresholds": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "walkers": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd"
+  },
+  "stored_records_sha256": {
+   "eval_A1e6_s1.jsonl": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d",
+   "eval_A1e6_s2.jsonl": "2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d",
+   "eval_A1e6_s3.jsonl": "f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27",
+   "eval_A1e6_s4.jsonl": "7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102",
+   "eval_A1e6_s5.jsonl": "5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97",
+   "eval_A3v5_s5.jsonl": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0"
+  }
+ },
+ "python": "3.12.3",
+ "numpy": "2.5.4",
+ "mujoco": "3.15.0",
+ "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+ "engine_version": "belief_engine_v6",
+ "agent_version": "has_agent_v4",
+ "argv": [
+  "scripts/do1_repair_ablation.py",
+  "--phase",
+  "DO1-L4-rep",
+  "--execute",
+  "--approved-by",
+  "owner W3/W4 authorization 2026-10-21 (DO1-L4-rep cap 39644 + DO1-X cap 14416, main VM, 6 workers, <= $1.50 incremental)",
+  "--harness-commit",
+  "3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5",
+  "--max-rollouts",
+  "39644",
+  "--max-wall-s",
+  "7200",
+  "--artifacts-root",
+  "/home/forge/dev/hdb/artifacts/hdb",
+  "--records-root",
+  "/home/forge/dev/runs/do1_w3w4_inputs/records",
+  "--workers",
+  "6",
+  "--out",
+  "/home/forge/dev/runs/do1_w3w4_2026-10-21/do1_l4_rep.jsonl"
+ ],
+ "runner_version": "do1_ablation_v2",
+ "objective": {
+  "version": "do1_objective_v2",
+  "tau_d_m": 0.75,
+  "w_step": 10000.0,
+  "s_step": 1000.0,
+  "feasible_offset": 100.0,
+  "margin_weight": 10.0,
+  "infeasible_margin_weight": 0.1,
+  "short_weight": 10.0,
+  "short_cap": 50.0,
+  "fit_weight": 0.001,
+  "gates": [
+   "speed",
+   "step_rate",
+   "alternation",
+   "touchdown",
+   "flight",
+   "slip",
+   "body_contact",
+   "saturation",
+   "pitch"
+  ],
+  "baseline": "faulty design 0, same train seeds"
+ },
+ "preregistration": {
+  "hypothesis": "On L4 the frozen objective saturates (4/4 train walking, validity 1 inside the gates) and rewards speed up to 0.4 m/s, so the submitted designs sit near the walking gates (15/16 robust, 19/24 validation). Ranking candidates by walking, then the paired-displacement constraint against the faulty robot, then the walking-gate margin raises validation walking to >= 20/24 while keeping verified displacement.",
+  "primary_case": "L4 (original tool order)",
+  "complementary_case": "L1 (descriptive only)",
+  "primary_outcome": "FULL_RECOVERY under the unchanged full_recovery_v1, per episode",
+  "unit": "replicate pair (shared bench noise seed): technical replicates of plant-CMA stochasticity on one robot instance",
+  "primary_test": "DO1-L4: exact one-sided McNemar (sign) test on discordant pairs, do1 FULL vs frozen FULL, alpha 0.05",
+  "success": "p <= 0.05, which with 5 pairs requires all 5 pairs discordant in favour of do1 (p = 0.031); an instance-specific finding about this robot and budget, not a rate over robots",
+  "suggestive": "every discordant pair favours do1 but p > 0.05 (e.g. 4 for, 0 against: p = 0.0625): reported as suggestive and inconclusive, never as a demonstrated improvement",
+  "no_improvement_observed": "no discordant pair favours do1: no evidence of improvement on this instance at this budget; with 5 technical replicates this is NOT a falsification of the objective",
+  "otherwise": "inconclusive at this budget (mixed discordant pairs); reported, no follow-up run without approval",
+  "pilot_DO1-L4-r0": "exploratory, one pair, no hypothesis test: FULL status, validation k/24, verdict and median paired displacement per arm, submitted and checked designs, per-candidate DO-1 components, budget split",
+  "secondary": [
+   "paired validation walking k/24 (do1 - frozen) per replicate, sign of the 5 differences",
+   "validation verdict and median paired displacement (do1 must stay VERIFIED_IMPROVEMENT)",
+   "train-seed margin, median paired diff and feasibility of each submitted and checked design",
+   "robust16 and robust displacement of each checked design; mapped P(FULL); plant/twin rollouts"
+  ],
+  "interpretation_limits": "technical replicates of plant-CMA stochasticity on one instance; not a rate over robots",
+  "null_wording": "No verified recovery was found under the tested intervention, optimizer configuration and computational budget.",
+  "no_outcome_based_stopping": true
+ },
+ "phase_preregistration": {
+  "study": "W3: replication of DO1-L4-r0 on fresh optimizer randomness, one development instance (L4)",
+  "runs": "frozen r0 sentinel (role sentinel, excluded from every analysis), then r1-r5 x (frozen, do1) interleaved",
+  "varies": "only the bench noise seed (plant-CMA streams): replicate_noise_seed(L4, r) = 1751409197 + 10007 r, and + 7919 k for the k-th plant repair; identical in both arms of a replicate",
+  "fixed": "instance, physical seeds, twin-CMA seeds (11 and 0), train/robust/validation/confirmation seeds, verifier full_recovery_v1, stop map v2, tau 0.75, budgets plant 700 / twin 2,800, objective do1_objective_v2",
+  "hypothesis": "do1 reaches FULL_RECOVERY on more L4 replicates than the frozen objective under matched randomness",
+  "primary_outcome": "FULL_RECOVERY per episode (unchanged full_recovery_v1)",
+  "primary_analysis": "intention to treat over the 5 pairs r1-r5: FULL count per arm k/5 with exact Clopper-Pearson 95% intervals; exact one-sided McNemar (sign) test on discordant pairs, alpha 0.05 (5/0 -> p = 0.031; 4/0 -> 0.0625, inconclusive; fewer discordant pairs -> descriptive only)",
+  "secondary": [
+   "PARTIAL_IMPROVEMENT and NOT_RECOVERED counts per arm",
+   "paired validation walking difference k/24 (do1 - frozen) per replicate; exact sign test",
+   "validation verdict and median paired displacement per episode",
+   "20 s confirmation run/passed and its checks",
+   "plant and twin rollouts; stop-map acceptance; binding gates; selected = last candidate evaluated",
+   "per-protocol analysis excluding NOT_EXPOSED pairs, shown next to ITT with counts and reasons"
+  ],
+  "stopping": "no outcome-based stopping, no extra replicates; a validity defect (sentinel mismatch, unequal pre-hook fingerprints, stored-prefix mismatch, incomplete verification, hook calls != 1, inconsistent DO-1 selection, an infrastructure error) pauses fail-closed; completed pairs are reported with the defect and nothing is re-run without owner approval; NOT_EXPOSED continues",
+  "limits": "technical replicates of optimizer randomness on ONE physical instance, evaluated on the same, already studied L4 validation seeds: no claim about unseen robots, fault families or validation conditions; the r0 pilot is exploratory and is never pooled",
+  "null_wording": "No verified recovery was found under the tested intervention, optimizer configuration and computational budget."
+ },
+ "cases": {
+  "L4": {
+   "instance_id": "hdb-v1-gen-0137:low_ground_friction:0",
+   "stored": [
+    "eval_A1e6_s3.jsonl",
+    4,
+    4,
+    "66053dae8e"
+   ]
+  }
+ },
+ "phase": "DO1-L4-rep",
+ "approved_by": "owner W3/W4 authorization 2026-10-21 (DO1-L4-rep cap 39644 + DO1-X cap 14416, main VM, 6 workers, <= $1.50 incremental)",
+ "runs": [
+  [
+   "L4",
+   "frozen",
+   0
+  ],
+  [
+   "L4",
+   "frozen",
+   1
+  ],
+  [
+   "L4",
+   "do1",
+   1
+  ],
+  [
+   "L4",
+   "frozen",
+   2
+  ],
+  [
+   "L4",
+   "do1",
+   2
+  ],
+  [
+   "L4",
+   "frozen",
+   3
+  ],
+  [
+   "L4",
+   "do1",
+   3
+  ],
+  [
+   "L4",
+   "frozen",
+   4
+  ],
+  [
+   "L4",
+   "do1",
+   4
+  ],
+  [
+   "L4",
+   "frozen",
+   5
+  ],
+  [
+   "L4",
+   "do1",
+   5
+  ]
+ ],
+ "cap": {
+  "episodes": 11,
+  "plant": 8844,
+  "twin": 30800,
+  "total": 39644
+ },
+ "max_rollouts": 39644,
+ "max_wall_s": 7200.0,
+ "harness_commit_approved": "3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5",
+ "records_root": "/home/forge/dev/runs/do1_w3w4_inputs/records"
+}

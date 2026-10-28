@@ -72,3 +72,56 @@ Append one incident per significant recurring failure. Mark everything here as `
 ## 2026-10-15 Deadman powered the guest off, but the instance stayed RUNNING
 - The VM's 6 h deadman (`poweroff` inside the guest) fired overnight; SSH timed out, yet `forge_cloud.py status` reported `RUNNING` 3.75 h after the deadline. The Windows watchdog (which stops via the API) had last run at 00:27 (PC asleep). An API `stop` reached STOPPED immediately. Billing of a guest-powered-off but RUNNING instance is unverified, so it is assumed to bill.
 - Fixes: the spend ledger now charges every run until an explicit API stop (conservative total $2.63 of $10 at 07:05); the orchestrator stops the VM through the API at the end of every work block instead of relying on the deadman. Option for the owner: let the watchdog task wake the PC.
+## 2026-10-16 M1a partial results deleted by a slot sync (operator error)
+- The first M1a run wrote `experiments/walk_recovery/oracle/results/m1a.jsonl` (untracked) inside slot `wr-main`; it then crashed on tiny-feet (`walk_opt.encode` rejected a base body exactly on the guided bound foot 0.06 because of the 1e-9 interval margin). Syncing the fix ran `git clean -fd` in the slot and deleted the 6 completed units (stilts x4, tiny-feet x2), exactly the hazard RESUME_CHECKPOINT warned about.
+- Impact: ~8.4k rollouts re-spent; no result was selected or altered. Units are deterministic (fixed seeds, fixed noise stream), so the rerun from scratch reproduces them; the stilts statuses/gains printed before the loss are compared with the rerun as a determinism check.
+- Fixes: encode tolerance covers the margin (regression test `BaseOnBoundTests`); oracle outputs now go to git-ignored `artifacts/walk_recovery/` on the VM (survives sync), pulled with `forge_dev.py pull` before they are copied into `experiments/` for commit.
+## 2026-10-17 S2: the ai_nogait ablation shared the ai arm's ledger investigation id (confounded arm)
+- `scripts/walk_s2_pilot.py` derived the AI investigation id from (creature, budget, noise seed) only, so `ai_nogait@2000` used the same id as `ai@2000`, which ran first in each shard. The per-investigation cap (8 requests) was therefore shared: 12 of ai_nogait's calls were refused BEFORE sending (`BudgetExceeded: ... request cap 8 reached`; no cost), leaving those pipelines with missing decisions.
+- Consequence: the S2 `ai_nogait` numbers (2/12 recovered, H6 2/12 top-2 hits) are confounded and are NOT evidence about gait features. `ai` (both budgets) was unaffected: it ran first and has its own ids per budget. Disclosed in `experiments/walk_recovery/dev_pilot/REPORT_S2.md`.
+- Fix: every method other than `ai` now derives its id with the method name (S2 `ai` ids unchanged). The information ablation must be re-run if it is to be used.
+## 2026-10-17 S3 nearly reached the batch VM's deadman deadline
+- The S3 confirmatory run was launched with a 4 h VM deadline that included the time spent on smokes and the amendment; the local background waiter that would have flagged it was stopped by Claude Code (Windows host low on memory). A one-off check found 0.11 h left with 28 units running; `forge_cloud.py extend --hours 2` (cap-guarded) fixed it before the guest powered off. No unit was interrupted.
+- Lesson: set the deadline at launch for the projected run time + margin (not the default), and do not rely on a local waiter process for safety-relevant extensions.
+## 2026-10-17 API key written into dev result files on the VM (trailing CR, redaction miss)
+- What happened:
+  - The causal-engineer pilot2 launch sourced `~/dev/.env` in bash (`set -a; . ~/dev/.env`). That file has CRLF line endings, so `NEBIUS_API_KEY` carried a trailing CR.
+  - Every request failed locally (`ValueError: Invalid header value b'Bearer <key>\r'`); no request reached the provider and nothing was spent.
+  - The error text contained the key. `redact_secret` and the record guards compare the exact key (with the CR) and missed the escaped form, so the key was written into 4 git-ignored result files on the VM (`~/dev/ce3/artifacts/ce/pilot2_shard*.jsonl`).
+  - The key was also echoed once into the operator's local session transcript while diagnosing.
+- Containment:
+  - The 4 files (0 successful calls, no results) were deleted.
+  - A grep of the VM logs, ledger and other slots found no other copy. Nothing was committed or pushed.
+- Fix:
+  - `config.nebius_api_key()` strips whitespace.
+  - `nebius.redact_secret` also removes stripped and escaped forms and any `Bearer <token>`.
+  - A new fail-closed `nebius.contains_secret` (which also checks JSON-escaped forms) is used by the director, mech_director and scientist record guards.
+  - Regression tests in `tests/test_nebius_client.py`.
+  - Launch rule: never `source` the .env in a shell; the Python `load_env` (dotenv) reads it.
+- Owner action recommended: rotate the Nebius Token Factory key, since it appeared in a local transcript.
+## 2026-10-17/18 Registered held-out run: AI arms invalidated by a key rotation during the run
+- Timeline:
+  - The registered evaluation (`experiments/causal_engineer/heldout/`) was launched at 20:12 UTC.
+  - At about 20:45 UTC the operator recommended rotating the Token Factory key (see the previous incident) without saying to
+    wait until the run ended.
+  - The owner rotated it at 21:02 UTC. Every model request after 21:03:50 UTC returned HTTP 401.
+- Effect:
+  - AI episodes ended as `consecutive_invalid` with the unrepaired robot submitted; only 4–15 of 40 per AI arm ran before
+    the outage.
+  - Non-AI arms were unaffected.
+  - 231 failed calls were settled in the ledger at worst case ($7.42 recorded, nothing billed).
+- Handling:
+  - The registered analysis was run once and reported as is (`REPORT.md`), with the AI tests marked uninterpretable.
+  - The new key was installed on the VM (verified read-only).
+  - A re-run of the AI arms is proposed as amendment 1 and needs the owner's decision.
+- Lessons:
+  - no credential changes during live runs;
+  - pre-run live key check;
+  - runners must fail fast on authentication errors.
+## 2026-10-18 GitHub Actions refuses to start runs (account billing) - infrastructure blocker
+- Push run 39088125876 (`feature/causal-engineer` @ `192c000`): both jobs failed in 1-2 s without starting.
+  - The annotation said "The job was not started because recent account payments have failed or your spending limit needs
+    to be increased."
+  - No test ran, so this is not a code failure.
+- Impact: there is no CI signal on any branch or PR (including PR #18) until the owner fixes GitHub billing.
+- Not done: no workaround, and no workflow change on this branch. PR #18 already reduces Actions usage once merged.

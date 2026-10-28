@@ -24,6 +24,9 @@ artifacts/
 runs/
 checkpoints/
 *.log
+# run logs inside the tracked TA-1 / DO-1 run records are evidence, not scratch output
+!experiments/do1/**/*.log
+!experiments/ta1/**/*.log
 # Editor/OS
 .idea/
 .vscode/
@@ -36,4 +39,10 @@ infra/nebius/state.json
 infra/nebius/repo.bundle
 infra/nebius/watchdog.log
 infra/nebius/spend_ledger.jsonl
+infra/nebius/state_batch.json
+infra/nebius/spend_ledger_batch.jsonl
 infra/nebius/tunnel.pid
+infra/nebius/AUTH_BLOCKED
+!experiments/w2/export_run_2026-10-21/**/*.log
+!experiments/w2/export_run_2026-10-21/*.log
+infra/nebius/sa.json

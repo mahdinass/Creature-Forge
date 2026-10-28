@@ -6,3 +6,20 @@ experiments/forge_loop/dev_live_records/*.json -text
 experiments/forge_loop/scoreboard/results/records/*.json -text
 experiments/forge_loop/memory_eval/bank.jsonl -text
 experiments/forge_loop/memory_eval/results/records/*.json -text
+experiments/walk_recovery/**/results/*.jsonl -text
+experiments/walk_recovery/**/results/*.json -text
+experiments/walk_recovery/**/results/**/*.jsonl -text
+experiments/walk_recovery/**/results/**/*.json -text
+experiments/walk_recovery/**/results/**/*.txt -text
+experiments/walk_recovery/**/results/*.txt -text
+experiments/walk_recovery/**/*.jsonl -text
+experiments/walk_recovery/**/results*/** -text
+experiments/causal_engineer/heldout/**/*.jsonl -text
+experiments/causal_engineer/heldout/**/*.json -text
+docs/archive/*.SHA256SUMS -text
+experiments/do1/** -text
+experiments/ta1/** -text
+experiments/w2/** -text
+docs/archive/*.tsv -text
+# E-1 registered study records and gate evidence (sha256-pinned; no EOL conversion)
+experiments/e1/** -text

@@ -3,7 +3,8 @@
 import type { ParamDiff } from '../demo/demoLogic'
 import type {
   Arm, ArmSource, ChallengeRun, Creature, CreatureVersion, Controllers, Edit, Hypothesis, InvestigationRecord, InvestigationSummary, Job, JobEvent, JobPoll, Kind,
-  LoopResult, ModelCall, Outcome, ProbesRecord, RankRow, SeedResult, ValidatedHypothesis, Verdict, VerdictStatus,
+  LoopResult, Origin, ModelCall, Outcome, PipelineRecord, ProbesRecord, RankRow, SeedResult, ValidatedHypothesis, Verdict, VerdictStatus,
+  DirectorCall, DirectorRecord, RecoveryProvenance, RecoveryRecord, RecoverySeedRow, RecoverySummary,
 } from './forgeTypes'
 
 // ---- challenges and outcomes ------------------------------------------------------------------------------------
@@ -232,7 +233,7 @@ export function jobFailureMessage(job: Job | null, events: JobEvent[]): string {
 }
 
 // ---- lineage ----------------------------------------------------------------------------------------------------
-export interface LineageRow { n: number; parent: number | null; depth: number; current: boolean; origin: 'user' | 'ai_accepted'; summary: string; version: CreatureVersion }
+export interface LineageRow { n: number; parent: number | null; depth: number; current: boolean; origin: Origin; summary: string; version: CreatureVersion }
 
 /** Newest version first, each with its depth in the parent chain; unknown parents count as roots. */
 export function lineageRows(c: Creature): LineageRow[] {
@@ -244,7 +245,7 @@ export function lineageRows(c: Creature): LineageRow[] {
 }
 
 const SOURCE_LABEL: Record<string, string> = {
-  nemotron: 'Nemotron', scripted_mock: 'Scripted mock', random_baseline: 'Random baseline', heuristic: 'Heuristic',
+  nemotron: 'Nemotron', scripted_mock: 'Scripted mock', random_baseline: 'Random baseline', heuristic: 'Heuristic', fix_rule: 'Fixed engineering rule',
 }
 
 /** One line for the lineage: who proposed the change, what it was, and the recorded verdict summary. */
@@ -252,6 +253,7 @@ export function changeSummary(v: CreatureVersion): string {
   if (v.origin === 'user' || !v.change) return v.parent === null ? 'Drawn by you' : 'Saved by you'
   const ch = v.change
   const src = SOURCE_LABEL[ch.source ?? ''] ?? 'Accepted change'
+  if (ch.kind === 'recovery') return `${src}: walking recovery, ${describeEdits(ch.edits as Edit[] | undefined)} · full recovery (held-out walking validation and a 20 s confirmation)`
   const ver = ch.verdict
   const verified = ver
     ? ver.n !== undefined ? `verified on ${ver.n} held-out seeds (${ver.wins ?? 0} wins / ${ver.losses ?? 0} losses / ${ver.ties ?? 0} ties)` : 'verified'
@@ -259,8 +261,9 @@ export function changeSummary(v: CreatureVersion): string {
   return `${src}: ${describeEdits(ch.edits as Edit[] | undefined)} \u00b7 ${verified}`
 }
 
-export function originLabel(o: 'user' | 'ai_accepted', source?: string): string {
+export function originLabel(o: Origin, source?: string): string {
   if (o === 'user') return 'Yours'
+  if (o === 'baseline_accepted') return 'Rule-based change, accepted'
   if (source === 'scripted_mock') return 'Scripted mock change, accepted'
   if (source === 'random_baseline' || source === 'heuristic') return 'Baseline change, accepted'
   return 'AI change, accepted'
@@ -528,10 +531,10 @@ export const isModelFailed = (rec: InvestigationRecord): boolean => rec.status =
 export function budgetLine(b: InvestigationRecord['budget']): string {
   if (!b) return 'No budget was recorded.'
   const parts: string[] = []
-  if (b.rollouts !== undefined) parts.push(`${b.rollouts.toLocaleString()} physics rollouts`)
+  if (b.rollouts !== undefined) parts.push(`${b.rollouts.toLocaleString('en-US')} physics rollouts`)
   if (b.wall_s !== undefined) parts.push(`${b.wall_s.toFixed(0)} s`)
   if (b.calls !== undefined) parts.push(`${b.calls} model call${b.calls === 1 ? '' : 's'}`)
-  if (b.tokens !== undefined) parts.push(`${b.tokens.toLocaleString()} tokens`)
+  if (b.tokens !== undefined) parts.push(`${b.tokens.toLocaleString('en-US')} tokens`)
   if (b.usd !== undefined) parts.push(`$${b.usd.toFixed(4)}`)
   return parts.join(', ')
 }
@@ -654,3 +657,264 @@ export function forgeUrl(cid: string, n?: number | null, run?: string | null): s
 
 /** Seed ids are large block numbers; show them compactly but never alter the id used for requests. */
 export const shortSeed = (seed: number): string => (seed >= 100000 ? `…${String(seed).slice(-3)}` : String(seed))
+
+// ---- walking recovery ("Recover walking") ------------------------------------------------------------------------
+export const RECOVERY_BUDGETS = [1000, 2000, 4000] as const
+export const RECOVERY_DEFAULT_BUDGET = 2000
+export const RECOVERY_STAGES = ['diagnostics', 'probes', 'plans', 'screening', 'validation', 'confirmation'] as const
+export type RecoveryStage = (typeof RECOVERY_STAGES)[number]
+export const RECOVERY_STAGE_LABEL: Record<RecoveryStage, string> = {
+  diagnostics: 'Diagnostics', probes: 'Probes', plans: 'Plans', screening: 'Screening', validation: 'Validation', confirmation: 'Confirmation',
+}
+
+/** Recover walking is offered for a walk challenge of this very version that is FAIL or POOR (never for PASS or ERROR). */
+export function canOfferRecovery(run: ChallengeRun | null, versionN: number): boolean {
+  return !!run && run.spec.kind === 'walk' && (run.outcome === 'FAIL' || run.outcome === 'POOR') && run.creature.n === versionN
+}
+
+export function recoveryProvenance(p: RecoveryProvenance | string | undefined): { label: string; tone: string; text: string } {
+  if (p === 'LIVE') return { label: 'LIVE', tone: 'model', text: 'A real model call chose the probes and plans.' }
+  if (p === 'SCRIPTED_MOCK') return { label: 'SCRIPTED MOCK', tone: 'mock', text: 'Not a model. The fixed rule’s decisions in the AI layout; never counted as a result of the AI.' }
+  if (p === 'NON_AI') return { label: 'NO AI', tone: 'heuristic', text: 'A fixed engineering rule chose the probes and plans. No model was called.' }
+  return { label: String(p ?? 'unknown'), tone: 'random', text: '' }
+}
+
+export const countWalking = (rows: RecoverySeedRow[] | undefined): { walking: number; n: number } => ({ walking: (rows ?? []).filter((r) => r.outcome === 'PASS').length, n: (rows ?? []).length })
+
+export type RecoveryTone = 'ok' | 'warn' | 'bad' | 'error'
+/** Plain-language outcome. A partial improvement is never called a recovery. */
+export function recoveryHeadline(rec: Pick<RecoveryRecord, 'status' | 'assessment' | 'budget' | 'error'>): { text: string; tone: RecoveryTone } {
+  const a = rec.assessment
+  switch (rec.status) {
+    case 'FULL_RECOVERY': {
+      const v = countWalking(a?.validation.candidate)
+      const c = countWalking(a?.confirmation.per_seed)
+      return { tone: 'ok', text: `Walks: recovered (${v.walking}/${v.n} validation seeds walking, confirmed ${c.walking}/${c.n} at ${a?.confirmation.duration ?? 20} s)` }
+    }
+    case 'PARTIAL_IMPROVEMENT': return { tone: 'warn', text: 'Improved, but does not walk reliably (not a recovery)' }
+    case 'NOT_RECOVERED': return { tone: 'bad', text: `Not recovered within ${rec.budget.total} rollouts` }
+    case 'INCONCLUSIVE_ERROR': return { tone: 'error', text: 'Inconclusive: some rollouts errored, and an error is never counted as success' }
+    case 'cancelled': return { tone: 'error', text: 'The recovery was cancelled before it finished' }
+    case 'failed': return { tone: 'error', text: `The recovery failed${rec.error ? `: ${rec.error}` : ''}` }
+    default: return { tone: 'error', text: `Unknown recovery status: ${rec.status}` }
+  }
+}
+
+/** One line for the history list. */
+export function recoverySummaryText(s: RecoverySummary): string {
+  const wf = s.walking_frac !== null && s.walking_frac !== undefined ? `, ${Math.round(s.walking_frac * 100)}% of validation seeds walking` : ''
+  switch (s.status) {
+    case 'FULL_RECOVERY': return `Recovered${wf}`
+    case 'PARTIAL_IMPROVEMENT': return `Improved, not a recovery${wf}`
+    case 'NOT_RECOVERED': return `Not recovered${wf}`
+    case 'INCONCLUSIVE_ERROR': return 'Inconclusive (errors)'
+    case 'cancelled': return 'Cancelled'
+    case 'failed': return `Failed${s.error ? `: ${s.error}` : ''}`
+    default: return s.status
+  }
+}
+export const recoveryTone = (status: string): RecoveryTone => (status === 'FULL_RECOVERY' ? 'ok' : status === 'PARTIAL_IMPROVEMENT' ? 'warn' : status === 'NOT_RECOVERED' ? 'bad' : 'error')
+
+/** Accept is for FULL_RECOVERY only. The reason mirrors the API's refusal (creature_forge/recoveries.py build_accept). */
+export function recoveryAcceptState(rec: RecoveryRecord): { allowed: boolean; reason: string | null } {
+  if (rec.status === 'FULL_RECOVERY' && rec.assessment?.status === 'FULL_RECOVERY' && rec.candidate) return { allowed: true, reason: null }
+  const why = (rec.assessment?.reasons ?? []).join('; ') || rec.error || ''
+  return {
+    allowed: false,
+    reason: `Not accepted: the status is ${rec.status}. Only FULL_RECOVERY can be accepted (stricter than a verified improvement; a partial improvement is not a recovery).${why ? ` Reason: ${why}` : ''}`,
+  }
+}
+
+// ---- expectation versus measurement
+const GAIN_EPS = 1e-9
+export interface ChipInfo { label: string; tone: 'ok' | 'bad' | 'muted' }
+/** The code (not the model) compares what the director expected with what MuJoCo measured on the training seeds:
+ * "improves" matches when more seeds walk or the mean fitness is higher than the unchanged creature's; "no_change" matches when neither is. */
+export function expectationChip(expect: string | null | undefined, probe: { status: string; delta_walking?: number; delta_mean_fitness?: number }): ChipInfo {
+  if (probe.status !== 'ok') return { label: 'NOT MEASURED', tone: 'muted' }
+  if (expect !== 'improves' && expect !== 'no_change') return { label: 'NO EXPECTATION RECORDED', tone: 'muted' }
+  const improved = (probe.delta_walking ?? 0) > 0 || (probe.delta_mean_fitness ?? 0) > GAIN_EPS
+  const matches = expect === 'improves' ? improved : !improved
+  return matches ? { label: 'MATCHED EXPECTATION', tone: 'ok' } : { label: 'DID NOT MATCH', tone: 'bad' }
+}
+const signedDelta = (x: number, d = 2): string => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(Number(x.toFixed(d)))
+export function measuredText(m: { status: string; reason?: string; delta_walking?: number; delta_mean_fitness?: number }): string {
+  if (m.status !== 'ok') return `not measured${m.reason ? `: ${m.reason}` : ''}`
+  return `${signedDelta(m.delta_walking ?? 0, 0)} walking training seeds, ${signedDelta(m.delta_mean_fitness ?? 0, 3)} mean fitness, against the unchanged creature`
+}
+
+// ---- reasoning view
+export interface CitedValue { path: string; value: string | null }
+export interface HypView { id: string; mechanism: string; cites: CitedValue[]; competing: string[]; refuted: boolean; refutedRound: number | null }
+export interface ProbeView { id: string; hypothesis: string | null; expect: string | null; chip: ChipInfo; measured: string; rollouts: number | null; status: string }
+export interface Subsystem { kind: 'control' | 'body'; name: string }
+export interface PlanView {
+  id: string; subsystems: Subsystem[]; init: string; share: number; budget: number; hypothesis: string | null; prediction: string | null
+  status: string; measured: string; rollouts: number | null; refunded: number | null; reason: string | null
+}
+export interface RoundView {
+  round: number; hypotheses: HypView[]; probes: ProbeView[]; rejectedProbes: string[]; refuted: string[]; diagnosis: string | null
+  directorIssues: string[]; plans: PlanView[]; rejectedPlans: string[]
+}
+export interface ReasoningView { title: string; mock: boolean; isAi: boolean; rounds: RoundView[] }
+
+/** `path = value` lines of the EVIDENCE block in the user message of one recorded model call (what the model actually saw). */
+export function evidenceMap(call: DirectorCall | undefined): Map<string, string> {
+  const out = new Map<string, string>()
+  const user = (call?.messages ?? []).filter((m) => m.role === 'user').map((m) => m.content ?? '').join('\n')
+  const lines = user.split('\n')
+  const at = lines.findIndex((l) => l.trim() === 'EVIDENCE:')
+  if (at < 0) return out
+  for (let i = at + 1; i < lines.length && lines[i].trim() !== ''; i++) {
+    const m = /^(\S+) = (.*)$/.exec(lines[i])
+    if (m) out.set(m[1], m[2])
+  }
+  return out
+}
+
+function probeCallOf(d: DirectorRecord, round: number): DirectorCall | undefined {
+  const dec = d.decisions.find((x) => x.kind === 'probes' && x.round === round)
+  const idx = dec?.calls?.[0]
+  return idx === undefined ? undefined : d.calls[idx]
+}
+
+export function buildReasoning(rec: Pick<RecoveryRecord, 'pipeline' | 'director_record' | 'director' | 'provenance'>): ReasoningView {
+  const pipe = rec.pipeline
+  const d = rec.director_record
+  const isAi = rec.director === 'ai'
+  const mock = rec.provenance === 'SCRIPTED_MOCK'
+  const title = !isAi ? 'Rule decisions (no AI)' : mock ? 'Scripted decisions (fixed rule in the AI layout, not a model)' : 'How the AI reasoned'
+  const rounds: RoundView[] = (pipe?.rounds ?? []).map((r) => {
+    const evidence = d ? evidenceMap(probeCallOf(d, r.round)) : new Map<string, string>()
+    const hypotheses: HypView[] = d ? Object.entries(d.hypotheses ?? {}).filter(([, h]) => h.round === r.round).map(([id, h]) => ({
+      id, mechanism: h.mechanism, competing: h.competing ?? [], refuted: h.refuted, refutedRound: h.refuted_round,
+      cites: (h.evidence ?? []).map((path) => ({ path, value: evidence.get(path) ?? null })),
+    })) : []
+    const probes: ProbeView[] = r.probes.map((p) => {
+      const e = d?.expectations?.[p.probe_id]
+      return { id: p.probe_id, hypothesis: e?.hypothesis ?? null, expect: e?.expect ?? null, chip: expectationChip(e?.expect, p), measured: measuredText(p),
+        rollouts: p.rollouts ?? null, status: p.status }
+    })
+    const plans: PlanView[] = r.plans.map((p) => {
+      const meta = d?.plan_meta?.[p.plan_id]
+      const sub: Subsystem[] = [...(p.plan.ctrl_subspaces ?? []).map((name) => ({ kind: 'control' as const, name })), ...(p.plan.body_params ?? []).map((name) => ({ kind: 'body' as const, name }))]
+      const imp = p.improvement
+      return {
+        id: p.plan_id, subsystems: sub, init: p.plan.init, share: Number(p.plan.budget_share.toFixed(3)), budget: p.budget, hypothesis: meta?.hypothesis ?? null,
+        prediction: meta?.prediction ?? (p.plan.rationale ?? null), status: p.status, rollouts: p.rollouts_used ?? null, refunded: p.refunded ?? null,
+        reason: p.reason ?? null, measured: measuredText({ status: p.status, reason: p.reason, delta_walking: imp?.delta_walking, delta_mean_fitness: imp?.delta_mean_fitness }),
+      }
+    })
+    const plansDec = d?.decisions.find((x) => x.kind === 'plans' && x.round === r.round)
+    const issues = (d?.decisions ?? []).filter((x) => x.round === r.round && x.status !== 'ok')
+      .map((x) => `${x.kind} decision ${x.status}${x.validation_errors?.length ? `: ${x.validation_errors.slice(0, 2).join('; ')}` : ''}`)
+    return {
+      round: r.round, hypotheses, probes, plans, diagnosis: plansDec?.diagnosis ?? null, directorIssues: issues,
+      refuted: d?.refuted_by_round?.[String(r.round)] ?? [],
+      rejectedProbes: r.rejected_probes.map((x) => `${String(x.probe_id)}: ${x.reason}`),
+      rejectedPlans: r.rejected_plans.map((x) => `plan ${x.index ?? '?'}: ${x.reasons.join('; ')}`),
+    }
+  })
+  return { title, mock, isAi, rounds }
+}
+
+// ---- budget ledger
+export interface LedgerSegment { key: 'start' | 'probes' | 'plans' | 'screening' | 'unspent'; label: string; n: number }
+export interface Ledger { total: number; used: number; segments: LedgerSegment[]; refunded: number }
+/** Net rollouts per category from the pipeline's own ledger lines. The screening reserve and its release cancel and are not shown;
+ * `unspent` is total - used (refunds of unused search budget end up there); `refunded` is the gross amount refunded by probes and plans. */
+export function ledgerSegments(pipe: Pick<PipelineRecord, 'budget_lines' | 'total_budget' | 'used'> | null | undefined): Ledger {
+  const sums = { start: 0, probes: 0, plans: 0, screening: 0 }
+  let refunded = 0
+  for (const l of pipe?.budget_lines ?? []) {
+    if (l.item.startsWith('screen_reserve')) continue
+    if (l.item.endsWith(':refund')) refunded += Math.abs(l.n)
+    if (l.item === 'start_eval') sums.start += l.n
+    else if (l.item.startsWith('probe:')) sums.probes += l.n
+    else if (l.item.startsWith('plan:')) sums.plans += l.n
+    else if (l.item.startsWith('screen:')) sums.screening += l.n
+  }
+  const total = pipe?.total_budget ?? 0
+  const used = pipe?.used ?? 0
+  return {
+    total, used, refunded,
+    segments: [
+      { key: 'start', label: 'Start evaluation', n: sums.start }, { key: 'probes', label: 'Probes', n: sums.probes },
+      { key: 'plans', label: 'Plans', n: sums.plans }, { key: 'screening', label: 'Screening', n: sums.screening },
+      { key: 'unspent', label: 'Unspent (refunds included)', n: Math.max(0, total - used) },
+    ],
+  }
+}
+
+// ---- candidate
+export interface EditRow { param: string; label: string; before: number | null; after: number | null; ratio: number }
+export const fmtEditValue = (x: number | null): string => (x === null ? 'n/a' : String(Number(x.toPrecision(4))))
+export const fmtRatio = (r: number): string => (Number.isFinite(r) ? `x ${Number(r.toPrecision(3))}` : 'n/a')
+export function editRows(edits: Edit[] | undefined, original: Record<string, unknown> | undefined, candidate: Record<string, unknown> | undefined): EditRow[] {
+  return (edits ?? []).map((e) => {
+    const b = original?.[e.param]
+    const a = candidate?.[e.param]
+    const before = typeof b === 'number' ? b : null
+    const after = typeof a === 'number' ? a : before !== null && e.op === 'scale' ? before * e.value : e.op === 'set' ? e.value : null
+    const ratio = e.op === 'scale' ? e.value : before !== null && before !== 0 && after !== null ? after / before : NaN
+    return { param: e.param, label: PARAM_LABEL[e.param] ?? e.param.replace(/_/g, ' '), before, after, ratio }
+  })
+}
+
+export const WALK_PARAM_NAMES = ['freq', 'duty', 'hip_amp', 'knee_amp', 'knee_shift', 'stance_knee', 'hip_bias', 'kp', 'kd', 'balance_gain', 'pitch_kp', 'pitch_ref', 'sync_gain', 'ramp_s', 'start_lean', 'fp_kd', 'fp_kv'] as const
+export interface ControllerChange {
+  rows: { name: string; before: number | null; after: number; changed: boolean | null; fp: boolean }[]
+  fpActive: boolean
+  changed: number | null
+  hasBefore: boolean
+}
+/** The candidate's walking vector against the version's own (when it has one). fp_kd / fp_kv are the foot-placement gains. */
+export function controllerChange(before: number[] | null | undefined, after: number[]): ControllerChange {
+  const hasBefore = !!before && before.length >= 15
+  const rows = after.map((x, i) => {
+    const b = hasBefore ? (before![i] ?? 0) : null
+    return { name: WALK_PARAM_NAMES[i] ?? `walk[${i}]`, before: b, after: x, changed: b === null ? null : Math.abs(b - x) > 1e-12, fp: i >= 15 }
+  })
+  return { rows, fpActive: rows.some((r) => r.fp && Math.abs(r.after) > 1e-12), hasBefore, changed: hasBefore ? rows.filter((r) => r.changed).length : null }
+}
+
+// ---- job progress
+/** Stage states from the job's reported phase (the server derives it from the rollouts that actually ran). */
+export function recoveryStageStates(job: Job | null, events: JobEvent[]): Record<RecoveryStage, 'done' | 'active' | 'pending'> {
+  const lastEv = [...events].reverse().find((e) => e.type === 'phase')
+  const phase = job?.progress.phase ?? (typeof lastEv?.data.phase === 'string' ? (lastEv.data.phase as string) : null)
+  const idx = phase ? (RECOVERY_STAGES as readonly string[]).indexOf(phase) : -1
+  const finished = job?.status === 'done' || phase === 'done'
+  const out = {} as Record<RecoveryStage, 'done' | 'active' | 'pending'>
+  RECOVERY_STAGES.forEach((s, i) => { out[s] = finished || i < idx ? 'done' : i === idx ? 'active' : 'pending' })
+  return out
+}
+export interface RecoveryBudgetBar { label: string; done: number; total: number; fraction: number }
+/** "rollouts used / total": the search budget while diagnostics..screening run, the validation / confirmation rollouts afterwards. */
+export function recoveryBudgetBar(job: Job | null, requested: number): RecoveryBudgetBar | null {
+  if (!job) return null
+  const { phase, done, total } = job.progress
+  if (job.status === 'done') return { label: 'finished', done: 1, total: 1, fraction: 1 }
+  if (phase === 'validation' || phase === 'confirmation') {
+    const t = Math.max(0, total)
+    return { label: `${phase} rollouts`, done, total: t, fraction: t > 0 ? Math.min(1, done / t) : 0 }
+  }
+  const t = total > 0 ? total : requested
+  return { label: 'search budget, rollouts used / total', done, total: t, fraction: t > 0 ? Math.min(1, done / t) : 0 }
+}
+export function recoveryPhaseText(job: Job | null, events: JobEvent[]): string {
+  if (!job) return 'Starting...'
+  if (job.status === 'queued') return 'Waiting for the physics worker...'
+  if (job.status === 'done') return 'Finished.'
+  if (job.status === 'failed') return 'The recovery failed.'
+  if (job.status === 'cancelled') return 'The recovery was cancelled.'
+  const stages = recoveryStageStates(job, events)
+  const active = RECOVERY_STAGES.find((s) => stages[s] === 'active')
+  return active ? `${RECOVERY_STAGE_LABEL[active]}: ${job.progress.done} of ${job.progress.total} rollouts` : 'Running...'
+}
+export const newestRecoveryFirst = (l: RecoverySummary[]): RecoverySummary[] => [...l].sort((a, b) => b.created.localeCompare(a.created) || b.id.localeCompare(a.id))
+export function modelCostText(d: DirectorRecord | null): string {
+  if (!d) return 'no model calls'
+  const sent = d.calls.filter((c) => c.sent !== false).length
+  return `${sent} model call${sent === 1 ? '' : 's'}, $${(d.cost_usd ?? 0).toFixed(3)}`
+}

@@ -1,5 +1,8 @@
 # Resume prompt (copy into a fresh Claude Code session, Opus 5.5, high effort, started in the repository root)
 
+> **SUPERSEDED (2026-10-18).** Historical checkpoint of the Forge Loop session (2026-10-15). For the current state read
+> `docs/RESEARCH_HANDOFF_2026-10-18.md`.
+
 ```
 Continue the Creature Forge project from its saved checkpoint. Do not start over.
 

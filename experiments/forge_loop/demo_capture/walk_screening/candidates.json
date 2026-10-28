@@ -1,0 +1,236 @@
+{
+ "declared_utc": "2026-10-16",
+ "purpose": "choose a visibly different creature that genuinely fails the walk challenge, WITHOUT model calls",
+ "procedure": "each candidate drawn by hand in the Studio (forge-demo-capture.mjs STOP_AFTER=challenge, server WITHOUT live mode), Use this creature, Walk challenge with the default 8 seeds; nothing else",
+ "selection_rule": "among candidates interpreted as valid: most seeds (of 8) whose outcome is FAIL with a detected fall; at least 6/8 required; ties -> lower median score, then most visually different from live1",
+ "candidates": {
+  "C1-top-heavy": {
+   "proportions_m": {
+    "thigh": 0.3,
+    "shank": 0.3,
+    "foot": 0.08,
+    "W": 0.4,
+    "H": 0.7
+   },
+   "figure_canvas": {
+    "torso": [
+     [
+      420.0,
+      84.0
+     ],
+     [
+      580.0,
+      84.0
+     ],
+     [
+      580.0,
+      364.0
+     ],
+     [
+      420.0,
+      364.0
+     ],
+     [
+      420.0,
+      84.0
+     ]
+    ],
+    "leg": [
+     [
+      500,
+      364.0
+     ],
+     [
+      500,
+      484.0
+     ],
+     [
+      500,
+      604.0
+     ]
+    ],
+    "foot": [
+     [
+      492.0,
+      604.0
+     ],
+     [
+      524.0,
+      604.0
+     ]
+    ]
+   }
+  },
+  "C2-short-legs-big-torso": {
+   "proportions_m": {
+    "thigh": 0.15,
+    "shank": 0.15,
+    "foot": 0.08,
+    "W": 0.3,
+    "H": 0.5
+   },
+   "figure_canvas": {
+    "torso": [
+     [
+      440.0,
+      284.0
+     ],
+     [
+      560.0,
+      284.0
+     ],
+     [
+      560.0,
+      484.0
+     ],
+     [
+      440.0,
+      484.0
+     ],
+     [
+      440.0,
+      284.0
+     ]
+    ],
+    "leg": [
+     [
+      500,
+      484.0
+     ],
+     [
+      500,
+      544.0
+     ],
+     [
+      500,
+      604.0
+     ]
+    ],
+    "foot": [
+     [
+      492.0,
+      604.0
+     ],
+     [
+      524.0,
+      604.0
+     ]
+    ]
+   }
+  },
+  "C3-stilts": {
+   "proportions_m": {
+    "thigh": 0.55,
+    "shank": 0.55,
+    "foot": 0.07,
+    "W": 0.12,
+    "H": 0.3
+   },
+   "figure_canvas": {
+    "torso": [
+     [
+      476.0,
+      44.0
+     ],
+     [
+      524.0,
+      44.0
+     ],
+     [
+      524.0,
+      164.0
+     ],
+     [
+      476.0,
+      164.0
+     ],
+     [
+      476.0,
+      44.0
+     ]
+    ],
+    "leg": [
+     [
+      500,
+      164.0
+     ],
+     [
+      500,
+      384.0
+     ],
+     [
+      500,
+      604.0
+     ]
+    ],
+    "foot": [
+     [
+      493.0,
+      604.0
+     ],
+     [
+      521.0,
+      604.0
+     ]
+    ]
+   }
+  },
+  "C4-tall-top-heavy": {
+   "proportions_m": {
+    "thigh": 0.35,
+    "shank": 0.35,
+    "foot": 0.1,
+    "W": 0.3,
+    "H": 0.6
+   },
+   "figure_canvas": {
+    "torso": [
+     [
+      440.0,
+      84.0
+     ],
+     [
+      560.0,
+      84.0
+     ],
+     [
+      560.0,
+      324.0
+     ],
+     [
+      440.0,
+      324.0
+     ],
+     [
+      440.0,
+      84.0
+     ]
+    ],
+    "leg": [
+     [
+      500,
+      324.0
+     ],
+     [
+      500,
+      464.0
+     ],
+     [
+      500,
+      604.0
+     ]
+    ],
+    "foot": [
+     [
+      490.0,
+      604.0
+     ],
+     [
+      530.0,
+      604.0
+     ]
+    ]
+   }
+  }
+ }
+}

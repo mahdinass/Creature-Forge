@@ -1,0 +1,200 @@
+{
+ "harness_version": "ta1_harness_v2",
+ "created_utc": "2026-10-20T21:06:56+00:00",
+ "git_commit": "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+ "git_branch": "experiment/ta1-harness",
+ "git_dirty": false,
+ "git_status_porcelain": "",
+ "inputs": {
+  "v6_settings": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\ds1\\engine_v6_settings.json",
+   "sha256": "a0b037ef292886cf6311e41e275b8d492832de3cc3b1a68d8a1c8fb3fb5f8df1",
+   "git_blob_at_head": "805c72ce0218a23d414c1ca05975f52356292b18"
+  },
+  "stop_model": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\ds1\\stopmap_dev_v2.json",
+   "sha256": "7a829bb31cb88a6d0f38bf046326ab0b657f92423bc2807203c5f5dfc4f3ce73",
+   "git_blob_at_head": "99590dc7d362dc9f5abc0f448bf058529ebe70b5"
+  },
+  "split_file": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\stage2_split.json",
+   "sha256": "8ce0c7d0fc128f0385092a0574c4045542f7e1cfee37096e15e5544afa609394",
+   "git_blob_at_head": "c357bed7ca762fe38dde2323b86b32613d82deb6"
+  },
+  "eval_instances": {
+   "path": "C:\\Users\\<user>\\.vscode\\cf-ta1-harness\\experiments\\causal_engineer\\dev\\hdb\\ds1\\ds1_eval_instances.json",
+   "sha256": "dbd502de456234d70a69bebc69522a7640c4163608f82528d65c72ae8f65e97e",
+   "git_blob_at_head": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "thresholds": {
+   "path": "C:\\Users\\<user>\\.vscode\\Creature-Forge\\artifacts\\vm\\hdb\\artifacts\\hdb\\thresholds_dev.json",
+   "sha256": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "git_blob_at_head": null
+  },
+  "walkers": {
+   "path": "C:\\Users\\<user>\\.vscode\\Creature-Forge\\artifacts\\vm\\hdb\\artifacts\\hdb\\walkers_all.jsonl",
+   "sha256": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd",
+   "git_blob_at_head": null
+  }
+ },
+ "reference": {
+  "implementation_commit": "ea9e7291e8b718f1936120fcd844bd236175a16d",
+  "tracked_inputs_git_blob": {
+   "v6_settings": "805c72ce0218a23d414c1ca05975f52356292b18",
+   "stop_model": "99590dc7d362dc9f5abc0f448bf058529ebe70b5",
+   "split_file": "c357bed7ca762fe38dde2323b86b32613d82deb6",
+   "eval_instances": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "artifact_inputs_sha256": {
+   "thresholds": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "walkers": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd"
+  },
+  "stored_records_sha256": {
+   "eval_A1e6_s1.jsonl": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d",
+   "eval_A1e6_s2.jsonl": "2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d",
+   "eval_A1e6_s3.jsonl": "f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27",
+   "eval_A1e6_s4.jsonl": "7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102",
+   "eval_A1e6_s5.jsonl": "5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97",
+   "eval_A3v5_s5.jsonl": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0"
+  }
+ },
+ "python": "3.11.9",
+ "numpy": "2.4.6",
+ "mujoco": "3.15.0",
+ "platform": "Windows-10-10.0.26200-SP0",
+ "engine_version": "belief_engine_v6",
+ "agent_version": "has_agent_v4",
+ "argv": [
+  "scripts/rv1_reverify.py",
+  "--execute",
+  "--phase",
+  "1A",
+  "--approved-by",
+  "owner FA-1C Phase 1A authorization 2026-10-20",
+  "--harness-commit",
+  "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+  "--max-rollouts",
+  "824",
+  "--artifacts-root",
+  "../Creature-Forge/artifacts/vm/hdb/artifacts/hdb",
+  "--records-root",
+  "../Creature-Forge/artifacts/vm/ds1/eval",
+  "--workers",
+  "6",
+  "--out",
+  "C:/Users/<user>/.vscode/creature_forge_runs/fa1c_phase1a_2026-10-20/rv1_phase1a.jsonl"
+ ],
+ "phase": "1A",
+ "approved_by": "owner FA-1C Phase 1A authorization 2026-10-20",
+ "cap": 824,
+ "designs": [
+  [
+   "R1",
+   "hdb-v1-gen-0073:low_ground_friction:2",
+   "eval_A1e6_s1.jsonl",
+   1,
+   "A1e6",
+   4,
+   "bbf27921db",
+   "NOT_RECOVERED",
+   23,
+   "WORSE"
+  ],
+  [
+   "R2",
+   "hdb-v1-gen-0073:low_ground_friction:0",
+   "eval_A1e6_s3.jsonl",
+   1,
+   "A1e6",
+   1,
+   "21f93b68fe",
+   "NOT_RECOVERED",
+   23,
+   "WORSE"
+  ],
+  [
+   "R3",
+   "hdb-v1-gen-0126:low_ground_friction:0",
+   "eval_A1e6_s2.jsonl",
+   2,
+   "A1e6",
+   2,
+   "ed99eefe37",
+   "NOT_RECOVERED",
+   20,
+   "NOT_VERIFIED"
+  ],
+  [
+   "R4",
+   "hdb-v1-gen-0137:low_ground_friction:0",
+   "eval_A1e6_s3.jsonl",
+   4,
+   "A1e6",
+   4,
+   "66053dae8e",
+   "PARTIAL_IMPROVEMENT",
+   19,
+   "VERIFIED_IMPROVEMENT"
+  ],
+  [
+   "R5",
+   "hdb-v1-gen-0096:low_ground_friction:2",
+   "eval_A1e6_s4.jsonl",
+   3,
+   "A1e6",
+   4,
+   "1d51937757",
+   "NOT_RECOVERED",
+   6,
+   "NOT_VERIFIED"
+  ],
+  [
+   "R6",
+   "hdb-v1-gen-0073:heavy_torso:0",
+   "eval_A1e6_s5.jsonl",
+   2,
+   "A1e6",
+   4,
+   "1277dab8f7",
+   "NOT_RECOVERED",
+   23,
+   "WORSE"
+  ],
+  [
+   "R7",
+   "hdb-v1-gen-0073:heavy_torso:0",
+   "eval_A3v5_s5.jsonl",
+   2,
+   "A3v5",
+   4,
+   "dfb185d771",
+   "FULL_RECOVERY",
+   23,
+   "VERIFIED_IMPROVEMENT"
+  ],
+  [
+   "R8",
+   "hdb-v1-gen-0143:pitch_sensor_bias:3",
+   "eval_A1e6_s2.jsonl",
+   5,
+   "A1e6",
+   2,
+   "e3c48a6799",
+   "FULL_RECOVERY",
+   24,
+   "VERIFIED_IMPROVEMENT"
+  ]
+ ],
+ "stored_records_sha256": {
+  "eval_A1e6_s1.jsonl": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d",
+  "eval_A1e6_s2.jsonl": "2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d",
+  "eval_A1e6_s3.jsonl": "f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27",
+  "eval_A1e6_s4.jsonl": "7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102",
+  "eval_A1e6_s5.jsonl": "5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97",
+  "eval_A3v5_s5.jsonl": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0"
+ },
+ "records_root": "C:\\Users\\<user>\\.vscode\\Creature-Forge\\artifacts\\vm\\ds1\\eval",
+ "harness_commit_approved": "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+ "rv1_version": "rv1_reverify_v2",
+ "gate_scope": "exact reproduction of the available stored reference fields (not proof of complete physical identity)"
+}

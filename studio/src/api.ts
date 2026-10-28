@@ -5,7 +5,11 @@ import type { OverviewData } from './overview/overviewTypes'
 import type { WalkingReplay, WalkingSummary } from './walking/walkingTypes'
 import type { FreehandResult, SandboxBodyDict, SandboxSchema, StrokeIn } from './sketch/freehandTypes'
 import type { DemoReplay, DemoRow, DemoRun, DemoStatus } from './demo/demoTypes'
-import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, StartedChallenge, StartedInvestigation } from './forge/forgeTypes'
+import type { CausalIndex, CausalRecord, CausalReplay, DesignKey } from './causal/causalTypes'
+import type { ScientistIndex, ScientistRecord } from './scientist/scientistTypes'
+import type { DesignId, Do1Index, Do1Payload } from './do1/do1Types'
+import type { NemotronCaseResponse, ReplayName, W2Payload } from './nemotron/nemotronTypes'
+import type { ChallengeRun, Creature, CreatureSummary, ForgeStatus, InvestigationRecord, InvestigationSummary, Job, JobPoll, Kind, RecoveryRecord, RecoverySummary, StartedChallenge, StartedInvestigation, StartedRecovery } from './forge/forgeTypes'
 
 export const STALE_HINT =
   'The running Studio server is probably older than this page. Close it and start the current one with scripts\start_studio.ps1.'
@@ -148,3 +152,38 @@ export const getInvestigation = (id: string) => fetch(`${FORGE}/investigations/$
 export const listInvestigations = (cid: string) => fetch(`${FORGE}/investigations?cid=${encodeURIComponent(cid)}`).then((r) => fj<InvestigationSummary[]>(r))
 export const acceptArm = (cid: string, b: { investigation_id: string; arm_id: string }) =>
   postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/accept`, b).then((r) => fj<Creature>(r))
+
+// ---- walking recovery ("Recover walking"): creature_forge/recoveries.py
+export function forgeRecoveryReplayUrl(recoveryId: string, arm: 'original' | 'candidate', seed: number): string {
+  return `${FORGE}/recoveries/${encodeURIComponent(recoveryId)}/replay?${new URLSearchParams({ arm, seed: String(seed) }).toString()}`
+}
+export const startRecovery = (cid: string, n: number, b: { director: 'ai' | 'fix'; mode?: 'live' | 'scripted'; budget: number }) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/versions/${n}/recoveries`, b).then((r) => fj<StartedRecovery>(r))
+export const listRecoveries = (cid: string) => fetch(`${FORGE}/recoveries?cid=${encodeURIComponent(cid)}`).then((r) => fj<RecoverySummary[]>(r))
+export const getRecovery = (id: string) => fetch(`${FORGE}/recoveries/${encodeURIComponent(id)}`).then((r) => fj<RecoveryRecord>(r))
+export const getRecoveryReplay = (id: string, arm: 'original' | 'candidate', seed: number) =>
+  fetch(forgeRecoveryReplayUrl(id, arm, seed)).then((r) => fj<RunPayload>(r))
+export const acceptRecovery = (cid: string, recoveryId: string) =>
+  postJson(`${FORGE}/creatures/${encodeURIComponent(cid)}/accept-recovery`, { recovery_id: recoveryId }).then((r) => fj<Creature>(r))
+
+// Causal engineer (/api/causal/*): recorded investigations of why a robot falls; replays are fresh deterministic MuJoCo rollouts, no model call
+export const getCausalRecords = () => fetch('/api/causal/records').then((r) => j<CausalIndex>(r))
+export const getCausalRecord = (id: string) => fetch(`/api/causal/records/${encodeURIComponent(id)}`).then((r) => j<CausalRecord>(r))
+export const getCausalReplay = (id: string, design: DesignKey, seed: number) =>
+  fetch(`/api/causal/records/${encodeURIComponent(id)}/replay?design=${design}&seed=${seed}`).then((r) => j<CausalReplay>(r))
+
+// Autonomous HaS scientist (/api/scientist/*): recorded Stage-2 investigations; same replay contract as the causal records
+export const getScientistRecords = () => fetch('/api/scientist/records').then((r) => j<ScientistIndex>(r))
+export const getScientistRecord = (id: string) => fetch(`/api/scientist/records/${encodeURIComponent(id)}`).then((r) => j<ScientistRecord>(r))
+export const getScientistReplay = (id: string, design: DesignKey, seed: number) =>
+  fetch(`/api/scientist/records/${encodeURIComponent(id)}/replay?design=${design}&seed=${seed}`).then((r) => j<CausalReplay>(r))
+
+// DO-1 L4 recovery (/api/do1/*): verified static replays of the faulty, frozen and DO-1 designs; no simulation
+export const getDo1Index = () => fetch('/api/do1/index').then((r) => j<Do1Index>(r))
+export const getDo1Payload = (design: DesignId, duration: 10 | 20, seed: number) =>
+  fetch(`/api/do1/payload/${design}/${duration}/${seed}`).then((r) => j<Do1Payload>(r))
+
+// Nemotron's recorded gen-0137 investigation (/api/nemotron/*): pinned W2 case files; playback, no model call, no simulation
+export const getNemotronCase = () => fetch('/api/nemotron/case').then((r) => j<NemotronCaseResponse>(r))
+export const getNemotronReplay = (name: ReplayName, seed: number) =>
+  fetch(`/api/nemotron/replay/${name}/${seed}`).then((r) => j<W2Payload>(r))

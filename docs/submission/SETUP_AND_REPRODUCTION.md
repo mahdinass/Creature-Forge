@@ -1,74 +1,111 @@
-# Setup and reproduction
+# Setup and reproduction (V1)
 
-Levels from "look at it" to "run it live on Nebius". Only live calls and the VM cost money; everything else is free.
+The levels run from "look at the demo" to "run it live on Nebius". Only live model calls and cloud VMs cost money;
+everything else is free and runs offline.
 
 ## Prerequisites
-Python 3.11+ (CI uses 3.12), Node 22+, Git. Chrome or Edge for the browser checks. The Studio runs on Linux, macOS and Windows; the Forge Loop scoreboard and live records were produced on a Linux Nebius VM.
+- **Software:** Python 3.11 or 3.12 (CI uses 3.12), Node 22+, Git. Chrome or Edge is needed only for the browser checks.
+- **Platforms:** the Studio runs on Linux, macOS and Windows.
+- **Recorded experiments:** all were produced on Linux (Nebius VMs) with Python 3.12.3, numpy 2.5.4 and MuJoCo 3.15.0.
 
 ## Environment variables (all optional)
-| variable | purpose |
+| Variable | Purpose |
 |---|---|
-| `NEBIUS_API_KEY` | Nebius Token Factory key; only for live Nemotron calls. Put it in a git-ignored `.env` (see `.env.example`) or the environment; never commit it. |
-| `NEBIUS_BASE_URL` | defaults to `https://api.tokenfactory.nebius.com/v1` (https only) |
-| `CREATURE_FORGE_ENABLE_LIVE=1` | lets the Studio accept live investigations (also needs the key) |
-| `CREATURE_FORGE_PORT` | Studio port (default 8000) |
+| `NEBIUS_API_KEY` | Nebius Token Factory key; needed only for live Nemotron calls. Keep it in a git-ignored `.env` (see `.env.example`) or the environment; never commit it. |
+| `NEBIUS_BASE_URL` | Defaults to `https://api.tokenfactory.nebius.com/v1` (https only). |
+| `CREATURE_FORGE_ENABLE_LIVE=1` | Lets the Studio make live calls (the key is also required). |
+| `CREATURE_FORGE_PORT` | Studio port (default 8000). |
+| `TA1_RECORDS_ROOT` | Optional folder of the git-ignored DS-1 stored records. Without it, the 24 DO-1 tests that need them skip. |
 
-## 1. Local scripted run (no key)
+## 1. The demo, offline (no key, no cloud)
 ```sh
 python -m venv .venv
 .venv/bin/pip install -e ".[studio]"            # Windows: .venv\Scripts\pip install -e ".[studio]"
-npm --prefix studio install && npm --prefix studio run build
+npm --prefix studio ci && npm --prefix studio run build
 .venv/bin/python scripts/run_studio.py          # http://127.0.0.1:8000
 ```
-Open the **My creature** tab: draw (or pick a starter), *Use this creature*, run a challenge, *Investigate with AI*. Without live mode only the **scripted mock** runs; it is labelled SCRIPTED MOCK and is never promoted to LIVE. The **Overview** and AI Investigation tabs show the earlier recorded Nemotron demo.
+On Windows you can instead run `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1`.
 
-## 2. Live mode (Nebius key)
+**The two demo-video pages** play back hash-pinned recorded files. They make no simulation and no model call.
+- **Verified repair**, `http://127.0.0.1:8000/?tab=recovery`. The server checks `experiments/do1/demo/SHA256SUMS` before it
+  serves anything.
+- **Nemotron's experiment**, `http://127.0.0.1:8000/?tab=nemotron`. Recorded LIVE playback from `experiments/w2/`.
+
+**Everything else in the Studio** (Draw, Playground, Compare, My creature) simulates in MuJoCo on your machine. Without a
+key, each AI action runs as a labelled **SCRIPTED MOCK** and is never promoted to LIVE.
+
+## 2. Live Nemotron (Nebius key; paid)
 Create `.env` in the repository root:
 ```
 NEBIUS_API_KEY=<your key>
 CREATURE_FORGE_ENABLE_LIVE=1
 ```
-Restart `scripts/run_studio.py`. *Investigate with AI* then calls `nvidia/nemotron-3-super-120b-a12b` (settings in `experiments/forge_loop/model_config.json`). One investigation is 1-2 model calls (about $0.002 each in our records) plus MuJoCo rollouts.
+Restart the Studio. Live calls are then allowed in these places:
+- **My creature → Investigate with AI** (and *Recover walking* with the AI director):
+  - model `nvidia/nemotron-3-super-120b-a12b`, settings in `experiments/forge_loop/model_config.json`;
+  - 1–4 calls per investigation, about $0.002–0.004 each in our records, plus MuJoCo verification.
+- **AI investigation → Run live:** the original Nano demo path, `creature_forge/demo.py`.
 
-## 3. Nebius VM workflow (what we used for all simulation and testing)
-Requires the Nebius CLI and the VM set up as in `docs/NEBIUS_CLOUD_R1.md` (project and subnet ids in `infra/nebius/forge_cloud.py`).
+The HaS scientist shown on the *Nemotron's experiment* and *AI scientist* pages is a command-line study,
+`scripts/hdb_agent_run.py`. We ran it on a Nebius VM. The Studio only plays back its records.
+
+**Safeguards.**
+- Every call goes through `creature_forge/nebius.py`: request, token and dollar caps, no blind retries, the key never
+  logged.
+- Every call is written to the inference ledger, `creature_forge/inference_ledger.py`. Its caps are 8,000 requests and
+  $52.78 in total, plus 4 requests and 80,000 tokens per investigation.
+- A call whose worst-case cost would exceed a cap is refused before it is sent.
+
+## 3. Nebius VM workflow (how all heavy simulation was run)
+Requires the Nebius CLI and the VM set up as in `docs/NEBIUS_CLOUD_R1.md` (ids in `infra/nebius/forge_cloud.py`).
 ```sh
-python infra/nebius/forge_cloud.py start        # refuses beyond the infra spend cap; sets a deadline
+python infra/nebius/forge_cloud.py start        # refuses beyond the infra cap (SPEND_CAP_USD, $96); sets a deadline
 python infra/nebius/forge_cloud.py spend        # conservative infra spend so far
-python infra/nebius/forge_dev.py sync           # mirror the worktree (incl. uncommitted changes) to a VM slot
+python infra/nebius/forge_dev.py sync           # mirror the worktree to a VM slot
 python infra/nebius/forge_dev.py test py        # also: fe | e2e | smoke | all
-python infra/nebius/forge_dev.py serve --slot integ --live   # Studio on the VM
-python infra/nebius/forge_dev.py tunnel         # then open http://127.0.0.1:8765
-python infra/nebius/forge_cloud.py stop         # always stop when finished (it bills while running)
+python infra/nebius/forge_cloud.py stop         # ALWAYS stop through the API; an in-VM poweroff gets restarted
 ```
-`sync` pushes to a bare repo on the VM and leaves the registered research clone untouched. Use `forge_dev.py pull` to copy VM outputs back (pull before the next `sync`, which cleans untracked files in the slot).
 
-## 4. Reproduce the scoreboard analysis (no key, no rollouts)
+## 4. Reproduce the V1 evidence without physics (any OS, minutes)
 ```sh
-python scripts/forge_scoreboard.py --analyze --records experiments/forge_loop/scoreboard/results/records
+# W3/W4 replication statistics from the raw records (must equal analysis_output.txt)
+.venv/bin/python scripts/do1_replication_analysis.py --w3 experiments/do1/w3w4_2026-10-21/do1_l4_rep.jsonl \
+  --w4 experiments/do1/w3w4_2026-10-21/do1_x.jsonl
+# integrity of the frozen records and the demo exports
+(cd experiments/do1/w3w4_2026-10-21 && sha256sum -c SHA256SUMS)
+(cd experiments/do1/demo && sha256sum -c SHA256SUMS)
+(cd experiments/w2/gen0137_one_side_weakness/plant_replays && sha256sum -c SHA256SUMS)
+.venv/bin/python -m unittest tests.test_frozen_records tests.test_evidence_tracked tests.test_do1_api tests.test_w2_case
+# Forge Loop scoreboard analysis (12 committed records; restore any rewritten generated file with git checkout)
+.venv/bin/python scripts/forge_scoreboard.py --analyze --records experiments/forge_loop/scoreboard/results/records
 ```
-This recomputes the pre-registered analysis (exact one-sided McNemar, Wilson intervals) from the 12 committed records, whose SHA-256 values are in `MANIFEST.json`. It writes `results/summary.json` and may rewrite the generated section of the report: check `git diff` and restore, since the registered outputs are frozen. Report and limits: `experiments/forge_loop/scoreboard/REPORT.md`. Re-running the live scoreboard is not supported: the protocol is registered and `--run` refuses to run against a changed or uncommitted protocol.
 
-## 5. Acceptance and live UI flows
-```sh
-python scripts/forge_acceptance.py --base http://127.0.0.1:8000 --starter balanced --kind push --mode scripted
-python scripts/forge_run_loop.py --cid <cid> --n <version> --run-id <run_id> --mode live
-node studio/e2e/forge-live-flow.mjs              # real browser, real Nemotron call; set LIVE_OK=1; never in CI
-```
-`forge_acceptance.py` runs draw, challenge, investigate, verdict and accept-if-verified over HTTP and writes a report under `artifacts/forge/acceptance/`. Neither script accepts a design that is not VERIFIED. The archived live UI run (15/15 checks) is described in `experiments/forge_loop/dev_live_records/README.md`. (The exact invocation of `forge-live-flow.mjs` was not re-verified for this document; see the header of that file.)
+## 5. Re-run physics experiments (Linux, recorded environment, costs VM time)
+- **W3/W4:**
+  1. Check out the pre-registration commit `3b8a8b1` clean.
+  2. Provide the DS-1 artifacts and the stored records, with the hashes in `scripts/ta1_tool_access.py` `REFERENCE`.
+  3. Run `bash scripts/run_do1_w3w4.sh 3b8a8b1e12bccddb2573a21c2717d3c36ae15dd5 <out>`.
+
+  The sentinel checks the environment first. Later commits add records under `experiments/`, and the runner's preflight
+  then refuses by design.
+- **Demo exports:** `scripts/do1_demo_export.py` and `scripts/w2_damaged_plant_export.py`, on the main VM. Each is
+  fail-closed against the recorded rows.
+- **Older studies (R1/R2, scoreboard):** `docs/NEBIUS_CLOUD_R1.md` and the protocols in `experiments/`. All protocols are
+  immutable.
 
 ## 6. Tests
 ```sh
-.venv/bin/python -m unittest discover -s tests
+.venv/bin/python -m unittest discover -s tests          # about 1,600 tests
 npm --prefix studio test && npm --prefix studio run build
 .venv/bin/python scripts/smoke_test.py
-.venv/bin/python scripts/lab_browser_check.py        # real-browser flows
+.venv/bin/python scripts/lab_browser_check.py           # 11 real-browser flows, incl. both demo-video pages
 ```
-Run these on the VM (`forge_dev.py test ...`) if the local machine is short of memory. Older evidence checks (`scripts/verify_demo_trials.py --full`, `scripts/analyze_r2.py`) are unchanged.
+CI (`.github/workflows/context-guards.yml`, Ubuntu, clean checkout) runs all four. Run them on the VM
+(`forge_dev.py test ...`) if the local machine is short of memory.
 
-## Budgets and caps
-- Inference ledger: 1,500 requests and $15.00 in total; per investigation 4 requests and 80,000 tokens. A call whose worst-case cost would exceed a cap is refused before it is sent.
-- Infra spend cap: $10 (`forge_cloud.py` refuses `start`/`extend` beyond it); a deadline powers the VM off, and the VM should still be stopped through the API.
-- The Studio refuses live calls unless the flag and key are present; scripted runs cost nothing.
-- Totals to date: see `docs/PROJECT_STATE.md` (latest recorded: 24 model calls and $0.05 for the scoreboard).
-- Older R1/R2 cloud experiments: `docs/NEBIUS_CLOUD_R1.md`; their protocol is immutable.
+## Budgets
+| What | Value |
+|---|---|
+| Infra cap | `SPEND_CAP_USD` $96. The infra ledger was $89.405 after W3/W4; the W3/W4 session itself cost $0.41 |
+| Inference | See §2. The recorded scientist calls cost about $0.003 each; the Forge Loop scoreboard cost $0.05 in total |
+| Scripted and recorded modes | Free |

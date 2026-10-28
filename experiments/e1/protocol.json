@@ -1,0 +1,82 @@
+{
+ "study": "E-1",
+ "version": 1,
+ "status": "REGISTERED 2026-10-24 (docs/E1_PROTOCOL.md section 9); frozen",
+ "title": "Physics-grounded investigation engine vs equally plant-budgeted exhaustive repair on sealed held-out damage",
+ "arms": [
+  "A0",
+  "A1",
+  "K0n"
+ ],
+ "arm_settings": {
+  "plant_budget": 700,
+  "twin_budget": 2800,
+  "twin_repair": 800,
+  "plant_repair": 300,
+  "max_alive": 12,
+  "max_experiments": 6,
+  "tau": 0.75,
+  "stop_model": "experiments/causal_engineer/dev/hdb/stopmap_dev_v1.json"
+ },
+ "hypotheses": {
+  "primary": {
+   "id": "H-E1",
+   "contrast": [
+    "A1",
+    "A0"
+   ],
+   "test": "exact one-sided McNemar",
+   "alpha": 0.05
+  },
+  "secondary_holm": [
+   {
+    "id": "H-E2",
+    "contrast": [
+     "A1",
+     "K0n"
+    ]
+   },
+   {
+    "id": "H-E3",
+    "contrast": [
+     "K0n",
+     "A0"
+    ]
+   }
+  ],
+  "outcome": "verification status FULL_RECOVERY (full_recovery_v1 on the hidden plant)"
+ },
+ "sampling": {
+  "seed": 2026102401,
+  "per_base": 2,
+  "per_base_stratum": 1,
+  "quotas": {
+   "pitch_sensor_bias": 6,
+   "payload_offset": 6,
+   "low_ground_friction": 6,
+   "short_feet": 6,
+   "feedback_gain_loss": 6,
+   "actuator_weakness": 6,
+   "one_side_weakness": 6,
+   "clock_fault": 6,
+   "heavy_torso": 6,
+   "sensor_latency": 18,
+   "joint_damping_wear": 18,
+   "leg_asymmetry": 18,
+   "heldcomp:payload_offset.fwd+actuator_weakness": 13,
+   "heldcomp:low_ground_friction+clock_fault.fast": 13,
+   "heldcomp:pitch_sensor_bias.++short_feet": 13,
+   "heldcomp:heavy_torso+feedback_gain_loss": 13
+  },
+  "n_total": 160,
+  "order": "strict round robin over strata in this key order; per-stratum sha256(seed:stratum:base:severity) order"
+ },
+ "population": "hdb-v1 test-side bases (hdb_bench.load_bases('test'), 99 walkers); dev and sealed held-out families; eligibility hdb_bench.check_eligibility",
+ "owner_approval": "2026-10-24: 160 sealed test instances; batch-VM spend about $18-23; cap $120",
+ "recovery": {
+  "worker_or_process_failure": "re-run the same shard with --resume (identical inputs; completed instance records are kept, a partial episode is recomputed from scratch)",
+  "vm_stop_or_crash": "restart the VM, re-sync the registered commit, resume every shard with --resume",
+  "build_interruption": "re-run e1_build.py on the same out-dir (resumable; evaluated candidates and thresholds are reused)",
+  "never": "no change of code, settings, seeds, sample or analysis after any arm outcome is seen; every deviation is reported"
+ }
+}

@@ -1,0 +1,18 @@
+120 evaluation units over 12 test creatures
+
+| variant | N | final FULL | final PARTIAL | warm FULL | warm walking (mean) | final walking (mean) | fallback |
+|---|---|---|---|---|---|---|---|
+| knn | 10 | 4/12 | 3 | 0 | 0.31 | 0.61 | 0 |
+| knn | 20 | 2/12 | 1 | 0 | 0.00 | 0.38 | 0 |
+| knn | 40 | 1/12 | 3 | 1 | 0.14 | 0.37 | 0 |
+| learned | 10 | 2/12 | 5 | 1 | 0.42 | 0.61 | 0 |
+| learned | 20 | 2/12 | 6 | 0 | 0.19 | 0.58 | 0 |
+| learned | 40 | 2/12 | 7 | 1 | 0.28 | 0.68 | 0 |
+| mean_best | 10 | 2/12 | 6 | 0 | 0.41 | 0.60 | 0 |
+| mean_best | 20 | 2/12 | 6 | 0 | 0.41 | 0.60 | 0 |
+| mean_best | 40 | 3/12 | 8 | 2 | 0.45 | 0.73 | 0 |
+| r2 | 0 | 2/12 | 3 | 0 | 0.00 | 0.39 | 0 |
+
+G3 conditions: learned@40 > knn@40: True; learned@40 > mean_best@40: False; learned > r2: False; learned@40 > learned@10: False
+G3 = FAIL
+applicability (lower = more confident): lower half FULL 3/18, upper half FULL 3/18

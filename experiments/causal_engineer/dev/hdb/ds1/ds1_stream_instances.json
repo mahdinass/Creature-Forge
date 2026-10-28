@@ -1,0 +1,32 @@
+{
+ "which": "stream",
+ "mults": "1.0,1.7",
+ "sample_seed": 20261021,
+ "exclude_ids": "artifacts/hdb/ds1_used_ids.txt",
+ "single": [
+  "hdb-v1-gen-0013:low_ground_friction:2",
+  "stilts-drawn:one_side_weakness:0",
+  "hdb-v1-gen-0004:payload_offset:2",
+  "hdb-v1-gen-0064:one_side_weakness:3",
+  "hdb-v1-gen-0038:low_ground_friction:0",
+  "hdb-v1-gen-0028:one_side_weakness:5",
+  "hdb-v1-gen-0064:pitch_sensor_bias:2",
+  "stilts-drawn:clock_fault:3",
+  "hdb-v1-gen-0036:pitch_sensor_bias:2",
+  "hdb-v1-gen-0038:short_feet:2",
+  "hdb-v1-gen-0004:feedback_gain_loss:2",
+  "hdb-v1-gen-0013:low_ground_friction:0",
+  "hdb-v1-gen-0036:one_side_weakness:3",
+  "hdb-v1-gen-0036:payload_offset:2",
+  "hdb-v1-gen-0064:clock_fault:2",
+  "hdb-v1-gen-0064:feedback_gain_loss:0"
+ ],
+ "comp": [
+  "hdb-v1-gen-0004:devcomp:pitch_sensor_bias.++actuator_weakness:0",
+  "hdb-v1-gen-0013:devcomp:low_ground_friction+actuator_weakness:0",
+  "hdb-v1-gen-0028:devcomp:pitch_sensor_bias.++actuator_weakness:0",
+  "hdb-v1-gen-0028:devcomp:pitch_sensor_bias.++clock_fault.fast:0"
+ ],
+ "ineligible": 4,
+ "excluded_used": 4
+}

@@ -45,5 +45,6 @@ def nebius_base_url(default: str) -> str:
 
 
 def nebius_api_key() -> str | None:
-    """NEBIUS_API_KEY from the (already loaded) environment; empty counts as unset."""
-    return os.environ.get("NEBIUS_API_KEY") or None
+    """NEBIUS_API_KEY from the (already loaded) environment, stripped of surrounding whitespace (a CRLF .env sourced by a shell
+    leaves a trailing CR, incident 2026-10-17); empty counts as unset."""
+    return (os.environ.get("NEBIUS_API_KEY") or "").strip() or None

@@ -1,0 +1,2455 @@
+{
+ "budget": {
+  "designs": [
+   {
+    "index": 0,
+    "source": "initial"
+   },
+   {
+    "index": 1,
+    "parent": 0,
+    "source": "counterfactual:hip_bias@-0.1R&kp@x1.2"
+   },
+   {
+    "index": 2,
+    "parent": 0,
+    "rollouts": 132,
+    "source": "repair:posture",
+    "tool": "posture",
+    "train_fitness": 4.355600908063119,
+    "train_walking": 3
+   },
+   {
+    "index": 3,
+    "parent": 2,
+    "rollouts": 164,
+    "source": "repair:feedback",
+    "tool": "feedback",
+    "train_fitness": 4.378499882822113,
+    "train_walking": 3
+   },
+   {
+    "index": 4,
+    "parent": 3,
+    "source": "counterfactual:kd@x2&foot_length@x2"
+   },
+   {
+    "index": 5,
+    "parent": 3,
+    "source": "counterfactual:kd@x1.5"
+   },
+   {
+    "index": 6,
+    "parent": 3,
+    "rollouts": 100,
+    "source": "repair:feedback",
+    "tool": "feedback",
+    "train_fitness": 4.378499882822113,
+    "train_walking": 3
+   },
+   {
+    "index": 7,
+    "parent": 3,
+    "rollouts": 100,
+    "source": "repair:foot_friction",
+    "tool": "foot_friction",
+    "train_fitness": 4.399591149166011,
+    "train_walking": 3
+   }
+  ],
+  "lines": [
+   {
+    "cumulative": 4,
+    "detail": {
+     "design": 0
+    },
+    "item": "observe",
+    "n": 4
+   },
+   {
+    "cumulative": 8,
+    "detail": {
+     "design": 0,
+     "id": "hip_bias@-0.1R&kp@x1.2"
+    },
+    "item": "counterfactual",
+    "n": 4
+   },
+   {
+    "cumulative": 160,
+    "detail": {
+     "budget": 152,
+     "design": 0,
+     "tool": "posture"
+    },
+    "item": "repair",
+    "n": 152
+   },
+   {
+    "cumulative": 140,
+    "detail": {
+     "tool": "posture",
+     "unused": 20
+    },
+    "item": "repair",
+    "n": -20
+   },
+   {
+    "cumulative": 333,
+    "detail": {
+     "budget": 193,
+     "design": 2,
+     "tool": "feedback"
+    },
+    "item": "repair",
+    "n": 193
+   },
+   {
+    "cumulative": 304,
+    "detail": {
+     "tool": "feedback",
+     "unused": 29
+    },
+    "item": "repair",
+    "n": -29
+   },
+   {
+    "cumulative": 312,
+    "detail": {
+     "design": 3,
+     "duration": 20.0
+    },
+    "item": "stress_test",
+    "n": 8
+   },
+   {
+    "cumulative": 316,
+    "detail": {
+     "design": 3
+    },
+    "item": "observe",
+    "n": 4
+   },
+   {
+    "cumulative": 320,
+    "detail": {
+     "design": 3,
+     "id": "kd@x2&foot_length@x2"
+    },
+    "item": "counterfactual",
+    "n": 4
+   },
+   {
+    "cumulative": 324,
+    "detail": {
+     "design": 3,
+     "id": "kd@x1.5"
+    },
+    "item": "counterfactual",
+    "n": 4
+   },
+   {
+    "cumulative": 436,
+    "detail": {
+     "budget": 112,
+     "design": 3,
+     "tool": "feedback"
+    },
+    "item": "repair",
+    "n": 112
+   },
+   {
+    "cumulative": 424,
+    "detail": {
+     "tool": "feedback",
+     "unused": 12
+    },
+    "item": "repair",
+    "n": -12
+   },
+   {
+    "cumulative": 524,
+    "detail": {
+     "budget": 100,
+     "design": 3,
+     "tool": "foot_friction"
+    },
+    "item": "repair",
+    "n": 100
+   },
+   {
+    "cumulative": 532,
+    "detail": {
+     "design": 7,
+     "duration": 20.0
+    },
+    "item": "stress_test",
+    "n": 8
+   }
+  ],
+  "remaining": 168,
+  "total": 700,
+  "used": 532
+ },
+ "config": {
+  "budget": 700,
+  "max_steps": 12,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_obs": 4,
+  "n_train": 4,
+  "prompt_version": "v2",
+  "provenance": "LIVE",
+  "scientist_mode": "iterative",
+  "system_prompt": {
+   "length": 12227,
+   "sha256": "7ab14908cf2acd3f4e4f7b63da1d4d282f4dca05956f2c348969a345988bf9ef"
+  },
+  "thinking": true,
+  "tolerance": "n_walking, n_fell: exact (tolerance 0). Others: max(absolute, 5 % of the baseline value); absolute tolerances: fall_time and time_upright 0.25 s; any *_slope 0.005; pitch_rate 0.05 rad/s; pitch 0.02 rad; tracking_error 0.005 rad; friction_utilisation 0.05; fractions and saturation_frac 0.02; step_freq_hz 0.15 Hz; com_vx 0.05 m/s; *_over_L and angmom_norm 0.02; anything else 0.02."
+ },
+ "error": null,
+ "evaluation_only": {
+  "diagnosis_category": "posture_bias",
+  "diagnosis_match": true,
+  "fault": "posture_lean",
+  "injected_category": "posture_bias",
+  "matching_tool": "posture",
+  "note": "Ground truth added by the evaluation runner after the AI finished. The AI never saw it: its prompt contained only the faulty robot, its own measurements and (optionally) retrieved memory items.",
+  "severity": 0.25
+ },
+ "experiments": [
+  {
+   "atoms": [
+    {
+     "level": "-0.1R",
+     "param": "hip_bias"
+    },
+    {
+     "level": "x1.2",
+     "param": "kp"
+    }
+   ],
+   "change": "hip_bias@-0.1R&kp@x1.2",
+   "changes": [
+    {
+     "op": "add",
+     "param": "hip_bias",
+     "value": -0.04
+    },
+    {
+     "op": "scale",
+     "param": "kp",
+     "value": 1.2
+    }
+   ],
+   "cost": 4,
+   "design_index": 0,
+   "executed_seq": 4,
+   "id": "E1",
+   "kind": "counterfactual",
+   "outcome": {
+    "cost_of_counterfactual_only": 4,
+    "n_fell": 1,
+    "n_fell_base": 4,
+    "n_walking": 3,
+    "n_walking_base": 0
+   },
+   "predictions": [
+    {
+     "direction": "decrease",
+     "hypothesis": "H1",
+     "quantity": "pitch_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H1",
+     "quantity": "pitch_end"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H1",
+     "quantity": "com_ahead_of_cop_over_L_mean"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H2",
+     "quantity": "capture_margin_over_L_mean"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H2",
+     "quantity": "n_walking"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H2",
+     "quantity": "pitch_rate_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H3",
+     "quantity": "com_height_over_L_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H3",
+     "quantity": "angmom_norm_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H3",
+     "quantity": "tracking_error_hip"
+    }
+   ],
+   "purpose": "Test reducing forward lean and increasing proportional gain.",
+   "registered_seq": 3,
+   "result_design_index": 1,
+   "scoring": [
+    {
+     "base": 0.191841378505174,
+     "delta": -0.10841083936624532,
+     "hypothesis": "H1",
+     "new": 0.08343053913892867,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "pitch_mean",
+     "status": "correct",
+     "tolerance": 0.02
+    },
+    {
+     "base": 0.7228413508498299,
+     "delta": -0.6255721395761562,
+     "hypothesis": "H1",
+     "new": 0.09726921127367374,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "pitch_end",
+     "status": "correct",
+     "tolerance": 0.036142067542491496
+    },
+    {
+     "base": 0.019496634601007326,
+     "delta": -0.0166712389398284,
+     "hypothesis": "H1",
+     "new": 0.0028253956611789272,
+     "observed": "no_change",
+     "predicted": "decrease",
+     "quantity": "com_ahead_of_cop_over_L_mean",
+     "status": "incorrect",
+     "tolerance": 0.02
+    },
+    {
+     "base": -0.20087242594282803,
+     "delta": 0.06442810156737963,
+     "hypothesis": "H2",
+     "new": -0.1364443243754484,
+     "observed": "increase",
+     "predicted": "increase",
+     "quantity": "capture_margin_over_L_mean",
+     "status": "correct",
+     "tolerance": 0.02
+    },
+    {
+     "base": 0.0,
+     "delta": 3.0,
+     "hypothesis": "H2",
+     "new": 3.0,
+     "observed": "increase",
+     "predicted": "increase",
+     "quantity": "n_walking",
+     "status": "correct",
+     "tolerance": 0.0
+    },
+    {
+     "base": 0.14010644862270505,
+     "delta": -0.13641809183801368,
+     "hypothesis": "H2",
+     "new": 0.003688356784691373,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "pitch_rate_mean",
+     "status": "correct",
+     "tolerance": 0.05
+    },
+    {
+     "base": 0.9830821664035546,
+     "delta": 0.008775445561343131,
+     "hypothesis": "H3",
+     "new": 0.9918576119648977,
+     "observed": "no_change",
+     "predicted": "decrease",
+     "quantity": "com_height_over_L_mean",
+     "status": "incorrect",
+     "tolerance": 0.04915410832017773
+    },
+    {
+     "base": 0.006573970798369157,
+     "delta": -0.005837085734516049,
+     "hypothesis": "H3",
+     "new": 0.0007368850638531081,
+     "observed": "no_change",
+     "predicted": "decrease",
+     "quantity": "angmom_norm_mean",
+     "status": "incorrect",
+     "tolerance": 0.02
+    },
+    {
+     "base": 0.05874204009536762,
+     "delta": -0.014466196886321107,
+     "hypothesis": "H3",
+     "new": 0.04427584320904651,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "tracking_error_hip",
+     "status": "correct",
+     "tolerance": 0.005
+    }
+   ],
+   "status": "ok",
+   "step": 1
+  },
+  {
+   "budget": 152,
+   "budget_share": 0.22,
+   "cost": 132,
+   "executed_seq": 7,
+   "hypothesis": "H1",
+   "id": "R1",
+   "is_current_best": true,
+   "kind": "repair",
+   "n_train": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": -1,
+   "registered_seq": 6,
+   "result_design_index": 2,
+   "rollouts_used": 132,
+   "start_walking": 0,
+   "status": "ok",
+   "step": 2,
+   "tool": "posture",
+   "train_fitness": 4.355600908063119,
+   "train_walking": 3
+  },
+  {
+   "budget": 193,
+   "budget_share": 0.28,
+   "cost": 164,
+   "executed_seq": 9,
+   "hypothesis": "H2",
+   "id": "R2",
+   "is_current_best": true,
+   "kind": "repair",
+   "n_train": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": -1,
+   "registered_seq": 8,
+   "result_design_index": 3,
+   "rollouts_used": 164,
+   "start_walking": 3,
+   "status": "ok",
+   "step": 2,
+   "tool": "feedback",
+   "train_fitness": 4.378499882822113,
+   "train_walking": 3
+  },
+  {
+   "cost": 8,
+   "design_index": 3,
+   "duration": 20.0,
+   "executed_seq": 12,
+   "falls": [
+    "seeds: 4; walking 4; fell 0 (FORWARD, i.e. nose down / torso ahead, on 0; BACKWARD on 0; other 0); labels walking: 4"
+   ],
+   "id": "T1",
+   "kind": "test",
+   "n_fell": 0,
+   "n_obs": 4,
+   "n_walking": 4,
+   "predicted_n_walking": 2,
+   "prediction_error": 2,
+   "purpose": "Assess robustness of the current best design on a 20\u202fs stress test",
+   "registered_seq": 11,
+   "status": "ok",
+   "step": 3
+  },
+  {
+   "cost": 4,
+   "design_index": 3,
+   "id": "O1",
+   "kind": "observe",
+   "step": 4
+  },
+  {
+   "atoms": [
+    {
+     "level": "x2",
+     "param": "kd"
+    },
+    {
+     "level": "x2",
+     "param": "foot_length"
+    }
+   ],
+   "change": "kd@x2&foot_length@x2",
+   "changes": [
+    {
+     "op": "scale",
+     "param": "kd",
+     "value": 2.0
+    },
+    {
+     "op": "scale",
+     "param": "foot_length",
+     "value": 2.0
+    }
+   ],
+   "cost": 8,
+   "design_index": 3,
+   "executed_seq": 16,
+   "id": "E2",
+   "kind": "counterfactual",
+   "outcome": {
+    "cost_of_counterfactual_only": 4,
+    "n_fell": 4,
+    "n_fell_base": 0,
+    "n_walking": 0,
+    "n_walking_base": 4
+   },
+   "predictions": [
+    {
+     "direction": "decrease",
+     "hypothesis": "H4",
+     "quantity": "pitch_rate_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H4",
+     "quantity": "angmom_norm_mean"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H4",
+     "quantity": "n_walking"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H5",
+     "quantity": "capture_margin_over_L_mean"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H5",
+     "quantity": "n_walking"
+    }
+   ],
+   "purpose": "Test increasing joint damping and foot length to address low_joint_impedance and short_support_base hypotheses.",
+   "registered_seq": 14,
+   "result_design_index": 4,
+   "scoring": [
+    {
+     "base": 0.016823248728523112,
+     "delta": 0.4402317681713092,
+     "hypothesis": "H4",
+     "new": 0.4570550168998323,
+     "observed": "increase",
+     "predicted": "decrease",
+     "quantity": "pitch_rate_mean",
+     "status": "incorrect",
+     "tolerance": 0.05
+    },
+    {
+     "base": 0.0020721211603838994,
+     "delta": 0.02094327053188153,
+     "hypothesis": "H4",
+     "new": 0.02301539169226543,
+     "observed": "increase",
+     "predicted": "decrease",
+     "quantity": "angmom_norm_mean",
+     "status": "incorrect",
+     "tolerance": 0.02
+    },
+    {
+     "base": 4.0,
+     "delta": -4.0,
+     "hypothesis": "H4",
+     "new": 0.0,
+     "observed": "decrease",
+     "predicted": "increase",
+     "quantity": "n_walking",
+     "status": "incorrect",
+     "tolerance": 0.0
+    },
+    {
+     "base": -0.18626326842649837,
+     "delta": 0.04920101625931944,
+     "hypothesis": "H5",
+     "new": -0.13706225216717893,
+     "observed": "increase",
+     "predicted": "increase",
+     "quantity": "capture_margin_over_L_mean",
+     "status": "correct",
+     "tolerance": 0.02
+    },
+    {
+     "base": 4.0,
+     "delta": -4.0,
+     "hypothesis": "H5",
+     "new": 0.0,
+     "observed": "decrease",
+     "predicted": "increase",
+     "quantity": "n_walking",
+     "status": "incorrect",
+     "tolerance": 0.0
+    }
+   ],
+   "status": "ok",
+   "step": 4
+  },
+  {
+   "atoms": [
+    {
+     "level": "x1.5",
+     "param": "kd"
+    }
+   ],
+   "change": "kd@x1.5",
+   "changes": [
+    {
+     "op": "scale",
+     "param": "kd",
+     "value": 1.5
+    }
+   ],
+   "cost": 4,
+   "design_index": 3,
+   "executed_seq": 19,
+   "id": "E3",
+   "kind": "counterfactual",
+   "outcome": {
+    "cost_of_counterfactual_only": 4,
+    "n_fell": 0,
+    "n_fell_base": 0,
+    "n_walking": 4,
+    "n_walking_base": 4
+   },
+   "predictions": [
+    {
+     "direction": "decrease",
+     "hypothesis": "H6",
+     "quantity": "n_walking"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H6",
+     "quantity": "pitch_rate_mean"
+    },
+    {
+     "direction": "increase",
+     "hypothesis": "H6",
+     "quantity": "angmom_norm_mean"
+    },
+    {
+     "direction": "decrease",
+     "hypothesis": "H6",
+     "quantity": "capture_margin_over_L_end"
+    }
+   ],
+   "purpose": "Test whether increasing joint damping worsens forward fall as predicted by H6.",
+   "registered_seq": 18,
+   "result_design_index": 5,
+   "scoring": [
+    {
+     "base": 4.0,
+     "delta": 0.0,
+     "hypothesis": "H6",
+     "new": 4.0,
+     "observed": "no_change",
+     "predicted": "decrease",
+     "quantity": "n_walking",
+     "status": "incorrect",
+     "tolerance": 0.0
+    },
+    {
+     "base": 0.016823248728523112,
+     "delta": 0.0027073134041013074,
+     "hypothesis": "H6",
+     "new": 0.01953056213262442,
+     "observed": "no_change",
+     "predicted": "increase",
+     "quantity": "pitch_rate_mean",
+     "status": "incorrect",
+     "tolerance": 0.05
+    },
+    {
+     "base": 0.0020721211603838994,
+     "delta": 0.00013653805408413893,
+     "hypothesis": "H6",
+     "new": 0.0022086592144680384,
+     "observed": "no_change",
+     "predicted": "increase",
+     "quantity": "angmom_norm_mean",
+     "status": "incorrect",
+     "tolerance": 0.02
+    },
+    {
+     "base": -0.15811222166678385,
+     "delta": -0.13382998875658392,
+     "hypothesis": "H6",
+     "new": -0.29194221042336777,
+     "observed": "decrease",
+     "predicted": "decrease",
+     "quantity": "capture_margin_over_L_end",
+     "status": "correct",
+     "tolerance": 0.02
+    }
+   ],
+   "status": "ok",
+   "step": 5
+  },
+  {
+   "budget": 112,
+   "budget_share": 0.30000000000000004,
+   "cost": 100,
+   "executed_seq": 22,
+   "hypothesis": "H6",
+   "id": "R3",
+   "is_current_best": false,
+   "kind": "repair",
+   "n_train": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": -1,
+   "registered_seq": 21,
+   "result_design_index": 6,
+   "rollouts_used": 100,
+   "start_walking": 3,
+   "status": "ok",
+   "step": 6,
+   "tool": "feedback",
+   "train_fitness": 4.378499882822113,
+   "train_walking": 3
+  },
+  {
+   "budget": 100,
+   "budget_share": 0.3623188405797101,
+   "cost": 100,
+   "executed_seq": 25,
+   "hypothesis": "H6",
+   "id": "R4",
+   "is_current_best": true,
+   "kind": "repair",
+   "n_train": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": -1,
+   "registered_seq": 24,
+   "result_design_index": 7,
+   "rollouts_used": 100,
+   "start_walking": 3,
+   "status": "ok",
+   "step": 7,
+   "tool": "foot_friction",
+   "train_fitness": 4.399591149166011,
+   "train_walking": 3
+  },
+  {
+   "cost": 8,
+   "design_index": 7,
+   "duration": 20.0,
+   "executed_seq": 28,
+   "falls": [
+    "seeds: 4; walking 4; fell 0 (FORWARD, i.e. nose down / torso ahead, on 0; BACKWARD on 0; other 0); labels walking: 4"
+   ],
+   "id": "T2",
+   "kind": "test",
+   "n_fell": 0,
+   "n_obs": 4,
+   "n_walking": 4,
+   "predicted_n_walking": 4,
+   "prediction_error": 0,
+   "purpose": "Check whether the current best design can sustain walking for 20\u202fs on the four training seeds, giving us an observation of its basic walking ability.",
+   "registered_seq": 27,
+   "status": "ok",
+   "step": 8
+  }
+ ],
+ "final": {
+  "confidence": 0.0,
+  "diagnosis_category": "posture_bias",
+  "ended_by": "concluded",
+  "explanation": "Excessive forward lean reduced by lowering hip_bias and increasing foot_friction, improving capture margin.",
+  "step": 9,
+  "submit": "best"
+ },
+ "hypotheses": {
+  "H1": {
+   "category": "posture_bias",
+   "causal_chain": "High hip_bias/pitch_ref \u2192 torso leans forward \u2192 COM moves ahead of centre of pressure \u2192 capture point falls outside support interval forward \u2192 forward toppling moment \u2192 pitch increases \u2192 fall forward.",
+   "confidence": 0.0,
+   "created_step": 1,
+   "evidence": [
+    "observation.median.pitch_mean",
+    "observation.median.pitch_end",
+    "observation.median.com_ahead_of_cop_over_L_mean",
+    "observation.median.capture_margin_over_L_mean"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 1
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 2,
+      "n_scored": 3
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E1"
+     ],
+     "reason": "Two of three predictions correct (pitch_mean \u2193, pitch_end \u2193); one prediction (com_ahead_of_cop_over_L_mean \u2193) observed no_change, not a clear contradiction.",
+     "status": "open",
+     "step": 2
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 0
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "R1"
+     ],
+     "reason": "Predicted n_walking after posture repair = 4, observed n_walking = 3 (experiment R1)",
+     "status": "refuted",
+     "step": 3
+    }
+   ],
+   "id": "H1",
+   "mechanism": "Excessive forward lean due to high hip_bias and pitch_ref settings.",
+   "status": "refuted"
+  },
+  "H2": {
+   "category": "weak_balance_feedback",
+   "causal_chain": "Low balance_gain \u2192 weak corrective torques when COM ahead of CoP \u2192 pitch rate and angular momentum grow unchecked \u2192 capture margin becomes more negative \u2192 forward fall.",
+   "confidence": 0.0,
+   "created_step": 1,
+   "evidence": [
+    "observation.median.pitch_rate_mean",
+    "observation.median.angmom_norm_mean",
+    "observation.median.capture_margin_over_L_mean"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 1
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 3,
+      "n_scored": 3
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E1"
+     ],
+     "reason": "All three predictions correct (capture_margin_over_L_mean \u2191, n_walking \u2191, pitch_rate_mean \u2193).",
+     "status": "supported",
+     "step": 2
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 0
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "R2"
+     ],
+     "reason": "Predicted n_walking after feedback repair = 4, observed n_walking = 3 (experiment R2)",
+     "status": "refuted",
+     "step": 3
+    }
+   ],
+   "id": "H2",
+   "mechanism": "Insufficient balance feedback gain to counteract forward momentum.",
+   "status": "refuted"
+  },
+  "H3": {
+   "category": "heavy_upper_body",
+   "causal_chain": "High torso_mass \u2192 greater forward momentum for a given step \u2192 requires larger balance corrections \u2192 if balance gains inadequate, COM drifts ahead of CoP \u2192 capture margin negative \u2192 forward fall.",
+   "confidence": 0.0,
+   "created_step": 1,
+   "evidence": [
+    "observation.median.com_height_over_L_mean",
+    "observation.median.tracking_error_hip",
+    "observation.median.angmom_norm_mean"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 1
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 3
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E1"
+     ],
+     "reason": "Two predictions (com_height_over_L_mean \u2193, angmom_norm_mean \u2193) observed no_change while expecting decrease; tracking_error_hip \u2193 was correct but insufficient to sustain hypothesis.",
+     "status": "refuted",
+     "step": 2
+    }
+   ],
+   "id": "H3",
+   "mechanism": "Torso mass too large relative to leg length, increasing forward inertia.",
+   "status": "refuted"
+  },
+  "H4": {
+   "category": "low_joint_impedance",
+   "causal_chain": "Low kd \u2192 insufficient damping of joint velocity \u2192 overshoot in pitch correction \u2192 angular momentum can reverse direction \u2192 capture point swings backward \u2192 backward fall.",
+   "confidence": 0.0,
+   "created_step": 2,
+   "evidence": [
+    "robot.body.torque_limit",
+    "robot.body.leg_density",
+    "observation.median.pitch_rate_slope",
+    "observation.median.capture_margin_over_L_end"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 2
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 3
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E2"
+     ],
+     "reason": "Predictions for pitch_rate_mean decrease, angmom_norm_mean decrease, and n_walking increase were all contradicted by E2 (observed increase, increase, decrease).",
+     "status": "refuted",
+     "step": 5
+    }
+   ],
+   "id": "H4",
+   "mechanism": "Insufficient joint damping (kd too low) leads to oscillations and occasional backward falls when forward momentum is high.",
+   "status": "refuted"
+  },
+  "H5": {
+   "category": "short_support_base",
+   "causal_chain": "Short foot length \u2192 smaller support interval \u2192 capture point more likely to lie outside anterior edge \u2192 forward toppling moment \u2192 pitch increase \u2192 forward fall.",
+   "confidence": 0.0,
+   "created_step": 3,
+   "evidence": [
+    "robot.body.foot_length",
+    "reference.features.foot_to_leg"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 3
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 2
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E2"
+     ],
+     "reason": "While the prediction for capture_margin_over_L_mean increase was correct, the prediction for n_walking increase was contradicted by E2 (observed decrease).",
+     "status": "refuted",
+     "step": 5
+    }
+   ],
+   "id": "H5",
+   "mechanism": "Foot length too short reduces the support base, making the capture point fall forward during stepping.",
+   "status": "refuted"
+  },
+  "H6": {
+   "category": "low_joint_impedance",
+   "causal_chain": "High kd \u2192 over\u2011damped joint response \u2192 delayed balance torques \u2192 pitch and angular momentum increase \u2192 capture margin becomes more negative \u2192 forward toppling moment \u2192 pitch increases further \u2192 fall forward.",
+   "confidence": 0.0,
+   "created_step": 5,
+   "evidence": [
+    "experiments.E2.delta.pitch_rate_mean",
+    "experiments.E2.delta.angmom_norm_mean",
+    "experiments.E2.delta.n_walking",
+    "experiments.E2.delta.capture_margin_over_L_end",
+    "experiments.E2.delta.com_ahead_of_cop_over_L_end"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 5
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 4
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E3"
+     ],
+     "reason": "Predictions for E3: n_walking decrease (incorrect), pitch_rate_mean increase (incorrect), angmom_norm_mean increase (incorrect), capture_margin_over_L_end decrease (correct). Only 1 of 4 predictions matched, insufficient to refute; hypothesis remains open.",
+     "status": "open",
+     "step": 6
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 4
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E3"
+     ],
+     "reason": "Predictions for kd@x1.5 (E3): n_walking decrease (incorrect), pitch_rate_mean increase (incorrect), angmom_norm_mean increase (incorrect), capture_margin_over_L_end decrease (correct). Overall H6 remains open.",
+     "status": "open",
+     "step": 7
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 4
+     },
+     "confidence": 0.0,
+     "experiments": [
+      "E3",
+      "R3",
+      "R4"
+     ],
+     "reason": "Predictions from E3 (n_walking decrease, pitch_rate_mean increase, angmom_norm_mean increase) were incorrect, and repairs R3 and R4 targeting H6 failed to improve walking (predicted 4 seeds, obtained 3). Only 1 of 4 predictions was correct, indicating the hypothesis is not supported.",
+     "status": "refuted",
+     "step": 8
+    }
+   ],
+   "id": "H6",
+   "mechanism": "Excessive joint damping (kd too high) makes the joints over\u2011damped, delaying corrective torques when the centre of mass moves ahead of the centre of pressure. This lag allows forward pitch and angular momentum to grow unchecked, driving the capture point forward of the support interval and causing a forward fall.",
+   "status": "refuted"
+  },
+  "H7": {
+   "category": "poor_foot_placement",
+   "causal_chain": "Low fp_kv and/or fp_kd \u2192 foot placement lags behind COM \u2192 support interval shifts rearward \u2192 capture point moves forward of support \u2192 negative capture margin \u2192 forward pitch acceleration \u2192 fall forward.",
+   "confidence": 0.0,
+   "created_step": 8,
+   "evidence": [
+    "observation.median.capture_margin_over_L_mean",
+    "observation.median.com_ahead_of_cop_over_L_mean",
+    "observation.median.pitch_mean",
+    "observation.median.pitch_end"
+   ],
+   "history": [
+    {
+     "confidence": 0.0,
+     "experiments": [],
+     "reason": "created",
+     "status": "open",
+     "step": 8
+    }
+   ],
+   "id": "H7",
+   "mechanism": "Inadequate swing\u2011foot placement gains cause the foot to land too far behind the center of mass, leaving insufficient backward ground\u2011reaction impulse to counteract forward momentum, leading to forward toppling and fall.",
+   "status": "open"
+  }
+ },
+ "id": "c-71c360e98c4a",
+ "initial_observation": {
+  "median": {
+   "angmom_norm_end": 0.09806266576885392,
+   "angmom_norm_mean": 0.006573970798369157,
+   "angmom_norm_slope": 0.003221923871227557,
+   "capture_inside_fraction": 0.013344226579520698,
+   "capture_margin_over_L_end": -0.7499685051338929,
+   "capture_margin_over_L_mean": -0.20087242594282803,
+   "capture_margin_over_L_slope": -0.04353819108559579,
+   "com_ahead_of_cop_over_L_end": 0.3544867778143991,
+   "com_ahead_of_cop_over_L_mean": 0.019496634601007326,
+   "com_ahead_of_cop_over_L_slope": 0.007356597396617068,
+   "com_height_over_L_end": 0.8872073265469604,
+   "com_height_over_L_mean": 0.9830821664035546,
+   "com_height_over_L_slope": -0.004596100187063306,
+   "com_vx_end": 1.0133125774006058,
+   "com_vx_mean": 0.45059279941328073,
+   "com_vx_slope": 0.10724409918233789,
+   "cp_ahead_of_front_edge_over_L_end": 0.7499685051338929,
+   "cp_ahead_of_front_edge_over_L_mean": 0.20054608962588383,
+   "cp_ahead_of_front_edge_over_L_slope": 0.05001575122021827,
+   "double_support_fraction": 0.024423559264138972,
+   "fall_direction": 1.0,
+   "fall_time": 7.051000000000689,
+   "flight_fraction": 0.020202550731921846,
+   "friction_utilisation_p95": 0.3078958902764365,
+   "leg_length_m": 0.601502,
+   "max_friction_utilisation": 1.0,
+   "n_swing_phases": 26.5,
+   "pitch_end": 0.7228413508498299,
+   "pitch_mean": 0.191841378505174,
+   "pitch_rate_end": 2.4905514632793455,
+   "pitch_rate_mean": 0.14010644862270505,
+   "pitch_rate_slope": 0.07827831045793057,
+   "pitch_slope": 0.05502877242272826,
+   "saturation_frac_ankle": 0.0,
+   "saturation_frac_hip": 0.0,
+   "saturation_frac_knee": 0.0,
+   "slip_fraction": 0.0010755521044214574,
+   "step_freq_hz": 3.586137619286525,
+   "step_length_over_L": 0.19696962585217478,
+   "swing_clearance_min_over_L": -0.0015233967007236473,
+   "swing_peak_clearance_mean_over_L": 0.04140860841763534,
+   "swing_peak_clearance_min_over_L": -3.5055191680607275e-05,
+   "time_upright": 7.056000000000689,
+   "tracking_error_ankle": 0.03362327894553068,
+   "tracking_error_hip": 0.05874204009536762,
+   "tracking_error_knee": 0.04910566437940676
+  },
+  "n_fell": 4,
+  "n_walking": 0,
+  "pre_fall": {
+   "angmom_norm": 0.0575255267781266,
+   "capture_margin_over_L": -0.5196185187287037,
+   "com_ahead_of_cop_over_L": 0.1719341610217453,
+   "com_height_over_L": 0.9325250962009153,
+   "com_vx": 0.8942725126263988,
+   "cp_ahead_of_front_edge_over_L": 0.5196185187287037,
+   "max_friction_utilisation": 1.0,
+   "pitch": 0.5304156477709797,
+   "pitch_rate": 1.3259194077166792,
+   "saturation_frac_ankle": 0.0,
+   "saturation_frac_hip": 0.0,
+   "saturation_frac_knee": 0.0,
+   "slip_fraction": 0.019444444444444445,
+   "window_s": 0.4974999999999441
+  }
+ },
+ "llm": {
+  "calls": 13,
+  "cost_usd": 0.0778899,
+  "latency_s": 218.48737626000002,
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "provenance": "LIVE",
+  "tokens": {
+   "completion": 35834,
+   "prompt": 152131
+  }
+ },
+ "memory": {
+  "assessments": {},
+  "error": null,
+  "items": [],
+  "log": []
+ },
+ "no_ai_comparison": [
+  {
+   "error": null,
+   "policy": "exhaustive",
+   "rollouts_used": 696,
+   "status": "PARTIAL_IMPROVEMENT",
+   "walking_frac": 0.875
+  }
+ ],
+ "prediction_summary": {
+  "accuracy": 0.4444444444444444,
+  "by_predicted_direction": {
+   "decrease": {
+    "correct": 5,
+    "n": 11
+   },
+   "increase": {
+    "correct": 3,
+    "n": 7
+   }
+  },
+  "by_quantity": {
+   "angmom_norm_mean": {
+    "correct": 0,
+    "n": 3
+   },
+   "capture_margin_over_L_end": {
+    "correct": 1,
+    "n": 1
+   },
+   "capture_margin_over_L_mean": {
+    "correct": 2,
+    "n": 2
+   },
+   "com_ahead_of_cop_over_L_mean": {
+    "correct": 0,
+    "n": 1
+   },
+   "com_height_over_L_mean": {
+    "correct": 0,
+    "n": 1
+   },
+   "n_walking": {
+    "correct": 1,
+    "n": 4
+   },
+   "pitch_end": {
+    "correct": 1,
+    "n": 1
+   },
+   "pitch_mean": {
+    "correct": 1,
+    "n": 1
+   },
+   "pitch_rate_mean": {
+    "correct": 1,
+    "n": 3
+   },
+   "tracking_error_hip": {
+    "correct": 1,
+    "n": 1
+   }
+  },
+  "chance_three_way": 0.3333333333333333,
+  "majority_observed_baseline": 0.3888888888888889,
+  "n_correct": 8,
+  "n_scored": 18,
+  "observed_directions": {
+   "decrease": 7,
+   "increase": 5,
+   "no_change": 6
+  },
+  "repair_predictions": {
+   "abs_errors": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "n": 4,
+   "within_one": 4
+  },
+  "tolerance": "n_walking, n_fell: exact (tolerance 0). Others: max(absolute, 5 % of the baseline value); absolute tolerances: fall_time and time_upright 0.25 s; any *_slope 0.005; pitch_rate 0.05 rad/s; pitch 0.02 rad; tracking_error 0.005 rad; friction_utilisation 0.05; fractions and saturation_frac 0.02; step_freq_hz 0.15 Hz; com_vx 0.05 m/s; *_over_L and angmom_norm 0.02; anything else 0.02."
+ },
+ "robot": {
+  "base_region": "L1-f0-t1-q1",
+  "initial": {
+   "body": {
+    "foot_friction": 1.0,
+    "foot_length": 0.0805,
+    "foot_length_r": 0.080826,
+    "leg_density": 1000.0,
+    "pose": [
+     0.0077,
+     -0.010186,
+     0.0,
+     -0.000619,
+     -0.010618,
+     0.0,
+     -0.040399
+    ],
+    "shank_length": 0.301626,
+    "shank_length_r": 0.299876,
+    "thigh_length": 0.301626,
+    "thigh_length_r": 0.299876,
+    "torque_limit": 60.0,
+    "torso_mass": 15.0
+   },
+   "vector": [
+    1.555141834114274,
+    0.5746145348782157,
+    0.06360334138900163,
+    0.8595200316946476,
+    -0.08113199129340379,
+    -0.004597134741325837,
+    0.1995479649846929,
+    121.70337151766175,
+    10.762497323989722,
+    133.01587595349372,
+    86.46280690087647,
+    0.19365164042268157,
+    0.8745373874736129,
+    0.37308082048845015,
+    0.01830344347150241,
+    0.35253116708984966,
+    0.7942147373973498
+   ]
+  },
+  "initial_matches_prompt": true,
+  "submitted": {
+   "body": {
+    "foot_friction": 1.0211001781912425,
+    "foot_length": 0.0805,
+    "foot_length_r": 0.080826,
+    "leg_density": 1000.0,
+    "pose": [
+     0.0077,
+     -0.010186,
+     0.0,
+     -0.000619,
+     -0.010618,
+     0.0,
+     -0.040399
+    ],
+    "shank_length": 0.301626,
+    "shank_length_r": 0.299876,
+    "thigh_length": 0.301626,
+    "thigh_length_r": 0.299876,
+    "torque_limit": 60.0,
+    "torso_mass": 15.0
+   },
+   "design_index": 7,
+   "source": "repair:foot_friction",
+   "vector": [
+    1.555141834114274,
+    0.5746145348782157,
+    0.06360334138900163,
+    0.8595200316946476,
+    -0.08113199129340379,
+    -0.09001837017069575,
+    0.18452395603507482,
+    69.13830501005972,
+    2.015444696003435,
+    55.771753637874156,
+    107.76412516711696,
+    0.20660924226187405,
+    0.6811074926206052,
+    0.37308082048845015,
+    0.006234368633385556,
+    0.35253116708984966,
+    0.7942147373973498
+   ]
+  },
+  "vector_names": [
+   "freq",
+   "duty",
+   "hip_amp",
+   "knee_amp",
+   "knee_shift",
+   "stance_knee",
+   "hip_bias",
+   "kp",
+   "kd",
+   "balance_gain",
+   "pitch_kp",
+   "pitch_ref",
+   "sync_gain",
+   "ramp_s",
+   "start_lean",
+   "fp_kd",
+   "fp_kv"
+  ]
+ },
+ "schema": "causal_record_v1",
+ "source": {
+  "file": "demo_src.jsonl",
+  "line": 7,
+  "note": "The full prompts and replies stay in the source file.",
+  "policy": "scientist_think",
+  "runner_version": "ce_eval_v1",
+  "scientist_version": "causal_scientist_v2"
+ },
+ "steps": [
+  {
+   "action": "counterfactual",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.004696799999999999,
+     "finish_reason": "stop",
+     "index": 0,
+     "latency_s": 12.438827758998741,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 2259,
+      "prompt_tokens": 8879,
+      "reasoning_tokens": 1548,
+      "total_tokens": 11138
+     }
+    },
+    {
+     "cost_usd": 0.0050165999999999995,
+     "finish_reason": "stop",
+     "index": 1,
+     "latency_s": 12.433474211999055,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 2336,
+      "prompt_tokens": 9714,
+      "reasoning_tokens": 1400,
+      "total_tokens": 12050
+     }
+    }
+   ],
+   "experiment": "E1",
+   "experiments": [
+    "E1"
+   ],
+   "first_attempt_errors": [
+    "counterfactual[0]: hip_bias@-0.1R&balance_gain@x1.2 is not possible on the current design: balance_gain=159.619 outside controller bounds [0, 150]",
+    "counterfactual[0].predictions: give 1-12 predictions"
+   ],
+   "hypothesis_transitions": [
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H1",
+     "reason": "created",
+     "to": "open"
+    },
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H2",
+     "reason": "created",
+     "to": "open"
+    },
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H3",
+     "reason": "created",
+     "to": "open"
+    }
+   ],
+   "parsed": {
+    "action": "counterfactual",
+    "conclude": [],
+    "counterfactual": [
+     {
+      "changes": [
+       {
+        "level": "-0.1R",
+        "param": "hip_bias"
+       },
+       {
+        "level": "x1.2",
+        "param": "kp"
+       }
+      ],
+      "predictions": [
+       {
+        "direction": "decrease",
+        "hypothesis": "H1",
+        "quantity": "pitch_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H1",
+        "quantity": "pitch_end"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H1",
+        "quantity": "com_ahead_of_cop_over_L_mean"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H2",
+        "quantity": "capture_margin_over_L_mean"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H2",
+        "quantity": "n_walking"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H2",
+        "quantity": "pitch_rate_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H3",
+        "quantity": "com_height_over_L_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H3",
+        "quantity": "angmom_norm_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H3",
+        "quantity": "tracking_error_hip"
+       }
+      ],
+      "purpose": "Test reducing forward lean and increasing proportional gain."
+     }
+    ],
+    "new_hypotheses": [
+     {
+      "category": "posture_bias",
+      "causal_chain": "High hip_bias/pitch_ref \u2192 torso leans forward \u2192 COM moves ahead of centre of pressure \u2192 capture point falls outside support interval forward \u2192 forward toppling moment \u2192 pitch increases \u2192 fall forward.",
+      "confidence": 0.0,
+      "evidence": [
+       "observation.median.pitch_mean",
+       "observation.median.pitch_end",
+       "observation.median.com_ahead_of_cop_over_L_mean",
+       "observation.median.capture_margin_over_L_mean"
+      ],
+      "id": "H1",
+      "mechanism": "Excessive forward lean due to high hip_bias and pitch_ref settings."
+     },
+     {
+      "category": "weak_balance_feedback",
+      "causal_chain": "Low balance_gain \u2192 weak corrective torques when COM ahead of CoP \u2192 pitch rate and angular momentum grow unchecked \u2192 capture margin becomes more negative \u2192 forward fall.",
+      "confidence": 0.0,
+      "evidence": [
+       "observation.median.pitch_rate_mean",
+       "observation.median.angmom_norm_mean",
+       "observation.median.capture_margin_over_L_mean"
+      ],
+      "id": "H2",
+      "mechanism": "Insufficient balance feedback gain to counteract forward momentum."
+     },
+     {
+      "category": "heavy_upper_body",
+      "causal_chain": "High torso_mass \u2192 greater forward momentum for a given step \u2192 requires larger balance corrections \u2192 if balance gains inadequate, COM drifts ahead of CoP \u2192 capture margin negative \u2192 forward fall.",
+      "confidence": 0.0,
+      "evidence": [
+       "observation.median.com_height_over_L_mean",
+       "observation.median.tracking_error_hip",
+       "observation.median.angmom_norm_mean"
+      ],
+      "id": "H3",
+      "mechanism": "Torso mass too large relative to leg length, increasing forward inertia."
+     }
+    ],
+    "repair": [],
+    "result_reading": "The robot falls forward in all four seeds after a median of 7.05 s. Key deviations from healthy ranges: pitch mean 0.19 rad (healthy \u22640.115 rad), pitch end 0.72 rad, pitch rate mean 0.14 rad/s (healthy \u22640.0155 rad/s), COM ahead of CoP mean 0.020 L (healthy \u22640.0105 L), capture margin mean -0.20 L (healthy \u2265 -0.169 L), angular momentum mean 0.0066 (healthy \u22640.00165), flight fraction 0.020 (healthy \u22640.0067), COM height mean 0.983 L (healthy \u22640.94 L). No joint torque saturation, slip negligible (0.001).",
+    "status_updates": [],
+    "test": []
+   },
+   "remaining_after": 692,
+   "remaining_before": 696,
+   "repaired": true,
+   "status": "ok",
+   "step": 1,
+   "user_message": {
+    "length": 17326,
+    "sha256": "8fc8cb565a403bea5c905e286266be87d9fec505296c123fe509a1f6a8265525"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "repair",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0065859,
+     "finish_reason": "stop",
+     "index": 2,
+     "latency_s": 24.964819007000187,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 3880,
+      "prompt_tokens": 10313,
+      "reasoning_tokens": 3083,
+      "total_tokens": 14193
+     }
+    }
+   ],
+   "experiment": "R2",
+   "experiments": [
+    "R1",
+    "R2"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H4",
+     "reason": "created",
+     "to": "open"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 2,
+      "n_scored": 3
+     },
+     "experiments": [
+      "E1"
+     ],
+     "from": "open",
+     "id": "H1",
+     "reason": "Two of three predictions correct (pitch_mean \u2193, pitch_end \u2193); one prediction (com_ahead_of_cop_over_L_mean \u2193) observed no_change, not a clear contradiction.",
+     "to": "open"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 3,
+      "n_scored": 3
+     },
+     "experiments": [
+      "E1"
+     ],
+     "from": "open",
+     "id": "H2",
+     "reason": "All three predictions correct (capture_margin_over_L_mean \u2191, n_walking \u2191, pitch_rate_mean \u2193).",
+     "to": "supported"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 3
+     },
+     "experiments": [
+      "E1"
+     ],
+     "from": "open",
+     "id": "H3",
+     "reason": "Two predictions (com_height_over_L_mean \u2193, angmom_norm_mean \u2193) observed no_change while expecting decrease; tracking_error_hip \u2193 was correct but insufficient to sustain hypothesis.",
+     "to": "refuted"
+    }
+   ],
+   "parsed": {
+    "action": "repair",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [
+     {
+      "category": "low_joint_impedance",
+      "causal_chain": "Low kd \u2192 insufficient damping of joint velocity \u2192 overshoot in pitch correction \u2192 angular momentum can reverse direction \u2192 capture point swings backward \u2192 backward fall.",
+      "confidence": 0.0,
+      "evidence": [
+       "robot.body.torque_limit",
+       "robot.body.leg_density",
+       "observation.median.pitch_rate_slope",
+       "observation.median.capture_margin_over_L_end"
+      ],
+      "id": "H4",
+      "mechanism": "Insufficient joint damping (kd too low) leads to oscillations and occasional backward falls when forward momentum is high."
+     }
+    ],
+    "repair": [
+     {
+      "budget_share": 0.22,
+      "hypothesis": "H1",
+      "predicted_n_walking": 4,
+      "tool": "posture"
+     },
+     {
+      "budget_share": 0.28,
+      "hypothesis": "H2",
+      "predicted_n_walking": 4,
+      "tool": "feedback"
+     }
+    ],
+    "result_reading": "After counterfactual E1 (hip_bias@-0.1R & kp@x1.2), walking seeds increased from 0 to 3, with 1 seed falling backward. Key changes: fall_time dropped from 7.05s to 1.40s; time_upright rose to 10.0s; step_freq_hz decreased to 3.185Hz; step_length_over_L decreased to 0.168; tracking errors reduced; com_vx_mean fell to 0.316m/s; com_vx_end to 0.371m/s; com_vx_slope near zero; com_height_over_L_end increased to 0.990; com_ahead_of_cop_over_L_end became -0.032 (near zero); capture_margin_over_L_mean improved from -0.20 to -0.136; capture_margin_over_L_end improved from -0.75 to -0.141; cp_ahead_of_front_edge_over_L_end fell from 0.75 to 0.111; angmom_norm_end swung from +0.098 to -0.006; pitch_mean reduced to 0.083rad; pitch_end to 0.097rad; pitch_rate_mean nearly zero. The remaining backward fall suggests possible over\u2011correction or insufficient damping.",
+    "status_updates": [
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E1"
+      ],
+      "id": "H1",
+      "reason": "Two of three predictions correct (pitch_mean \u2193, pitch_end \u2193); one prediction (com_ahead_of_cop_over_L_mean \u2193) observed no_change, not a clear contradiction.",
+      "status": "open"
+     },
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E1"
+      ],
+      "id": "H2",
+      "reason": "All three predictions correct (capture_margin_over_L_mean \u2191, n_walking \u2191, pitch_rate_mean \u2193).",
+      "status": "supported"
+     },
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E1"
+      ],
+      "id": "H3",
+      "reason": "Two predictions (com_height_over_L_mean \u2193, angmom_norm_mean \u2193) observed no_change while expecting decrease; tracking_error_hip \u2193 was correct but insufficient to sustain hypothesis.",
+      "status": "refuted"
+     }
+    ],
+    "test": []
+   },
+   "remaining_after": 396,
+   "remaining_before": 692,
+   "repaired": false,
+   "status": "ok",
+   "step": 2,
+   "user_message": {
+    "length": 21381,
+    "sha256": "6c731d07a3db8549d05bb8df1607f04401368b718d25cd3cb9f515bd73d307cf"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "test",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.006937799999999999,
+     "finish_reason": "stop",
+     "index": 3,
+     "latency_s": 25.55656717000238,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 4185,
+      "prompt_tokens": 10571,
+      "reasoning_tokens": 3757,
+      "total_tokens": 14756
+     }
+    }
+   ],
+   "experiment": "T1",
+   "experiments": [
+    "T1"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H5",
+     "reason": "created",
+     "to": "open"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 0
+     },
+     "experiments": [
+      "R1"
+     ],
+     "from": "open",
+     "id": "H1",
+     "reason": "Predicted n_walking after posture repair = 4, observed n_walking = 3 (experiment R1)",
+     "to": "refuted"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 0
+     },
+     "experiments": [
+      "R2"
+     ],
+     "from": "supported",
+     "id": "H2",
+     "reason": "Predicted n_walking after feedback repair = 4, observed n_walking = 3 (experiment R2)",
+     "to": "refuted"
+    }
+   ],
+   "parsed": {
+    "action": "test",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [
+     {
+      "category": "short_support_base",
+      "causal_chain": "Short foot length \u2192 smaller support interval \u2192 capture point more likely to lie outside anterior edge \u2192 forward toppling moment \u2192 pitch increase \u2192 forward fall.",
+      "confidence": 0.0,
+      "evidence": [
+       "robot.body.foot_length",
+       "reference.features.foot_to_leg"
+      ],
+      "id": "H5",
+      "mechanism": "Foot length too short reduces the support base, making the capture point fall forward during stepping."
+     }
+    ],
+    "repair": [],
+    "result_reading": "After the feedback repair (R2), the current best design (from repair:feedback) achieved 3 out of 4 training seeds walking (train_walking: 3 -> 3) with a train fitness of 4.378. The design has not yet been subjected to observation rollouts, so its performance on the standard 10\u202fs seeds is unknown. The previous posture repair (R1) improved walking from 0 to 3 seeds but did not reach the predicted 4 seeds.",
+    "status_updates": [
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "R1"
+      ],
+      "id": "H1",
+      "reason": "Predicted n_walking after posture repair = 4, observed n_walking = 3 (experiment R1)",
+      "status": "refuted"
+     },
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "R2"
+      ],
+      "id": "H2",
+      "reason": "Predicted n_walking after feedback repair = 4, observed n_walking = 3 (experiment R2)",
+      "status": "refuted"
+     }
+    ],
+    "test": [
+     {
+      "predicted_n_walking": 2,
+      "purpose": "Assess robustness of the current best design on a 20\u202fs stress test"
+     }
+    ]
+   },
+   "remaining_after": 388,
+   "remaining_before": 396,
+   "repaired": false,
+   "status": "ok",
+   "step": 3,
+   "user_message": {
+    "length": 22349,
+    "sha256": "89bfe37a0dc320b61809a5fbd817fe7956b9ce5e0cf04909f6fd0345070c4fba"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "counterfactual",
+   "allowed_actions": [
+    "counterfactual",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0057903,
+     "finish_reason": "stop",
+     "index": 4,
+     "latency_s": 16.85660707599891,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 2840,
+      "prompt_tokens": 10781,
+      "reasoning_tokens": 2379,
+      "total_tokens": 13621
+     }
+    }
+   ],
+   "experiment": "E2",
+   "experiments": [
+    "E2"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [],
+   "parsed": {
+    "action": "counterfactual",
+    "conclude": [],
+    "counterfactual": [
+     {
+      "changes": [
+       {
+        "level": "x2",
+        "param": "kd"
+       },
+       {
+        "level": "x2",
+        "param": "foot_length"
+       }
+      ],
+      "predictions": [
+       {
+        "direction": "decrease",
+        "hypothesis": "H4",
+        "quantity": "pitch_rate_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H4",
+        "quantity": "angmom_norm_mean"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H4",
+        "quantity": "n_walking"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H5",
+        "quantity": "capture_margin_over_L_mean"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H5",
+        "quantity": "n_walking"
+       }
+      ],
+      "purpose": "Test increasing joint damping and foot length to address low_joint_impedance and short_support_base hypotheses."
+     }
+    ],
+    "new_hypotheses": [],
+    "repair": [],
+    "result_reading": "The current best design (index 3, from feedback repair) has not yet been observed on the 10\u2011s training seeds. Its key parameters are kd=2.015 (at the lower bound), foot_length=0.0805 (short relative to leg length), hip_bias=0.1845, pitch_ref=0.2066, balance_gain=55.77, kp=69.14, etc. The 20\u2011s stress test (T1) of this design walked all 4 seeds for the full duration, indicating improved robustness. On the 10\u2011s training seeds, the design yields 3 walking seeds and 1 falling seed (as inherited from the posture repair). Prior experiments showed that reducing forward lean (hip_bias) and increasing kp allowed 3 of 4 seeds to walk, while the remaining seed fell backward. No joint torque saturation or slip was observed.",
+    "status_updates": [],
+    "test": []
+   },
+   "remaining_after": 380,
+   "remaining_before": 388,
+   "repaired": false,
+   "status": "ok",
+   "step": 4,
+   "user_message": {
+    "length": 23123,
+    "sha256": "b0f296b32f28740f25ec4b417f1fbc38f1686f7a04bcb0377eb3bc55eecdff1e"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "counterfactual",
+   "allowed_actions": [
+    "counterfactual",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0064836,
+     "finish_reason": "stop",
+     "index": 5,
+     "latency_s": 21.328845187999832,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 3266,
+      "prompt_tokens": 11814,
+      "reasoning_tokens": 2522,
+      "total_tokens": 15080
+     }
+    },
+    {
+     "cost_usd": 0.006468,
+     "finish_reason": "stop",
+     "index": 6,
+     "latency_s": 18.42779246899954,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 2964,
+      "prompt_tokens": 12668,
+      "reasoning_tokens": 2299,
+      "total_tokens": 15632
+     }
+    }
+   ],
+   "experiment": "E3",
+   "experiments": [
+    "E3"
+   ],
+   "first_attempt_errors": [
+    "counterfactual[0]: kd@x0.5 is not possible on the current design: kd=1.00772 outside controller bounds [2, 25]",
+    "counterfactual[0].predictions: give 1-12 predictions"
+   ],
+   "hypothesis_transitions": [
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H6",
+     "reason": "created",
+     "to": "open"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 0,
+      "n_scored": 3
+     },
+     "experiments": [
+      "E2"
+     ],
+     "from": "open",
+     "id": "H4",
+     "reason": "Predictions for pitch_rate_mean decrease, angmom_norm_mean decrease, and n_walking increase were all contradicted by E2 (observed increase, increase, decrease).",
+     "to": "refuted"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 2
+     },
+     "experiments": [
+      "E2"
+     ],
+     "from": "open",
+     "id": "H5",
+     "reason": "While the prediction for capture_margin_over_L_mean increase was correct, the prediction for n_walking increase was contradicted by E2 (observed decrease).",
+     "to": "refuted"
+    }
+   ],
+   "parsed": {
+    "action": "counterfactual",
+    "conclude": [],
+    "counterfactual": [
+     {
+      "changes": [
+       {
+        "level": "x1.5",
+        "param": "kd"
+       }
+      ],
+      "predictions": [
+       {
+        "direction": "decrease",
+        "hypothesis": "H6",
+        "quantity": "n_walking"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H6",
+        "quantity": "pitch_rate_mean"
+       },
+       {
+        "direction": "increase",
+        "hypothesis": "H6",
+        "quantity": "angmom_norm_mean"
+       },
+       {
+        "direction": "decrease",
+        "hypothesis": "H6",
+        "quantity": "capture_margin_over_L_end"
+       }
+      ],
+      "purpose": "Test whether increasing joint damping worsens forward fall as predicted by H6."
+     }
+    ],
+    "new_hypotheses": [
+     {
+      "category": "low_joint_impedance",
+      "causal_chain": "High kd \u2192 over\u2011damped joint response \u2192 delayed balance torques \u2192 pitch and angular momentum increase \u2192 capture margin becomes more negative \u2192 forward toppling moment \u2192 pitch increases further \u2192 fall forward.",
+      "confidence": 0.0,
+      "evidence": [
+       "experiments.E2.delta.pitch_rate_mean",
+       "experiments.E2.delta.angmom_norm_mean",
+       "experiments.E2.delta.n_walking",
+       "experiments.E2.delta.capture_margin_over_L_end",
+       "experiments.E2.delta.com_ahead_of_cop_over_L_end"
+      ],
+      "id": "H6",
+      "mechanism": "Excessive joint damping (kd too high) makes the joints over\u2011damped, delaying corrective torques when the centre of mass moves ahead of the centre of pressure. This lag allows forward pitch and angular momentum to grow unchecked, driving the capture point forward of the support interval and causing a forward fall."
+     }
+    ],
+    "repair": [],
+    "result_reading": "Re\u2011observation of design 3 (O1) shows all four seeds remain upright for the full 10\u202fs (n_walking=4, n_fell=0); median time_upright \u224810.0\u202fs, com_vx_mean\u22480.48\u202fm/s, pitch_mean\u22480.17\u202frad, capture_margin_over_L_mean\u2248\u22120.19, indicating a forward\u2011leaning but stable gait.",
+    "status_updates": [
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E2"
+      ],
+      "id": "H4",
+      "reason": "Predictions for pitch_rate_mean decrease, angmom_norm_mean decrease, and n_walking increase were all contradicted by E2 (observed increase, increase, decrease).",
+      "status": "refuted"
+     },
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E2"
+      ],
+      "id": "H5",
+      "reason": "While the prediction for capture_margin_over_L_mean increase was correct, the prediction for n_walking increase was contradicted by E2 (observed decrease).",
+      "status": "refuted"
+     }
+    ],
+    "test": []
+   },
+   "remaining_after": 376,
+   "remaining_before": 380,
+   "repaired": true,
+   "status": "ok",
+   "step": 5,
+   "user_message": {
+    "length": 25439,
+    "sha256": "34c490882a8e1b6091678906e9f363b703c2fc0003859a0ab2a45d0abcc5d75f"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "repair",
+   "allowed_actions": [
+    "counterfactual",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.006409499999999999,
+     "finish_reason": "stop",
+     "index": 7,
+     "latency_s": 15.773533753002994,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 2935,
+      "prompt_tokens": 12560,
+      "reasoning_tokens": 2319,
+      "total_tokens": 15495
+     }
+    }
+   ],
+   "experiment": "R3",
+   "experiments": [
+    "R3"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 4
+     },
+     "experiments": [
+      "E3"
+     ],
+     "from": "open",
+     "id": "H6",
+     "reason": "Predictions for E3: n_walking decrease (incorrect), pitch_rate_mean increase (incorrect), angmom_norm_mean increase (incorrect), capture_margin_over_L_end decrease (correct). Only 1 of 4 predictions matched, insufficient to refute; hypothesis remains open.",
+     "to": "open"
+    }
+   ],
+   "parsed": {
+    "action": "repair",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [],
+    "repair": [
+     {
+      "budget_share": 0.30000000000000004,
+      "hypothesis": "H6",
+      "predicted_n_walking": 4,
+      "tool": "feedback"
+     }
+    ],
+    "result_reading": "After increasing kd by a factor of 1.5 on the current best design (design 3), the robot continued to walk on all four training seeds (n_walking stayed 4, n_fell 0). Measured changes beyond tolerance: step_length_over_L rose from 0.2573 to 0.3007; double_support_fraction dropped from 0.036 to 0.01025; com_vx_mean increased from 0.4871 to 0.5863; com_vx_end from 0.5078 to 0.7044; com_vx_slope from 0.02592 to 0.03951; com_ahead_of_cop_over_L_end shifted from -0.03168 to 0.02858; capture_margin_over_L_mean became slightly more negative (-0.1863 \u2192 -0.2262); capture_margin_over_L_end from -0.1581 to -0.2919; capture_margin_over_L_slope from -0.007075 to -0.01214; cp_ahead_of_front_edge_over_L_mean from 0.1851 to 0.2254; cp_ahead_of_front_edge_over_L_end from 0.1581 to 0.2919; cp_ahead_of_front_edge_over_L_slope from 0.008341 to 0.01401; pitch_mean from 0.1661 to 0.2039; pitch_end from 0.1695 to 0.220; pitch_rate_end became more negative (-0.03309 \u2192 -0.195). No seeds fell.",
+    "status_updates": [
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E3"
+      ],
+      "id": "H6",
+      "reason": "Predictions for E3: n_walking decrease (incorrect), pitch_rate_mean increase (incorrect), angmom_norm_mean increase (incorrect), capture_margin_over_L_end decrease (correct). Only 1 of 4 predictions matched, insufficient to refute; hypothesis remains open.",
+      "status": "open"
+     }
+    ],
+    "test": []
+   },
+   "remaining_after": 276,
+   "remaining_before": 376,
+   "repaired": false,
+   "status": "ok",
+   "step": 6,
+   "user_message": {
+    "length": 27615,
+    "sha256": "2a51dcbf5e12934037cfdf01ab62a24423e70d2564954fedc92687cb6ef16c4b"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "repair",
+   "allowed_actions": [
+    "counterfactual",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0082899,
+     "finish_reason": "stop",
+     "index": 8,
+     "latency_s": 29.400301777001005,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 5001,
+      "prompt_tokens": 12630,
+      "reasoning_tokens": 4488,
+      "total_tokens": 17631
+     }
+    }
+   ],
+   "experiment": "R4",
+   "experiments": [
+    "R4"
+   ],
+   "first_attempt_errors": [],
+   "hypothesis_transitions": [
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 4
+     },
+     "experiments": [
+      "E3"
+     ],
+     "from": "open",
+     "id": "H6",
+     "reason": "Predictions for kd@x1.5 (E3): n_walking decrease (incorrect), pitch_rate_mean increase (incorrect), angmom_norm_mean increase (incorrect), capture_margin_over_L_end decrease (correct). Overall H6 remains open.",
+     "to": "open"
+    }
+   ],
+   "parsed": {
+    "action": "repair",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [],
+    "repair": [
+     {
+      "budget_share": 0.3623188405797101,
+      "hypothesis": "H6",
+      "predicted_n_walking": 4,
+      "tool": "foot_friction"
+     }
+    ],
+    "result_reading": "After the latest observation (design 3 post-feedback repair), all 4 training seeds walked the full 10\u202fs (n_walking=4, n_fell=0, time_upright=10.0\u202fs). The robot still exhibits a forward lean: pitch_mean=0.166\u202frad (healthy range 0.011\u20130.115\u202frad), pitch_end=0.169\u202frad. The centre\u2011of\u2011mass is ahead of the centre of pressure: com_ahead_of_cop_over_L_mean=+0.0044 (healthy \u20130.0012 to +0.0105). The capture margin is negative: capture_margin_over_L_mean=\u20130.186 (healthy \u20130.169 to +0.0087), capture_margin_over_L_end=\u20130.158, indicating a tendency to step forward of the support interval. Angular momentum and pitch rate are low but positive: angmom_norm_mean=0.0021, angmom_norm_end=0.0121, pitch_rate_mean=0.0037\u202frad/s. Joint damping is near its minimum (kd=2.015, range [2,25]). Foot length=0.0805\u202fm, torso mass=15.0\u202fkg (at the upper bound). No joint torque saturation or slip observed.",
+    "status_updates": [
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E3"
+      ],
+      "id": "H6",
+      "reason": "Predictions for kd@x1.5 (E3): n_walking decrease (incorrect), pitch_rate_mean increase (incorrect), angmom_norm_mean increase (incorrect), capture_margin_over_L_end decrease (correct). Overall H6 remains open.",
+      "status": "open"
+     }
+    ],
+    "test": []
+   },
+   "remaining_after": 176,
+   "remaining_before": 276,
+   "repaired": false,
+   "status": "ok",
+   "step": 7,
+   "user_message": {
+    "length": 27816,
+    "sha256": "8ebc687b1163b76482fc587f87af88e3631e299b1a0ae09b8cd3ba8253cfa361"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "test",
+   "allowed_actions": [
+    "counterfactual",
+    "test",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0066246,
+     "finish_reason": "stop",
+     "index": 9,
+     "latency_s": 21.673054738002975,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 3137,
+      "prompt_tokens": 12671,
+      "reasoning_tokens": 2478,
+      "total_tokens": 15808
+     }
+    },
+    {
+     "cost_usd": 0.0050319,
+     "finish_reason": "stop",
+     "index": 10,
+     "latency_s": 5.952538254998217,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1124,
+      "prompt_tokens": 13401,
+      "reasoning_tokens": 423,
+      "total_tokens": 14525
+     }
+    }
+   ],
+   "experiment": "T2",
+   "experiments": [
+    "T2"
+   ],
+   "first_attempt_errors": [
+    "new_hypotheses[0].evidence: needs 1-16 evidence paths"
+   ],
+   "hypothesis_transitions": [
+    {
+     "experiments": [],
+     "from": null,
+     "id": "H7",
+     "reason": "created",
+     "to": "open"
+    },
+    {
+     "cited_predictions": {
+      "n_correct": 1,
+      "n_scored": 4
+     },
+     "experiments": [
+      "E3",
+      "R3",
+      "R4"
+     ],
+     "from": "open",
+     "id": "H6",
+     "reason": "Predictions from E3 (n_walking decrease, pitch_rate_mean increase, angmom_norm_mean increase) were incorrect, and repairs R3 and R4 targeting H6 failed to improve walking (predicted 4 seeds, obtained 3). Only 1 of 4 predictions was correct, indicating the hypothesis is not supported.",
+     "to": "refuted"
+    }
+   ],
+   "parsed": {
+    "action": "test",
+    "conclude": [],
+    "counterfactual": [],
+    "new_hypotheses": [
+     {
+      "category": "poor_foot_placement",
+      "causal_chain": "Low fp_kv and/or fp_kd \u2192 foot placement lags behind COM \u2192 support interval shifts rearward \u2192 capture point moves forward of support \u2192 negative capture margin \u2192 forward pitch acceleration \u2192 fall forward.",
+      "confidence": 0.0,
+      "evidence": [
+       "observation.median.capture_margin_over_L_mean",
+       "observation.median.com_ahead_of_cop_over_L_mean",
+       "observation.median.pitch_mean",
+       "observation.median.pitch_end"
+      ],
+      "id": "H7",
+      "mechanism": "Inadequate swing\u2011foot placement gains cause the foot to land too far behind the center of mass, leaving insufficient backward ground\u2011reaction impulse to counteract forward momentum, leading to forward toppling and fall."
+     }
+    ],
+    "repair": [],
+    "result_reading": "The current best design (index 7) resulted from a foot_friction repair and has not yet been observed via the observation instrument. Its parameters are: kd=2.015, hip_amp=0.0636, stance_knee=-0.09002, leg_density=1000.0, torque_limit=60.0, foot_friction=1.021, knee_amp=0.8595, sync_gain=0.6811, pitch_kp=107.8, torso_mass=15.0, kp=69.14, start_lean=0.006234, fp_kv=0.7942, leg_length (thigh+shank)=0.6032 m, knee_shift=-0.08113, foot_length=0.0805, duty=0.5746, hip_bias=0.1845, fp_kd=0.3525, ramp_s=0.3731, freq=1.555, pitch_ref=0.2066, balance_gain=55.77. Based on the similar design (index 3) that passed a 20\u202fs stress test with all four seeds walking, we expect this design to also walk well, but we lack direct observation.",
+    "status_updates": [
+     {
+      "confidence": 0.0,
+      "experiments": [
+       "E3",
+       "R3",
+       "R4"
+      ],
+      "id": "H6",
+      "reason": "Predictions from E3 (n_walking decrease, pitch_rate_mean increase, angmom_norm_mean increase) were incorrect, and repairs R3 and R4 targeting H6 failed to improve walking (predicted 4 seeds, obtained 3). Only 1 of 4 predictions was correct, indicating the hypothesis is not supported.",
+      "status": "refuted"
+     }
+    ],
+    "test": [
+     {
+      "predicted_n_walking": 4,
+      "purpose": "Check whether the current best design can sustain walking for 20\u202fs on the four training seeds, giving us an observation of its basic walking ability."
+     }
+    ]
+   },
+   "remaining_after": 168,
+   "remaining_before": 176,
+   "repaired": true,
+   "status": "ok",
+   "step": 8,
+   "user_message": {
+    "length": 27923,
+    "sha256": "4ba4ea6a4ff4175804e1820ddc95cf05eedbe82e10e44195fc09846a7ed4de1e"
+   },
+   "validation_errors": []
+  },
+  {
+   "action": "conclude",
+   "allowed_actions": [
+    "counterfactual",
+    "repair",
+    "conclude"
+   ],
+   "calls": [
+    {
+     "cost_usd": 0.0049422,
+     "finish_reason": "stop",
+     "index": 11,
+     "latency_s": 8.575718787997175,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 1172,
+      "prompt_tokens": 12958,
+      "reasoning_tokens": 1026,
+      "total_tokens": 14130
+     }
+    },
+    {
+     "cost_usd": 0.004612799999999999,
+     "finish_reason": "stop",
+     "index": 12,
+     "latency_s": 5.1052960679990065,
+     "reasoning_present": true,
+     "schema_name": "scientist_step",
+     "usage": {
+      "completion_tokens": 735,
+      "prompt_tokens": 13171,
+      "reasoning_tokens": 533,
+      "total_tokens": 13906
+     }
+    }
+   ],
+   "first_attempt_errors": [
+    "conclude: the chosen action needs exactly one element"
+   ],
+   "hypothesis_transitions": [],
+   "parsed": {
+    "action": "conclude",
+    "conclude": [
+     {
+      "confidence": 0.0,
+      "diagnosis_category": "posture_bias",
+      "explanation": "Excessive forward lean reduced by lowering hip_bias and increasing foot_friction, improving capture margin.",
+      "submit": "best"
+     }
+    ],
+    "counterfactual": [],
+    "new_hypotheses": [],
+    "repair": [],
+    "result_reading": "The current best design (index 7, resulting from the foot_friction repair) has not undergone a standard 10\u2011s observation rollout, but the most recent 20\u2011s stress test (T2) showed that all four training seeds walked the entire 20\u202fs without any falls (walking 4, fell 0). This indicates the design can sustain walking under the prescribed perturbations and floor\u2011friction variation for twice the training horizon.",
+    "status_updates": [],
+    "test": []
+   },
+   "remaining_after": 168,
+   "remaining_before": 168,
+   "repaired": true,
+   "status": "ok",
+   "step": 9,
+   "user_message": {
+    "length": 29044,
+    "sha256": "846f07d670a125b9052b80635476320128a5d9ef63f7a051ac2ce62dd298d801"
+   },
+   "validation_errors": []
+  }
+ ],
+ "verification": {
+  "independent": true,
+  "note": "Independent verification on hidden seeds the AI never saw (full_recovery_v1, uncharged).",
+  "reasons": [],
+  "rollouts": {
+   "confirmation": 24,
+   "confirmation_rollout_equivalents": 48.0,
+   "validation": 48
+  },
+  "status": "FULL_RECOVERY",
+  "walking_frac": 1.0
+ }
+}

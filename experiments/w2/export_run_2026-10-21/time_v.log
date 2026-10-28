@@ -1,0 +1,23 @@
+	Command being timed: "/home/forge/dev/venvs/hdb/bin/python -u scripts/w2_damaged_plant_export.py --execute --approved-by owner W2 authorization 2026-10-21 (bounded W2 replay export, commit c8816c6, main VM, <=2 workers, ~296 rollout-eq, <=$0.30) --artifacts-root /home/forge/dev/hdb/artifacts/hdb --workers 2 --out /home/forge/dev/runs/w2_plant_export_2026-10-21_r2/plant_replays"
+	User time (seconds): 137.86
+	System time (seconds): 0.33
+	Percent of CPU this job got: 150%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:31.81
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 210340
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 73717
+	Voluntary context switches: 927
+	Involuntary context switches: 815
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 18656
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

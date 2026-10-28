@@ -1,0 +1,27 @@
+{
+  "id": "walkrec-exp-l2-v1",
+  "stage": "S2 / L2 experience-learning pilot (development data; decides gate G3; never confirmatory)",
+  "registered_before_run": true,
+  "question": "Does a surrogate trained on past optimisation runs of OTHER creatures (successes and failures) choose better warm starts for UNFAMILIAR creatures (held-out morphology regions) than retrieval (k-NN), a fixed best-solution medoid, or the R2 transfer, at an equal small optimisation budget? Does it improve with more experience (N = 10, 20, 40 training creatures)?",
+  "campaign": "walkrec-exp-l2",
+  "heldout_regions": ["L2-f0-*"],
+  "heldout_note": "long legs (L >= 0.9 m) with short feet (foot/L < 0.15): stilts-like bodies; training sees long legs only with long feet and short feet only with shorter legs",
+  "panels": {
+    "train": {"campaign": "walkrec-exp-train", "n": 40, "min_dist": 0.15, "max_draws": 3000},
+    "test":  {"campaign": "walkrec-exp-test",  "n": 12, "min_dist": 0.15, "max_draws": 3000}
+  },
+  "seeds": {"train": 8, "validate": 24, "confirm": 24},
+  "collect":  {"budget": 4000, "noise_seed": 1, "n_train_seeds": 8},
+  "evaluate": {"budget": 1000, "noise_seed": 1, "learning_curve": [10, 20, 40],
+               "variants": ["r2", "knn", "mean_best", "learned"], "k_warm": 3, "beta": 1.0, "per_creature": 20},
+  "model": {"n_models": 5, "hidden": [64, 64], "epochs": 100, "lr": 0.01, "weight_decay": 0.0001, "seed": 0},
+  "recovery_rule": "recovery.full_recovery_v1 (unchanged); every variant on a test creature uses the same seeds and noise seed",
+  "analysis": {
+    "primary_descriptive": "per variant x N: test creatures (of 12) FULL_RECOVERY after the 1000-rollout search; also the zero-budget warm-start assessment (walking fraction, status) = the quality of the decision alone",
+    "G3_rule": "PASS iff learned@40 full recoveries > knn@40, > mean_best@40 and > r2, AND learned@40 > learned@10; otherwise experience learning is reported as exploratory/negative and not added to the confirmatory study",
+    "secondary": "mean validation walking fraction per variant x N; applicability ratio vs outcome; paired per-creature table",
+    "no_tests": "12 test creatures: counts only, no significance claim"
+  },
+  "similarity_note": "the dynamic-similarity transfer is not a variant: it never helped in M1a",
+  "rollout_cap": {"collect": 200000, "evaluate": 160000}
+}

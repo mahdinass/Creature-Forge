@@ -1,0 +1,20 @@
+{
+  "sha256": {
+    "analysis_output.txt": "4019bf87269691462b560ddac815cba71d03d9415fb0479c6a3bf2aeb05cb6d8",
+    "panel.json": "4e45f5de167aeae1d71943458e997c7f9447c5e7769e522fb967e11a5d1f655d",
+    "shard0.jsonl": "5f5fc4291764f34cedb47cfc38fdf9f2b90040fe63dda70b8ba551fc95959c89",
+    "shard1.jsonl": "9892ab6a276d21920f90ef825216e2e92459961d60512f0ef419427c4b3d8dea",
+    "shard10.jsonl": "ee719bad6744b646839bdb32ca3795b94cb4ce9ad84502fbe5ff89374d0fba70",
+    "shard11.jsonl": "633f1f82d76d38d563d8681e90b2d62c1cb0ff4f62e148ef09fbde36b331ae90",
+    "shard2.jsonl": "3188804f2327d2a749ce81662a9874efe34efe671bd73d5049c20ef447982fcf",
+    "shard3.jsonl": "137243a45ebcb6184dae216dbf4fde23bbf603b53ae4b02900fc27dd42f12cff",
+    "shard4.jsonl": "9e9ddc854a21d1b9d56cab29fd497683b6a5bd9f944e17acd788cc090ab0d838",
+    "shard5.jsonl": "816203941220cece2382a1a02aeb75b7064cc0c6e09a1cc4b3c3e2fa040004a8",
+    "shard6.jsonl": "84c4843b72166359dd40614349ae3fe262c75b97fa87158ce0ba848eb42576fb",
+    "shard7.jsonl": "8f338d9494ee57909a7be791075cf1c0591a2b9692b43317c829795555e3ad7b",
+    "shard8.jsonl": "62b7d9bb09815621406bced204164dd7b934aa58e2e339c98b9ee287e1ef5165",
+    "shard9.jsonl": "6e8331f2a9399613114cf775bbd3eba77d6d4d96722447355b2f5b6cafbbe4f7",
+    "summary.json": "f67390d2d42c6d44b4400224387eb8d5ee1308cabc912c17285ec361371a1f84"
+  },
+  "note": "S3 confirmatory records exactly as produced on the batch VM (slot s3, snapshot 77981e2 of b44f863; code = protocol_amend1's pinned 700924f + manifest-only commits); analysis_output.txt = the single run of scripts/walk_confirm_analysis.py (f33b6d0) on the VM against protocol_amend1.json (sha256 41ad66b2... as checked out on the VM, LF)"
+}

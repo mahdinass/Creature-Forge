@@ -1,0 +1,16 @@
+{
+ "which": "init",
+ "mults": "1.7",
+ "sample_seed": 20261022,
+ "exclude_ids": "artifacts/hdb/ds1_used_ids.txt",
+ "single": [
+  "walkrec-dev-m1-gen-0000:actuator_weakness:2",
+  "hdb-v1-gen-0039:clock_fault:2",
+  "hdb-v1-gen-0040:short_feet:2"
+ ],
+ "comp": [
+  "hdb-v1-gen-0052:devcomp:one_side_weakness.left+clock_fault.fast:0"
+ ],
+ "ineligible": 2,
+ "excluded_used": 0
+}

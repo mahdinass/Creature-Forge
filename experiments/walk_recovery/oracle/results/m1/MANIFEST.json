@@ -1,0 +1,20 @@
+{
+  "sha256": {
+    "analysis_output.txt": "1c31125d466878c8e24e77f630e84f492b36663e8307bc5565c2ba7d329fa2bc",
+    "panel.json": "5e2b84e3adabb1a36fa97f7383b578e5ca80e87a53853bec8c814b397a021d85",
+    "shard0.jsonl": "ff7dcaed3a426410fd6969137cb6abd45c48d585a2564c7b307acd70d6ca3235",
+    "shard1.jsonl": "a74867516d21cb8e09120f7488327b24488f0d7188826c1532474139454df7d7",
+    "shard10.jsonl": "b81c7274fe113f0f3fc87b7062847b70f2a5b7364edbb18a64cf017442ad0605",
+    "shard11.jsonl": "be82a2d5bf8bad0d3fcdf7b1ce751fa32ad12cc41041dea0c5d7a6eab06a0832",
+    "shard2.jsonl": "524cd5241bb0c896a3dc3a584b171041bf62b9135ad54344363c875c0e881092",
+    "shard3.jsonl": "6d76996cf170741f71328ac57e96a9f2c5c224f04bc94895ba503fd8e5569e75",
+    "shard4.jsonl": "a033ed98679ef25d9a3792cd1c9b8015980d14a920c44a702270026a8243a130",
+    "shard5.jsonl": "9e253e2bbe755a5847416362b07c04f69b45fa50908abd269c6aaf4aea989685",
+    "shard6.jsonl": "211882075485ac74e328c3072a340d3f1ad677ecc7c3268512eec80664dc5f4e",
+    "shard7.jsonl": "9b43df0febaf550f0201f6519c752a2be99a2cb2f47e2cc364272b4135b11e6d",
+    "shard8.jsonl": "ab2a29bdfb84adb6de743ce4707460b8a0f78c78103852607c4af91bdc5f40e1",
+    "shard9.jsonl": "131631726bfa2cd75bcfbd88195b297dba268608e40632188faefb0abc3402fb",
+    "summary.json": "23ef6c1c539ba0d97fe7b00cae560361b03c04071f0df11550f97421ff24b5f8"
+  },
+  "note": "M1 records as produced on the batch VM (slot m1, snapshot b6825a0 = 66a228f + clean tree), pulled with forge_dev.py pull; analysis_output.txt is the single run of scripts/walk_m1_analysis.py (c5635fb)"
+}

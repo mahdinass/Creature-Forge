@@ -27,7 +27,7 @@ from .creatures import atomic_write_json, now_iso
 
 log = logging.getLogger(__name__)
 
-KINDS = ("challenge", "investigation", "loop")
+KINDS = ("challenge", "investigation", "loop", "recovery")
 STATUSES = ("queued", "running", "done", "failed", "cancelled")
 TERMINAL = ("done", "failed", "cancelled")
 EVENT_TYPES = ("phase", "progress", "model_request", "model_response", "validation", "arm_result", "verdict",

@@ -25,7 +25,8 @@ from .sandbox import SandboxBody
 log = logging.getLogger(__name__)
 
 MODES = ("guided", "experimental")
-ORIGINS = ("user", "ai_accepted")
+ORIGINS = ("user", "ai_accepted", "baseline_accepted")   # baseline_accepted: a non-AI engineering rule (e.g. the FIX recovery director)
+FULL_RECOVERY = "FULL_RECOVERY"   # recovery.full_recovery_v1: the only status a recovered candidate may be accepted with
 CID_RE = re.compile(r"c-[0-9a-f]{8}")  # always used with fullmatch
 DEFAULT_MAX_CREATURES = 500
 
@@ -40,6 +41,7 @@ def max_creatures() -> int:
     except ValueError:
         return DEFAULT_MAX_CREATURES
 WALK_VECTOR_LEN = 15  # r3.PARAM_NAMES order (contracts section 2)
+WALK_VECTOR_LENS = (WALK_VECTOR_LEN, WALK_VECTOR_LEN + 2)   # 17 = + the foot-placement gains fp_kd, fp_kv (walk recovery)
 VERIFIED = "VERIFIED_IMPROVEMENT"
 _LEG_KEYS = ("thigh_length", "shank_length", "foot_length")
 _SCALAR_FIELDS = ("torso_mass", "thigh_length", "shank_length", "foot_length", "foot_friction", "torque_limit",
@@ -146,8 +148,8 @@ def normalize_controllers(controllers) -> dict:
         if not isinstance(walk, dict) or set(walk) - {"vector", "provenance"}:
             raise ValueError("controllers.walk must be null or {vector, provenance}")
         vec = walk.get("vector")
-        if not isinstance(vec, (list, tuple)) or len(vec) != WALK_VECTOR_LEN:
-            raise ValueError(f"controllers.walk.vector must have {WALK_VECTOR_LEN} numbers")
+        if not isinstance(vec, (list, tuple)) or len(vec) not in WALK_VECTOR_LENS:
+            raise ValueError(f"controllers.walk.vector must have {WALK_VECTOR_LEN} numbers (or {WALK_VECTOR_LENS[1]} with fp_kd, fp_kv)")
         prov = walk.get("provenance")
         if prov is not None and not isinstance(prov, dict):
             raise ValueError("controllers.walk.provenance must be an object or null")
@@ -274,6 +276,35 @@ class CreatureStore:
             norm_ctrl = normalize_controllers(controllers)
             n = max(v["n"] for v in rec["versions"]) + 1
             rec["versions"].append(self._version(n, parent_n, mode, norm_body, norm_ctrl, "ai_accepted", None, change))
+            rec["current"] = n
+            self._write(rec)
+            return rec
+
+    def accept_recovery(self, cid: str, *, parent_n: int, body: dict, vector, change: dict, origin: str) -> dict:
+        """Append a child of `parent_n` holding a recovered body + 17-D walking vector. Stricter than `accept`: refuses unless
+        `change["status"]` is FULL_RECOVERY (full_recovery_v1). A recovery id can be accepted once (a repeat is refused)."""
+        status = change.get("status") if isinstance(change, dict) else None
+        if status != FULL_RECOVERY:
+            raise ValueError(f"only a {FULL_RECOVERY} can be accepted as a recovery (status: {status!r}); "
+                             "a partial improvement is not a recovery")
+        if origin not in ORIGINS or origin == "user":
+            raise ValueError(f"origin must be ai_accepted or baseline_accepted, got {origin!r}")
+        with self._lock:
+            rec = self._read(cid)
+            parent = next((v for v in rec["versions"] if v["n"] == parent_n), None)
+            if parent is None:
+                raise KeyError(f"{cid} has no version {parent_n}")
+            rid = change.get("recovery_id")
+            if rid is not None and any(isinstance(v.get("change"), dict) and v["change"].get("recovery_id") == rid
+                                       for v in rec["versions"]):
+                raise ValueError(f"recovery {rid} was already accepted into this creature")
+            mode = parent["mode"]
+            norm_body = normalize_body(body, mode)
+            walk = {"vector": list(vector), "provenance": {"kind": "recovery", "recovery_id": rid,
+                                                           "director": change.get("director"), "status": status}}
+            norm_ctrl = normalize_controllers({"stand": parent["controllers"].get("stand"), "walk": walk})
+            n = max(v["n"] for v in rec["versions"]) + 1
+            rec["versions"].append(self._version(n, parent_n, mode, norm_body, norm_ctrl, origin, None, change))
             rec["current"] = n
             self._write(rec)
             return rec

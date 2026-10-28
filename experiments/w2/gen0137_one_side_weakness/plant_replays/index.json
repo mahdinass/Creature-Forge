@@ -1,0 +1,808 @@
+{
+ "schema": "w2_plant_replays_v1",
+ "exporter": "w2_damaged_plant_export_v1",
+ "instance": "hdb-v1-gen-0137:one_side_weakness:4",
+ "approved_by": "owner W2 authorization 2026-10-21 (bounded W2 replay export, commit c8816c6, main VM, <=2 workers, ~296 rollout-eq, <=$0.30)",
+ "environment": {
+  "system": "Linux",
+  "machine": "x86_64",
+  "python": "3.12.3",
+  "numpy": "2.5.4",
+  "mujoco": "3.15.0"
+ },
+ "frame_state": "pre-step",
+ "max_hz": 30,
+ "plant": "hidden (instance plant applied): the damaged robot",
+ "fidelity": {
+  "experiments": "per-seed features equal to the record (production and trace paths)",
+  "validation": "status, walking fraction and reasons equal to the record (Stage 2 stored no per-seed verification rows); each trace equal to this run's production row",
+  "fk_tol_m": 1e-09,
+  "fk_max_err_m": 0.0
+ },
+ "experiments": {
+  "observe": {
+   "arm": "A3",
+   "id": "X0:observe",
+   "seeds": [
+    52175936,
+    52175937,
+    52175938,
+    52175939
+   ],
+   "design_hash": "f7a709fa06"
+  },
+  "x1_nem": {
+   "arm": "A3",
+   "id": "X1:cf:freq@x0.85",
+   "seeds": [
+    52175936,
+    52175937,
+    52175938,
+    52175939
+   ],
+   "design_hash": "ee976196c3"
+  },
+  "x1_eng": {
+   "arm": "A1e",
+   "id": "X1:cf:freq@x1.2",
+   "seeds": [
+    52175936,
+    52175937,
+    52175938,
+    52175939
+   ],
+   "design_hash": "1bf7a28972"
+  }
+ },
+ "validation": {
+  "nominal": {
+   "design_hash": "f7a709fa06",
+   "rows": [
+    {
+     "seed": 69489984,
+     "outcome": "POOR",
+     "score": 0.6781290740719003,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489985,
+     "outcome": "POOR",
+     "score": 0.7373671399069454,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489986,
+     "outcome": "POOR",
+     "score": 0.7976968705226842,
+     "walking": false,
+     "fell": false,
+     "label": "contact_chatter",
+     "fall_time": null
+    },
+    {
+     "seed": 69489987,
+     "outcome": "POOR",
+     "score": 0.7149255682363388,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489988,
+     "outcome": "POOR",
+     "score": 0.720303972461165,
+     "walking": false,
+     "fell": false,
+     "label": "contact_chatter",
+     "fall_time": null
+    },
+    {
+     "seed": 69489989,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 8.141000000000927
+    },
+    {
+     "seed": 69489990,
+     "outcome": "POOR",
+     "score": 1.0250620184207415,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489991,
+     "outcome": "POOR",
+     "score": 0.45377094620892133,
+     "walking": false,
+     "fell": false,
+     "label": "stationary",
+     "fall_time": null
+    },
+    {
+     "seed": 69489992,
+     "outcome": "POOR",
+     "score": 0.6695394576483067,
+     "walking": false,
+     "fell": false,
+     "label": "contact_chatter",
+     "fall_time": null
+    },
+    {
+     "seed": 69489993,
+     "outcome": "POOR",
+     "score": 1.088920120007849,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489994,
+     "outcome": "POOR",
+     "score": 0.9146942776268296,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489995,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 1.1559999999999835
+    },
+    {
+     "seed": 69489996,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 5.0960000000000365
+    },
+    {
+     "seed": 69489997,
+     "outcome": "POOR",
+     "score": 1.0728152346114392,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489998,
+     "outcome": "POOR",
+     "score": 0.710184525563671,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489999,
+     "outcome": "POOR",
+     "score": 0.7280280480650257,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69490000,
+     "outcome": "POOR",
+     "score": 0.9500266236008099,
+     "walking": false,
+     "fell": false,
+     "label": "contact_chatter",
+     "fall_time": null
+    },
+    {
+     "seed": 69490001,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 4.245999999999753
+    },
+    {
+     "seed": 69490002,
+     "outcome": "POOR",
+     "score": 0.8083661382242797,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69490003,
+     "outcome": "POOR",
+     "score": 0.7071120864489223,
+     "walking": false,
+     "fell": false,
+     "label": "contact_chatter",
+     "fall_time": null
+    },
+    {
+     "seed": 69490004,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 8.13600000000093
+    },
+    {
+     "seed": 69490005,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 3.82099999999969
+    },
+    {
+     "seed": 69490006,
+     "outcome": "POOR",
+     "score": 0.7697271991394984,
+     "walking": false,
+     "fell": false,
+     "label": "contact_chatter",
+     "fall_time": null
+    },
+    {
+     "seed": 69490007,
+     "outcome": "POOR",
+     "score": 0.7561858635506846,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    }
+   ]
+  },
+  "a3_submitted": {
+   "design_hash": "7d577c6688",
+   "rows": [
+    {
+     "seed": 69489984,
+     "outcome": "PASS",
+     "score": 2.437243023805658,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489985,
+     "outcome": "PASS",
+     "score": 2.2841703853392903,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489986,
+     "outcome": "PASS",
+     "score": 2.324504975816995,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489987,
+     "outcome": "PASS",
+     "score": 2.266744531017785,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489988,
+     "outcome": "PASS",
+     "score": 2.480985525607199,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489989,
+     "outcome": "PASS",
+     "score": 2.4033140638932657,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489990,
+     "outcome": "PASS",
+     "score": 2.4385335545843874,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489991,
+     "outcome": "PASS",
+     "score": 2.3080959759048785,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489992,
+     "outcome": "PASS",
+     "score": 2.4487999398512823,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489993,
+     "outcome": "PASS",
+     "score": 2.479400910344001,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489994,
+     "outcome": "PASS",
+     "score": 2.126436705289452,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489995,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 1.3109999999999664
+    },
+    {
+     "seed": 69489996,
+     "outcome": "PASS",
+     "score": 2.4446421897394863,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489997,
+     "outcome": "PASS",
+     "score": 2.4204514349563304,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489998,
+     "outcome": "PASS",
+     "score": 2.3072795253109746,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489999,
+     "outcome": "PASS",
+     "score": 2.3293811608288646,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490000,
+     "outcome": "PASS",
+     "score": 2.401976086702099,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490001,
+     "outcome": "PASS",
+     "score": 2.4041767996475976,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490002,
+     "outcome": "PASS",
+     "score": 2.4323110230215375,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490003,
+     "outcome": "PASS",
+     "score": 2.2995024186860737,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490004,
+     "outcome": "PASS",
+     "score": 2.4374264050751626,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490005,
+     "outcome": "PASS",
+     "score": 2.344474123367495,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490006,
+     "outcome": "PASS",
+     "score": 2.4028621327211632,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490007,
+     "outcome": "PASS",
+     "score": 2.356110107048541,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    }
+   ]
+  },
+  "a1e_submitted": {
+   "design_hash": "4a74f1bbe1",
+   "rows": [
+    {
+     "seed": 69489984,
+     "outcome": "PASS",
+     "score": 3.438967954379877,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489985,
+     "outcome": "PASS",
+     "score": 3.3118071800308644,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489986,
+     "outcome": "PASS",
+     "score": 3.332372744455602,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489987,
+     "outcome": "PASS",
+     "score": 3.2834509755498367,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489988,
+     "outcome": "PASS",
+     "score": 3.2757445349497094,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489989,
+     "outcome": "PASS",
+     "score": 3.5339782810298472,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489990,
+     "outcome": "PASS",
+     "score": 3.369259737803676,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489991,
+     "outcome": "PASS",
+     "score": 3.2806650548723386,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489992,
+     "outcome": "PASS",
+     "score": 3.444816486576634,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489993,
+     "outcome": "PASS",
+     "score": 3.4888131597462357,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489994,
+     "outcome": "POOR",
+     "score": 2.312867957268294,
+     "walking": false,
+     "fell": false,
+     "label": "slow_or_few_steps",
+     "fall_time": null
+    },
+    {
+     "seed": 69489995,
+     "outcome": "FAIL",
+     "score": 0.0,
+     "walking": false,
+     "fell": true,
+     "label": "fall",
+     "fall_time": 1.8359999999999086
+    },
+    {
+     "seed": 69489996,
+     "outcome": "PASS",
+     "score": 3.2460997436785974,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489997,
+     "outcome": "PASS",
+     "score": 3.4763777250721972,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489998,
+     "outcome": "PASS",
+     "score": 3.173129445251415,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69489999,
+     "outcome": "PASS",
+     "score": 3.3275874322835826,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490000,
+     "outcome": "PASS",
+     "score": 3.4128393738533953,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490001,
+     "outcome": "FAIL",
+     "score": 0.9817844637941648,
+     "walking": false,
+     "fell": true,
+     "label": "falling_forward",
+     "fall_time": 2.5559999999998295
+    },
+    {
+     "seed": 69490002,
+     "outcome": "PASS",
+     "score": 3.426096107137745,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490003,
+     "outcome": "PASS",
+     "score": 3.207156493879058,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490004,
+     "outcome": "FAIL",
+     "score": 0.9485294466677479,
+     "walking": false,
+     "fell": true,
+     "label": "falling_forward",
+     "fall_time": 2.525999999999833
+    },
+    {
+     "seed": 69490005,
+     "outcome": "PASS",
+     "score": 3.445812057786132,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490006,
+     "outcome": "PASS",
+     "score": 3.5136917030419026,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    },
+    {
+     "seed": 69490007,
+     "outcome": "PASS",
+     "score": 3.256164145337893,
+     "walking": true,
+     "fell": false,
+     "label": "walking",
+     "fall_time": null
+    }
+   ]
+  }
+ },
+ "files": {
+  "a1e_submitted/69489984": "payloads/a1e_submitted_69489984.json",
+  "a1e_submitted/69489985": "payloads/a1e_submitted_69489985.json",
+  "a1e_submitted/69489986": "payloads/a1e_submitted_69489986.json",
+  "a1e_submitted/69489987": "payloads/a1e_submitted_69489987.json",
+  "a1e_submitted/69489988": "payloads/a1e_submitted_69489988.json",
+  "a1e_submitted/69489989": "payloads/a1e_submitted_69489989.json",
+  "a1e_submitted/69489990": "payloads/a1e_submitted_69489990.json",
+  "a1e_submitted/69489991": "payloads/a1e_submitted_69489991.json",
+  "a1e_submitted/69489992": "payloads/a1e_submitted_69489992.json",
+  "a1e_submitted/69489993": "payloads/a1e_submitted_69489993.json",
+  "a1e_submitted/69489994": "payloads/a1e_submitted_69489994.json",
+  "a1e_submitted/69489995": "payloads/a1e_submitted_69489995.json",
+  "a1e_submitted/69489996": "payloads/a1e_submitted_69489996.json",
+  "a1e_submitted/69489997": "payloads/a1e_submitted_69489997.json",
+  "a1e_submitted/69489998": "payloads/a1e_submitted_69489998.json",
+  "a1e_submitted/69489999": "payloads/a1e_submitted_69489999.json",
+  "a1e_submitted/69490000": "payloads/a1e_submitted_69490000.json",
+  "a1e_submitted/69490001": "payloads/a1e_submitted_69490001.json",
+  "a1e_submitted/69490002": "payloads/a1e_submitted_69490002.json",
+  "a1e_submitted/69490003": "payloads/a1e_submitted_69490003.json",
+  "a1e_submitted/69490004": "payloads/a1e_submitted_69490004.json",
+  "a1e_submitted/69490005": "payloads/a1e_submitted_69490005.json",
+  "a1e_submitted/69490006": "payloads/a1e_submitted_69490006.json",
+  "a1e_submitted/69490007": "payloads/a1e_submitted_69490007.json",
+  "a3_submitted/69489984": "payloads/a3_submitted_69489984.json",
+  "a3_submitted/69489985": "payloads/a3_submitted_69489985.json",
+  "a3_submitted/69489986": "payloads/a3_submitted_69489986.json",
+  "a3_submitted/69489987": "payloads/a3_submitted_69489987.json",
+  "a3_submitted/69489988": "payloads/a3_submitted_69489988.json",
+  "a3_submitted/69489989": "payloads/a3_submitted_69489989.json",
+  "a3_submitted/69489990": "payloads/a3_submitted_69489990.json",
+  "a3_submitted/69489991": "payloads/a3_submitted_69489991.json",
+  "a3_submitted/69489992": "payloads/a3_submitted_69489992.json",
+  "a3_submitted/69489993": "payloads/a3_submitted_69489993.json",
+  "a3_submitted/69489994": "payloads/a3_submitted_69489994.json",
+  "a3_submitted/69489995": "payloads/a3_submitted_69489995.json",
+  "a3_submitted/69489996": "payloads/a3_submitted_69489996.json",
+  "a3_submitted/69489997": "payloads/a3_submitted_69489997.json",
+  "a3_submitted/69489998": "payloads/a3_submitted_69489998.json",
+  "a3_submitted/69489999": "payloads/a3_submitted_69489999.json",
+  "a3_submitted/69490000": "payloads/a3_submitted_69490000.json",
+  "a3_submitted/69490001": "payloads/a3_submitted_69490001.json",
+  "a3_submitted/69490002": "payloads/a3_submitted_69490002.json",
+  "a3_submitted/69490003": "payloads/a3_submitted_69490003.json",
+  "a3_submitted/69490004": "payloads/a3_submitted_69490004.json",
+  "a3_submitted/69490005": "payloads/a3_submitted_69490005.json",
+  "a3_submitted/69490006": "payloads/a3_submitted_69490006.json",
+  "a3_submitted/69490007": "payloads/a3_submitted_69490007.json",
+  "nominal/69489984": "payloads/nominal_69489984.json",
+  "nominal/69489985": "payloads/nominal_69489985.json",
+  "nominal/69489986": "payloads/nominal_69489986.json",
+  "nominal/69489987": "payloads/nominal_69489987.json",
+  "nominal/69489988": "payloads/nominal_69489988.json",
+  "nominal/69489989": "payloads/nominal_69489989.json",
+  "nominal/69489990": "payloads/nominal_69489990.json",
+  "nominal/69489991": "payloads/nominal_69489991.json",
+  "nominal/69489992": "payloads/nominal_69489992.json",
+  "nominal/69489993": "payloads/nominal_69489993.json",
+  "nominal/69489994": "payloads/nominal_69489994.json",
+  "nominal/69489995": "payloads/nominal_69489995.json",
+  "nominal/69489996": "payloads/nominal_69489996.json",
+  "nominal/69489997": "payloads/nominal_69489997.json",
+  "nominal/69489998": "payloads/nominal_69489998.json",
+  "nominal/69489999": "payloads/nominal_69489999.json",
+  "nominal/69490000": "payloads/nominal_69490000.json",
+  "nominal/69490001": "payloads/nominal_69490001.json",
+  "nominal/69490002": "payloads/nominal_69490002.json",
+  "nominal/69490003": "payloads/nominal_69490003.json",
+  "nominal/69490004": "payloads/nominal_69490004.json",
+  "nominal/69490005": "payloads/nominal_69490005.json",
+  "nominal/69490006": "payloads/nominal_69490006.json",
+  "nominal/69490007": "payloads/nominal_69490007.json",
+  "observe/52175936": "payloads/observe_52175936.json",
+  "observe/52175937": "payloads/observe_52175937.json",
+  "observe/52175938": "payloads/observe_52175938.json",
+  "observe/52175939": "payloads/observe_52175939.json",
+  "x1_eng/52175936": "payloads/x1_eng_52175936.json",
+  "x1_eng/52175937": "payloads/x1_eng_52175937.json",
+  "x1_eng/52175938": "payloads/x1_eng_52175938.json",
+  "x1_eng/52175939": "payloads/x1_eng_52175939.json",
+  "x1_nem/52175936": "payloads/x1_nem_52175936.json",
+  "x1_nem/52175937": "payloads/x1_nem_52175937.json",
+  "x1_nem/52175938": "payloads/x1_nem_52175938.json",
+  "x1_nem/52175939": "payloads/x1_nem_52175939.json"
+ }
+}

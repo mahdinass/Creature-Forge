@@ -1,0 +1,29 @@
+rv1_reverify_v2: 8 designs on 7 instances; cap 824 rollout-equivalents (96 per design + 8 per instance eligibility check); no twin rollouts
+  gate: exact reproduction of the available stored reference fields (not proof of complete physical identity)
+  R1 hdb-v1-gen-0073:low_ground_friction:2 eval_A1e6_s1.jsonl#L1 A1e6 design 4 bbf27921db must reproduce NOT_RECOVERED 23/24 WORSE
+  R2 hdb-v1-gen-0073:low_ground_friction:0 eval_A1e6_s3.jsonl#L1 A1e6 design 1 21f93b68fe must reproduce NOT_RECOVERED 23/24 WORSE
+  R3 hdb-v1-gen-0126:low_ground_friction:0 eval_A1e6_s2.jsonl#L2 A1e6 design 2 ed99eefe37 must reproduce NOT_RECOVERED 20/24 NOT_VERIFIED
+  R4 hdb-v1-gen-0137:low_ground_friction:0 eval_A1e6_s3.jsonl#L4 A1e6 design 4 66053dae8e must reproduce PARTIAL_IMPROVEMENT 19/24 VERIFIED_IMPROVEMENT
+  R5 hdb-v1-gen-0096:low_ground_friction:2 eval_A1e6_s4.jsonl#L3 A1e6 design 4 1d51937757 must reproduce NOT_RECOVERED 6/24 NOT_VERIFIED
+  R6 hdb-v1-gen-0073:heavy_torso:0 eval_A1e6_s5.jsonl#L2 A1e6 design 4 1277dab8f7 must reproduce NOT_RECOVERED 23/24 WORSE
+  R7 hdb-v1-gen-0073:heavy_torso:0 eval_A3v5_s5.jsonl#L2 A3v5 design 4 dfb185d771 must reproduce FULL_RECOVERY 23/24 VERIFIED_IMPROVEMENT
+  R8 hdb-v1-gen-0143:pitch_sensor_bias:3 eval_A1e6_s2.jsonl#L5 A1e6 design 2 e3c48a6799 must reproduce FULL_RECOVERY 24/24 VERIFIED_IMPROVEMENT
+  input v6_settings: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/ds1/engine_v6_settings.json sha256=a0b037ef292886cf6311e41e275b8d492832de3cc3b1a68d8a1c8fb3fb5f8df1
+  input stop_model: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/ds1/stopmap_dev_v2.json sha256=7a829bb31cb88a6d0f38bf046326ab0b657f92423bc2807203c5f5dfc4f3ce73
+  input split_file: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/stage2_split.json sha256=8ce0c7d0fc128f0385092a0574c4045542f7e1cfee37096e15e5544afa609394
+  input eval_instances: C:\Users\<user>\.vscode\cf-ta1-harness\experiments/causal_engineer/dev/hdb/ds1/ds1_eval_instances.json sha256=dbd502de456234d70a69bebc69522a7640c4163608f82528d65c72ae8f65e97e
+  input thresholds: ../Creature-Forge/artifacts/vm/hdb/artifacts/hdb\thresholds_dev.json sha256=12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89
+  input walkers: ../Creature-Forge/artifacts/vm/hdb/artifacts/hdb\walkers_all.jsonl sha256=151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd
+R1 hdb-v1-gen-0073:low_ground_friction:2 NOT_RECOVERED 23 exact 17s
+R2 hdb-v1-gen-0073:low_ground_friction:0 NOT_RECOVERED 23 exact 15s
+R3 hdb-v1-gen-0126:low_ground_friction:0 NOT_RECOVERED 20 exact 15s
+R4 hdb-v1-gen-0137:low_ground_friction:0 PARTIAL_IMPROVEMENT 19 exact 14s
+R5 hdb-v1-gen-0096:low_ground_friction:2 NOT_RECOVERED 6 exact 14s
+R6 hdb-v1-gen-0073:heavy_torso:0 NOT_RECOVERED 23 exact 13s
+R7 hdb-v1-gen-0073:heavy_torso:0 FULL_RECOVERY 23 exact 22s
+R8 hdb-v1-gen-0143:pitch_sensor_bias:3 FULL_RECOVERY 24 exact 40s
+GATE PASS: 7/7 instance checks and 8/8 designs - exact reproduction of the available stored reference fields (not proof of complete physical identity)
+
+real	2m33.149s
+user	0m0.030s
+sys	0m0.015s

@@ -1,0 +1,62 @@
+{
+ "n": 668,
+ "positives": 79,
+ "naive_beta_robust16": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.1165,
+  "log_loss": 0.3502,
+  "ece": 0.1205,
+  "auroc": 0.912
+ },
+ "naive_beta_robust8": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.0964,
+  "log_loss": 0.2808,
+  "ece": 0.0914,
+  "auroc": 0.9084
+ },
+ "constant": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.1043,
+  "log_loss": 0.3635,
+  "ece": 0.0,
+  "auroc": 0.5
+ },
+ "logistic_lobo[robust16]": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.0738,
+  "log_loss": 0.2262,
+  "ece": 0.0354,
+  "auroc": 0.9021
+ },
+ "logistic_lobo[robust16+stress]": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.0722,
+  "log_loss": 0.2211,
+  "ece": 0.042,
+  "auroc": 0.913
+ },
+ "logistic_lobo[all_visible]": {
+  "n": 668,
+  "base_rate": 0.1183,
+  "brier": 0.0698,
+  "log_loss": 0.2058,
+  "ece": 0.0485,
+  "auroc": 0.9338
+ },
+ "full_fit_all_visible": [
+  -5.2079,
+  0.5702,
+  0.3725,
+  0.478,
+  0.5607,
+  0.3327,
+  0.2405,
+  0.1602
+ ]
+}

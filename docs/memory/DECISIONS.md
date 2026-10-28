@@ -105,3 +105,91 @@ This is the Git-visible decision index. Add one dated section per consequential 
   new registration; the v1 protocol, bank and records are frozen.
 - Interrupted evaluations are paused only at pair boundaries and resumed with `--resume` (never rerun a recorded pair); the
   driver for long runs is launched in a remote `tmux` session so it survives the local machine disconnecting.
+
+## 2026-10-16 Walking recovery: G1 = PROCEED (M1, development data)
+- M1 (`experiments/walk_recovery/oracle/REPORT_M1.md`): joint body+controller CMA with the new foot-placement controller (17-D, `phasegait_fp.py`) fully recovers 6/12 dev creatures at 8k rollouts (ctrl15 1/12, ctrl17 5/12, joint15 4/12); union 8/12. Pre-declared G1 rule (>= 50%) met exactly -> proceed to the AI-director stage.
+- Decisions for M2: every method uses the 17-D family with optional 4-parameter body co-design; final candidates are selected on held-out screening seeds (train-validation gap +0.21 median; 8k worse than 4k); training on 8 seeds under the validation-variation preset (H7: 3 nominal seeds generalise worse); similarity transfer dropped as a fix (never helped). R* chosen on the method pilot by the plan's 25-60% rule.
+- Not claimed: impossibility for the 4 unrecovered creatures (walking 0.62-0.96, "not within 8k"); anything about Nemotron (no model calls in M1).
+
+## 2026-10-17 Walking recovery: confirmatory result and what the project claims
+- S3 (frozen walkrec-confirm-v1 + pre-data amendment 1; `experiments/walk_recovery/confirmatory/REPORT.md`): equal total budget 2,000, 48 fresh failing robots: FIX 19, CMA-joint 11, RAND 11, ai_v2 9, CMA-ctrl 8 full recoveries. Primary ai_v2 > FIX NOT supported (4 vs 14, p = 0.996).
+- Claim: the classical procedure (foot-placement controller + body co-design + diagnostic subspace probes + verdict-aware selection) makes 40% of genuinely failing never-seen robots walk under the strict criterion. Not claimed: AI decision value. Summary: `docs/WALK_RECOVERY.md`.
+- Development negatives kept: S2/S2b director, L2 learned experience (G3 FAIL), S4a control-law invention and closed loop (G4 FAIL).
+
+## 2026-10-18 Phase 3: Hypothesis-as-Simulation scientist on a hidden-damage bench (owner-approved plan, revision 2)
+- **Plan of record:** `docs/HAS_PLAN_2026-10-18.md`; living spec and log: `docs/HAS_SCIENTIST.md`; branch `feature/has-scientist`.
+- **Architecture:**
+  - Nemotron writes executable deviation hypotheses (a generic DSL), experiments and repair strategies.
+  - A deterministic engine weighs the hypotheses by paired same-seed twin simulation, chooses experiments by EIG, runs
+    posterior-robust repair, and stops on a dev-validated evidence→`full_recovery_v1` mapping.
+- **Benchmark integrity:**
+  - The agent sees the nominal design. The plant adds a hidden deviation and a reality gap.
+  - Eligibility is physics-only. Oracle R/U and ambiguity are labels, never filters.
+  - An identifiability study runs before any comparative run. Families are frozen before comparative dev runs.
+- **Hypotheses:**
+  - Primary, fixed in every protocol variant: FULL(A3 HaS) > FULL(A1 engine-only), one-sided exact McNemar.
+  - Separate confirmatory C-MKV: K1 (true mechanism structure) > K0 (none).
+  - Variants: P-main / P-reduced (if Tier B slips) / P-fallback.
+- **Attribution:** arms A0/A1/A1f/A2/A3h/A3hx/A3/A4/A5, plus deterministic replay. Nemotron's predictive distributions are
+  compared with the engine-only posterior predictive.
+- **Spending:** staged. Stage 1 approved: infra $35 (cap 38 → 72) and inference ≤ $5 within the $40 cap. Real credit on
+  2026-10-18 was Cloud $66, Token Factory $52. Later stages need owner approval with advance notice.
+- **Elicit:** API access was denied; no Elicit result is used anywhere.
+
+## 2026-10-21 Post-DO-1 plan: demo first, fail-closed replays, staged replication (owner-approved, revision 2)
+- **Plan of record:** `~/.claude/plans/pasted-content-id-3fc3-creature-cozy-parasol.md`. Each step needs separate approval.
+  - Workstreams: W0 preservation and integration; W1 L4 demo; W2 Nemotron audit; W3 replication `DO1-L4-rep`; W4 cross-family `DO1-X`; W5 submission.
+  - W3: r1–r5 paired, plus a frozen r0 sentinel. The cap is 39,644.
+  - W4: B1 `gen-0142:payload_offset:5` and C1 `gen-0070:feedback_gain_loss:2`, by a pre-declared eligibility rule.
+- **Demo integrity.** Replays must reproduce the hidden plant and the stored verification rows exactly. Otherwise nothing is exported. The existing Scientist/Causal replays use the generic preset **without** the hidden fault, and must be relabelled or replaced before filming.
+- **Attribution.** DO-1 is NO_AI and is never credited to Nemotron. Nemotron's demonstrated contributions are:
+  - the pre-registered Forge Loop push scoreboard (6/12 vs 1/12);
+  - recorded HaS traces, such as the `gen-0137 one_side_weakness` experiment choice, with deterministic replay attribution.
+- **Records.** TA-1/DO-1 raw records are frozen under `experiments/do1/` and `experiments/ta1/`. Source and inputs that decided DO1-L4-r0 are pinned by `tests/test_frozen_paths.py`.
+
+## 2026-10-21 W1b: the Verified repair page shows only hash-pinned evidence
+- **Pinned evidence.** `/api/do1` serves the DO-1 export only if its `SHA256SUMS` equals the pinned hash, and every
+  file is checked before it is served. Verdicts and reasons are read from the audited record, never restated.
+- **Derived numbers.** The UI derives every number from rows or recorded verification. A mismatch between rows and
+  exported aggregates is shown as an error, not hidden.
+- **Visible caveats.** The default seed is the pre-declared one and is labelled illustrative. The attribution caption
+  (no Nemotron) and the scope caption (one replicate) always stay visible.
+
+## 2026-10-21 - The viewer's floor is a backdrop (grid fix)
+- **Rule.** In `studio/src/Viewport.tsx`, the floor plane is drawn first (`renderOrder={-1}`) with `depthWrite={false}`.
+- **Why.** A huge coplanar ground plane clipped at the near plane has depth errors larger than mm offsets on some
+  rasterisers, and it hid the grid. Polygon offset and larger offsets did not help.
+- **Do not reintroduce it.** Don't use depth-writing ground planes under overlays. Verify viewer changes with a
+  camera-position sweep, not only the t = 0 frame.
+
+## 2026-10-21 - W2: how Nemotron's contribution is presented
+- **Attribution doc.** `docs/NEMOTRON_CONTRIBUTION.md` plus `experiments/w2/studies.json`: one row per study, each
+  with a source file and a verbatim quote that a test checks. Only the Forge Loop scoreboard is a pre-registered result
+  in Nemotron's favour. DO-1 is listed as NO_AI and is presented separately from Nemotron's work.
+- **Demo case = pinned excerpt.** The gen-0137 one_side_weakness case is three byte-exact lines of the Stage 2 records
+  (A3, A1e, A4), pinned by line and source SHA-256. `case.json` must rebuild exactly from them. The page must show the
+  A4 replicate that did not verify, the 36-instance parity, and that the case was selected post hoc.
+- **Wording that must stay.** EIG was tied across all 7 candidates. No prediction was registered. Nemotron's
+  hypotheses got weight 0. The repair was the engine's delegated procedure.
+- **HaS replays are nominal.** `/api/scientist` replays never include the hidden plant. They are labelled "nominal
+  design, no hidden damage" (labels, banner, API note). The causal-engineer replays are unchanged, because those faults
+  live in the replayed body and vector.
+- **Damaged-robot animation only via the gated exporter** (`scripts/w2_damaged_plant_export.py`).
+  - Gate: per-seed experiment features exact, verification aggregates exact, FK.
+  - It must run in the recorded Linux environment, and only with owner approval.
+
+## 2026-10-27 - Submission candidate (`release/v1-submission`)
+- **Base:** `release/v1-rc2-prep` @ `60b6ac9` (PR #20), which contains `release/v1` (PR #19). PR #20 was reviewed and kept
+  whole: E-1 evidence and code are additive (a separate testbench module and scripts), the frozen manifest only gains
+  42 entries, the infra changes harden the stop path, and no Studio, physics, verifier or optimiser path changed.
+- **Excluded from the release:** H1 (PR #22), H3 (PR #23), E-2R and the other research branches (RL-1, R0, EM-1, DI-1,
+  VEL-1, VEL-2). Their decisions are summarised in `docs/RESEARCH_STATUS.md`; their code is not product code.
+- **Imported byte-identically from `feature/demo-capture` @ `29e8e50`:** `experiments/forge_loop/demo_capture/` (live
+  take records, request ids) and `studio/e2e/forge-demo-capture.mjs` (refuses live mode without `LIVE_OK=1`). The
+  directory is a living, non-frozen one, so the manifest is unchanged.
+- **Wording rules for public text:** the qualifying Nebius path is the runtime Token Factory call. Our AI Cloud use was
+  Compute VMs, not Serverless Jobs, Endpoints or DevPods, and is described as such. DO-1 is reported with the R0 caveat
+  (not a general improvement). The walking-recovery confirmatory result (fixed rule 19/48, AI director 9/48) is shown
+  in the README. Experience learning is reported as not demonstrated.
+- **No file moves** for repository structure: frozen records, tests and commit messages cite current paths. A
+  categorised index (`docs/README.md`) was added instead.

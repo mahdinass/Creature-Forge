@@ -1,0 +1,35 @@
+{
+  "id": "walkrec-s4a-mech-pilot-v1",
+  "stage": "S4a (iteration 3): closed-loop control-law invention by Nemotron vs compute-matched non-AI structure (development data; never confirmatory). Decides G4.",
+  "registered_before_run": true,
+  "design_doc": "docs/WALK_RECOVERY_ITERATION3.md (sections 3-4 and 8)",
+  "campaign": "walkrec-dev2",
+  "creatures": [{"panel": {"campaign": "walkrec-dev2-gen", "n": 24, "min_dist": 0.15, "max_draws": 3000}}],
+  "panel_note": "24 NEW development creatures (not M1/S2 dev, not L2, not S3); generated once before any unit; panel sha256 in every unit",
+  "start": "15-D R2 controller (family 15, NO foot placement): structure must come from the method",
+  "budget": 3000,
+  "seeds": {"diag": 4, "train": 8, "screen": 12, "validate": 24, "confirm": 24},
+  "settings": {"probe_budget_frac": 0.08, "max_rounds": 4, "screen_top_k": 3, "screen_n": 12},
+  "methods": ["fix15", "generic", "randmech", "expert", "ai_1shot", "ai_iter"],
+  "method_notes": {
+    "fix15": "no new structure; FIX rule over opt_body/opt_posture/opt_timing",
+    "generic": "blind structure: the two generic linear mechanisms (8 gains over d, v, pitch, pitch_rate on swing and stance hip) + FIX rule",
+    "randmech": "random DSL mechanisms (2 per round, 2 rounds) + FIX rule",
+    "expert": "REFERENCE, not a comparator: the human-designed swing-foot-placement law written in the DSL + FIX rule",
+    "ai_1shot": "MechDirector one_shot: one investigation round (mechanisms + probes), no feedback loop, then the final plan",
+    "ai_iter": "MechDirector iterative: up to 4 rounds with physical feedback from train/diag seeds (fitted gains, deltas, post-probe gait features); may revise, switch cause or stop"
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b, production config (thinking off), strict JSON schemas, one repair per call, order shuffling with recorded seeds, <= 12 requests per pipeline",
+  "replicates": [1],
+  "accounting": "equal TOTAL budget 3,000 per method: start evaluation, every probe (incl. mechanism probes and their 4-seed post-probe diagnostics), every plan, screening (incl. the original's screen for selection v2) charged; assessment uncharged and identical",
+  "selection": "mech_pipelines selection v2 for every method: (passes the verdict distance bar on screen, screen walking, screen median)",
+  "recovery_rule": "recovery.full_recovery_v1 (unchanged)",
+  "analysis": {
+    "G4": "PASS iff ai_iter full recoveries >= max(fix15, generic, randmech) + 3 (of 24)",
+    "capability_1": "ai_iter vs ai_1shot full recoveries (paired table); revision metric: share of revised mechanisms whose probe improved on the revised one (delta walking, then delta fitness) vs share of new proposals that improved",
+    "mechanism_analysis": "what Nemotron invented: targets, legs, signals used; whether any proposal is equivalent to swing-hip feedback on d and v; how often fitted gains stayed ~0",
+    "descriptive_only": "24 creatures, one replicate; no significance claims"
+  },
+  "rollout_cap": 480000,
+  "inference": "<= 12 requests per AI pipeline, unique ledger ids per method/creature; global caps $15 / 1,500 requests"
+}

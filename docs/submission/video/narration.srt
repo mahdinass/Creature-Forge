@@ -1,0 +1,111 @@
+1
+00:00:02,500 --> 00:00:08,773
+A walking robot with a hidden fault, and two repairs, side by side in
+
+2
+00:00:08,823 --> 00:00:15,095
+MuJoCo. What if an AI could investigate why a robot fails, instead of just
+
+3
+00:00:15,145 --> 00:00:16,450
+trying another design?
+
+4
+00:00:16,500 --> 00:00:23,354
+First, how a repair is judged. Every design runs on twenty-four held-out starts the
+
+5
+00:00:23,404 --> 00:00:30,258
+optimiser never saw. The frozen optimiser's repair goes farther on the median, but only
+
+6
+00:00:30,308 --> 00:00:37,162
+nineteen of twenty-four starts walk: a partial improvement. DO-1 changes the optimiser's objective. Twenty-one
+
+7
+00:00:37,212 --> 00:00:44,066
+walk, and a twenty-second confirmation passes. Full recovery, verified. This is deterministic optimisation, no
+
+8
+00:00:44,116 --> 00:00:50,971
+language model. In five fresh repeats on this robot, DO-1 recovered all five; the
+
+9
+00:00:51,021 --> 00:00:52,450
+frozen optimiser, none.
+
+10
+00:00:52,500 --> 00:00:58,912
+Now the scientist: a recorded live investigation by NVIDIA Nemotron, played back, with no
+
+11
+00:00:58,962 --> 00:01:04,450
+new model call. Same robot, a different hidden fault. It barely moves.
+
+12
+00:01:04,500 --> 00:01:10,867
+The belief engine has two explanations: a weak right side, or a weak left.
+
+13
+00:01:10,917 --> 00:01:17,283
+All seven experiments look equally informative to it. It picks a faster gait, where
+
+14
+00:01:17,333 --> 00:01:23,700
+both predict the same walking. Nemotron picks a slower gait, where they predict opposite
+
+15
+00:01:23,750 --> 00:01:26,450
+outcomes, without registering a formal prediction.
+
+16
+00:01:26,500 --> 00:01:34,746
+MuJoCo runs both experiments on the damaged robot. These are the recorded measurements, replayed
+
+17
+00:01:34,796 --> 00:01:42,450
+exactly. Nemotron's experiment walks on three of four starts; on one, it falls.
+
+18
+00:01:42,500 --> 00:01:48,814
+Nemotron's lane now points to the right side, which is correct. The engine alone
+
+19
+00:01:48,864 --> 00:01:52,450
+is 99.8 percent sure of the wrong side.
+
+20
+00:01:52,500 --> 00:02:01,783
+Nemotron hands the repair to the engine's optimiser. The verifier: Nemotron's lane fully recovers,
+
+21
+00:02:01,833 --> 00:02:06,450
+twenty-three of twenty-four. The engine alone, partly.
+
+22
+00:02:06,500 --> 00:02:13,862
+Nemotron 3 Super, on Nebius Token Factory, decides what to do next. Deterministic instruments
+
+23
+00:02:13,912 --> 00:02:21,274
+do the rest: experiments, Bayesian inference, optimisation and memory. A hidden verifier decides. The
+
+24
+00:02:21,324 --> 00:02:24,450
+simulation ran on Nebius AI Cloud.
+
+25
+00:02:24,500 --> 00:02:31,450
+Is Nemotron better? Not overall. A second run made the same choice and only
+
+26
+00:02:31,500 --> 00:02:38,450
+partly recovered. Across thirty-six robots it is level with the engine. Nemotron's one pre-registered
+
+27
+00:02:38,500 --> 00:02:45,450
+win is small: six of twelve redesigns verified, against one in twelve random edits,
+
+28
+00:02:45,500 --> 00:02:49,450
+mostly on push tests. AI proposes; physics decides.

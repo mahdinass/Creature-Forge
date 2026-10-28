@@ -1,0 +1,86 @@
+{
+ "date": "2026-10-21",
+ "rule": "account segment after C:\\Users\\ (raw, JSON-escaped or forward-slash) -> <user>; nothing else changed",
+ "tool": "scripts/redact_local_paths.py",
+ "originals": "git-ignored run archive (docs/ARTIFACT_ARCHIVE_2026-10-21.md); their SHA-256 are also in docs/archive/runs_2026-10-21.SHA256SUMS",
+ "why": "publication: tracked copies must not expose the local Windows account name; the originals stay byte-exact and verifiable",
+ "files": [
+  {
+   "tracked": "experiments/do1/l4_r0/analysis_do1_l4_r0.py",
+   "archive": "do1_l4_r0_pilot_2026-10-21/analysis_do1_l4_r0.py",
+   "original_sha256": "34154d0d1c61c894cfba76b487252bd8aa1d704e692f264acf230f75f6008b87",
+   "redacted_sha256": "d75df7d23913a60b8a8ef8183e7a35a9917c5325432fd166ee0257bd60fc2a57",
+   "replacements": 1,
+   "bytes": [
+    7639,
+    7640
+   ]
+  },
+  {
+   "tracked": "experiments/ta1/a1_l4_pilot_2026-10-21/analysis_a1_l4.py",
+   "archive": "fa1c_a1_l4_pilot_2026-10-21/analysis_a1_l4.py",
+   "original_sha256": "49e4633a011c9f376d38ba15a7ffb6303c091756410410b842dafac3846a05af",
+   "redacted_sha256": "8685c9a3d39e5e0396dc6c707efec40563016ec349be6d5232dc6269fe4fd1a6",
+   "replacements": 2,
+   "bytes": [
+    5099,
+    5101
+   ]
+  },
+  {
+   "tracked": "experiments/ta1/phase1a_2026-10-20/rv1_phase1a.jsonl.manifest.json",
+   "archive": "fa1c_phase1a_2026-10-20/rv1_phase1a.jsonl.manifest.json",
+   "original_sha256": "7a3b6767800c09403a5b3a2be1f4b78af4c21349b87d7f7cf6f1e6198d08363d",
+   "redacted_sha256": "a621e857ec39a4d14360f14f98afb9c3bb1cb70d85de285de7a09fe3d2a9a4f5",
+   "replacements": 8,
+   "bytes": [
+    6336,
+    6344
+   ]
+  },
+  {
+   "tracked": "experiments/ta1/phase1a_2026-10-20/rv1_phase1a.log",
+   "archive": "fa1c_phase1a_2026-10-20/rv1_phase1a.log",
+   "original_sha256": "8fb6de9ab6c10ebbd86d9bac5e1c59193d157a65888b650316feb4f042b58262",
+   "redacted_sha256": "54d380aef890a1b20e8565a7a1ce776dfc9baa65fbab1560016ecdf2d31d4978",
+   "replacements": 4,
+   "bytes": [
+    3178,
+    3182
+   ]
+  },
+  {
+   "tracked": "experiments/ta1/phase1b_followup_2026-10-21/followup_analysis.py",
+   "archive": "fa1c_phase1b_followup_2026-10-21/followup_analysis.py",
+   "original_sha256": "cd31286a305fd466e70f009ffe97b3d39a6b5299030788f7c1644b4ea5d09adb",
+   "redacted_sha256": "5229d18822c8cf5f51263ba32c12397684c2d886205e0ea027d5492441dcde18",
+   "replacements": 1,
+   "bytes": [
+    6923,
+    6924
+   ]
+  },
+  {
+   "tracked": "experiments/ta1/x1_d3_2026-10-21/rv2_x1_d3.jsonl.manifest.json",
+   "archive": "fa1c_x1_d3_2026-10-21/rv2_x1_d3.jsonl.manifest.json",
+   "original_sha256": "317f34cd4ca1b11082b284dc370e91925e9beca8b0f55b5ac4ed1f818265fcce",
+   "redacted_sha256": "6cd85b016490ecbdfd7f6466463b1601402cd9e94b90ae497fe502d6f5234428",
+   "replacements": 13,
+   "bytes": [
+    6192,
+    6205
+   ]
+  },
+  {
+   "tracked": "experiments/ta1/x1_d3_2026-10-21/rv2_x1_d3.log",
+   "archive": "fa1c_x1_d3_2026-10-21/rv2_x1_d3.log",
+   "original_sha256": "2495262b6614d6e704888af040c48c71579f4d8601976b21f875e34cf25e6402",
+   "redacted_sha256": "0041c4d8b561b5c9f8cddb07216d9956da81fd5abc638e7760425074b4b4dc1c",
+   "replacements": 6,
+   "bytes": [
+    2070,
+    2076
+   ]
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/forge/dev/w2-plant-export/scripts/w2_damaged_plant_export.py", line 427, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/forge/dev/w2-plant-export/scripts/w2_damaged_plant_export.py", line 414, in main
+    res = smoke(recs, pl, inst, pool=pool)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/forge/dev/w2-plant-export/scripts/w2_damaged_plant_export.py", line 321, in smoke
+    check_instance(inst, recs, pl)
+  File "/home/forge/dev/w2-plant-export/scripts/w2_damaged_plant_export.py", line 159, in check_instance
+    raise FidelityError("rebuilt instance differs from the record: " + "; ".join(problems))
+FidelityError: rebuilt instance differs from the record: the rebuilt obs seeds differ from the recorded experiment seeds

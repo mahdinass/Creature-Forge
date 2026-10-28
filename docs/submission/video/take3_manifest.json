@@ -1,0 +1,208 @@
+{
+ "kind": "demo-video-capture",
+ "base": "http://127.0.0.1:8765",
+ "started_utc": "2026-10-21T15:22:53.987Z",
+ "software": false,
+ "pace": 1,
+ "shots": [
+  "hook",
+  "do1",
+  "why",
+  "nemo-intro",
+  "failure",
+  "hypotheses",
+  "fork",
+  "measure",
+  "belief",
+  "repair",
+  "verify",
+  "lab",
+  "scope",
+  "close"
+ ],
+ "layout": {
+  "css_viewport": {
+   "width": 2400,
+   "height": 1350
+  },
+  "device_scale": 0.8,
+  "frame": "1920x1080"
+ },
+ "overlay": "cursor dot drawn by the capture script (no cursor in a screencast); nothing else is added to the page",
+ "playback_only": "no simulation and no model call: the pages play back hash-pinned files; other /api requests are blocked",
+ "chapters": [
+  {
+   "shot": "hook",
+   "title": "Verified repair: faulty / frozen / DO-1 on the illustrative seed, real time",
+   "start": 3.62,
+   "end": 19.91,
+   "video_start": 0,
+   "video_end": 16.29
+  },
+  {
+   "shot": "do1",
+   "title": "Validation and confirmation counts, deterministic attribution",
+   "start": 19.91,
+   "end": 45.43,
+   "video_start": 16.29,
+   "video_end": 41.81
+  },
+  {
+   "shot": "why",
+   "title": "Why the longer walk is not a full recovery",
+   "start": 45.43,
+   "end": 60.63,
+   "video_start": 41.81,
+   "video_end": 57.01
+  },
+  {
+   "shot": "nemo-intro",
+   "title": "Recorded LIVE investigation, playback; captions",
+   "start": 60.63,
+   "end": 69.07,
+   "video_start": 57.01,
+   "video_end": 65.45
+  },
+  {
+   "shot": "failure",
+   "title": "Stage 1: the damaged robot (recorded measurements, reconstructed replay)",
+   "start": 69.07,
+   "end": 85.2,
+   "video_start": 65.45,
+   "video_end": 81.58
+  },
+  {
+   "shot": "hypotheses",
+   "title": "Stage 2: competing hypotheses, belief 0.895 / 0.105",
+   "start": 85.2,
+   "end": 90.87,
+   "video_start": 81.58,
+   "video_end": 87.25
+  },
+  {
+   "shot": "fork",
+   "title": "Stage 3: tied EIG; Nemotron freq@x0.85 vs engine freq@x1.2; no registered prediction",
+   "start": 90.87,
+   "end": 107.56,
+   "video_start": 87.25,
+   "video_end": 103.94
+  },
+  {
+   "shot": "measure",
+   "title": "Stage 4: both experiments on the damaged robot (exact recorded measurements)",
+   "start": 107.56,
+   "end": 129.08,
+   "video_start": 103.94,
+   "video_end": 125.46
+  },
+  {
+   "shot": "measure-fall",
+   "title": "Stage 4: the start where Nemotron's own experiment fell",
+   "start": 129.08,
+   "end": 138.51,
+   "video_start": 125.46,
+   "video_end": 134.89
+  },
+  {
+   "shot": "belief",
+   "title": "Stage 5: the same engine ends on opposite sides",
+   "start": 138.51,
+   "end": 149.57,
+   "video_start": 134.89,
+   "video_end": 145.95
+  },
+  {
+   "shot": "repair",
+   "title": "Stage 6: Nemotron delegates; the engine's optimiser repairs",
+   "start": 149.57,
+   "end": 161.16,
+   "video_start": 145.95,
+   "video_end": 157.54
+  },
+  {
+   "shot": "verify",
+   "title": "Stage 7: independent verification; reconstructed replays on the illustrative hidden start",
+   "start": 161.16,
+   "end": 181.56,
+   "video_start": 157.54,
+   "video_end": 177.94
+  },
+  {
+   "shot": "lab",
+   "title": "How the laboratory works: Nemotron decides, deterministic instruments act, an independent verifier judges",
+   "start": 181.56,
+   "end": 201.01,
+   "video_start": 177.94,
+   "video_end": 197.39
+  },
+  {
+   "shot": "scope",
+   "title": "How representative: A4 replicate PARTIAL; 36 instances 15 vs 14",
+   "start": 201.01,
+   "end": 213.51,
+   "video_start": 197.39,
+   "video_end": 209.89
+  },
+  {
+   "shot": "studies",
+   "title": "Every study: favourable, mixed, negative; DO-1 NO_AI",
+   "start": 213.51,
+   "end": 229.37,
+   "video_start": 209.89,
+   "video_end": 225.75
+  },
+  {
+   "shot": "close",
+   "title": "Provenance footer",
+   "start": 229.37,
+   "end": 233.5,
+   "video_start": 225.75,
+   "video_end": 229.88
+  }
+ ],
+ "checks": [
+  {
+   "ok": true,
+   "m": "WebGL renderer: ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x0000A7A0) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  {
+   "ok": true,
+   "m": "damaged-plant replays are available and verified"
+  },
+  {
+   "ok": true,
+   "m": "the pre-declared illustrative seed is selected"
+  }
+ ],
+ "errors": [],
+ "blocked": [],
+ "console_errors": [
+  "Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "renderer": "ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x0000A7A0) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+ "evidence": {
+  "do1_default_seed": 66645963,
+  "do1_walking": {
+   "faulty": 5,
+   "frozen": 19,
+   "do1": 21
+  },
+  "nemotron_instance": "hdb-v1-gen-0137:one_side_weakness:4",
+  "replays_available": true,
+  "playback": "RECORDED_LIVE"
+ },
+ "video_t0": 3.62,
+ "measure_seeds": {
+  "differ": 52175937,
+  "fell": 52175938
+ },
+ "duration_s": 234.92,
+ "frames": 6194,
+ "video": {
+  "file": "take.mp4",
+  "fps": 30,
+  "codec": "h264",
+  "note": "constant 30 fps from screencast timestamps"
+ },
+ "screencast_fps": 27.4
+}

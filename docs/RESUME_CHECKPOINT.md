@@ -1,5 +1,8 @@
 # RESUME CHECKPOINT — Creature Forge (written 2026-10-15 ~19:10 UTC)
 
+> **SUPERSEDED (2026-10-18).** Historical checkpoint of the Forge Loop session (2026-10-15). For the current state read
+> `docs/RESEARCH_HANDOFF_2026-10-18.md`.
+
 Read this first. **Verify each fact against Git / the VM / GitHub before acting** (commands in §9); trust files and commits
 over any conversation summary. The objective is to resume in minutes without redoing finished work.
 
@@ -159,3 +162,28 @@ Never run tests/builds/MuJoCo locally (no free RAM); use `forge_dev.py test py|f
 - **Remaining D items:** scripted demo capture (owner records voice-over), publication audit owner decisions (history
   emails, Nebius §4.1.10(c)/§18.7, Super/Ultra licence texts), final secret scan on the final refs. PR #16 merge awaits the
   owner's explicit yes (merge commit, no squash).
+
+## 2026-10-16 evening — WALKING-RECOVERY RESEARCH (branch `feature/walk-recovery`, pushed)
+Plan of record (owner-approved, rev. 2): local file `~/.claude/plans/pasted-content-id-4675-creature-merry-corbato.md`
+(summary in PROJECT_STATE 2026-10-16). Staged spend; owner approved S0, S1 (temporary 64-vCPU batch VM, infra cap $20)
+and S2. Commits: authored Mahdi, NO AI trailers.
+- **Done:** M0 modules (`walk_opt`, `creature_gen`, `recovery`, `gait_features`, `phasegait_fp` (17-D foot placement),
+  `walk_pipelines` (equal-total-budget framework + FIX/RAND/full-space/scripted directors), `director` (NemotronDirector,
+  live-tested once in a smoke)); M1a and M1 (G1 = PROCEED: joint17 6/12) — `experiments/walk_recovery/oracle/REPORT_M1*.md`.
+- **Running at this write:** S2 dev pilot (`experiments/walk_recovery/dev_pilot/protocol_s2.json`, registered `da421f2`)
+  on the BATCH VM (`CF_VM=batch`, slot `s2`, 12 tmux sessions `s2s0..11`, outputs `~/dev/s2/artifacts/walk_recovery/s2/shard*.jsonl`,
+  logs `~/logs/s2s*.log`). The authoritative inference ledger is TEMPORARILY on the batch VM: `~/dev/ledger/inference_ledger.jsonl`
+  (copied from the main VM at 262 lines; must be copied back to the main VM `~/dev/ledger/` and to `artifacts/vm/ledger_backup/`
+  after S2). Pull with `CF_VM=batch python infra/nebius/forge_dev.py pull --slot s2 artifacts/walk_recovery`; NEVER sync slot s2
+  before pulling (outputs are in git-ignored artifacts/, so a sync is safe, but pull first anyway).
+- **VMs:** main VM STOPPED. Batch VM RUNNING during S2; stop it via `CF_VM=batch python infra/nebius/forge_cloud.py stop` after
+  pulling; delete it (`CF_VM=batch ... delete --yes --skip-sync`) once no longer needed (owner approved a temporary VM).
+  `forge_cloud.py spend` shows both profiles against the combined $20 cap.
+- **Next:** analyse S2 once (R* rule, primary comparator rule, G2) -> L2 experience pilot (`experience.py` in progress) -> G3 ->
+  confirmatory protocol freeze (target 10-23) -> S3 approval -> confirmatory run -> demo take -> submission docs.
+
+## 2026-10-17 later — development finished; S3 awaiting the owner's freeze approval
+- Reports: oracle/REPORT_M1A.md, REPORT_M1.md; dev_pilot/REPORT_S2.md, REPORT_S2B.md; experience/REPORT_L2.md; mech_pilot/REPORT_S4A.md.
+- Authoritative inference ledger: batch VM `~/dev/ledger/inference_ledger.jsonl` (backup `artifacts/vm/ledger_backup/inference_ledger_20261017c_batch.jsonl`, 1424 lines); copy it to the main VM before any live call there.
+- Both VMs STOPPED. Infra cap $35 (forge_cloud SPEND_CAP_USD). Batch VM (CF_VM=batch) kept for S3; delete after S3.
+- S3: run `scripts/walk_oracle.py --make-panel` with the frozen protocol, then `scripts/walk_s2_pilot.py` shards (methods from the protocol), then `scripts/walk_confirm_analysis.py` ONCE.

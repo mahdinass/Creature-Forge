@@ -8,6 +8,12 @@ export interface ChartRun {
 }
 
 const W = 600
+
+/** Axis ticks every 1 s up to 6 s, every 2 s up to 12 s, then every 5 s. */
+export function timeTicks(duration: number): number[] {
+  const step = duration <= 6 ? 1 : duration <= 12 ? 2 : 5
+  return Array.from({ length: Math.floor(duration / step + 1e-9) + 1 }, (_, i) => i * step)
+}
 const H = 110
 const PAD = { l: 34, r: 8, t: 8, b: 16 }
 
@@ -34,7 +40,7 @@ export function HeightChart({ runs }: { runs: ChartRun[] }) {
           <text x={4} y={y(f * yMax) + 3} className="axis">{(f * yMax).toFixed(2)}</text>
         </g>
       ))}
-      {[0, 1, 2, 3, 4, 5].filter((s) => s <= duration).map((s) => (
+      {timeTicks(duration).map((s) => (
         <text key={s} x={x(s)} y={H - 3} className="axis" textAnchor="middle">{s}</text>
       ))}
       {runs.map(({ run, color, label }) => (

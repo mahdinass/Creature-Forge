@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shlex
 import subprocess
 import sys
@@ -20,29 +21,194 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-STATE = HERE / "state.json"
-SPEND = HERE / "spend_ledger.jsonl"       # git-ignored; infra spend for the Forge Loop effort (from 2026-10-14)
-SPEND_CAP_USD = 10.0                       # owner-approved additional infra cap; start/extend refuse beyond it
+# Infra cap across ALL VM profiles (combined): $10 (2026-10-14), raised to $20 by the owner on 2026-10-16 for the
+# walking-recovery S1 stage (temporary 64-vCPU batch VM), and to $35 on 2026-10-17 for iteration 3 (S4a, S4b, S3, demo). create/start/extend refuse beyond it.
+# 2026-10-18: phase-3 Stage 1 approved by the owner (infra envelope $35; real Cloud credit $66 at a ledger of $33.29).
+# Cap = ledger 33.29 + envelope 35 + ~3 disk accrual; the credit-supported maximum is ~$94 (ledger + credit - $5 reserve).
+# 2026-10-19: Stage 1 ended at a ledger of $75.48 (5.39 h of unplanned batch time past a deadline, CLI login expired).
+# Phase-3 Stage 2 approved by the owner: +$20 incremental infra. Cap = ledger at the Stage-2 start $75.48 + $20 + $0.5
+# accounting slack (disk accrual rounding). Estimated real credit before Stage 2 is ~$23.8.
+# 2026-10-24: the owner set a standing development mandate (Cloud credit $37.49 at a ledger of $92.98) and raised the cap
+# to $120 for the registered study E-1 (projected $18-23 on the batch VM).
+SPEND_CAP_USD = 120.0
 SSH_KEY = Path.home() / ".ssh" / "creature_forge_nebius"
-HOST = "creature-forge-nebius"
 REGISTERED_COMMIT = "f33d429c7aaf4a01e5cb960c384350c80a6f50bf"   # R1 pre-registration commit
-CFG = {
+_BASE = {
     "project_id": "project-e01jjnn2pa00wm820bree9", "region": "eu-west1", "subnet_id": "vpcsubnet-e01bb10pt7n200dkqh",
-    "name": "creature-forge-r1-cpu", "platform": "cpu-d3", "preset": "8vcpu-32gb", "image_family": "ubuntu24.04-driverless",
-    "disk_type": "network_ssd", "disk_gib": 50, "default_deadline_h": 6.0,
+    "platform": "cpu-d3", "image_family": "ubuntu24.04-driverless", "disk_type": "network_ssd", "disk_gib": 50,
     # rates quoted on docs.nebius.com/compute/resources/pricing (from 2026-10-01); verify with `plan` before creating
-    "usd_per_vcpu_h": 0.015, "usd_per_gib_ram_h": 0.0045, "usd_per_gib_disk_month": 0.071, "max_usd_per_h": 0.30,
+    "usd_per_vcpu_h": 0.015, "usd_per_gib_ram_h": 0.0045, "usd_per_gib_disk_month": 0.071,
 }
+# VM profiles, selected with the environment variable CF_VM (default "main"; forge_dev.py inherits it). "main" is the
+# long-lived dev VM (paths unchanged); "batch" is a temporary large VM for heavy MuJoCo batches, deleted after use.
+PROFILES = {
+    "main": {**_BASE, "name": "creature-forge-r1-cpu", "preset": "8vcpu-32gb", "default_deadline_h": 6.0, "max_usd_per_h": 0.30,
+             "state": "state.json", "spend": "spend_ledger.jsonl", "host": "creature-forge-nebius"},
+    "batch": {**_BASE, "name": "creature-forge-batch", "preset": "64vcpu-256gb", "default_deadline_h": 3.0, "max_usd_per_h": 2.30,
+              "state": "state_batch.json", "spend": "spend_ledger_batch.jsonl", "host": "creature-forge-batch"},
+}
+VM = os.environ.get("CF_VM", "main")
+if VM not in PROFILES:
+    raise SystemExit(f"CF_VM must be one of {sorted(PROFILES)}, got {VM!r}")
+CFG = PROFILES[VM]
+STATE = HERE / CFG["state"]                 # git-ignored
+SPEND = HERE / CFG["spend"]                 # git-ignored; infra spend ledger of this profile (main: from 2026-10-14)
+HOST = CFG["host"]
 WSL = ["wsl.exe", "-d", "Ubuntu", "-u", "mahdi", "--", "bash", "-s"]
 
 
-def nebius(*args: str, check: bool = True) -> str:
-    cmd = "~/.nebius/bin/nebius " + " ".join(shlex.quote(a) for a in args) + "\n"
-    r = subprocess.run(WSL, input=cmd.encode(), capture_output=True)
+AUTH_BLOCKED = HERE / "AUTH_BLOCKED"       # git-ignored marker: set on the first auth failure, cleared only by `login`
+_AUTH_SIGNS = ("auth.nebius.com", "authentication", "oauth2", "unauthenticated", "token is expired")
+
+
+def nebius(*args: str, check: bool = True, interactive: bool = False) -> str:
+    """Run the Nebius CLI in WSL. Unattended calls never open a browser (--no-browser) and give up on auth after 30 s.
+    An auth failure writes AUTH_BLOCKED; every later unattended call then refuses without contacting Nebius (no repeated
+    login attempts) until the owner runs `forge_cloud.py login` in a terminal (owner instruction, 2026-10-19)."""
+    if not interactive and AUTH_BLOCKED.exists():
+        raise SystemExit(f"nebius auth blocked since {AUTH_BLOCKED.read_text('utf-8').strip()}: "
+                         "run `python infra/nebius/forge_cloud.py login` in a terminal (opens the browser once)")
+    flags = [] if interactive else ["--no-browser", "--auth-timeout", "30s"]
+    cmd = "~/.nebius/bin/nebius " + " ".join(shlex.quote(a) for a in [*flags, *args]) + "\n"
+    try:
+        r = subprocess.run(WSL, input=cmd.encode(), capture_output=True, timeout=None if interactive else 180)
+    except subprocess.TimeoutExpired:
+        raise SystemExit(f"nebius {' '.join(args[:3])} timed out")
     out = r.stdout.decode(errors="replace").replace("\0", "")
+    err = r.stderr.decode(errors="replace").replace("\0", "")
+    if r.returncode != 0 and not interactive and any(k in (out + err).lower() for k in _AUTH_SIGNS):
+        AUTH_BLOCKED.write_text(time.strftime("%Y-%m-%dT%H:%M:%S%z") + "\n", "utf-8")
+        raise SystemExit("nebius auth failed (login expired): AUTH_BLOCKED written, no further attempts. "
+                         "Run `python infra/nebius/forge_cloud.py login` in a terminal.")
     if check and r.returncode != 0:
-        raise SystemExit(f"nebius {' '.join(args[:3])} failed:\n{r.stderr.decode(errors='replace').replace(chr(0), '')[-1500:]}")
+        raise SystemExit(f"nebius {' '.join(args[:3])} failed:\n{err[-1500:]}")
     return out
+
+
+def cmd_login(_a=None) -> None:
+    """Owner action in a terminal: refresh the CLI login (may open the browser once), then clear AUTH_BLOCKED."""
+    nebius("compute", "instance", "list", "--parent-id", CFG["project_id"], "--format", "json", interactive=True)
+    AUTH_BLOCKED.unlink(missing_ok=True)
+    exp = auth_expiry()
+    print("login ok; AUTH_BLOCKED cleared" + (f"; CLI auth valid for {(exp - time.time()) / 3600:.1f} h" if exp else ""))
+
+
+# Auth horizon (2026-10-24 incident: the federation token is a fixed ~12 h access token with no refresh; once it expires the
+# watchdog can no longer stop anything). Rule: no VM may be running when the token expires. `start`/`extend` keep every
+# deadline (+ watchdog lag) inside the token lifetime, and the watchdog stops running VMs AUTH_MARGIN_S before expiry.
+AUTH_MARGIN_S = 1800         # pre-emptive stop this long before expiry (watchdog period 15 min -> stops >= 15 min early)
+WATCHDOG_LAG_S = 900         # the watchdog runs every 15 min
+_EXPIRY_CMD = "grep -E '^[[:space:]]*expires_at:' ~/.nebius/credentials.yaml 2>/dev/null\n"   # never reads the token line
+
+
+def parse_expiry(text: str) -> int | None:
+    """Earliest `expires_at:` epoch in credentials.yaml text (conservative if several profiles hold tokens)."""
+    vals = []
+    for line in text.splitlines():
+        k, _, v = line.strip().partition(":")
+        if k == "expires_at":
+            try:
+                vals.append(int(float(v.strip().strip("'\""))))
+            except ValueError:
+                pass
+    return min(vals) if vals else None
+
+
+def federation_expiry() -> int | None:
+    """Earliest cached CLI token expiry in WSL (the federation token, ~12 h), or None. The tokens never leave WSL."""
+    try:
+        r = subprocess.run(WSL, input=_EXPIRY_CMD.encode(), capture_output=True, timeout=60)
+    except subprocess.TimeoutExpired:
+        return None
+    return parse_expiry(r.stdout.decode(errors="replace").replace("\0", ""))
+
+
+# Service account for unattended control-plane calls (owner-approved 2026-10-24): a dedicated SA in a group whose only
+# rights are `editor` access permits on the two research instances (no project-level role). Its authorized key lives only
+# in WSL (~/.nebius/sa/, mode 600) and expires at a fixed date; the CLI mints short tokens from it, so unattended stop/status
+# no longer depend on the owner's 12 h federation login. sa.json (git-ignored) holds no secret: profile name, key expiry.
+SA_CFG = HERE / "sa.json"
+
+
+def sa_config() -> dict | None:
+    return json.loads(SA_CFG.read_text("utf-8")) if SA_CFG.exists() else None
+
+
+def nebius_sa(*args: str) -> str:
+    """Run the CLI with the service-account profile. Never writes AUTH_BLOCKED (that marker is about the owner's login)."""
+    cfg = sa_config()
+    if not cfg:
+        raise SystemExit("no service-account profile configured (infra/nebius/sa.json)")
+    if time.time() >= cfg["key_expires_epoch"]:
+        raise SystemExit("service-account key expired")
+    cmd = "~/.nebius/bin/nebius " + " ".join(shlex.quote(a) for a in ["--profile", cfg["profile"], *args]) + "\n"
+    try:
+        r = subprocess.run(WSL, input=cmd.encode(), capture_output=True, timeout=180)
+    except subprocess.TimeoutExpired:
+        raise SystemExit(f"nebius(sa) {' '.join(args[:3])} timed out")
+    if r.returncode != 0:
+        raise SystemExit(f"nebius(sa) {' '.join(args[:3])} failed:\n{r.stderr.decode(errors='replace')[-800:]}")
+    return r.stdout.decode(errors="replace").replace("\0", "")
+
+
+def ctl(*args: str) -> str:
+    """Unattended control-plane call: service account first, the owner's federation profile as fallback."""
+    if sa_config():
+        try:
+            return nebius_sa(*args)
+        except SystemExit as e:
+            sa_err = str(e)
+        try:
+            return nebius(*args)
+        except SystemExit as e:
+            raise SystemExit(f"both auth paths failed: sa: {sa_err[:300]} | federation: {str(e)[:300]}")
+    return nebius(*args)
+
+
+def sa_working(iid: str) -> bool:
+    try:
+        nebius_sa("compute", "instance", "get", "--id", iid, "--format", "json")
+        return True
+    except SystemExit:
+        return False
+
+
+def auth_expiry() -> int | None:
+    """When unattended stops stop working: the SA key expiry if the SA profile works for this profile's instance, else the
+    federation token expiry."""
+    cfg, iid = sa_config(), load().get("instance_id")
+    if cfg and iid and sa_working(iid):
+        return int(cfg["key_expires_epoch"])
+    return federation_expiry()
+
+
+def auth_horizon(expiry: int | None, now: float | None = None) -> float:
+    """Latest epoch a VM deadline may have so that the watchdog still holds a valid token when it must act."""
+    now = time.time() if now is None else now
+    if expiry is None:
+        return now                       # unknown lifetime: treat as expired (fail closed)
+    return expiry - AUTH_MARGIN_S - WATCHDOG_LAG_S
+
+
+def auth_clamp_hours(hours: float, expiry: int | None, now: float | None = None) -> float:
+    """Hours of deadline that fit inside the auth horizon (<= hours, possibly <= 0)."""
+    now = time.time() if now is None else now
+    return min(hours, (auth_horizon(expiry, now) - now) / 3600)
+
+
+def auth_guard(hours: float, *, clamp: bool) -> float:
+    """Return the deadline length to use. `clamp` (start) shortens to the horizon; otherwise (extend) refuse beyond it."""
+    exp = auth_expiry()
+    ok = auth_clamp_hours(hours, exp)
+    left = "unknown" if exp is None else f"{(exp - time.time()) / 3600:.2f} h"
+    if ok >= hours:
+        return hours
+    if clamp and ok >= 0.5:
+        print(f"WARNING: CLI auth expires in {left}; deadline shortened from {hours} h to {ok:.2f} h so the watchdog can "
+              "still stop the VM. Run `forge_cloud.py login` to get a fresh ~12 h window.")
+        return ok
+    raise SystemExit(f"refusing: a {hours} h deadline outlives the Nebius CLI auth (expires in {left}; need "
+                     f"{(AUTH_MARGIN_S + WATCHDOG_LAG_S) / 60:.0f} min margin). Run `python infra/nebius/forge_cloud.py login` first.")
 
 
 def load() -> dict:
@@ -53,8 +219,8 @@ def save(st: dict) -> None:
     STATE.write_text(json.dumps(st, indent=1), "utf-8")
 
 
-def costs() -> dict:
-    c = CFG
+def costs(c: dict | None = None) -> dict:
+    c = c or CFG
     vcpu, ram = (int(c["preset"].split("vcpu")[0]), int(c["preset"].split("-")[1].rstrip("gb")))
     compute = vcpu * c["usd_per_vcpu_h"] + ram * c["usd_per_gib_ram_h"]
     disk_h = c["disk_gib"] * c["usd_per_gib_disk_month"] / 730
@@ -63,8 +229,9 @@ def costs() -> dict:
             "disk_usd_per_day_when_stopped": round(disk_h * 24, 3)}
 
 
-def spend_events() -> list[dict]:
-    return [json.loads(l) for l in SPEND.read_text("utf-8").splitlines() if l.strip()] if SPEND.exists() else []
+def spend_events(path: Path | None = None) -> list[dict]:
+    path = path or SPEND
+    return [json.loads(l) for l in path.read_text("utf-8").splitlines() if l.strip()] if path.exists() else []
 
 
 def spend_record(event: str, **kw) -> None:
@@ -72,16 +239,17 @@ def spend_record(event: str, **kw) -> None:
         f.write(json.dumps({"event": event, "epoch": int(time.time()), **kw}) + "\n")
 
 
-def spend_total(now: float | None = None) -> dict:
+def spend_total(now: float | None = None, profile: str | None = None) -> dict:
     """Conservative spend since the ledger started: every run interval is charged from its start until the next recorded
     API stop (or `now` if none). The deadman timer powers the GUEST off at the deadline, but on 2026-10-15 the instance
     still reported RUNNING 3.75 h later, so a guest poweroff is not assumed to end compute billing. Disk is charged
     continuously from the first event. Rates are the quoted ones in CFG, not a billing statement."""
     now = time.time() if now is None else now
-    ev = spend_events()
+    prof = PROFILES[profile or VM]
+    ev = spend_events(HERE / prof["spend"])
     if not ev:
         return {"compute_h": 0.0, "usd": 0.0, "cap_usd": SPEND_CAP_USD}
-    c = costs()
+    c = costs(prof)
     hours, run_start, deadline = 0.0, None, 0.0
     for e in ev:
         if e["event"] == "start":
@@ -95,13 +263,21 @@ def spend_total(now: float | None = None) -> dict:
             run_start = None
     if run_start is not None:
         hours += max(0.0, now - run_start) / 3600
-    disk_h = max(0.0, now - ev[0]["epoch"]) / 3600
+    end = now
+    if any(e["event"] == "deleted" for e in ev):        # a deleted profile's disk stops billing at deletion
+        end = max(e["epoch"] for e in ev if e["event"] == "deleted")
+    disk_h = max(0.0, end - ev[0]["epoch"]) / 3600
     usd = hours * c["compute_usd_per_h"] + disk_h * c["disk_usd_per_h"]
     return {"compute_h": round(hours, 3), "usd": round(usd, 3), "cap_usd": SPEND_CAP_USD}
 
 
+def spend_all(now: float | None = None) -> dict:
+    per = {name: spend_total(now, name) for name in PROFILES}
+    return {"usd": round(sum(v["usd"] for v in per.values()), 3), "cap_usd": SPEND_CAP_USD, "profiles": per}
+
+
 def spend_guard(extra_hours: float) -> None:
-    t = spend_total()
+    t = spend_all()
     projected = t["usd"] + extra_hours * costs()["total_usd_per_h"]
     if projected > SPEND_CAP_USD:
         raise SystemExit(f"refusing: projected infra spend ${projected:.2f} exceeds the approved ${SPEND_CAP_USD:.2f} cap "
@@ -119,14 +295,15 @@ def instance() -> dict:
     st = load()
     if "instance_id" not in st:
         raise SystemExit("no instance recorded; run `create`")
-    return json.loads(nebius("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
+    return json.loads(ctl("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
 
 
 def cmd_plan(_a=None) -> None:
     c = costs()
     print(json.dumps({"config": CFG, "cost": c}, indent=1))
     ok = c["total_usd_per_h"] <= CFG["max_usd_per_h"]
-    print("WITHIN the $0.30/h ceiling" if ok else "EXCEEDS the $0.30/h ceiling - will not create")
+    print(f"profile {VM}: " + (f"WITHIN the ${CFG['max_usd_per_h']:.2f}/h ceiling" if ok
+                               else f"EXCEEDS the ${CFG['max_usd_per_h']:.2f}/h ceiling - will not create"))
     if not ok:
         raise SystemExit(1)
 
@@ -136,7 +313,8 @@ def cmd_create(a) -> None:
     if c["total_usd_per_h"] > CFG["max_usd_per_h"]:
         raise SystemExit("quoted rate exceeds ceiling")
     if load().get("instance_id"):
-        raise SystemExit("an instance is already recorded in state.json; refusing to create a second one")
+        raise SystemExit(f"an instance is already recorded in {STATE.name}; refusing to create a second one")
+    spend_guard(CFG["default_deadline_h"])
     pub = SSH_KEY.with_suffix(".pub").read_text().strip()
     ci = (HERE / "cloud-init.yaml.tmpl").read_text("utf-8").replace("@@SSH_PUBKEY@@", pub)
     ci = ci.replace("@@DEADLINE_S@@", str(int(CFG["default_deadline_h"] * 3600)))
@@ -157,6 +335,7 @@ def cmd_create(a) -> None:
     if not iid:
         raise SystemExit("created, but could not find instance id in output; inspect `nebius compute instance list` NOW to avoid orphaned billing")
     save({"instance_id": iid, "created_epoch": int(time.time()), "deadline_epoch": int(time.time() + CFG["default_deadline_h"] * 3600)})
+    spend_record("start", deadline=int(time.time() + CFG["default_deadline_h"] * 3600) + 900, by="create")
     print("created", iid, "- run `status` until RUNNING, then `ssh-config`")
 
 
@@ -172,7 +351,9 @@ def cmd_status(_a=None) -> dict:
         st["ip"] = ip
         save(st)
     left = (st.get("deadline_epoch", 0) - time.time()) / 3600
+    exp = auth_expiry()
     print(json.dumps({"id": st["instance_id"], "state": state, "ip": ip, "deadline_in_h": round(left, 2),
+                      "auth_expires_in_h": None if exp is None else round((exp - time.time()) / 3600, 2),
                       "est_spend_usd_if_running_since_create": round(max(0, (time.time() - st["created_epoch"]) / 3600) * costs()["total_usd_per_h"], 2)}))
     return {"state": state, "ip": ip}
 
@@ -269,15 +450,31 @@ def cmd_sync_down(_a=None) -> Path:
 def cmd_extend(a) -> None:
     left = max(0.0, (load().get("deadline_epoch", 0) - time.time()) / 3600)
     spend_guard(max(0.0, a.hours - left))
+    auth_guard(a.hours, clamp=False)
     dl = set_deadline(a.hours)
     spend_record("extend", deadline=dl)
     print(f"deadline now {a.hours} h from now ({dl}), local and VM verified equal (est. cap ${a.hours * costs()['total_usd_per_h']:.2f})")
 
 
+def wait_state(iid: str, want: str = "STOPPED", timeout_s: int = 600, poll_s: int = 15) -> str:
+    """Poll the control plane until the instance reports `want` (or the timeout). Returns the last state seen."""
+    t_end, state = time.time() + timeout_s, None
+    while True:
+        state = json.loads(ctl("compute", "instance", "get", "--id", iid, "--format", "json")).get("status", {}).get("state")
+        if state == want or time.time() >= t_end:
+            return state
+        time.sleep(poll_s)
+
+
 def cmd_stop(_a=None) -> None:
-    nebius("compute", "instance", "stop", "--id", load()["instance_id"])
+    """API stop, then verify STOPPED on the control plane (a guest poweroff is not a stop: the platform restarts it)."""
+    iid = load()["instance_id"]
+    ctl("compute", "instance", "stop", "--id", iid)
     spend_record("stop")
-    print("stop requested (compute billing ends when STOPPED; the boot disk keeps billing ~$%s/day)" % costs()["disk_usd_per_day_when_stopped"])
+    state = wait_state(iid)
+    if state != "STOPPED":
+        raise SystemExit(f"stop requested but the instance reports {state} after 10 min: check NOW")
+    print("STOPPED (verified on the control plane; the boot disk keeps billing ~$%s/day)" % costs()["disk_usd_per_day_when_stopped"])
 
 
 def remote_deadline() -> int:
@@ -299,8 +496,9 @@ def set_deadline(hours: float) -> int:
 
 def cmd_start(_a=None) -> None:
     spend_guard(CFG["default_deadline_h"])
+    hours = auth_guard(CFG["default_deadline_h"], clamp=True)
     nebius("compute", "instance", "start", "--id", load()["instance_id"])
-    spend_record("start", deadline=int(time.time() + CFG["default_deadline_h"] * 3600) + 900)  # +15 min: boot/sync slack
+    spend_record("start", deadline=int(time.time() + hours * 3600) + 900)  # +15 min: boot/sync slack
     for _ in range(30):
         time.sleep(10)
         s = cmd_status()
@@ -315,13 +513,13 @@ def cmd_start(_a=None) -> None:
         time.sleep(10)
     else:
         raise SystemExit("SSH not reachable after start")
-    dl = set_deadline(CFG["default_deadline_h"])
+    dl = set_deadline(hours)
     spend_record("extend", deadline=dl)
-    print(f"started; local and VM-side deadline verified equal ({dl}, {CFG['default_deadline_h']} h from now)")
+    print(f"started; local and VM-side deadline verified equal ({dl}, {hours:.2f} h from now)")
 
 
 def cmd_spend(_a=None) -> None:
-    print(json.dumps(spend_total()))
+    print(json.dumps(spend_all()))
 
 
 def cmd_verify_deadline(_a=None) -> None:
@@ -351,32 +549,84 @@ def cmd_delete(a) -> None:
     st.pop("instance_id", None)
     st["deleted_epoch"] = int(time.time())
     save(st)
+    spend_record("stop", by="delete")
+    spend_record("deleted")
 
 
 def cmd_watchdog(_a=None) -> None:
-    """Run from Task Scheduler every 15 min: stops the VM if its deadline passed (independent of any Claude/Codex session)."""
-    st = load()
-    if not st.get("instance_id"):
-        return
+    """Run from Task Scheduler every 15 min: stops EVERY profile's VM whose deadline passed (independent of any session),
+    and pre-emptively stops running VMs when the CLI auth is about to expire (after expiry it could stop nothing)."""
     log = HERE / "watchdog.log"
-    try:
-        state = instance().get("status", {}).get("state")
-        if time.time() > st.get("deadline_epoch", 0) and state in ("RUNNING", "STARTING"):
-            nebius("compute", "instance", "stop", "--id", st["instance_id"])
-            spend_record("stop", by="watchdog")
-            msg = "deadline passed: stop requested"
-        else:
-            msg = f"ok state={state}"
-    except SystemExit as e:
-        msg = f"error {e}"
-    with log.open("a") as f:
-        f.write(f"{time.strftime('%FT%T')} {msg}\n")
+    exp = auth_expiry()
+    for name, prof in PROFILES.items():
+        path = HERE / prof["state"]
+        st = json.loads(path.read_text("utf-8")) if path.exists() else {}
+        if not st.get("instance_id"):
+            continue
+        try:
+            got = json.loads(ctl("compute", "instance", "get", "--id", st["instance_id"], "--format", "json"))
+            state = got.get("status", {}).get("state")
+            why = watchdog_reason(time.time(), st.get("deadline_epoch", 0), exp, state)
+            if why:
+                ctl("compute", "instance", "stop", "--id", st["instance_id"])
+                with (HERE / prof["spend"]).open("a", encoding="utf-8") as f:
+                    f.write(json.dumps({"event": "stop", "epoch": int(time.time()), "by": "watchdog", "reason": why}) + "\n")
+                msg = f"{why}: stop requested"
+            else:
+                msg = f"ok state={state}" + ("" if exp is None else f" auth_left_h={(exp - time.time()) / 3600:.2f}")
+        except SystemExit as e:
+            msg = f"error {e}"
+        with log.open("a") as f:
+            f.write(f"{time.strftime('%FT%T')} [{name}] {msg}\n")
+
+
+def watchdog_reason(now: float, deadline: float, expiry: int | None, state: str | None) -> str | None:
+    """Why the watchdog must stop a VM now, or None. Unknown auth expiry does not trigger a stop by itself (the `get` call
+    that produced `state` just succeeded, so the token is valid now)."""
+    if state not in ("RUNNING", "STARTING"):
+        return None
+    if now > deadline:
+        return "deadline passed"
+    if expiry is not None and now >= expiry - AUTH_MARGIN_S:
+        return "CLI auth expiring"
+    return None
+
+
+def cmd_selfstop_install(_a=None) -> None:
+    """Install the VM-side API self-stop (infra/nebius/remote/forge-selfstop) on this profile's running VM. A fresh SA key
+    (fixed expiry = sa.json key_expires_epoch) is generated in WSL and streamed through this process into the VM installer's
+    stdin: it is never written to the repository, a log or the Windows disk, and the WSL temp copy is removed at once."""
+    cfg = sa_config()
+    if not cfg:
+        raise SystemExit("no service-account profile configured (infra/nebius/sa.json)")
+    iid = load()["instance_id"]
+    exp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(cfg["key_expires_epoch"]))
+    tmp = "/tmp/cf_selfstop_bin"
+    script = (f"set -e; rm -rf {tmp}; mkdir -m 700 {tmp}; cp ~/.nebius/bin/nebius {tmp}/nebius; "
+              f"wslpath -w {tmp}\n")
+    win_tmp = subprocess.run(WSL, input=script.encode(), capture_output=True, check=True).stdout.decode().strip()
+    remote = HERE / "remote"
+    subprocess.run(["scp", "-q", "-F", str(Path.home() / ".ssh" / "config"), str(Path(win_tmp) / "nebius"),
+                    str(remote / "forge-selfstop"), str(remote / "install_selfstop.sh"), f"{HOST}:/tmp/"], check=True)
+    keygen = (f"set -e; umask 077; k=$(mktemp); ~/.nebius/bin/nebius --no-browser --auth-timeout 30s iam auth-public-key "
+              f"generate --service-account-id {shlex.quote(cfg['service_account_id'])} --expires-at {exp} --output \"$k\" "
+              f">/dev/null 2>&1; cat \"$k\"; rm -f \"$k\"; rm -rf {tmp}\n")
+    key = subprocess.run(WSL, input=keygen.encode(), capture_output=True, check=True).stdout
+    if not key.strip().startswith(b"{"):
+        raise SystemExit("service-account key generation failed")
+    r = subprocess.run(["ssh", "-F", str(Path.home() / ".ssh" / "config"), HOST,
+                        f"cd /tmp && sudo bash install_selfstop.sh {shlex.quote(iid)} && rm -f /tmp/nebius /tmp/forge-selfstop /tmp/install_selfstop.sh"],
+                       input=key, capture_output=True)
+    del key
+    if r.returncode != 0:
+        raise SystemExit(f"self-stop install failed:\n{r.stderr.decode(errors='replace')[-800:]}")
+    print(r.stdout.decode(errors="replace").strip().splitlines()[-1])
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
-    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend"):
+    for n in ("plan", "create", "status", "ssh-config", "bootstrap", "check", "monitor", "sync-down", "stop", "start", "watchdog", "verify-deadline", "spend", "login", "selfstop-install"):
         sp.add_parser(n)
     e = sp.add_parser("exec"); e.add_argument("command"); e.add_argument("--timeout", type=int, default=600)
     r = sp.add_parser("run-stage"); r.add_argument("stage", choices=["pilot", "train", "validate", "gate", "select"]); r.add_argument("--rep", type=int, default=1)
@@ -387,7 +637,7 @@ def main() -> None:
     a = ap.parse_args()
     {"plan": cmd_plan, "create": cmd_create, "status": cmd_status, "ssh-config": cmd_ssh_config, "bootstrap": cmd_bootstrap,
      "check": cmd_check, "exec": cmd_exec, "run-stage": cmd_run_stage, "monitor": cmd_monitor, "sync-down": cmd_sync_down,
-     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend}[a.cmd](a)
+     "extend": cmd_extend, "stop": cmd_stop, "start": cmd_start, "verify-deadline": cmd_verify_deadline, "run": cmd_run, "wait": cmd_wait, "delete": cmd_delete, "watchdog": cmd_watchdog, "spend": cmd_spend, "login": cmd_login, "selfstop-install": cmd_selfstop_install}[a.cmd](a)
 
 
 if __name__ == "__main__":

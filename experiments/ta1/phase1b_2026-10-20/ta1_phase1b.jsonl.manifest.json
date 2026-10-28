@@ -1,0 +1,111 @@
+{
+ "harness_version": "ta1_harness_v2",
+ "created_utc": "2026-10-20T21:32:42+00:00",
+ "git_commit": "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+ "git_branch": "experiment/ta1-harness",
+ "git_dirty": false,
+ "git_status_porcelain": "",
+ "inputs": {
+  "v6_settings": {
+   "path": "/home/forge/dev/ta1-phase1b/experiments/causal_engineer/dev/hdb/ds1/engine_v6_settings.json",
+   "sha256": "f6e9eef6affd3253e9ef9e7bbe8156b39927d2ed394155f2453611e68f8393ff",
+   "git_blob_at_head": "805c72ce0218a23d414c1ca05975f52356292b18"
+  },
+  "stop_model": {
+   "path": "/home/forge/dev/ta1-phase1b/experiments/causal_engineer/dev/hdb/ds1/stopmap_dev_v2.json",
+   "sha256": "c20b6c4b064c359b8c9df5f99611e3fbd14d1fd304bac402feb88a46bb5d9df9",
+   "git_blob_at_head": "99590dc7d362dc9f5abc0f448bf058529ebe70b5"
+  },
+  "split_file": {
+   "path": "/home/forge/dev/ta1-phase1b/experiments/causal_engineer/dev/hdb/stage2_split.json",
+   "sha256": "79bc3b254e6eca584fbc167c699f67a466dae8bb3891261b3138e36da2b66c1e",
+   "git_blob_at_head": "c357bed7ca762fe38dde2323b86b32613d82deb6"
+  },
+  "eval_instances": {
+   "path": "/home/forge/dev/ta1-phase1b/experiments/causal_engineer/dev/hdb/ds1/ds1_eval_instances.json",
+   "sha256": "bac394ea850f39ab119d19cf57f0d0336cf21c9e09d52bfb84414179ae77891e",
+   "git_blob_at_head": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "thresholds": {
+   "path": "/home/forge/dev/hdb/artifacts/hdb/thresholds_dev.json",
+   "sha256": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "git_blob_at_head": null
+  },
+  "walkers": {
+   "path": "/home/forge/dev/hdb/artifacts/hdb/walkers_all.jsonl",
+   "sha256": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd",
+   "git_blob_at_head": null
+  }
+ },
+ "reference": {
+  "implementation_commit": "ea9e7291e8b718f1936120fcd844bd236175a16d",
+  "tracked_inputs_git_blob": {
+   "v6_settings": "805c72ce0218a23d414c1ca05975f52356292b18",
+   "stop_model": "99590dc7d362dc9f5abc0f448bf058529ebe70b5",
+   "split_file": "c357bed7ca762fe38dde2323b86b32613d82deb6",
+   "eval_instances": "08d94f3c14bd367b0f552f55c57d224f04341fef"
+  },
+  "artifact_inputs_sha256": {
+   "thresholds": "12ca21cbf85d054f9aa4aa08beb184b0f497b52e205184c264609aeedfc37d89",
+   "walkers": "151801a5187aabf8ad1dade4e41c47ea07c57007c590ffdb235df83f19aaf1fd"
+  },
+  "stored_records_sha256": {
+   "eval_A1e6_s1.jsonl": "75a0498ba228cf2a9591dcd903a8a8eb11a119e34608b7634aa162c52e44829d",
+   "eval_A1e6_s2.jsonl": "2e841477918c68700094adfdbbc373e38f145acffb4b5ff1fac020d67976f48d",
+   "eval_A1e6_s3.jsonl": "f4a2ca64124f14837236f822ef9cc3ee3bee189775cb6fc1ed1be9d9d2896f27",
+   "eval_A1e6_s4.jsonl": "7015d7d7c378f56d5febbe586b9339426a1e7d1adf1df3001cb50ad38d258102",
+   "eval_A1e6_s5.jsonl": "5064356c4474e83aa4f0ee9cf2015ccd20d67eb9a3701268656d0d302b262e97",
+   "eval_A3v5_s5.jsonl": "701ba810b30c94256ddd935a93d2751fd97c2b414c2ace87bf8490acd1f47cb0"
+  }
+ },
+ "python": "3.12.3",
+ "numpy": "2.5.4",
+ "mujoco": "3.15.0",
+ "platform": "Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39",
+ "engine_version": "belief_engine_v6",
+ "agent_version": "has_agent_v4",
+ "argv": [
+  "scripts/ta1_tool_access.py",
+  "--phase",
+  "1B",
+  "--execute",
+  "--approved-by",
+  "owner FA-1C Phase 1B Nebius amendment 2026-10-20",
+  "--harness-commit",
+  "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+  "--max-rollouts",
+  "7208",
+  "--artifacts-root",
+  "/home/forge/dev/hdb/artifacts/hdb",
+  "--records-root",
+  "/home/forge/dev/runs/fa1c_phase1b_inputs/records",
+  "--workers",
+  "6",
+  "--out",
+  "/home/forge/dev/runs/fa1c_phase1b_2026-10-20/ta1_phase1b.jsonl"
+ ],
+ "phase": "1B",
+ "approved_by": "owner FA-1C Phase 1B Nebius amendment 2026-10-20",
+ "runs": [
+  [
+   "L1",
+   "control",
+   0
+  ],
+  [
+   "L1",
+   "treatment",
+   0
+  ]
+ ],
+ "cap": {
+  "episodes": 2,
+  "plant": 1608,
+  "twin": 5600,
+  "total": 7208
+ },
+ "max_rollouts": 7208,
+ "max_wall_s": 0.0,
+ "harness_commit_approved": "33a6e6f05aa0a0af968811156b44755f3c7381f9",
+ "records_root": "/home/forge/dev/runs/fa1c_phase1b_inputs/records"
+}

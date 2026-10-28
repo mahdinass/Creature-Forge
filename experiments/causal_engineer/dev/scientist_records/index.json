@@ -1,0 +1,104 @@
+{
+ "schema": "scientist_record_v1",
+ "records": [
+  {
+   "id": "s-2b0cf1d9cef9",
+   "arm": "A3",
+   "provenance": "LIVE",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 1.0,
+   "n_steps": 9,
+   "n_experiments": 4,
+   "llm_calls": 9,
+   "cost_usd": 0.027961,
+   "robot": {
+    "thigh_length": 0.39104190795317395,
+    "shank_length": 0.28215542925178855,
+    "foot_length": 0.1901016793800632,
+    "torso_mass": 7.146141723638078,
+    "leg_density": 1002.064432,
+    "foot_friction": 0.65198,
+    "torque_limit": 136.189381,
+    "thigh_length_r": 0.39104190795317395,
+    "shank_length_r": 0.28215542925178855,
+    "foot_length_r": 0.1901016793800632,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "conclusion_by": "engine_repair"
+  },
+  {
+   "id": "s-3aaeac5d6420",
+   "arm": "A3",
+   "provenance": "LIVE",
+   "status": "FULL_RECOVERY",
+   "walking_frac": 0.9583333333333334,
+   "n_steps": 3,
+   "n_experiments": 2,
+   "llm_calls": 2,
+   "cost_usd": 0.00434,
+   "robot": {
+    "thigh_length": 0.35467446316235507,
+    "shank_length": 0.2945264392942533,
+    "foot_length": 0.12838171053655106,
+    "torso_mass": 11.927553789575702,
+    "leg_density": 399.083147,
+    "foot_friction": 0.529186,
+    "torque_limit": 63.337437,
+    "thigh_length_r": 0.35467446316235507,
+    "shank_length_r": 0.2945264392942533,
+    "foot_length_r": 0.12838171053655106,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "conclusion_by": "engine_repair"
+  },
+  {
+   "id": "s-077975ba0620",
+   "arm": "A3",
+   "provenance": "LIVE",
+   "status": "PARTIAL_IMPROVEMENT",
+   "walking_frac": 0.7916666666666666,
+   "n_steps": 7,
+   "n_experiments": 4,
+   "llm_calls": 8,
+   "cost_usd": 0.023724,
+   "robot": {
+    "thigh_length": 0.35467446316235507,
+    "shank_length": 0.2945264392942533,
+    "foot_length": 0.12838171053655106,
+    "torso_mass": 11.927553789575702,
+    "leg_density": 399.083147,
+    "foot_friction": 0.529186,
+    "torque_limit": 63.337437,
+    "thigh_length_r": 0.35467446316235507,
+    "shank_length_r": 0.2945264392942533,
+    "foot_length_r": 0.12838171053655106,
+    "pose": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "conclusion_by": "engine_repair"
+  }
+ ]
+}

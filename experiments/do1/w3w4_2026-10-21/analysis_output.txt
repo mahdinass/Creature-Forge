@@ -1,0 +1,45 @@
+Input files (sha256):
+  w3: experiments/do1/w3w4_2026-10-21/do1_l4_rep.jsonl 4f9c7295bd771cf26c8dab2a8a1db433ed2f2460dd6e1b3a3340d90571114714
+  w4: experiments/do1/w3w4_2026-10-21/do1_x.jsonl f484ac6b19ce0f54c8071e4566b42770920734e6553f21c691fb9e936899bc9d
+
+=== W3 DO1-L4-rep (L4 hdb-v1-gen-0137:low_ground_friction:0) ===
+SENTINEL frozen r0 (reproduction check only, not analysed): reproduction_exact=True | PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +1.082 m  conf -    plant 700 twin 2514 acc False  valid True exposed None
+Pairs (r, noise seed): frozen | do1 | walking diff
+  r1 1751419204:
+     frozen PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +1.081 m  conf -    plant 700 twin 2514 acc False  valid True exposed None
+     do1    FULL_RECOVERY        21/24  VERIFIED_IMPROVEMENT   med +0.775 m  conf pass plant 428 twin 2418 acc True  valid True exposed True  diff +2/24
+       do1 repair leg_length: 91 candidates, selected #63 (last False), W 4 margin 0.24701305926912506 gain 0.8760528814258584 gates ['speed', 'speed', 'speed', 'touchdown']
+  r2 1751429211:
+     frozen PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +1.084 m  conf -    plant 692 twin 2514 acc False  valid True exposed None
+     do1    FULL_RECOVERY        21/24  VERIFIED_IMPROVEMENT   med +0.814 m  conf pass plant 428 twin 2418 acc True  valid True exposed True  diff +2/24
+       do1 repair leg_length: 91 candidates, selected #69 (last False), W 4 margin 0.2621151268709783 gain 0.9100063772884921 gates ['touchdown', 'speed', 'touchdown', 'touchdown']
+  r3 1751439218:
+     frozen PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +1.084 m  conf -    plant 700 twin 2514 acc False  valid True exposed None
+     do1    FULL_RECOVERY        20/24  VERIFIED_IMPROVEMENT   med +0.875 m  conf pass plant 428 twin 2418 acc True  valid True exposed True  diff +1/24
+       do1 repair leg_length: 91 candidates, selected #87 (last False), W 4 margin 0.24205213728276181 gain 0.9517939263886397 gates ['touchdown', 'speed', 'speed', 'speed']
+  r4 1751449225:
+     frozen PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +1.085 m  conf -    plant 692 twin 2514 acc False  valid True exposed None
+     do1    FULL_RECOVERY        21/24  VERIFIED_IMPROVEMENT   med +0.717 m  conf pass plant 428 twin 2418 acc True  valid True exposed True  diff +2/24
+       do1 repair leg_length: 91 candidates, selected #52 (last False), W 4 margin 0.2783671023056686 gain 0.8161932543517947 gates ['touchdown', 'speed', 'speed', 'touchdown']
+  r5 1751459232:
+     frozen PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +1.054 m  conf -    plant 700 twin 2514 acc False  valid True exposed None
+     do1    FULL_RECOVERY        21/24  VERIFIED_IMPROVEMENT   med +0.728 m  conf pass plant 428 twin 2418 acc True  valid True exposed True  diff +2/24
+       do1 repair leg_length: 91 candidates, selected #75 (last False), W 4 margin 0.2694740514413513 gain 0.8196187733642482 gates ['touchdown', 'speed', 'touchdown', 'touchdown']
+ITT: n=5 FULL frozen 0/5 CP95 [0.000, 0.522] | FULL do1 5/5 CP95 [0.478, 1.000] | discordant for/against do1 5/0 McNemar one-sided p 0.03125 -> every discordant pair favours do1, p <= 0.05 (instance-specific; technical replicates)
+   status counts {'frozen': {'FULL_RECOVERY': 0, 'PARTIAL_IMPROVEMENT': 5, 'NOT_RECOVERED': 0, 'WORSE': 0}, 'do1': {'FULL_RECOVERY': 5, 'PARTIAL_IMPROVEMENT': 0, 'NOT_RECOVERED': 0, 'WORSE': 0}}; walking diffs [2, 2, 1, 2, 2] (sign 5+/0-, one-sided p 0.03125, median 2)
+PER_PROTOCOL: n=5 FULL frozen 0/5 CP95 [0.000, 0.522] | FULL do1 5/5 CP95 [0.478, 1.000] | discordant for/against do1 5/0 McNemar one-sided p 0.03125 -> every discordant pair favours do1, p <= 0.05 (instance-specific; technical replicates)
+   status counts {'frozen': {'FULL_RECOVERY': 0, 'PARTIAL_IMPROVEMENT': 5, 'NOT_RECOVERED': 0, 'WORSE': 0}, 'do1': {'FULL_RECOVERY': 5, 'PARTIAL_IMPROVEMENT': 0, 'NOT_RECOVERED': 0, 'WORSE': 0}}; walking diffs [2, 2, 1, 2, 2] (sign 5+/0-, one-sided p 0.03125, median 2)
+Per-protocol exclusions: none
+Infrastructure errors: 0
+
+=== W4 DO1-X (exploratory, descriptive only) ===
+B1 hdb-v1-gen-0142:payload_offset:5: same status; walking +3/24
+   frozen PARTIAL_IMPROVEMENT  17/24  VERIFIED_IMPROVEMENT   med +2.764 m  conf -    plant 692 twin 2260 acc False  valid True exposed None repro True prefix None
+   do1    PARTIAL_IMPROVEMENT  20/24  VERIFIED_IMPROVEMENT   med +2.541 m  conf FAIL plant 696 twin 2260 acc False  valid True exposed True repro None prefix True
+   gates: {"status": ["PARTIAL_IMPROVEMENT", "PARTIAL_IMPROVEMENT"], "walking_k": [17, 20], "aggregate": ["POOR", "PASS"], "verdict": ["VERIFIED_IMPROVEMENT", "VERIFIED_IMPROVEMENT"], "median_diff_m": [2.7642831181713428, 2.5408153450283057], "confirmation": [[false, null], [true, false]], "reasons_frozen_only": ["candidate aggregate is POOR, not PASS (walking on 17 of 24 seeds; PASS needs >= 80%)"], "reasons_do1_only": ["confirmation: walking on 62% of seeds at 20 s, needs >= 80%"]}
+C1 hdb-v1-gen-0070:feedback_gain_loss:2: do1 better status
+   frozen PARTIAL_IMPROVEMENT  19/24  VERIFIED_IMPROVEMENT   med +2.171 m  conf -    plant 457 twin 2704 acc True  valid True exposed None repro True prefix None
+   do1    FULL_RECOVERY        20/24  VERIFIED_IMPROVEMENT   med +2.189 m  conf pass plant 445 twin 2704 acc True  valid True exposed True repro None prefix True
+   gates: {"status": ["PARTIAL_IMPROVEMENT", "FULL_RECOVERY"], "walking_k": [19, 20], "aggregate": ["POOR", "PASS"], "verdict": ["VERIFIED_IMPROVEMENT", "VERIFIED_IMPROVEMENT"], "median_diff_m": [2.1713935776079487, 2.1893048950689007], "confirmation": [[false, null], [true, true]], "reasons_frozen_only": ["candidate aggregate is POOR, not PASS (walking on 19 of 24 seeds; PASS needs >= 80%)"], "reasons_do1_only": []}
+
+Null wording where applicable: No verified recovery was found under the tested intervention, optimizer configuration and computational budget.

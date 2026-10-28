@@ -1,0 +1,4 @@
+A0 hdb-v1-gen-0013:payload_offset:1 PARTIAL_IMPROVEMENT 48
+A0 hdb-v1-gen-0038:low_ground_friction:1 NOT_RECOVERED 64
+A0 hdb-v1-gen-0034:feedback_gain_loss:1 PARTIAL_IMPROVEMENT 30
+A0 hdb-v1-gen-0034:one_side_weakness:1 NOT_RECOVERED 37

@@ -1,0 +1,48 @@
+## 1. Candidates (stop map logistic_v2, w = [-9.8666, 1.3676, 0.8129, 6.753, -0.3651] )
+  control   d0 parent None initial                        fric x1.000
+  control   d1 parent 0 counterfactual:torque_limit@x2 fric x1.000
+      changes vs parent: torque_limit 85.32->170.6
+  control   d2 parent 0 twin:cma:placement             fric x1.000 | r8 8 r16 16 stress4 4 disp WORSE med -2.8711 | z -2.751 P 0.0600 (recorded 0.0600) terms {'bias': -9.867, 'robust16_logit': 4.782, 'stress4_logit': 1.786, 'disp_pass': 0.0, 'disp_median_clipped': 0.548} | eligible True
+      changes vs parent: fp_kd +0->+0.5134; fp_kv +0->+0.61
+  control   d3 parent 2 repair:placement               fric x1.000 | r8 None r16 16 stress4 4 disp WORSE med -2.7965 | z -2.751 P 0.0600 (recorded 0.0600) terms {'bias': -9.867, 'robust16_logit': 4.782, 'stress4_logit': 1.786, 'disp_pass': 0.0, 'disp_median_clipped': 0.548} | eligible True
+      changes vs parent: fp_kd +0.5134->+0.5664; fp_kv +0.61->+0.6655
+  control   d4 parent 3 repair:posture                 fric x1.000 | r8 None r16 16 stress4 4 disp WORSE med -2.7965 | z -2.751 P 0.0600 (recorded 0.0600) terms {'bias': -9.867, 'robust16_logit': 4.782, 'stress4_logit': 1.786, 'disp_pass': 0.0, 'disp_median_clipped': 0.548} | eligible True
+  control: selected design 4 (rule: max mapped P, then walking fraction, then index; tau 0.75 never reached)
+  treatment d0 parent None initial                        fric x1.000
+  treatment d1 parent 0 counterfactual:torque_limit@x2 fric x1.000
+      changes vs parent: torque_limit 85.32->170.6
+  treatment d2 parent 0 twin:cma:foot_friction         fric x1.492 | r8 6 r16 None stress4 None disp None med None | eligible False
+      changes vs parent: foot_friction 1.319->1.968
+  treatment d3 parent 2 repair:foot_friction           fric x1.510 | r8 None r16 16 stress4 2 disp INCONCLUSIVE med 0.0071 | z -5.087 P 0.0061 (recorded 0.0061) terms {'bias': -9.867, 'robust16_logit': 4.782, 'stress4_logit': 0.0, 'disp_pass': 0.0, 'disp_median_clipped': -0.003} | eligible True
+      changes vs parent: foot_friction 1.968->1.993
+  treatment d4 parent 3 repair:placement               fric x1.510 | r8 None r16 16 stress4 4 disp WORSE med -2.7306 | z -2.751 P 0.0600 (recorded 0.0600) terms {'bias': -9.867, 'robust16_logit': 4.782, 'stress4_logit': 1.786, 'disp_pass': 0.0, 'disp_median_clipped': 0.548} | eligible True
+      changes vs parent: fp_kd +0->+0.5333; fp_kv +0->+0.1607
+  treatment: selected design 4 (rule: max mapped P, then walking fraction, then index; tau 0.75 never reached)
+
+## 2. Counterfactual decomposition, treatment d3 vs d4
+  d3 actual                                               z -5.087 P 0.0061
+  d3 with stress4=4                                       z -3.301 P 0.0355
+  d3 with median=-2.73                                    z -4.537 P 0.0106
+  d4 actual                                               z -2.751 P 0.0600
+  d4 with median=0.0071                                   z -3.301 P 0.0355
+  any design, disp_pass True, r16 16, s4 4, median +0.5   z +3.272 P 0.9634
+  z(d4)-z(d3) by term: {'bias': -0.0, 'robust16_logit': 0.0, 'stress4_logit': 1.786, 'disp_pass': 0.0, 'disp_median_clipped': 0.55} total 2.336
+
+## 3. Faulty robot on L1 validation seeds (Phase 1A R1, per-seed, verified)
+  faulty scores (m): min 0.00 median 6.89 max 7.19; labels {'contact_chatter': 22, 'fall': 2}
+  control submitted design scores (m): min 0.00 median 4.11 max 4.27
+
+## 4. Stop-map training data (ds1_stopdata*, 678 init-base designs): FULL by displacement evidence
+  pass=False INCONCLUSIVE         median (-0.5,0.5)  : FULL 0/14
+  pass=False NOT_VERIFIED         median (-0.5,0.5)  : FULL 1/168
+  pass=False NOT_VERIFIED         median (-1.5,-0.5] : FULL 0/1
+  pass=False NOT_VERIFIED         median >= 1.5      : FULL 0/6
+  pass=False NOT_VERIFIED         median [0.5,1.5)   : FULL 0/4
+  pass=False WORSE                median (-1.5,-0.5] : FULL 0/24
+  pass=False WORSE                median <= -1.5     : FULL 0/8
+  pass=True  VERIFIED_IMPROVEMENT median >= 1.5      : FULL 141/255
+  pass=True  VERIFIED_IMPROVEMENT median [0.5,1.5)   : FULL 116/198
+  all disp_pass=False designs: FULL 1/225
+
+## 5. DS-1 dev-eval (FA-1 repair_decisions.csv): submitted design vs a checked alternative with a better displacement status
+  {'episodes with mapped alternatives': 29}
