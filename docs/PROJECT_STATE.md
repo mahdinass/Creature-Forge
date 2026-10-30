@@ -998,3 +998,10 @@ missing records. They are frozen and are not changed.
 - **VMs:** main and batch both STOPPED via the control plane at 2026-10-27 22:13 UTC (`forge_cloud.py status`).
 - **Owner actions:** merge the release PR into `main`, make the repository public, video, Devpost form
   (`docs/submission/SUBMISSION_CHECKLIST.md` §5).
+
+## AI-first documentation polish (2026-10-30, branch `docs/ai-first-readme`)
+
+Documentation only: README opening, new *Why this is an AI-agent system* section, results grouped into AI-guided and
+deterministic, judge reading order, dated status notes in `docs/FORGE_LOOP.md` and `docs/submission/`, one static workflow
+still linked to the demo video. No code, experiment, record or result changed. Animated GIF evaluated and skipped (5.5 MB
+at 800 px for the 25 s sequence). Next: owner reviews the PR; nothing is merged without approval.

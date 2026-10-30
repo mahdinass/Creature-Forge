@@ -3,15 +3,19 @@
 Every number below is traceable to a file named in the README table *What was demonstrated* or in
 `docs/RESEARCH_STATUS.md`. Paste the sections into the matching Devpost fields.
 
+> **Current status (2026-10-30).** The owner reports that the project was submitted on 2026-10-29:
+> <https://devpost.com/software/creature-forge>. This file is the text prepared before submission, kept as a record; the
+> Devpost page is authoritative and may differ. Only the repository and video fields below were updated afterwards.
+
 ## Form fields
 | Field | Value |
 |---|---|
 | Project name | Creature Forge |
 | Tagline (max ~200 characters) | An AI lab for robot failures: NVIDIA Nemotron proposes the diagnosis and the fix, and MuJoCo physics decides whether the fix is real. |
 | Track | **Physical AI** (simulation only; no hardware) |
-| Repository | `https://github.com/mahdinass/Creature-Forge` *(must be public before submitting)* |
+| Repository | `https://github.com/mahdinass/Creature-Forge` |
 | Demo URL | Not required for Physical AI. Optional: the repository README quick start |
-| Video | *(public YouTube URL, after the owner's upload)* |
+| Video | `https://youtu.be/hPY-_cK5Oow` |
 | Built with | python, mujoco, numpy, fastapi, react, three.js, react-three-fiber, typescript, vite, nvidia-nemotron, nebius-token-factory, nebius-ai-cloud |
 | New or existing project | New: the repository's first commit is 2026-10-13, inside the submission period (which began 2026-08-26) |
 

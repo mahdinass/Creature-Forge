@@ -1,5 +1,13 @@
 # Submission compliance checklist (final candidate, 2026-10-27)
 
+> **Current status (2026-10-30), added after submission.** Everything below is the pre-submission snapshot of 2026-10-27;
+> its status values were not updated. Since then:
+> - The release PR (#24) is merged into `main` at `12b2b36` (checked in Git).
+> - The repository is public and GitHub reports Apache-2.0 (checked with `gh repo view` on 2026-10-30).
+> - Demo video: <https://youtu.be/hPY-_cK5Oow>. Devpost: <https://devpost.com/software/creature-forge>. Both URLs responded
+>   on 2026-10-30; that does not prove the video's visibility setting or the Devpost submission state.
+> - The owner reports that the project was submitted on 2026-10-29. This was not independently verified.
+
 - **Source of truth:** the official rules at `https://nebiusglobalaihackathon.devpost.com/rules` and the challenge page,
   both read on 2026-10-27. Quotes below are from the rules.
 - **Deadline:** Friday 2026-10-30, **10:00 PDT = 17:00 UTC = 18:00 Oslo** (CET). Drafts can be saved on Devpost before then;

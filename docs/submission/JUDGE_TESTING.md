@@ -5,7 +5,7 @@ inspect every recorded result. Live Nemotron calls are optional and need your ow
 
 | You want to… | Time | Needs |
 |---|---|---|
-| See what the system does without installing | 5 min | Read the README and the video |
+| See what the system does without installing | 5 min | Read the README and watch the [video](https://youtu.be/hPY-_cK5Oow) |
 | Run the Studio and the recorded demos | about 10 min | Python 3.11 or 3.12, Node 22+, Git |
 | Run the live MuJoCo loop on a drawn robot | +5 min | the same |
 | Call Nemotron live | +5 min | a Nebius Token Factory key (fractions of a cent per call) |
@@ -26,6 +26,9 @@ small set of start-up rollouts). Open <http://127.0.0.1:8000>.
 
 Windows alternative: `powershell -ExecutionPolicy Bypass -File scripts\start_studio.ps1` frees port 8000, rebuilds a
 stale frontend, checks the API and opens the browser.
+
+**Suggested order:** *Nemotron's experiment* (section 2), the live loop (section 3), then *Verified repair* (section 2), a
+supporting demonstration of independent verification with no AI.
 
 ## 2. The recorded results (no key; nothing is simulated or called)
 **Nemotron's experiment:** <http://127.0.0.1:8000/?tab=nemotron>

@@ -1,18 +1,33 @@
 # Creature Forge
 
-**A physics lab where an AI investigates why a robot fails, and a simulator decides whether the fix is real.**
+**An AI agent that investigates robot failures, requests controlled physics experiments, and proposes repairs that are independently verified in simulation.**
 
-Creature Forge is a simulation laboratory for two-legged robots. You draw a robot or load a damaged one. MuJoCo measures
-how it fails. **NVIDIA Nemotron**, called at runtime through **Nebius Token Factory**, reads the measurements and proposes
-hypotheses, diagnostic experiments and bounded physical repairs. Deterministic code then tests every proposal in physics,
-on seeds the model never saw and next to a random change of the same size, and accepts it only if a fixed rule says the
-improvement is real. The model proposes, the physics measures and the rule judges.
+You draw a two-legged robot or load a damaged one, and MuJoCo measures how it fails. **NVIDIA Nemotron**, called at runtime
+through **Nebius Token Factory**, is the reasoning component: it reads the measurements, forms hypotheses and can request
+diagnostic experiments from a permitted menu. Creature Forge validates each request and runs it in MuJoCo, and the
+measured results return to Nemotron, which uses them to propose bounded changes to the robot. Valid proposals are screened
+in MuJoCo, and the selected one is tested on seeds the model never saw, next to a random change of the same size. A fixed
+rule decides whether the improvement is real, and an engineer decides whether to accept a verified design. The model
+proposes, the physics measures, the rule judges and the engineer accepts.
 
 Built for the Nebius × NVIDIA Global AI Hackathon 2026, **Physical AI** track. Simulation only; no hardware.
+[Demo video](https://youtu.be/hPY-_cK5Oow) · [Devpost](https://devpost.com/software/creature-forge)
 
 ![Forge Loop, live run: Nemotron's foot-length change verified on 12 held-out seeds beside an inconclusive matched random change](docs/assets/forge-loop-live-verdict.jpg)
 <sub>Studio, *My creature → Investigate with AI*, captured during a LIVE run on 2026-10-16 (2 Nemotron 3 Super calls,
 $0.0043). Record: [`experiments/forge_loop/demo_capture/`](experiments/forge_loop/demo_capture/README.md).</sub>
+
+## Why this is an AI-agent system
+A simulator alone runs whatever it is told. A language model alone can comment on results, but nothing tests what it
+says. Here the model takes part in the investigation: it decides what to test, requests permitted experiments, reads the
+measurements and proposes a concrete change. Information flows both ways:
+
+**Failure evidence → Nemotron hypotheses and experiment requests → validated MuJoCo experiments → measured feedback →
+Nemotron redesign proposal → independent physics verification.**
+
+The agent is bounded. Nemotron has no direct access to MuJoCo: Creature Forge validates its requests and replies, runs
+the experiments and applies fixed acceptance rules. The model never judges its own result, and each investigation is a
+limited run, not a continuous autonomous repair cycle, and only an engineer can accept a verified change.
 
 ## Why this problem
 When a robot falls, trying another design is easy; knowing *why* it failed is hard. Language models produce plausible
@@ -38,6 +53,9 @@ do not.
 | *Investigate → AI investigation, AI scientist, Causal engineer, Experiment history* | Recorded investigations with their evidence, verdicts and replays | Recorded | Nothing |
 
 ## How it works
+[![Still from the demo video's animated workflow, labelled ILLUSTRATIVE: failure measurements, Nemotron, the Creature Forge check, MuJoCo experiments, results returning to Nemotron, and independent verification](docs/assets/workflow-animation-preview.jpg)](https://youtu.be/hPY-_cK5Oow?t=15)
+<sub>Illustrative still; values come from the recorded investigation. [Watch the 25-second animated walkthrough](https://youtu.be/hPY-_cK5Oow?t=15).</sub>
+
 ```mermaid
 flowchart LR
     U[You: draw or pick a robot] --> SIM[MuJoCo challenge<br/>seeded rollouts]
@@ -85,11 +103,21 @@ distributed or fine-tuned.
 ## What was demonstrated, and how strongly
 Each row names its evidence. NO_AI marks results that involve no language model.
 
+### AI-guided investigation and redesign
 | Result | Strength and caveats | Evidence |
 |---|---|---|
-| **Forge Loop scoreboard (pre-registered):** Nemotron's redesign verified in 6 of 12 investigations vs 1 of 12 for size-matched random edits (exact one-sided McNemar p = 0.031) | Small: six starter creatures, two replicates, mostly push challenges; no walking redesign verified | [`experiments/forge_loop/scoreboard/REPORT.md`](experiments/forge_loop/scoreboard/REPORT.md) |
-| **Live end-to-end run:** a drawn creature fell short of a 15 N push target (0/8 seeds); Nemotron proposed "foot length × 1.35", verified 12 wins / 0 losses on held-out seeds while its matched random twin was inconclusive; the accepted v2 passed 8/8 | Single recorded runs; every live attempt is listed, and the two walking attempts did not verify | [`experiments/forge_loop/demo_capture/README.md`](experiments/forge_loop/demo_capture/README.md), [`docs/submission/evidence/live_acceptance_2026-10-24.json`](docs/submission/evidence/live_acceptance_2026-10-24.json) |
+| **Forge Loop scoreboard (pre-registered):** Nemotron's redesign verified in 6 of 12 investigations vs 1 of 12 for size-matched random edits (exact one-sided McNemar p = 0.031) | Small: six starter creatures, two replicates (6 push and 6 stand investigations); 5 of the 6 AI verifications were on push. The pilot had no walking investigations, and no Forge Loop walking redesign has verified | [`experiments/forge_loop/scoreboard/REPORT.md`](experiments/forge_loop/scoreboard/REPORT.md) |
+| **Live end-to-end run:** a drawn creature fell short of a 15 N push target (0/8 seeds); Nemotron proposed "foot length × 1.35", verified 12 wins / 0 losses on held-out seeds while its matched random twin was inconclusive; the accepted v2 passed 8/8 on a separate re-challenge seed panel | Single recorded runs; every live attempt is listed, and the two walking attempts did not verify | [`experiments/forge_loop/demo_capture/README.md`](experiments/forge_loop/demo_capture/README.md), [`docs/submission/evidence/live_acceptance_2026-10-24.json`](docs/submission/evidence/live_acceptance_2026-10-24.json) |
 | **Nemotron's experiment choice:** on identical evidence, its experiment moved the belief to the correct hidden fault where the engine's choice did not; its lane then fully recovered (23/24), the engine's partly (20/24) | One instance, selected afterwards. Across 36 paired instances Nemotron and the engine alone were level, 15 vs 14 (p = 0.50) | [`docs/NEMOTRON_CONTRIBUTION.md`](docs/NEMOTRON_CONTRIBUTION.md), `experiments/w2/` |
+
+These results do not show that Nemotron beats deterministic methods. It was level with the engine in the row above, and
+as a walking-recovery director it did worse than a fixed rule (below).
+
+### Supporting deterministic physics research
+These results come from fixed procedures, not from Nemotron. The strongest effects in the programme are deterministic.
+
+| Result | Strength and caveats | Evidence |
+|---|---|---|
 | **Walking recovery (pre-registered confirmatory, NO_AI winner):** a fixed engineering procedure (a foot-placement controller, body–controller co-design and verdict-aware selection) fully recovered 19 of 48 fresh robots that could not walk. The Nemotron director recovered 9 of 48 at equal compute; "AI beats the rule" was not supported (p = 0.996) | A strong classical result and a clear negative for the AI director on walking | [`docs/WALK_RECOVERY.md`](docs/WALK_RECOVERY.md), `experiments/walk_recovery/confirmatory/` |
 | **Verified repair (NO_AI):** an objective change (DO-1) turned the optimiser's partial repair (19/24) into a full recovery (21/24 and the 20 s endurance run); a pre-registered replication gave 5/5 vs 0/5 (p = 0.031) | One robot, its studied seeds, thin margins. A later 18-robot development study (R0) found DO-1 is **not** a general improvement | [`docs/DO1_REPLICATION_REPORT.md`](docs/DO1_REPLICATION_REPORT.md), [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md) |
 | **Registered held-out study E-1 (NO_AI):** on 160 robots with unseen damage, the physics-diagnosis engine recovered 56 vs 46 for exhaustive search (p = 0.061, **inconclusive**). Switching diagnosis off gave 42 (p = 0.017), which meets the registered secondary criterion only (0.050 corrected over all three tests) | Supportive, not study-wide confirmatory | [`docs/E1_RESULTS.md`](docs/E1_RESULTS.md) |
@@ -113,10 +141,13 @@ Open <http://127.0.0.1:8000>. On Windows, `powershell -ExecutionPolicy Bypass -F
 the start-up and opens the browser.
 
 **Three things to try:**
-1. <http://127.0.0.1:8000/?tab=nemotron>: Nemotron's recorded experiment, with its request ids.
-2. <http://127.0.0.1:8000/?tab=recovery>: the verified repair, three robots replayed side by side.
-3. *Create → Draw*, *Use this creature*, run the push challenge, then *Investigate with AI*. Without a key the AI step is
-   a clearly labelled SCRIPTED MOCK; MuJoCo, the arena and the verdict are real.
+1. <http://127.0.0.1:8000/?tab=nemotron>: Nemotron's recorded experiment. These are real model calls played back, with
+   their request ids; no key is needed.
+2. The Forge Loop: *Create → Draw*, *Use this creature*, run the push challenge, then investigate. MuJoCo, the arena and
+   the verdict are always real. Without a key the AI step is a clearly labelled SCRIPTED MOCK (*Run scripted mock*); with
+   your own Token Factory key, *Investigate with AI* calls Nemotron live (see below).
+3. <http://127.0.0.1:8000/?tab=recovery>: the verified repair (NO_AI), three robots replayed side by side. It is a
+   supporting demonstration of independent physics verification.
 
 Step-by-step judge guide with expected results and troubleshooting:
 [`docs/submission/JUDGE_TESTING.md`](docs/submission/JUDGE_TESTING.md).
@@ -144,7 +175,7 @@ but not every float bit for bit. CI (GitHub Actions, Ubuntu) runs all four check
 ## Limitations
 - **Simulation only:** one planar biped family in MuJoCo. Nothing has been tested on hardware.
 - **Nemotron's measured advantage is narrow:** one pre-registered win over random edits, mostly on push challenges, and
-  parity with the deterministic engine in the larger scientist study. AI walking redesigns never verified, and on
+  parity with the deterministic engine in the larger scientist study. Forge Loop walking redesigns never verified, and on
   walking recovery the AI director did worse than a fixed rule.
 - **No experience learning** has been demonstrated (see above).
 - **Recorded pages are playback** of hash-pinned records; the Studio does not start the batch studies. Large raw archives

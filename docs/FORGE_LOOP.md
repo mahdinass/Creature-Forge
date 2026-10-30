@@ -1,5 +1,8 @@
 # Forge Loop
 
+Current status (2026-10-30): the Forge Loop is part of the v1 release on `main`. The next paragraph is the development
+note from 2026-10-15, kept as history. Current results are in the [README](../README.md).
+
 Status as of 2026-10-15, branch `feature/forge-loop`. Implemented and tested on the Nebius VM. Live Nemotron calls have
 run on development records. A small pre-registered scoreboard found AI-selected edits verified more often than matched random edits (6/12 vs 1/12, p = 0.031), mostly on the push challenge. Contracts: `docs/FORGE_LOOP_CONTRACTS.md`.
 
