@@ -7,6 +7,7 @@ messages by their current path.
 | Document | For |
 |---|---|
 | [`../README.md`](../README.md) | What Creature Forge is, quick start, results and limits |
+| [Demo video](https://youtu.be/hPY-_cK5Oow) | The recorded walkthrough; the animated workflow starts at [0:15](https://youtu.be/hPY-_cK5Oow?t=15) |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Components and data flow, as implemented |
 | [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md) | Every completed study, its registered decision and its evidence |
 | [`submission/JUDGE_TESTING.md`](submission/JUDGE_TESTING.md) | Step-by-step testing guide for judges |
@@ -14,9 +15,9 @@ messages by their current path.
 ## Product (the release)
 - [`FORGE_LOOP.md`](FORGE_LOOP.md), [`FORGE_LOOP_CONTRACTS.md`](FORGE_LOOP_CONTRACTS.md): the live draw → challenge →
   AI redesign → verify → evolve loop.
-- [`DO1_DEMO.md`](DO1_DEMO.md): the *Verified repair* page (NO_AI).
 - [`NEMOTRON_CONTRIBUTION.md`](NEMOTRON_CONTRIBUTION.md): the *Nemotron's experiment* page and every measured Nemotron
   contribution, favourable or not.
+- [`DO1_DEMO.md`](DO1_DEMO.md): the *Verified repair* page (NO_AI).
 - [`INVESTIGATION_LAB.md`](INVESTIGATION_LAB.md), [`INVESTIGATION_DEMO.md`](INVESTIGATION_DEMO.md),
   [`CAUSAL_ENGINEER.md`](CAUSAL_ENGINEER.md), [`HAS_SCIENTIST.md`](HAS_SCIENTIST.md), [`UX_REDESIGN.md`](UX_REDESIGN.md):
   the other Studio pages and the systems behind them.
@@ -48,7 +49,7 @@ Summarised with their decisions in [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md).
   [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md) §2.
 
 ## Submission package
-`submission/`: [`DEVPOST.md`](submission/DEVPOST.md) (paste-ready text), [`FEEDBACK.md`](submission/FEEDBACK.md),
+`submission/`: [`DEVPOST.md`](submission/DEVPOST.md) (text prepared for the submission), [`FEEDBACK.md`](submission/FEEDBACK.md),
 [`JUDGE_TESTING.md`](submission/JUDGE_TESTING.md), [`SUBMISSION_CHECKLIST.md`](submission/SUBMISSION_CHECKLIST.md)
 (compliance), [`VIDEO_HANDOFF.md`](submission/VIDEO_HANDOFF.md) (video asset package), plus the earlier storyboard,
 cut list and production notes.
