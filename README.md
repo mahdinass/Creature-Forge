@@ -201,6 +201,7 @@ but not every float bit for bit. CI (GitHub Actions, Ubuntu) runs all four check
 Apache License 2.0 ([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)); third-party inventory in
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). NVIDIA Nemotron is used only as a hosted model under its own terms
 ([`docs/MODEL_AND_SERVICE_TERMS.md`](docs/MODEL_AND_SERVICE_TERMS.md)). This is an independent hackathon project, not
-endorsed by NVIDIA or Nebius. Commits written with an AI coding assistant carry a `Co-Authored-By` disclosure.
+endorsed by NVIDIA or Nebius. AI coding assistants were used during development and documentation. The project author
+remains responsible for the design, implementation, experimental results, and verification.
 
 Contributors and coding agents: start with [`AGENTS.md`](AGENTS.md) and `docs/PROJECT_STATE.md`.
