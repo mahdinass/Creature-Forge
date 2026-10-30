@@ -13,9 +13,10 @@ proposes, the physics measures, the rule judges and the engineer accepts.
 Built for the Nebius × NVIDIA Global AI Hackathon 2026, **Physical AI** track. Simulation only; no hardware.
 [Demo video](https://youtu.be/hPY-_cK5Oow) · [Devpost](https://devpost.com/software/creature-forge)
 
-![Forge Loop, live run: Nemotron's foot-length change verified on 12 held-out seeds beside an inconclusive matched random change](docs/assets/forge-loop-live-verdict.jpg)
-<sub>Studio, *My creature → Investigate with AI*, captured during a LIVE run on 2026-10-16 (2 Nemotron 3 Super calls,
-$0.0043). Record: [`experiments/forge_loop/demo_capture/`](experiments/forge_loop/demo_capture/README.md).</sub>
+![Before and after, from the demo video: the original robot lies fallen with 0 of 8 seeds passed; the redesigned v2 stands upright with 8 of 8 passed](docs/assets/before-after-hero.jpg)
+<sub>Frame from the [demo video](https://youtu.be/hPY-_cK5Oow?t=13) at 0:13. Both panels are recorded MuJoCo replays from the live run,
+on the same 15 N push target but from two separate 8-seed evaluations with different seeds. v2 is the verified
+foot-length change Nemotron proposed, accepted by the engineer.</sub>
 
 ## Why this is an AI-agent system
 A simulator alone runs whatever it is told. A language model alone can comment on results, but nothing tests what it
@@ -112,6 +113,10 @@ Each row names its evidence. NO_AI marks results that involve no language model.
 
 These results do not show that Nemotron beats deterministic methods. It was level with the engine in the row above, and
 as a walking-recovery director it did worse than a fixed rule (below).
+
+![Forge Loop, live run: Nemotron's foot-length change verified on 12 held-out seeds beside an inconclusive matched random change](docs/assets/forge-loop-live-verdict.jpg)
+<sub>Studio, *My creature → Investigate with AI*, captured during a LIVE run on 2026-10-16 (2 Nemotron 3 Super calls,
+$0.0043). Record: [`experiments/forge_loop/demo_capture/`](experiments/forge_loop/demo_capture/README.md).</sub>
 
 ### Supporting deterministic physics research
 These results come from fixed procedures, not from Nemotron. The strongest effects in the programme are deterministic.
